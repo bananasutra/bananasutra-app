@@ -1,0 +1,29 @@
+SONGBOOK name,SONGBOOK status,SONGBOOK Description (trapline for album),SONGBOOK SUTRA(s),SONGBOOK primary topics,SONGBOOK ID
+Ask: (Naked) TRUTH,OPEN,,KNOWsutra,TRUTH,G-01-TRUT
+Ask: But(t) WHY,REVIEW,,KNOWsutra,WISDOM,G-01-WHY
+Ask: BERTRAND (knows),OPEN,,KNOWsutra,WISDOM,G-01-BERT
+Ask: PEACE (not war),REVIEW,,KNOWsutra,PEACE,G-01-PEAC
+Speak: APES (gone wrong),OPEN,,BLOWsutra,INJUSTICE,G-02-APES
+Speak: EGO (gone loco),OPEN,,BLOWsutra,EGO,G-02-EGO
+Speak: CENSOR(ed),REVIEW,,BLOWsutra,INJUSTICE,G-02-CENS
+Speak: DUCK (shady),REVIEW,,BLOWsutra,POOLITICS,G-02-DUC
+Speak: FOTUS Circus,REVIEW,,BLOWsutra,POOLITICS,G-02-CIRC
+Speak: MAxxxA Saga,REVIEW,,BLOWsutra,POOLITICS,G-02-MAXA
+Speak: REVOLT (now),REVIEW,,BLOWsutra,INJUSTICE,G-02-REVO
+Play: B.J. (is for banana jokes),REVIEW,,SHOWsutra,FOOLERY,G-03-BJ
+Play: FANANA (party),REVIEW,,SHOWsutra,FOOLERY,G-03-FANA
+Play: (Be) The Fool,REVIEW,,SHOWsutra,FOOLERY,G-03-FOOL
+Dare: DARE (to care),REVIEW,,GROWsutra,WISDOM,G-04-DARE
+Dare: GOD (etc.),REVIEW,,GROWsutra,RELIGION,G-04-GOD
+Dare: KIND(ness),REVIEW,,GROWsutra,BEAUTY,G-04-KIND
+Trust: FLY (like water),REVIEW,,FLOWsutra,PEACE,G-05-FLY
+Trust: WET (my friend),REVIEW,,FLOWsutra,BEAUTY,G-05-WET
+Bless: POET(ry),REVIEW,,GLOWsutra,BEAUTY,G-06-POET
+Bless: RAINBOWS (in my clouds),REVIEW,,GLOWsutra,BEAUTY,G-06-CLOU
+Bow: (Thank) Dogs,REVIEW,,BOWsutra,WISDOM,G-07-DOGS
+Bow: Death (is nothing),REVIEW,,BOWsutra,PEACE,G-07-DEAT
+EP: Sidération,LIVE,,BLOWsutra,INJUSTICE,G-02-SIDE
+EP: DEFY,LIVE,,BLOWsutra,POOLITICS,G-02-DEFY
+EP: Best Teacher Award,LIVE,,BOWsutra,WISDOM,G-07-PROF
+EP: Criminals,LIVE,,BLOWsutra,INJUSTICE,G-02-CRIM
+EP: Peachy,IDEA,,FLOWsutra,BEAUTY,G-03-KINK

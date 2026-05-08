@@ -1,0 +1,10 @@
+/**
+ * Shared layout primitives for catalog pages (compose with page-specific roots).
+ * Imported once from src/index.css after tokens.css.
+ */
+
+.catalog-layout-shell {
+  width: 100%;
+  max-width: var(--catalog-layout-max-width);
+  margin-inline: auto;
+}

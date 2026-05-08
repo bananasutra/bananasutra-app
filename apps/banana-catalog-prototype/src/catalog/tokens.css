@@ -1,0 +1,265 @@
+/* Fonts: single stylesheet linked from index.html (avoid duplicate requests vs @import). */
+
+:root {
+  --font-wordmark: "Archivo Black", "Sora", system-ui, sans-serif;
+  --font-display: "Fraunces", "Times New Roman", Georgia, serif;
+  --font-body: "Sora", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui: "Sora", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Content column cap — header, footer, `.catalog-layout-shell` (see desktop override below). */
+  --catalog-layout-max-width: 1400px;
+
+  /* Breadcrumbs — typography + rhythm (CatalogBreadcrumbs.css consumes these only). */
+  --catalog-breadcrumb-font-weight: 600;
+  --catalog-breadcrumb-font-size: 0.62rem;
+  --catalog-breadcrumb-line-height: 1.35;
+  --catalog-breadcrumb-letter-spacing: 0.06em;
+  --catalog-breadcrumb-gap: 0.35rem;
+  --catalog-breadcrumb-margin-top: 0.75rem;
+  --catalog-breadcrumb-margin-bottom: 1rem;
+  --catalog-breadcrumb-color-rail: var(--color-text-faint);
+  --catalog-breadcrumb-color-current: var(--color-text-muted);
+  --catalog-breadcrumb-sep-opacity: 0.65;
+  --catalog-breadcrumb-link-border: var(--color-border);
+  --catalog-breadcrumb-focus-outline-width: 2px;
+  --catalog-breadcrumb-focus-outline-offset: 2px;
+  --catalog-breadcrumb-focus-radius: 3px;
+  /* ≤560px */
+  --catalog-breadcrumb-gap-sm: 0.28rem;
+  --catalog-breadcrumb-margin-bottom-sm: 0.85rem;
+
+  --catalog-page-intro-padding-top: 0.5rem;
+
+  /*
+   * Shell page headers — Sora bold uppercase, scaled up from section labels.
+   * Song detail (`.song-detail-title`) keeps its own larger hero scale on purpose.
+   */
+  --catalog-page-title-font-family: var(--font-ui);
+  --catalog-page-title-font-size: clamp(1.2rem, 3vw, 1.5rem);
+  --catalog-page-title-font-weight: 800;
+  --catalog-page-title-line-height: 1.25;
+  --catalog-page-title-font-variation: normal;
+  --catalog-page-title-letter-spacing: 0.06em;
+  --catalog-page-title-text-transform: uppercase;
+  --catalog-page-title-color: var(--color-text-strong);
+
+  --catalog-page-lede-font-family: var(--font-body);
+  --catalog-page-lede-font-size: 0.94rem;
+  --catalog-page-lede-line-height: 1.65;
+  --catalog-page-lede-color: var(--color-text-muted);
+
+  /*
+   * Shell pages (About, Songbooks, style guide): rules between intro ↔ jump nav, section rhythm,
+   * and a stronger small-caps label than `.catalog-section-title` / homepage hero kicker.
+   */
+  --catalog-shell-rule: 1px solid var(--color-border);
+  --catalog-shell-section-pad-y: 1.65rem;
+  --catalog-shell-section-label-size: clamp(0.8rem, 2.1vw, 0.88rem);
+  --catalog-shell-section-label-weight: 700;
+  --catalog-shell-section-label-tracking: 0.08em;
+  --catalog-shell-section-label-color: var(--color-text-primary);
+  /*
+   * Section CTA — right-aligned, uppercase Sora, underline+arrow.
+   * Shared across home, about, songbooks, sutra detail.
+   */
+  --catalog-section-cta-size: 0.65rem;
+  --catalog-section-cta-weight: 600;
+  --catalog-section-cta-tracking: 0.06em;
+  --catalog-section-cta-color: var(--color-text-muted);
+  --catalog-section-cta-hover-color: var(--color-link-hover);
+
+  /* Optional lede / subhead line-length cap (use `.catalog-page-shell__measure` on the element). */
+  --catalog-shell-lede-measure: 62ch;
+  /*
+   * Jump nav band: distance from lede to top rule, from each rule to the link row — keep equal
+   * (see `.catalog-page-shell__jump-region` + intro/hero :has(+ …) in CatalogApp / AboutPage).
+   */
+  --catalog-shell-jump-band-pad-y: clamp(0.75rem, 1.8vw, 1rem);
+
+  /* Footer site nav — spacing (see GlobalFooter.css); colors match header primary nav. */
+  --catalog-footer-nav-gap-row: 0.35rem;
+  --catalog-footer-nav-gap-col: 0.5rem;
+  --catalog-footer-nav-gap-col-mobile: 0.38rem;
+  --catalog-footer-nav-gap-col-xs: 0.3rem;
+  --catalog-footer-nav-link-padding-y: 0.35rem;
+  --catalog-footer-nav-link-padding-x: 0.42rem;
+
+  /* Fraunces variable axes — tuned per placement (see design.md §3). */
+  --fraunces-hero: "opsz" 120, "SOFT" 55, "WONK" 1;
+  --fraunces-display: "opsz" 72, "SOFT" 36, "WONK" 1;
+  --fraunces-quote: "opsz" 84, "SOFT" 70, "WONK" 1;
+
+  --type-xxxl: 4.5rem;
+  --type-xxl: 3rem;
+  --type-xl: 2.25rem;
+  --type-lg: 1.5rem;
+  --type-md: 1.125rem;
+  --type-base: 1rem;
+  --type-sm: 0.875rem;
+  --type-xs: 0.75rem;
+  --type-2xs: 0.68rem;
+
+  /* Compact UI caps + tabular stat (search panel see-all row, keyword tabs; safe to reuse in other catalog UI). */
+  --type-ui-caps-family: var(--font-ui);
+  --type-ui-caps-size: var(--type-2xs);
+  --type-ui-caps-weight: 700;
+  --type-ui-caps-tracking: 0.1em;
+  --type-ui-caps-line-height: 1.2;
+  --type-ui-stat-size: 0.72rem;
+  --type-ui-stat-weight: 600;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --focus-ring-offset: 2px;
+  --focus-ring-width: 3px;
+  --inline-link-decoration-thickness: 1px;
+  --inline-link-underline-offset: 0.14em;
+
+  --ease-default: cubic-bezier(0.2, 0.8, 0.25, 1);
+  --dur-fast: 150ms;
+  --dur-base: 180ms;
+  --dur-slow: 250ms;
+
+  --sutra-know: #6488a0;
+  --sutra-blow: #a54f44;
+  --sutra-show: #b77a88;
+  --sutra-grow: #748f73;
+  --sutra-flow: #72a8a7;
+  --sutra-glow: #b48a47;
+  --sutra-bow: #8e768d;
+  --sutra-quack: #c5795e;
+
+  --sutra-know-soft: rgba(100, 136, 160, 0.16);
+  --sutra-blow-soft: rgba(165, 79, 68, 0.16);
+  --sutra-show-soft: rgba(183, 122, 136, 0.16);
+  --sutra-grow-soft: rgba(116, 143, 115, 0.16);
+  --sutra-flow-soft: rgba(114, 168, 167, 0.16);
+  --sutra-glow-soft: rgba(180, 138, 71, 0.16);
+  --sutra-bow-soft: rgba(142, 118, 141, 0.16);
+  --sutra-quack-soft: rgba(197, 121, 94, 0.16);
+}
+
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --color-bg-page: #f4f1e8;
+  --color-bg-shell: #f8f4ec;
+  --color-bg-elevated: #fffdf8;
+  /* List rows / link cards at rest use panel; elevated is for selected rows and emphasis surfaces */
+  --color-bg-panel: #efe9dc;
+  --color-bg-inset: #efe9dc;
+
+  --color-text-primary: #2d3a1f;
+  --color-text-strong: #1e2814;
+  --color-text-muted: #5c6650;
+  --color-text-faint: #7a8472;
+
+  --color-border: #cdd2c9;
+  --color-border-strong: #a8b0a2;
+
+  --color-link: #524a40;
+  --color-link-hover: #3d372f;
+  --color-link-visited: #5f5750;
+  --color-accent: #524a40;
+  --color-accent-soft: rgba(82, 74, 64, 0.14);
+  --color-accent-on: #f4f1e8;
+
+  --color-focus: #524a40;
+  --focus-ring-color: var(--color-focus);
+  --color-inline-link: var(--color-link);
+  --color-inline-link-hover: var(--color-link-hover);
+  --color-inline-link-visited: var(--color-link-visited);
+  /* Words-style lift hover — shared by .words-card, tracks rows, song track picks */
+  --catalog-row-hover-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --catalog-row-hover-translate-y: -1px;
+  /* Selected list row (tracks browser + song detail track picks) */
+  --catalog-track-row-selected-border: color-mix(in srgb, var(--color-link) 28%, var(--color-border));
+  --catalog-track-row-selected-bg: var(--color-bg-elevated);
+  --color-hero-gradient: radial-gradient(circle at top, #fbf5eb, #eee4d4 55%);
+
+  --media-strip-bg: rgba(45, 58, 31, 0.62);
+  --media-strip-border: rgba(244, 241, 232, 0.22);
+  --media-sc-on-bg: #5f727c;
+  --media-sc-on-fg: #f4f7f9;
+  --media-yt-on-bg: #8f6d60;
+  --media-yt-on-fg: #f8f1ea;
+  --media-off-bg: rgba(255, 255, 255, 0.08);
+  --media-off-fg: #cdc1b2;
+  --media-off-border: rgba(255, 255, 255, 0.14);
+  --media-auto-bg: var(--color-accent);
+  --media-auto-fg: var(--color-accent-on);
+  --media-auto-border: #3d372f;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-bg-page: #13110d;
+  --color-bg-shell: #1b1815;
+  --color-bg-elevated: #241f1b;
+  /* Same invariant as light: resting list/row surfaces use panel; elevated = selected / emphasis */
+  --color-bg-panel: #211c19;
+  --color-bg-inset: #211c19;
+
+  --color-text-primary: #efe6d9;
+  --color-text-strong: #fff8ed;
+  --color-text-muted: #c7b8a6;
+  --color-text-faint: #a59584;
+
+  --color-border: #4a4037;
+  --color-border-strong: #6b5c4f;
+
+  --color-link: #a89f94;
+  --color-link-hover: #c4bdb4;
+  --color-link-visited: #b6ada2;
+  --color-accent: #a89f94;
+  --color-accent-soft: rgba(168, 159, 148, 0.18);
+  --color-accent-on: #13110d;
+
+  --color-focus: #a89f94;
+  --focus-ring-color: var(--color-focus);
+  --color-inline-link: var(--color-link);
+  --color-inline-link-hover: var(--color-link-hover);
+  --color-inline-link-visited: var(--color-link-visited);
+  --catalog-row-hover-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --catalog-row-hover-translate-y: -1px;
+  --catalog-track-row-selected-border: color-mix(in srgb, var(--color-link) 28%, var(--color-border));
+  --catalog-track-row-selected-bg: var(--color-bg-elevated);
+  --color-hero-gradient: radial-gradient(circle at top, #2b2521, #140f0d 58%);
+
+  --media-strip-bg: rgba(18, 15, 12, 0.74);
+  --media-strip-border: rgba(255, 240, 220, 0.15);
+  --media-sc-on-bg: #667984;
+  --media-sc-on-fg: #0f151a;
+  --media-yt-on-bg: #84685d;
+  --media-yt-on-fg: #170f0b;
+  --media-off-bg: rgba(255, 255, 255, 0.08);
+  --media-off-fg: #b1a290;
+  --media-off-border: rgba(255, 255, 255, 0.12);
+  --media-auto-bg: var(--color-accent);
+  --media-auto-fg: var(--color-accent-on);
+  --media-auto-border: #8a8075;
+}
+
+/*
+ * Below ~1200px the 1400px token almost never binds, so line length stays as on tablet/phone.
+ * From laptop/desktop widths up, use a slightly narrower column for readability.
+ */
+@media (min-width: 1200px) {
+  :root {
+    --catalog-layout-max-width: 1180px;
+  }
+}

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      (function () {
+        var KEY = 'bananasutra-theme'
+        var stored = null
+        try {
+          stored = window.localStorage.getItem(KEY)
+        } catch (e) {}
+        var theme =
+          stored === 'dark' || stored === 'light'
+            ? stored
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+        document.documentElement.setAttribute('data-theme', theme)
+      })()
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20260424b" />
+    <link rel="shortcut icon" href="/favicon.svg?v=20260424b" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="BANANASUTRA — songs for a world gone bananas. Explore the catalog: browse songs by sutra, topic, intention, and sound; search lyrics context, songbooks, and muses."
+    />
+    <meta
+      name="theme-color"
+      content="#f4f1e8"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#13110d"
+      media="(prefers-color-scheme: dark)"
+    />
+    <title>BANANASUTRA catalog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Sora:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      #app-boot-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        background: radial-gradient(circle at top, #fbf5eb, #eee4d4 55%);
+        color: #1e2814;
+        font-family: "Sora", system-ui, sans-serif;
+      }
+      html[data-theme='dark'] #app-boot-splash {
+        background: radial-gradient(circle at top, #2b2521, #140f0d 58%);
+        color: #efe6d9;
+      }
+      #app-boot-splash .app-boot-splash__inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.1rem;
+        text-align: center;
+      }
+      #app-boot-splash .app-boot-splash__title {
+        margin: 0;
+        font-family: "Archivo Black", "Sora", system-ui, sans-serif;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.005em;
+        font-size: clamp(1.15rem, 4.5vw, 1.45rem);
+        line-height: 1;
+      }
+      #app-boot-splash .app-boot-splash__spinner {
+        width: 1.85rem;
+        height: 1.85rem;
+        border-radius: 50%;
+        border: 2px solid rgba(82, 74, 64, 0.18);
+        border-top-color: #524a40;
+        animation: app-boot-spin 0.72s linear infinite;
+      }
+      html[data-theme='dark'] #app-boot-splash .app-boot-splash__spinner {
+        border-color: rgba(239, 230, 217, 0.2);
+        border-top-color: #a89f94;
+      }
+      @keyframes app-boot-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div id="app-boot-splash" aria-live="polite" aria-busy="true">
+        <div class="app-boot-splash__inner">
+          <p class="app-boot-splash__title">BANANASUTRA</p>
+          <div class="app-boot-splash__spinner" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

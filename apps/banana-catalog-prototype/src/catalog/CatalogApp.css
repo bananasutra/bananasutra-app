@@ -1,0 +1,1256 @@
+/* Page shell: fixed header + in-flow layout below (document scroll). */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.catalog.catalog-page {
+  max-width: var(--catalog-layout-max-width);
+  margin: 0 auto;
+  padding: 0 1rem 2.5rem;
+  /* Space for fixed header; exact height set by JS as --catalog-header-h */
+  padding-top: calc(var(--catalog-header-h, 108px) + 24px);
+  color: var(--color-text-primary);
+  /* Vertical rhythm after page intros (title + subcopy) before grids / filters / chips */
+  --catalog-after-intro-gap: clamp(1.05rem, 2.6vw, 1.85rem);
+}
+
+/* Universal section h2 — Sora bold uppercase.  Promoted from the old
+   `.catalog-shell-section-label` tokens so every page shares one voice. */
+.catalog-section-title {
+  margin: 0 0 1.1rem;
+  font: var(--catalog-shell-section-label-weight) var(--catalog-shell-section-label-size) / 1.3 var(--font-ui);
+  letter-spacing: var(--catalog-shell-section-label-tracking);
+  text-transform: uppercase;
+  color: var(--catalog-shell-section-label-color);
+}
+
+/* Section CTA — right-aligned, uppercase. Sits at section foot with generous
+   space above so it reads as a clear exit affordance after grids/content. */
+.catalog-section-cta {
+  display: block;
+  margin-top: 1.15rem;
+  text-align: right;
+  font: var(--catalog-section-cta-weight) var(--catalog-section-cta-size) / 1.35 var(--font-ui);
+  letter-spacing: var(--catalog-section-cta-tracking);
+  text-transform: uppercase;
+  color: var(--catalog-section-cta-color);
+  text-decoration: none;
+  border-bottom: none;
+}
+
+.catalog-section-cta:hover {
+  color: var(--catalog-section-cta-hover-color);
+}
+
+/* Sticky footer pattern: main grows so footer sits at bottom on short pages. */
+.catalog.catalog-page.catalog-page--shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.catalog-page__main {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  padding-bottom: 3.5rem;
+}
+
+.catalog-page-intro {
+  max-width: var(--catalog-layout-max-width);
+  margin: 0 auto;
+  padding: var(--catalog-page-intro-padding-top) 0 var(--catalog-after-intro-gap, 1.35rem);
+}
+
+/* Even band: lede-to-rule spacing matches rule-to-links spacing (see `catalog-page-shell.css`). */
+.catalog-page-intro:has(+ .catalog-page-shell__jump-region) {
+  padding-bottom: var(--catalog-shell-jump-band-pad-y);
+}
+
+.catalog-page-intro--narrow {
+  max-width: 900px;
+}
+
+@media (max-width: 640px) {
+  /* Song catalog: less air between intro and filter/grid on phones. */
+  .catalog.catalog-page:has(.catalog-page-intro--song-catalog) {
+    --catalog-after-intro-gap: clamp(0.42rem, 1.8vw, 0.75rem);
+  }
+}
+
+.catalog-active-context {
+  margin: 0 0 0.85rem;
+  padding: 0 0 0.55rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.catalog-active-context__summary {
+  margin: 0;
+  color: var(--color-text-faint, #666);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  font-family: var(--font-ui, inherit);
+}
+
+.catalog-active-context__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+}
+
+.catalog-active-context__head .catalog-active-context__summary {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.catalog-copy-view-link {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0.28rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-inset);
+  color: var(--color-text-secondary);
+  font-family: var(--font-ui, inherit);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.12s ease,
+    color 0.12s ease,
+    background 0.12s ease;
+}
+
+.catalog-copy-view-link:hover:not(:disabled) {
+  border-color: var(--color-link);
+  color: var(--color-link);
+  background: var(--color-bg-panel);
+}
+
+.catalog-copy-view-link:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.catalog-copy-view-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.catalog-active-context .catalog-chips {
+  margin-top: 0.55rem;
+  margin-bottom: 0;
+}
+
+.catalog-page-h1 {
+  margin: 0;
+  font-family: var(--catalog-page-title-font-family);
+  font-weight: var(--catalog-page-title-font-weight);
+  font-style: normal;
+  font-variation-settings: var(--catalog-page-title-font-variation);
+  font-size: var(--catalog-page-title-font-size);
+  line-height: var(--catalog-page-title-line-height);
+  letter-spacing: var(--catalog-page-title-letter-spacing, normal);
+  text-transform: var(--catalog-page-title-text-transform, none);
+  color: var(--catalog-page-title-color);
+}
+
+.catalog-page-sub {
+  margin: 0.35rem 0 0;
+  font-family: var(--catalog-page-lede-font-family);
+  font-size: var(--catalog-page-lede-font-size);
+  line-height: var(--catalog-page-lede-line-height);
+  color: var(--catalog-page-lede-color);
+}
+
+.catalog-page-sub a {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-decoration-color: var(--color-link);
+  text-underline-offset: 2px;
+}
+
+.catalog-page-sub a:visited {
+  color: var(--color-link);
+}
+
+.catalog-page-sub a:hover {
+  color: var(--color-link-hover);
+  text-decoration-color: var(--color-link-hover);
+}
+
+.catalog-page-sub a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.catalog-header--fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--color-bg-shell);
+  border-bottom: 1px solid var(--color-border);
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.catalog-header-inner {
+  max-width: var(--catalog-layout-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem 1rem;
+  padding: 0.5rem 1rem 0.75rem;
+  box-sizing: border-box;
+}
+
+.catalog-header-links {
+  display: flex;
+  align-items: center;
+}
+
+.catalog-header-search-link {
+  color: var(--color-link);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.35rem 0.55rem;
+  border-radius: 8px;
+}
+
+.catalog-header-search-link:hover {
+  color: var(--color-link-hover);
+}
+
+.catalog-header-search-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+
+.catalog-sort {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.catalog-sort-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-faint);
+  margin-right: 0.25rem;
+}
+
+.catalog-sort-select {
+  min-width: min(100%, 24rem);
+  max-width: 100%;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-panel);
+  color: var(--color-text-primary);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* Custom chevron — native arrows are inconsistent in Chrome vs padding. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4L6 7.5L9.5 4' stroke='%238b93a7' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.72rem center;
+  background-size: 12px;
+  padding: 0.5rem 2.45rem 0.5rem 0.72rem;
+  border-radius: 8px;
+  /* Same 16px floor as discovery search — iOS WebKit avoids focus-zoom on selects too. */
+  font-size: max(16px, 0.82rem);
+  cursor: pointer;
+}
+
+.catalog-sort-select:hover,
+.catalog-sort-select:focus-visible {
+  border-color: var(--color-border-strong);
+  outline: none;
+}
+
+.catalog-layout {
+  display: grid;
+  grid-template-columns: 1fr minmax(240px, 300px);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.catalog-layout--filters-collapsed {
+  grid-template-columns: 1fr;
+}
+
+.catalog-layout--filters-collapsed .catalog-filters {
+  display: none;
+}
+
+.catalog-filter-reopen {
+  display: none;
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-panel);
+  color: var(--color-text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.catalog-layout--filters-collapsed .catalog-filter-reopen {
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .catalog-layout:not(.catalog-layout--filters-collapsed) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
+  }
+
+  /* Flex layout ignores grid placement; reset avoids stray grid inheritance in nested contexts */
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-main {
+    grid-column: auto;
+    grid-row: auto;
+    display: contents;
+  }
+
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-main__sort-row {
+    order: 1;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  /* /tracks: player is a sibling of the sort row inside `main`; keep it in the same “header band” as sort (order 1). */
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .tracks-page__player {
+    order: 1;
+    width: 100%;
+  }
+
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-filter-reopen {
+    order: 1;
+    margin-bottom: 0;
+  }
+
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-filters {
+    grid-column: auto;
+    grid-row: auto;
+    order: 2;
+    width: 100%;
+  }
+
+  /*
+    Pagers default to order: 0. With `display: contents` on `.catalog-main`, unpaginated siblings sort *before*
+    order: 1 — so two pagers stacked appeared above sort + filters. Pin pager + list stacking explicitly.
+  */
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-pager--top {
+    order: 3;
+    width: 100%;
+  }
+
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-grid,
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-empty,
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .videos-page__list-wrap,
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .words-page__grid,
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .tracks-page__list {
+    order: 4;
+    width: 100%;
+  }
+
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-pager--bottom {
+    order: 5;
+    width: 100%;
+  }
+}
+
+/* Short viewport (landscape phones / small laptops): reduce fixed header chrome while preserving page breathing room. */
+@media (max-height: 760px) {
+  .catalog-header-inner {
+    gap: 0.45rem 0.85rem;
+    padding: 0.42rem 0.9rem 0.58rem;
+  }
+
+  .catalog.catalog-page {
+    padding-top: calc(var(--catalog-header-h, 108px) + 18px);
+    --catalog-after-intro-gap: clamp(0.88rem, 2.2vw, 1.45rem);
+  }
+
+  .catalog-page__main {
+    padding-bottom: 3rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .catalog-active-context {
+    margin-bottom: 0.75rem;
+    padding: 0 0 0.5rem;
+  }
+}
+
+/* Footer spacing tune: keep desktop breathing room, reduce trailing dead space on tablets/phones. */
+@media (max-width: 900px) {
+  .catalog-page__main {
+    padding-bottom: 1.75rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .catalog-page__main {
+    padding-bottom: 1.1rem;
+  }
+}
+
+/* Default: in-flow so single-column (≤900px) never stacks a stuck panel over the song grid.
+   Sticky + scrollbox only from min-width 901px — a later bare .catalog-filters{} would override
+   max-width rules with the same specificity, which is why a narrow-only override failed before. */
+.catalog-filters {
+  position: static;
+  top: auto;
+  max-height: none;
+  overflow: visible;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-panel);
+  grid-column: 2;
+  grid-row: 1;
+}
+
+@media (min-width: 901px) {
+  .catalog-filters {
+    position: sticky;
+    top: calc(var(--catalog-header-h, 108px) + 0.35rem);
+    max-height: calc(100vh - var(--catalog-header-h, 108px) - 1.5rem);
+    max-height: calc(100dvh - var(--catalog-header-h, 108px) - 1.5rem);
+    overflow: auto;
+  }
+}
+
+.catalog-filters-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.catalog-filters > .catalog-active-context {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.catalog-icon-btn {
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.catalog-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.55rem;
+  margin-bottom: 0.75rem;
+}
+
+.catalog-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  border: none;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--color-text-faint) 8%, transparent);
+  color: var(--color-text-primary);
+  font-size: 0.74rem;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  line-height: 1.35;
+  min-height: 2.25rem;
+  padding: 0.38rem 0.78rem;
+  cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
+}
+
+a.catalog-chip {
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .catalog-chip:hover {
+    background: color-mix(in srgb, var(--color-link) 12%, var(--color-bg-panel));
+    color: var(--color-link);
+  }
+}
+
+.catalog-chip:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.catalog-chip-x {
+  color: var(--color-link);
+  font-size: 0.94rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.85;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .catalog-chip:hover .catalog-chip-x {
+    color: var(--color-link-hover);
+    opacity: 1;
+  }
+}
+
+.catalog-chip--find {
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  color: var(--color-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .catalog-chip--find:hover {
+    background: color-mix(in srgb, var(--color-accent) 22%, transparent);
+    color: var(--color-accent);
+  }
+}
+
+@media (max-width: 767px), (pointer: coarse) {
+  .catalog-chip {
+    min-height: 44px;
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+}
+
+.catalog-clear {
+  border: none;
+  background: transparent;
+  color: var(--color-text-faint);
+  font-size: 0.72rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+a.catalog-clear {
+  text-decoration: underline;
+  color: var(--color-text-faint);
+}
+
+a.catalog-clear:hover {
+  color: var(--color-link-hover);
+}
+
+.catalog-facet-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.catalog-facet-find-label {
+  display: block;
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  color: var(--color-text-faint, #666);
+  line-height: 1.35;
+}
+
+.catalog-facet-find-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.45rem 0.55rem;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--color-border, #ccc);
+  background: var(--color-bg-panel, #fff);
+  color: var(--color-text-strong, #111);
+  font-size: max(16px, 0.88rem);
+  font-family: var(--font-ui, inherit);
+}
+
+.catalog-facet h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-faint);
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+
+.catalog-facet-help {
+  margin: 0 0 0.45rem;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: var(--color-text-faint);
+  font-family: var(--font-ui);
+}
+
+.catalog-facet-help a {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-decoration-color: var(--color-link);
+  text-underline-offset: 2px;
+}
+
+.catalog-facet-help a:hover {
+  color: var(--color-link-hover);
+  text-decoration-color: var(--color-link-hover);
+}
+
+.catalog-facet-help a:visited {
+  color: var(--color-link);
+}
+
+.catalog-facet-help a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.catalog-facet-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.16rem 0.4rem;
+}
+
+.catalog-facet-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.16rem;
+  margin: 0;
+  padding: 0.38rem 0.72rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: 0.68rem;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  line-height: 1.35;
+  cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+a.catalog-facet-chip {
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+a.catalog-facet-chip:visited {
+  color: var(--color-text-primary);
+}
+
+a.catalog-facet-chip.is-active:visited {
+  color: var(--color-accent);
+}
+
+.catalog-facet-chip:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .catalog-facet-chip:hover {
+    background: color-mix(in srgb, var(--color-link) 9%, var(--color-bg-panel));
+    color: var(--color-link);
+  }
+
+  .catalog-facet-chip:hover .catalog-facet-count {
+    color: var(--color-text-muted);
+  }
+}
+
+.catalog-facet-chip.is-active {
+  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  color: var(--color-accent);
+  box-shadow: inset 0 -2px 0 0 var(--color-accent);
+}
+
+.catalog-facet-chip.is-active .catalog-facet-count {
+  color: color-mix(in srgb, var(--color-accent) 55%, var(--color-text-faint));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .catalog-facet-chip.is-active:hover {
+    background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+    color: var(--color-accent);
+  }
+
+  .catalog-facet-chip.is-active:hover .catalog-facet-count {
+    color: color-mix(in srgb, var(--color-accent) 50%, var(--color-text-muted));
+  }
+}
+
+.catalog-facet-chip:active {
+  background: color-mix(in srgb, var(--color-text-faint) 12%, transparent);
+}
+
+@media (max-width: 767px), (pointer: coarse) {
+  .catalog-facet-chip {
+    min-height: 44px;
+    padding: 0.45rem 0.85rem;
+  }
+}
+
+.catalog-facet-count {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--color-text-faint);
+  line-height: inherit;
+  white-space: nowrap;
+}
+
+/**
+ * Colored sutra token inside filter chips and removable “active” chips (text only).
+ */
+.catalog-facet-sutra-name {
+  font-family: inherit;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .catalog-facet-chip:hover .catalog-facet-sutra-name.is-sutra-know,
+  .catalog-chip:hover .catalog-facet-sutra-name.is-sutra-know {
+    color: var(--sutra-know);
+  }
+  .catalog-facet-chip:hover .catalog-facet-sutra-name.is-sutra-blow,
+  .catalog-chip:hover .catalog-facet-sutra-name.is-sutra-blow {
+    color: var(--sutra-blow);
+  }
+  .catalog-facet-chip:hover .catalog-facet-sutra-name.is-sutra-show,
+  .catalog-chip:hover .catalog-facet-sutra-name.is-sutra-show {
+    color: var(--sutra-show);
+  }
+  .catalog-facet-chip:hover .catalog-facet-sutra-name.is-sutra-grow,
+  .catalog-chip:hover .catalog-facet-sutra-name.is-sutra-grow {
+    color: var(--sutra-grow);
+  }
+  .catalog-facet-chip:hover .catalog-facet-sutra-name.is-sutra-flow,
+  .catalog-chip:hover .catalog-facet-sutra-name.is-sutra-flow {
+    color: var(--sutra-flow);
+  }
+  .catalog-facet-chip:hover .catalog-facet-sutra-name.is-sutra-glow,
+  .catalog-chip:hover .catalog-facet-sutra-name.is-sutra-glow {
+    color: var(--sutra-glow);
+  }
+  .catalog-facet-chip:hover .catalog-facet-sutra-name.is-sutra-bow,
+  .catalog-chip:hover .catalog-facet-sutra-name.is-sutra-bow {
+    color: var(--sutra-bow);
+  }
+  .catalog-facet-chip:hover .catalog-facet-sutra-name.is-sutra-quack,
+  .catalog-chip:hover .catalog-facet-sutra-name.is-sutra-quack {
+    color: var(--sutra-quack);
+  }
+}
+
+.catalog-main {
+  min-width: 0;
+  grid-column: 1;
+  grid-row: 1;
+}
+
+/* Sort sits in the main column so its right edge lines up with the song grid. */
+.catalog-main__sort-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.68rem;
+}
+
+@media (max-width: 640px) {
+  .catalog-main__sort-row {
+    margin-bottom: 0.42rem;
+  }
+
+  .catalog-main__sort-row .catalog-sort {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.26rem;
+    width: 100%;
+  }
+
+  .catalog-main__sort-row .catalog-sort-select {
+    width: 100%;
+    max-width: none;
+  }
+
+  .catalog-card-body {
+    padding: 0.55rem 0.58rem 0.68rem;
+    gap: 0.28rem;
+  }
+
+  .catalog-card-title.song-title {
+    font-size: 0.88rem;
+    line-height: 1.22;
+  }
+
+  .catalog-card-summary {
+    font-size: 0.72rem;
+    line-height: 1.34;
+    -webkit-line-clamp: 2;
+  }
+
+  .catalog-meta-pill {
+    min-height: 1.28rem;
+    font-size: 0.6rem;
+    padding: 0.1rem 0.26rem;
+  }
+
+  .catalog-sutra-word {
+    font-size: 0.56rem;
+  }
+
+  .catalog-card-meta-secondary {
+    font-size: 0.54rem;
+  }
+
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.85rem;
+  align-items: stretch;
+}
+
+@media (max-width: 640px) {
+  .catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+}
+
+.catalog-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.catalog-card-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.catalog-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--color-bg-elevated);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.catalog-card.catalog-card-link:hover {
+  border-color: var(--color-border-strong);
+  transform: translateY(-1px);
+}
+
+.catalog-grid--skeleton {
+  pointer-events: none;
+}
+
+.catalog-card--skeleton {
+  border-color: var(--color-border);
+}
+
+.catalog-sort--loading .catalog-sort-select {
+  width: 13rem;
+  min-width: 0;
+  height: 2.1rem;
+  border-radius: 8px;
+}
+
+.catalog-skeleton-block {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-text-faint) 12%, var(--color-bg-panel));
+}
+
+.catalog-skeleton-block::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-bg-shell) 55%, transparent) 45%,
+    transparent 100%
+  );
+  animation: catalog-skeleton-shimmer 1.25s ease-in-out infinite;
+}
+
+.catalog-skeleton-line {
+  display: block;
+  height: 0.74rem;
+  border-radius: 999px;
+}
+
+.catalog-skeleton-line--title {
+  height: 0.98rem;
+  width: 78%;
+}
+
+.catalog-skeleton-line--short {
+  width: 58%;
+}
+
+@keyframes catalog-skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.catalog-card-art {
+  position: relative;
+  aspect-ratio: 1;
+  flex-shrink: 0;
+  background: var(--color-bg-inset);
+}
+
+.catalog-card-media-strip {
+  position: absolute;
+  left: 0.4rem;
+  bottom: 0.4rem;
+  display: inline-flex;
+  gap: 0.22rem;
+  padding: 0.18rem;
+  border-radius: 6px;
+  background: var(--media-strip-bg);
+  border: 1px solid var(--media-strip-border);
+}
+
+.catalog-card-media-slot {
+  min-width: 1.55rem;
+  padding: 0.12rem 0.28rem;
+  border-radius: 4px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  line-height: 1;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.2rem;
+}
+
+.catalog-card-media-slot--sc.is-on {
+  color: var(--media-sc-on-fg);
+  background: var(--media-sc-on-bg);
+  border-color: transparent;
+}
+
+.catalog-card-media-slot--yt.is-on {
+  color: var(--media-yt-on-fg);
+  background: var(--media-yt-on-bg);
+  border-color: transparent;
+}
+
+.catalog-card-media-slot.is-off {
+  color: var(--media-off-fg);
+  background: var(--media-off-bg);
+  border-color: var(--media-off-border);
+}
+
+.catalog-card-media-slot--yt-partial.is-on {
+  box-shadow: 0 0 0 1px var(--media-off-border);
+}
+
+.catalog-card-media-autoplay-cue {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.34rem;
+  border-radius: 4px;
+  font-size: 0.58rem;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  color: var(--media-auto-fg);
+  border: 1px solid var(--media-auto-border);
+  background: var(--media-auto-bg);
+  line-height: 1.1;
+}
+
+@media (max-width: 767px) {
+  /* In-app SoundCloud autoplay does not run on typical phone browsers — hide cue to avoid implying it will. */
+  .catalog-card-media-autoplay-cue {
+    display: none;
+  }
+}
+
+.catalog-card-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.catalog-card-art-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 2.5rem;
+  opacity: 0.35;
+}
+
+.catalog-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0.65rem 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: var(--color-bg-elevated);
+}
+
+.catalog-card-title.song-title {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.25;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 700;
+  font-variation-settings: normal;
+  letter-spacing: normal;
+}
+
+.catalog-card-summary {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.catalog-card-meta {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  gap: 0.28rem;
+  margin-top: auto;
+  flex-shrink: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+/**
+ * Sutra on catalog cards (songs / words / videos / tracks): colored word only,
+ * aligned with home + about sutra labels — not the interactive pill used on detail pages.
+ */
+.catalog-sutra-word {
+  flex-shrink: 0;
+  font-family: var(--font-ui);
+  font-weight: 650;
+  font-size: 0.6rem;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  background: none !important;
+  border: none !important;
+  border-left: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.catalog-sutra-word.is-sutra-know,
+.catalog-facet-sutra-name.is-sutra-know {
+  color: var(--sutra-know);
+}
+.catalog-sutra-word.is-sutra-blow,
+.catalog-facet-sutra-name.is-sutra-blow {
+  color: var(--sutra-blow);
+}
+.catalog-sutra-word.is-sutra-show,
+.catalog-facet-sutra-name.is-sutra-show {
+  color: var(--sutra-show);
+}
+.catalog-sutra-word.is-sutra-grow,
+.catalog-facet-sutra-name.is-sutra-grow {
+  color: var(--sutra-grow);
+}
+.catalog-sutra-word.is-sutra-flow,
+.catalog-facet-sutra-name.is-sutra-flow {
+  color: var(--sutra-flow);
+}
+.catalog-sutra-word.is-sutra-glow,
+.catalog-facet-sutra-name.is-sutra-glow {
+  color: var(--sutra-glow);
+}
+.catalog-sutra-word.is-sutra-bow,
+.catalog-facet-sutra-name.is-sutra-bow {
+  color: var(--sutra-bow);
+}
+.catalog-sutra-word.is-sutra-quack,
+.catalog-facet-sutra-name.is-sutra-quack {
+  color: var(--sutra-quack);
+}
+
+.catalog-card-meta-secondary {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 500 0.58rem/1.25 var(--font-ui);
+  color: var(--color-text-faint);
+}
+
+.catalog-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.42rem;
+  line-height: 1;
+  border: 1px solid var(--color-border);
+  font-size: 0.65rem;
+  padding: 0.12rem 0.35rem;
+  border-radius: 999px;
+  background: var(--color-bg-panel);
+  color: var(--color-text-muted);
+  font-family: var(--font-ui);
+  font-weight: 600;
+}
+
+.catalog-empty {
+  margin-top: 1.5rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.catalog-meta-pill--sutra {
+  border-left: 3px solid transparent;
+  padding-left: 0.45rem !important;
+}
+
+.is-sutra-know {
+  border-left-color: var(--sutra-know) !important;
+  background: var(--sutra-know-soft) !important;
+}
+
+.is-sutra-blow {
+  border-left-color: var(--sutra-blow) !important;
+  background: var(--sutra-blow-soft) !important;
+}
+
+.is-sutra-show {
+  border-left-color: var(--sutra-show) !important;
+  background: var(--sutra-show-soft) !important;
+}
+
+.is-sutra-grow {
+  border-left-color: var(--sutra-grow) !important;
+  background: var(--sutra-grow-soft) !important;
+}
+
+.is-sutra-flow {
+  border-left-color: var(--sutra-flow) !important;
+  background: var(--sutra-flow-soft) !important;
+}
+
+.is-sutra-glow {
+  border-left-color: var(--sutra-glow) !important;
+  background: var(--sutra-glow-soft) !important;
+}
+
+.is-sutra-bow {
+  border-left-color: var(--sutra-bow) !important;
+  background: var(--sutra-bow-soft) !important;
+}
+
+.is-sutra-quack {
+  border-left-color: var(--sutra-quack) !important;
+  background: var(--sutra-quack-soft) !important;
+}
+
+/* Beat `.is-sutra-*` soft fills (same specificity, later wins): cards + filter labels use text color only. */
+.catalog-sutra-word.is-sutra-know,
+.catalog-sutra-word.is-sutra-blow,
+.catalog-sutra-word.is-sutra-show,
+.catalog-sutra-word.is-sutra-grow,
+.catalog-sutra-word.is-sutra-flow,
+.catalog-sutra-word.is-sutra-glow,
+.catalog-sutra-word.is-sutra-bow,
+.catalog-sutra-word.is-sutra-quack,
+.catalog-facet-sutra-name.is-sutra-know,
+.catalog-facet-sutra-name.is-sutra-blow,
+.catalog-facet-sutra-name.is-sutra-show,
+.catalog-facet-sutra-name.is-sutra-grow,
+.catalog-facet-sutra-name.is-sutra-flow,
+.catalog-facet-sutra-name.is-sutra-glow,
+.catalog-facet-sutra-name.is-sutra-bow,
+.catalog-facet-sutra-name.is-sutra-quack {
+  background: transparent !important;
+  border-left-color: transparent !important;
+}
+
+/* design.md — brand + song title utilities */
+.bananasutra-wordmark {
+  font-family: var(--font-wordmark);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  line-height: 1;
+  color: var(--color-text-strong);
+}
+
+.bananasutra-tagline {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+  color: var(--color-text-muted);
+}
+
+.song-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-style: italic;
+  font-variation-settings: var(--fraunces-display);
+  letter-spacing: -0.005em;
+  color: var(--color-text-primary);
+}

@@ -1,0 +1,472 @@
+/* Phase 3 /tracks — list + player + pagination + filters (URL-synced). */
+
+.tracks-page__intro {
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--color-text-secondary, #444);
+}
+
+.tracks-page__player {
+  margin: 0 0 1.1rem;
+}
+
+.tracks-page__player-h {
+  margin: 0 0 0.45rem;
+  padding: 0;
+}
+
+.tracks-page__player-frame {
+  padding: 0;
+}
+
+.tracks-page__sc-link-wrap {
+  margin: 0.45rem 0 0;
+  padding: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.tracks-page__sc-link {
+  color: var(--color-link, #5c4a1a);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-link, #5c4a1a) 35%, transparent);
+  text-underline-offset: 0.12em;
+}
+
+.tracks-page__sc-link:hover {
+  color: var(--color-link-hover, #3d3214);
+  text-decoration-color: var(--color-link-hover, #3d3214);
+}
+
+.tracks-page__sc-link:focus-visible {
+  outline: 2px solid var(--color-focus, #7f652d);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.tracks-page__player .sc-embed-frame {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.tracks-page__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.tracks-page__item {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* catalog-main uses display:contents ≤900px when filters open — list must stretch to the layout column width */
+@media (max-width: 900px) {
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .tracks-page__list {
+    align-self: stretch;
+    width: 100%;
+    max-width: none;
+  }
+}
+
+/* Invariant: thumb is a real 5rem square (SC assets are square). Text block uses tight vertical rhythm so
+   total row height stays near ~5–6.5rem — keeps a centered square from floating in a much taller row. */
+
+/* Track row: text + fixed 5rem art column (square fits column width = 5rem). */
+.tracks-page__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 5rem;
+  align-items: stretch;
+  justify-items: stretch;
+  gap: 0;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border, #e4e2dc);
+  border-radius: var(--radius-sm, 8px);
+  background: var(--color-bg-panel, #fff);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+/* Match .words-card hover (tokens: --catalog-row-hover-*) */
+.tracks-page__row:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--catalog-row-hover-shadow);
+  transform: translateY(var(--catalog-row-hover-translate-y));
+}
+
+.tracks-page__row:focus-visible {
+  outline: 2px solid var(--color-focus, #7f652d);
+  outline-offset: 2px;
+}
+
+.tracks-page__row--selected {
+  border-color: var(--catalog-track-row-selected-border);
+  background: var(--catalog-track-row-selected-bg);
+  box-shadow: inset -3px 0 0 0 var(--color-link);
+}
+
+.tracks-page__row--selected:hover {
+  border-color: var(--catalog-track-row-selected-border);
+  background: var(--catalog-track-row-selected-bg);
+  box-shadow:
+    inset -3px 0 0 0 var(--color-link),
+    var(--catalog-row-hover-shadow);
+  transform: translateY(var(--catalog-row-hover-translate-y));
+}
+
+.tracks-page__row-main {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+  /* stretch cross-axis so title/meta/rail use full text column width (flex-start shrink-wraps and breaks ellipsis % width on WebKit) */
+  align-items: stretch;
+  padding: 0.42rem 0.55rem 0.42rem 0.75rem;
+  box-sizing: border-box;
+}
+
+.tracks-page__text-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.32rem;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  flex: 0 1 auto;
+  box-sizing: border-box;
+}
+
+.tracks-page__body {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.tracks-page__title {
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.22;
+  color: var(--color-text-strong, #111);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tracks-page__rail-meta {
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  gap: 0.28rem;
+  min-width: 0;
+  width: 100%;
+  font-size: 0.75rem;
+  line-height: 1.28;
+  color: var(--color-text-secondary, #444);
+}
+
+.tracks-page__rail-meta-tail {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tracks-page__rail-meta .catalog-sutra-word {
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.tracks-page__rail-meta .catalog-card-meta-secondary {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-text-muted, #5c5c5c);
+}
+
+.tracks-page__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.14rem;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-ui, inherit);
+  font-size: 0.75rem;
+  line-height: 1.28;
+  letter-spacing: 0.01em;
+  text-align: left;
+}
+
+.tracks-page__rail-stats {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.45rem 0.65rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.tracks-page__stat {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted, #5c5c5c);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tracks-page__song-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.26rem 0.55rem;
+  border: 1px solid var(--color-border, #cfcac0);
+  border-radius: 5px;
+  background: var(--color-bg-inset, rgba(0, 0, 0, 0.03));
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-text-secondary, #4a4a46);
+  white-space: nowrap;
+  transition:
+    border-color 0.12s ease,
+    color 0.12s ease,
+    background 0.12s ease;
+}
+
+.tracks-page__song-cta:hover {
+  border-color: color-mix(in srgb, var(--color-link, #5c4a1a) 55%, var(--color-border, #cfcac0));
+  color: var(--color-link, #5c4a1a);
+  background: var(--color-bg-panel, #fff);
+  text-decoration: none;
+}
+
+.tracks-page__song-cta:focus-visible {
+  outline: 2px solid var(--color-focus, #7f652d);
+  outline-offset: 2px;
+}
+
+.tracks-page__thumb-wrap {
+  position: relative;
+  box-sizing: border-box;
+  align-self: center;
+  justify-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  min-height: 0;
+  border-radius: 0 var(--radius-sm, 8px) var(--radius-sm, 8px) 0;
+  overflow: hidden;
+  border: none;
+  border-left: 1px solid var(--color-border, #e0dcd4);
+  background: var(--color-bg-inset, #eee);
+}
+
+.tracks-page__thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  object-fit: cover;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+}
+
+.tracks-page__thumb--empty {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tracks-page__wave {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  padding: 0.35rem 0.25rem 0.45rem;
+  box-sizing: border-box;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.35), transparent 55%);
+  pointer-events: none;
+}
+
+/* “Now playing” overlay sits on real cover art (often dark): light scrim + bars echo elevated panel */
+.tracks-page__thumb-wrap--active .tracks-page__wave {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-bg-elevated, #fffdf8) 42%, transparent),
+    transparent 58%
+  );
+}
+
+.tracks-page__wave-bar {
+  width: 3px;
+  border-radius: 1px;
+  background: color-mix(in srgb, var(--color-link, #c9a227) 90%, #fff);
+  height: 32%;
+  animation: tracks-page-wave 0.45s ease-in-out infinite alternate;
+}
+
+.tracks-page__thumb-wrap--active .tracks-page__wave-bar {
+  background: color-mix(in srgb, #fff 82%, var(--color-bg-elevated, #fffdf8) 18%);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.1);
+}
+
+.tracks-page__wave-bar:nth-child(2) {
+  animation-delay: 0.08s;
+  height: 55%;
+}
+
+.tracks-page__wave-bar:nth-child(3) {
+  animation-delay: 0.16s;
+  height: 42%;
+}
+
+.tracks-page__wave-bar:nth-child(4) {
+  animation-delay: 0.24s;
+  height: 68%;
+}
+
+@keyframes tracks-page-wave {
+  from {
+    transform: scaleY(0.45);
+    opacity: 0.65;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tracks-page__wave-bar {
+    animation: none;
+    opacity: 0.85;
+    transform: scaleY(0.65);
+  }
+}
+
+/* Active filter summary in sticky filter column or above collapsed “Show filters”. */
+.catalog-filters .tracks-page__filter-summary.catalog-active-context,
+.catalog-main .tracks-page__filter-summary.catalog-active-context {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.tracks-page__empty-filtered {
+  margin-top: 0.75rem;
+}
+
+.tracks-page__empty-filtered p {
+  margin: 0 0 0.65rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--color-text-muted, #555);
+}
+
+.tracks-page__empty-filtered p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 600px) {
+  /* overflow:hidden on the row can make WebKit resolve %/ellipsis widths too narrow; clip only the art */
+  .tracks-page__row {
+    overflow: visible;
+  }
+
+  .tracks-page__thumb-wrap {
+    grid-column: 2;
+    overflow: hidden;
+    border-radius: 0 var(--radius-sm, 8px) var(--radius-sm, 8px) 0;
+  }
+
+  .tracks-page__row-main {
+    grid-column: 1;
+    min-width: 0;
+    padding: 0.42rem 0.28rem 0.42rem 0.75rem;
+  }
+
+  .tracks-page__body {
+    min-width: 0;
+  }
+
+  .tracks-page__title {
+    min-width: 0;
+    width: 100%;
+  }
+
+  /* Global .catalog-sutra-word uses flex-shrink: 0 — release so genre tail can ellipsis on narrow viewports. */
+  .tracks-page__rail-meta .catalog-sutra-word {
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Duration/plays/likes line only — smaller type fits before ellipsis; does not affect thumb column or Song page CTA */
+  .tracks-page__rail-stats .tracks-page__stat {
+    font-size: 0.6875rem;
+    line-height: 1.25;
+  }
+
+  .tracks-page__rail-stats {
+    column-gap: 0.5rem;
+  }
+}

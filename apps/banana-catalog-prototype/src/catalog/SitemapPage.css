@@ -1,0 +1,62 @@
+/* SitemapPage — simple linked index of all site sections. */
+
+.sitemap-page {
+  padding-bottom: clamp(1.2rem, 2.6vw, 1.75rem);
+}
+
+.sitemap-page__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.sitemap-page__section {
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sitemap-page__section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.sitemap-page__heading {
+  margin: 0 0 0.6rem;
+  font: 700 0.72rem/1.35 var(--font-ui);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.sitemap-page__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sitemap-page__item {
+  margin: 0;
+}
+
+.sitemap-page__link {
+  font: 400 0.88rem/1.55 var(--font-body);
+  color: var(--color-inline-link);
+  text-decoration: underline;
+  text-decoration-thickness: var(--inline-link-decoration-thickness);
+  text-underline-offset: var(--inline-link-underline-offset);
+  transition: color var(--dur-fast) var(--ease-default);
+}
+
+.sitemap-page__link:hover {
+  color: var(--color-inline-link-hover);
+}
+
+.sitemap-page__link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: 2px;
+}

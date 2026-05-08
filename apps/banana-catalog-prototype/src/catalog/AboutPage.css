@@ -1,0 +1,313 @@
+.about-page {
+  /* Match home (`HomePortal.css` `.home-portal__section`): one bottom border per block + symmetric padding. */
+  --about-section-pad-y: 1.65rem;
+  /* Fixed header often taller than fallback; extra air stops #anchor targets tucking under chrome. */
+  --about-scroll-margin: calc(var(--catalog-header-h, 108px) + 1.35rem);
+  --about-rhythm: clamp(1.2rem, 2.6vw, 1.75rem);
+  padding-bottom: var(--about-rhythm);
+}
+
+
+.about-page__anchor-target {
+  scroll-margin-top: var(--about-scroll-margin);
+}
+
+.about-page__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-page__body > .about-page__section {
+  margin: 0;
+  padding: var(--about-section-pad-y) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.about-page__body > .about-page__section:last-child {
+  border-bottom: none;
+}
+
+
+.about-page__prose {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+}
+
+.about-page__prose p {
+  margin: 0 0 0.85rem;
+}
+
+.about-page__prose p:last-child {
+  margin-bottom: 0;
+}
+
+.about-page__sutra-matrix {
+  /* Space between sutra cards matches intro → QUACK card (see --about-sutra-card-gap). */
+  --about-sutra-card-gap: 0.75rem;
+  margin: var(--about-rhythm) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--about-rhythm);
+}
+
+.about-page__sutra-matrix .about-page__sutra-list {
+  margin: 0;
+}
+
+.about-page__sutra-quack-wrap {
+  margin: 0;
+  padding: 0;
+}
+
+.about-page__sutra-quack-kicker {
+  margin: 0 0 0.35rem;
+  font: 600 0.62rem/1.35 var(--font-ui);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--sutra-quack);
+}
+
+.about-page__sutra-quack-intro {
+  margin: 0 0 var(--about-sutra-card-gap);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-weight: 400;
+  max-width: 62ch;
+}
+
+.about-page__prose strong {
+  color: var(--color-text-strong);
+  font-weight: 600;
+}
+
+.about-page__sutra-list {
+  /* Horizontal cushion around middots (card vertical gap uses --about-sutra-card-gap on matrix). */
+  --about-sutra-dot-pad: 0.4em;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--about-sutra-card-gap);
+  font-size: clamp(1.05rem, 2.5vw, 1.2rem);
+  line-height: 1.5;
+  font-family: var(--font-body);
+  color: var(--color-text-muted);
+}
+
+.about-page__sutra-list > li {
+  margin: 0;
+  padding: 0;
+}
+
+.about-page__sutra-list-item {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 0.55rem 1rem 0.58rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--color-border) 72%, transparent);
+  border-left: 3px solid color-mix(in srgb, var(--color-border) 40%, transparent);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.16s ease, border 0.16s ease;
+}
+
+.about-page__sutra-list-item:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Two-row header: sutra + question, then practice + themes (never one flex row — avoids
+   short titles squeezing the subline onto line 1 on narrow viewports). */
+.about-page__sutra-list-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: 100%;
+}
+
+.about-page__sutra-list-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 0.25rem 0;
+  width: 100%;
+}
+
+.about-page__sutra-list-primary {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.about-page__sutra-list-dot {
+  display: inline;
+  padding-inline: var(--about-sutra-dot-pad);
+  color: var(--color-text-faint);
+  user-select: none;
+}
+
+.about-page__sutra-list-sub {
+  font-weight: 400;
+  font-size: 0.95em;
+  color: var(--color-text-muted);
+  width: 100%;
+  min-width: 0;
+}
+
+.about-page__sutra-list-sutra {
+  font-weight: 700;
+  font-size: 1.08em;
+  font-family: var(--font-ui);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.about-page__sutra-list-item.is-sutra-know .about-page__sutra-list-sutra {
+  color: var(--sutra-know);
+}
+.about-page__sutra-list-item.is-sutra-blow .about-page__sutra-list-sutra {
+  color: var(--sutra-blow);
+}
+.about-page__sutra-list-item.is-sutra-show .about-page__sutra-list-sutra {
+  color: var(--sutra-show);
+}
+.about-page__sutra-list-item.is-sutra-grow .about-page__sutra-list-sutra {
+  color: var(--sutra-grow);
+}
+.about-page__sutra-list-item.is-sutra-flow .about-page__sutra-list-sutra {
+  color: var(--sutra-flow);
+}
+.about-page__sutra-list-item.is-sutra-glow .about-page__sutra-list-sutra {
+  color: var(--sutra-glow);
+}
+.about-page__sutra-list-item.is-sutra-bow .about-page__sutra-list-sutra {
+  color: var(--sutra-bow);
+}
+
+.about-page__sutra-list-item.is-sutra-quack .about-page__sutra-list-sutra {
+  color: var(--sutra-quack);
+}
+
+/* Persistent left border in sutra color at rest (signals clickability) */
+.about-page__sutra-list-item.is-sutra-know { border-left-color: color-mix(in srgb, var(--sutra-know) 45%, transparent); }
+.about-page__sutra-list-item.is-sutra-blow { border-left-color: color-mix(in srgb, var(--sutra-blow) 45%, transparent); }
+.about-page__sutra-list-item.is-sutra-show { border-left-color: color-mix(in srgb, var(--sutra-show) 45%, transparent); }
+.about-page__sutra-list-item.is-sutra-grow { border-left-color: color-mix(in srgb, var(--sutra-grow) 45%, transparent); }
+.about-page__sutra-list-item.is-sutra-flow { border-left-color: color-mix(in srgb, var(--sutra-flow) 45%, transparent); }
+.about-page__sutra-list-item.is-sutra-glow { border-left-color: color-mix(in srgb, var(--sutra-glow) 45%, transparent); }
+.about-page__sutra-list-item.is-sutra-bow  { border-left-color: color-mix(in srgb, var(--sutra-bow) 45%, transparent); }
+
+/* QUACK: orange wash + dotted left rail (sub-sutra of BLOW; distinct from solid core lanes). */
+.about-page__sutra-list-item--quack {
+  background: color-mix(in srgb, var(--sutra-quack-soft) 72%, var(--color-bg-panel)) !important;
+  border: 1px solid color-mix(in srgb, var(--sutra-quack) 22%, var(--color-border)) !important;
+  border-left: 3px dotted var(--sutra-quack) !important;
+}
+
+.about-page__sutra-list-item--quack.is-sutra-quack:hover {
+  background: color-mix(in srgb, var(--sutra-quack-soft) 58%, var(--sutra-quack)) !important;
+  border: 1px solid color-mix(in srgb, var(--sutra-quack) 34%, var(--color-border)) !important;
+  border-left: 3px dotted color-mix(in srgb, var(--sutra-quack) 78%, var(--color-bg-page)) !important;
+}
+
+/* Hover: same surface treatment as home sutra tiles (no lift / shadow) */
+.about-page__sutra-list-item.is-sutra-know:hover {
+  background: color-mix(in srgb, var(--sutra-know-soft) 68%, var(--sutra-know)) !important;
+  border: 1px solid color-mix(in srgb, var(--sutra-know) 32%, var(--color-border));
+  border-left: 3px solid color-mix(in srgb, var(--sutra-know) 82%, var(--color-bg-page)) !important;
+}
+.about-page__sutra-list-item.is-sutra-blow:hover {
+  background: color-mix(in srgb, var(--sutra-blow-soft) 68%, var(--sutra-blow)) !important;
+  border: 1px solid color-mix(in srgb, var(--sutra-blow) 32%, var(--color-border));
+  border-left: 3px solid color-mix(in srgb, var(--sutra-blow) 82%, var(--color-bg-page)) !important;
+}
+.about-page__sutra-list-item.is-sutra-show:hover {
+  background: color-mix(in srgb, var(--sutra-show-soft) 68%, var(--sutra-show)) !important;
+  border: 1px solid color-mix(in srgb, var(--sutra-show) 32%, var(--color-border));
+  border-left: 3px solid color-mix(in srgb, var(--sutra-show) 82%, var(--color-bg-page)) !important;
+}
+.about-page__sutra-list-item.is-sutra-grow:hover {
+  background: color-mix(in srgb, var(--sutra-grow-soft) 68%, var(--sutra-grow)) !important;
+  border: 1px solid color-mix(in srgb, var(--sutra-grow) 32%, var(--color-border));
+  border-left: 3px solid color-mix(in srgb, var(--sutra-grow) 82%, var(--color-bg-page)) !important;
+}
+.about-page__sutra-list-item.is-sutra-flow:hover {
+  background: color-mix(in srgb, var(--sutra-flow-soft) 68%, var(--sutra-flow)) !important;
+  border: 1px solid color-mix(in srgb, var(--sutra-flow) 32%, var(--color-border));
+  border-left: 3px solid color-mix(in srgb, var(--sutra-flow) 82%, var(--color-bg-page)) !important;
+}
+.about-page__sutra-list-item.is-sutra-glow:hover {
+  background: color-mix(in srgb, var(--sutra-glow-soft) 68%, var(--sutra-glow)) !important;
+  border: 1px solid color-mix(in srgb, var(--sutra-glow) 32%, var(--color-border));
+  border-left: 3px solid color-mix(in srgb, var(--sutra-glow) 82%, var(--color-bg-page)) !important;
+}
+.about-page__sutra-list-item.is-sutra-bow:hover {
+  background: color-mix(in srgb, var(--sutra-bow-soft) 68%, var(--sutra-bow)) !important;
+  border: 1px solid color-mix(in srgb, var(--sutra-bow) 32%, var(--color-border));
+  border-left: 3px solid color-mix(in srgb, var(--sutra-bow) 82%, var(--color-bg-page)) !important;
+}
+
+.about-page__sutra-list-question {
+  font-weight: 600;
+  font-size: 1em;
+  color: var(--color-text-strong);
+}
+
+.about-page__sutra-list-meta {
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-border) 75%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82em;
+  line-height: 1.45;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.about-page__sutra-list-when {
+  margin: 0;
+  font-style: italic;
+}
+
+.about-page__sutra-list-essence {
+  margin: 0;
+}
+
+.about-page__sutra-list-counts {
+  margin: 0.45rem 0 0;
+  font: 600 0.75rem/1.35 var(--font-ui);
+  letter-spacing: 0.035em;
+  color: var(--color-text-faint);
+}
+
+.about-page__sutra-list-cta {
+  display: block;
+  margin-top: 0.5rem;
+  font: 700 0.62rem/1.35 var(--font-ui);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: right;
+  color: var(--color-link);
+}
+
+
+.about-page__colophon-text {
+  margin: 0;
+  font-size: 0.82rem;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--color-text-faint);
+  font-family: var(--font-body);
+}

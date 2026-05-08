@@ -1,0 +1,46 @@
+/* Shell layout primitives — token definitions in `tokens.css` (`--catalog-shell-*`). */
+
+/*
+ * Jump band: both horizontal rules live on this wrapper; padding above/below the link row matches
+ * intro/hero padding-bottom before the band (`--catalog-shell-jump-band-pad-y`) so spacing is even.
+ */
+.catalog-page-shell__jump-region {
+  border-top: var(--catalog-shell-rule);
+  border-bottom: var(--catalog-shell-rule);
+  padding-block: var(--catalog-shell-jump-band-pad-y);
+  margin-bottom: var(--catalog-after-intro-gap, 1.35rem);
+}
+
+.catalog-page-shell__jump-region > .catalog-page-jump-nav {
+  padding: 0;
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+/* Jump links: same small-caps register as section labels (slightly larger / darker than legacy jump row). */
+.catalog-page-shell__jump-region .catalog-page-jump-nav__list {
+  font: var(--catalog-shell-section-label-weight) var(--catalog-shell-section-label-size) / 1.3 var(--font-ui);
+  letter-spacing: var(--catalog-shell-section-label-tracking);
+  text-transform: uppercase;
+  color: var(--catalog-shell-section-label-color);
+}
+
+.catalog-page-shell__jump-region .catalog-page-jump-nav__link {
+  color: var(--color-text-muted);
+}
+
+/* Readability cap for intro / subcopy — does not replace full-width layout chrome. */
+.catalog-page-shell__measure {
+  max-width: min(var(--catalog-shell-lede-measure, 62ch), 100%);
+}
+
+/* Stack sections like home / about body: symmetric vertical padding + one bottom rule. */
+.catalog-page-shell__section {
+  margin: 0;
+  padding: var(--catalog-shell-section-pad-y) 0;
+  border-bottom: var(--catalog-shell-rule);
+}
+
+.catalog-page-shell__section:last-child {
+  border-bottom: none;
+}

@@ -1,0 +1,1090 @@
+[
+  {
+    "quote": "Gratitude turns what we have into enough.",
+    "muse": "Aesop",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-1"
+  },
+  {
+    "quote": "The only way to make sense out of change is to plunge into it, move with it, and join the dance.",
+    "muse": "Alan Watts",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-2"
+  },
+  {
+    "quote": "In the depth of winter, I finally learned that within me there lay an invincible summer.",
+    "muse": "Albert Camus",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-3"
+  },
+  {
+    "quote": "The evil that is in the world almost always comes from ignorance, and good intentions may do as much harm as malevolence if they lack understanding.",
+    "muse": "Albert Camus",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-4"
+  },
+  {
+    "quote": "Life is like riding a bicycle. To keep your balance, you must keep moving.",
+    "muse": "Albert Einstein",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-5"
+  },
+  {
+    "quote": "Play is the highest form of research.",
+    "muse": "Albert Einstein",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-6"
+  },
+  {
+    "quote": "The more I learn, the more I realize how much I don’t know.",
+    "muse": "Albert Einstein",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-7"
+  },
+  {
+    "quote": "The world will not be destroyed by those who do evil, but by those who watch them without doing anything.",
+    "muse": "Albert Einstein",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-8"
+  },
+  {
+    "quote": "There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is a miracle.",
+    "muse": "Albert Einstein",
+    "primary_sutra": "BOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-9"
+  },
+  {
+    "quote": "Most ignorance is evincible ignorance. We don’t know because we don’t want to know.",
+    "muse": "Aldous Huxley",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "KNOWLEDGE",
+    "quote_id": "Q-10"
+  },
+  {
+    "quote": "We are born in a moment of brilliance, and we flow with the universe like a dance.",
+    "muse": "Alejandro Jodorowsky",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-11"
+  },
+  {
+    "quote": "The line separating good and evil passes not through states, nor between classes—but right through every human heart.",
+    "muse": "Aleksandr Solzhenitsyn",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-12"
+  },
+  {
+    "quote": "We live not by lies.",
+    "muse": "Aleksandr Solzhenitsyn",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-13"
+  },
+  {
+    "quote": "America, when will you be angelic? When will you take off your clothes?",
+    "muse": "Allen Ginsberg",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "EGO",
+    "quote_id": "Q-14"
+  },
+  {
+    "quote": "There is always light. If only we’re brave enough to see it. If only we’re brave enough to be it.",
+    "muse": "Amanda Gorman",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-15"
+  },
+  {
+    "quote": "We do not grow absolutely, chronologically. We grow sometimes in one dimension, and not in another; unevenly.",
+    "muse": "Anaïs Nin",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "FLOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-17"
+  },
+  {
+    "quote": "Wanderer, there is no path, the path is made by walking.",
+    "muse": "Antonio Machado",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-18"
+  },
+  {
+    "quote": "I am not free while any woman is unfree, even when her shackles are very different from my own.",
+    "muse": "Audre Lorde",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-19"
+  },
+  {
+    "quote": "Not all cowards are hypocrites, but(t) all hypocrites are cowards.",
+    "muse": "Banana Sutra",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "EGO",
+    "quote_id": "Q-20"
+  },
+  {
+    "quote": "A nation will not survive morally or economically when so few have so much and so many have so little.",
+    "muse": "Bernie Sanders",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-21"
+  },
+  {
+    "quote": "The trouble with the world is that the stupid are cocksure and the intelligent are full of doubt.",
+    "muse": "Bertrand Russell",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-22"
+  },
+  {
+    "quote": "To be without some of the things you want is an indispensable part of happiness.",
+    "muse": "Bertrand Russell",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-23"
+  },
+  {
+    "quote": "La fin ne justifie pas les moyens.",
+    "muse": "Blaise Pascal",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-24"
+  },
+  {
+    "quote": "Man is equally incapable of seeing the nothingness from which he emerges and the infinity in which he is engulfed.",
+    "muse": "Blaise Pascal",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "FLOWsutra",
+    "core_topic": "KNOWLEDGE",
+    "quote_id": "Q-25"
+  },
+  {
+    "quote": "I don’t have to chase extraordinary moments to find happiness—it’s right in front of me if I’m paying attention and practicing gratitude.",
+    "muse": "Brené Brown",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-26"
+  },
+  {
+    "quote": "Be water, my friend.",
+    "muse": "Bruce Lee",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-27"
+  },
+  {
+    "quote": "The curious paradox is that when I accept myself just as I am, then I can change.",
+    "muse": "Carl Rogers",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-28"
+  },
+  {
+    "quote": "I am just a tiny speck in an infinite sea of stars.",
+    "muse": "Carl Sagan",
+    "primary_sutra": "BOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-29"
+  },
+  {
+    "quote": "The devil's finest trick is to persuade you that he does not exist.",
+    "muse": "Charles Baudelaire",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-31"
+  },
+  {
+    "quote": "A thankful heart is not only the greatest virtue, but the parent of all other virtues.",
+    "muse": "Cicero",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-32"
+  },
+  {
+    "quote": "Beauty is everywhere, not everyone sees it",
+    "muse": "Confucius",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-33"
+  },
+  {
+    "quote": "Happiness is not something ready-made. It comes from your own actions.",
+    "muse": "Dalai Lama",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-34"
+  },
+  {
+    "quote": "Give light, and the darkness will disappear of itself.",
+    "muse": "Desmond Tutu",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-35"
+  },
+  {
+    "quote": "The most wasted of all days is one without laughter.",
+    "muse": "E.E. Cummings",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "FLOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-36"
+  },
+  {
+    "quote": "The greater the power, the more dangerous the abuse.",
+    "muse": "Edmund Burke",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-37"
+  },
+  {
+    "quote": "The only thing necessary for the triumph of evil is for good men to do nothing.",
+    "muse": "Edmund Burke",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-38"
+  },
+  {
+    "quote": "If voting mattered, they wouldn't let us do it.",
+    "muse": "Ernest Miller Hemingway",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-39"
+  },
+  {
+    "quote": "It is not the answer that enlightens, but the question.",
+    "muse": "Eugene Ionesco",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-40"
+  },
+  {
+    "quote": "Don’t be afraid to look silly. It might free you.",
+    "muse": "Frank Zappa",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-42"
+  },
+  {
+    "quote": "He who has a why to live can bear almost any how.",
+    "muse": "Friedrich Nietzsche",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-43"
+  },
+  {
+    "quote": "In heaven, all the interesting people are missing.",
+    "muse": "Friedrich Nietzsche",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-44"
+  },
+  {
+    "quote": "They muddy the waters to make it seem deep.",
+    "muse": "Friedrich Nietzsche",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-45"
+  },
+  {
+    "quote": "Angels can fly because they take themselves lightly.",
+    "muse": "G.K. Chesterton",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-46"
+  },
+  {
+    "quote": "I think it’s the duty of the comedian to find out where the line is drawn and cross it deliberately.",
+    "muse": "George Carlin",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-48"
+  },
+  {
+    "quote": "All animals are equal, but some animals are more equal than others.",
+    "muse": "George Orwell",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "EGO",
+    "quote_id": "Q-49"
+  },
+  {
+    "quote": "Happiness can exist only in acceptance.",
+    "muse": "George Orwell",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-50"
+  },
+  {
+    "quote": "Some ideas are so stupid that only intellectuals believe them.",
+    "muse": "George Orwell",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "EGO",
+    "quote_id": "Q-52"
+  },
+  {
+    "quote": "I don’t want to belong to any club that would have me as a member.",
+    "muse": "Groucho Marx",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-53"
+  },
+  {
+    "quote": "What is this precious love and laughter budding in our hearts? \nIt is the glorious sound of a soul waking up!",
+    "muse": "Hafiz",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-54"
+  },
+  {
+    "quote": "The sad truth is that most evil is done by people who never make up their minds to be good or evil.",
+    "muse": "Hannah Arendt",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-55"
+  },
+  {
+    "quote": "It’s not what you look at that matters, it’s what you see.",
+    "muse": "Henry David Thoreau",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-56"
+  },
+  {
+    "quote": "Death is nothing at all. It does not count. \nI have only slipped away into the next room.",
+    "muse": "Henry Scott Holland",
+    "primary_sutra": "BOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-57"
+  },
+  {
+    "quote": "People with courage and character always seem sinister to the rest.",
+    "muse": "Herman Hesse",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "EGO",
+    "quote_id": "Q-58"
+  },
+  {
+    "quote": "It is not down on any map; true places never are.",
+    "muse": "Herman Melville",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-59"
+  },
+  {
+    "quote": "Not everything that is faced can be changed, \nbut nothing can be changed until it is faced.",
+    "muse": "James Baldwin",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "KNOWLEDGE",
+    "quote_id": "Q-60"
+  },
+  {
+    "quote": "Existence precedes essence.",
+    "muse": "Jean-Paul Sartre",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "FLOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-61"
+  },
+  {
+    "quote": "Freedom is what you do with what’s been done to you.",
+    "muse": "Jean-Paul Sartre",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-62"
+  },
+  {
+    "quote": "Living is easy with eyes closed, misunderstanding all you see.",
+    "muse": "John Lennon",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "EGO",
+    "quote_id": "Q-64"
+  },
+  {
+    "quote": "You can’t stop the waves, but you can learn to surf.",
+    "muse": "Jon Kabat-Zinn",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "KNOWLEDGE",
+    "quote_id": "Q-65"
+  },
+  {
+    "quote": "He who knows others is wise; \nhe who knows himself is enlightened.",
+    "muse": "Lao Tzu",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-66"
+  },
+  {
+    "quote": "Life is a series of natural and spontaneous changes. Don’t resist them; that only creates sorrow.",
+    "muse": "Lao Tzu",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-67"
+  },
+  {
+    "quote": "There is a crack in everything, that's how the light gets in.",
+    "muse": "Leonard Cohen",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-68"
+  },
+  {
+    "quote": "Humility is not thinking less of yourself, it’s thinking of yourself less.",
+    "muse": "Carroll Lewis",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-69"
+  },
+  {
+    "quote": "Many people wish to be poets because they wish to wear the title, but one should wish to celebrate more than one wishes to be celebrated.",
+    "muse": "Lucille Clifton",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "FLOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-70"
+  },
+  {
+    "quote": "Strength does not come from physical capacity. It comes from an indomitable will.",
+    "muse": "Mahatma Gandhi",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-71"
+  },
+  {
+    "quote": "Another belief of mine; that everyone else my age is an adult, whereas I am merely in disguise.",
+    "muse": "Margaret Atwood",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-72"
+  },
+  {
+    "quote": "I’d rather be absolutely ridiculous than absolutely boring.",
+    "muse": "Marilyn Monroe",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "FLOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-73"
+  },
+  {
+    "quote": "It's easier to fool people than to convince them that they have been fooled.",
+    "muse": "Mark Twain",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-74"
+  },
+  {
+    "quote": "The secret source of humor itself is not joy but sorrow. There is no humor in heaven.",
+    "muse": "Mark Twain",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-75"
+  },
+  {
+    "quote": "I don’t know if I found my way, but I have walked enough to see that it’s all worth it.",
+    "muse": "Mary Oliver",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-76"
+  },
+  {
+    "quote": "Tell me, what is it you plan to do with your one wild and precious life?",
+    "muse": "Mary Oliver",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-77"
+  },
+  {
+    "quote": "Why not let the soft animal of your body love what it loves?",
+    "muse": "Mary Oliver",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-78"
+  },
+  {
+    "quote": "Forgive yourself for not knowing what you didn’t know before you learned it.",
+    "muse": "Maya Angelou",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-79"
+  },
+  {
+    "quote": "Laughter is the sound of the soul dancing.",
+    "muse": "Maya Angelou",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-80"
+  },
+  {
+    "quote": "It is not only for what we do that we are held responsible, but also for what we do not do.",
+    "muse": "Molière",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-81"
+  },
+  {
+    "quote": "The trees that are slow to grow bear the best fruit.",
+    "muse": "Molière",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-82"
+  },
+  {
+    "quote": "One man with courage is a majority.",
+    "muse": "Nelson Mandela",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-83"
+  },
+  {
+    "quote": "The most potent weapon of the oppressor is the mind of the oppressed.",
+    "muse": "Nelson Mandela",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-84"
+  },
+  {
+    "quote": "Life is too important to be taken seriously.",
+    "muse": "Oscar Wilde",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-85"
+  },
+  {
+    "quote": "The smallest act of kindness is worth more than the grandest intention.",
+    "muse": "Oscar Wilde",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-86"
+  },
+  {
+    "quote": "Comedy is simply a funny way of being serious.",
+    "muse": "Peter Ustinov",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-89"
+  },
+  {
+    "quote": "Ignorance is the root and stem of all evil.",
+    "muse": "Plato",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-90"
+  },
+  {
+    "quote": "Life must be lived as play.",
+    "muse": "Plato",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-91"
+  },
+  {
+    "quote": "Adopt the pace of nature: her secret is patience.",
+    "muse": "Ralph Waldo Emerson",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-93"
+  },
+  {
+    "quote": "Make your own Bible. Select and collect all the words and sentences that in all your readings have been to you like the blast of a trumpet.",
+    "muse": "Ralph Waldo Emerson",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-94"
+  },
+  {
+    "quote": "What is success? To laugh often and much.",
+    "muse": "Ralph Waldo Emerson",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-95"
+  },
+  {
+    "quote": "Joy is not in things; it is in us.",
+    "muse": "Richard Wagner",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-96"
+  },
+  {
+    "quote": "Life is a balance of holding on and letting go.",
+    "muse": "Rumi",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-97"
+  },
+  {
+    "quote": "When you do things from your soul, you feel a river moving in you, a joy.",
+    "muse": "Rumi",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-99"
+  },
+  {
+    "quote": "You are the universe in ecstatic motion.",
+    "muse": "Rumi",
+    "primary_sutra": "BOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-100"
+  },
+  {
+    "quote": "Curiosity is, in great and generous minds, the first passion and the last.",
+    "muse": "Samuel Johnson",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-101"
+  },
+  {
+    "quote": "Never mind the bollocks.",
+    "muse": "Sex Pistols",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-102"
+  },
+  {
+    "quote": "I did the math, and everything is stupid.",
+    "muse": "Snoopy",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-103"
+  },
+  {
+    "quote": "All I really know is I dunno shit about fck.",
+    "muse": "Banana Sutra",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-104"
+  },
+  {
+    "quote": "The only true wisdom is in knowing you know nothing.",
+    "muse": "Socrates",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-105"
+  },
+  {
+    "quote": "The unexamined life is not worth living.",
+    "muse": "Socrates",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-106"
+  },
+  {
+    "quote": "Wonder is the beginning of wisdom.",
+    "muse": "Socrates",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-107"
+  },
+  {
+    "quote": "Humor is a weapon of mass construction.",
+    "muse": "Stephen Fry",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-108"
+  },
+  {
+    "quote": "The greatest enemy of knowledge is not ignorance, \nit is the illusion of knowledge.",
+    "muse": "Stephen Hawking",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-109"
+  },
+  {
+    "quote": "The only wisdom we can hope to acquire is the wisdom of humility.",
+    "muse": "T.S. Eliot",
+    "primary_sutra": "BOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-110"
+  },
+  {
+    "quote": "We are here to awaken from our illusion of separateness.",
+    "muse": "Thich Nhat Hanh",
+    "primary_sutra": "BOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-111"
+  },
+  {
+    "quote": "Ur-Fascism is still around us, sometimes in plainclothes.",
+    "muse": "Umberto Eco",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-112"
+  },
+  {
+    "quote": "What is to give light must endure burning.",
+    "muse": "Victor Frankl",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-113"
+  },
+  {
+    "quote": "Laughter is the sun that drives winter from the human face.",
+    "muse": "Victor Hugo",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-114"
+  },
+  {
+    "quote": "To love is to act.",
+    "muse": "Victor Hugo",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-115"
+  },
+  {
+    "quote": "The only way to comprehend what mathematicians mean by infinity is to contemplate the extent of human stupidity.",
+    "muse": "Voltaire",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-116"
+  },
+  {
+    "quote": "I would rather entertain and hope that people learned something than educate people and hope they were entertained.",
+    "muse": "Walt Disney",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-117"
+  },
+  {
+    "quote": "To see a world in a grain of sand and a heaven in a wildflower.",
+    "muse": "William Blake",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-118"
+  },
+  {
+    "quote": "Hell is empty, and all the devils are here.",
+    "muse": "William Shakespeare",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "RELIGION",
+    "quote_id": "Q-119"
+  },
+  {
+    "quote": "Ignorance is the curse of God; knowledge is the wing wherewith we fly to heaven.",
+    "muse": "William Shakespeare",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "RELIGION",
+    "quote_id": "Q-120"
+  },
+  {
+    "quote": "Pourquoi faudrait-il aimer rarement pour aimer beaucoup?",
+    "muse": "Albert Camus",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-122"
+  },
+  {
+    "quote": "The creatures outside looked from pig to man, and from man to pig, and from pig to man again; but already it was impossible to say which was which.",
+    "muse": "George Orwell",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "POOLITICS",
+    "quote_id": "Q-123"
+  },
+  {
+    "quote": "In America, the President reigns for four years.",
+    "muse": "Oscar Wilde",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-124"
+  },
+  {
+    "quote": "If voting made any difference they wouldn’t let us do it.",
+    "muse": "Oscar Wilde",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-125"
+  },
+  {
+    "quote": "America is a circus, full of clowns and freaks parading themselves as serious leaders",
+    "muse": "Charles Bukowski",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "INJUSTICE",
+    "quote_id": "Q-126"
+  },
+  {
+    "quote": "You are the sky. Everything else–it’s just the weather.",
+    "muse": "Pema Chödrön",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-127"
+  },
+  {
+    "quote": "The only thing that makes life possible is permanent, intolerable uncertainty: not knowing what comes next.",
+    "muse": "Ursula K. Le Guin",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-128"
+  },
+  {
+    "quote": "I am rooted, but I flow.",
+    "muse": "Virginia Woolf",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-130"
+  },
+  {
+    "quote": "You were once wild here. Don't let them tame you.",
+    "muse": "Isadora Duncan",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-131"
+  },
+  {
+    "quote": "To be truly visionary we have to root our imagination in our concrete reality while simultaneously imagining possibilities beyond that reality.",
+    "muse": "bell hooks",
+    "primary_sutra": "FLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-132"
+  },
+  {
+    "quote": "Remember the earth whose skin you are... Remember to dance.",
+    "muse": "Joy Harjo",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "FLOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-135"
+  },
+  {
+    "quote": "Feet, what do I need you for when I have wings to fly?",
+    "muse": "Frida Kahlo",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-136"
+  },
+  {
+    "quote": "There are years that ask questions and years that answer.",
+    "muse": "Zora Neale Hurston",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "KNOWLEDGE",
+    "quote_id": "Q-137"
+  },
+  {
+    "quote": "The best and most beautiful things in the world cannot be seen or even touched. They must be felt with the heart.",
+    "muse": "Helen Keller",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "BOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-138"
+  },
+  {
+    "quote": "And the world says: You are here. You are here. You are here.",
+    "muse": "Ada Limón",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "FLOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-139"
+  },
+  {
+    "quote": "Before you learn the gravity of kindness, you must travel where sorrow lies.",
+    "muse": "Naomi Shihab Nye",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-140"
+  },
+  {
+    "quote": "What you do makes a difference, and you have to decide what kind of difference you want to make.",
+    "muse": "Jane Goodall",
+    "primary_sutra": "BOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-141"
+  },
+  {
+    "quote": "Attention is the rarest and purest form of generosity.",
+    "muse": "Simone Weil",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-142"
+  },
+  {
+    "quote": "Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.",
+    "muse": "Marie Curie",
+    "primary_sutra": "BOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-143"
+  },
+  {
+    "quote": "Those who contemplate the beauty of the earth find reserves of strength that will endure as long as life lasts.",
+    "muse": "Rachel Carson",
+    "primary_sutra": "BOWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-144"
+  },
+  {
+    "quote": "Hope is the thing with feathers that perches in the soul, and sings the tune without the words, and never stops at all.",
+    "muse": "Emily Dickinson",
+    "primary_sutra": "BOWsutra",
+    "secondary_sutras": "FLOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-145"
+  },
+  {
+    "quote": "This is not a pipe.",
+    "muse": "René Magritte",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-147"
+  },
+  {
+    "quote": "Laziness is nothing more than the habit of resting before you get tired.",
+    "muse": "Jules Renard",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-148"
+  },
+  {
+    "quote": "Music is the only religion that delivers the good.",
+    "muse": "Frank Zappa",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "FLOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-150"
+  },
+  {
+    "quote": "Do one thing every day that scares you.",
+    "muse": "Eleanor Roosevelt",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-151"
+  },
+  {
+    "quote": "Beauty will save the world.",
+    "muse": "Fyodor Dostoyevski",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-153"
+  }
+]

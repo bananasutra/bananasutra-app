@@ -1,0 +1,20 @@
+{
+  "name": "bananasutra-app",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix apps/banana-catalog-prototype",
+    "build": "npm run build --prefix apps/banana-catalog-prototype",
+    "build:data": "npm run build:data --prefix apps/banana-catalog-prototype",
+    "catalog:data": "npm run catalog:snapshot:validate && npm run build:data --prefix apps/banana-catalog-prototype && npm run catalog:slug:audit && npm run catalog:genres:audit",
+    "catalog:snapshot:validate": "python3 apps/banana-catalog-prototype/scripts/validate_snapshot.py",
+    "catalog:genres:audit": "python3 apps/banana-catalog-prototype/scripts/audit_genres.py",
+    "catalog:slug:audit": "python3 apps/banana-catalog-prototype/scripts/audit_song_slugs.py && python3 apps/banana-catalog-prototype/scripts/audit_songbook_slugs.py && python3 apps/banana-catalog-prototype/scripts/audit_sutra_slugs.py",
+    "catalog:dev": "npm run dev --prefix apps/banana-catalog-prototype",
+    "preview": "npm run preview --prefix apps/banana-catalog-prototype",
+    "catalog:preview": "npm run build --prefix apps/banana-catalog-prototype && npm run preview --prefix apps/banana-catalog-prototype -- --host",
+    "catalog:data:dev": "npm run catalog:data && npm run catalog:dev",
+    "catalog:fresh": "npm run catalog:data && npm run build",
+    "catalog:fresh:dev": "npm run catalog:data && npm run catalog:dev",
+    "catalog:sync": "npm run catalog:fresh"
+  }
+}

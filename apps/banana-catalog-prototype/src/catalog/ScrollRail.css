@@ -1,0 +1,84 @@
+/* ─── ScrollRail ──────────────────────────────────────────────────────────── */
+
+.scroll-rail {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+/* The scrollable strip — no visible scrollbar; buttons handle navigation.
+   Touch / trackpad scroll still works via the overflow. */
+.scroll-rail__inner {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;          /* Firefox */
+}
+.scroll-rail__inner::-webkit-scrollbar {
+  display: none;                  /* Chrome / Safari */
+}
+
+/* ── Prev/next buttons ──────────────────────────────────────────────────── */
+
+.scroll-rail__btn {
+  flex: 0 0 auto;
+  /* align-self: stretch (inherited from parent) makes the button span the full rail height. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 2rem;
+  /* No fixed height — grows to match content. Keep min-height for touch target compliance. */
+  min-height: 2.75rem;
+  padding: 0 0.1rem;
+
+  font-size: 1.45rem;
+  line-height: 1;
+  font-weight: 300;
+
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+
+  transition:
+    opacity 0.15s ease,
+    background-color 0.12s ease,
+    color 0.12s ease;
+}
+
+.scroll-rail__btn:hover {
+  background: var(--color-bg-elevated);
+  color: var(--color-link-hover);
+  border-color: var(--color-border-strong);
+}
+
+.scroll-rail__btn:active {
+  background: var(--color-bg-inset);
+}
+
+/* When disabled (at scroll boundary): invisible but keeps layout stable. */
+.scroll-rail__btn:disabled {
+  opacity: 0;
+  pointer-events: none;
+  cursor: default;
+}
+
+.scroll-rail__btn--left {
+  margin-right: 0.35rem;
+}
+
+.scroll-rail__btn--right {
+  margin-left: 0.35rem;
+}
+
+/* On narrow phones touch-swipe is the natural gesture — buttons just take space. */
+@media (max-width: 480px) {
+  .scroll-rail__btn {
+    display: none;
+  }
+}

@@ -1,0 +1,354 @@
+{
+  "sutra": [
+    {
+      "value": "BLOWsutra",
+      "count": 88
+    },
+    {
+      "value": "KNOWsutra",
+      "count": 58
+    },
+    {
+      "value": "GROWsutra",
+      "count": 57
+    },
+    {
+      "value": "QUACKsutra",
+      "count": 56
+    },
+    {
+      "value": "SHOWsutra",
+      "count": 52
+    },
+    {
+      "value": "FLOWsutra",
+      "count": 35
+    },
+    {
+      "value": "GLOWsutra",
+      "count": 29
+    },
+    {
+      "value": "BOWsutra",
+      "count": 10
+    }
+  ],
+  "light_shadow": [
+    {
+      "value": "LIGHT",
+      "count": 207
+    },
+    {
+      "value": "SHADOW",
+      "count": 178
+    }
+  ],
+  "topic": [
+    {
+      "value": "POOLITICS",
+      "count": 79
+    },
+    {
+      "value": "BEAUTY",
+      "count": 62
+    },
+    {
+      "value": "INJUSTICE",
+      "count": 59
+    },
+    {
+      "value": "WISDOM",
+      "count": 43
+    },
+    {
+      "value": "TRUTH",
+      "count": 36
+    },
+    {
+      "value": "FOOLERY",
+      "count": 32
+    },
+    {
+      "value": "PEACE",
+      "count": 30
+    },
+    {
+      "value": "EGO",
+      "count": 27
+    },
+    {
+      "value": "RELIGION",
+      "count": 17
+    }
+  ],
+  "intention": [
+    {
+      "value": "beWOKE",
+      "count": 49
+    },
+    {
+      "value": "beBRAVE",
+      "count": 37
+    },
+    {
+      "value": "seeEGO",
+      "count": 34
+    },
+    {
+      "value": "beFAIR",
+      "count": 25
+    },
+    {
+      "value": "beGRATEFUL",
+      "count": 24
+    },
+    {
+      "value": "beCURIOUS",
+      "count": 23
+    },
+    {
+      "value": "beSILLY",
+      "count": 23
+    },
+    {
+      "value": "seeHIStory",
+      "count": 23
+    },
+    {
+      "value": "beWONDROUS",
+      "count": 22
+    },
+    {
+      "value": "beKIND",
+      "count": 21
+    },
+    {
+      "value": "beYOU",
+      "count": 20
+    },
+    {
+      "value": "beFOOL",
+      "count": 19
+    },
+    {
+      "value": "beWISE",
+      "count": 15
+    },
+    {
+      "value": "beBRIGHT",
+      "count": 14
+    },
+    {
+      "value": "seeWAR",
+      "count": 13
+    },
+    {
+      "value": "beGODless",
+      "count": 12
+    },
+    {
+      "value": "beHUMBLE",
+      "count": 11
+    }
+  ],
+  "written_year": [
+    {
+      "value": "2025",
+      "count": 204
+    },
+    {
+      "value": "2024",
+      "count": 154
+    },
+    {
+      "value": "2026",
+      "count": 27
+    }
+  ],
+  "track_genre": [
+    {
+      "value": "DUB",
+      "count": 80
+    },
+    {
+      "value": "LOFI",
+      "count": 56
+    },
+    {
+      "value": "BLUES",
+      "count": 50
+    },
+    {
+      "value": "JAZZ",
+      "count": 50
+    },
+    {
+      "value": "BURLESQUE",
+      "count": 48
+    },
+    {
+      "value": "INDIE",
+      "count": 43
+    },
+    {
+      "value": "FOLK",
+      "count": 34
+    },
+    {
+      "value": "ROCK",
+      "count": 12
+    },
+    {
+      "value": "MANTRA",
+      "count": 9
+    },
+    {
+      "value": "WORLD",
+      "count": 4
+    }
+  ],
+  "track_secondary_genre": [
+    {
+      "value": "INDIE",
+      "count": 34
+    },
+    {
+      "value": "JAZZ",
+      "count": 29
+    },
+    {
+      "value": "BURLESQUE",
+      "count": 24
+    },
+    {
+      "value": "LOFI",
+      "count": 18
+    },
+    {
+      "value": "RAGGA",
+      "count": 16
+    },
+    {
+      "value": "DUB",
+      "count": 15
+    },
+    {
+      "value": "BLUES",
+      "count": 14
+    },
+    {
+      "value": "FLAMENCO",
+      "count": 13
+    },
+    {
+      "value": "FOLK",
+      "count": 11
+    },
+    {
+      "value": "MANTRA",
+      "count": 7
+    },
+    {
+      "value": "GIPSY",
+      "count": 5
+    },
+    {
+      "value": "ROCK",
+      "count": 5
+    },
+    {
+      "value": "TECHNO",
+      "count": 3
+    },
+    {
+      "value": "WORLD",
+      "count": 3
+    },
+    {
+      "value": "MOTORIK",
+      "count": 2
+    },
+    {
+      "value": "PSYCHEDELIC",
+      "count": 2
+    },
+    {
+      "value": "PUNK",
+      "count": 2
+    },
+    {
+      "value": "COUNTRY",
+      "count": 1
+    }
+  ],
+  "track_instrument": [
+    {
+      "value": "cello",
+      "count": 38
+    },
+    {
+      "value": "banjo",
+      "count": 25
+    },
+    {
+      "value": "piano",
+      "count": 25
+    },
+    {
+      "value": "accordion",
+      "count": 19
+    },
+    {
+      "value": "bass",
+      "count": 10
+    },
+    {
+      "value": "harmonica",
+      "count": 2
+    },
+    {
+      "value": "fiddle",
+      "count": 1
+    },
+    {
+      "value": "guitar",
+      "count": 1
+    }
+  ],
+  "track_mood": [
+    {
+      "value": "😎 CHILL",
+      "count": 9
+    },
+    {
+      "value": "🤔 DEEP",
+      "count": 2
+    },
+    {
+      "value": "🙏 BLESS",
+      "count": 1
+    },
+    {
+      "value": "🥳 WOO",
+      "count": 1
+    }
+  ],
+  "lang": [
+    {
+      "value": "EN",
+      "count": 358
+    },
+    {
+      "value": "FR",
+      "count": 22
+    },
+    {
+      "value": "ES",
+      "count": 4
+    },
+    {
+      "value": "RU",
+      "count": 1
+    }
+  ]
+}

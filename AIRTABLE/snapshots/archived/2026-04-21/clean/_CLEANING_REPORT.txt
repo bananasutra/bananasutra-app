@@ -1,0 +1,35 @@
+AIRTABLE SNAPSHOT CLEANING REPORT — 2026-04-21
+======================================================================
+
+Per-file summary of invisible-character normalization.
+Columns not listed had no modifications.
+
+── SUTRAs-2026-04-21.csv → sutras-2026-04-21.csv (8 rows)
+    (no cell modifications)
+
+── SONGBOOKs-2026-04-21.csv → songbooks-2026-04-21.csv (32 rows)
+    (no cell modifications)
+
+── MUSEs-2026-04-21.csv → muses-2026-04-21.csv (181 rows)
+    (no cell modifications)
+
+── QUOTEs-2026-04-21.csv → quotes-2026-04-21.csv (148 rows)
+    (no cell modifications)
+
+── SONGS (Lyrics)-2026-04-21.csv → lyrics-2026-04-21.csv (383 rows)
+    (no cell modifications)
+
+── YTplaylists-2026-04-21.csv → yt_playlists-2026-04-21.csv (46 rows)
+    (no cell modifications)
+
+── YTvideos-2026-04-21.csv → yt_videos-2026-04-21.csv (470 rows)
+    (no cell modifications)
+
+── SC TRACKs-2026-04-21.csv → sc_tracks-2026-04-21.csv (632 rows)
+    description                          LINE-SEP×2647, NBSP×198, ZWSP×9
+
+── SC EPs-2026-04-21.csv → sc_eps-2026-04-21.csv (231 rows)
+    (no cell modifications)
+
+── SC Playlists-2026-04-21.csv → sc_playlists-2026-04-21.csv (49 rows)
+    (no cell modifications)

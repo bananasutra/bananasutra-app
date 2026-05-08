@@ -1,0 +1,66 @@
+# --- OS / Finder ---
+.DS_Store
+**/.DS_Store
+.AppleDouble
+._*
+
+# --- Secrets ---
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+CLAUDE.md
+
+# --- Node / frontend ---
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+dist-ssr/
+**/dist-ssr/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# --- Python ---
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+ENV/
+env/
+
+# --- Editors ---
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- Local caches / accidental root noise ---
+.pycache/
+.pycache_tmp/
+
+# --- Temporary / regenerable pipeline artifacts ---
+pipelines/sc/raw/
+pipelines/yt/raw/
+**/*.pre-regression-fix
+**/*-simple.csv
+
+# --- Build output ---
+apps/banana-catalog-prototype/src/data/generated/*.tmp
