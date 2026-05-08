@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BANANASUTRA · Oops</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=20260507a" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=20260507a" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20260507a" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Sora:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #0f0f0f;
+        color: #f7f2e8;
+        font-family: "Sora", system-ui, -apple-system, sans-serif;
+      }
+      .oops-wrap {
+        width: min(92vw, 720px);
+        text-align: center;
+        padding: 2rem 1rem 2.5rem;
+      }
+      .brand {
+        margin: 0 0 1rem;
+        font-family: "Archivo Black", "Sora", system-ui, sans-serif;
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+      .oops {
+        margin: 0.25rem 0 1rem;
+        font-family: "Archivo Black", "Sora", system-ui, sans-serif;
+        font-size: clamp(2.6rem, 10vw, 5.6rem);
+        line-height: 1;
+        letter-spacing: 0.02em;
+      }
+      .banana {
+        display: block;
+        margin: 0 auto 1.4rem;
+        width: min(320px, 68vw);
+        height: auto;
+      }
+      .home-link {
+        display: inline-block;
+        margin-top: 0.5rem;
+        padding: 0.8rem 1.1rem;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 999px;
+        color: #fff4bf;
+        text-decoration: none;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+      }
+      .home-link:hover {
+        border-color: rgba(255, 244, 191, 0.65);
+        background: rgba(255, 244, 191, 0.08);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="oops-wrap">
+      <p class="brand">BANANASUTRA</p>
+      <img
+        class="banana"
+        src="/bananasutra-oops-404-300.png"
+        alt="Banana taped to wall illustration"
+        onerror="this.onerror=null;this.src='/favicon-32x32.png';"
+      />
+      <h1 class="oops">OOPS</h1>
+      <a class="home-link" href="/">PEEL ME BACK HOME</a>
+    </main>
+  </body>
+</html>
