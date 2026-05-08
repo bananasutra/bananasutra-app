@@ -15,6 +15,7 @@ import { useSongCatalog } from './generatedData'
 import { SongThumbCard } from './SongThumbCard'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
+import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
 import './SongbooksPage.css'
@@ -281,7 +282,7 @@ export function SongbookPage() {
                 >
                   <iframe
                     className="songbooks-page__featured-video-iframe"
-                    src={`https://www.youtube-nocookie.com/embed/${featuredSongbookVideo.video_id}?rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`}
+                    src={youtubePrivacyEmbedSrc(featuredSongbookVideo.video_id)}
                     title={featuredSongbookVideo.lyrics_title || featuredSongbookVideo.title || 'Featured video'}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
