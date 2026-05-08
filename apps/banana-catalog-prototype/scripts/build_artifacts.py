@@ -12,7 +12,8 @@ Outputs:
     same snapshot's ``sc_tracks``** (so Airtable link fixes apply without re-running the SC pipeline),
     then title-match on ``pipelines/sc/raw/bananasutra_sc_export.csv``), search-only blobs (songbook, muse, SC titles when present,
     capped lyrics head / muse quote — not full lyrics search)
-  src/data/generated/song_catalog_browse.json — slimmer `/songs` browse payload (cards + filters + sorting fields)
+  src/data/generated/song_catalog_browse.json — slimmer `/songs` browse payload (cards + filters + sorting fields;
+    includes `track_count_published` for header “Browse all tracks” totals)
   src/data/generated/song_search_deep.json — deep meaning index (`lyrics_id` -> capped lyric text head)
   src/data/generated/song_detail.json — same featured set (tracks may be empty)
   src/data/generated/facets.json (includes SC `track_genre`, `track_instrument`, `track_mood`)
@@ -1120,6 +1121,7 @@ def build_song_catalog_browse(song_catalog: list[dict[str, Any]]) -> list[dict[s
         "track_instruments",
         "track_moods",
         "discovery_top_track_genres",
+        "track_count_published",
         "aggregate_play_count",
         "aggregate_like_count",
         "peak_play_count",

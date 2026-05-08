@@ -326,6 +326,17 @@ export function TracksPage() {
     </section>
   )
 
+  const tracksTaggingNotice = (
+    <p className="tracks-page__filter-notice" role="note">
+      <span className="tracks-page__filter-notice-glyph" aria-hidden>
+        {'\u2139\uFE0E'}
+      </span>
+      <span className="tracks-page__filter-notice-text">
+        Tracks tagging is still in progress. Genres, tempo, mood, and instrument filters are incomplete.
+      </span>
+    </p>
+  )
+
   const pagerPreserve = () => new URLSearchParams(location.search)
 
   const pagerLink = (target: number) => {
@@ -403,6 +414,8 @@ export function TracksPage() {
                 </div>
 
                 {filtersOpen ? activeFilterContext : null}
+
+                {filtersOpen ? tracksTaggingNotice : null}
 
                 <div id="tracks-filter-panel" className="catalog-facet-stack">
                   <section className="catalog-facet" aria-labelledby="tracks-find-heading">
@@ -508,6 +521,7 @@ export function TracksPage() {
                 {!filtersOpen ? (
                   <>
                     {activeFilterContext}
+                    {tracksTaggingNotice}
                     <button
                       type="button"
                       className="catalog-filter-reopen"
