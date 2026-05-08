@@ -17,6 +17,7 @@ const WordsPage = lazy(() => import('./catalog/WordsPage').then((m) => ({ defaul
 const SutraDetailPage = lazy(() => import('./catalog/SutraDetailPage').then((m) => ({ default: m.SutraDetailPage })))
 const StyleGuidePage = lazy(() => import('./catalog/StyleGuidePage').then((m) => ({ default: m.StyleGuidePage })))
 const SitemapPage = lazy(() => import('./catalog/SitemapPage').then((m) => ({ default: m.SitemapPage })))
+const GITHUB_PROJECT_BASENAME = '/bananasutra-app'
 
 /** Start the main browse payload fetch as soon as the app bundle is evaluated. */
 if (typeof window !== 'undefined') {
@@ -150,12 +151,17 @@ function ScrollToTopOnNavigate() {
 
 /** Catalog routes — see `_docs/CATALOG-GLOBAL-CHROME.md` and `_docs/CATALOG-IA.md`. */
 export default function App() {
+  const routerBasename =
+    typeof window !== 'undefined' && window.location.hostname.endsWith('.github.io')
+      ? GITHUB_PROJECT_BASENAME
+      : undefined
+
   return (
     <>
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
-      <BrowserRouter>
+      <BrowserRouter basename={routerBasename}>
         <BootPrefetch />
         <NavigationLoadingBridge />
         <ScrollToTopOnNavigate />
