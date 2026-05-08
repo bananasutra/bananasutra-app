@@ -4,6 +4,7 @@ import { NavigationLoadingBridge } from './NavigationLoadingBridge'
 import { loadSongCatalogBrowse, loadYoutubeByLyricsId } from './catalog/generatedData'
 import { prefetchCatalogRoutesIdle } from './routePrefetch'
 import { SearchRedirect } from './catalog/SearchRedirect'
+import { useAnalyticsPageView } from './useAnalyticsPageView'
 
 const HomePortal = lazy(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
 const AboutPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutPage })))
@@ -146,6 +147,9 @@ function ScrollToTopOnNavigate() {
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
+
+  useAnalyticsPageView()
+
   return null
 }
 
