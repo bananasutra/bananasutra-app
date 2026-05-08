@@ -402,6 +402,11 @@ export function TracksPage() {
                   </button>
                 </div>
 
+                <p className="tracks-page__filter-notice" role="note">
+                  Track tagging is still in progress—genre, tempo, mood, and instrument filters may be incomplete for some
+                  tracks.
+                </p>
+
                 {filtersOpen ? activeFilterContext : null}
 
                 <div id="tracks-filter-panel" className="catalog-facet-stack">
