@@ -64,3 +64,6 @@ pipelines/yt/raw/
 
 # --- Build output ---
 apps/banana-catalog-prototype/src/data/generated/*.tmp
+
+# --- Private/local docs (keep on disk, not on public repo) ---
+_docs/
