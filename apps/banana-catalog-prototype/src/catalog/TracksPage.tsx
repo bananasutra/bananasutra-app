@@ -329,10 +329,10 @@ export function TracksPage() {
   const tracksTaggingNotice = (
     <p className="tracks-page__filter-notice" role="note">
       <span className="tracks-page__filter-notice-glyph" aria-hidden>
-        {'\u26A0\uFE0E'}
+        {'\u2139\uFE0E'}
       </span>
       <span className="tracks-page__filter-notice-text">
-        Tracks tagging is still in progress. Genres, tempo, mood, and instruments filters is incomplete.
+        Tracks tagging is still in progress. Genres, tempo, mood, and instrument filters are incomplete.
       </span>
     </p>
   )
