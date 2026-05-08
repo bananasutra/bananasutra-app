@@ -15,6 +15,7 @@ import { ScrollRail } from './ScrollRail'
 import { CatalogPager } from './CatalogPager'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
+import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import './CatalogPager.css'
 import './CatalogApp.css'
 import './VideosPage.css'
@@ -341,6 +342,12 @@ export function VideosPage() {
     [allVideos],
   )
   const featuredVideoHero = useMemo(() => pickRandomVideo(featuredVideos), [featuredVideos])
+
+  const featuredHeroSongPageHref = useMemo(() => {
+    if (!featuredVideoHero) return null
+    const id = (featuredVideoHero.lyrics_id || '').trim()
+    return featuredYoutubeSongPageHref(featuredVideoHero, Boolean(id && inAppIds.has(id)))
+  }, [featuredVideoHero, inAppIds])
 
   const orphanUploadCount = useMemo(
     () => allVideos.filter((v) => !inAppIds.has(v.lyrics_id)).length,
@@ -751,6 +758,13 @@ export function VideosPage() {
                 ) : null}
                 {(featuredVideoHero.sutra || '').trim() ? (
                   <p className="videos-page__featured-hero-sutra">{featuredVideoHero.sutra.trim()}</p>
+                ) : null}
+                {featuredHeroSongPageHref ? (
+                  <div className="catalog-featured-video-song-row">
+                    <Link className="catalog-song-page-cta" to={featuredHeroSongPageHref}>
+                      Song page
+                    </Link>
+                  </div>
                 ) : null}
               </div>
             </section>

@@ -25,6 +25,7 @@ import { songOnWordsSurface } from './wordsStory'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
+import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
 import './SongbooksPage.css'
@@ -258,6 +259,13 @@ export function SutraDetailPage() {
   }, [entry?.sutra, youtubeVideos])
   const featuredSutraVideo = useMemo(() => pickRandomVideo(featuredSutraVideos), [featuredSutraVideos])
 
+  const featuredSutraSongPageHref = useMemo(() => {
+    if (!featuredSutraVideo || !songCatalogRows) return null
+    const id = (featuredSutraVideo.lyrics_id || '').trim()
+    const inCatalog = id ? songCatalogRows.some((s) => (s.lyrics_id || '').trim() === id) : false
+    return featuredYoutubeSongPageHref(featuredSutraVideo, inCatalog)
+  }, [featuredSutraVideo, songCatalogRows])
+
   const pivotTarget = useMemo(() => {
     if (!familyKey || !entry) return null
     return pickPivotTargetFamily(entry.mental_health_pivot, familyKey)
@@ -481,6 +489,13 @@ export function SutraDetailPage() {
                   <h3 className="sutra-detail__feat-title">{featuredSutraVideo.lyrics_title || featuredSutraVideo.title}</h3>
                   {(featuredSutraVideo.lyrics_summary || '').trim() ? (
                     <p className="sutra-detail__feat-desc">{featuredSutraVideo.lyrics_summary?.trim()}</p>
+                  ) : null}
+                  {featuredSutraSongPageHref ? (
+                    <div className="catalog-featured-video-song-row">
+                      <Link className="catalog-song-page-cta" to={featuredSutraSongPageHref}>
+                        Song page
+                      </Link>
+                    </div>
                   ) : null}
                 </div>
               </>

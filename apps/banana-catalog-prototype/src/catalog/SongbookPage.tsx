@@ -16,6 +16,7 @@ import { SongThumbCard } from './SongThumbCard'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
+import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
 import './SongbooksPage.css'
@@ -136,6 +137,12 @@ export function SongbookPage() {
   const featuredSongbookVideoSummary = (featuredSongbookVideo?.lyrics_summary || '').trim() || (
     featuredSongbookVideo?.lyrics_id ? (songCatalogByLyricsId.get(featuredSongbookVideo.lyrics_id)?.summary_short || '').trim() : ''
   )
+
+  const featuredSongbookSongPageHref = useMemo(() => {
+    if (!featuredSongbookVideo) return null
+    const id = (featuredSongbookVideo.lyrics_id || '').trim()
+    return featuredYoutubeSongPageHref(featuredSongbookVideo, Boolean(id && songCatalogByLyricsId.has(id)))
+  }, [featuredSongbookVideo, songCatalogByLyricsId])
 
   if (catalogLoading) {
     return (
@@ -295,6 +302,13 @@ export function SongbookPage() {
                   </h3>
                   {featuredSongbookVideoSummary ? (
                     <p className="songbooks-page__featured-video-summary">{featuredSongbookVideoSummary}</p>
+                  ) : null}
+                  {featuredSongbookSongPageHref ? (
+                    <div className="catalog-featured-video-song-row">
+                      <Link className="catalog-song-page-cta" to={featuredSongbookSongPageHref}>
+                        Song page
+                      </Link>
+                    </div>
                   ) : null}
                 </div>
               </section>
