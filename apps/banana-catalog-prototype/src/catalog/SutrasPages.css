@@ -206,27 +206,29 @@
   }
 }
 
-.sutra-detail__featured-video {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-  width: 100%;
-  max-width: 980px;
-  margin-inline: auto;
-}
-
+/* Same stacking model as `.songbooks-page__featured-video-*` / `.videos-page__featured-hero-*`:
+   embed + copy are siblings, each `max-width: 980px` + `margin-inline: auto` so left edges line up. */
 .sutra-detail__featured-video-embed {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  max-width: 980px;
+  margin: 0 auto;
   overflow: hidden;
   border-radius: var(--radius-sm);
 }
 
 .sutra-detail__featured-video-copy {
+  margin-top: 0.8rem;
+  max-width: 980px;
+  margin-inline: auto;
   width: 100%;
-  margin-inline: 0;
   text-align: left;
+}
+
+.sutra-detail__featured-video-copy .sutra-detail__feat-title,
+.sutra-detail__featured-video-copy .sutra-detail__feat-desc {
+  margin-inline: 0;
+  padding-inline: 0;
 }
 
 /* YouTube video embed — 16:9 responsive container */
@@ -238,10 +240,9 @@
   border-radius: var(--radius-sm);
 }
 
-.sutra-detail__yt-embed {
+.sutra-detail__featured-video-embed .sutra-detail__yt-embed {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   border: none;

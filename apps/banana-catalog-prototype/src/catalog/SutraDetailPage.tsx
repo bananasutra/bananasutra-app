@@ -463,7 +463,7 @@ export function SutraDetailPage() {
               Featured {entry.sutra} Video
             </h2>
             {featuredSutraVideo ? (
-              <div className="sutra-detail__featured-video">
+              <>
                 <div
                   className="sutra-detail__featured-video-embed"
                   style={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
@@ -483,7 +483,7 @@ export function SutraDetailPage() {
                     <p className="sutra-detail__feat-desc">{featuredSutraVideo.lyrics_summary?.trim()}</p>
                   ) : null}
                 </div>
-              </div>
+              </>
             ) : (
               <p className="sutra-detail__empty">No featured {entry.sutra} video marked in the catalog yet.</p>
             )}
