@@ -592,7 +592,7 @@ export function TracksPage() {
                                     {statLine}
                                   </span>
                                   <Link
-                                    className="tracks-page__song-cta"
+                                    className="catalog-song-page-cta"
                                     to={href}
                                     onClick={(e) => e.stopPropagation()}
                                   >

@@ -429,7 +429,10 @@
 
 .songbooks-page__featured-video-title {
   margin: 0 0 0.4rem;
-  line-height: 1.3;
+  font-family: var(--font-body);
+  font-weight: var(--catalog-featured-embed-title-weight);
+  font-size: var(--catalog-featured-embed-title-size);
+  line-height: var(--catalog-featured-embed-title-line-height);
   color: var(--color-text-strong);
 }
 

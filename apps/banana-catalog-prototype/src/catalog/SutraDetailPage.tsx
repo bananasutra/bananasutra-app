@@ -24,6 +24,8 @@ import { useSongCatalog } from './generatedData'
 import { songOnWordsSurface } from './wordsStory'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
+import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
+import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
 import './SongbooksPage.css'
@@ -257,6 +259,13 @@ export function SutraDetailPage() {
   }, [entry?.sutra, youtubeVideos])
   const featuredSutraVideo = useMemo(() => pickRandomVideo(featuredSutraVideos), [featuredSutraVideos])
 
+  const featuredSutraSongPageHref = useMemo(() => {
+    if (!featuredSutraVideo || !songCatalogRows) return null
+    const id = (featuredSutraVideo.lyrics_id || '').trim()
+    const inCatalog = id ? songCatalogRows.some((s) => (s.lyrics_id || '').trim() === id) : false
+    return featuredYoutubeSongPageHref(featuredSutraVideo, inCatalog)
+  }, [featuredSutraVideo, songCatalogRows])
+
   const pivotTarget = useMemo(() => {
     if (!familyKey || !entry) return null
     return pickPivotTargetFamily(entry.mental_health_pivot, familyKey)
@@ -462,14 +471,14 @@ export function SutraDetailPage() {
               Featured {entry.sutra} Video
             </h2>
             {featuredSutraVideo ? (
-              <div className="sutra-detail__featured-video">
+              <>
                 <div
                   className="sutra-detail__featured-video-embed"
                   style={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
                 >
                   <iframe
                     className="sutra-detail__yt-embed"
-                    src={`https://www.youtube-nocookie.com/embed/${featuredSutraVideo.video_id}?rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`}
+                    src={youtubePrivacyEmbedSrc(featuredSutraVideo.video_id)}
                     title={featuredSutraVideo.lyrics_title || featuredSutraVideo.title || `${entry.sutra} featured video`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -481,8 +490,15 @@ export function SutraDetailPage() {
                   {(featuredSutraVideo.lyrics_summary || '').trim() ? (
                     <p className="sutra-detail__feat-desc">{featuredSutraVideo.lyrics_summary?.trim()}</p>
                   ) : null}
+                  {featuredSutraSongPageHref ? (
+                    <div className="catalog-featured-video-song-row">
+                      <Link className="catalog-song-page-cta" to={featuredSutraSongPageHref}>
+                        Song page
+                      </Link>
+                    </div>
+                  ) : null}
                 </div>
-              </div>
+              </>
             ) : (
               <p className="sutra-detail__empty">No featured {entry.sutra} video marked in the catalog yet.</p>
             )}

@@ -206,24 +206,29 @@
   }
 }
 
-.sutra-detail__featured-video {
-  display: grid;
-  gap: 0.9rem;
-}
-
+/* Same stacking model as `.songbooks-page__featured-video-*` / `.videos-page__featured-hero-*`:
+   embed + copy are siblings, each `max-width: 980px` + `margin-inline: auto` so left edges line up. */
 .sutra-detail__featured-video-embed {
   position: relative;
   width: 100%;
   max-width: 980px;
   margin: 0 auto;
-  aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: var(--radius-sm);
 }
 
 .sutra-detail__featured-video-copy {
+  margin-top: 0.8rem;
   max-width: 980px;
   margin-inline: auto;
+  width: 100%;
+  text-align: left;
+}
+
+.sutra-detail__featured-video-copy .sutra-detail__feat-title,
+.sutra-detail__featured-video-copy .sutra-detail__feat-desc {
+  margin-inline: 0;
+  padding-inline: 0;
 }
 
 /* YouTube video embed — 16:9 responsive container */
@@ -235,22 +240,22 @@
   border-radius: var(--radius-sm);
 }
 
-.sutra-detail__yt-embed {
+.sutra-detail__featured-video-embed .sutra-detail__yt-embed {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   border: none;
   border-radius: var(--radius-sm);
 }
 
-/* Featured songbook h3 — subordinate to section H2 labels. */
+/* Featured EP / video h3 — subordinate to section H2 labels. */
 .sutra-detail__feat-title {
   margin: 0 0 0.5rem;
   font-family: var(--font-body);
-  font-weight: 600;
-  line-height: 1.3;
+  font-weight: var(--catalog-featured-embed-title-weight);
+  font-size: var(--catalog-featured-embed-title-size);
+  line-height: var(--catalog-featured-embed-title-line-height);
   color: var(--color-text-strong);
 }
 
