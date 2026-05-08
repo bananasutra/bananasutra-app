@@ -1,3 +1,5 @@
+import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
+
 type Props = {
   videoId: string
   title?: string
@@ -9,9 +11,7 @@ type Props = {
 export function YouTubeEmbed({ videoId, title = 'YouTube video' }: Props) {
   const id = videoId.trim()
   if (!id) return null
-  const src =
-    `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}` +
-    '?rel=0&modestbranding=1&iv_load_policy=3&playsinline=1'
+  const src = youtubePrivacyEmbedSrc(id)
   return (
     <div className="yt-embed-shell">
       <iframe

@@ -14,6 +14,7 @@ import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { ScrollRail } from './ScrollRail'
 import { CatalogPager } from './CatalogPager'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
+import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
 import './CatalogPager.css'
 import './CatalogApp.css'
 import './VideosPage.css'
@@ -736,7 +737,7 @@ export function VideosPage() {
               >
                 <iframe
                   className="videos-page__featured-hero-iframe"
-                  src={`https://www.youtube-nocookie.com/embed/${featuredVideoHero.video_id}?rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`}
+                  src={youtubePrivacyEmbedSrc(featuredVideoHero.video_id)}
                   title={featuredVideoHero.lyrics_title || featuredVideoHero.title || 'Featured video'}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen

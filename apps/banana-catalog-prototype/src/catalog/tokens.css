@@ -58,6 +58,12 @@
   --catalog-shell-section-label-weight: 700;
   --catalog-shell-section-label-tracking: 0.08em;
   --catalog-shell-section-label-color: var(--color-text-primary);
+
+  /* Featured full-width video blocks — title must read below section `.catalog-section-title` (h2). */
+  --catalog-featured-embed-title-size: clamp(0.98rem, 2.1vw, 1.12rem);
+  --catalog-featured-embed-title-weight: 600;
+  --catalog-featured-embed-title-line-height: 1.35;
+
   /*
    * Section CTA — right-aligned, uppercase Sora, underline+arrow.
    * Shared across home, about, songbooks, sutra detail.

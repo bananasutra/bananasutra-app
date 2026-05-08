@@ -30,12 +30,45 @@
   color: var(--catalog-shell-section-label-color);
 }
 
+/* Mirrors About intro line (“Ideas you can feel.”) — not uppercase kicker. */
+.home-portal__hero-label.home-portal__hero-label--about-lede {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-family: var(--font-ui);
+  font-weight: 800;
+  font-size: clamp(0.95rem, 2.35vw, 1.06rem);
+  line-height: 1.35;
+  color: var(--color-text-strong);
+}
+
 .home-portal__hero-why {
   margin: 0 0 1rem;
   font-size: 0.82rem;
   line-height: 1.5;
   color: var(--color-text-muted);
   font-family: var(--font-body);
+}
+
+.home-portal__hero-why-inner {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.45rem;
+  justify-content: center;
+  align-items: baseline;
+  max-width: 22rem;
+  margin-inline: auto;
+}
+
+@media (max-width: 520px) {
+  .home-portal__hero-why-inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .home-portal__hero-why-sep {
+    display: none;
+  }
 }
 
 .home-portal__hero-why a {
@@ -350,14 +383,15 @@
   text-align: center;
   color: var(--color-text-strong);
   font-family: var(--font-display);
-  font-size: clamp(1.45rem, 4.2vw, 2.45rem);
+  font-size: clamp(1.15rem, 3.1vw, 1.85rem);
   font-weight: 500;
   font-style: italic;
   font-variation-settings: var(--fraunces-display);
   letter-spacing: -0.025em;
-  line-height: 1.22;
+  line-height: 1.28;
   white-space: normal;
   width: min(100%, 34ch);
+  min-height: 4.25em;
   position: relative;
   padding: 0.55rem 0.65rem 0.45rem 2.15rem;
   margin-left: auto;

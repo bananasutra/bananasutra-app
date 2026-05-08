@@ -16,6 +16,7 @@ import { SUTRA_CONTEXT, sutraHrefForFamily } from './sutraContext'
 import { useDocumentTitle } from './useDocumentTitle'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { loadSongCatalog } from './generatedData'
+import { songOnWordsSurface } from './wordsStory'
 import './CatalogApp.css'
 import './HomePortal.css'
 
@@ -196,6 +197,17 @@ export function HomePortal() {
       .slice(0, 6)
   }, [songCatalog])
 
+  const wordsSurfaceCount = useMemo(() => {
+    if (!songCatalog) return null
+    return songCatalog.filter(songOnWordsSurface).length
+  }, [songCatalog])
+
+  /** Matches searchable catalog rows (same pool as `/words` + rest of catalog). */
+  const searchDiscoverRowCount = useMemo(() => {
+    if (!songCatalog) return null
+    return songCatalog.length
+  }, [songCatalog])
+
   const songbooksCount = BUILD_SUMMARY.songbooks ?? 0
 
   useEffect(() => {
@@ -271,8 +283,8 @@ export function HomePortal() {
           <h1 className="visually-hidden">BANANASUTRA</h1>
 
           <section className="home-portal__hero" aria-labelledby="home-hero-quote-label">
-            <p id="home-hero-quote-label" className="home-portal__hero-label">
-              A quote for now.
+            <p id="home-hero-quote-label" className="home-portal__hero-label home-portal__hero-label--about-lede">
+              Ideas you can feel.
             </p>
             <p className="home-portal__quote" aria-label="Featured quote">
               <span className="home-portal__quote-text">{typedQuote}</span>
@@ -304,14 +316,19 @@ export function HomePortal() {
               </p>
             ) : null}
             <p className="home-portal__hero-why">
-              <Link to="/about#sutras">Learn more about sutras</Link>
-              {primarySutraDisplay ? (
-                <>
-                  {' '}
-                  <span aria-hidden>or</span>{' '}
-                  <Link to={buildBrowsePathForFacet('sutra', primarySutraDisplay)}>Browse all {primarySutraDisplay} songs</Link>
-                </>
-              ) : null}
+              <span className="home-portal__hero-why-inner">
+                <Link to="/about#sutras">About sutras</Link>
+                {primarySutraDisplay ? (
+                  <>
+                    <span className="home-portal__hero-why-sep" aria-hidden>
+                      {' · '}
+                    </span>
+                    <Link to={buildBrowsePathForFacet('sutra', primarySutraDisplay)}>
+                      All {primarySutraDisplay} songs
+                    </Link>
+                  </>
+                ) : null}
+              </span>
             </p>
           </section>
 
@@ -324,7 +341,6 @@ export function HomePortal() {
             </p>
             <div className="home-portal__sutra-grid">
               {SUTRA_GRID_KEYS.map((key) => {
-                const quack = key === 'QUACK'
                 const ctx = SUTRA_CONTEXT[key]
                 return (
                   <Link
@@ -333,10 +349,11 @@ export function HomePortal() {
                     to={sutraHrefForFamily(key)}
                   >
                     <div className="home-portal__sutra-tile-top">
-                      {quack ? <span className="home-portal__sutra-tile-sub">Sub of BLOW</span> : null}
                       <span className="home-portal__sutra-tile-name">{ctx.sutra}</span>
                       <span className="home-portal__sutra-tile-question">{ctx.question}</span>
-                      <span className="home-portal__sutra-tile-practice">{ctx.practice}</span>
+                      <span className="home-portal__sutra-tile-practice">
+                        {key === 'QUACK' ? 'Sub of BLOW' : ctx.practice}
+                      </span>
                     </div>
                   </Link>
                 )
@@ -410,14 +427,16 @@ export function HomePortal() {
 
           <section className="home-portal__section home-portal__section--last" aria-labelledby="home-explore-heading">
             <h2 id="home-explore-heading" className="catalog-section-title">
-              How to explore
+              Ways to Explore
             </h2>
             <ul className="about-page__how-grid">
               <li className="about-page__how-cell">
                 <Link className="about-page__how-card" to="/songs#catalog-songs-find-input">
                   <span className="about-page__how-label">Search &amp; Discover →</span>
                   <span className="about-page__how-stat">
-                    {formatCount(buildSummaryCount('songs'))} songs · find + filters
+                    {searchDiscoverRowCount != null
+                      ? `${formatCount(searchDiscoverRowCount)} songs & lyrics · find + filters`
+                      : '— · find + filters'}
                   </span>
                   <span className="about-page__how-desc">
                     Find any song by title, sutra, muse, topic, or vibe. Start typing, start finding.
@@ -427,20 +446,20 @@ export function HomePortal() {
               <li className="about-page__how-cell">
                 <Link className="about-page__how-card" to="/songbooks">
                   <span className="about-page__how-label">Browse Songbooks →</span>
-                  <span className="about-page__how-stat">{formatCount(buildSummaryCount('songbooks'))} themed sets</span>
+                  <span className="about-page__how-stat">{formatCount(buildSummaryCount('songbooks'))} curated collections</span>
                   <span className="about-page__how-desc">
-                    Curated playlists that tell a story. By sutra, by mood, by language, by genre.
+                    Best-of SoundCloud playlists that tell a story. By topic, by genres, and by language.
                   </span>
                 </Link>
               </li>
               <li className="about-page__how-cell">
                 <Link className="about-page__how-card" to="/songs">
-                  <span className="about-page__how-label">Explore the Full Catalog →</span>
+                  <span className="about-page__how-label">Explore the fool catalog →</span>
                   <span className="about-page__how-stat">
-                    {formatCount(buildSummaryCount('songs'))} · meaning-first
+                    {formatCount(buildSummaryCount('songs'))} songs · meaning-first
                   </span>
                   <span className="about-page__how-desc">
-                    Every song in one place. Filter by sutra, topic, muse, or just scroll and see what finds you.
+                    Every song in one place—filter, wander, or let something find you.
                   </span>
                 </Link>
               </li>
@@ -448,10 +467,10 @@ export function HomePortal() {
                 <Link className="about-page__how-card" to="/tracks">
                   <span className="about-page__how-label">Listen to Top Tracks →</span>
                   <span className="about-page__how-stat">
-                    {formatCount(buildSummaryCount('track_catalog_rows'))} · sound-first
+                    {formatCount(buildSummaryCount('track_catalog_rows'))} tracks · sound-first
                   </span>
                   <span className="about-page__how-desc">
-                    The audio variants, ranked and filterable. Pick a genre, an instrument, a mood.
+                    The best tracks, ranked and filterable by tempo, genres, instruments, and moods.
                   </span>
                 </Link>
               </li>
@@ -459,16 +478,18 @@ export function HomePortal() {
                 <Link className="about-page__how-card" to="/videos">
                   <span className="about-page__how-label">Watch Music Videos →</span>
                   <span className="about-page__how-stat">
-                    {formatCount(buildSummaryCount('youtube_video_rows'))} on YouTube
+                    {formatCount(buildSummaryCount('youtube_video_rows'))} videos · eyes first
                   </span>
-                  <span className="about-page__how-desc">Same songs, eyes open. The visual wall.</span>
+                  <span className="about-page__how-desc">
+                    The visual YouTube wall. Same songs, eye candy style.
+                  </span>
                 </Link>
               </li>
               <li className="about-page__how-cell">
                 <Link className="about-page__how-card" to="/words">
                   <span className="about-page__how-label">Read the Words →</span>
                   <span className="about-page__how-stat">
-                    {formatCount(buildSummaryCount('featured_lyrics_only'))} lyrics-first rows
+                    {wordsSurfaceCount != null ? formatCount(wordsSurfaceCount) : '—'} lyrics-first songs
                   </span>
                   <span className="about-page__how-desc">
                     Lyrics without music. Pieces still brewing, or that live as text alone.

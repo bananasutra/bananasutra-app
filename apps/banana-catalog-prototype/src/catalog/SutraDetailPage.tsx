@@ -24,6 +24,7 @@ import { useSongCatalog } from './generatedData'
 import { songOnWordsSurface } from './wordsStory'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
+import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
 import './SongbooksPage.css'
@@ -469,7 +470,7 @@ export function SutraDetailPage() {
                 >
                   <iframe
                     className="sutra-detail__yt-embed"
-                    src={`https://www.youtube-nocookie.com/embed/${featuredSutraVideo.video_id}?rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`}
+                    src={youtubePrivacyEmbedSrc(featuredSutraVideo.video_id)}
                     title={featuredSutraVideo.lyrics_title || featuredSutraVideo.title || `${entry.sutra} featured video`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
