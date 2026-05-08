@@ -1,5 +1,5 @@
-import { lazy, Suspense, useEffect, useLayoutEffect } from 'react'
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { Component, lazy, Suspense, type ReactNode, useEffect, useLayoutEffect, useState } from 'react'
+import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
 import { NavigationLoadingBridge } from './NavigationLoadingBridge'
 import { loadSongCatalogBrowse, loadYoutubeByLyricsId } from './catalog/generatedData'
 import { prefetchCatalogRoutesIdle } from './routePrefetch'
@@ -30,10 +30,92 @@ function CatalogBrowseRoute() {
 }
 
 function AppRouteFallback() {
+  const [showSlowFallback, setShowSlowFallback] = useState(false)
+  useEffect(() => {
+    const id = window.setTimeout(() => setShowSlowFallback(true), 12000)
+    return () => window.clearTimeout(id)
+  }, [])
   return (
     <div className="app-route-fallback" role="status" aria-live="polite" aria-busy="true">
       <span className="app-route-fallback__spinner" aria-hidden />
       <p className="app-route-fallback__label">Loading…</p>
+      {showSlowFallback ? (
+        <p className="app-route-fallback__hint">
+          This is taking longer than usual. If needed, you can retry this page.
+        </p>
+      ) : null}
+      {showSlowFallback ? (
+        <button type="button" className="app-route-fallback__retry" onClick={() => window.location.reload()}>
+          Retry page load
+        </button>
+      ) : null}
+    </div>
+  )
+}
+
+function RouteLoadErrorFallback({ onRetry }: { onRetry: () => void }) {
+  return (
+    <div className="app-route-fallback" role="alert" aria-live="assertive" aria-busy="false">
+      <p className="app-route-fallback__label">Couldn&apos;t load this page yet.</p>
+      <p className="app-route-fallback__hint">
+        Your connection may have dropped for a moment. Retry and we&apos;ll keep your URL.
+      </p>
+      <div className="app-route-fallback__actions">
+        <button type="button" className="app-route-fallback__retry" onClick={onRetry}>
+          Retry
+        </button>
+        <Link to="/" className="app-route-fallback__home-link">
+          Back home
+        </Link>
+      </div>
+    </div>
+  )
+}
+
+class RouteErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; key: number }> {
+  state = { hasError: false, key: 0 }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error: unknown) {
+    // Keep diagnostics in development without crashing the whole app on chunk errors.
+    if (import.meta.env.DEV) console.error(error)
+  }
+
+  retry = () => {
+    this.setState((prev) => ({ hasError: false, key: prev.key + 1 }))
+  }
+
+  render() {
+    if (this.state.hasError) return <RouteLoadErrorFallback onRetry={this.retry} />
+    return <div key={this.state.key}>{this.props.children}</div>
+  }
+}
+
+function RouteBoundary({ children }: { children: ReactNode }) {
+  return (
+    <RouteErrorBoundary>
+      <Suspense fallback={<AppRouteFallback />}>{children}</Suspense>
+    </RouteErrorBoundary>
+  )
+}
+
+function NotFoundRoute() {
+  return (
+    <div className="catalog catalog-page catalog-page--shell">
+      <div className="catalog-page__main">
+        <main id="main-content" className="songbooks-page songbooks-page--missing">
+          <p className="songbooks-page__missing-title">OOPS — page not found.</p>
+          <p className="songbooks-page__missing-sub">
+            The route does not exist in this build. Use Home to keep exploring.
+          </p>
+          <Link to="/" className="songbooks-page__back-link">
+            Peel me back home
+          </Link>
+        </main>
+      </div>
     </div>
   )
 }
@@ -77,23 +159,106 @@ export default function App() {
         <BootPrefetch />
         <NavigationLoadingBridge />
         <ScrollToTopOnNavigate />
-        <Suspense fallback={<AppRouteFallback />}>
-          <Routes>
-            <Route path="/" element={<HomePortal />} />
-            <Route path="/songs" element={<CatalogBrowseRoute />} />
-            <Route path="/words" element={<WordsPage />} />
-            <Route path="/search" element={<SearchRedirect />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/about/:slug" element={<SutraDetailPage />} />
-            <Route path="/songbooks" element={<SongbooksPage />} />
-            <Route path="/songbooks/:slug" element={<SongbookPage />} />
-            <Route path="/tracks" element={<TracksPage />} />
-            <Route path="/songs/:slug" element={<SongDetail />} />
-            <Route path="/videos" element={<VideosPage />} />
-            <Route path="/style-guide" element={<StyleGuidePage />} />
-            <Route path="/sitemap" element={<SitemapPage />} />
-          </Routes>
-        </Suspense>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <RouteBoundary>
+                <HomePortal />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/songs"
+            element={
+              <RouteBoundary>
+                <CatalogBrowseRoute />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/words"
+            element={
+              <RouteBoundary>
+                <WordsPage />
+              </RouteBoundary>
+            }
+          />
+          <Route path="/search" element={<SearchRedirect />} />
+          <Route
+            path="/about"
+            element={
+              <RouteBoundary>
+                <AboutPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/about/:slug"
+            element={
+              <RouteBoundary>
+                <SutraDetailPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/songbooks"
+            element={
+              <RouteBoundary>
+                <SongbooksPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/songbooks/:slug"
+            element={
+              <RouteBoundary>
+                <SongbookPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/tracks"
+            element={
+              <RouteBoundary>
+                <TracksPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/songs/:slug"
+            element={
+              <RouteBoundary>
+                <SongDetail />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/videos"
+            element={
+              <RouteBoundary>
+                <VideosPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/style-guide"
+            element={
+              <RouteBoundary>
+                <StyleGuidePage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/sitemap"
+            element={
+              <RouteBoundary>
+                <SitemapPage />
+              </RouteBoundary>
+            }
+          />
+          <Route path="*" element={<NotFoundRoute />} />
+        </Routes>
       </BrowserRouter>
     </>
   )
