@@ -10,7 +10,8 @@ Outputs:
     includes `has_in_app_playback`, `has_sc_catalog_listen` / `sc_catalog_listen_url` (when no primary SC EP:
     optional **human overrides** CSV, then ``AT-TRACKS-FULL-v4.csv`` **re-bucketed by ``lyrics_id`` from the
     same snapshot's ``sc_tracks``** (so Airtable link fixes apply without re-running the SC pipeline),
-    then title-match on ``pipelines/sc/raw/bananasutra_sc_export.csv``), search-only blobs (songbook, muse, SC titles when present,
+    then title-match on ``pipelines/sc/raw/bananasutra_sc_export.csv`` unless lyrics ``production_stage`` is ``SUNO``),
+    search-only blobs (songbook, muse, SC titles when present,
     capped lyrics head / muse quote — not full lyrics search)
   src/data/generated/song_catalog_browse.json — slimmer `/songs` browse payload (cards + filters + sorting fields;
     includes `track_count_published` for header “Browse all tracks” totals)
@@ -874,6 +875,11 @@ def title_lead_bonus(target: str, track_title_norm: str) -> int:
     return 0
 
 
+def lyric_pipeline_stage_upper(lyric: dict[str, Any]) -> str:
+    """``production_stage`` / legacy ``status`` from lyrics CSV — uppercased for comparisons."""
+    return str(lyric.get("production_stage") or lyric.get("status") or "").strip().upper()
+
+
 def load_soundcloud_raw_export_listen_rows(path: Path) -> list[dict[str, Any]]:
     """Track-level rows from ``bananasutra_sc_export.csv`` (no ``/sets/`` URLs) for listen + cover fallbacks."""
     if not path.is_file():
@@ -904,16 +910,24 @@ def pick_listen_url_from_soundcloud_export_rows(
     rows: list[dict[str, Any]],
     lyrics_title_raw: str | None,
     fallback_sc_url: str,
+    *,
+    allow_export_title_heuristic: bool = True,
 ) -> tuple[str, str]:
     """
     Return (sc_url, track_title) using title heuristics on the raw scrape export.
     Prefer ``fallback_sc_url`` exact match when set.
+
+    When ``allow_export_title_heuristic`` is false (e.g. lyrics pipeline ``SUNO``), only the
+    normalized ``fallback_sc_url`` path applies — avoids bogus substring matches like *Bully* →
+    *Project 2-0-2-5 • Bully FOLKsutra*.
     """
     fb = _norm_soundcloud_url(fallback_sc_url)
     if fb:
         for r in rows:
             if r["norm_url"] == fb:
                 return str(r["raw_url"] or "").strip(), str(r["raw_title"] or "").strip()
+    if not allow_export_title_heuristic:
+        return "", ""
     target = normalize_title_for_match(lyrics_title_raw)
     if not target:
         return "", ""
@@ -992,6 +1006,9 @@ def fill_catalog_covers_from_soundcloud_raw_export(
                     break
             if str(song.get("cover_image_url") or "").strip():
                 continue
+        pipeline_upper = str(song.get("lyrics_pipeline_status") or "").strip().upper()
+        if pipeline_upper == "SUNO":
+            continue
         target = normalize_title_for_match(song.get("lyrics_title"))
         if not target:
             continue
@@ -1944,10 +1961,12 @@ def main() -> None:
                     sc_catalog_track_title = str(hit.get("track_title") or "").strip()
                     sc_catalog_listen_source = "full_v4"
                 if not sc_catalog_listen_url:
+                    allow_export_title_heuristic = lyric_pipeline_stage_upper(lyric) != "SUNO"
                     ex_u, ex_t = pick_listen_url_from_soundcloud_export_rows(
                         export_listen_rows,
                         lyric.get("song_title"),
                         fallback_sc_url,
+                        allow_export_title_heuristic=allow_export_title_heuristic,
                     )
                     if ex_u:
                         sc_catalog_listen_url = ex_u
