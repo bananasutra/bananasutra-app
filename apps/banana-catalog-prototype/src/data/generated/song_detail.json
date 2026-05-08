@@ -68,7 +68,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-248",
+        "lyrics_title": "The Fool Who Knows",
+        "url_slug": "the-fool-who-knows",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-217",
+        "lyrics_title": "Shades of Fools (All I Know)",
+        "url_slug": "shades-of-fools-all-i-know",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-jqVeUE2kfD4URweU-kKwl8A-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-3": {
@@ -719,7 +738,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-240",
+        "lyrics_title": "Thank you, Mister Paine",
+        "url_slug": "thank-you-mister-paine",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-u5pewrASgTDY7LtN-z0b1TA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-172",
+        "lyrics_title": "Oh, Freedom",
+        "url_slug": "oh-freedom",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-P78u62myC8kQzJcZ-qk1VzQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": [
       {
         "track_id": "2084801919",
@@ -788,7 +826,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-255",
+        "lyrics_title": "The President’s Above The Law",
+        "url_slug": "the-president-s-above-the-law",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-7": {
@@ -819,7 +867,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-366",
+        "lyrics_title": "What Lessons Do We Forget?",
+        "url_slug": "what-lessons-do-we-forget",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-8": {
@@ -850,7 +908,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-369",
+        "lyrics_title": "Camus Dit Oui",
+        "url_slug": "camus-dit-oui",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-339",
+        "lyrics_title": "Buuuuurn!",
+        "url_slug": "buuuuurn",
+        "cover_image_url": "https://i.ytimg.com/vi/12eQO6Nqe24/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-9": {
@@ -881,7 +958,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-126",
+        "lyrics_title": "Kindness",
+        "url_slug": "kindness",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-60rWtzt0Ur5yDsl8-lcLgjQ-t500x500.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-127",
+        "lyrics_title": "Kindness (Oh Sweet Kindness)",
+        "url_slug": "kindness-oh-sweet-kindness",
+        "cover_image_url": "https://i.ytimg.com/vi/-NHkXyWo4M0/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2029770568",
@@ -1047,7 +1143,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-13",
+        "lyrics_title": "AI Manifesto",
+        "url_slug": "ai-manifesto",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-19",
+        "lyrics_title": "Authentic Innovation Manifesto",
+        "url_slug": "authentic-innovation-manifesto",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-13": {
@@ -1078,7 +1193,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-12",
+        "lyrics_title": "AI Fair Use Manifesto",
+        "url_slug": "ai-fair-use-manifesto",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-8MpTLEJF8IA3pZOl-q8KlmA-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-19",
+        "lyrics_title": "Authentic Innovation Manifesto",
+        "url_slug": "authentic-innovation-manifesto",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-14": {
@@ -1109,7 +1243,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-140",
+        "lyrics_title": "Let's Do It",
+        "url_slug": "let-s-do-it",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-eBfjOLCOGCrYzDzL-qn290w-t500x500.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2205955091",
@@ -1408,7 +1552,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-140",
+        "lyrics_title": "Let's Do It",
+        "url_slug": "let-s-do-it",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-eBfjOLCOGCrYzDzL-qn290w-t500x500.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2248524080",
@@ -1545,7 +1699,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-10",
+        "lyrics_title": "ABC of NPD",
+        "url_slug": "abc-of-npd",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-111",
+        "lyrics_title": "I Know You Didn’t Ask",
+        "url_slug": "i-know-you-didn-t-ask",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": [
       {
         "track_id": "2208202442",
@@ -1684,7 +1857,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-13",
+        "lyrics_title": "AI Manifesto",
+        "url_slug": "ai-manifesto",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-12",
+        "lyrics_title": "AI Fair Use Manifesto",
+        "url_slug": "ai-fair-use-manifesto",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-8MpTLEJF8IA3pZOl-q8KlmA-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-20": {
@@ -2005,7 +2197,17 @@
     "sc_catalog_listen_url": "https://soundcloud.com/bananasutra/banana-jokes-making-us-laugh-psychedelic-dub",
     "sc_catalog_track_title": "Banana Jokes, Making Us Laugh • Psychedelic DUBsutra",
     "sc_catalog_listen_source": "full_v4",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-378",
+        "lyrics_title": "This Is Not A Banana",
+        "url_slug": "this-is-not-a-banana",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-25": {
@@ -2321,7 +2523,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-25",
+        "lyrics_title": "Be The Fool (Embrace The Cracks)",
+        "url_slug": "be-the-fool-embrace-the-cracks",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-33": {
@@ -2859,7 +3071,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-359",
+        "lyrics_title": "We’re Tiny Specks, Right?",
+        "url_slug": "we-re-tiny-specks-right",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-iSBnDzZ6pNZ2thIT-zteX6Q-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-39": {
@@ -3034,7 +3256,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-82",
+        "lyrics_title": "FOTUS Circus: Ginsberg Hollow (Horror) Show",
+        "url_slug": "fotus-circus-ginsberg-hollow-horror-show",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-TISJ7mgoFUnIyF3o-Nc2YDg-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-42": {
@@ -3065,7 +3297,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-3",
+        "lyrics_title": "A Letter To My Friend (Never Again)",
+        "url_slug": "a-letter-to-my-friend-never-again",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-wWQhnGqz9vHL3gbU-Sx2Pvw-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-268",
+        "lyrics_title": "Trauma Begets Trauma",
+        "url_slug": "trauma-begets-trauma",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-O1DJ2yudziIuoAWo-vRdodg-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2129607411",
@@ -3249,7 +3500,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-65",
+        "lyrics_title": "Dressed In (Nothing Butt) Wonder",
+        "url_slug": "dressed-in-nothing-butt-wonder",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-1DyhYd51j78cqPch-AJYylQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-45": {
@@ -3456,7 +3717,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-234",
+        "lyrics_title": "Stymy Stymy Yuck",
+        "url_slug": "stymy-stymy-yuck",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-MnjuWCHszuAJt8sg-DJvk4g-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": [
       {
         "track_id": "2040185160",
@@ -4223,7 +4494,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-10",
+        "lyrics_title": "ABC of NPD",
+        "url_slug": "abc-of-npd",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-56": {
@@ -4254,7 +4535,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-234",
+        "lyrics_title": "Stymy Stymy Yuck",
+        "url_slug": "stymy-stymy-yuck",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-MnjuWCHszuAJt8sg-DJvk4g-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-57": {
@@ -4285,7 +4576,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-67",
+        "lyrics_title": "Easy (Death Is Nothing At All)",
+        "url_slug": "easy-death-is-nothing-at-all",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-bzZBqdfk2aR7Mc8I-ba7MdA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "1963060251",
@@ -5057,7 +5358,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-359",
+        "lyrics_title": "We’re Tiny Specks, Right?",
+        "url_slug": "we-re-tiny-specks-right",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-iSBnDzZ6pNZ2thIT-zteX6Q-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": [
       {
         "track_id": "2177269569",
@@ -7543,7 +7854,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-34",
+        "lyrics_title": "Blessed Be Your Voice",
+        "url_slug": "blessed-be-your-voice",
+        "cover_image_url": "https://i.ytimg.com/vi/QIS1zNLBh0I/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "1944270919",
@@ -7614,7 +7935,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-65",
+        "lyrics_title": "Dressed In (Nothing Butt) Wonder",
+        "url_slug": "dressed-in-nothing-butt-wonder",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-1DyhYd51j78cqPch-AJYylQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2202148471",
@@ -8238,7 +8569,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-146",
+        "lyrics_title": "Blessed Be The Dogs (SHOWsutra Edition)",
+        "url_slug": "blessed-be-the-dogs-showsutra-edition",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-kAEVcohylwIZch0q-ThHu4Q-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-93": {
@@ -8269,7 +8610,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-222",
+        "lyrics_title": "Shush (How To Help A Bible Bro Grow Up)",
+        "url_slug": "shush-how-to-help-a-bible-bro-grow-up",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-iut6y3WtyieWGgpN-uNGjiA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "1958761599",
@@ -8688,7 +9039,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-275",
+        "lyrics_title": "Universal Currency",
+        "url_slug": "universal-currency",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-ZOzjbG3qBNgMzOWS-9LnxjQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-219",
+        "lyrics_title": "Shameless (DEFY)",
+        "url_slug": "shameless-defy",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-ZOzjbG3qBNgMzOWS-9LnxjQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2123667888",
@@ -9394,7 +9764,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-212",
+        "lyrics_title": "Secret De Polichinelle",
+        "url_slug": "secret-de-polichinelle",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-xr4XjkoXh1PH9F6I-IQ3wCQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-102": {
@@ -9425,7 +9805,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-34",
+        "lyrics_title": "Blessed Be Your Voice",
+        "url_slug": "blessed-be-your-voice",
+        "cover_image_url": "https://i.ytimg.com/vi/QIS1zNLBh0I/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "1955989799",
@@ -10159,7 +10549,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-294",
+        "lyrics_title": "When We Duende (All Night)",
+        "url_slug": "when-we-duende-all-night",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-9BOw1039glUsyHSi-RcOVWw-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-295",
+        "lyrics_title": "When We Duende (Encore)",
+        "url_slug": "when-we-duende-encore",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-2HTk9xJWFp1O434r-CXIyuA-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-113": {
@@ -10675,7 +11084,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-380",
+        "lyrics_title": "The Sound Of Logic",
+        "url_slug": "the-sound-of-logic",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-iTMnLbPUyo5PZgb5-Yvmp6g-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": [
       {
         "track_id": "2175054777",
@@ -10743,7 +11162,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-244",
+        "lyrics_title": "The Conquest of Happiness",
+        "url_slug": "the-conquest-of-happiness",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-mzPTVVzYjzKf5bIY-HeAycA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2241219638",
@@ -11456,7 +11885,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-338",
+        "lyrics_title": "Can You Play Win-Win Or No?",
+        "url_slug": "can-you-play-win-win-or-no",
+        "cover_image_url": "https://i.ytimg.com/vi/vrX1iXZnIGs/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2119797591",
@@ -11730,7 +12169,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-153",
+        "lyrics_title": "Making Songs Like...",
+        "url_slug": "making-songs-like",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-yFu7z79boWM74g0U-gNvzig-t500x500.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "1949821027",
@@ -13439,6 +13888,15 @@
         "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
         "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-212",
+        "lyrics_title": "Secret De Polichinelle",
+        "url_slug": "secret-de-polichinelle",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-xr4XjkoXh1PH9F6I-IQ3wCQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
       }
     ],
     "tracks": [
@@ -14098,7 +14556,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-14",
+        "lyrics_title": "Ain't Doing Bad Doing Nothing",
+        "url_slug": "ain-t-doing-bad-doing-nothing",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-ywHf0D0qFVueq62i-1G6SmQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2012769107",
@@ -15700,7 +16168,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-155",
+        "lyrics_title": "Males Fantasies (vol2)",
+        "url_slug": "males-fantasies-vol2",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-VQwphayyp6Az5g1b-6E63wg-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": [
       {
         "track_id": "2088639993",
@@ -15766,7 +16244,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-154",
+        "lyrics_title": "Male Fantasies",
+        "url_slug": "male-fantasies",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-xSBf70BkIjbkDGPA-9368AQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-156": {
@@ -16611,7 +17099,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-184",
+        "lyrics_title": "Pedo Nation",
+        "url_slug": "pedo-nation-felon-nation-redux",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-LhTksDdMzsR3b0mE-zpGPhA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "1955826383",
@@ -17766,7 +18264,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-71",
+        "lyrics_title": "En Vrai, On Est Tous Frères",
+        "url_slug": "en-vrai-on-est-tous-freres",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-LV5LoqM7mHhduC2y-UvDK3w-t500x500.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2170697034",
@@ -17863,7 +18371,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-240",
+        "lyrics_title": "Thank you, Mister Paine",
+        "url_slug": "thank-you-mister-paine",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-u5pewrASgTDY7LtN-z0b1TA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-356",
+        "lyrics_title": "Weary Blues",
+        "url_slug": "weary-blues",
+        "cover_image_url": "https://i.ytimg.com/vi/b8JeousZ2Ow/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2008831139",
@@ -17929,7 +18456,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-67",
+        "lyrics_title": "Easy (Death Is Nothing At All)",
+        "url_slug": "easy-death-is-nothing-at-all",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-bzZBqdfk2aR7Mc8I-ba7MdA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-57",
+        "lyrics_title": "Darling",
+        "url_slug": "darling",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-sm0RyWK8U9ogWbAR-vvmBLg-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": [
       {
         "track_id": "2196026415",
@@ -18585,6 +19131,15 @@
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-413",
+        "lyrics_title": "Cruelty’s The Point (Admit It)",
+        "url_slug": "cruelty-s-the-point-admit-it",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
       }
     ],
     "tracks": [
@@ -19033,7 +19588,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-3",
+        "lyrics_title": "A Letter To My Friend (Never Again)",
+        "url_slug": "a-letter-to-my-friend-never-again",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-wWQhnGqz9vHL3gbU-Sx2Pvw-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-252",
+        "lyrics_title": "The Love of A Dove",
+        "url_slug": "the-love-of-a-dove",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-JAgkPz4F7h0eq74Z-njbS5Q-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": [
       {
         "track_id": "2208891425",
@@ -20247,13 +20821,22 @@
     "sc_catalog_listen_source": "",
     "related_songs": [
       {
-        "lyrics_id": "L-129",
-        "lyrics_title": "Kiss A Pulse",
-        "url_slug": "kiss-a-pulse",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-FsS9zAJyonxRU7Rm-RHZvfQ-t500x500.png",
+        "lyrics_id": "L-220",
+        "lyrics_title": "She Wears The Words",
+        "url_slug": "she-wears-the-words",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-5mRES9yziroUV5n7-956HbA-t500x500.jpg",
         "has_in_app_playback": true,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-290",
+        "lyrics_title": "What the Mirror Said (Reste Lucide)",
+        "url_slug": "what-the-mirror-said-reste-lucide",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-VQkWPBpI3EhvPQjd-JaXiYg-t500x500.png",
+        "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
-        "has_youtube_video": true
+        "has_youtube_video": false
       }
     ],
     "tracks": []
@@ -20489,7 +21072,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-100",
+        "lyrics_title": "Hide Your Pets",
+        "url_slug": "hide-your-pets",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-CzzPifPeoMavIOYE-YkIAeg-t500x500.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-196": {
@@ -20608,7 +21201,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-305",
+        "lyrics_title": "Why You Lie (To The People's Face)?",
+        "url_slug": "why-you-lie-to-the-people-s-face",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-OY8Egh3zRPXQxH74-PbCZmw-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2021403365",
@@ -21684,6 +22287,15 @@
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-286",
+        "lyrics_title": "What Dissent Looks Like Now",
+        "url_slug": "what-dissent-looks-like-now",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-oX7ZY3z8JzrLVWyA-Iz5Tsg-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
       }
     ],
     "tracks": [
@@ -21944,6 +22556,15 @@
         "lyrics_title": "Question The Nation",
         "url_slug": "question-the-nation",
         "cover_image_url": "https://i1.sndcdn.com/artworks-kMicgGnKLarUxkiZ-jURgUg-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-303",
+        "lyrics_title": "Why trust an old, mean religion?",
+        "url_slug": "why-trust-an-old-mean-religion",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-Z6c6IDbs2ejUVhp8-iueiCg-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true
@@ -22635,7 +23256,7 @@
     "url_slug_locked": true,
     "lyrics_summary": "Charm is cheap. Don't let it seep under your skin.",
     "lyrics_extract": "",
-    "lyrics_text": "---\nSIDE B EPx3: \"Arrogant hearts\"\n\n[Verse 1]\nStep right up to the mirror maze,\nWhere charm is cheap and love decays,\nThey smile so wide while they cut you thin,\nSecondhand smoke seeps under your skin.\n\n[Chorus]\nNo empathy, no remedy,\nEntitlement is their melody,\nGrandiose ghosts on high ego stage,\nArrogant hearts and their puppets cage.\n\n[Verse 2]\nSuperficial saints with a selfie crown,\nValidation junkies shake you down,\nMalice erupts when masks won’t stay,\nGaslight fever keeps truth at bay.\n\n[Bridge]\n“Ladies and gents, beware the show!\nThey’ll promise excellence, deliver shadow.\nCommunal halos, malignant schemes,\nCovert whispers, grandiose dreams!”\n\n[Final Chorus]\nLearned helplessness in smoky air,\nYou breathe their poison unaware,\nThe crowd applauds, the tyrant grins,\nBut emptiness echoes where soul cannot sing.",
+    "lyrics_text": "SIDE B EPx3: \"Arrogant hearts\"\n\n[Verse 1]\nStep right up to the mirror maze,\nWhere charm is cheap and love decays,\nThey smile so wide while they cut you thin,\nSecondhand smoke seeps under your skin.\n\n[Chorus]\nNo empathy, no remedy,\nEntitlement is their melody,\nGrandiose ghosts on high ego stage,\nArrogant hearts and their puppets cage.\n\n[Verse 2]\nSuperficial saints with a selfie crown,\nValidation junkies shake you down,\nMalice erupts when masks won’t stay,\nGaslight fever keeps truth at bay.\n\n[Bridge]\n“Ladies and gents, beware the show!\nThey’ll promise excellence, deliver shadow.\nCommunal halos, malignant schemes,\nCovert whispers, grandiose dreams!”\n\n[Final Chorus]\nLearned helplessness in smoky air,\nYou breathe their poison unaware,\nThe crowd applauds, the tyrant grins,\nBut emptiness echoes where soul cannot sing.",
     "sutra": "BLOWsutra",
     "topic": "EGO",
     "intention": "seeEGO",
@@ -22893,7 +23514,7 @@
     "url_slug_locked": true,
     "lyrics_summary": "Segsting — c'est pas du s3xe, mais c'est presque aussi bien. Parfois mieux. Un cheeky cabaret romp en français.",
     "lyrics_extract": "",
-    "lyrics_text": "Alors, on dit comment segsting in French (whoa)\nSegsting, apparemment c’est une chose universelle\n\nSegsting, c’est pas du s3xe,\nmais c’est presque aussi bien (aussi bien)\nOui même mieux des fois, ha (clin d’oeil)\n\nSegsting, mmm, eh, eh, segsting in French\n\nJe suis dans mon lit, prête à jouer\n\nCe soir, je me sens plutôt chill, oh bébé\n\nOn se parle en emojis, ouais\nTu m’envoies une aubergine\n\nJe t’envoies une banane\nComme une blague banane\n(J’adore les bananas jokes)\nEt puis j’ajoute une pêche\nParce que ouais, pourquoi pas\nTu m’envoies un moulin\n\noh ca c’est subtil, coquin\n(j’adore parler en emojis)\n\nJe t’envoie un ticket emoji\ncomme a la fête foraine\nUp peu comme dans un poem,\n\nc’est mimi une métaphore de manège,\nEt la vérité j’me dit c’est que ton moulin,\nBen ouais, en fait, J’y monterai bien\nOh mais zut… oh non ! (Oh merde….)\nj’me dit,\nj’espere que ca fait pas trop pute\n(Ha, oops putain Zut!) (clin d’oeil)\n\nmais tu m’ envoies\nCrise évitée (ouf)\n\nSegsting, c’est pas du s3xe,\nmais c’est presque aussi bien (aussi bien)\nOui même mieux des fois, ha (clin d’oeil)\n\nSegsting, mmm\neh, eh, segsting in french\n\nOh La la, je passe aux mots,\nc’est limite les d’emoji,\nJ’ecris : “Je suis au lit, et toi?” \n\nTu réponds : \"Tu portes quoi ?\"\nEt ajoute : \"Tu es nue ?\"\n\nJe réponds : \"Non, en pyjamas”\net qu’est ce que tu m’envois?\nDevil head emoji, meme couleur que l’aubergine (purple :)\nJ’allais presque répondre avec l’aubergine en feu, (haha)\nA classique emoji duo\nÇa me fait toujours sourire\nJ’imagine déjà ce que je ferais si j’étais près de toi en fait,\n\nDans ma tête, c’est deja comme une fête\nJ’m’ imagine déjà, j’suis seule, mais déjà sur toi, ha!\n\nL’internet existe pour des nuits comme ça (comme ci comme ça)\n\nHa, mais voila, oh ok, ah oui, je vois, deja, oh la la … coquin\nLes choses s’accélèrent, tu veux déjà voir mes seins!\n\nSeggsting, c’est pas du s3xe,\nmais c’est presque aussi bien (aussi bien)\nOui oui même mieux des fois, ha (clin d’oeil)\n\nSegggsting, mmm,\neh, eh, segggsting in french\n\nEt hop, soudain on passé au niveau suivant\nEt dans les jeu de segggsting, c’est direction le ciel :)\nTu m’envoies une photo de ton torso\net dis, \"À toi maintenant\" photo bingo!\nAh part que bon voila, bingo or pas,\nIl est tard et je ressemble à une sorcière,\n\nDonc Je me dégonfle, et je t’envoie une vieille photo qui montre un peu mes seins \n\nParce des photos de mes gros seins, la vérité c’est Que j’en ai plein! (Fun fact:)\n\nTu negocies:\n\"j'ai envoyé une exclusive en direct, c’est pas juste…”\nPas de soucis\net j’allais expliquer, et te rassurer,\nmais en fait non, mon portable est mort, brusquement.\n\nUne autre nuit toute seule, ouais\nPerdue chez moi, seule, ouais\n\nJe suis sur mon lit\nUne main sur mon belly,\net une main sur mon tel, ouais\nUne autre nuit toute seule, ouais\nPerdue chez moi, sans toi, mmouais\nUne main sur mon cœur ouais\net une main sur mes vérités, ouais\n\nSegggsting, c’est pas du s3xe,\nmais c’est presque aussi bien (aussi bien)\nOui même mieux des fois, ha (clin d’oeil)\n\nSegggsting, mmm, aubergine on fire, eh, eh, sexting in French",
+    "lyrics_text": "Alors, on dit comment segsting in French (whoa)\nSegsting, apparemment c’est une chose universelle\n\nSegsting, c’est pas du s3xe,\nmais c’est presque aussi bien (aussi bien)\nOui même mieux des fois, ha (clin d’oeil)\nSegsting, mmm, eh, eh, segsting in French\n\nJe suis dans mon lit, prête à jouer\nCe soir, je me sens plutôt chill, oh bébé\nOn se parle en emojis, ouais\nTu m’envoies une aubergine\n\nJe t’envoies une banane\nComme une blague banane\n(J’adore les bananas jokes)\nEt puis j’ajoute une pêche\n\nParce que ouais, pourquoi pas\nTu m’envoies un moulin\noh ca c’est subtil, coquin\n\n(j’adore parler en emojis)\nJe t’envoie un ticket emoji\ncomme a la fête foraine\nUp peu comme dans un poem,\n\nc’est mimi une métaphore de manège,\nEt la vérité j’me dit c’est que ton moulin,\nBen ouais, en fait, J’y monterai bien\nOh mais zut… oh non ! (Oh merde….)\n\nj’me dit,\nj’espere que ca fait pas trop pute\n(Ha, oops putain Zut!) (clin d’oeil)\nmais tu m’ envoies\nCrise évitée (ouf)\n\nSegsting, c’est pas du s3xe,\nmais c’est presque aussi bien (aussi bien)\nOui même mieux des fois, ha (clin d’oeil)\nSegsting, mmm\neh, eh, segsting in french\n\nOh La la, je passe aux mots,\nc’est limite les d’emoji,\nJ’ecris : “Je suis au lit, et toi?” \n\nTu réponds : \"Tu portes quoi ?\"\nEt ajoute : \"Tu es nue ?\"\nJe réponds : \"Non, en pyjamas”\net qu’est ce que tu m’envois?\n\nDevil head emoji, meme couleur que l’aubergine (purple :)\nJ’allais presque répondre avec l’aubergine en feu, (haha)\nA classique emoji duo\nÇa me fait toujours sourire\n\nJ’imagine déjà ce que je ferais si j’étais près de toi en fait,\nDans ma tête, c’est deja comme une fête\nJ’m’ imagine déjà, j’suis seule, mais déjà sur toi, ha\nL’internet existe pour des nuits comme ça (comme ci comme ça)\nHa, mais voila, oh ok, ah oui, je vois, deja, oh la la … coquin\nLes choses s’accélèrent, tu veux déjà voir mes seins!\n\nSeggsting, c’est pas du s3xe,\nmais c’est presque aussi bien (aussi bien)\nOui oui même mieux des fois, ha (clin d’oeil)\nSegggsting, mmm,\neh, eh, segggsting in french\n\nEt hop, soudain on passé au niveau suivant\nEt dans les jeu de segggsting, c’est direction le ciel :)\nTu m’envoies une photo de ton torso\net dis, \"À toi maintenant\" photo bingo!\nAh part que bon voila, bingo or pas,\nIl est tard et je ressemble à une sorcière,\n\nDonc Je me dégonfle, et je t’envoie une vieille photo qui montre un peu mes seins \nParce des photos de mes gros seins, la vérité c’est Que j’en ai plein! (Fun fact:)\n\nTu negocies:\n\"j'ai envoyé une exclusive en direct, c’est pas juste…”\nPas de soucis\net j’allais expliquer, et te rassurer,\nmais en fait non, mon portable est mort, brusquement.\n\nUne autre nuit toute seule, ouais\nPerdue chez moi, seule, ouais\nJe suis sur mon lit\nUne main sur mon belly,\net une main sur mon tel, ouais\nUne autre nuit toute seule, ouais\nPerdue chez moi, sans toi, mmouais\nUne main sur mon cœur ouais\net une main sur mes vérités, ouais\n\nSegggsting, c’est pas du s3xe,\nmais c’est presque aussi bien (aussi bien)\nOui même mieux des fois, ha (clin d’oeil)\nSegggsting, mmm, aubergine on fire, eh, eh, sexting in French",
     "sutra": "SHOWsutra",
     "topic": "FOOLERY",
     "intention": "beSILLY",
@@ -22914,7 +23535,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-37",
+        "lyrics_title": "Bo Burnham Covers",
+        "url_slug": "bo-burnham-covers",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-0cRNu3FFXne8uJuk-QwQNJA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-214": {
@@ -23627,17 +24258,7 @@
     "sc_catalog_listen_url": "https://soundcloud.com/bananasutra/she-wears-the-words-o",
     "sc_catalog_track_title": "She Wears the Words • JAZZsutra Mighty Poetry Minute",
     "sc_catalog_listen_source": "full_v4",
-    "related_songs": [
-      {
-        "lyrics_id": "L-254",
-        "lyrics_title": "The Poem",
-        "url_slug": "the-poem",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-z3oqCWriMGQ0OJPD-bZzyHg-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": true
-      }
-    ],
+    "related_songs": [],
     "tracks": [
       {
         "track_id": "1961710035",
@@ -24465,7 +25086,7 @@
     "fav": true,
     "cover_image_url": "https://i1.sndcdn.com/artworks-kWzeemU5Sy6IEyqW-Ipy4sA-t500x500.png",
     "songbook": "Dare: GOD (etc.)",
-    "muse": "Ralph Waldo Emerson",
+    "muse": "Ralph Waldo Emerson,Albert Camus,Jean-Paul Sartre",
     "primary_ep_volume": 1,
     "primary_ep_rating": "",
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/sing-your-own-gospel-vol-2-epx7-growsutra-god-etc-revolutionary-gipsy-jazz",
@@ -25366,7 +25987,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-320",
+        "lyrics_title": "Self-Remembering",
+        "url_slug": "self-remembering",
+        "cover_image_url": "https://i.ytimg.com/vi/kowt-gyVdoI/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-232": {
@@ -25912,7 +26543,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-48",
+        "lyrics_title": "Creepy Con Meme",
+        "url_slug": "creepy-con-meme",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-DywO4KaBtyF8CyML-ToVQ2g-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2075930744",
@@ -26570,7 +27211,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-5",
+        "lyrics_title": "A Man's a Man and A' That",
+        "url_slug": "a-man-s-a-man-and-a-that",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-1bqixGWYedpZR647-tZkbFA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-172",
+        "lyrics_title": "Oh, Freedom",
+        "url_slug": "oh-freedom",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-P78u62myC8kQzJcZ-qk1VzQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": [
       {
         "track_id": "2108793282",
@@ -27228,7 +27888,17 @@
     "sc_catalog_listen_url": "https://soundcloud.com/bananasutra/the-ducktator-lament-o-thats",
     "sc_catalog_track_title": "The Ducktator (lament) • That’s All Folks • BananasutraDUCK (yuck)",
     "sc_catalog_listen_source": "full_v4",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-249",
+        "lyrics_title": "The Grazed Duck Luck",
+        "url_slug": "the-grazed-duck-luck",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-Ry9lF58UXxHFjvyH-N7IpMQ-t500x500.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-246": {
@@ -27259,7 +27929,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-82",
+        "lyrics_title": "FOTUS Circus: Ginsberg Hollow (Horror) Show",
+        "url_slug": "fotus-circus-ginsberg-hollow-horror-show",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-TISJ7mgoFUnIyF3o-Nc2YDg-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2081214603",
@@ -27440,7 +28120,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-2",
+        "lyrics_title": "A Good Witch",
+        "url_slug": "a-good-witch",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-249": {
@@ -27471,7 +28161,17 @@
     "sc_catalog_listen_url": "https://soundcloud.com/bananasutra/grazed-duck-luck-o-sutrablow",
     "sc_catalog_track_title": "That Grazed Duck’s Luck • Jazzy Bluesy Folk • sutraBLOW",
     "sc_catalog_listen_source": "full_v4",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-245",
+        "lyrics_title": "The Ducktator (Lament)",
+        "url_slug": "the-ducktator-lament",
+        "cover_image_url": "https://i.ytimg.com/vi/aw-LmHCscgw/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-250": {
@@ -27997,7 +28697,35 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-93",
+        "lyrics_title": "Hard Core",
+        "url_slug": "hard-core",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-TawBy2TG82lsrzx3-SEV7yw-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-196",
+        "lyrics_title": "Pro-life Means What, Honey?",
+        "url_slug": "pro-life-means-what-honey",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-6n9qPQKkYrr2fiIl-Ru83aw-t500x500.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-222",
+        "lyrics_title": "Shush (How To Help A Bible Bro Grow Up)",
+        "url_slug": "shush-how-to-help-a-bible-bro-grow-up",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-iut6y3WtyieWGgpN-uNGjiA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-252": {
@@ -28455,7 +29183,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-6",
+        "lyrics_title": "A New Historical Era",
+        "url_slug": "a-new-historical-era",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-257": {
@@ -28571,7 +29309,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-48",
+        "lyrics_title": "Creepy Con Meme",
+        "url_slug": "creepy-con-meme",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-DywO4KaBtyF8CyML-ToVQ2g-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-259": {
@@ -29836,7 +30584,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-182",
+        "lyrics_title": "Peace Matters More",
+        "url_slug": "peace-matters-more",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-E8wykXuhdIZsTYC5-7gZGHQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": [
       {
         "track_id": "2209323959",
@@ -29976,7 +30734,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-375",
+        "lyrics_title": "Syndrome Nom Nom",
+        "url_slug": "syndrome-nom-nom",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-270": {
@@ -30110,7 +30878,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-160",
+        "lyrics_title": "Metaphors' Edge (Joseph Campbell's song)",
+        "url_slug": "metaphors-edge-joseph-campbell-s-song",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-jy4Ny3sg2PSbdteq-7zc7yg-t500x500.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-272": {
@@ -30141,7 +30919,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-116",
+        "lyrics_title": "It's An Ethical Paradox",
+        "url_slug": "it-s-an-ethical-paradox",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-dpot7zmJbp98Q8za-Swn1Rg-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-273": {
@@ -30355,7 +31143,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-244",
+        "lyrics_title": "The Conquest of Happiness",
+        "url_slug": "the-conquest-of-happiness",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-mzPTVVzYjzKf5bIY-HeAycA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2240112737",
@@ -31558,7 +32356,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-203",
+        "lyrics_title": "Read Me Harder (BB is for Banned Books)",
+        "url_slug": "read-me-harder-bb-is-for-banned-books",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-AsBdOuYSmx4CVzKs-Y8zKhQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2255341622",
@@ -32073,7 +32881,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-220",
+        "lyrics_title": "She Wears The Words",
+        "url_slug": "she-wears-the-words",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-5mRES9yziroUV5n7-956HbA-t500x500.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-192",
+        "lyrics_title": "Poets Hats",
+        "url_slug": "poets-hats",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-291": {
@@ -32825,7 +33652,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-23",
+        "lyrics_title": "Banana Jokes Making Us Laugh",
+        "url_slug": "banana-jokes-making-us-laugh",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-2zgnIx8miwTWEq1e-YVPWpg-t1080x1080.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": [
       {
         "track_id": "2074302272",
@@ -33062,7 +33899,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-205",
+        "lyrics_title": "Reason Over Reverence",
+        "url_slug": "reason-over-reverence",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-52aEtWxS2ijbwMuq-syAe6A-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2082813372",
@@ -33135,6 +33982,15 @@
         "url_slug": "double-standards",
         "cover_image_url": "https://i1.sndcdn.com/artworks-CzCzt9mTlZWzjTqp-8FLR4g-t500x500.png",
         "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-171",
+        "lyrics_title": "Oh My, Oh Why (Socrates Song)",
+        "url_slug": "oh-my-oh-why-socrates-song",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-u4xWThnzlboyzPPM-yy5lxA-t500x500.png",
+        "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true
       }
@@ -33319,7 +34175,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-197",
+        "lyrics_title": "Project 2025 (Honky tonk dreams in the land of the free)",
+        "url_slug": "project-2025-honky-tonk-dreams-in-the-land-of-the-free",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-Gpeeqzc8b4frhVCd-pyGbug-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-306": {
@@ -34174,7 +35040,26 @@
     "sc_catalog_listen_url": "https://soundcloud.com/bananasutra/what-justifies-the-pain-o",
     "sc_catalog_track_title": "What Justifies The Pain? • KNOWsutra Gipsy Peace FOLK",
     "sc_catalog_listen_source": "full_v4",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-268",
+        "lyrics_title": "Trauma Begets Trauma",
+        "url_slug": "trauma-begets-trauma",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-O1DJ2yudziIuoAWo-vRdodg-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-353",
+        "lyrics_title": "Wars Don’t Flow",
+        "url_slug": "wars-don-t-flow",
+        "cover_image_url": "https://i.ytimg.com/vi/kyp8P25k6w0/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-315": {
@@ -34205,7 +35090,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-100",
+        "lyrics_title": "Hide Your Pets",
+        "url_slug": "hide-your-pets",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-CzzPifPeoMavIOYE-YkIAeg-t500x500.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-316": {
@@ -34267,7 +35162,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-67",
+        "lyrics_title": "Easy (Death Is Nothing At All)",
+        "url_slug": "easy-death-is-nothing-at-all",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-bzZBqdfk2aR7Mc8I-ba7MdA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-57",
+        "lyrics_title": "Darling",
+        "url_slug": "darling",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-sm0RyWK8U9ogWbAR-vvmBLg-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-318": {
@@ -34370,7 +35284,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-76",
+        "lyrics_title": "Flow Like Water (My Friend)",
+        "url_slug": "flow-like-water-my-friend",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-MMGcG9MArl8ioybW-fZbhtw-t500x500.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-321": {
@@ -34401,7 +35325,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-246",
+        "lyrics_title": "The Dystopian Quiz Song",
+        "url_slug": "the-dystopian-quiz-song",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-jQRym0eZpol8JOvs-sUKVsw-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-322": {
@@ -34554,7 +35488,7 @@
     "url_slug": "masa-make-america-safe-again",
     "url_slug_locked": true,
     "lyrics_summary": "Make America Safe? Start with books, not boys in blue. Every dollar spent on school cuts down crime. That's it. That's the whole plan.",
-    "lyrics_extract": "",
+    "lyrics_extract": "Give the kids a safer plan, / Not just guns, but books in hand.",
     "lyrics_text": "[VERSE 1] \nThey cut the schools, then build more walls,\nNow prison’s full like study halls.\nThree outta four behind those bars,\nNever made it far in class or charts.\n\nYou want less crime? Here’s the clue:\nIt starts with books, not boys in blue.\n\n[CHORUS] \nMake America SAFE again!\n(Stop the lies spinning the spin!)\nMake America BRIGHT again!\n(Education’s where we win!)\nGive the kids a safer plan,\nNot just guns, but books in hand.\nMake America SAFE again,\nKids need no jails, they need a pen!\n\n[VERSE 2]\nThey cut the funding, raise the fear,\nBut learning is what keeps us clear.\nEvery dollar spent on school\nCuts down crime. That’s a rule!\nKick out ignorance and hate,\nOr fail will be our nation’s fate.\n\n[CHORUS]\nMake America SAFE again!\n(No more gaslight, no more spin!)\nMake America SMART again!\n(Read, not bleed… press start again!)\nGive the youth a real chance,\nNot just cuffs, with no conscience!\nMake America SAFE again!\nRaise your voice, now take a stand!\n\n[BRIDGE]\nLess diplomas, more despair,\nIs that really fair and square?\nLift the kids, reduce the crime,\nPeace and safety take some time…\n\n[FINAL CHORUS]\nMake America SAFE again!\n(Not by fear, but thinking men!)\nMake America JUST again!\nBooks, not bars, we must defend!\nWith unbanned books and a pen,\nLet’s teach the truth and heal again?\nMake America SAFE again,\nAnd never go back to way back when…",
     "sutra": "QUACKsutra",
     "topic": "INJUSTICE",
@@ -34576,7 +35510,35 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-149",
+        "lyrics_title": "MAHA (Make America Humane Again)",
+        "url_slug": "maha-make-america-humane-again",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-150",
+        "lyrics_title": "MAKA (Make America Kind Again)",
+        "url_slug": "maka-make-america-kind-again",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-9mKo23b9tXJzWs5t-yMjheA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-158",
+        "lyrics_title": "MAWA (Make America Woke Again)",
+        "url_slug": "mawa-make-america-woke-again",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-ohldLp0ezWMHuexZ-Z1TUbg-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2211183593",
@@ -34829,7 +35791,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-234",
+        "lyrics_title": "Stymy Stymy Yuck",
+        "url_slug": "stymy-stymy-yuck",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-MnjuWCHszuAJt8sg-DJvk4g-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-330": {
@@ -34860,7 +35832,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-117",
+        "lyrics_title": "It's War, My Friend",
+        "url_slug": "it-s-war-my-friend",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-yjDwmBzrh9rcYKwR-u7wlPw-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-331": {
@@ -34972,7 +35954,7 @@
     "url_slug": "enshittification-word-of-the-year",
     "url_slug_locked": true,
     "lyrics_summary": "En-shit-ti-fi-ca-tion: six syllables, one trending truth. Glittering rot in algorithm's scent. Systems are breaking down. Twerk your hopes while you can.",
-    "lyrics_extract": "",
+    "lyrics_extract": "Roll it round, enshittification, / Six-bit curse of our generation.",
     "lyrics_text": "[Verse 1]\nWell, here’s something funny, Boo,\nFunny ’cause, well, well, it’s true.\nLean in close, pay attention,\nSay it slow: enshittification.\n\nRoll it round, enshittification,\nSix-bit curse of our generation.\nAss-roots creeping under the floor,\nSmile real sweet while the shits want more.\n\nI read it glowing on my phone,\nLittle lies in a monotone.\nTruth smells funny, wildly bent,\nGlittering rot in algorithm’s scent.\nSmall blue balls and black holes trends,\nA fairy tales that never ends.\n\n[Chorus]\nIt’s enshittification, darling, sway and sigh,\nIt’s enshittification, wink as it slides by.\nSugar on the tongue, turn up the sound,\nTwerk your hips while the systems break down.\nIt’s enshittification, say it slow, say it sweet,\nPretty little nightmare with a deadpan beat.\n\n[Verse 2]\nLast year’s word was gaslighting, boo,\nSame old poo on a newer loo.\nFunny how the buzzwords breed,\nSnake eats tail, never be freed.\nConspicuous, ominous charm,\nGlossy language, petty harm.\n\nNext year’s word? Spin the wheel,\nTech-bro mystics selling “real.”\nBut(t) I vote “no” to TWATocracies,\nCosplay kings and autocracies,\nTiny flags and bloody tags,\nRed tape lingerie in rags.\n\n[Chorus]\nIt’s enshittification, rhyme it with manipulation,\nCabaret corruption in a sponsored simulation.\nLaugh-track lies with a velvet glove,\nAs enshittification calls it “love.”\n\n[Bridge]\nSay it once…\nSay it twice…\nSay it like you paid the price…\n\n[Spoken Word]\nIt’s all there, murals on the walls,\nLipstick prophecies, bathroom scrawls.\nYear after year, the language sheds,\nBut enshittification tucks us into bed.\nSociology, sweetheart, keep the score…\nHistory hums, then asks for more.\n\n[Final Chorus]\nIt’s enshittification, the art of greed in lace,\nA dirty little word with a powdered face.\nSix soft syllables, kiss of decay,\nHum it gently as it eats the day.\nIt’s enshittification, darling, clap on beat,\nEnd-of-the-world cabaret, take a seat.\n\n[Outro]\nSo here’s something funny, Boo,\nFunny ’cause it’s dreadfully true.\nenshittification, spin it around,\nWord of the year in a funeral gown.\nProphetic linguistics, burlesque politics,\nDubbed-out lullaby for the apocalypse.",
     "sutra": "SHOWsutra",
     "topic": "POOLITICS",
@@ -35054,7 +36036,7 @@
     "url_slug": "shame-on-you-boo-don-be-gone-orchestra-duck-of-the-jungle",
     "url_slug_locked": true,
     "lyrics_summary": "To the tune of \"I Wanna Be Like You\": oobee doo, you felon, boo. The people are moving on. Your VIP jail cell is waiting.",
-    "lyrics_extract": "",
+    "lyrics_extract": "We’re all laughing at you, dicky boo, that much is true.",
     "lyrics_text": "We the people, we’re movin’ on,\nOrangutan (oh you) you gotta go,\nYou fool of baloney, dick be gone,\nOrange suit’s waiting for you, bro!\n\nOh, oobee doo, you felon (boo yooo)\nShame on you, now shut up Don (duck yooo)\nVIP jail cell is waitin’ for you. (Wow Woohoo)\nYou just stink like poo, (eeewww boo you)\nYour mouth’s just like a loo, (that’s just true)\nWho wanna cope with a whiny quack like you, no one boo (bye bye you)\n\nNow don’t you quack, (quack), because what the frack?! (Quack Quack) \nLike Are you on crack, or were you born whack? (Quack quack quack)\nWe’re all laughing at you, dicky boo, that much is true, \nYou bragged you like to grab pussies, (quack quack) oh my, oh why, so ewwww, \nYour crowd size’s no joke, tiny, slackers quack (quack)\nDisgrace’s your prize, you jock, now off my back!\n\nOh, Shame on You, Donald Junior Tramp Boo (you-ooo)\noh ha ha Ducky boo, that dicky name of you (woo-hoo)\nQueen Kamala’s ready to lock your orange ass, too (bye bye oh so long)\nYou had your run, hon, don’t be crass, you (tiny duck in a song)\nNow you’re fired, so move on, hon, (no mo ducking along)\nNo one trusts you, Don, so shush, you just don’t belong (boing boing)",
     "sutra": "QUACKsutra",
     "topic": "POOLITICS",
@@ -35076,7 +36058,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-100",
+        "lyrics_title": "Hide Your Pets",
+        "url_slug": "hide-your-pets",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-CzzPifPeoMavIOYE-YkIAeg-t500x500.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-234",
+        "lyrics_title": "Stymy Stymy Yuck",
+        "url_slug": "stymy-stymy-yuck",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-MnjuWCHszuAJt8sg-DJvk4g-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-337": {
@@ -35189,7 +36190,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-8",
+        "lyrics_title": "A Toast To The Good Life",
+        "url_slug": "a-toast-to-the-good-life",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-340": {
@@ -35220,7 +36231,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-3",
+        "lyrics_title": "A Letter To My Friend (Never Again)",
+        "url_slug": "a-letter-to-my-friend-never-again",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-wWQhnGqz9vHL3gbU-Sx2Pvw-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-342": {
@@ -35282,7 +36303,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-337",
+        "lyrics_title": "Chuck-A-Dick",
+        "url_slug": "chuck-a-dick",
+        "cover_image_url": "https://i.ytimg.com/vi/THWS5PnCVRQ/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-43",
+        "lyrics_title": "Chuck Ain't Woke",
+        "url_slug": "chuck-ain-t-woke",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-344": {
@@ -35819,7 +36859,26 @@
     "sc_catalog_listen_url": "https://soundcloud.com/bananasutra/the-weary-blues-a-poem-by-monsieur-hughes",
     "sc_catalog_track_title": "The Weary Blues, a poem by monsieur Hughes",
     "sc_catalog_listen_source": "export_title",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-172",
+        "lyrics_title": "Oh, Freedom",
+        "url_slug": "oh-freedom",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-P78u62myC8kQzJcZ-qk1VzQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      },
+      {
+        "lyrics_id": "L-5",
+        "lyrics_title": "A Man's a Man and A' That",
+        "url_slug": "a-man-s-a-man-and-a-that",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-1bqixGWYedpZR647-tZkbFA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-357": {
@@ -35932,7 +36991,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-67",
+        "lyrics_title": "Easy (Death Is Nothing At All)",
+        "url_slug": "easy-death-is-nothing-at-all",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-bzZBqdfk2aR7Mc8I-ba7MdA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2301494108",
@@ -36415,7 +37484,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-7",
+        "lyrics_title": "A Stroll Down History’s Lane",
+        "url_slug": "a-stroll-down-history-s-lane",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-9uz2GCIarSzz3CK9-yLGoGg-t500x500.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-367": {
@@ -36545,7 +37624,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-8",
+        "lyrics_title": "A Toast To The Good Life",
+        "url_slug": "a-toast-to-the-good-life",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-370": {
@@ -36626,7 +37715,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-414",
+        "lyrics_title": "Happy Birthday, Dear Dreamer Friend",
+        "url_slug": "happy-birthday-dear-dreamer-friend",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-TGcGmCYEU9byzJJn-KhYvMA-t500x500.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-374": {
@@ -36688,7 +37787,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-269",
+        "lyrics_title": "Trump Derangement Syndrome ™",
+        "url_slug": "trump-derangement-syndrome-tm",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-Ys4zGlSmXhrD1HsT-Kvzuxg-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-376": {
@@ -36750,7 +37859,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-23",
+        "lyrics_title": "Banana Jokes Making Us Laugh",
+        "url_slug": "banana-jokes-making-us-laugh",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-2zgnIx8miwTWEq1e-YVPWpg-t1080x1080.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-379": {
@@ -36781,7 +37900,26 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-134",
+        "lyrics_title": "Le Bal Des Salauds",
+        "url_slug": "le-bal-des-salauds",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-y8HtxewGKAQtoPJZ-3ZbprQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      },
+      {
+        "lyrics_id": "L-135",
+        "lyrics_title": "Le Bal Electoral",
+        "url_slug": "le-bal-electoral",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
     "tracks": []
   },
   "L-380": {
@@ -36812,7 +37950,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-115",
+        "lyrics_title": "Ironic Moronic Eugenics",
+        "url_slug": "ironic-moronic-eugenics",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-N9z3Fy63NDAYopf0-Ffs1iA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": [
       {
         "track_id": "2313584582",
@@ -38682,7 +39830,7 @@
     "url_slug": "let-me-tell-you-about-heartache",
     "url_slug_locked": true,
     "lyrics_summary": "Love, heartache, and the tender promise to keep showing up. A soul classic reimagined.",
-    "lyrics_extract": "",
+    "lyrics_extract": "Come on, come on, come on, come on,\nnow touch me, baby.",
     "lyrics_text": "Now, I'm gonna love you\n'Till the heavens stop the rain\nI'm gonna love you\n'Till the stars fall from the sky\nFor you and I\n\nCome on, come on, come on, come on\nNow touch me, baby\nCan't you see that I am not afraid?\nWhat was that promise that you made?\n\nI'm gonna love you\n'Till the heaven stop the rain\nI'm gonna love you\n'Till the stars fall from the sky\nFor you and I\n\nI'm gonna love you\n'Till the heavens stop the rain\nI'm gonna love you\n'Till the stars fall from the sky\nFor you and I\n\nLet me tell you about heartache\nand the loss of god Wandering \nlike a hopeless night \nNo hope no light \nnot even a North Star\nOh well, Good luck, love",
     "sutra": "GROWsutra",
     "topic": "BEAUTY",
@@ -38735,7 +39883,17 @@
     "sc_catalog_listen_url": "",
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
-    "related_songs": [],
+    "related_songs": [
+      {
+        "lyrics_id": "L-16",
+        "lyrics_title": "All the -Isms",
+        "url_slug": "all-the-isms",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-qrxklwZQpzKpzPUh-kUGDvA-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
+      }
+    ],
     "tracks": []
   },
   "L-410": {
@@ -38774,8 +39932,8 @@
     "lyrics_title": "Dudu Duende Murió",
     "url_slug": "dud-duende-murio",
     "url_slug_locked": true,
-    "lyrics_summary": "",
-    "lyrics_extract": "",
+    "lyrics_summary": "Ah, les pommes...",
+    "lyrics_extract": "En fait c’est ça l’drame,\nles hommes… et leurs organes.",
     "lyrics_text": "V1: (original French version)\n[Couplet 1]\nJ’disais serre-moi fort,\nbénis soient nos corps,\nJ’avais même dit s’il te plaît,\nj’y croyais… quelle drôle d;idée…\n\nOui, J’suis con, j’le reconnais,\nj’oublie toutes mes leçons, ouais,\nOh Moi et mes illusions de vérité\non se marre bien, toute seules… infinité\n\n[Couplet 2]\nTu m’faisais rougir,\nmais jamais frémir,\nPas de baiser vrai,\nque du faux, du secret.\n\nEn fait c’est ça l’drame,\nles hommes… et leurs organes,\nÇa sent même pas les fleurs,\net encore moins les cœurs.\n\n[Pont - dub / écho]\n(vérité… vérité…)\n(j’y croyais… j’y croyais.)\n\n[Refrain]\nLes hormones et les pommes,\nc’est comme les hommes,\nOn peut pas s’y fier,\nc’est trop sucré.\n\nBut why do I care?\nRien n’est clair…\nPourquoi j’rougis\nseule dans la nuit ?\n\n[Couplet 3]\nAh les fantasmes faciles,\nça fond, ça file… fragile,\n“Tire mes cheveux” que j’disais,\n“plus fort”… j’imaginais.\n\nJe rêvais d’un guide, d’un sens,\nj’ai trouvé du vide, du silence,\nUn froid qui colle à la peau,\ncomme un lit sans écho.\n\n[Pont]\nLa vérité m’éclaire,\nmême quand ça me serre,\nCette histoire, j’y croyais…\nmais c’était pas vrai.\n\n[Refrain]\nLes hormones et les pommes,\nc’est comme les hommes,\nOn peut pas s’y fier,\nc’est trop sucré…\n\nBut why do I care?\nRien n’est clair…\nPourquoi j’rougis\nseule dans la nuit?\n\n[Final]\nImages au ralenti,\npersonne dit merci,\n“prends-moi encore une fois”,\nmais t’es déjà loin de moi.\n\n[Outro]\nParles-tu, Duende ?\nTu sais… la vérité,\nc’est comme le feu,\nça brûle ce que je veux.\n\nBlessed be les fruits défendus,\nles costumes d’Adam… disparus.\n\n--\nV2: (Spanish translation)\n[Verso 1]\nYo decía “abrázame”,\nbenditos nuestros cuerpos, eh,\nHasta dije “por favor”…\nmírame, puro error.\n\nSí, soy tonta, lo sé,\nolvidando otra vez,\nYo y mis sueños de verdad,\nriendo solas… sin final.\n\n[Verso 2]\nMe hacías sonrojar,\npero nunca vibrar,\nNi un beso real,\nsolo cuento y disfraz.\n\nEse es el drama,\nhombres… y sus ganas,\nNo huelen las flores,\nni entienden amores.\n\n[Puente dub]\n(verdad… verdad…)\n(yo creía… creía…)\n\n[Coro]\nHormonas y manzanas,\nigual que los hombres,\nno se puede confiar,\ntodo sabe a dulce.\n\nBut why do I care? (kept for flavor)\nNada está claro…\n¿por qué me sonrojo\nsola en mi cuarto?\n\n[Verso 3]\nAy, fantasías baratas,\nse van… no duran nada,\n“tírame el pelo”, decía,\n“más fuerte”… lo quería.\n\nSoñaba guía, sentido,\nrecibí frío y vacío,\nUn hielo pegado a mi piel,\ncomo cama sin voz ni piel.\n\n[Puente]\nLa verdad es mi luz,\naunque duela en el pecho,\nYo creía en los dos…\npero no era cierto.\n\n[Coro]\nHormonas y manzanas,\nigual que los hombres,\nno se puede confiar,\ntodo sabe a dulce…\n\nBut why do I care?\nNada está claro…\n¿por qué me sonrojo\nsola en mi cuarto?\n\n[Outro]\n¿Hablas, Duende?\nLa verdad… ya ves,\nes fuego que arde,\nquema lo que quiero tener.\n\nBenditos frutos prohibidos,\ntraje de Adán… perdido.",
     "sutra": "FLOWsutra",
     "topic": "TRUTH",
@@ -38881,7 +40039,7 @@
     "lyrics_title": "Cruelty’s The Point (Admit It)",
     "url_slug": "cruelty-s-the-point-admit-it",
     "url_slug_locked": true,
-    "lyrics_summary": "",
+    "lyrics_summary": "This is one is dedicated to The Department of Homeland Cruelty...",
     "lyrics_extract": "Is your barrel pointed well? / Do you feel divine as people yell?",
     "lyrics_text": "[Verse 1]\nShall we light the stage with pain?\nAnd count ‘em all bloodstains?\nDivide and conquer truth apart,\nLike no one would smell a fart!\n\n[Verse 2]\nIs your barrel pointed well?\nDo you feel divine as people yell?\nIs your silence sleek and smooth,\nLike the lies you tell the youth?\n\n[Chorus]\nIs it policy, or performance art?\nDead kids make a striking chart...\nIs this cruelty, is this real,\nOr just how you love to feel?\n\n[Verse 3]\nDoes your shit make you feel tall?\nDo you hear ‘em fascist calls?\nWe are not fooled… this was built.\nYou gloat and feel zero guilt.\n\n[Bridge]\nZionist or Nazi cap,\nDoesn’t matter, same old trap.\nOnly difference in the fight?\nWhere the barrel’s aimed tonight…\n\n[Chorus]\nIs it policy, or performance art?\nDead kids make a striking chart...\nCruelty’s the point, admit it,\nAnd you’re goddamn loving every minute.\n\n[Outro]\nYou’re nothing but an evil puppeteer,\nAnd we see ‘em old strings real clear.\n[end]",
     "sutra": "QUACKsutra",
@@ -38963,6 +40121,47 @@
     "sc_catalog_listen_url": "https://soundcloud.com/bananasutra/happy-birthday-dear-dreamer",
     "sc_catalog_track_title": "Happy Birthday, Dear Dreamer Friend • Psychedelic GLOWsutra Folk Country Birthday BANJO Love",
     "sc_catalog_listen_source": "full_v4",
+    "related_songs": [
+      {
+        "lyrics_id": "L-372",
+        "lyrics_title": "Just Be You, Oooh!\n(A Birthday Sing-Along)",
+        "url_slug": "just-be-you-oooh-a-birthday-sing-along",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false
+      }
+    ],
+    "tracks": []
+  },
+  "L-415": {
+    "lyrics_id": "L-415",
+    "lyrics_title": "Bully",
+    "url_slug": "bully",
+    "url_slug_locked": true,
+    "lyrics_summary": "Why do we choose the broken men?... Asking for a friend.",
+    "lyrics_extract": "Why does this land of liberty / Bow down to arrogant tyranny?",
+    "lyrics_text": "[Verse 1]\nWhy does this land of liberty\nBow down to arrogant tyranny?\nWe cheer for the brash, the cruel, the loud,\nA bully’s roar draws in the crowd.\nBut strength ain’t loud, it don’t demean,\nTrue leaders build, they don’t tear clean.\nInstead, we crown the broken kings,\nTheir hollow hearts, their fragile strings.\n\n[Pre-Chorus]\nInsecure minds, selfish hearts,\nBuilt their towers to hide their scars.\nTheir dominance? A shallow ploy,\nA feeble act to destroy joy.\n\n[Chorus]\nAmerica, why love a bully’s game?\nLiberty’s turned to a hollow name.\nNo empathy, no morality,\nA winner with no integrity.\n\n[Verse 2]\nLow self-esteem breeds the cruelest thirst,\nBullies rise, but they’re dying first.\nTheir conquests? Just a house of sand,\nBuilt by the weakest of trembling hands.\nYet we adore the bravado, the sneer,\nAs if strength’s found in another’s fear.\nWhy do we choose the broken men?\nElected lies, again, again.\n\n[Pre-Chorus]\nProjecting pain, they claim control,\nBut the bully’s mask can’t hide the hole.\nBehind the roar, there’s nothing to see,\nA coward’s soul, a travesty.\n\n[Chorus]\nAmerica, why love a bully’s game?\nLiberty’s turned to a hollow name.\nNo empathy, no morality,\nA winner with no integrity.\n\n[Bridge]\nThe myth of merit dies tonight,\nSuccess through pain ain’t earned by right.\nNo strength in fear, no pride in lies,\nJust feeble hearts in oversized ties.\nDo we call this our destiny?\nA nation led by tyranny?\nConvicted yet elected still,\nIs justice just a bitter pill?\n\n[Chorus]\nAmerica, why love a bully’s game?\nLiberty’s turned to a hollow name.\nNo empathy, no morality,\nA winner with no integrity.\n\n[Outro]\nA true victory needs empathy,\nA moral path, accountability.\nBut here we are, the bully crowned,\nA hollow king on shaky ground.\nAmerica, when will you see?\nThe bully’s roar is a fallacy.",
+    "sutra": "QUACKsutra",
+    "topic": "INJUSTICE",
+    "intention": "seeEGO",
+    "light_shadow": "SHADOW",
+    "lang": "EN",
+    "written_year": "2024",
+    "song_in_app": true,
+    "fav": false,
+    "cover_image_url": "",
+    "songbook": "Quack: DUCK (shady)",
+    "muse": "",
+    "primary_ep_volume": 0,
+    "primary_ep_rating": "",
+    "primary_ep_url": "",
+    "primary_ep_title": "",
+    "fallback_sc_url": "",
+    "has_sc_catalog_listen": false,
+    "sc_catalog_listen_url": "",
+    "sc_catalog_track_title": "",
+    "sc_catalog_listen_source": "",
     "related_songs": [],
     "tracks": []
   }
