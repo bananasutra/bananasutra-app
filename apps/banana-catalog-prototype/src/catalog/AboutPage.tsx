@@ -7,7 +7,7 @@ import { buildSutraStats } from './sutraPageUtils'
 import type { SutraContextEntry, SutraFamilyKey } from './sutraContext'
 import { SUTRA_CONTEXT, SUTRA_INDEX_CORE_ORDER, sutraHrefForFamily } from './sutraContext'
 import { sutraClassName } from './sutraTheme'
-import { useDocumentTitle } from './useDocumentTitle'
+import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import './CatalogApp.css'
@@ -92,7 +92,12 @@ export function AboutPage() {
   const location = useLocation()
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
 
-  useDocumentTitle('About')
+  usePageMeta({
+    title: 'About the Sutras',
+    description:
+      'What is BANANASUTRA? Seven sutras — KNOW, BLOW, SHOW, FLOW, GROW, GLOW, and QUACK — songs for a world gone bananas.',
+    path: '/about',
+  })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [])
 
   useEffect(() => {

@@ -2,37 +2,82 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { useDocumentTitle } from './useDocumentTitle'
+import {
+  SUTRA_CONTEXT,
+  SUTRA_INDEX_CORE_ORDER,
+  sutraHrefForFamily,
+  type SutraContextEntry,
+} from './sutraContext'
+import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import './CatalogApp.css'
 import './SitemapPage.css'
 
-const SITEMAP_SECTIONS = [
+const BROWSE_LINKS: { to: string; label: string; pathLabel: string; description: string }[] = [
   {
-    heading: 'Explore',
-    links: [
-      { to: '/', label: 'Home' },
-      { to: '/songs', label: 'Songs — browse & filter the catalog' },
-      { to: '/tracks', label: 'Tracks — audio player view' },
-      { to: '/videos', label: 'Videos — YouTube catalog' },
-      { to: '/words', label: 'Words — lyrics & writing' },
-    ],
+    to: '/songs',
+    label: 'Songs Catalog',
+    pathLabel: '/songs',
+    description: 'Browse the full song grid — sutra, topic, intention, genre, language, and text search.',
   },
   {
-    heading: 'Discover',
-    links: [
-      { to: '/songbooks', label: 'Songbooks — thematic collections' },
-      { to: '/about', label: 'About — what is Bananasutra' },
-      { to: '/about#sutras', label: 'The seven sutras' },
-    ],
+    to: '/tracks',
+    label: 'Top Tracks',
+    pathLabel: '/tracks',
+    description: 'SoundCloud tracks ranked and filtered — tempo, genre, instruments, moods.',
   },
-] as const
+  {
+    to: '/videos',
+    label: 'Music Videos',
+    pathLabel: '/videos',
+    description: 'YouTube catalog — filter by sutra, topic, intention, and in-app vs YouTube-only.',
+  },
+  {
+    to: '/words',
+    label: 'Lyrics & Words',
+    pathLabel: '/words',
+    description: 'Lyrics-first surface — writing stages, searchable words, meaning before polish.',
+  },
+  {
+    to: '/songbooks',
+    label: 'Songbooks & Playlists',
+    pathLabel: '/songbooks',
+    description: 'Curated SoundCloud playlists by sutra, genre, language, and editorial collections.',
+  },
+]
+
+const ABOUT_LINKS: { to: string; label: string; pathLabel: string; description: string }[] = [
+  {
+    to: '/about',
+    label: 'About the Sutras',
+    pathLabel: '/about',
+    description: 'What BANANASUTRA is — the seven sutras as a compass, plus who’s behind the project.',
+  },
+  {
+    to: '/',
+    label: 'Home',
+    pathLabel: '/',
+    description: 'Discovery search, featured releases, and paths into songs, words, and videos.',
+  },
+]
+
+function sutraSearchBlurb(entry: SutraContextEntry): string {
+  const when = (entry.sutra_when || '').trim()
+  if (when) return when
+  const essence = (entry.sutra_card_essence || '').trim()
+  if (essence) return essence
+  return `${entry.question} · ${entry.practice} · ${entry.themes}`
+}
 
 export function SitemapPage() {
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
 
-  useDocumentTitle('Sitemap')
+  usePageMeta({
+    title: 'Sitemap',
+    description: 'Full sitemap of BANANASUTRA — all pages, all sutras, all ways to explore.',
+    path: '/sitemap',
+  })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [])
 
   return (
@@ -58,20 +103,72 @@ export function SitemapPage() {
           </header>
 
           <div className="sitemap-page__body">
-            {SITEMAP_SECTIONS.map((section) => (
-              <section key={section.heading} className="sitemap-page__section">
-                <h2 className="sitemap-page__heading">{section.heading}</h2>
-                <ul className="sitemap-page__list">
-                  {section.links.map((link) => (
-                    <li key={link.to} className="sitemap-page__item">
-                      <Link to={link.to} className="sitemap-page__link">
-                        {link.label}
+            <section className="sitemap-page__section">
+              <h2 className="sitemap-page__heading">Browse the catalog</h2>
+              <ul className="sitemap-page__list">
+                {BROWSE_LINKS.map((item) => (
+                  <li key={item.to} className="sitemap-page__item">
+                    <div className="sitemap-page__row">
+                      <Link to={item.to} className="sitemap-page__link">
+                        {item.label}
                       </Link>
+                      <span className="sitemap-page__path">{item.pathLabel}</span>
+                    </div>
+                    <p className="sitemap-page__desc">{item.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="sitemap-page__section">
+              <h2 className="sitemap-page__heading">The sutras</h2>
+              <p className="sitemap-page__section-lede">
+                Seven core lanes plus QUACK (a BLOW sub-sutra) — same slugs as the About page.
+              </p>
+              <ul className="sitemap-page__list">
+                {SUTRA_INDEX_CORE_ORDER.map((key) => {
+                  const entry = SUTRA_CONTEXT[key]
+                  const href = sutraHrefForFamily(key)
+                  return (
+                    <li key={key} className="sitemap-page__item">
+                      <div className="sitemap-page__row">
+                        <Link to={href} className="sitemap-page__link">
+                          {entry.sutra}
+                        </Link>
+                        <span className="sitemap-page__path">{href}</span>
+                      </div>
+                      <p className="sitemap-page__desc">{sutraSearchBlurb(entry)}</p>
                     </li>
-                  ))}
-                </ul>
-              </section>
-            ))}
+                  )
+                })}
+                <li className="sitemap-page__item sitemap-page__item--quack">
+                  <div className="sitemap-page__row">
+                    <Link to={sutraHrefForFamily('QUACK')} className="sitemap-page__link">
+                      {SUTRA_CONTEXT.QUACK.sutra}
+                    </Link>
+                    <span className="sitemap-page__path">{sutraHrefForFamily('QUACK')}</span>
+                  </div>
+                  <p className="sitemap-page__desc">{sutraSearchBlurb(SUTRA_CONTEXT.QUACK)}</p>
+                </li>
+              </ul>
+            </section>
+
+            <section className="sitemap-page__section">
+              <h2 className="sitemap-page__heading">About</h2>
+              <ul className="sitemap-page__list">
+                {ABOUT_LINKS.map((item) => (
+                  <li key={item.to} className="sitemap-page__item">
+                    <div className="sitemap-page__row">
+                      <Link to={item.to} className="sitemap-page__link">
+                        {item.label}
+                      </Link>
+                      <span className="sitemap-page__path">{item.pathLabel}</span>
+                    </div>
+                    <p className="sitemap-page__desc">{item.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
           </div>
         </article>
       </div>
