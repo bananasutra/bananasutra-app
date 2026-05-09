@@ -16,6 +16,7 @@ import { SUTRA_CONTEXT, sutraHrefForFamily } from './sutraContext'
 import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { loadSongCatalog } from './generatedData'
+import { hasListenerCatalogMedia } from './listenerCatalog'
 import { songOnWordsSurface } from './wordsStory'
 import './CatalogApp.css'
 import './HomePortal.css'
@@ -200,6 +201,12 @@ export function HomePortal() {
   const wordsSurfaceCount = useMemo(() => {
     if (!songCatalog) return null
     return songCatalog.filter(songOnWordsSurface).length
+  }, [songCatalog])
+
+  /** Same inclusion rule as `/songs` browse grid (`CatalogApp` → `hasListenerCatalogMedia`). */
+  const songsBrowseGridCount = useMemo(() => {
+    if (!songCatalog) return null
+    return songCatalog.filter(hasListenerCatalogMedia).length
   }, [songCatalog])
 
   /** Matches searchable catalog rows (same pool as `/words` + rest of catalog). */
@@ -461,7 +468,9 @@ export function HomePortal() {
                 <Link className="about-page__how-card" to="/songs">
                   <span className="about-page__how-label">Explore the fool catalog →</span>
                   <span className="about-page__how-stat">
-                    {formatCount(buildSummaryCount('songs'))} songs · meaning-first
+                    {songsBrowseGridCount != null
+                      ? `${formatCount(songsBrowseGridCount)} songs · meaning-first`
+                      : '— · meaning-first'}
                   </span>
                   <span className="about-page__how-desc">
                     Every song in one place—filter, wander, or let something find you.
