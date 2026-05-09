@@ -60,3 +60,35 @@
   outline-offset: var(--focus-ring-offset);
   border-radius: 2px;
 }
+
+.sitemap-page__section-lede {
+  margin: 0 0 0.85rem;
+  max-width: 40rem;
+  font: 400 0.82rem/1.5 var(--font-body);
+  color: var(--color-text-muted);
+}
+
+.sitemap-page__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+}
+
+.sitemap-page__path {
+  font: 400 0.75rem/1.4 var(--font-ui);
+  color: var(--color-text-muted);
+}
+
+.sitemap-page__desc {
+  margin: 0.35rem 0 0;
+  max-width: 42rem;
+  font: 400 0.8rem/1.45 var(--font-body);
+  color: var(--color-text-muted);
+}
+
+.sitemap-page__item--quack {
+  padding-top: 0.35rem;
+  margin-top: 0.35rem;
+  border-top: 1px dashed var(--color-border);
+}

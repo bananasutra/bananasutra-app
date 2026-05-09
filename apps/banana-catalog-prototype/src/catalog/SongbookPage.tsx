@@ -9,7 +9,7 @@ import { SoundCloudEmbed } from './SoundCloudEmbed'
 import { sutraClassName } from './sutraTheme'
 import { buildBrowsePath, buildBrowsePathForFacet } from './urlState'
 import { emptyFilterState, type SongCatalogItem, type SongbookMemberSong } from './types'
-import { useDocumentTitle } from './useDocumentTitle'
+import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { SongThumbCard } from './SongThumbCard'
@@ -71,7 +71,13 @@ export function SongbookPage() {
   }, [songCatalogRows])
 
   const songbook = useMemo(() => songbookBySlug(slug), [slug])
-  useDocumentTitle(songbook ? `${songbook.songbook} · Songbook` : 'Songbook not found')
+  usePageMeta({
+    title: songbook ? `${songbook.songbook} · Songbook` : 'Songbook not found',
+    description: songbook
+      ? (songbook.description || '').trim() || `${songbook.songbook} — a curated BANANASUTRA songbook.`
+      : undefined,
+    path: songbook ? `/songbooks/${slug.trim()}` : undefined,
+  })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [slug, songbook?.songbook, songbook?.song_count])
 
   const sutraTokens = useMemo(() => splitCsvTokens(songbook?.sutras ?? ''), [songbook?.sutras])

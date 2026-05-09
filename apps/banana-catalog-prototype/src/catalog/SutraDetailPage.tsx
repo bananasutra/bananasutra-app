@@ -18,7 +18,7 @@ import {
 } from './sutraPageUtils'
 import type { SutraFamilyKey } from './sutraContext'
 import { SongThumbCard } from './SongThumbCard'
-import { useDocumentTitle } from './useDocumentTitle'
+import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { songOnWordsSurface } from './wordsStory'
@@ -161,7 +161,14 @@ export function SutraDetailPage() {
   const familyKey = resolved?.key ?? null
   const entry = resolved?.entry ?? null
 
-  useDocumentTitle(entry ? `${familyKey} · Sutra` : 'Sutra')
+  usePageMeta({
+    title: entry && familyKey ? `${familyKey} · Sutra` : 'Sutra',
+    description:
+      entry && familyKey
+        ? `Explore the ${familyKey} sutra — songs, featured video, and related songbooks.`
+        : 'BANANASUTRA sutra detail.',
+    path: slug && entry ? `/about/${slug.trim()}` : undefined,
+  })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [slug])
 
   const sutraStats = useMemo(() => {

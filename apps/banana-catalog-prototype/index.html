@@ -38,7 +38,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="BANANASUTRA — songs for a world gone bananas. Explore the catalog: browse songs by sutra, topic, intention, and sound; search lyrics context, songbooks, and muses."
+      content="BANANASUTRA — songs for a world gone bananas. Explore the catalog: browse songs by sutra, topic, intention, and sound."
     />
     <meta
       name="theme-color"
@@ -50,7 +50,22 @@
       content="#13110d"
       media="(prefers-color-scheme: dark)"
     />
-    <title>BANANASUTRA catalog</title>
+    <title>BANANASUTRA · Songs for a World Gone Bananas</title>
+    <!-- Open Graph fallback (overridden by React per-page) -->
+    <meta property="og:title" content="BANANASUTRA · Songs for a World Gone Bananas" />
+    <meta
+      property="og:description"
+      content="BANANASUTRA — songs for a world gone bananas. Explore the catalog: browse songs by sutra, topic, intention, and sound."
+    />
+    <meta property="og:image" content="https://bananasutra.com/android-chrome-512x512.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bananasutra.com" />
+    <meta property="og:site_name" content="BANANASUTRA" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="BANANASUTRA · Songs for a World Gone Bananas" />
+    <meta name="twitter:description" content="BANANASUTRA — songs for a world gone bananas." />
+    <meta name="twitter:image" content="https://bananasutra.com/android-chrome-512x512.png" />
+    <link rel="canonical" href="https://bananasutra.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -115,6 +130,20 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-MJLGTXTE5W', { send_page_view: false });
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "BANANASUTRA",
+        "url": "https://bananasutra.com",
+        "description": "Songs for a world gone bananas. Explore the catalog: browse songs by sutra, topic, intention, and sound.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://bananasutra.com/songs?find={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
     </script>
   </head>
   <body>

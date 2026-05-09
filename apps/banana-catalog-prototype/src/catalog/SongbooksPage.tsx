@@ -6,7 +6,7 @@ import { CatalogPageJumpNav } from './CatalogPageJumpNav'
 import { allSongbooks, songbookHref } from './songbooks'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
-import { useDocumentTitle } from './useDocumentTitle'
+import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import './CatalogApp.css'
 import './SongbooksPage.css'
@@ -168,7 +168,11 @@ export function SongbooksPage() {
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
 
-  useDocumentTitle('Songbooks')
+  usePageMeta({
+    title: 'Songbooks & Playlists',
+    description: 'Curated SoundCloud playlists that tell a story. By topic, by genre, and by language.',
+    path: '/songbooks',
+  })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [])
 
   const songbooks = useMemo(() => [...allSongbooks()].sort(sortBooks), [])

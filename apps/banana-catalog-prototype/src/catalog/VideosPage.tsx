@@ -9,7 +9,7 @@ import { songCatalogPath } from './songPaths'
 import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
 import type { SongCatalogItem, YouTubeCatalogVideo } from './types'
-import { useDocumentTitle } from './useDocumentTitle'
+import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { ScrollRail } from './ScrollRail'
 import { CatalogPager } from './CatalogPager'
@@ -306,7 +306,12 @@ export function VideosPage() {
   ]
     .filter(Boolean)
     .join(' · ')
-  useDocumentTitle(titleSuffix ? `Videos · ${titleSuffix}` : 'Videos')
+  const videosMetaTitle = titleSuffix ? `Music Videos · ${titleSuffix}` : 'Music Videos'
+  usePageMeta({
+    title: videosMetaTitle,
+    description: 'BANANASUTRA music videos on YouTube. Browse by sutra, topic, and intention.',
+    path: '/videos',
+  })
 
   useEffect(() => {
     let cancelled = false

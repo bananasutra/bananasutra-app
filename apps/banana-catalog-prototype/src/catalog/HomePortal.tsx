@@ -13,7 +13,7 @@ import type { SongCatalogItem, SongbookCatalogItem } from './types'
 import { buildBrowsePathForFacet, searchHasBrowseParams } from './urlState'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { SUTRA_CONTEXT, sutraHrefForFamily } from './sutraContext'
-import { useDocumentTitle } from './useDocumentTitle'
+import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { loadSongCatalog } from './generatedData'
 import { songOnWordsSurface } from './wordsStory'
@@ -267,7 +267,12 @@ export function HomePortal() {
     }
   }, [featuredQuote.quote])
 
-  useDocumentTitle('Home')
+  usePageMeta({
+    title: 'Songs for a World Gone Bananas',
+    description:
+      'Explore the BANANASUTRA catalog — songs organized by sutra, topic, intention, and sound. Browse songbooks, read lyrics, watch videos, and listen to tracks.',
+    path: '/',
+  })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [fullSearch])
 
   if (legacyRedirect) {

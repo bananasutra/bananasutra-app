@@ -25,7 +25,7 @@ import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
 import { CatalogPager } from './CatalogPager'
 import './CatalogPager.css'
-import { useDocumentTitle } from './useDocumentTitle'
+import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { loadSongSearchDeep, useSongCatalogBrowse } from './generatedData'
 import { hasListenerCatalogMedia } from './listenerCatalog'
@@ -111,7 +111,11 @@ export function CatalogApp() {
     typeof window === 'undefined' ? true : window.innerWidth >= 900,
   )
 
-  useDocumentTitle('The Songs')
+  usePageMeta({
+    title: 'Songs Catalog',
+    description: 'Browse all BANANASUTRA songs. Filter by sutra, topic, intention, genre, and language.',
+    path: '/songs',
+  })
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 899px)')
