@@ -87,6 +87,10 @@ function trackDurationSeconds(track: SongDetailTrack): number {
   return parseDurationFormatted((track.duration_raw ?? '').trim())
 }
 
+/** Single-track list-mode chrome (R9); `/sets/` URLs need enough height for multi-track rows in the SC widget. */
+const SC_EMBED_HEIGHT_TRACK_LIST = 166
+const SC_EMBED_HEIGHT_SET_PLAYLIST = 450
+
 /** Matches `@media (min-width: 900px)` for `.song-detail-split--two-col` — lyrics clamp only there. */
 const SONG_DETAIL_TWO_COL_MQ = '(min-width: 900px)'
 
@@ -344,6 +348,8 @@ function SongDetailLoaded({
 
   const fallbackScUrl = (detail.fallback_sc_url ?? '').trim()
   const catalogListenUrl = (detail.sc_catalog_listen_url ?? '').trim()
+  const primaryEpUrl = (detail.primary_ep_url ?? '').trim()
+  const primaryEpTitle = (detail.primary_ep_title ?? '').trim()
   const playingUrl = (
     selectedUrl?.trim() ||
     defaultTrack?.sc_url?.trim() ||
@@ -352,6 +358,7 @@ function SongDetailLoaded({
     ''
   ).trim()
   const inAppPlayableTracks = orderedTracks.filter((t) => trackIsInApp(t) && t.sc_url.trim())
+  /** All curated picks reference one EP → use it; otherwise fall back to primary SC EP set when tracks span multiple releases. */
   const sharedPlayableEpUrl = useMemo(() => {
     const set = new Set(
       inAppPlayableTracks
@@ -360,25 +367,37 @@ function SongDetailLoaded({
     )
     return set.size === 1 ? [...set][0] : ''
   }, [inAppPlayableTracks])
-  const sharedEpTrackCount = useMemo(() => {
-    if (!sharedPlayableEpUrl) return 0
-    const matching = inAppPlayableTracks.filter((t) => (t.ep_url || '').trim() === sharedPlayableEpUrl)
-    const epTotal = Math.max(0, ...matching.map((t) => Number(t.ep_total_tracks || 0)))
+  const playFullEpSetUrl = useMemo(() => {
+    const primarySet = primaryEpUrl.includes('/sets/') ? primaryEpUrl : ''
+    return sharedPlayableEpUrl || primarySet
+  }, [sharedPlayableEpUrl, primaryEpUrl])
+  const playFullEpTrackCount = useMemo(() => {
+    if (!playFullEpSetUrl) return 0
+    const nk = normSoundcloudUrl(playFullEpSetUrl)
+    const matchingApp = inAppPlayableTracks.filter((t) => normSoundcloudUrl((t.ep_url || '').trim()) === nk)
+    const epTotal = Math.max(0, ...matchingApp.map((t) => Number(t.ep_total_tracks || 0)))
     if (epTotal > 0) return epTotal
-    return matching.length
-  }, [inAppPlayableTracks, sharedPlayableEpUrl])
-  const sharedEpTotalDuration = useMemo(() => {
-    if (!sharedPlayableEpUrl) return ''
-    const nk = normSoundcloudUrl(sharedPlayableEpUrl)
+    if (matchingApp.length > 0) return matchingApp.length
+    const catalogMatching = detail.tracks.filter((t) => normSoundcloudUrl((t.ep_url || '').trim()) === nk)
+    const ct = Math.max(0, ...catalogMatching.map((t) => Number(t.ep_total_tracks || 0)))
+    if (ct > 0) return ct
+    return catalogMatching.length
+  }, [playFullEpSetUrl, inAppPlayableTracks, detail.tracks])
+  const playFullEpDurationLabel = useMemo(() => {
+    if (!playFullEpSetUrl) return ''
+    const nk = normSoundcloudUrl(playFullEpSetUrl)
     const fromEpRow = nk ? detail.sc_ep_set_duration_totals?.[nk]?.trim() : ''
     if (fromEpRow) {
       const secs = parseDurationFormatted(fromEpRow)
       return formatEpDuration(secs)
     }
-    const matching = inAppPlayableTracks.filter((t) => normSoundcloudUrl((t.ep_url || '').trim()) === nk)
-    const totalSeconds = matching.reduce((acc, t) => acc + trackDurationSeconds(t), 0)
+    const matchingApp = inAppPlayableTracks.filter((t) => normSoundcloudUrl((t.ep_url || '').trim()) === nk)
+    const totalSeconds = matchingApp.reduce((acc, t) => acc + trackDurationSeconds(t), 0)
     return formatEpDuration(totalSeconds)
-  }, [detail.sc_ep_set_duration_totals, inAppPlayableTracks, sharedPlayableEpUrl])
+  }, [detail.sc_ep_set_duration_totals, inAppPlayableTracks, playFullEpSetUrl])
+
+  const soundcloudMainEmbedHeight =
+    playingUrl.includes('/sets/') ? SC_EMBED_HEIGHT_SET_PLAYLIST : SC_EMBED_HEIGHT_TRACK_LIST
 
   const requestSoundcloudPlayback = (url: string) => {
     setSelectedUrl(url)
@@ -394,8 +413,6 @@ function SongDetailLoaded({
     Boolean(detail.lang) ||
     Boolean(writtenYear) ||
     Boolean((detail.muse ?? '').trim())
-  const primaryEpUrl = (detail.primary_ep_url ?? '').trim()
-  const primaryEpTitle = (detail.primary_ep_title ?? '').trim()
   const hasYoutubeVideos = youtubeVideos.length > 0
   const hasLyrics = Boolean((detail.lyrics_text || '').trim())
   const hasPlayableTrack = Boolean(playingUrl)
@@ -706,7 +723,7 @@ function SongDetailLoaded({
                       scUrl={playingUrl}
                       title={`SoundCloud: ${detail.lyrics_title}`}
                       mode="list"
-                      height={166}
+                      height={soundcloudMainEmbedHeight}
                       autoPlay={Boolean((selectedUrl ?? '').trim())}
                       reloadKey={soundcloudReloadKey}
                       loading="eager"
@@ -726,7 +743,7 @@ function SongDetailLoaded({
                         <SoundCloudEmbed
                           scUrl={primaryEpUrl}
                           title={primaryEpTitle ? `SoundCloud: ${primaryEpTitle}` : `SoundCloud EP · ${detail.lyrics_title}`}
-                          height={360}
+                          height={primaryEpUrl.includes('/sets/') ? SC_EMBED_HEIGHT_SET_PLAYLIST : 360}
                           mode={primaryEpUrl.includes('/sets/') ? 'list' : 'visual'}
                           autoPlay
                           loading="eager"
@@ -792,16 +809,16 @@ function SongDetailLoaded({
                   </ul>
                 </section>
               ) : null}
-              {sharedPlayableEpUrl ? (
+              {playFullEpSetUrl && hasCuratedInAppTracks ? (
                 <section className="song-detail-audio-playall" aria-label="Play full EP">
                   <p className="song-detail-audio-hint">
-                    Like it? Listen to all {sharedEpTrackCount || 'the'} track{sharedEpTrackCount === 1 ? '' : 's'} as a
-                    playlist{sharedEpTotalDuration ? ` (${sharedEpTotalDuration})` : ''}.
+                    Like it? Listen to all {playFullEpTrackCount || 'the'} track{playFullEpTrackCount === 1 ? '' : 's'} as a
+                    playlist{playFullEpDurationLabel ? ` (${playFullEpDurationLabel})` : ''}.
                   </p>
                   <button
                     type="button"
                     className="song-detail-audio-action-btn"
-                    onClick={() => requestSoundcloudPlayback(sharedPlayableEpUrl)}
+                    onClick={() => requestSoundcloudPlayback(playFullEpSetUrl)}
                   >
                     Play full EP
                   </button>
