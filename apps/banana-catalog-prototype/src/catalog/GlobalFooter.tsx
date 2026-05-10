@@ -40,8 +40,12 @@ function FooterContactForm() {
   const [status, setStatus] = useState<FormStatus>('idle')
   const [errorMsg, setErrorMsg] = useState('')
   const [honeypot, setHoneypot] = useState('')
-  const loadedAt = useRef(Date.now())
+  const loadedAt = useRef(0)
   const contentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    loadedAt.current = Date.now()
+  }, [])
 
   /* Reset timing on open so the 3-second guard starts from reveal, not page load. */
   useEffect(() => {
@@ -160,7 +164,7 @@ function FooterContactForm() {
                   value={honeypot}
                   onChange={(e) => setHoneypot(e.target.value)}
                   tabIndex={-1}
-                  autoComplete="nope"
+                  autoComplete="off"
                 />
               </div>
 

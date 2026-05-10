@@ -172,9 +172,11 @@ export function useSongCatalog(): SongCatalogLoadState {
     /* BootPrefetch may finish between first paint and this effect — cache warm but hook state still
      * loading:true. Sync from cache instead of returning early with stale state. */
     if (songCatalogResolved) {
-      setData(songCatalogResolved)
-      setError(null)
-      setLoading(false)
+      queueMicrotask(() => {
+        setData(songCatalogResolved)
+        setError(null)
+        setLoading(false)
+      })
       return
     }
     let cancelled = false
@@ -208,9 +210,11 @@ export function useSongCatalogBrowse(): SongCatalogLoadState {
 
   useEffect(() => {
     if (songCatalogBrowseResolved) {
-      setData(songCatalogBrowseResolved)
-      setError(null)
-      setLoading(false)
+      queueMicrotask(() => {
+        setData(songCatalogBrowseResolved)
+        setError(null)
+        setLoading(false)
+      })
       return
     }
     let cancelled = false
@@ -253,10 +257,12 @@ export function useSongCatalogAndDetail(): SongCatalogDetailLoadState {
 
   useEffect(() => {
     if (songCatalogResolved && songDetailResolved) {
-      setCatalog(songCatalogResolved)
-      setDetailMap(songDetailResolved)
-      setError(null)
-      setLoading(false)
+      queueMicrotask(() => {
+        setCatalog(songCatalogResolved)
+        setDetailMap(songDetailResolved)
+        setError(null)
+        setLoading(false)
+      })
       return
     }
     let cancelled = false

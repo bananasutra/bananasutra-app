@@ -197,7 +197,9 @@ export function CatalogApp() {
     const shouldWarmDeep = findInputFocused || draftLen >= 2 || queryLen >= 2
     if (!shouldWarmDeep || deepSearchByLyricsId || deepSearchLoading) return
     let cancelled = false
-    setDeepSearchLoading(true)
+    queueMicrotask(() => {
+      if (!cancelled) setDeepSearchLoading(true)
+    })
     loadSongSearchDeep()
       .then((index) => {
         if (!cancelled) setDeepSearchByLyricsId(index)

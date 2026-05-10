@@ -135,7 +135,7 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
     if (urlSlug === canonicalSlug) return
     const tail = fullSearch ? `?${fullSearch}` : ''
     navigate(`/songs/${canonicalSlug}${tail}`, { replace: true, state: location.state })
-  }, [detail, urlSlug, canonicalSlug, fullSearch, navigate])
+  }, [detail, urlSlug, canonicalSlug, fullSearch, navigate, location.state])
 
   usePageMeta({
     title: detail ? `${detail.lyrics_title} · Song` : dataLoading ? 'Song' : 'Song not found',
@@ -248,7 +248,9 @@ function SongDetailLoaded({
 
   useEffect(() => {
     let cancelled = false
-    setYoutubeVideosLoaded(false)
+    queueMicrotask(() => {
+      if (!cancelled) setYoutubeVideosLoaded(false)
+    })
     loadYoutubeByLyricsId()
       .then((o) => {
         if (!cancelled) {

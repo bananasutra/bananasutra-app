@@ -212,7 +212,9 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
     const shouldWarmDeep = open && debounced.trim().length >= 2
     if (!shouldWarmDeep || deepSearchByLyricsId || deepSearchLoading) return
     let cancelled = false
-    setDeepSearchLoading(true)
+    queueMicrotask(() => {
+      if (!cancelled) setDeepSearchLoading(true)
+    })
     loadSongSearchDeep()
       .then((index) => {
         if (!cancelled) setDeepSearchByLyricsId(index)
@@ -237,8 +239,10 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
 
   useEffect(() => {
     if (!open || youtubeLoadStarted) return
-    setYoutubeLoadStarted(true)
     let cancelled = false
+    queueMicrotask(() => {
+      if (!cancelled) setYoutubeLoadStarted(true)
+    })
     loadYoutubeByLyricsId()
       .then((o) => {
         if (!cancelled) setYoutubeFlat(Object.values(o).flat())

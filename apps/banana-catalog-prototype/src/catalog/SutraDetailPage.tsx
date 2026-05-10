@@ -192,15 +192,15 @@ export function SutraDetailPage() {
       pullTypingIntervalRef.current = undefined
     }
     if (!full) {
-      setTypedPullQuote('')
+      queueMicrotask(() => setTypedPullQuote(''))
       return
     }
     const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reducedMotion) {
-      setTypedPullQuote(full)
+      queueMicrotask(() => setTypedPullQuote(full))
       return
     }
-    setTypedPullQuote('')
+    queueMicrotask(() => setTypedPullQuote(''))
     let idx = 0
     pullTypingIntervalRef.current = window.setInterval(() => {
       idx += 1
