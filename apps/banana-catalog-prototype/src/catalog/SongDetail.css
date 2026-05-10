@@ -2,7 +2,7 @@
   min-height: 100vh;
   color: var(--color-text-primary);
   padding: 0 0 2.5rem;
-  --song-detail-narrow-col: minmax(220px, min(34vw, 380px));
+  --song-detail-narrow-col: minmax(200px, min(28vw, 280px));
   /*
     Collapsed lyrics max height: tall default to reduce clipping. Roughly anchored to a typical
     audio tab stack — tab strip + embed chrome + three track rows (.song-detail-track + list gaps).
@@ -313,6 +313,13 @@
   margin-top: 0.12rem;
 }
 
+.song-detail-secondary-meta:last-child .song-detail-secondary-meta-item + .song-detail-secondary-meta-item::before {
+  content: '·';
+  margin-right: 0.7rem;
+  color: var(--color-text-faint);
+  opacity: 0.5;
+}
+
 .song-detail-secondary-meta-item {
   position: relative;
   font: 500 0.76rem/1.3 var(--font-ui);
@@ -322,12 +329,20 @@
 .song-detail-secondary-link {
   color: var(--color-text-faint);
   text-decoration: none;
-  border-bottom: 1px dotted transparent;
+  background: var(--color-bg-inset);
+  padding: 0.12rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
 }
 
 .song-detail-secondary-link:hover {
   color: var(--color-link-hover);
-  border-bottom-color: var(--color-border-strong);
+  background: var(--color-bg-elevated);
+  border-color: var(--color-border);
 }
 
 .song-detail-secondary-link:focus-visible {
@@ -1010,6 +1025,76 @@
   .song-detail-tab {
     font-size: 0.68rem;
     min-height: 2.15rem;
+  }
+}
+
+@media print {
+  .song-detail .catalog-breadcrumbs,
+  .song-detail-tabs,
+  .song-detail-media,
+  .song-detail-player,
+  .song-detail-tracks,
+  .song-detail-audio-playall,
+  .song-detail-related,
+  .song-detail-lyrics-expand,
+  .song-detail-split__media {
+    display: none !important;
+  }
+
+  .song-detail {
+    padding: 0;
+  }
+
+  .song-detail-hero {
+    grid-template-columns: 80px 1fr !important;
+    gap: 0.75rem !important;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .song-detail-cover {
+    width: 80px !important;
+    height: 80px !important;
+    aspect-ratio: 1;
+    border-radius: 4px;
+  }
+
+  .song-detail-lyrics-pre {
+    max-height: none !important;
+    overflow: visible !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    font-size: 0.85rem !important;
+    line-height: 1.5 !important;
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .song-detail-split {
+    grid-template-columns: 1fr !important;
+  }
+
+  .song-detail-title.song-title {
+    font-size: 1.4rem !important;
+    margin-bottom: 0.15rem;
+  }
+
+  .song-detail-summary {
+    font-size: 0.85rem !important;
+  }
+
+  .song-detail-secondary-meta-item {
+    font-size: 0.7rem !important;
+  }
+
+  .song-detail::after {
+    content: 'bananasutra.com';
+    display: block;
+    margin-top: 2rem;
+    font-size: 0.65rem;
+    color: #999;
+    text-align: center;
   }
 }
 

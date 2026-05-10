@@ -188,3 +188,33 @@ a:focus-visible {
   background: var(--color-accent);
   animation: nav-route-loading-bar-move 0.85s ease-in-out infinite;
 }
+
+@media print {
+  body,
+  .catalog,
+  .catalog-page {
+    background: white !important;
+    color: #000 !important;
+  }
+
+  * {
+    box-shadow: none !important;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+
+  .catalog-header,
+  .discovery-search,
+  .catalog-nav,
+  .catalog-search-bar,
+  .catalog-footer,
+  .sc-embed-frame,
+  .yt-embed-frame,
+  .yt-embed-wrap,
+  .nav-route-loading-bar {
+    display: none !important;
+  }
+}

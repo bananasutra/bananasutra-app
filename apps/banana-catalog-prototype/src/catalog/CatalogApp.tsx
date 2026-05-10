@@ -29,6 +29,7 @@ import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { loadSongSearchDeep, useSongCatalogBrowse } from './generatedData'
 import { hasListenerCatalogMedia } from './listenerCatalog'
+import { FooterSocialIcon } from './FooterSocialIcons'
 import './CatalogApp.css'
 
 const PAGE_SIZE = 30
@@ -638,7 +639,7 @@ export function CatalogApp() {
                         }
                         aria-hidden
                       >
-                        SC
+                        <FooterSocialIcon id="soundcloud" className="catalog-card-media-icon" />
                       </span>
                       <span
                         className={`catalog-card-media-slot catalog-card-media-slot--yt${song.has_youtube_video ? ' is-on' : ' is-off'}${
@@ -653,17 +654,8 @@ export function CatalogApp() {
                         }
                         aria-hidden
                       >
-                        YT
+                        <FooterSocialIcon id="youtube" className="catalog-card-media-icon" />
                       </span>
-                      {song.has_in_app_playback || song.has_sc_catalog_listen ? (
-                        <span
-                          className="catalog-card-media-autoplay-cue"
-                          title="Opens on Audio tab and starts SoundCloud playback"
-                          aria-label="Autoplay enabled when opening this song"
-                        >
-                          ▶ Auto
-                        </span>
-                      ) : null}
                     </div>
                   </div>
                   <div className="catalog-card-body">

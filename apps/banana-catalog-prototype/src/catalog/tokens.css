@@ -205,9 +205,6 @@
   --media-off-bg: rgba(255, 255, 255, 0.08);
   --media-off-fg: #cdc1b2;
   --media-off-border: rgba(255, 255, 255, 0.14);
-  --media-auto-bg: var(--color-accent);
-  --media-auto-fg: var(--color-accent-on);
-  --media-auto-border: #3d372f;
 }
 
 :root[data-theme='dark'] {
@@ -255,9 +252,6 @@
   --media-off-bg: rgba(255, 255, 255, 0.08);
   --media-off-fg: #b1a290;
   --media-off-border: rgba(255, 255, 255, 0.12);
-  --media-auto-bg: var(--color-accent);
-  --media-auto-fg: var(--color-accent-on);
-  --media-auto-border: #8a8075;
 }
 
 /*

@@ -1001,19 +1001,22 @@ a.catalog-facet-chip.is-active:visited {
 }
 
 .catalog-card-media-slot {
-  min-width: 1.55rem;
-  padding: 0.12rem 0.28rem;
+  min-width: auto;
+  padding: 0.18rem 0.25rem;
   border-radius: 4px;
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
   text-align: center;
-  line-height: 1;
+  line-height: 0;
   border: 1px solid transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 1.2rem;
+}
+
+.catalog-card-media-icon {
+  display: block;
+  width: 14px;
+  height: 14px;
 }
 
 .catalog-card-media-slot--sc.is-on {
@@ -1036,27 +1039,6 @@ a.catalog-facet-chip.is-active:visited {
 
 .catalog-card-media-slot--yt-partial.is-on {
   box-shadow: 0 0 0 1px var(--media-off-border);
-}
-
-.catalog-card-media-autoplay-cue {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.12rem 0.34rem;
-  border-radius: 4px;
-  font-size: 0.58rem;
-  font-weight: 650;
-  letter-spacing: 0.03em;
-  color: var(--media-auto-fg);
-  border: 1px solid var(--media-auto-border);
-  background: var(--media-auto-bg);
-  line-height: 1.1;
-}
-
-@media (max-width: 767px) {
-  /* In-app SoundCloud autoplay does not run on typical phone browsers — hide cue to avoid implying it will. */
-  .catalog-card-media-autoplay-cue {
-    display: none;
-  }
 }
 
 .catalog-card-art img {

@@ -56,6 +56,28 @@ function searchCatalogHref(query: string): string {
   return `${CATALOG_BROWSE_PATH}?find=${encodeURIComponent(trimmed)}`
 }
 
+function formatEpDuration(totalSeconds: number): string {
+  if (totalSeconds <= 0) return ''
+  const h = Math.floor(totalSeconds / 3600)
+  const m = Math.round((totalSeconds % 3600) / 60)
+  if (h > 0) return `~${h}h ${m}m`
+  return `~${m}m`
+}
+
+function parseDurationFormatted(fmt: string): number {
+  const parts = fmt.split(':').map(Number)
+  if (parts.some((n) => Number.isNaN(n))) return 0
+  if (parts.length === 2) return parts[0] * 60 + parts[1]
+  if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2]
+  return 0
+}
+
+function trackDurationSeconds(track: SongDetailTrack): number {
+  const sec = Number(track.duration_sec)
+  if (Number.isFinite(sec) && sec > 0) return sec
+  return parseDurationFormatted((track.duration_raw ?? '').trim())
+}
+
 /** Matches `@media (min-width: 900px)` for `.song-detail-split--two-col` — lyrics clamp only there. */
 const SONG_DETAIL_TWO_COL_MQ = '(min-width: 900px)'
 
@@ -320,7 +342,6 @@ function SongDetailLoaded({
     catalogListenUrl ||
     ''
   ).trim()
-  const playingIsSet = playingUrl.includes('/sets/')
   const inAppPlayableTracks = orderedTracks.filter((t) => trackIsInApp(t) && t.sc_url.trim())
   const sharedPlayableEpUrl = useMemo(() => {
     const set = new Set(
@@ -336,6 +357,12 @@ function SongDetailLoaded({
     const epTotal = Math.max(0, ...matching.map((t) => Number(t.ep_total_tracks || 0)))
     if (epTotal > 0) return epTotal
     return matching.length
+  }, [inAppPlayableTracks, sharedPlayableEpUrl])
+  const sharedEpTotalDuration = useMemo(() => {
+    if (!sharedPlayableEpUrl) return ''
+    const matching = inAppPlayableTracks.filter((t) => (t.ep_url || '').trim() === sharedPlayableEpUrl)
+    const totalSeconds = matching.reduce((acc, t) => acc + trackDurationSeconds(t), 0)
+    return formatEpDuration(totalSeconds)
   }, [inAppPlayableTracks, sharedPlayableEpUrl])
 
   const requestSoundcloudPlayback = (url: string) => {
@@ -563,42 +590,42 @@ function SongDetailLoaded({
                       {detail.topic ? (
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={buildBrowsePathForFacet('topic', detail.topic)}>
-                            topic: {detail.topic}
+                            {detail.topic}
                           </Link>
                         </li>
                       ) : null}
                       {detail.intention ? (
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={buildBrowsePathForFacet('intention', detail.intention)}>
-                            intention: {detail.intention}
+                            {detail.intention}
                           </Link>
                         </li>
                       ) : null}
                       {detail.light_shadow ? (
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={buildBrowsePathForFacet('light_shadow', detail.light_shadow)}>
-                            tone: {detail.light_shadow}
+                            {detail.light_shadow}
                           </Link>
                         </li>
                       ) : null}
                       {detail.lang ? (
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={buildBrowsePathForFacet('lang', detail.lang)}>
-                            lang: {detail.lang}
+                            {detail.lang}
                           </Link>
                         </li>
                       ) : null}
                       {writtenYear ? (
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={buildBrowsePathForFacet('written_year', writtenYear)}>
-                            written: {writtenYear}
+                            {writtenYear}
                           </Link>
                         </li>
                       ) : null}
                       {detail.muse ? (
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={searchCatalogHref(detail.muse)}>
-                            muse: {detail.muse}
+                            {detail.muse}
                           </Link>
                         </li>
                       ) : null}
@@ -663,7 +690,8 @@ function SongDetailLoaded({
                     <SoundCloudEmbed
                       scUrl={playingUrl}
                       title={`SoundCloud: ${detail.lyrics_title}`}
-                      mode={playingIsSet ? 'list' : 'visual'}
+                      mode="list"
+                      height={166}
                       autoPlay={Boolean((selectedUrl ?? '').trim())}
                       reloadKey={soundcloudReloadKey}
                       loading="eager"
@@ -753,7 +781,7 @@ function SongDetailLoaded({
                 <section className="song-detail-audio-playall" aria-label="Play full EP">
                   <p className="song-detail-audio-hint">
                     Like it? Listen to all {sharedEpTrackCount || 'the'} track{sharedEpTrackCount === 1 ? '' : 's'} as a
-                    playlist.
+                    playlist{sharedEpTotalDuration ? ` (${sharedEpTotalDuration})` : ''}.
                   </p>
                   <button
                     type="button"
