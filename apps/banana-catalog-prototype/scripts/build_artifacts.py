@@ -1806,6 +1806,14 @@ def main() -> None:
     sc_tracks_raw = read_csv(paths["sc_tracks"])
     sc_tracks_rows = [normalize_track_row(row) for row in sc_tracks_raw]
     sc_eps_rows = read_csv(paths["sc_eps"])
+    ep_duration_total_by_norm_url: dict[str, str] = {}
+    for ep_row in sc_eps_rows:
+        ep_u = str(ep_row.get("ep_url") or "").strip()
+        dt = str(ep_row.get("duration_total") or "").strip()
+        if ep_u and dt:
+            nk = _norm_soundcloud_url(ep_u)
+            if nk:
+                ep_duration_total_by_norm_url[nk] = dt
     songbook_rows = read_csv(paths["songbooks"])
     sc_playlist_rows = read_csv(paths["sc_playlists"])
     sutra_rows = read_csv(paths["sutras"])
@@ -2076,7 +2084,17 @@ def main() -> None:
         }
         song_catalog.append(card)
 
-        song_detail[lyrics_id] = {
+        set_ep_duration_totals: dict[str, str] = {}
+        for t in detail_tracks:
+            eu = str(t.get("ep_url") or "").strip()
+            if "/sets/" not in eu:
+                continue
+            nk = _norm_soundcloud_url(eu)
+            dt = ep_duration_total_by_norm_url.get(nk)
+            if dt:
+                set_ep_duration_totals[nk] = dt
+
+        detail_payload: dict[str, Any] = {
             "lyrics_id": lyrics_id,
             "lyrics_title": display_title,
             "url_slug": url_slug,
@@ -2107,6 +2125,9 @@ def main() -> None:
             "related_songs": [],
             "tracks": detail_tracks,
         }
+        if set_ep_duration_totals:
+            detail_payload["sc_ep_set_duration_totals"] = set_ep_duration_totals
+        song_detail[lyrics_id] = detail_payload
 
     # Default sort contract: newest first (stable tie-break on lyrics_id).
     song_catalog.sort(key=lambda row: str(row.get("lyrics_id", "")))

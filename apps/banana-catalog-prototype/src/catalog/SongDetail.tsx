@@ -72,6 +72,15 @@ function parseDurationFormatted(fmt: string): number {
   return 0
 }
 
+/** Matches `_norm_soundcloud_url` in build_artifacts.py — stable lookup for EP duration metadata. */
+function normSoundcloudUrl(url: string): string {
+  let u = url.trim().replace(/\/+$/, '').toLowerCase()
+  if (!u) return ''
+  const q = u.indexOf('?')
+  if (q >= 0) u = u.slice(0, q)
+  return u
+}
+
 function trackDurationSeconds(track: SongDetailTrack): number {
   const sec = Number(track.duration_sec)
   if (Number.isFinite(sec) && sec > 0) return sec
@@ -360,10 +369,16 @@ function SongDetailLoaded({
   }, [inAppPlayableTracks, sharedPlayableEpUrl])
   const sharedEpTotalDuration = useMemo(() => {
     if (!sharedPlayableEpUrl) return ''
-    const matching = inAppPlayableTracks.filter((t) => (t.ep_url || '').trim() === sharedPlayableEpUrl)
+    const nk = normSoundcloudUrl(sharedPlayableEpUrl)
+    const fromEpRow = nk ? detail.sc_ep_set_duration_totals?.[nk]?.trim() : ''
+    if (fromEpRow) {
+      const secs = parseDurationFormatted(fromEpRow)
+      return formatEpDuration(secs)
+    }
+    const matching = inAppPlayableTracks.filter((t) => normSoundcloudUrl((t.ep_url || '').trim()) === nk)
     const totalSeconds = matching.reduce((acc, t) => acc + trackDurationSeconds(t), 0)
     return formatEpDuration(totalSeconds)
-  }, [inAppPlayableTracks, sharedPlayableEpUrl])
+  }, [detail.sc_ep_set_duration_totals, inAppPlayableTracks, sharedPlayableEpUrl])
 
   const requestSoundcloudPlayback = (url: string) => {
     setSelectedUrl(url)

@@ -215,6 +215,8 @@ export type SongDetailRecord = {
   primary_ep_url: string
   primary_ep_title: string
   primary_ep_rating: string
+  /** Normalized SoundCloud `/sets/` URL → `duration_total` from sc_eps CSV (e.g. `"1:51:06"`). */
+  sc_ep_set_duration_totals?: Record<string, string>
   fallback_sc_url?: string
   has_sc_catalog_listen?: boolean
   sc_catalog_listen_url?: string
