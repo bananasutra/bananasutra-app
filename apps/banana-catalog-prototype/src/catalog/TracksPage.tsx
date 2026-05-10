@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { KeyboardEvent, MouseEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import trackCatalogUrl from '../data/generated/track_catalog.json?url'
+import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
 import { TRACKS_BROWSER_FACET_ORDER, TRACKS_FACET_LABELS } from './catalogFacetConfig'
 import { CatalogPager } from './CatalogPager'
 import './CatalogPager.css'
@@ -95,7 +95,7 @@ export function TracksPage() {
 
   useEffect(() => {
     let cancelled = false
-    fetch(trackCatalogUrl)
+    fetchCatalogData(catalogDataFileUrl('track_catalog.json'))
       .then((r) => {
         if (!cancelled) setCatalogLoadError(null)
         if (!r.ok) throw new Error(`HTTP ${r.status}`)

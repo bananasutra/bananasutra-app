@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react'
-import songCatalogUrl from '../data/generated/song_catalog.json?url'
-import songCatalogBrowseUrl from '../data/generated/song_catalog_browse.json?url'
-import songSearchDeepUrl from '../data/generated/song_search_deep.json?url'
-import songDetailUrl from '../data/generated/song_detail.json?url'
-import youtubeByLyricsUrl from '../data/generated/youtube_by_lyrics_id.json?url'
+import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
 import type { SongCatalogItem, SongDetailRecord, YouTubeCatalogVideo } from './types'
 
 let songCatalogResolved: SongCatalogItem[] | null = null
@@ -20,7 +16,7 @@ let songDetailPromise: Promise<Record<string, SongDetailRecord>> | null = null
 export async function loadSongCatalog(): Promise<SongCatalogItem[]> {
   if (songCatalogResolved) return songCatalogResolved
   if (!songCatalogPromise) {
-    songCatalogPromise = fetch(songCatalogUrl)
+    songCatalogPromise = fetchCatalogData(catalogDataFileUrl('song_catalog.json'))
       .then((r) => {
         if (!r.ok) throw new Error(`song_catalog.json: HTTP ${r.status}`)
         return r.json() as Promise<SongCatalogItem[]>
@@ -97,7 +93,7 @@ function normalizeBrowseSongRow(row: Partial<SongCatalogItem>): SongCatalogItem 
 export async function loadSongCatalogBrowse(): Promise<SongCatalogItem[]> {
   if (songCatalogBrowseResolved) return songCatalogBrowseResolved
   if (!songCatalogBrowsePromise) {
-    songCatalogBrowsePromise = fetch(songCatalogBrowseUrl)
+    songCatalogBrowsePromise = fetchCatalogData(catalogDataFileUrl('song_catalog_browse.json'))
       .then((r) => {
         if (!r.ok) throw new Error(`song_catalog_browse.json: HTTP ${r.status}`)
         return r.json() as Promise<Partial<SongCatalogItem>[]>
@@ -118,7 +114,7 @@ export async function loadSongCatalogBrowse(): Promise<SongCatalogItem[]> {
 export async function loadSongSearchDeep(): Promise<Record<string, string>> {
   if (songSearchDeepResolved) return songSearchDeepResolved
   if (!songSearchDeepPromise) {
-    songSearchDeepPromise = fetch(songSearchDeepUrl)
+    songSearchDeepPromise = fetchCatalogData(catalogDataFileUrl('song_search_deep.json'))
       .then((r) => {
         if (!r.ok) throw new Error(`song_search_deep.json: HTTP ${r.status}`)
         return r.json() as Promise<Record<string, string>>
@@ -139,7 +135,7 @@ export async function loadSongSearchDeep(): Promise<Record<string, string>> {
 export async function loadSongDetail(): Promise<Record<string, SongDetailRecord>> {
   if (songDetailResolved) return songDetailResolved
   if (!songDetailPromise) {
-    songDetailPromise = fetch(songDetailUrl)
+    songDetailPromise = fetchCatalogData(catalogDataFileUrl('song_detail.json'))
       .then((r) => {
         if (!r.ok) throw new Error(`song_detail.json: HTTP ${r.status}`)
         return r.json() as Promise<Record<string, SongDetailRecord>>
@@ -298,7 +294,7 @@ let youtubePromise: Promise<Record<string, YouTubeCatalogVideo[]>> | null = null
 export async function loadYoutubeByLyricsId(): Promise<Record<string, YouTubeCatalogVideo[]>> {
   if (youtubeResolved) return youtubeResolved
   if (!youtubePromise) {
-    youtubePromise = fetch(youtubeByLyricsUrl)
+    youtubePromise = fetchCatalogData(catalogDataFileUrl('youtube_by_lyrics_id.json'))
       .then((r) => {
         if (!r.ok) throw new Error(`youtube_by_lyrics_id.json: HTTP ${r.status}`)
         return r.json() as Promise<Record<string, YouTubeCatalogVideo[]>>

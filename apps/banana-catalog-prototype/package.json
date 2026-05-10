@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/sync-catalog-data-dist.mjs",
     "build:data": "python3 scripts/build_artifacts.py",
     "lint": "eslint .",
     "preview": "vite preview"
