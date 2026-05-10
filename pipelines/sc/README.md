@@ -58,15 +58,25 @@ Merges the fresh scrape with the latest canonicalized Airtable snapshot
 
 Writes QA + diagnostic files alongside:
 
-- `SC-NEW-TRACKS-QA.csv` — new tracks with fuzzy-matched lyrics_id candidates
+- `SC-NEW-TRACKS-QA.csv` — new tracks with fuzzy-matched lyrics_id candidates.
+  **`matcher_hints`** describes tie-breaking when LYRICS has **sister** titles
+  (same core name, different release): (1) **4-digit years** parsed from **EP +
+  track titles** on the scrape vs year digits in **LYRICS** titles; (2)
+  **LYRICS `date_created`** vs this row’s SoundCloud **`created_at`** — closest
+  calendar date wins among equal fuzzy scores (upload time usually matches the
+  lyric row you intend). EP-level identity on SoundCloud is also one
+  **`created_at` per set**; different creation timestamps mean different EPs.
 - `SC-SYNC-REPORT.csv` — one-row build summary + drift flags
 - `LYRICS-BELOW-FILTER.csv` — lyrics with no filter-passing SC track
 
 Every file also gets written to `outputs/archive/<YYYY-MM-DD>/` as a dated copy.
 
-If `SC-NEW-TRACKS-QA.csv` has rows in `LOW` or `MEDIUM` confidence, fill in
-the `CORRECT_LYRICS_ID` column and re-run the builder. Iterate until every
-new track sits in `HIGH` or `CORRECTED`.
+Use **`matcher_hints`** while reviewing rows (including **`HIGH`**, for
+spot-checks when sister songs exist). If titles carry no year digits but dates
+still disagree, trust **`created_at`** vs **`date_created`** or set
+**`CORRECT_LYRICS_ID`**. If `SC-NEW-TRACKS-QA.csv` has rows in **`LOW`** or
+**`MEDIUM`** confidence, fill in **`CORRECT_LYRICS_ID`** and re-run the builder.
+Iterate until every new track sits in **`HIGH`** or **`CORRECTED`**.
 
 ## Import into Airtable
 

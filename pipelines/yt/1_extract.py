@@ -20,6 +20,14 @@ Output (all under pipelines/yt/raw/):
                            playlist_names uses cleaned names via name_mapping.csv
   yt_playlists_raw.csv   — all channel playlists with id, raw_title, url, thumbnail, count
   yt_raw_backup.json     — raw API response backup
+
+Missing a new upload in yt_videos_raw.csv?
+  • Re-run this script after the video is **Public** (scheduled/premiere/private/draft
+    often do not appear with an API key alone — use OAuth as the channel owner if needed).
+  • Confirm the video is listed under the channel’s **Uploads** tab on YouTube (not only
+    inside a playlist if it were somehow omitted from uploads — rare).
+  • Watch terminal output for **Batch error** during Step 4 or **WARNING** after Step 4:
+    any batch failure used to skip all later batches (now retried via continue + gap report).
 """
 
 import os, re, csv, json, time, requests
@@ -212,6 +220,7 @@ print(f"  Total videos: {len(video_ids)}")
 # ── STEP 4: batch enrich (50 at a time) ──────────────────────────────────────
 print("\nStep 4: Enriching metadata...")
 raw_videos = []
+batch_errors = []
 for i in range(0, len(video_ids), 50):
     batch = video_ids[i:i+50]
     r = requests.get(f"{BASE}/videos", params={
@@ -221,10 +230,29 @@ for i in range(0, len(video_ids), 50):
     })
     data = r.json()
     if "error" in data:
-        print(f"  Batch error at {i}:", data["error"]["message"]); break
-    raw_videos.extend(data.get("items",[]))
+        msg = data["error"].get("message", str(data["error"]))
+        print(f"  Batch error at offset {i} (videos.list): {msg}")
+        batch_errors.append((i, msg))
+        time.sleep(0.5)
+        continue
+    items = data.get("items", [])
+    raw_videos.extend(items)
+    if len(items) < len(batch):
+        got = {it["id"] for it in items}
+        missing_in_batch = [vid for vid in batch if vid not in got]
+        print(f"  ⚠  Batch at {i}: API returned {len(items)}/{len(batch)} rows "
+              f"(dropped IDs may be deleted/private/inaccessible): {missing_in_batch[:5]}"
+              f"{'…' if len(missing_in_batch) > 5 else ''}")
     print(f"  Enriched {len(raw_videos)}/{len(video_ids)}...")
     time.sleep(0.1)
+
+fetched_ids = {v["id"] for v in raw_videos}
+missing_ids = [vid for vid in video_ids if vid not in fetched_ids]
+if missing_ids:
+    print(f"\n  ⚠  WARNING: {len(missing_ids)} upload playlist ID(s) never appeared in "
+          f"videos.list output (quota/errors/partials above). Example IDs: {missing_ids[:8]}")
+if batch_errors:
+    print(f"\n  ⚠  {len(batch_errors)} batch(es) failed — fix quota/API errors and re-run")
 
 with open(BACKUP_FILE,"w",encoding="utf-8") as f:
     json.dump(raw_videos, f, ensure_ascii=False, indent=2)

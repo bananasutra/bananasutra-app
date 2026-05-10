@@ -268,11 +268,17 @@ function SongDetailLoaded({
   }, [lyricsId])
 
   const orderedTracks = useMemo(() => {
-    if (!activeTrackGenre) return detail.tracks
+    const byLikesThenPlays = (a: SongDetailTrack, b: SongDetailTrack) => {
+      const ld = b.like_count - a.like_count
+      if (ld !== 0) return ld
+      return b.play_count - a.play_count
+    }
+    if (!activeTrackGenre) return [...detail.tracks].sort(byLikesThenPlays)
     return [...detail.tracks].sort((a, b) => {
       const aMatch = trackMatchesGenre(a, activeTrackGenre) ? 1 : 0
       const bMatch = trackMatchesGenre(b, activeTrackGenre) ? 1 : 0
-      return bMatch - aMatch
+      if (bMatch !== aMatch) return bMatch - aMatch
+      return byLikesThenPlays(a, b)
     })
   }, [detail, activeTrackGenre])
 

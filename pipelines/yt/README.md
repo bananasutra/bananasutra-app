@@ -38,6 +38,17 @@ python3 1_extract.py
 Writes `raw/yt_videos_raw.csv`, `raw/yt_playlists_raw.csv`, `raw/yt_raw_backup.json`.
 Playlist names are auto-cleaned via `name_mapping.csv`.
 
+### Troubleshooting: a new upload missing from `yt_videos_raw.csv`
+
+The extractor pulls IDs from the channel **Uploads** playlist, then calls **`videos.list`**. If the title never appears in that CSV, **`build_yt_final.py` cannot invent it**.
+
+1. **Visibility** — With only an **API key**, YouTube typically omits **private**, **draft**, and many **scheduled / not-yet-public** uploads from API results. Use **OAuth as the channel owner** if you need those in the extract, or wait until the video is **Public** and re-run `1_extract.py`.
+2. **Re-run extract** — `build_yt_final.py` only reads `raw/yt_videos_raw.csv`; refresh that file after publishing.
+3. **Terminal warnings** — After `1_extract.py`, check for **`Batch error`** (quota, invalid key) or **`WARNING: … upload playlist ID(s) never appeared`**. One failed batch no longer aborts all remaining batches; if counts still mismatch, fix API/quota and re-run.
+4. **Confirm on YouTube** — The video should appear under the channel **Uploads** tab; **each upload has one creation/publish timeline** — if Studio shows it as a separate upload, it should eventually match an ID in the Uploads playlist once public.
+
+**Quick check:** `grep -i 'your title fragment' raw/yt_videos_raw.csv` — if nothing, the extract step still isn’t seeing that video via the API.
+
 **Step 2 — Reconcile videos (every build):**
 ```bash
 python3 build_yt_final.py

@@ -452,11 +452,15 @@ def select_best_tracks(
     return ordered[:top_tracks]
 
 
-def sort_tracks_for_detail(tracks: list[dict[str, Any]], like_weight: int) -> list[dict[str, Any]]:
-    """Full track list: published tracks first (fav, then score), then hidden-from-app last."""
+def sort_tracks_for_detail(tracks: list[dict[str, Any]], _like_weight: int) -> list[dict[str, Any]]:
+    """Full track list: published tracks first (fav, then by likes), then hidden-from-app last.
 
-    def rank_key(t: dict[str, Any]) -> tuple[int, int, int]:
-        return (score_track(t, like_weight), int(t["play_count"]), int(t["like_count"]))
+    `_like_weight` is retained for call-site compatibility; song-detail ordering is likes-first
+    (plays tie-break), matching the /songs/[slug] audio tab requirement.
+    """
+
+    def rank_key(t: dict[str, Any]) -> tuple[int, int]:
+        return (int(t["like_count"]), int(t["play_count"]))
 
     published = [t for t in tracks if t["track_in_app"]]
     fav_pub = [t for t in published if t["fav_track"]]

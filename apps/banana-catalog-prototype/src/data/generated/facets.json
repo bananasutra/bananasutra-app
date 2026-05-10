@@ -2,19 +2,19 @@
   "sutra": [
     {
       "value": "BLOWsutra",
-      "count": 88
+      "count": 90
     },
     {
       "value": "KNOWsutra",
-      "count": 58
-    },
-    {
-      "value": "GROWsutra",
-      "count": 57
+      "count": 59
     },
     {
       "value": "QUACKsutra",
       "count": 57
+    },
+    {
+      "value": "GROWsutra",
+      "count": 55
     },
     {
       "value": "SHOWsutra",
@@ -36,7 +36,7 @@
   "light_shadow": [
     {
       "value": "LIGHT",
-      "count": 207
+      "count": 208
     },
     {
       "value": "SHADOW",
@@ -70,7 +70,7 @@
     },
     {
       "value": "PEACE",
-      "count": 30
+      "count": 31
     },
     {
       "value": "EGO",
@@ -103,15 +103,15 @@
       "count": 24
     },
     {
+      "value": "seeHIStory",
+      "count": 24
+    },
+    {
       "value": "beCURIOUS",
       "count": 23
     },
     {
       "value": "beSILLY",
-      "count": 23
-    },
-    {
-      "value": "seeHIStory",
       "count": 23
     },
     {
@@ -336,7 +336,7 @@
   "lang": [
     {
       "value": "EN",
-      "count": 359
+      "count": 360
     },
     {
       "value": "FR",

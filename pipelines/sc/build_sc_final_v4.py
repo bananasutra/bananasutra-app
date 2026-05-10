@@ -50,7 +50,11 @@ Known tracks (track_id in SC TRACKS snapshot):
 New tracks (track_id not yet in SC TRACKS snapshot):
     Parse sutra from EP/track title.
     Parse genres from SC tags.
-    Fuzzy-match lyrics_id from extracted song name.
+    Fuzzy-match lyrics_id from extracted song name. Sister-song ties (same fuzzy
+    score): prefer LYRICS rows whose title carries matching year digits from the
+    scrape (EP + track titles), then prefer LYRICS date_created nearest this row's
+    SoundCloud created_at (upload time aligns with the intended lyric release).
+    Rows in SC-NEW-TRACKS-QA without CORRECT_LYRICS_ID are re-resolved each run.
     Write to QA file for manual review.
 
 ── TWO-PASS WORKFLOW ────────────────────────────────────────────────────────
@@ -59,8 +63,9 @@ Pass 1:  python3 build_sc_final_v4.py
          → Auto-matched lyrics_ids filled in where score ≥ 80.
          → Low-confidence rows have blank CORRECT_LYRICS_ID column.
 
-Pass 2:  Open outputs/SC-NEW-TRACKS-QA.csv, fill in CORRECT_LYRICS_ID
-         (e.g. L-312) for any low-confidence rows, save.
+Pass 2:  Open outputs/SC-NEW-TRACKS-QA.csv; read matcher_hints (sister-song /
+         date tie-break notes). Fill CORRECT_LYRICS_ID (e.g. L-312) for any
+         low-confidence rows, save.
          Re-run: python3 build_sc_final_v4.py
          → Script reads the corrected lyrics_id, then pulls the canonical
            title and sutra from the LYRICS snapshot (no hand-typed titles).
@@ -92,17 +97,19 @@ play_count >= 300  OR  like_count >= 5  →  determines membership in AT-TRACKS-
                                                    ep_description, ep_songbook_title passthrough from snapshot)
   pipelines/sc/outputs/AT-PLAYLISTS-v4.csv       Airtable-ready PLAYLISTS table (set covers from
                                                    sc_playlist_art_api.json first — re-run export after SC artwork changes)
-  pipelines/sc/outputs/SC-NEW-TRACKS-QA.csv      QA file for new tracks
+  pipelines/sc/outputs/SC-NEW-TRACKS-QA.csv      QA file for new tracks (matcher_hints column)
   pipelines/sc/outputs/SC-SYNC-REPORT.csv        drift flags vs LYRICS snapshot
   pipelines/sc/outputs/archive/YYYY-MM-DD/       dated copies per run
 """
+
+from __future__ import annotations
 
 import csv
 import json
 import os
 import re
 from collections import Counter, defaultdict
-from datetime import date
+from datetime import date, datetime
 from rapidfuzz import fuzz
 
 from sc_sndcdn_artwork import sndcdn_artwork_sm_lg
@@ -493,6 +500,30 @@ def norm(s):
     return re.sub(r'[^a-z0-9 ]', '', (s or '').lower()).strip()
 
 
+def _parse_lyrics_date_created(raw: str) -> date | None:
+    """LYRICS snapshot date_created (typically YYYY-MM-DD)."""
+    if not (raw or '').strip():
+        return None
+    s = raw.strip()[:10]
+    try:
+        return datetime.strptime(s, '%Y-%m-%d').date()
+    except ValueError:
+        return None
+
+
+def _parse_sc_created_at(raw: str) -> datetime | None:
+    """SoundCloud export created_at, e.g. 2026-05-10 05:53:53."""
+    if not (raw or '').strip():
+        return None
+    s = raw.strip()
+    for fmt, n in (('%Y-%m-%d %H:%M:%S', 19), ('%Y-%m-%d', 10)):
+        try:
+            return datetime.strptime(s[:n], fmt)
+        except ValueError:
+            continue
+    return None
+
+
 def build_lyrics_map(path):
     """
     Build maps from the LYRICS reference CSV:
@@ -504,6 +535,8 @@ def build_lyrics_map(path):
       - ntitle_to_sutra: normalized song title → sutra  ← PREFERRED source of
                          truth for sutra classification. Title is stable across
                          Airtable edits; lyrics_id is not.
+      - id_to_date_created: lyrics_id → date from LYRICS date_created (optional;
+                         used with SoundCloud created_at to break fuzzy ties)
 
     Supports both column-name formats:
       - Legacy `LYRICS-with airtable ids.csv` file: `LYRICS ID`
@@ -514,6 +547,7 @@ def build_lyrics_map(path):
     id_to_title = {}
     id_to_sutra = {}
     ntitle_to_sutra = {}
+    id_to_date_created: dict[str, date | None] = {}
 
     def _get_ci(r, *names):
         """Case-insensitive column lookup that also tolerates stray BOM / whitespace
@@ -542,7 +576,10 @@ def build_lyrics_map(path):
             id_to_sutra[lid] = sutra
         if sutra and key not in ntitle_to_sutra:
             ntitle_to_sutra[key] = sutra
-    return title_to_id, id_to_title, id_to_sutra, ntitle_to_sutra
+        dc_raw = (_get_ci(r, 'date_created', 'Date created') or '').strip()
+        if lid not in id_to_date_created:
+            id_to_date_created[lid] = _parse_lyrics_date_created(dc_raw)
+    return title_to_id, id_to_title, id_to_sutra, ntitle_to_sutra, id_to_date_created
 
 
 def normalize_lid(lid):
@@ -662,10 +699,104 @@ def resolve_against_snapshot(ref, id_to_title, id_to_sutra, title_to_id,
             snap_at_conf_title, snap_at_conf_sutra)
 
 
-def resolve_lyrics_id(candidate_title, title_to_id):
+# Years for disambiguating sister songs (e.g. CIRCA 2025 vs CIRCA 2026).
+_YEAR_HINT_RE = re.compile(r'\b(19[89]\d|20[0-3]\d)\b')
+
+
+def _years_in_text(*chunks: str) -> frozenset[int]:
+    """Collect plausible 4-digit years from raw EP title, track title, etc."""
+    found: set[int] = set()
+    for chunk in chunks:
+        if not chunk:
+            continue
+        for m in _YEAR_HINT_RE.finditer(chunk.lower()):
+            y = int(m.group(1))
+            if 1980 <= y <= 2039:
+                found.add(y)
+    return frozenset(found)
+
+
+def _years_in_norm_lyric_key(k: str) -> frozenset[int]:
+    """Years appearing inside norm(canonical lyrics title) (digits survive norm())."""
+    found: set[int] = set()
+    for m in _YEAR_HINT_RE.finditer(k):
+        y = int(m.group(1))
+        if 1980 <= y <= 2039:
+            found.add(y)
+    return frozenset(found)
+
+
+def _tie_break_lyrics_candidates(
+    candidates: list[tuple[int, str, str]],
+    track_created_raw: str,
+    id_to_date_created: dict[str, date | None] | None,
+) -> tuple[int, str, str]:
+    """Prefer LYRICS date_created nearest SoundCloud created_at; then lyrics_id."""
+    if len(candidates) == 1:
+        return candidates[0]
+    dt_map = id_to_date_created or {}
+    td = _parse_sc_created_at(track_created_raw)
+    if td is None:
+        candidates.sort(key=lambda t: t[1])
+        return candidates[0]
+    track_d = td.date()
+
+    def rank(t: tuple[int, str, str]) -> tuple[int, int, int, str]:
+        s, lid, _k = t
+        ld = dt_map.get(lid)
+        if ld is None:
+            return (1, 999_999, -s, lid)
+        dist = abs((track_d - ld).days)
+        return (0, dist, -s, lid)
+
+    return sorted(candidates, key=rank)[0]
+
+
+def _track_qa_matcher_hints(
+    ep_title: str,
+    track_title: str,
+    lyrics_id: str,
+    score: int,
+    track_created_at: str,
+) -> str:
+    """One-line curator note for SC-NEW-TRACKS-QA.csv (sister songs)."""
+    hints = sorted(_years_in_text(ep_title, track_title))
+    lid = (lyrics_id or '').strip() or '—'
+    ts = (track_created_at or '').strip()
+    head = f'auto_lyrics_id={lid} match_score={score}.'
+    tb = (
+        'Tie-breaks among equal fuzzy scores: (1) 4-digit years in EP + track titles '
+        'vs year digits inside LYRICS titles; (2) LYRICS date_created closest to this '
+        "row's SoundCloud created_at (new SC uploads align with the intended lyric row)."
+    )
+    if hints:
+        ys = ', '.join(str(y) for y in hints)
+        return (
+            f'{head} {tb} Title digit hint(s): {ys}. '
+            'extracted_song_name is only text before •.'
+            + (f' SC created_at={ts}.' if ts else '')
+        )
+    return (
+        f'{head} {tb} No year digits in EP/track titles on scrape.'
+        + (f' SC created_at={ts}.' if ts else '')
+        + ' If still wrong, set CORRECT_LYRICS_ID.'
+    )
+
+
+def resolve_lyrics_id(
+    candidate_title,
+    title_to_id,
+    context_ep_title: str = '',
+    context_track_title: str = '',
+    context_created_at: str = '',
+    id_to_date_created: dict[str, date | None] | None = None,
+):
     """
     Try to match a song name to a lyrics_id.
     Returns (lyrics_id, score) — score=100 for exact match, 0 if no match.
+
+    Sister-song tie-breaks (same fuzzy score): digits in EP/track titles vs
+    LYRICS titles, then LYRICS date_created nearest SoundCloud created_at.
     """
     lt = (candidate_title or '').strip()
     if not lt:
@@ -673,14 +804,42 @@ def resolve_lyrics_id(candidate_title, title_to_id):
     key = norm(lt)
     if key in title_to_id:
         return title_to_id[key], 100
-    best_score, best_id = 0, ''
+
+    year_hints = _years_in_text(context_ep_title, context_track_title)
+
+    scored: list[tuple[int, str, str]] = []
+    best_score = 0
     for k, lid in title_to_id.items():
-        score = fuzz.token_sort_ratio(key, k)
+        score = int(fuzz.token_sort_ratio(key, k))
+        scored.append((score, lid, k))
         if score > best_score:
-            best_score, best_id = score, lid
-    if best_score >= QA_LOW_CONF:
-        return best_id, best_score
-    return '', best_score
+            best_score = score
+
+    if best_score < QA_LOW_CONF:
+        return '', best_score
+
+    qualified = [(s, lid, k) for s, lid, k in scored if s >= QA_LOW_CONF]
+
+    if year_hints:
+        aligned = [
+            (s, lid, k)
+            for s, lid, k in qualified
+            if _years_in_norm_lyric_key(k) & year_hints
+        ]
+        if aligned:
+            aligned.sort(key=lambda t: t[0], reverse=True)
+            top = aligned[0][0]
+            best_aligned = [t for t in aligned if t[0] == top]
+            s, lid, _k = _tie_break_lyrics_candidates(
+                best_aligned, context_created_at, id_to_date_created)
+            return lid, s
+
+    qualified.sort(key=lambda t: t[0], reverse=True)
+    top = qualified[0][0]
+    tier = [t for t in qualified if t[0] == top]
+    s, lid, _k = _tie_break_lyrics_candidates(
+        tier, context_created_at, id_to_date_created)
+    return lid, s
 
 
 def extract_song_name(track_title):
@@ -1032,7 +1191,8 @@ def main():
             f"{os.path.basename(SC_PLAYLIST_ART_API)}"
         )
 
-    title_to_id, id_to_title, id_to_sutra, ntitle_to_sutra = build_lyrics_map(LYRICS_REF)
+    title_to_id, id_to_title, id_to_sutra, ntitle_to_sutra, id_to_date_created = (
+        build_lyrics_map(LYRICS_REF))
     print(f"  ✓ LYRICS map:        {len(title_to_id)} entries "
           f"({len(id_to_sutra)} with sutra classification)")
 
@@ -1304,7 +1464,8 @@ def main():
                 new_count += 1
 
             if tid in qa_overrides:
-                # ── Re-run: use whatever the user left in the QA file ────────
+                # ── Re-run: CORRECT_LYRICS_ID wins; else re-resolve (do not
+                # freeze stale auto_lyrics_id) so matcher fixes apply without QA churn.
                 qr         = qa_overrides[tid]
                 # ID-primary correction: curator types CORRECT_LYRICS_ID (e.g.
                 # "L-312") to override a bad auto-match. When present, it wins
@@ -1313,17 +1474,29 @@ def main():
                 # (historical bug: "Zero Sum (Zero. Sean)" with stray period
                 # self-propagated across runs via CORRECT_SONG_TITLE).
                 corrected_lid = normalize_lid(qr.get('CORRECT_LYRICS_ID', '').strip())
-                auto_lid      = normalize_lid(qr.get('auto_lyrics_id', '').strip())
-                lyrics_id     = corrected_lid or auto_lid
+                song_base = (qr.get('extracted_song_name') or '').strip() or extract_song_name(
+                    track_title
+                )
                 if corrected_lid:
+                    lyrics_id = corrected_lid
+                    score = int(float(qr.get('match_score', 0) or 0))
                     merged_qr = dict(qr)
                     merged_qr['CORRECT_LYRICS_ID'] = corrected_lid
                     qa_overrides[tid] = merged_qr
-                # song_name → lyrics_title in output. When we have a resolved
-                # lyrics_id, use the canonical title from LYRICS; otherwise
-                # fall back to the prior run's extracted_song_name.
-                song_name  = (id_to_title.get(lyrics_id, '') if lyrics_id
-                              else qr.get('extracted_song_name', '').strip())
+                else:
+                    lyrics_id, score = resolve_lyrics_id(
+                        song_base,
+                        title_to_id,
+                        context_ep_title=ep_title,
+                        context_track_title=track_title,
+                        context_created_at=r.get('created_at', '') or '',
+                        id_to_date_created=id_to_date_created,
+                    )
+                    merged_qr = dict(qr)
+                    merged_qr['auto_lyrics_id'] = lyrics_id
+                    merged_qr['match_score'] = score
+                    qa_overrides[tid] = merged_qr
+                song_name = id_to_title.get(lyrics_id, '') or song_base
                 genres_std = (qr.get('extracted_genre') or qr.get('genres') or '').strip()
                 # ID-primary sutra lookup: trust the (possibly corrected) lid,
                 # then fall back to QA-supplied sutra, then to title-parsed.
@@ -1331,9 +1504,6 @@ def main():
                 sutra      = (sutra_from_lyrics
                               or qr.get('sutra', '').strip()
                               or parse_sutra(ep_title, track_title))
-                # match_score may have been written as a float string on the prior run
-                # (e.g. '61.53846154'), so go through float() before int() to coerce safely.
-                score      = int(float(qr.get('match_score', 0) or 0))
                 matched_title = id_to_title.get(lyrics_id, '') if lyrics_id else ''
 
                 was_corrected = bool(corrected_lid)
@@ -1344,16 +1514,25 @@ def main():
                 elif was_corrected:
                     confidence = 'CORRECTED ✓'
                 else:
-                    confidence = qr.get('confidence', '')
-                    if not confidence or confidence.startswith('LOW'):
-                        confidence = 'LOW — fill in below'
+                    confidence = (
+                        'HIGH (spot-check)'  if score >= QA_HIGH_CONF else
+                        'MEDIUM (review)'    if score >= QA_LOW_CONF  else
+                        'LOW — fill in below'
+                    )
 
             else:
                 # ── First run: auto-generate everything ──────────────────────
                 sutra      = parse_sutra(ep_title, track_title)
                 genres_std = extracted_genres_std
                 song_name  = extract_song_name(track_title)
-                lyrics_id, score = resolve_lyrics_id(song_name, title_to_id)
+                lyrics_id, score = resolve_lyrics_id(
+                    song_name,
+                    title_to_id,
+                    context_ep_title=ep_title,
+                    context_track_title=track_title,
+                    context_created_at=r.get('created_at', '') or '',
+                    id_to_date_created=id_to_date_created,
+                )
                 matched_title = id_to_title.get(lyrics_id, '') if lyrics_id else ''
                 # ID-primary sutra: once the fuzzy match gives us a lyrics_id,
                 # look up its sutra in the snapshot.
@@ -1375,7 +1554,7 @@ def main():
 
             track_out_row = {
                 **common,
-                'lyrics_title': song_name,
+                'lyrics_title': id_to_title.get(lyrics_id, '') or song_name,
                 'sutra':        sutra,
                 'primary_genre': '',
                 'secondary_genre': '',
@@ -1447,6 +1626,13 @@ def main():
                         'CORRECT_LYRICS_ID':    corrected_lid or qa_overrides.get(tid, {}).get('CORRECT_LYRICS_ID', ''),
                         # checked = show in app catalog / default SC player; leave blank → unchecked until set.
                         'track_in_app':         track_in_app_out,
+                        'matcher_hints':        _track_qa_matcher_hints(
+                            ep_title,
+                            track_title,
+                            lyrics_id,
+                            score,
+                            r.get('created_at', '') or '',
+                        ),
                     })
 
     print(f"  ✓ Known tracks (filtered import set):      {known_count}")
@@ -1811,7 +1997,7 @@ def main():
         QA_HEADERS = [
             'track_id', 'track_title', 'ep_title', 'sutra', 'extracted_genre',
             'extracted_song_name', 'auto_lyrics_id', 'match_score',
-            'matched_title', 'confidence', 'play_count', 'like_count',
+            'matched_title', 'confidence', 'matcher_hints', 'play_count', 'like_count',
             'CORRECT_LYRICS_ID', 'track_in_app',
         ]
         _write_csv(OUT_QA, qa_out, QA_HEADERS)
@@ -1825,6 +2011,7 @@ def main():
         print(f"    MEDIUM    ({med}) — worth a look")
         print(f"    LOW       ({low}) — fill in CORRECT_LYRICS_ID (e.g. L-312) and re-run")
         print(f"    CORRECTED ({corrected}) — title confirmed, add to LYRICS base when ready")
+        print(f"    matcher_hints column — sister-song tie-break notes (titles + dates)")
     else:
         if os.path.exists(OUT_QA):
             os.remove(OUT_QA)
@@ -1898,6 +2085,7 @@ def main():
             print(f"\n  ⚠  {len(qa_out)} new tracks in {os.path.basename(OUT_QA)}"
                   f"  (LOW={low}, MEDIUM={med}, HIGH={high}, CORRECTED={corr})")
             print(f"  → Open outputs/{os.path.basename(OUT_QA)}")
+            print(f"  → Read matcher_hints (title-year + created_at vs LYRICS date_created)")
             print(f"  → Fill in CORRECT_LYRICS_ID (e.g. L-312) for LOW + MEDIUM rows")
             print(f"  → For CORRECTED rows flagged 'not in LYRICS', add the lyrics_id to LYRICS first")
             print(f"  → Optional: set track_in_app in QA (also written to SC-TRACK-QA-CORRECTIONS.csv);")
