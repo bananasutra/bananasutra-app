@@ -375,7 +375,7 @@
   min-width: max-content;
   margin-bottom: -1px;
   padding: 0.62rem 0.9rem;
-  border-bottom: 2px solid transparent;
+  border-bottom: 3px solid transparent;
   color: var(--color-text-muted);
   font: 700 0.72rem/1.35 var(--font-ui);
   letter-spacing: 0.06em;
