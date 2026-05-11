@@ -77,7 +77,6 @@
   color: var(--color-text-muted);
   font-family: var(--font-body);
   font-weight: 400;
-  max-width: 62ch;
 }
 
 .about-page__prose strong {
