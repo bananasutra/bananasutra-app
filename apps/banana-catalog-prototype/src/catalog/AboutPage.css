@@ -425,21 +425,21 @@
   margin: var(--about-rhythm) 0 0;
 }
 
-.about-muse-search {
+.about-page-search {
   display: grid;
   gap: 0.42rem;
   margin-top: var(--about-rhythm);
   max-width: 34rem;
 }
 
-.about-muse-search span {
+.about-page-search span {
   color: var(--color-text-faint);
   font: 700 0.68rem/1.35 var(--font-ui);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.about-muse-search input {
+.about-page-search input {
   width: 100%;
   min-height: 2.65rem;
   border: 1px solid var(--color-border);
@@ -450,8 +450,8 @@
   padding: 0.62rem 0.78rem;
 }
 
-.about-muse-search input:hover,
-.about-muse-search input:focus-visible {
+.about-page-search input:hover,
+.about-page-search input:focus-visible {
   border-color: var(--color-border-strong);
   outline: none;
 }

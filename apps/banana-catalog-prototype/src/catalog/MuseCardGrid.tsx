@@ -200,7 +200,7 @@ export function MuseCardGrid() {
           {formatCount(rows.length)} thinkers, fools, poets, and troublemakers who inspired the songs.
         </p>
 
-        <label className="about-muse-search">
+        <label className="about-page-search">
           <span>Search muses</span>
           <input
             type="search"

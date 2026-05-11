@@ -33,6 +33,10 @@ function quoteSutras(item: QuoteWallItem): string[] {
   return [...new Set(values)]
 }
 
+function normalizeSearch(value: string): string {
+  return value.trim().toLowerCase()
+}
+
 function groupQuotes(rows: QuoteWallItem[]): [string, QuoteWallItem[]][] {
   const grouped = new Map<string, QuoteWallItem[]>()
   for (const row of rows) {
@@ -51,6 +55,7 @@ export function QuoteWall() {
   const { data, error, loading } = useQuotesWall()
   const rows = useMemo(() => data ?? [], [data])
   const [topicFilter, setTopicFilter] = useState('all')
+  const [findQuote, setFindQuote] = useState('')
 
   usePageMeta({
     title: 'The Quotes',
@@ -67,10 +72,23 @@ export function QuoteWall() {
     return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]))
   }, [rows])
 
-  const filtered = useMemo(
-    () => (topicFilter === 'all' ? rows : rows.filter((row) => topicLabel(row.core_topic) === topicFilter)),
-    [rows, topicFilter],
-  )
+  const filtered = useMemo(() => {
+    const query = normalizeSearch(findQuote)
+    return rows.filter((row) => {
+      const topicOk = topicFilter === 'all' || topicLabel(row.core_topic) === topicFilter
+      const searchOk =
+        !query ||
+        [
+          row.quote,
+          row.muse,
+          row.primary_sutra,
+          row.secondary_sutras,
+          row.core_topic,
+          row.inspired_song?.title ?? '',
+        ].some((value) => normalizeSearch(value).includes(query))
+      return topicOk && searchOk
+    })
+  }, [findQuote, rows, topicFilter])
   const grouped = useMemo(() => groupQuotes(filtered), [filtered])
 
   if (loading) return <p className="about-page__prose">Loading quotes...</p>
@@ -85,6 +103,16 @@ export function QuoteWall() {
         <p className="about-page__prose">
           {formatCount(rows.length)} sparks that lit the songs, grouped by what they&apos;re about.
         </p>
+
+        <label className="about-page-search">
+          <span>Search quotes</span>
+          <input
+            type="search"
+            value={findQuote}
+            onChange={(event) => setFindQuote(event.target.value)}
+            placeholder="Find a quote, muse, sutra, topic, or song..."
+          />
+        </label>
 
         <div className="about-filter-stack" aria-label="Quote filters">
           <div className="about-filter-group" aria-label="Filter quotes by topic">
