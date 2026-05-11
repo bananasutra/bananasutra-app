@@ -47,14 +47,14 @@ function payloadIndicatesYoutubePlaying(parsed: Record<string, unknown>): boolea
 }
 
 /**
- * Detect “YouTube is playing” from embed postMessage.
- * Do not require `event.source === iframe.contentWindow`: the player often posts from an inner frame,
- * so `source` may not match the outer embed’s `contentWindow`.
- */
-/**
  * SoundCloud’s `Widget.pause()` / internal focus can scroll the playlist iframe into view.
  * When the embed sits above the YouTube block (songbook layout), that feels like an unwanted “jump back up”.
+ *
+ * We only correct when the viewport actually drifts, and we avoid a burst of `scrollTo` calls — those fight
+ * YouTube’s own layout and read as a brief “jitter” on the video.
  */
+const VIEWPORT_DRIFT_PX = 2
+
 function restoreViewportScroll(left: number, top: number): void {
   try {
     window.scrollTo({ left, top, behavior: 'instant' })
@@ -63,16 +63,34 @@ function restoreViewportScroll(left: number, top: number): void {
   }
 }
 
-function scheduleViewportScrollRestores(left: number, top: number): void {
-  const go = () => restoreViewportScroll(left, top)
-  go()
-  queueMicrotask(go)
-  requestAnimationFrame(go)
-  requestAnimationFrame(() => requestAnimationFrame(go))
-  window.setTimeout(go, 0)
-  window.setTimeout(go, 80)
-  window.setTimeout(go, 200)
+function viewportDrifted(left: number, top: number): boolean {
+  return Math.abs(window.scrollX - left) > VIEWPORT_DRIFT_PX || Math.abs(window.scrollY - top) > VIEWPORT_DRIFT_PX
 }
+
+/** Restore scroll only if SoundCloud (or the browser) moved the page — skips redundant scrollTo. */
+function patchViewportScrollIfDrifted(left: number, top: number): void {
+  if (!viewportDrifted(left, top)) return
+  restoreViewportScroll(left, top)
+}
+
+/**
+ * Follow-up only (no synchronous scroll here): microtask + two rAFs + one late timeout catch
+ * focus-induced drift without stacking many `scrollTo` calls in the same frame as the embeds.
+ */
+function scheduleLightViewportScrollPatch(left: number, top: number): void {
+  queueMicrotask(() => patchViewportScrollIfDrifted(left, top))
+  requestAnimationFrame(() => {
+    patchViewportScrollIfDrifted(left, top)
+    requestAnimationFrame(() => patchViewportScrollIfDrifted(left, top))
+  })
+  window.setTimeout(() => patchViewportScrollIfDrifted(left, top), 140)
+}
+
+/**
+ * Detect “YouTube is playing” from embed postMessage.
+ * Do not require `event.source === iframe.contentWindow`: the player often posts from an inner frame,
+ * so `source` may not match the outer embed’s `contentWindow`.
+ */
 
 function messageIndicatesYoutubePlaying(event: MessageEvent): boolean {
   if (!YT_MESSAGE_ORIGINS.has(event.origin)) return false
@@ -136,7 +154,8 @@ export function useExclusiveYoutubeSoundcloudPlayback({
           // ignore
         }
       }
-      scheduleViewportScrollRestores(left, top)
+      patchViewportScrollIfDrifted(left, top)
+      scheduleLightViewportScrollPatch(left, top)
 
       void loadSoundCloudWidgetApi()
         .then((SC) => {
@@ -146,7 +165,8 @@ export function useExclusiveYoutubeSoundcloudPlayback({
           } catch {
             // ignore
           }
-          scheduleViewportScrollRestores(left, top)
+          patchViewportScrollIfDrifted(left, top)
+          scheduleLightViewportScrollPatch(left, top)
         })
         .catch(() => {
           // ignore
