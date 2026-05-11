@@ -4,8 +4,9 @@ import { loadSoundCloudWidgetApi, type SoundCloudWidget } from './soundcloudWidg
 const YT_MESSAGE_ORIGINS = new Set(['https://www.youtube-nocookie.com', 'https://www.youtube.com'])
 const YT_POST_TARGET = 'https://www.youtube-nocookie.com'
 
-/** YouTube IFrame API player state: playing */
+/** YouTube IFrame API player states (subset). */
 const YT_PLAYER_STATE_PLAYING = 1
+const YT_PLAYER_STATE_BUFFERING = 3
 
 function postMessagePauseYoutubeEmbed(iframe: HTMLIFrameElement | null): void {
   if (!iframe?.contentWindow) return
@@ -19,16 +20,38 @@ function postMessagePauseYoutubeEmbed(iframe: HTMLIFrameElement | null): void {
 
 function postMessageYoutubeListeningHandshake(iframe: HTMLIFrameElement | null): void {
   if (!iframe?.contentWindow) return
-  const payload = JSON.stringify({ event: 'listening', id: 1, channel: 'widget' })
-  try {
-    iframe.contentWindow.postMessage(payload, YT_POST_TARGET)
-  } catch {
-    // ignore
+  /** Modern embeds often emit `infoDelivery` / `playerState` only after a `listening` handshake. */
+  const payloads = [
+    JSON.stringify({ event: 'listening' }),
+    JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }),
+  ]
+  for (const payload of payloads) {
+    try {
+      iframe.contentWindow.postMessage(payload, YT_POST_TARGET)
+    } catch {
+      // ignore
+    }
   }
 }
 
-function messageIndicatesYoutubePlaying(event: MessageEvent, youtubeContentWindow: Window | null): boolean {
-  if (!youtubeContentWindow || event.source !== youtubeContentWindow) return false
+function payloadIndicatesYoutubePlaying(parsed: Record<string, unknown>): boolean {
+  if (parsed.event === 'onStateChange') {
+    const st = Number(parsed.info)
+    if (st === YT_PLAYER_STATE_PLAYING || st === YT_PLAYER_STATE_BUFFERING) return true
+  }
+  if (parsed.event === 'infoDelivery' && parsed.info && typeof parsed.info === 'object') {
+    const ps = Number((parsed.info as Record<string, unknown>).playerState)
+    if (ps === YT_PLAYER_STATE_PLAYING || ps === YT_PLAYER_STATE_BUFFERING) return true
+  }
+  return false
+}
+
+/**
+ * Detect “YouTube is playing” from embed postMessage.
+ * Do not require `event.source === iframe.contentWindow`: the player often posts from an inner frame,
+ * so `source` may not match the outer embed’s `contentWindow`.
+ */
+function messageIndicatesYoutubePlaying(event: MessageEvent): boolean {
   if (!YT_MESSAGE_ORIGINS.has(event.origin)) return false
   const raw = event.data
   if (raw == null) return false
@@ -42,9 +65,7 @@ function messageIndicatesYoutubePlaying(event: MessageEvent, youtubeContentWindo
     }
   }
   if (!parsed || typeof parsed !== 'object') return false
-  const o = parsed as Record<string, unknown>
-  if (o.event === 'onStateChange' && Number(o.info) === YT_PLAYER_STATE_PLAYING) return true
-  return false
+  return payloadIndicatesYoutubePlaying(parsed as Record<string, unknown>)
 }
 
 export type ExclusiveYoutubeSoundcloudOptions = {
@@ -76,15 +97,35 @@ export function useExclusiveYoutubeSoundcloudPlayback({
   useEffect(() => {
     if (!enabled) return
 
-    const onWindowMessage = (event: MessageEvent) => {
-      if (!messageIndicatesYoutubePlaying(event, youtubeIframeRef.current?.contentWindow ?? null)) return
+    const pauseSoundcloudFromDom = () => {
+      const wrap = soundcloudWrapRef.current
+      const iframe = wrap?.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
+      if (!iframe) return
       const w = scWidgetRef.current
-      if (!w) return
-      try {
-        w.pause()
-      } catch {
-        // ignore
+      if (w) {
+        try {
+          w.pause()
+        } catch {
+          // ignore
+        }
       }
+      void loadSoundCloudWidgetApi()
+        .then((SC) => {
+          if (!document.body.contains(iframe)) return
+          try {
+            SC.Widget(iframe).pause()
+          } catch {
+            // ignore
+          }
+        })
+        .catch(() => {
+          // ignore
+        })
+    }
+
+    const onWindowMessage = (event: MessageEvent) => {
+      if (!messageIndicatesYoutubePlaying(event)) return
+      pauseSoundcloudFromDom()
     }
     window.addEventListener('message', onWindowMessage)
 
