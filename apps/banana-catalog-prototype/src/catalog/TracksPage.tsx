@@ -708,8 +708,8 @@ export function TracksPage() {
                       )}
                     </div>
                     <p className="tracks-page__play-all-note">
-                      Auto-advance works best on desktop. On mobile (especially iPhone), you may need to tap each
-                      next track to keep the queue going.
+                      Autoplay works best on desktop. On mobile (especially iPhone), you may need to tap each next
+                      track to keep the queue going.
                     </p>
                   </div>
                 ) : null}
