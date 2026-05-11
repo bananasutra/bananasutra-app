@@ -424,6 +424,8 @@ HEADER_MAP: dict[str, dict[str, str]] = {
         "playlist_count": "playlist_count",
         "play_count": "play_count",
         "like_count": "like_count",
+        "engagement_rate": "engagement_rate",
+        "Engagement rate": "engagement_rate",
         "repost_count": "repost_count",
         "comment_count": "comment_count",
         "duration": "duration",
