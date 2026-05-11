@@ -403,6 +403,12 @@ html {
     Pagers default to order: 0. With `display: contents` on `.catalog-main`, unpaginated siblings sort *before*
     order: 1 — so two pagers stacked appeared above sort + filters. Pin pager + list stacking explicitly.
   */
+  /* R15 /tracks: Play all shares the “results” band with the top pager (below filters); default order:0 sat above the fold. */
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .tracks-page__play-all {
+    order: 3;
+    width: 100%;
+  }
+
   .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-pager--top {
     order: 3;
     width: 100%;
