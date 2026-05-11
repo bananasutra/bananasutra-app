@@ -33,6 +33,23 @@ function normalizeSearch(value: string): string {
   return value.trim().toLowerCase()
 }
 
+function eraSortRank(era: string): number {
+  const normalized = normalizeSearch(era)
+  if (normalized === 'ancient') return 0
+  if (normalized === 'medieval') return 1
+  if (normalized === 'early modern') return 2
+
+  const century = normalized.match(/^(\d{1,2})(?:st|nd|rd|th)?\s*c/)
+  if (century) return 10 + Number(century[1])
+
+  if (normalized === 'early 20th c') return 31
+  if (normalized === 'mid 20th c') return 32
+  if (normalized === 'late 20th c') return 33
+  if (normalized === 'contemporary') return 40
+
+  return 100
+}
+
 function formatTypeCategory(value: string): string {
   return formatCommaList(value)
 }
@@ -147,7 +164,7 @@ export function MuseCardGrid() {
         counts.set(era, (counts.get(era) ?? 0) + 1)
       }
     }
-    return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+    return [...counts.entries()].sort((a, b) => eraSortRank(a[0]) - eraSortRank(b[0]) || a[0].localeCompare(b[0]))
   }, [rows])
 
   const genderOptions = useMemo(() => {
