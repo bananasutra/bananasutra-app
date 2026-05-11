@@ -492,6 +492,7 @@ HEADER_MAP: dict[str, dict[str, str]] = {
     # map to snake_case; catalog build may ignore.
     "SC Playlists": {
         "SC EPs": "sc_eps_link",
+        "SC TRACKs": "sc_tracks_link",
         "playlist_name": "playlist_name",
         "playlist_url": "playlist_url",
         "sc_playlist_type": "sc_playlist_type",

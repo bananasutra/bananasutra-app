@@ -58,6 +58,25 @@ function songbookKindBadgeLabel(songbookType: string | undefined): string | null
   }
 }
 
+/**
+ * Derive tracks `primary_genre` token from SONGBOOK titles like "ROCKsutra (Best Of)" → ROCK.
+ * Matches deployed facet casing (uppercase tokens in facets.json).
+ */
+function primaryGenreTokenFromSongbookTitle(title: string): string | null {
+  const m = /^(.+?)sutra\b/i.exec((title || '').trim())
+  if (!m) return null
+  const raw = (m[1] || '').trim().toUpperCase()
+  return raw || null
+}
+
+/** `/tracks` filtered by primary genre, sorted by likes (stable deep-link for genre best-of pages). */
+function tracksHrefForPrimaryGenre(token: string): string {
+  const q = new URLSearchParams()
+  q.set('primary_genre', token)
+  q.set('tsort', 'likes')
+  return `/tracks?${q.toString()}`
+}
+
 export function SongbookPage() {
   const { slug = '' } = useParams()
   const pageRef = useRef<HTMLDivElement>(null)
@@ -99,7 +118,12 @@ export function SongbookPage() {
   const songbookKindLabel = songbook ? songbookKindBadgeLabel(songbook.songbook_type) : null
 
   const songbookTypeKey = (songbook?.songbook_type ?? '').trim().toLowerCase()
-  const showHeroSongCount = songbookTypeKey !== 'sutra' && songbookTypeKey !== 'language'
+  // Genre/collection rows often have no linked lyrics members — hide misleading "0 songs" in hero.
+  const showHeroSongCount =
+    songbookTypeKey !== 'sutra' &&
+    songbookTypeKey !== 'language' &&
+    songbookTypeKey !== 'genre' &&
+    songbookTypeKey !== 'collection'
   const isSutraSongbook = songbookTypeKey === 'sutra'
 
   useEffect(() => {
@@ -128,7 +152,11 @@ export function SongbookPage() {
 
   const relatedCount = playbackMemberSongs.length
   const relatedSongsHeading = relatedCount === 1 ? '1 related song' : `${relatedCount} related songs`
-  const hideRelatedSongsSection = songbookTypeKey === 'collection' && relatedCount === 0
+  const hideEmptyGenreOrCollectionRelated =
+    (songbookTypeKey === 'genre' || songbookTypeKey === 'collection') && relatedCount === 0
+  const genrePrimaryToken =
+    songbook && songbookTypeKey === 'genre' ? primaryGenreTokenFromSongbookTitle(songbook.songbook) : null
+  const genreTracksBrowseHref = genrePrimaryToken ? tracksHrefForPrimaryGenre(genrePrimaryToken) : null
   const memberLyricsIdSet = useMemo(
     () => new Set((songbook?.member_lyrics_ids ?? []).map((id) => (id || '').trim()).filter(Boolean)),
     [songbook?.member_lyrics_ids],
@@ -320,7 +348,33 @@ export function SongbookPage() {
               </section>
             ) : null}
 
-            {!hideRelatedSongsSection ? (
+            {songbookTypeKey === 'genre' && relatedCount === 0 && genreTracksBrowseHref ? (
+              <section className="songbooks-page__genre-tracks" aria-labelledby="songbook-genre-tracks-heading">
+                <h2 id="songbook-genre-tracks-heading" className="catalog-section-title">
+                  Matching tracks
+                </h2>
+                <p className="songbooks-page__genre-tracks-copy">
+                  <Link to={genreTracksBrowseHref} className="songbooks-page__songs-browse-link">
+                    Browse {genrePrimaryToken} tracks on /tracks (sorted by likes)
+                  </Link>
+                </p>
+              </section>
+            ) : null}
+
+            {songbookTypeKey === 'genre' && relatedCount === 0 && !genreTracksBrowseHref ? (
+              <section className="songbooks-page__genre-fallback" aria-labelledby="songbook-genre-fallback-heading">
+                <h2 id="songbook-genre-fallback-heading" className="catalog-section-title">
+                  Browse catalog
+                </h2>
+                <p className="songbooks-page__playback-empty songbooks-page__playback-empty--browse">
+                  <Link to={songsBrowseFindHref} className="songbooks-page__songs-browse-link">
+                    Browse matching songs on /songs
+                  </Link>
+                </p>
+              </section>
+            ) : null}
+
+            {!hideEmptyGenreOrCollectionRelated ? (
               <section className="songbooks-page__songs" aria-labelledby="songbook-songs-heading">
                 <h2 id="songbook-songs-heading" className="songbooks-page__songs-title catalog-section-title">
                   {relatedSongsHeading}

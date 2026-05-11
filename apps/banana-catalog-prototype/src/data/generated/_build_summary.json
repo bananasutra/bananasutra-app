@@ -1,5 +1,5 @@
 {
-  "snapshot_date": "2026-05-09",
+  "snapshot_date": "2026-05-10",
   "songs": 387,
   "details": 387,
   "featured_with_in_app_playback": 184,
@@ -45,48 +45,48 @@
   },
   "inputs": {
     "lyrics": {
-      "path": "AIRTABLE/snapshots/2026-05-09/clean/lyrics-2026-05-09.csv",
+      "path": "AIRTABLE/snapshots/2026-05-10/clean/lyrics-2026-05-10.csv",
       "sha256": "87f78290293aa8f9ddcc4f5771d4451e8c34883c8eba7cc522589e541f254e83",
       "rows": 394
     },
     "sc_tracks": {
-      "path": "AIRTABLE/snapshots/2026-05-09/clean/sc_tracks-2026-05-09.csv",
-      "sha256": "11f125da3011eb52b493afd5e975a086d8deee957f03a072ecbd42525613955b",
+      "path": "AIRTABLE/snapshots/2026-05-10/clean/sc_tracks-2026-05-10.csv",
+      "sha256": "2650f54d19916f2eab00f03aa0ff437cbc280186ff3b3e4c2b54d4efc1cce688",
       "rows": 651
     },
     "sc_eps": {
-      "path": "AIRTABLE/snapshots/2026-05-09/clean/sc_eps-2026-05-09.csv",
+      "path": "AIRTABLE/snapshots/2026-05-10/clean/sc_eps-2026-05-10.csv",
       "sha256": "ab59ed3661416f15f9587f9a585d156304b29a9bab33be6bcd3f8e99cf6bac2d",
       "rows": 235
     },
     "songbooks": {
-      "path": "AIRTABLE/snapshots/2026-05-09/clean/songbooks-2026-05-09.csv",
+      "path": "AIRTABLE/snapshots/2026-05-10/clean/songbooks-2026-05-10.csv",
       "sha256": "d1bb34232cb457197b582c71a828e56a55d7e5fa6ed7241626430d8aac3f00f8",
       "rows": 43
     },
     "sc_playlists": {
-      "path": "AIRTABLE/snapshots/2026-05-09/clean/sc_playlists-2026-05-09.csv",
-      "sha256": "7810534a5b64d51e5f5bcf4e6743b8ab31ecc2759df8e020fa36a5fc4026bea1",
+      "path": "AIRTABLE/snapshots/2026-05-10/clean/sc_playlists-2026-05-10.csv",
+      "sha256": "bb114cc86dfb8be5e9407662c968f2a12e9ac87f9bcc23cbfac37a5fb3ec67e2",
       "rows": 59
     },
     "sutras": {
-      "path": "AIRTABLE/snapshots/2026-05-09/clean/sutras-2026-05-09.csv",
+      "path": "AIRTABLE/snapshots/2026-05-10/clean/sutras-2026-05-10.csv",
       "sha256": "469400442cc5cffbc17f014a7721fcf64579a140e5fabea4345160cc25a9a6cd",
       "rows": 8
     },
     "muses": {
-      "path": "AIRTABLE/snapshots/2026-05-09/clean/muses-2026-05-09.csv",
+      "path": "AIRTABLE/snapshots/2026-05-10/clean/muses-2026-05-10.csv",
       "sha256": "b093c924f42437b4ee7b4159c5c01312af89d2a94886079aa55bcfa133a80c36",
       "rows": 181
     },
     "quotes": {
-      "path": "AIRTABLE/snapshots/2026-05-09/clean/quotes-2026-05-09.csv",
+      "path": "AIRTABLE/snapshots/2026-05-10/clean/quotes-2026-05-10.csv",
       "sha256": "c4547b0fd77f20980ff880935e7191d32d06c70b5085e442934cfc45caf78f60",
       "rows": 153
     },
     "yt_videos": {
-      "path": "AIRTABLE/snapshots/2026-05-09/clean/yt_videos-2026-05-09.csv",
-      "sha256": "255b9d846b9ae04dd80f757f82ba324c27a0ef4b098fa4823440027a810b8ded",
+      "path": "AIRTABLE/snapshots/2026-05-10/clean/yt_videos-2026-05-10.csv",
+      "sha256": "dc0c908387cc8603d5a56a117d680c820615117c6b240dbeebccbc33ec18e405",
       "rows": 472
     }
   }

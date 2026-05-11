@@ -449,6 +449,20 @@
   border-top: 1px solid var(--color-border);
 }
 
+.songbooks-page__genre-tracks,
+.songbooks-page__genre-fallback {
+  margin-bottom: 0.8rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.songbooks-page__genre-tracks-copy {
+  margin: 0.35rem 0 0;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+
 .songbooks-page__featured-video + .songbooks-page__songs {
   padding-top: 0;
   border-top: none;
