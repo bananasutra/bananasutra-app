@@ -375,7 +375,7 @@
   min-width: max-content;
   margin-bottom: -1px;
   padding: 0.62rem 0.9rem;
-  border-bottom: 3px solid transparent;
+  border-bottom: var(--catalog-tab-active-rule-width) solid transparent;
   color: var(--color-text-muted);
   font: 700 0.72rem/1.35 var(--font-ui);
   letter-spacing: 0.06em;
@@ -396,7 +396,7 @@
 }
 
 .about-tab-row__item--active {
-  border-bottom-color: currentColor;
+  border-bottom-color: var(--catalog-tab-active-rule-color);
 }
 
 .about-show-all {

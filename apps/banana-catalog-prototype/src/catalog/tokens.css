@@ -114,6 +114,10 @@
   --type-ui-stat-size: 0.72rem;
   --type-ui-stat-weight: 600;
 
+  /* Shared active tab underline: discovery search, About tabs, song detail media tabs. */
+  --catalog-tab-active-rule-width: 3px;
+  --catalog-tab-active-rule-color: var(--color-text-strong);
+
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 18px;
