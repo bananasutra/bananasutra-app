@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { CatalogPageJumpNav } from './CatalogPageJumpNav'
 import { usePageMeta } from './usePageMeta'
 
@@ -124,19 +124,6 @@ export function AboutContent() {
           </p>
         </section>
 
-        <section className="about-page__section about-page__teaser" aria-labelledby="about-discovery">
-          <h2 id="about-discovery" className="catalog-section-title about-page__anchor-target">
-            Want to know who inspired the songs?
-          </h2>
-          <div className="about-page__teaser-actions" aria-label="Explore muses and quotes">
-            <Link className="about-page__teaser-link" to="/about/muses">
-              Meet the muses
-            </Link>
-            <Link className="about-page__teaser-link" to="/about/quotes">
-              Read the quotes
-            </Link>
-          </div>
-        </section>
       </div>
     </>
   )

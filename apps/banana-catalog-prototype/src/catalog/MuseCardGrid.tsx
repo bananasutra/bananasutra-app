@@ -51,6 +51,7 @@ function MuseCard({ item, highlighted }: { item: MuseCatalogItem; highlighted: b
         <span className="muse-card__sutra-dot" aria-hidden />
         <span className="muse-card__name">{item.muse}</span>
         <span className="muse-card__type">{typeLabel}</span>
+        {placeBits ? <span className="muse-card__place">{placeBits}</span> : null}
         <span className="muse-card__count">
           {formatCount(item.song_count)} {item.song_count === 1 ? 'song' : 'songs'}
         </span>
@@ -178,9 +179,13 @@ export function MuseCardGrid() {
             ))}
           </div>
 
-          <label className="about-sort-control">
-            <span>Sort</span>
-            <select value={sort} onChange={(event) => setSort(event.target.value as 'az' | 'songs')}>
+          <label className="catalog-sort about-sort-control">
+            <span className="catalog-sort-label">Sort</span>
+            <select
+              className="catalog-sort-select"
+              value={sort}
+              onChange={(event) => setSort(event.target.value as 'az' | 'songs')}
+            >
               <option value="az">Alphabetical</option>
               <option value="songs">By song count</option>
             </select>
