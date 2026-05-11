@@ -1181,7 +1181,12 @@ def main():
         for r in conf_pl_rows
         if (r.get('playlist_name') or '').strip()
     }
-    print(f"  ✓ Confirmed PLAYLISTs: {len(confirmed_playlists)}")
+    confirmed_playlists_by_url = {
+        r.get('playlist_url', '').strip(): r
+        for r in conf_pl_rows
+        if (r.get('playlist_url') or '').strip()
+    }
+    print(f"  ✓ Confirmed PLAYLISTs: {len(confirmed_playlists)} ({len(confirmed_playlists_by_url)} by URL)")
 
     playlist_art_sm_from_api, playlist_art_lg_from_api = load_playlist_art_api_json(SC_PLAYLIST_ART_API)
     if playlist_art_sm_from_api or playlist_art_lg_from_api:
@@ -1911,10 +1916,22 @@ def main():
     ]
 
     out_playlists = []
+    playlist_conf_url_fallback = 0
     for pl_name in sorted(pl_agg):
         d       = pl_agg[pl_name]
-        conf_pl = confirmed_playlists.get(pl_name, {})
-        pl_url  = conf_pl.get('playlist_url', '').strip() or sc_name_to_url.get(pl_name, '')
+        conf_by_name = confirmed_playlists.get(pl_name, {})
+        pl_url = (
+            conf_by_name.get('playlist_url', '').strip()
+            or sc_name_to_url.get(pl_name, '')
+        )
+        conf_by_url = (
+            confirmed_playlists_by_url.get(pl_url, {}) if pl_url else {}
+        )
+        # URL row fills gaps; name-keyed snapshot wins on conflicts (editorial truth).
+        # Recovers scplaylist_in_app / songbook_id when scrape canonical name ≠ Airtable playlist_name.
+        conf_pl = _merge_prefer_nonempty(conf_by_url, conf_by_name)
+        if conf_by_url and not conf_by_name:
+            playlist_conf_url_fallback += 1
         # Art: SC API playlist manifest (same objects as fetch_all_playlists) → snapshot → track-derived
         pl_art = _strip_prioritized(
             playlist_art_sm_from_api.get(pl_name),
@@ -1958,7 +1975,13 @@ def main():
             'songbook_id': conf_pl.get('songbook_id', '').strip(),
         })
 
-    print(f"  ✓ Playlists: {len(out_playlists)}")
+    if playlist_conf_url_fallback:
+        print(
+            f"  ✓ Playlists: {len(out_playlists)} "
+            f"({playlist_conf_url_fallback} matched snapshot by URL only — name drift)"
+        )
+    else:
+        print(f"  ✓ Playlists: {len(out_playlists)}")
 
     # ── 7. Write outputs ───────────────────────────────────────────────────────
     print("\n[7] Writing outputs...")
