@@ -391,6 +391,88 @@
   }
 }
 
+/* R14: Play All control sits between Sort row and top pager so it reads as "above the tracks list". */
+.tracks-page__play-all-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.85rem;
+  margin: 0 0 0.7rem;
+}
+
+.tracks-page__play-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.85rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-bg-elevated, #fffdf8);
+  background: var(--color-link, #524a40);
+  border: 1px solid var(--color-link, #524a40);
+  border-radius: var(--radius-sm, 8px);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.tracks-page__play-all-btn:hover {
+  background: var(--color-link-hover, #3d3214);
+  border-color: var(--color-link-hover, #3d3214);
+}
+
+.tracks-page__play-all-btn:focus-visible {
+  outline: 2px solid var(--color-focus, #7f652d);
+  outline-offset: 2px;
+}
+
+.tracks-page__play-all-btn--stop {
+  background: var(--color-bg-panel, #fff);
+  color: var(--color-text-strong, #111);
+  border-color: var(--color-border-strong, #c9c4b8);
+}
+
+.tracks-page__play-all-btn--stop:hover {
+  background: var(--color-bg-inset, #f4f1ea);
+  color: var(--color-text-strong, #111);
+  border-color: var(--color-border-strong, #c9c4b8);
+}
+
+.tracks-page__play-all-glyph {
+  display: inline-block;
+  font-size: 0.85em;
+  line-height: 1;
+  transform: translateY(-0.02em);
+}
+
+.tracks-page__play-all-status {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--color-text-muted, #5c5c5c);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .tracks-page__play-all-row {
+    margin-bottom: 0.55rem;
+  }
+
+  .tracks-page__play-all-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tracks-page__play-all-status {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 /* Active filter summary in sticky filter column or above collapsed “Show filters”. */
 .catalog-filters .tracks-page__filter-summary.catalog-active-context,
 .catalog-main .tracks-page__filter-summary.catalog-active-context {
