@@ -392,12 +392,24 @@
 }
 
 /* R14: Play All control sits between Sort row and top pager so it reads as "above the tracks list". */
+.tracks-page__play-all {
+  margin: 0 0 0.7rem;
+}
+
 .tracks-page__play-all-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.55rem 0.85rem;
-  margin: 0 0 0.7rem;
+  margin: 0;
+}
+
+.tracks-page__play-all-note {
+  margin: 0.32rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-text-muted, #5c5c5c);
+  max-width: 56ch;
 }
 
 .tracks-page__play-all-btn {
@@ -458,7 +470,7 @@
 }
 
 @media (max-width: 640px) {
-  .tracks-page__play-all-row {
+  .tracks-page__play-all {
     margin-bottom: 0.55rem;
   }
 
@@ -469,6 +481,10 @@
 
   .tracks-page__play-all-status {
     width: 100%;
+    text-align: center;
+  }
+
+  .tracks-page__play-all-note {
     text-align: center;
   }
 }

@@ -672,39 +672,45 @@ export function TracksPage() {
                 ) : null}
 
                 {filtered.length > 1 ? (
-                  <div className="tracks-page__play-all-row" role="group" aria-label="Play all tracks">
-                    {playAllActive ? (
-                      <>
+                  <div className="tracks-page__play-all" role="group" aria-label="Play all tracks">
+                    <div className="tracks-page__play-all-row">
+                      {playAllActive ? (
+                        <>
+                          <button
+                            type="button"
+                            className="tracks-page__play-all-btn tracks-page__play-all-btn--stop"
+                            onClick={stopPlayAll}
+                          >
+                            <span className="tracks-page__play-all-glyph" aria-hidden>
+                              ■
+                            </span>
+                            Stop playing all
+                          </button>
+                          <span className="tracks-page__play-all-status" aria-live="polite">
+                            {(() => {
+                              const idx = filtered.findIndex((t) => t.track_id === selected?.track_id)
+                              const pos = idx >= 0 ? idx + 1 : 1
+                              return `Playing ${pos} of ${filtered.length}`
+                            })()}
+                          </span>
+                        </>
+                      ) : (
                         <button
                           type="button"
-                          className="tracks-page__play-all-btn tracks-page__play-all-btn--stop"
-                          onClick={stopPlayAll}
+                          className="tracks-page__play-all-btn"
+                          onClick={startPlayAll}
                         >
                           <span className="tracks-page__play-all-glyph" aria-hidden>
-                            ■
+                            ▶
                           </span>
-                          Stop playing all
+                          {`Play all ${filtered.length} tracks`}
                         </button>
-                        <span className="tracks-page__play-all-status" aria-live="polite">
-                          {(() => {
-                            const idx = filtered.findIndex((t) => t.track_id === selected?.track_id)
-                            const pos = idx >= 0 ? idx + 1 : 1
-                            return `Playing ${pos} of ${filtered.length}`
-                          })()}
-                        </span>
-                      </>
-                    ) : (
-                      <button
-                        type="button"
-                        className="tracks-page__play-all-btn"
-                        onClick={startPlayAll}
-                      >
-                        <span className="tracks-page__play-all-glyph" aria-hidden>
-                          ▶
-                        </span>
-                        {`Play all ${filtered.length} tracks`}
-                      </button>
-                    )}
+                      )}
+                    </div>
+                    <p className="tracks-page__play-all-note">
+                      Autoplay works best on desktop. On mobile (especially iPhone), you may need to tap each next
+                      track to keep the queue going.
+                    </p>
                   </div>
                 ) : null}
 
