@@ -6,3 +6,5 @@ export type CatalogDataFilename =
   | 'song_detail.json'
   | 'youtube_by_lyrics_id.json'
   | 'track_catalog.json'
+  | 'muses_catalog.json'
+  | 'quotes_wall.json'

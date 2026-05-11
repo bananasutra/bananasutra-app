@@ -13,6 +13,8 @@ export const CATALOG_DATA_FILENAMES = [
   'song_detail.json',
   'youtube_by_lyrics_id.json',
   'track_catalog.json',
+  'muses_catalog.json',
+  'quotes_wall.json',
 ] as const
 
 const ALLOWED = new Set<string>(CATALOG_DATA_FILENAMES)

@@ -18,6 +18,8 @@ const FILES = [
   'song_detail.json',
   'youtube_by_lyrics_id.json',
   'track_catalog.json',
+  'muses_catalog.json',
+  'quotes_wall.json',
 ]
 
 if (!fs.existsSync(path.join(root, 'dist'))) {
