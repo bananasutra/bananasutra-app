@@ -15,15 +15,26 @@ function museDomId(muse: string): string {
 }
 
 function filterCount(rows: MuseCatalogItem[], field: 'era' | 'gender_pronoun', value: string): number {
-  return rows.filter((row) => (row[field] || '').trim() === value).length
+  return rows.filter((row) => splitList(row[field]).includes(value)).length
 }
 
-function formatTypeCategory(value: string): string {
+function splitList(value: string): string[] {
   return value
     .split(',')
     .map((part) => part.trim())
     .filter(Boolean)
-    .join(', ')
+}
+
+function formatCommaList(value: string): string {
+  return splitList(value).join(', ')
+}
+
+function normalizeSearch(value: string): string {
+  return value.trim().toLowerCase()
+}
+
+function formatTypeCategory(value: string): string {
+  return formatCommaList(value)
 }
 
 function formatLifespan(item: MuseCatalogItem): string {
@@ -38,7 +49,7 @@ function MuseCard({ item, highlighted }: { item: MuseCatalogItem; highlighted: b
   const id = museDomId(item.muse)
   const typeLabel = formatTypeCategory(item.type_category) || 'Muse'
   const lifespan = formatLifespan(item)
-  const placeBits = [item.country, item.era || [item.birth_year, item.death_year].filter(Boolean).join('-')]
+  const placeBits = [item.country, formatCommaList(item.era) || [item.birth_year, item.death_year].filter(Boolean).join('-')]
     .filter(Boolean)
     .join(', ')
 
@@ -105,21 +116,21 @@ export function MuseCardGrid() {
   const location = useLocation()
   const { data, error, loading } = useMusesCatalog()
   const rows = useMemo(() => data ?? [], [data])
+  const highlightedMuse = useMemo(() => {
+    const params = new URLSearchParams(location.search)
+    return (params.get('muse') || params.get('highlight') || '').trim()
+  }, [location.search])
   const [eraFilter, setEraFilter] = useState('all')
   const [genderFilter, setGenderFilter] = useState('all')
+  const [findMuse, setFindMuse] = useState('')
   const [sort, setSort] = useState<'az' | 'songs'>('az')
-  const [showAll, setShowAll] = useState(false)
+  const [showAll, setShowAll] = useState(() => Boolean(highlightedMuse))
 
   usePageMeta({
     title: 'The Muses',
     description: 'Explore the thinkers, fools, poets, and troublemakers who inspired BANANASUTRA songs.',
     path: '/about/muses',
   })
-
-  const highlightedMuse = useMemo(() => {
-    const params = new URLSearchParams(location.search)
-    return (params.get('muse') || params.get('highlight') || '').trim()
-  }, [location.search])
 
   useEffect(() => {
     if (!highlightedMuse || loading) return
@@ -132,8 +143,9 @@ export function MuseCardGrid() {
   const eraOptions = useMemo(() => {
     const counts = new Map<string, number>()
     for (const row of rows) {
-      const era = row.era.trim()
-      if (era) counts.set(era, (counts.get(era) ?? 0) + 1)
+      for (const era of splitList(row.era)) {
+        counts.set(era, (counts.get(era) ?? 0) + 1)
+      }
     }
     return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]))
   }, [rows])
@@ -148,17 +160,30 @@ export function MuseCardGrid() {
   }, [rows])
 
   const filtered = useMemo(() => {
+    const query = normalizeSearch(findMuse)
     const next = rows.filter((row) => {
-      const eraOk = eraFilter === 'all' || row.era === eraFilter
+      const eraOk = eraFilter === 'all' || splitList(row.era).includes(eraFilter)
       const genderOk = genderFilter === 'all' || row.gender_pronoun === genderFilter
-      return eraOk && genderOk
+      const searchOk =
+        !query ||
+        [
+          row.muse,
+          row.type_category,
+          row.country,
+          row.era,
+          row.themes,
+          row.famous_works,
+          row.notes,
+          row.quote_excerpt,
+        ].some((value) => normalizeSearch(value).includes(query))
+      return eraOk && genderOk && searchOk
     })
     next.sort((a, b) => {
       if (sort === 'songs') return b.song_count - a.song_count || a.muse.localeCompare(b.muse)
       return a.muse.localeCompare(b.muse)
     })
     return next
-  }, [eraFilter, genderFilter, rows, sort])
+  }, [eraFilter, findMuse, genderFilter, rows, sort])
 
   const visible = showAll ? filtered : filtered.slice(0, INITIAL_MUSE_COUNT)
 
@@ -174,6 +199,16 @@ export function MuseCardGrid() {
         <p className="about-page__prose">
           {formatCount(rows.length)} thinkers, fools, poets, and troublemakers who inspired the songs.
         </p>
+
+        <label className="about-muse-search">
+          <span>Search muses</span>
+          <input
+            type="search"
+            value={findMuse}
+            onChange={(event) => setFindMuse(event.target.value)}
+            placeholder="Find a muse, theme, work, or quote..."
+          />
+        </label>
 
         <div className="about-filter-stack" aria-label="Muse filters">
           <div className="about-filter-group" aria-label="Filter muses by era">

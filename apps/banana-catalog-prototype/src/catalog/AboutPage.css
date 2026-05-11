@@ -426,6 +426,37 @@
   margin: var(--about-rhythm) 0 0;
 }
 
+.about-muse-search {
+  display: grid;
+  gap: 0.42rem;
+  margin-top: var(--about-rhythm);
+  max-width: 34rem;
+}
+
+.about-muse-search span {
+  color: var(--color-text-faint);
+  font: 700 0.68rem/1.35 var(--font-ui);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.about-muse-search input {
+  width: 100%;
+  min-height: 2.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-panel);
+  color: var(--color-text-strong);
+  font: 500 max(16px, 0.88rem)/1.35 var(--font-body);
+  padding: 0.62rem 0.78rem;
+}
+
+.about-muse-search input:hover,
+.about-muse-search input:focus-visible {
+  border-color: var(--color-border-strong);
+  outline: none;
+}
+
 .about-filter-group {
   display: flex;
   gap: 0.45rem;
