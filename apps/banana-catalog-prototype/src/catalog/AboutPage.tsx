@@ -98,7 +98,9 @@ export function AboutPage() {
       'What is BANANASUTRA? Seven sutras — KNOW, BLOW, SHOW, FLOW, GROW, GLOW, and QUACK — songs for a world gone bananas.',
     path: '/about',
   })
-  useSyncCatalogHeaderHeight(pageRef, headerRef, [])
+  // Pass loading/error so the ResizeObserver re-attaches to the new header
+  // after the page swaps from the loading/error fallback to the full layout.
+  useSyncCatalogHeaderHeight(pageRef, headerRef, [catalogLoading, catalogError])
 
   useEffect(() => {
     if (location.hash !== '#sutras') return
@@ -118,7 +120,7 @@ export function AboutPage() {
         <GlobalHeader ref={headerRef} />
         <div className="catalog-page__main">
           <article className="about-page catalog-layout-shell" id="main-content">
-            <p className="about-page__p">Loading…</p>
+            <p className="about-page__prose">Loading…</p>
           </article>
         </div>
         <GlobalFooter />
@@ -132,7 +134,7 @@ export function AboutPage() {
         <GlobalHeader ref={headerRef} />
         <div className="catalog-page__main">
           <article className="about-page catalog-layout-shell" id="main-content">
-            <p className="about-page__p">{catalogError ?? 'Could not load catalog data.'}</p>
+            <p className="about-page__prose">{catalogError ?? 'Could not load catalog data.'}</p>
           </article>
         </div>
         <GlobalFooter />
@@ -276,7 +278,7 @@ export function AboutPage() {
               </div>
             </section>
 
-            <section className="about-page__section about-page__section--colophon" aria-labelledby="colophon">
+            <section className="about-page__section" aria-labelledby="colophon">
               <h2 id="colophon" className="catalog-section-title about-page__anchor-target">
                 Colophon
               </h2>
