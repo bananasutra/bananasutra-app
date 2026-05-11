@@ -113,12 +113,6 @@ export function AboutSutrasContent() {
             smarter than playing finite games. Seven commandments for a world gone bombastic, fostering curiosity,
             humility, respect, trust, and joy. In other words: long-term peace and happiness.
           </p>
-          <p>
-            <strong>Why seven?</strong> I didn&apos;t pick seven. I noticed seven. Seven distinct points of view that
-            keep emerging, seven action verbs that drive core human behaviors. The eighth is an anomaly, a specific
-            failure of the BLOWsutra mode, about a dumb duck dead set on dismantling democracy for nothing but finite,
-            puerile aims. I call that one QUACKsutra.
-          </p>
         </div>
 
         <div className="about-page__sutra-matrix">
@@ -135,6 +129,12 @@ export function AboutSutrasContent() {
           </ul>
 
           <div className="about-page__sutra-quack-wrap">
+            <p className="about-page__sutra-quack-intro">
+              <strong>Why seven?</strong> I didn&apos;t pick seven. I noticed seven. Seven distinct points of view that
+              keep emerging, seven action verbs that drive core human behaviors. The eighth is an anomaly, a specific
+              failure of the BLOWsutra mode, about a dumb duck dead set on dismantling democracy for nothing but finite,
+              puerile aims. I call that one QUACKsutra.
+            </p>
             <p className="about-page__sutra-quack-kicker">Sub-sutra of BLOWsutra · not one of the seven core lanes</p>
             <p className="about-page__sutra-quack-intro">
               QUACKsutra isn&apos;t a sutra in the same sense as the seven above, it&apos;s a BLOWsutra sub-sutra, but
