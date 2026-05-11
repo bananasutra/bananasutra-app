@@ -97,10 +97,12 @@ export type MuseCatalogItem = {
   era: string
   birth_year: string
   death_year: string
+  famous_works: string
   core_sutra: string
   secondary_sutras: string
   themes: string
   notes: string
+  quote_excerpt: string
   wikipedia_url: string
   song_count: number
 }

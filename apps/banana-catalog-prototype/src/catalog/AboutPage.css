@@ -589,6 +589,34 @@
   color: var(--color-text-muted);
 }
 
+.muse-card__detail-list {
+  display: grid;
+  gap: 0.38rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.muse-card__detail-list div {
+  display: grid;
+  grid-template-columns: 3.4rem 1fr;
+  gap: 0.45rem;
+}
+
+.muse-card__detail-list dt {
+  margin: 0;
+  color: var(--color-text-faint);
+  font: 800 0.58rem/1.35 var(--font-ui);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.muse-card__detail-list dd {
+  margin: 0;
+}
+
 .muse-card__meta {
   margin-top: 0.55rem;
   color: color-mix(in srgb, var(--color-bg-page) 72%, transparent);

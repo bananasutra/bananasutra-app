@@ -706,10 +706,15 @@ def build_muses_catalog(
                 "era": str(row.get("era") or "").strip(),
                 "birth_year": str(row.get("birth_year") or "").strip(),
                 "death_year": str(row.get("death_year") or "").strip(),
+                "famous_works": truncate_words(str(row.get("famous_works") or ""), 180),
                 "core_sutra": str(row.get("core_sutra") or "").strip(),
                 "secondary_sutras": str(row.get("secondary_sutras") or "").strip(),
                 "themes": str(row.get("themes_keywords") or "").strip(),
                 "notes": truncate_words(str(row.get("bananasutra_notes") or ""), 140),
+                "quote_excerpt": truncate_words(
+                    str(row.get("quotes_lookup") or row.get("key_quotes") or ""),
+                    180,
+                ),
                 "wikipedia_url": str(row.get("primary_source") or "").strip(),
                 "song_count": muse_song_count.get(name.lower(), 0),
             }

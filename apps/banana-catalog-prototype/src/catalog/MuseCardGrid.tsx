@@ -18,10 +18,26 @@ function filterCount(rows: MuseCatalogItem[], field: 'era' | 'gender_pronoun', v
   return rows.filter((row) => (row[field] || '').trim() === value).length
 }
 
+function formatTypeCategory(value: string): string {
+  return value
+    .split(',')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .join(', ')
+}
+
+function formatLifespan(item: MuseCatalogItem): string {
+  if (item.birth_year && item.death_year) return `${item.birth_year}-${item.death_year}`
+  if (item.birth_year) return `born ${item.birth_year}`
+  if (item.death_year) return `died ${item.death_year}`
+  return ''
+}
+
 function MuseCard({ item, highlighted }: { item: MuseCatalogItem; highlighted: boolean }) {
   const [expanded, setExpanded] = useState(highlighted)
   const id = museDomId(item.muse)
-  const typeLabel = item.type_category || 'Muse'
+  const typeLabel = formatTypeCategory(item.type_category) || 'Muse'
+  const lifespan = formatLifespan(item)
   const placeBits = [item.country, item.era || [item.birth_year, item.death_year].filter(Boolean).join('-')]
     .filter(Boolean)
     .join(', ')
@@ -46,8 +62,34 @@ function MuseCard({ item, highlighted }: { item: MuseCatalogItem; highlighted: b
       </button>
       <div id={`${id}-details`} className="muse-card__details" hidden={!expanded}>
         {item.notes ? <p className="muse-card__notes">{item.notes}</p> : null}
+        <dl className="muse-card__detail-list">
+          {lifespan ? (
+            <div>
+              <dt>Life</dt>
+              <dd>{lifespan}</dd>
+            </div>
+          ) : null}
+          {item.famous_works ? (
+            <div>
+              <dt>Works</dt>
+              <dd>{item.famous_works}</dd>
+            </div>
+          ) : null}
+          {item.themes ? (
+            <div>
+              <dt>Themes</dt>
+              <dd>{item.themes}</dd>
+            </div>
+          ) : null}
+          {item.quote_excerpt ? (
+            <div>
+              <dt>Quote</dt>
+              <dd>{item.quote_excerpt}</dd>
+            </div>
+          ) : null}
+        </dl>
         <div className="muse-card__links">
-          <Link to={`/songs?find=${encodeURIComponent(item.muse)}`}>Filter songs</Link>
+          {item.song_count > 0 ? <Link to={`/songs?find=${encodeURIComponent(item.muse)}`}>Filter songs</Link> : null}
           {item.wikipedia_url ? (
             <a href={item.wikipedia_url} target="_blank" rel="noreferrer">
               Wikipedia
