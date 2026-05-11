@@ -88,6 +88,35 @@ export type SongCatalogItem = {
   lyrics_pipeline_status: string
 }
 
+export type MuseCatalogItem = {
+  muse: string
+  muse_id: string
+  gender_pronoun: string
+  type_category: string
+  country: string
+  era: string
+  birth_year: string
+  death_year: string
+  famous_works: string
+  core_sutra: string
+  secondary_sutras: string
+  themes: string
+  notes: string
+  quote_excerpt: string
+  wikipedia_url: string
+  song_count: number
+}
+
+export type QuoteWallItem = {
+  quote: string
+  muse: string
+  primary_sutra: string
+  secondary_sutras: string
+  core_topic: string
+  quote_id: string
+  inspired_song?: { title: string; slug: string }
+}
+
 /** `/songs` media combo filter (lyrics-only rows live on `/words`). Default: all combos in this grid. */
 export type MediaComboFilter = 'all' | 'lyrics_sc' | 'lyrics_yt' | 'full'
 

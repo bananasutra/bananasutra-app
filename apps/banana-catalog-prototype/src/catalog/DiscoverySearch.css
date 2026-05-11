@@ -370,7 +370,7 @@
   min-width: 0;
   padding: 0.5rem 0.35rem;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-bottom: var(--catalog-tab-active-rule-width) solid transparent;
   margin-bottom: -1px;
   background: transparent;
   color: var(--color-text-faint);
@@ -382,7 +382,7 @@
 
 .discovery-search__tab--active {
   color: var(--color-text-strong);
-  border-bottom-color: var(--color-text-strong);
+  border-bottom-color: var(--catalog-tab-active-rule-color);
 }
 
 .discovery-search__tab:focus-visible {
@@ -435,9 +435,8 @@
 
   .discovery-search__tabs--keyword .discovery-search__tab--active {
     background: var(--color-accent-soft);
-    border-bottom-color: var(--color-text-strong);
-    border-bottom-width: 2px;
-    padding-bottom: calc(0.45rem - 1px);
+    border-bottom-color: var(--catalog-tab-active-rule-color);
+    padding-bottom: calc(0.45rem - (var(--catalog-tab-active-rule-width) - 1px));
   }
 }
 

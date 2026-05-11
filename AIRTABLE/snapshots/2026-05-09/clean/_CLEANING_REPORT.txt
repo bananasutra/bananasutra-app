@@ -10,7 +10,7 @@ Columns not listed had no modifications.
 ── SONGBOOKs-2026-05-09.csv → songbooks-2026-05-09.csv (43 rows)
     (no cell modifications)
 
-── MUSEs-2026-05-09.csv → muses-2026-05-09.csv (182 rows)
+── MUSEs-2026-05-09.csv → muses-2026-05-09.csv (181 rows)
     (no cell modifications)
 
 ── QUOTEs-2026-05-09.csv → quotes-2026-05-09.csv (153 rows)

@@ -462,6 +462,23 @@
   border-radius: 2px;
 }
 
+.home-portal__quote-muse-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.home-portal__quote-muse-link:hover {
+  color: var(--color-text-muted);
+}
+
+.home-portal__quote-muse-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 .home-portal__quote-meta-sep {
   color: var(--color-text-faint);
 }

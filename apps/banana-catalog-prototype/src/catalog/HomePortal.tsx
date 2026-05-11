@@ -319,6 +319,10 @@ export function HomePortal() {
                         >
                           {part}
                         </Link>
+                      ) : muse && part === muse ? (
+                        <Link className="home-portal__quote-muse-link" to={`/about/muses?muse=${encodeURIComponent(muse)}`}>
+                          {part}
+                        </Link>
                       ) : (
                         part
                       )}

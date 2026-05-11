@@ -25,6 +25,8 @@
   "youtube_rows_missing_lyrics_id": 17,
   "sutra_context_rows": 8,
   "home_quotes": 136,
+  "muses_catalog": 177,
+  "quotes_wall": 136,
   "track_catalog_rows": 649,
   "related_song_links_written": 523,
   "edition_rows_missing_links_count": 0,
@@ -74,8 +76,8 @@
     },
     "muses": {
       "path": "AIRTABLE/snapshots/2026-05-09/clean/muses-2026-05-09.csv",
-      "sha256": "bb68973b0b2ae392e3f40b066cbf1701615e6475b7cd16f2cfedb53990c70798",
-      "rows": 182
+      "sha256": "b093c924f42437b4ee7b4159c5c01312af89d2a94886079aa55bcfa133a80c36",
+      "rows": 181
     },
     "quotes": {
       "path": "AIRTABLE/snapshots/2026-05-09/clean/quotes-2026-05-09.csv",

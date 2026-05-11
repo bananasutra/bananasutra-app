@@ -23,6 +23,8 @@ Outputs:
   src/data/generated/sutra_context.json — sutra context (question/practice/themes/mental_health_pivot,
     sutra_when/sutra_card_essence/sutra_essence, optional featured_ep from sc_eps when ep_featured)
   src/data/generated/home_quotes.json — quote pool from QUOTEs where **quote_in_app** is enabled
+  src/data/generated/muses_catalog.json — lightweight muse cards for `/about/muses`
+  src/data/generated/quotes_wall.json — quote wall data for `/about/quotes`, with optional inspired song links
   src/data/generated/youtube_by_lyrics_id.json — YT rows from **clean ``yt_videos-<date>.csv``** (same pattern as
     SoundCloud: Airtable snapshot is source of truth for the catalog). Grouped by lyrics_id (plus a "" bucket when
     lyrics_id is blank). ``pipelines/yt/build_yt_final.py`` / ``AT-VIDEOS-final.csv`` remain for scrape metrics,
@@ -663,6 +665,65 @@ def filter_song_detail_muse(raw_muse: str, muse_visibility: dict[str, bool]) -> 
     return ",".join(dedupe_preserve_order(visible))
 
 
+def truncate_words(value: str, max_chars: int) -> str:
+    text = str(value or "").strip()
+    if len(text) <= max_chars:
+        return text
+    clipped = text[: max_chars - 3].rsplit(" ", 1)[0].strip()
+    return f"{clipped or text[: max_chars - 3]}..."
+
+
+def build_muses_catalog(
+    muse_rows: list[dict[str, str]],
+    lyrics_rows: list[dict[str, str]],
+) -> list[dict[str, Any]]:
+    """Build lightweight muse cards for `/about/muses`."""
+    muse_song_count: dict[str, int] = defaultdict(int)
+    for lyric in lyrics_rows:
+        if not lyric_row_in_app(lyric):
+            continue
+        for muse in split_multi(lyric.get("muse")):
+            name = muse.strip()
+            if name:
+                muse_song_count[name.lower()] += 1
+
+    out: list[dict[str, Any]] = []
+    for row in muse_rows:
+        if not parse_bool(row.get("muse_in_app")):
+            continue
+        name = str(row.get("muse") or "").strip()
+        if not name:
+            continue
+        if name.lower() == "anonymous anonymous":
+            continue
+        out.append(
+            {
+                "muse": name,
+                "muse_id": str(row.get("muse_id") or "").strip(),
+                "gender_pronoun": str(row.get("gender_pronoun") or "").strip(),
+                "type_category": str(row.get("type_category") or "").strip(),
+                "country": str(row.get("country") or "").strip(),
+                "era": str(row.get("era") or "").strip(),
+                "birth_year": str(row.get("birth_year") or "").strip(),
+                "death_year": str(row.get("death_year") or "").strip(),
+                "famous_works": truncate_words(str(row.get("famous_works") or ""), 180),
+                "core_sutra": str(row.get("core_sutra") or "").strip(),
+                "secondary_sutras": str(row.get("secondary_sutras") or "").strip(),
+                "themes": str(row.get("themes_keywords") or "").strip(),
+                "notes": truncate_words(str(row.get("bananasutra_notes") or ""), 140),
+                "quote_excerpt": truncate_words(
+                    str(row.get("quotes_lookup") or row.get("key_quotes") or ""),
+                    180,
+                ),
+                "wikipedia_url": str(row.get("primary_source") or "").strip(),
+                "song_count": muse_song_count.get(name.lower(), 0),
+            }
+        )
+
+    out.sort(key=lambda row: str(row.get("muse") or "").lower())
+    return out
+
+
 def sutra_family_key_from_field(raw_sutra: str) -> str:
     upper = str(raw_sutra or "").strip().upper()
     for prefix in ("KNOW", "BLOW", "QUACK", "SHOW", "GROW", "FLOW", "GLOW", "BOW"):
@@ -744,6 +805,54 @@ def build_home_quotes(quotes_rows: list[dict[str, str]]) -> list[dict[str, str]]
                 "quote_id": str(row.get("quote_id") or "").strip(),
             }
         )
+    out.sort(
+        key=lambda row: (
+            parse_int(str(row.get("quote_id") or "").replace("Q-", "")),
+            str(row.get("quote") or "").lower(),
+        )
+    )
+    return out
+
+
+def normalize_quote_key(value: str | None) -> str:
+    return re.sub(r"\s+", " ", str(value or "").strip()).lower()
+
+
+def build_quotes_wall(
+    quotes_rows: list[dict[str, str]],
+    lyrics_rows: list[dict[str, str]],
+) -> list[dict[str, Any]]:
+    """Build quote wall data, kept separate from home quote JS for route-level loading."""
+    quote_to_song: dict[str, dict[str, str]] = {}
+    for lyric in lyrics_rows:
+        if not lyric_row_in_app(lyric):
+            continue
+        quote_key = normalize_quote_key(lyric.get("song_muse_quote"))
+        slug = catalog_url_slug(lyric, str(lyric.get("song_title") or "").strip())
+        title = str(lyric.get("song_title") or "").strip()
+        if quote_key and slug and title and quote_key not in quote_to_song:
+            quote_to_song[quote_key] = {"title": title, "slug": slug}
+
+    out: list[dict[str, Any]] = []
+    for row in quotes_rows:
+        if not parse_bool(row.get("quote_in_app")):
+            continue
+        quote = str(row.get("quote") or "").strip()
+        if not quote:
+            continue
+        entry: dict[str, Any] = {
+            "quote": quote,
+            "muse": str(row.get("muse") or "").strip(),
+            "primary_sutra": str(row.get("primary_sutra") or "").strip(),
+            "secondary_sutras": str(row.get("secondary_sutras") or "").strip(),
+            "core_topic": str(row.get("core_topic") or "").strip(),
+            "quote_id": str(row.get("quote_id") or "").strip(),
+        }
+        inspired_song = quote_to_song.get(normalize_quote_key(quote))
+        if inspired_song:
+            entry["inspired_song"] = inspired_song
+        out.append(entry)
+
     out.sort(
         key=lambda row: (
             parse_int(str(row.get("quote_id") or "").replace("Q-", "")),
@@ -2204,6 +2313,8 @@ def main() -> None:
     )
     edition_link_gaps = find_edition_link_gaps(song_detail)
     home_quotes = build_home_quotes(quotes_rows)
+    muses_catalog = build_muses_catalog(muse_rows, lyrics_rows)
+    quotes_wall = build_quotes_wall(quotes_rows, lyrics_rows)
     song_catalog_browse = build_song_catalog_browse(song_catalog)
     song_search_deep = build_song_search_deep(song_catalog)
 
@@ -2296,6 +2407,8 @@ def main() -> None:
         "song_slug_index.json": song_slug_index,
         "sutra_context.json": sutra_context,
         "home_quotes.json": home_quotes,
+        "muses_catalog.json": muses_catalog,
+        "quotes_wall.json": quotes_wall,
         "youtube_by_lyrics_id.json": youtube_by_lyrics_id,
     }
     for filename, payload in outputs.items():
@@ -2322,6 +2435,8 @@ def main() -> None:
         "youtube_rows_missing_lyrics_id": len(youtube_by_lyrics_id.get("", [])),
         "sutra_context_rows": len(sutra_context),
         "home_quotes": len(home_quotes),
+        "muses_catalog": len(muses_catalog),
+        "quotes_wall": len(quotes_wall),
         "track_catalog_rows": len(track_catalog),
         "related_song_links_written": related_links_written,
         "edition_rows_missing_links_count": len(edition_link_gaps),
