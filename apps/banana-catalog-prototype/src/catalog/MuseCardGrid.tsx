@@ -2,32 +2,20 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useMusesCatalog } from './generatedData'
 import type { MuseCatalogItem } from './types'
-import { sutraClassName } from './sutraTheme'
 import { usePageMeta } from './usePageMeta'
 
 const INITIAL_MUSE_COUNT = 40
-const SUTRA_FILTERS = ['KNOWsutra', 'BLOWsutra', 'SHOWsutra', 'GROWsutra', 'FLOWsutra', 'GLOWsutra', 'BOWsutra'] as const
 
 function formatCount(n: number): string {
   return new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(n)
-}
-
-function splitTypes(value: string): string[] {
-  return value
-    .split(',')
-    .map((part) => part.trim())
-    .filter(Boolean)
 }
 
 function museDomId(muse: string): string {
   return `muse-${muse.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`
 }
 
-function activeFilterCount(rows: MuseCatalogItem[], key: keyof Pick<MuseCatalogItem, 'core_sutra' | 'type_category'>, value: string) {
-  return rows.filter((row) => {
-    if (key === 'type_category') return splitTypes(row.type_category).includes(value)
-    return row.core_sutra === value
-  }).length
+function filterCount(rows: MuseCatalogItem[], field: 'era' | 'gender_pronoun', value: string): number {
+  return rows.filter((row) => (row[field] || '').trim() === value).length
 }
 
 function MuseCard({ item, highlighted }: { item: MuseCatalogItem; highlighted: boolean }) {
@@ -37,10 +25,9 @@ function MuseCard({ item, highlighted }: { item: MuseCatalogItem; highlighted: b
   const placeBits = [item.country, item.era || [item.birth_year, item.death_year].filter(Boolean).join('-')]
     .filter(Boolean)
     .join(', ')
-  const tone = sutraClassName(item.core_sutra)
 
   return (
-    <article id={id} className={`muse-card ${tone}${expanded ? ' is-expanded' : ''}${highlighted ? ' is-highlighted' : ''}`}>
+    <article id={id} className={`muse-card${expanded ? ' is-expanded' : ''}${highlighted ? ' is-highlighted' : ''}`}>
       <button
         type="button"
         className="muse-card__button"
@@ -48,17 +35,17 @@ function MuseCard({ item, highlighted }: { item: MuseCatalogItem; highlighted: b
         aria-controls={`${id}-details`}
         onClick={() => setExpanded((value) => !value)}
       >
-        <span className="muse-card__sutra-dot" aria-hidden />
         <span className="muse-card__name">{item.muse}</span>
         <span className="muse-card__type">{typeLabel}</span>
         {placeBits ? <span className="muse-card__place">{placeBits}</span> : null}
-        <span className="muse-card__count">
-          {formatCount(item.song_count)} {item.song_count === 1 ? 'song' : 'songs'}
-        </span>
+        {item.song_count > 0 ? (
+          <span className="muse-card__count">
+            {formatCount(item.song_count)} {item.song_count === 1 ? 'song' : 'songs'}
+          </span>
+        ) : null}
       </button>
       <div id={`${id}-details`} className="muse-card__details" hidden={!expanded}>
         {item.notes ? <p className="muse-card__notes">{item.notes}</p> : null}
-        <p className="muse-card__meta">{placeBits || item.core_sutra}</p>
         <div className="muse-card__links">
           <Link to={`/songs?find=${encodeURIComponent(item.muse)}`}>Filter songs</Link>
           {item.wikipedia_url ? (
@@ -76,8 +63,8 @@ export function MuseCardGrid() {
   const location = useLocation()
   const { data, error, loading } = useMusesCatalog()
   const rows = useMemo(() => data ?? [], [data])
-  const [sutraFilter, setSutraFilter] = useState('all')
-  const [typeFilter, setTypeFilter] = useState('all')
+  const [eraFilter, setEraFilter] = useState('all')
+  const [genderFilter, setGenderFilter] = useState('all')
   const [sort, setSort] = useState<'az' | 'songs'>('az')
   const [showAll, setShowAll] = useState(false)
 
@@ -100,28 +87,36 @@ export function MuseCardGrid() {
     })
   }, [highlightedMuse, loading])
 
-  const typeOptions = useMemo(() => {
+  const eraOptions = useMemo(() => {
     const counts = new Map<string, number>()
     for (const row of rows) {
-      for (const type of splitTypes(row.type_category)) {
-        counts.set(type, (counts.get(type) ?? 0) + 1)
-      }
+      const era = row.era.trim()
+      if (era) counts.set(era, (counts.get(era) ?? 0) + 1)
+    }
+    return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+  }, [rows])
+
+  const genderOptions = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const row of rows) {
+      const gender = row.gender_pronoun.trim()
+      if (gender) counts.set(gender, (counts.get(gender) ?? 0) + 1)
     }
     return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]))
   }, [rows])
 
   const filtered = useMemo(() => {
     const next = rows.filter((row) => {
-      const sutraOk = sutraFilter === 'all' || row.core_sutra === sutraFilter
-      const typeOk = typeFilter === 'all' || splitTypes(row.type_category).includes(typeFilter)
-      return sutraOk && typeOk
+      const eraOk = eraFilter === 'all' || row.era === eraFilter
+      const genderOk = genderFilter === 'all' || row.gender_pronoun === genderFilter
+      return eraOk && genderOk
     })
     next.sort((a, b) => {
       if (sort === 'songs') return b.song_count - a.song_count || a.muse.localeCompare(b.muse)
       return a.muse.localeCompare(b.muse)
     })
     return next
-  }, [rows, sort, sutraFilter, typeFilter])
+  }, [eraFilter, genderFilter, rows, sort])
 
   const visible = showAll ? filtered : filtered.slice(0, INITIAL_MUSE_COUNT)
 
@@ -139,42 +134,42 @@ export function MuseCardGrid() {
         </p>
 
         <div className="about-filter-stack" aria-label="Muse filters">
-          <div className="about-filter-group" aria-label="Filter muses by sutra">
+          <div className="about-filter-group" aria-label="Filter muses by era">
             <button
               type="button"
-              className={`about-filter-pill${sutraFilter === 'all' ? ' is-active' : ''}`}
-              onClick={() => setSutraFilter('all')}
+              className={`about-filter-pill${eraFilter === 'all' ? ' is-active' : ''}`}
+              onClick={() => setEraFilter('all')}
             >
-              All <span>{formatCount(rows.length)}</span>
+              All eras <span>{formatCount(rows.length)}</span>
             </button>
-            {SUTRA_FILTERS.map((sutra) => (
+            {eraOptions.map(([era]) => (
               <button
-                key={sutra}
+                key={era}
                 type="button"
-                className={`about-filter-pill${sutraFilter === sutra ? ' is-active' : ''}`}
-                onClick={() => setSutraFilter(sutra)}
+                className={`about-filter-pill${eraFilter === era ? ' is-active' : ''}`}
+                onClick={() => setEraFilter(era)}
               >
-                {sutra} <span>{formatCount(activeFilterCount(rows, 'core_sutra', sutra))}</span>
+                {era} <span>{formatCount(filterCount(rows, 'era', era))}</span>
               </button>
             ))}
           </div>
 
-          <div className="about-filter-group" aria-label="Filter muses by type">
+          <div className="about-filter-group" aria-label="Filter muses by gender">
             <button
               type="button"
-              className={`about-filter-pill${typeFilter === 'all' ? ' is-active' : ''}`}
-              onClick={() => setTypeFilter('all')}
+              className={`about-filter-pill${genderFilter === 'all' ? ' is-active' : ''}`}
+              onClick={() => setGenderFilter('all')}
             >
-              All types <span>{formatCount(rows.length)}</span>
+              All genders <span>{formatCount(rows.length)}</span>
             </button>
-            {typeOptions.map(([type, count]) => (
+            {genderOptions.map(([gender, count]) => (
               <button
-                key={type}
+                key={gender}
                 type="button"
-                className={`about-filter-pill${typeFilter === type ? ' is-active' : ''}`}
-                onClick={() => setTypeFilter(type)}
+                className={`about-filter-pill${genderFilter === gender ? ' is-active' : ''}`}
+                onClick={() => setGenderFilter(gender)}
               >
-                {type} <span>{formatCount(count)}</span>
+                {gender} <span>{formatCount(count)}</span>
               </button>
             ))}
           </div>

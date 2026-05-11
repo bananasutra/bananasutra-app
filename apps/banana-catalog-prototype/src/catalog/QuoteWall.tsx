@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useQuotesWall } from './generatedData'
 import type { QuoteWallItem } from './types'
 import { sutraClassName } from './sutraTheme'
+import { SUTRA_CONTEXT, sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
 import { usePageMeta } from './usePageMeta'
 
 function formatCount(n: number): string {
@@ -15,6 +16,21 @@ function topicLabel(topic: string): string {
 
 function topicDomId(topic: string): string {
   return `quote-topic-${topic.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'other'}`
+}
+
+function sutraFamilyFromDisplay(displayName: string): SutraFamilyKey | null {
+  const normalized = displayName.trim().toUpperCase()
+  for (const key of Object.keys(SUTRA_CONTEXT) as SutraFamilyKey[]) {
+    if (normalized.startsWith(key)) return key
+  }
+  return null
+}
+
+function quoteSutras(item: QuoteWallItem): string[] {
+  const values = [item.primary_sutra, ...item.secondary_sutras.split(',')]
+    .map((value) => value.trim())
+    .filter(Boolean)
+  return [...new Set(values)]
 }
 
 function groupQuotes(rows: QuoteWallItem[]): [string, QuoteWallItem[]][] {
@@ -104,16 +120,27 @@ export function QuoteWall() {
               </h3>
               <div className="quote-cluster__items">
                 {quotes.map((item) => {
-                  const tone = sutraClassName(item.primary_sutra)
                   return (
-                    <figure key={item.quote_id || `${item.muse}-${item.quote}`} className={`quote-item ${tone}`}>
+                    <figure key={item.quote_id || `${item.muse}-${item.quote}`} className="quote-item">
                       <span className="quote-item__mark" aria-hidden>
                         &ldquo;
                       </span>
                       <blockquote className="quote-item__text">{item.quote}</blockquote>
                       <figcaption className="quote-item__meta">
                         <Link to={`/about/muses?muse=${encodeURIComponent(item.muse)}`}>{item.muse}</Link>
-                        {item.primary_sutra ? <span className="quote-item__sutra">{item.primary_sutra}</span> : null}
+                        {quoteSutras(item).map((sutra) => {
+                          const family = sutraFamilyFromDisplay(sutra)
+                          if (!family) return null
+                          return (
+                            <Link
+                              key={sutra}
+                              className={`quote-item__sutra-link catalog-facet-sutra-name ${sutraClassName(sutra)}`}
+                              to={sutraHrefForFamily(family)}
+                            >
+                              {sutra}
+                            </Link>
+                          )
+                        })}
                         {item.inspired_song ? (
                           <Link className="quote-item__song" to={`/songs/${item.inspired_song.slug}`}>
                             inspired: {item.inspired_song.title}

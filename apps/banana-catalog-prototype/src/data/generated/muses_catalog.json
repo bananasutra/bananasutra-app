@@ -2,6 +2,7 @@
   {
     "muse": "Ada Limón",
     "muse_id": "M-108",
+    "gender_pronoun": "She",
     "type_category": "Poet",
     "country": "US",
     "era": "Contemporary",
@@ -17,6 +18,7 @@
   {
     "muse": "Ada Lovelace",
     "muse_id": "M-110",
+    "gender_pronoun": "She",
     "type_category": "Scientist,Philosopher",
     "country": "GB",
     "era": "19th C",
@@ -32,6 +34,7 @@
   {
     "muse": "Adrienne Rich",
     "muse_id": "M-139",
+    "gender_pronoun": "She",
     "type_category": "Poet",
     "country": "US",
     "era": "Late 20th C",
@@ -47,6 +50,7 @@
   {
     "muse": "Aesop",
     "muse_id": "M-4",
+    "gender_pronoun": "He",
     "type_category": "Fabulist,Fool",
     "country": "GR",
     "era": "Ancient",
@@ -62,6 +66,7 @@
   {
     "muse": "Alan Watts",
     "muse_id": "M-172",
+    "gender_pronoun": "He",
     "type_category": "Philosopher,Author",
     "country": "GB",
     "era": "Mid 20th C",
@@ -77,6 +82,7 @@
   {
     "muse": "Albert Camus",
     "muse_id": "M-26",
+    "gender_pronoun": "He",
     "type_category": "Philosopher,Fool",
     "country": "FR",
     "era": "Mid 20th C",
@@ -92,6 +98,7 @@
   {
     "muse": "Albert Einstein",
     "muse_id": "M-58",
+    "gender_pronoun": "He",
     "type_category": "Scientist",
     "country": "DE",
     "era": "Early 20th C",
@@ -107,6 +114,7 @@
   {
     "muse": "Aldous Huxley",
     "muse_id": "M-88",
+    "gender_pronoun": "He",
     "type_category": "Author,Fool",
     "country": "UK",
     "era": "Mid 20th C",
@@ -122,6 +130,7 @@
   {
     "muse": "Alejandro Jodorowsky",
     "muse_id": "M-92",
+    "gender_pronoun": "He",
     "type_category": "Filmmaker,Author,Philosopher",
     "country": "CL/FR",
     "era": "Contemporary",
@@ -137,6 +146,7 @@
   {
     "muse": "Aleksandr Solzhenitsyn",
     "muse_id": "M-156",
+    "gender_pronoun": "He",
     "type_category": "Author,Poet",
     "country": "RU",
     "era": "Mid 20th C",
@@ -152,6 +162,7 @@
   {
     "muse": "Allen Ginsberg",
     "muse_id": "M-71",
+    "gender_pronoun": "He",
     "type_category": "Poet,Fool",
     "country": "US",
     "era": "Mid 20th C",
@@ -167,6 +178,7 @@
   {
     "muse": "Amanda Gorman",
     "muse_id": "M-73",
+    "gender_pronoun": "She",
     "type_category": "Poet,Author",
     "country": "US",
     "era": "Contemporary",
@@ -182,6 +194,7 @@
   {
     "muse": "Amy Winehouse",
     "muse_id": "M-175",
+    "gender_pronoun": "She",
     "type_category": "Musician",
     "country": "GB",
     "era": "Contemporary",
@@ -197,6 +210,7 @@
   {
     "muse": "Anatole France",
     "muse_id": "M-65",
+    "gender_pronoun": "He",
     "type_category": "Author",
     "country": "FR",
     "era": "Early 20th C",
@@ -212,6 +226,7 @@
   {
     "muse": "Anaïs Nin",
     "muse_id": "M-125",
+    "gender_pronoun": "She",
     "type_category": "Author",
     "country": "FR/US",
     "era": "Mid 20th C",
@@ -227,6 +242,7 @@
   {
     "muse": "André Breton",
     "muse_id": "M-18",
+    "gender_pronoun": "He",
     "type_category": "Poet,Philosopher",
     "country": "FR",
     "era": "Early 20th C",
@@ -240,23 +256,9 @@
     "song_count": 0
   },
   {
-    "muse": "Anonymous Anonymous",
-    "muse_id": "M-7",
-    "type_category": "Fool",
-    "country": "",
-    "era": "Contemporary",
-    "birth_year": "",
-    "death_year": "",
-    "core_sutra": "KNOWsutra",
-    "secondary_sutras": "BLOWsutra,SHOWsutra,GROWsutra,FLOWsutra,GLOWsutra,BOWsutra",
-    "themes": "universality,humor/satire,wisdom,mystery,collective",
-    "notes": "",
-    "wikipedia_url": "",
-    "song_count": 182
-  },
-  {
     "muse": "Anthony Bourdain",
     "muse_id": "M-15",
+    "gender_pronoun": "He",
     "type_category": "Philosopher,Fool",
     "country": "US",
     "era": "Contemporary",
@@ -272,6 +274,7 @@
   {
     "muse": "Antoine de Saint-Exupéry",
     "muse_id": "M-46",
+    "gender_pronoun": "He",
     "type_category": "Author,Philosopher",
     "country": "FR",
     "era": "Early 20th C,Mid 20th C",
@@ -287,6 +290,7 @@
   {
     "muse": "Antonio Machado",
     "muse_id": "M-112",
+    "gender_pronoun": "He",
     "type_category": "Poet,Philosopher",
     "country": "SP",
     "era": "Early 20th C",
@@ -302,6 +306,7 @@
   {
     "muse": "Aretha Franklin",
     "muse_id": "M-67",
+    "gender_pronoun": "She",
     "type_category": "Musician",
     "country": "US",
     "era": "Late 20th C",
@@ -317,6 +322,7 @@
   {
     "muse": "Arthur Rimbaud",
     "muse_id": "M-140",
+    "gender_pronoun": "He",
     "type_category": "Poet",
     "country": "FR",
     "era": "19th C",
@@ -332,6 +338,7 @@
   {
     "muse": "Audre Lorde",
     "muse_id": "M-109",
+    "gender_pronoun": "She",
     "type_category": "Author,Poet",
     "country": "US",
     "era": "Late 20th C",
@@ -347,6 +354,7 @@
   {
     "muse": "Banana Sutra",
     "muse_id": "M-157",
+    "gender_pronoun": "They",
     "type_category": "Fool",
     "country": "FR",
     "era": "Contemporary",
@@ -362,6 +370,7 @@
   {
     "muse": "Barack Obama",
     "muse_id": "M-127",
+    "gender_pronoun": "He",
     "type_category": "Politician",
     "country": "US",
     "era": "Contemporary",
@@ -377,6 +386,7 @@
   {
     "muse": "bell hooks",
     "muse_id": "M-84",
+    "gender_pronoun": "She",
     "type_category": "Author,Feminist Theorist",
     "country": "US",
     "era": "Late 20th C,Contemporary",
@@ -392,6 +402,7 @@
   {
     "muse": "Bernie Sanders",
     "muse_id": "M-146",
+    "gender_pronoun": "He",
     "type_category": "Politician,Philosopher",
     "country": "US",
     "era": "Contemporary",
@@ -407,6 +418,7 @@
   {
     "muse": "Bertrand Russell",
     "muse_id": "M-144",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "GB",
     "era": "Early 20th C",
@@ -422,6 +434,7 @@
   {
     "muse": "Blaise Pascal",
     "muse_id": "M-131",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "FR",
     "era": "17th C",
@@ -437,6 +450,7 @@
   {
     "muse": "Bo Burnham",
     "muse_id": "M-22",
+    "gender_pronoun": "He",
     "type_category": "Musician,Fool",
     "country": "US",
     "era": "Contemporary",
@@ -452,6 +466,7 @@
   {
     "muse": "Brené Brown",
     "muse_id": "M-19",
+    "gender_pronoun": "She",
     "type_category": "Author",
     "country": "US",
     "era": "Contemporary",
@@ -467,6 +482,7 @@
   {
     "muse": "Bruce Lee",
     "muse_id": "M-106",
+    "gender_pronoun": "He",
     "type_category": "Martial Artist,Philosopher",
     "country": "US/HK",
     "era": "Mid 20th C",
@@ -482,6 +498,7 @@
   {
     "muse": "Carl Rogers",
     "muse_id": "M-141",
+    "gender_pronoun": "He",
     "type_category": "Psychologist,Philosopher",
     "country": "US",
     "era": "Mid 20th C",
@@ -497,6 +514,7 @@
   {
     "muse": "Carl Sagan",
     "muse_id": "M-145",
+    "gender_pronoun": "He",
     "type_category": "Scientist,Philosopher",
     "country": "US",
     "era": "Late 20th C",
@@ -512,6 +530,7 @@
   {
     "muse": "Carroll Lewis",
     "muse_id": "M-28",
+    "gender_pronoun": "He",
     "type_category": "Author",
     "country": "UK",
     "era": "19th C",
@@ -527,6 +546,7 @@
   {
     "muse": "Cassandra",
     "muse_id": "M-31",
+    "gender_pronoun": "She",
     "type_category": "Fictional,Mythological",
     "country": "GR",
     "era": "Ancient",
@@ -542,6 +562,7 @@
   {
     "muse": "Cat Power",
     "muse_id": "M-137",
+    "gender_pronoun": "She",
     "type_category": "Musician",
     "country": "US",
     "era": "Late 20th C,Contemporary",
@@ -557,6 +578,7 @@
   {
     "muse": "Charles Aznavour",
     "muse_id": "M-11",
+    "gender_pronoun": "He",
     "type_category": "Musician,Fool",
     "country": "FR",
     "era": "Mid 20th C",
@@ -572,6 +594,7 @@
   {
     "muse": "Charles Baudelaire",
     "muse_id": "M-13",
+    "gender_pronoun": "He",
     "type_category": "Poet",
     "country": "FR",
     "era": "19th C",
@@ -587,6 +610,7 @@
   {
     "muse": "Charles Bukowski",
     "muse_id": "M-20",
+    "gender_pronoun": "He",
     "type_category": "Author,Poet",
     "country": "US",
     "era": "Late 20th C",
@@ -602,6 +626,7 @@
   {
     "muse": "Charles Tart",
     "muse_id": "M-158",
+    "gender_pronoun": "He",
     "type_category": "Author,Psychologist",
     "country": "US",
     "era": "Contemporary",
@@ -617,6 +642,7 @@
   {
     "muse": "Charlie Chaplin",
     "muse_id": "M-32",
+    "gender_pronoun": "He",
     "type_category": "Comedian,Fool",
     "country": "US",
     "era": "Early 20th C",
@@ -632,6 +658,7 @@
   {
     "muse": "Cicero",
     "muse_id": "M-1",
+    "gender_pronoun": "He",
     "type_category": "Philosopher,Orator,Author",
     "country": "ROM",
     "era": "Ancient",
@@ -647,6 +674,7 @@
   {
     "muse": "Cindi Lauper",
     "muse_id": "M-102",
+    "gender_pronoun": "She",
     "type_category": "Musician",
     "country": "US",
     "era": "Late 20th C,Contemporary",
@@ -662,6 +690,7 @@
   {
     "muse": "Cole Porter",
     "muse_id": "M-135",
+    "gender_pronoun": "He",
     "type_category": "Musician",
     "country": "US",
     "era": "Early 20th C,Mid 20th C",
@@ -677,6 +706,7 @@
   {
     "muse": "Confucius",
     "muse_id": "M-38",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "CN",
     "era": "Ancient",
@@ -692,6 +722,7 @@
   {
     "muse": "Dalai Lama",
     "muse_id": "M-100",
+    "gender_pronoun": "He",
     "type_category": "Philosopher,Buddhist Leader,Saint",
     "country": "TN",
     "era": "Contemporary",
@@ -707,6 +738,7 @@
   {
     "muse": "David Bowie",
     "muse_id": "M-16",
+    "gender_pronoun": "He",
     "type_category": "Musician,Fool",
     "country": "GB",
     "era": "Late 20th C",
@@ -722,6 +754,7 @@
   {
     "muse": "Desmond Tutu",
     "muse_id": "M-163",
+    "gender_pronoun": "He",
     "type_category": "Politician,Philosopher,Saint",
     "country": "ZA",
     "era": "Late 20th C,Contemporary",
@@ -737,6 +770,7 @@
   {
     "muse": "Don Miguel Ruiz",
     "muse_id": "M-142",
+    "gender_pronoun": "He",
     "type_category": "Author",
     "country": "MX",
     "era": "Contemporary",
@@ -752,6 +786,7 @@
   {
     "muse": "Douglas Adams",
     "muse_id": "M-3",
+    "gender_pronoun": "He",
     "type_category": "Author",
     "country": "GB",
     "era": "Late 20th C",
@@ -767,6 +802,7 @@
   {
     "muse": "Dr Seuss",
     "muse_id": "M-54",
+    "gender_pronoun": "He",
     "type_category": "Author,Fool",
     "country": "US",
     "era": "Mid 20th C,Late 20th C",
@@ -782,6 +818,7 @@
   {
     "muse": "E.E. Cummings",
     "muse_id": "M-40",
+    "gender_pronoun": "He",
     "type_category": "Poet",
     "country": "US",
     "era": "Early 20th C",
@@ -797,6 +834,7 @@
   {
     "muse": "Eartha Kitt",
     "muse_id": "M-99",
+    "gender_pronoun": "She",
     "type_category": "Musician",
     "country": "US",
     "era": "Mid 20th C,Late 20th C",
@@ -812,6 +850,7 @@
   {
     "muse": "Eckhart Tolle",
     "muse_id": "M-161",
+    "gender_pronoun": "He",
     "type_category": "Author",
     "country": "GB",
     "era": "Contemporary",
@@ -827,6 +866,7 @@
   {
     "muse": "Edmund Burke",
     "muse_id": "M-21",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "IE",
     "era": "18th C",
@@ -842,6 +882,7 @@
   {
     "muse": "Edward Snowden",
     "muse_id": "M-154",
+    "gender_pronoun": "He",
     "type_category": "Author,Fool",
     "country": "US",
     "era": "Contemporary",
@@ -857,6 +898,7 @@
   {
     "muse": "Eleanor Roosevelt",
     "muse_id": "M-181",
+    "gender_pronoun": "She",
     "type_category": "",
     "country": "US/CA",
     "era": "Late 20th C",
@@ -872,6 +914,7 @@
   {
     "muse": "Emily Dickinson",
     "muse_id": "M-49",
+    "gender_pronoun": "She",
     "type_category": "Poet",
     "country": "US",
     "era": "19th C",
@@ -887,6 +930,7 @@
   {
     "muse": "Eminem Eminem",
     "muse_id": "M-62",
+    "gender_pronoun": "He",
     "type_category": "Musician",
     "country": "US",
     "era": "Contemporary",
@@ -902,6 +946,7 @@
   {
     "muse": "Ernest Miller Hemingway",
     "muse_id": "M-80",
+    "gender_pronoun": "He",
     "type_category": "Author",
     "country": "US",
     "era": "Mid 20th C",
@@ -917,6 +962,7 @@
   {
     "muse": "Eugene Ionesco",
     "muse_id": "M-89",
+    "gender_pronoun": "He",
     "type_category": "Author",
     "country": "FR",
     "era": "Mid 20th C",
@@ -932,6 +978,7 @@
   {
     "muse": "Federico Garcia Lorca",
     "muse_id": "M-70",
+    "gender_pronoun": "He",
     "type_category": "Poet",
     "country": "SP",
     "era": "Early 20th C",
@@ -947,6 +994,7 @@
   {
     "muse": "Frank Sinatra",
     "muse_id": "M-151",
+    "gender_pronoun": "He",
     "type_category": "Musician,Fool",
     "country": "US",
     "era": "Mid 20th C",
@@ -962,6 +1010,7 @@
   {
     "muse": "Frank Zappa",
     "muse_id": "M-178",
+    "gender_pronoun": "He",
     "type_category": "Musician,Fool",
     "country": "US",
     "era": "Late 20th C",
@@ -977,6 +1026,7 @@
   {
     "muse": "Frida Kahlo",
     "muse_id": "M-95",
+    "gender_pronoun": "She",
     "type_category": "Painter,Artist",
     "country": "MX",
     "era": "Mid 20th C",
@@ -992,6 +1042,7 @@
   {
     "muse": "Friedrich Nietzsche",
     "muse_id": "M-124",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "DE",
     "era": "19th C",
@@ -1007,6 +1058,7 @@
   {
     "muse": "Fyodor Dostoyevski",
     "muse_id": "M-53",
+    "gender_pronoun": "He",
     "type_category": "Author,Philosopher",
     "country": "RU",
     "era": "19th C",
@@ -1022,6 +1074,7 @@
   {
     "muse": "G.K. Chesterton",
     "muse_id": "M-33",
+    "gender_pronoun": "He",
     "type_category": "Author,Philosopher,Fool",
     "country": "GB",
     "era": "Early 20th C",
@@ -1037,6 +1090,7 @@
   {
     "muse": "George Bernard Shaw",
     "muse_id": "M-149",
+    "gender_pronoun": "He",
     "type_category": "Author,Playwright,Critic",
     "country": "GB",
     "era": "Early 20th C",
@@ -1052,6 +1106,7 @@
   {
     "muse": "George Carlin",
     "muse_id": "M-27",
+    "gender_pronoun": "He",
     "type_category": "Comedian,Fool",
     "country": "US",
     "era": "Late 20th C",
@@ -1067,6 +1122,7 @@
   {
     "muse": "George Orwell",
     "muse_id": "M-129",
+    "gender_pronoun": "He",
     "type_category": "Author,Poet",
     "country": "GB",
     "era": "Mid 20th C",
@@ -1082,6 +1138,7 @@
   {
     "muse": "Grace Hopper",
     "muse_id": "M-85",
+    "gender_pronoun": "She",
     "type_category": "Scientist",
     "country": "US",
     "era": "Mid 20th C",
@@ -1097,6 +1154,7 @@
   {
     "muse": "Groucho Marx",
     "muse_id": "M-117",
+    "gender_pronoun": "He",
     "type_category": "Comedian,Fool",
     "country": "US",
     "era": "Early 20th C",
@@ -1112,6 +1170,7 @@
   {
     "muse": "Guillaume Apollinaire",
     "muse_id": "M-8",
+    "gender_pronoun": "He",
     "type_category": "Poet",
     "country": "FR",
     "era": "Early 20th C",
@@ -1127,6 +1186,7 @@
   {
     "muse": "Guy de Maupassant",
     "muse_id": "M-44",
+    "gender_pronoun": "He",
     "type_category": "Author",
     "country": "FR",
     "era": "19th C",
@@ -1142,6 +1202,7 @@
   {
     "muse": "Hafiz",
     "muse_id": "M-74",
+    "gender_pronoun": "He",
     "type_category": "Poet,Mystic",
     "country": "IR",
     "era": "Medieval",
@@ -1157,6 +1218,7 @@
   {
     "muse": "Hannah Arendt",
     "muse_id": "M-9",
+    "gender_pronoun": "She",
     "type_category": "Philosopher",
     "country": "DE",
     "era": "Mid 20th C",
@@ -1172,6 +1234,7 @@
   {
     "muse": "Hans Andersen",
     "muse_id": "M-5",
+    "gender_pronoun": "He",
     "type_category": "Author,Fool",
     "country": "DK",
     "era": "19th C",
@@ -1187,6 +1250,7 @@
   {
     "muse": "Helen Keller",
     "muse_id": "M-96",
+    "gender_pronoun": "She",
     "type_category": "Author,Activist",
     "country": "US",
     "era": "Early 20th C,Mid 20th C",
@@ -1202,6 +1266,7 @@
   {
     "muse": "Henry David Thoreau",
     "muse_id": "M-160",
+    "gender_pronoun": "He",
     "type_category": "Author,Philosopher",
     "country": "US",
     "era": "19th C",
@@ -1217,6 +1282,7 @@
   {
     "muse": "Henry Scott Holland",
     "muse_id": "M-83",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "GB",
     "era": "19th C",
@@ -1232,6 +1298,7 @@
   {
     "muse": "Herman Hesse",
     "muse_id": "M-82",
+    "gender_pronoun": "He",
     "type_category": "Author,Fool",
     "country": "DE/CH",
     "era": "Early 20th C",
@@ -1247,6 +1314,7 @@
   {
     "muse": "Herman Melville",
     "muse_id": "M-119",
+    "gender_pronoun": "He",
     "type_category": "Author,Poet",
     "country": "US",
     "era": "19th C",
@@ -1262,6 +1330,7 @@
   {
     "muse": "Honoré de Balzac",
     "muse_id": "M-43",
+    "gender_pronoun": "He",
     "type_category": "Author,Playwright",
     "country": "FR",
     "era": "19th C",
@@ -1277,6 +1346,7 @@
   {
     "muse": "Hunter S. Thompson",
     "muse_id": "M-159",
+    "gender_pronoun": "He",
     "type_category": "Author,Fool",
     "country": "US",
     "era": "Late 20th C",
@@ -1292,6 +1362,7 @@
   {
     "muse": "Isadora Duncan",
     "muse_id": "M-56",
+    "gender_pronoun": "She",
     "type_category": "Dancer,Choreographer",
     "country": "US",
     "era": "Early 20th C",
@@ -1307,6 +1378,7 @@
   {
     "muse": "Jacques Brel",
     "muse_id": "M-17",
+    "gender_pronoun": "He",
     "type_category": "Musician,Fool",
     "country": "FR",
     "era": "Mid 20th C",
@@ -1322,6 +1394,7 @@
   {
     "muse": "James Baldwin",
     "muse_id": "M-12",
+    "gender_pronoun": "He",
     "type_category": "Poet",
     "country": "US",
     "era": "Mid 20th C",
@@ -1337,6 +1410,7 @@
   {
     "muse": "Jane Goodall",
     "muse_id": "M-72",
+    "gender_pronoun": "She",
     "type_category": "Scientist,Activist,Author",
     "country": "GB",
     "era": "Late 20th C,Contemporary",
@@ -1352,6 +1426,7 @@
   {
     "muse": "Jean Jacques Rousseau",
     "muse_id": "M-90",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "FR",
     "era": "18th C",
@@ -1367,6 +1442,7 @@
   {
     "muse": "Jean-Paul Sartre",
     "muse_id": "M-147",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "FR",
     "era": "Mid 20th C",
@@ -1382,6 +1458,7 @@
   {
     "muse": "Jeanne D'arc",
     "muse_id": "M-42",
+    "gender_pronoun": "She",
     "type_category": "Politician",
     "country": "FR",
     "era": "Medieval",
@@ -1397,6 +1474,7 @@
   {
     "muse": "Jesus Jesus",
     "muse_id": "M-91",
+    "gender_pronoun": "He",
     "type_category": "Philosopher,Mystic",
     "country": "IL",
     "era": "Ancient",
@@ -1412,6 +1490,7 @@
   {
     "muse": "Jim Morrison",
     "muse_id": "M-123",
+    "gender_pronoun": "He",
     "type_category": "Musician",
     "country": "US",
     "era": "Mid 20th C",
@@ -1427,6 +1506,7 @@
   {
     "muse": "Jimi Hendrix",
     "muse_id": "M-81",
+    "gender_pronoun": "He",
     "type_category": "Musician",
     "country": "US",
     "era": "Late 20th C",
@@ -1442,6 +1522,7 @@
   {
     "muse": "John Lennon",
     "muse_id": "M-107",
+    "gender_pronoun": "He",
     "type_category": "Musician",
     "country": "GB",
     "era": "Mid 20th C,Late 20th C",
@@ -1457,6 +1538,7 @@
   {
     "muse": "Johnny Cash",
     "muse_id": "M-30",
+    "gender_pronoun": "He",
     "type_category": "Musician",
     "country": "US",
     "era": "Mid 20th C",
@@ -1472,6 +1554,7 @@
   {
     "muse": "Jon Kabat-Zinn",
     "muse_id": "M-94",
+    "gender_pronoun": "He",
     "type_category": "Scientist,Philosopher",
     "country": "US",
     "era": "Contemporary",
@@ -1487,6 +1570,7 @@
   {
     "muse": "Joseph Campbell",
     "muse_id": "M-25",
+    "gender_pronoun": "He",
     "type_category": "Writer",
     "country": "US",
     "era": "Mid 20th C",
@@ -1502,6 +1586,7 @@
   {
     "muse": "Joy Harjo",
     "muse_id": "M-77",
+    "gender_pronoun": "She",
     "type_category": "Poet,Musician",
     "country": "US",
     "era": "Late 20th C,Contemporary",
@@ -1517,6 +1602,7 @@
   {
     "muse": "Jules Renard",
     "muse_id": "M-179",
+    "gender_pronoun": "He",
     "type_category": "Author,Humorist,Philosopher,Playwright",
     "country": "FR",
     "era": "18th C",
@@ -1532,6 +1618,7 @@
   {
     "muse": "Kamama Harris",
     "muse_id": "M-78",
+    "gender_pronoun": "She",
     "type_category": "Politician",
     "country": "US",
     "era": "Contemporary",
@@ -1547,6 +1634,7 @@
   {
     "muse": "Kurt Cobain",
     "muse_id": "M-36",
+    "gender_pronoun": "He",
     "type_category": "Musician",
     "country": "US",
     "era": "Late 20th C",
@@ -1562,6 +1650,7 @@
   {
     "muse": "Kurt Vonnegut",
     "muse_id": "M-168",
+    "gender_pronoun": "He",
     "type_category": "Author",
     "country": "US",
     "era": "Mid 20th C,Late 20th C",
@@ -1577,6 +1666,7 @@
   {
     "muse": "Lao Tzu",
     "muse_id": "M-165",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "CN",
     "era": "Ancient",
@@ -1592,6 +1682,7 @@
   {
     "muse": "Lawrence Ferlinghetti",
     "muse_id": "M-63",
+    "gender_pronoun": "He",
     "type_category": "Poet",
     "country": "US",
     "era": "Late 20th C",
@@ -1607,6 +1698,7 @@
   {
     "muse": "Leonard Cohen",
     "muse_id": "M-37",
+    "gender_pronoun": "He",
     "type_category": "Musician,Songwriter",
     "country": "CA",
     "era": "Late 20th C",
@@ -1622,6 +1714,7 @@
   {
     "muse": "Lou Doillon",
     "muse_id": "M-51",
+    "gender_pronoun": "She",
     "type_category": "Musician",
     "country": "FR",
     "era": "Contemporary",
@@ -1637,6 +1730,7 @@
   {
     "muse": "Lou Reed",
     "muse_id": "M-180",
+    "gender_pronoun": "He",
     "type_category": "Musician,Songwriter",
     "country": "US",
     "era": "Late 20th C",
@@ -1652,6 +1746,7 @@
   {
     "muse": "Lucille Clifton",
     "muse_id": "M-35",
+    "gender_pronoun": "She",
     "type_category": "Author,Poet",
     "country": "US",
     "era": "Late 20th C",
@@ -1667,6 +1762,7 @@
   {
     "muse": "Mahatma Gandhi",
     "muse_id": "M-69",
+    "gender_pronoun": "He",
     "type_category": "Politician,Philosopher",
     "country": "IN",
     "era": "Early 20th C,Mid 20th C",
@@ -1682,6 +1778,7 @@
   {
     "muse": "Manu LeCon",
     "muse_id": "M-104",
+    "gender_pronoun": "He",
     "type_category": "Politician",
     "country": "FR",
     "era": "Contemporary",
@@ -1697,6 +1794,7 @@
   {
     "muse": "Margaret Atwood",
     "muse_id": "M-10",
+    "gender_pronoun": "She",
     "type_category": "Author,Poet",
     "country": "CA",
     "era": "Contemporary",
@@ -1712,6 +1810,7 @@
   {
     "muse": "Mariama Mariama",
     "muse_id": "M-116",
+    "gender_pronoun": "She",
     "type_category": "Musician",
     "country": "GN/FR",
     "era": "Contemporary",
@@ -1727,6 +1826,7 @@
   {
     "muse": "Marie Curie",
     "muse_id": "M-41",
+    "gender_pronoun": "She",
     "type_category": "Scientist,Author",
     "country": "PL/FR",
     "era": "Early 20th C",
@@ -1742,6 +1842,7 @@
   {
     "muse": "Marilyn Monroe",
     "muse_id": "M-121",
+    "gender_pronoun": "She",
     "type_category": "Comedian,Actress,Fool",
     "country": "US",
     "era": "Mid 20th C",
@@ -1757,6 +1858,7 @@
   {
     "muse": "Mark Twain",
     "muse_id": "M-164",
+    "gender_pronoun": "He",
     "type_category": "Author,Philosopher",
     "country": "US",
     "era": "19th C,Early 20th C",
@@ -1772,6 +1874,7 @@
   {
     "muse": "Mary Oliver",
     "muse_id": "M-128",
+    "gender_pronoun": "She",
     "type_category": "Author,Poet",
     "country": "US",
     "era": "Contemporary",
@@ -1787,6 +1890,7 @@
   {
     "muse": "Maya Angelou",
     "muse_id": "M-6",
+    "gender_pronoun": "She",
     "type_category": "Author,Poet",
     "country": "US",
     "era": "Late 20th C",
@@ -1802,6 +1906,7 @@
   {
     "muse": "Molière",
     "muse_id": "M-120",
+    "gender_pronoun": "He",
     "type_category": "Author,Fool",
     "country": "FR",
     "era": "17th C",
@@ -1817,6 +1922,7 @@
   {
     "muse": "Morissey Morissey",
     "muse_id": "M-122",
+    "gender_pronoun": "He",
     "type_category": "Musician",
     "country": "GB",
     "era": "Contemporary",
@@ -1832,6 +1938,7 @@
   {
     "muse": "Naomi Shihab Nye",
     "muse_id": "M-126",
+    "gender_pronoun": "She",
     "type_category": "Poet",
     "country": "US",
     "era": "Contemporary",
@@ -1847,6 +1954,7 @@
   {
     "muse": "Nelson Mandela",
     "muse_id": "M-115",
+    "gender_pronoun": "He",
     "type_category": "Politician,Philosopher",
     "country": "ZA",
     "era": "Late 20th C,Contemporary",
@@ -1862,6 +1970,7 @@
   {
     "muse": "Nina Hagen",
     "muse_id": "M-75",
+    "gender_pronoun": "She",
     "type_category": "Musician",
     "country": "DE",
     "era": "Late 20th C",
@@ -1877,6 +1986,7 @@
   {
     "muse": "Nina Simone",
     "muse_id": "M-150",
+    "gender_pronoun": "She",
     "type_category": "Musician",
     "country": "US",
     "era": "Mid 20th C",
@@ -1892,6 +2002,7 @@
   {
     "muse": "Octavia E. Butler",
     "muse_id": "M-24",
+    "gender_pronoun": "She",
     "type_category": "Author",
     "country": "US",
     "era": "Late 20th C",
@@ -1907,6 +2018,7 @@
   {
     "muse": "Oscar Wilde",
     "muse_id": "M-174",
+    "gender_pronoun": "He",
     "type_category": "Author,Poet,Playwright,Fool",
     "country": "GB",
     "era": "19th C",
@@ -1922,6 +2034,7 @@
   {
     "muse": "Pablo Picasso",
     "muse_id": "M-132",
+    "gender_pronoun": "He",
     "type_category": "Painter",
     "country": "SP/FR",
     "era": "Early 20th C",
@@ -1937,6 +2050,7 @@
   {
     "muse": "Patti Smith",
     "muse_id": "M-152",
+    "gender_pronoun": "She",
     "type_category": "Musician,Poet",
     "country": "US",
     "era": "Late 20th C",
@@ -1952,6 +2066,7 @@
   {
     "muse": "Paul Éluard",
     "muse_id": "M-60",
+    "gender_pronoun": "He",
     "type_category": "Poet",
     "country": "FR",
     "era": "Early 20th C,Mid 20th C",
@@ -1967,6 +2082,7 @@
   {
     "muse": "Peggy Lee",
     "muse_id": "M-105",
+    "gender_pronoun": "He",
     "type_category": "Musician",
     "country": "US",
     "era": "Mid 20th C",
@@ -1982,6 +2098,7 @@
   {
     "muse": "Pema Chödrön",
     "muse_id": "M-34",
+    "gender_pronoun": "She",
     "type_category": "Author,Spiritual Teacher",
     "country": "US/CA",
     "era": "Late 20th C,Contemporary",
@@ -1997,6 +2114,7 @@
   {
     "muse": "Peter Ustinov",
     "muse_id": "M-166",
+    "gender_pronoun": "He",
     "type_category": "Actor,Playwright,Comedian",
     "country": "GB/RU",
     "era": "Mid 20th C,Late 20th C",
@@ -2012,6 +2130,7 @@
   {
     "muse": "Philip K Dick",
     "muse_id": "M-48",
+    "gender_pronoun": "He",
     "type_category": "Author,Philosopher",
     "country": "US",
     "era": "Mid 20th C,Late 20th C",
@@ -2027,6 +2146,7 @@
   {
     "muse": "Pink Floyd",
     "muse_id": "M-64",
+    "gender_pronoun": "They",
     "type_category": "Musician",
     "country": "GB",
     "era": "Late 20th C",
@@ -2042,6 +2162,7 @@
   {
     "muse": "Plato",
     "muse_id": "M-134",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "GR",
     "era": "Ancient",
@@ -2057,6 +2178,7 @@
   {
     "muse": "Plutarch",
     "muse_id": "M-2",
+    "gender_pronoun": "He",
     "type_category": "Author,Historian,Philosopher",
     "country": "GR",
     "era": "Ancient",
@@ -2072,6 +2194,7 @@
   {
     "muse": "Portishead Portishead",
     "muse_id": "M-136",
+    "gender_pronoun": "They",
     "type_category": "Musician",
     "country": "GB",
     "era": "Late 20th C",
@@ -2087,6 +2210,7 @@
   {
     "muse": "Rachel Carson",
     "muse_id": "M-29",
+    "gender_pronoun": "She",
     "type_category": "Author,Scientist",
     "country": "US",
     "era": "Mid 20th C",
@@ -2102,6 +2226,7 @@
   {
     "muse": "Rachel Lark",
     "muse_id": "M-101",
+    "gender_pronoun": "She",
     "type_category": "Musician",
     "country": "US",
     "era": "Contemporary",
@@ -2117,6 +2242,7 @@
   {
     "muse": "Ralph Waldo Emerson",
     "muse_id": "M-61",
+    "gender_pronoun": "He",
     "type_category": "Philosopher,Fool",
     "country": "US",
     "era": "19th C",
@@ -2132,6 +2258,7 @@
   {
     "muse": "René Magritte",
     "muse_id": "M-114",
+    "gender_pronoun": "He",
     "type_category": "Painter,Poet",
     "country": "BE",
     "era": "Early 20th C,Mid 20th C",
@@ -2147,6 +2274,7 @@
   {
     "muse": "René Magritte",
     "muse_id": "M-113",
+    "gender_pronoun": "He",
     "type_category": "Artist,Painter",
     "country": "FR",
     "era": "Early 20th C,Mid 20th C",
@@ -2162,6 +2290,7 @@
   {
     "muse": "Richard Wagner",
     "muse_id": "M-170",
+    "gender_pronoun": "He",
     "type_category": "Musician,Composer",
     "country": "DE",
     "era": "19th C",
@@ -2177,6 +2306,7 @@
   {
     "muse": "Robert Burns",
     "muse_id": "M-23",
+    "gender_pronoun": "He",
     "type_category": "Poet,Fool",
     "country": "GB-SCT",
     "era": "18th C",
@@ -2192,6 +2322,7 @@
   {
     "muse": "Robert Desnos",
     "muse_id": "M-47",
+    "gender_pronoun": "He",
     "type_category": "Poet",
     "country": "FR",
     "era": "Early 20th C,Mid 20th C",
@@ -2207,6 +2338,7 @@
   {
     "muse": "Robin Wall Kimmerer",
     "muse_id": "M-97",
+    "gender_pronoun": "She",
     "type_category": "Author,Scientist,Botanist",
     "country": "US",
     "era": "Contemporary",
@@ -2222,6 +2354,7 @@
   {
     "muse": "Rumi",
     "muse_id": "M-143",
+    "gender_pronoun": "He",
     "type_category": "Poet",
     "country": "IR/TR",
     "era": "Medieval",
@@ -2237,6 +2370,7 @@
   {
     "muse": "Sam Cooke",
     "muse_id": "M-39",
+    "gender_pronoun": "He",
     "type_category": "Musician",
     "country": "US",
     "era": "Mid 20th C",
@@ -2252,6 +2386,7 @@
   {
     "muse": "Samuel Johnson",
     "muse_id": "M-93",
+    "gender_pronoun": "He",
     "type_category": "Author,Critic",
     "country": "GB",
     "era": "18th C",
@@ -2267,6 +2402,7 @@
   {
     "muse": "ScoobyDoo",
     "muse_id": "M-52",
+    "gender_pronoun": "They",
     "type_category": "Fictional,Fool",
     "country": "US",
     "era": "Late 20th C",
@@ -2282,6 +2418,7 @@
   {
     "muse": "Sex Pistols",
     "muse_id": "M-133",
+    "gender_pronoun": "He",
     "type_category": "Musician",
     "country": "GB",
     "era": "Late 20th C",
@@ -2297,6 +2434,7 @@
   {
     "muse": "Simone Weil",
     "muse_id": "M-173",
+    "gender_pronoun": "She",
     "type_category": "Author,Philosopher",
     "country": "FR",
     "era": "Early 20th C,Mid 20th C",
@@ -2312,6 +2450,7 @@
   {
     "muse": "Snoopy",
     "muse_id": "M-153",
+    "gender_pronoun": "They",
     "type_category": "Fictional",
     "country": "US",
     "era": "",
@@ -2327,6 +2466,7 @@
   {
     "muse": "Socrates",
     "muse_id": "M-155",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "GR",
     "era": "Ancient",
@@ -2342,6 +2482,7 @@
   {
     "muse": "St. Vincent De Paul",
     "muse_id": "M-45",
+    "gender_pronoun": "He",
     "type_category": "Philosopher,Saint",
     "country": "FR",
     "era": "17th C",
@@ -2357,6 +2498,7 @@
   {
     "muse": "Stephen Fry",
     "muse_id": "M-68",
+    "gender_pronoun": "He",
     "type_category": "Author,Philosopher",
     "country": "GB",
     "era": "Late 20th C,Contemporary",
@@ -2372,6 +2514,7 @@
   {
     "muse": "Stephen Hawking",
     "muse_id": "M-79",
+    "gender_pronoun": "He",
     "type_category": "Scientist",
     "country": "GB",
     "era": "Late 20th C,Contemporary",
@@ -2387,6 +2530,7 @@
   {
     "muse": "Stephen King",
     "muse_id": "M-98",
+    "gender_pronoun": "He",
     "type_category": "Author",
     "country": "US",
     "era": "Late 20th C",
@@ -2402,6 +2546,7 @@
   {
     "muse": "T.S. Eliot",
     "muse_id": "M-59",
+    "gender_pronoun": "He",
     "type_category": "Poet,Critic",
     "country": "GB/US",
     "era": "Early 20th C,Mid 20th C",
@@ -2417,6 +2562,7 @@
   {
     "muse": "Terrence McKenna",
     "muse_id": "M-118",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "US",
     "era": "Late 20th C",
@@ -2432,6 +2578,7 @@
   {
     "muse": "Thich Nhat Hanh",
     "muse_id": "M-76",
+    "gender_pronoun": "He",
     "type_category": "Philosopher,Buddhist Monk",
     "country": "VN",
     "era": "Late 20th C,Contemporary",
@@ -2447,6 +2594,7 @@
   {
     "muse": "Thomas Paine",
     "muse_id": "M-130",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "UK",
     "era": "18th C",
@@ -2462,6 +2610,7 @@
   {
     "muse": "Tom Waits",
     "muse_id": "M-171",
+    "gender_pronoun": "He",
     "type_category": "Musician,Fool",
     "country": "US",
     "era": "Contemporary",
@@ -2477,6 +2626,7 @@
   {
     "muse": "Umberto Eco",
     "muse_id": "M-57",
+    "gender_pronoun": "He",
     "type_category": "Author,Poet",
     "country": "IT",
     "era": "Late 20th C",
@@ -2492,6 +2642,7 @@
   {
     "muse": "Ursula K. Le Guin",
     "muse_id": "M-103",
+    "gender_pronoun": "She",
     "type_category": "Author",
     "country": "US",
     "era": "Late 20th C",
@@ -2507,6 +2658,7 @@
   {
     "muse": "Victor Frankl",
     "muse_id": "M-66",
+    "gender_pronoun": "He",
     "type_category": "Philosopher",
     "country": "AT",
     "era": "Mid 20th C",
@@ -2522,6 +2674,7 @@
   {
     "muse": "Victor Hugo",
     "muse_id": "M-86",
+    "gender_pronoun": "He",
     "type_category": "Author,Poet",
     "country": "FR",
     "era": "19th C",
@@ -2537,6 +2690,7 @@
   {
     "muse": "Virginia Woolf",
     "muse_id": "M-177",
+    "gender_pronoun": "She",
     "type_category": "Author,Essayist",
     "country": "GB",
     "era": "Early 20th C",
@@ -2552,6 +2706,7 @@
   {
     "muse": "Vladimir Putin",
     "muse_id": "M-138",
+    "gender_pronoun": "He",
     "type_category": "Politician",
     "country": "RU",
     "era": "Contemporary",
@@ -2567,6 +2722,7 @@
   {
     "muse": "Vladimir Vysotsky",
     "muse_id": "M-169",
+    "gender_pronoun": "He",
     "type_category": "Musician,Poet",
     "country": "RU",
     "era": "Mid 20th C",
@@ -2582,6 +2738,7 @@
   {
     "muse": "Voltaire",
     "muse_id": "M-167",
+    "gender_pronoun": "He",
     "type_category": "Philosopher,Fool",
     "country": "FR",
     "era": "18th C",
@@ -2597,6 +2754,7 @@
   {
     "muse": "Walt Disney",
     "muse_id": "M-50",
+    "gender_pronoun": "He",
     "type_category": "Filmmaker,Entrepreneur,Fool",
     "country": "US",
     "era": "Early 20th C,Mid 20th C",
@@ -2612,6 +2770,7 @@
   {
     "muse": "Wangari Maathai",
     "muse_id": "M-111",
+    "gender_pronoun": "She",
     "type_category": "Activist,Author,Scientist",
     "country": "KE",
     "era": "Late 20th C,Contemporary",
@@ -2627,6 +2786,7 @@
   {
     "muse": "William Blake",
     "muse_id": "M-14",
+    "gender_pronoun": "He",
     "type_category": "Poet,Painter,Visionary",
     "country": "GB",
     "era": "18th C",
@@ -2642,6 +2802,7 @@
   {
     "muse": "William Shakespeare",
     "muse_id": "M-148",
+    "gender_pronoun": "He",
     "type_category": "Author",
     "country": "GB",
     "era": "16th C,17th C",
@@ -2657,6 +2818,7 @@
   {
     "muse": "Winnie The Pooh",
     "muse_id": "M-176",
+    "gender_pronoun": "They",
     "type_category": "Fictional,Fool",
     "country": "US",
     "era": "Mid 20th C",
@@ -2672,6 +2834,7 @@
   {
     "muse": "Zora Neale Hurston",
     "muse_id": "M-87",
+    "gender_pronoun": "She",
     "type_category": "Author,Anthropologist",
     "country": "US",
     "era": "Early 20th C,Mid 20th C",

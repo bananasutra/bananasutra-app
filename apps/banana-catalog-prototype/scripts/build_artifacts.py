@@ -694,10 +694,13 @@ def build_muses_catalog(
         name = str(row.get("muse") or "").strip()
         if not name:
             continue
+        if name.lower() == "anonymous anonymous":
+            continue
         out.append(
             {
                 "muse": name,
                 "muse_id": str(row.get("muse_id") or "").strip(),
+                "gender_pronoun": str(row.get("gender_pronoun") or "").strip(),
                 "type_category": str(row.get("type_category") or "").strip(),
                 "country": str(row.get("country") or "").strip(),
                 "era": str(row.get("era") or "").strip(),
