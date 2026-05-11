@@ -632,20 +632,22 @@
 
 .muse-card__detail-list div {
   display: grid;
-  grid-template-columns: 3.4rem 1fr;
-  gap: 0.45rem;
+  grid-template-columns: 5.4rem minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: baseline;
 }
 
 .muse-card__detail-list dt {
   margin: 0;
   color: var(--color-text-faint);
-  font: 800 0.58rem/1.35 var(--font-ui);
+  font: 800 0.58rem/1.45 var(--font-ui);
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
 
 .muse-card__detail-list dd {
   margin: 0;
+  min-width: 0;
 }
 
 .muse-card__meta {

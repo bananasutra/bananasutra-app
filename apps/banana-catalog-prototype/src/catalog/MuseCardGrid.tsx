@@ -89,7 +89,7 @@ function MuseCard({ item, highlighted }: { item: MuseCatalogItem; highlighted: b
           {item.themes ? (
             <div>
               <dt>Themes</dt>
-              <dd>{item.themes}</dd>
+              <dd>{formatCommaList(item.themes)}</dd>
             </div>
           ) : null}
           {item.quote_excerpt ? (
