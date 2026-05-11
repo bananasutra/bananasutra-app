@@ -74,16 +74,20 @@ function patchViewportScrollIfDrifted(left: number, top: number): void {
 }
 
 /**
- * Follow-up only (no synchronous scroll here): microtask + two rAFs + one late timeout catch
- * focus-induced drift without stacking many `scrollTo` calls in the same frame as the embeds.
+ * Deferred scroll correction; `capturedSeq` must match live `stabilizeSeq` or the work is dropped so
+ * stacked handlers from rapid YouTube `postMessage` bursts do not fight each other.
  */
-function scheduleLightViewportScrollPatch(left: number, top: number): void {
-  queueMicrotask(() => patchViewportScrollIfDrifted(left, top))
-  requestAnimationFrame(() => {
+function scheduleLightViewportScrollPatch(left: number, top: number, capturedSeq: number, getSeq: () => number): void {
+  const run = () => {
+    if (capturedSeq !== getSeq()) return
     patchViewportScrollIfDrifted(left, top)
-    requestAnimationFrame(() => patchViewportScrollIfDrifted(left, top))
+  }
+  queueMicrotask(run)
+  requestAnimationFrame(() => {
+    run()
+    requestAnimationFrame(run)
   })
-  window.setTimeout(() => patchViewportScrollIfDrifted(left, top), 140)
+  window.setTimeout(run, 180)
 }
 
 /**
@@ -138,13 +142,32 @@ export function useExclusiveYoutubeSoundcloudPlayback({
   useEffect(() => {
     if (!enabled) return
 
+    /**
+     * YouTube emits many `infoDelivery` / state messages in a short window. Each used to capture
+     * `scrollX/Y` again after a partial jump, so restores targeted inconsistent coordinates — especially
+     * on songbooks where the playlist sits above the video.
+     */
+    let scrollBurst: { left: number; top: number; until: number } | null = null
+    let stabilizeSeq = 0
+
+    const readFrozenScrollAnchor = (): { left: number; top: number } => {
+      const now = performance.now()
+      if (!scrollBurst || now > scrollBurst.until) {
+        scrollBurst = { left: window.scrollX, top: window.scrollY, until: now + 800 }
+      } else {
+        scrollBurst.until = now + 800
+      }
+      return { left: scrollBurst.left, top: scrollBurst.top }
+    }
+
     const pauseSoundcloudFromDom = () => {
       const wrap = soundcloudWrapRef.current
       const iframe = wrap?.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
       if (!iframe) return
 
-      const left = window.scrollX
-      const top = window.scrollY
+      stabilizeSeq += 1
+      const seq = stabilizeSeq
+      const { left, top } = readFrozenScrollAnchor()
 
       const w = scWidgetRef.current
       if (w) {
@@ -155,10 +178,10 @@ export function useExclusiveYoutubeSoundcloudPlayback({
         }
       }
       patchViewportScrollIfDrifted(left, top)
-      scheduleLightViewportScrollPatch(left, top)
 
       void loadSoundCloudWidgetApi()
         .then((SC) => {
+          if (seq !== stabilizeSeq) return
           if (!document.body.contains(iframe)) return
           try {
             SC.Widget(iframe).pause()
@@ -166,10 +189,13 @@ export function useExclusiveYoutubeSoundcloudPlayback({
             // ignore
           }
           patchViewportScrollIfDrifted(left, top)
-          scheduleLightViewportScrollPatch(left, top)
         })
         .catch(() => {
           // ignore
+        })
+        .finally(() => {
+          if (seq !== stabilizeSeq) return
+          scheduleLightViewportScrollPatch(left, top, seq, () => stabilizeSeq)
         })
     }
 
