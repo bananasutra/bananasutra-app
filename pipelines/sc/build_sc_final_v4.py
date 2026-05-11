@@ -254,6 +254,14 @@ OUT_PLAYLISTS_DATED = os.path.join(ARCHIVE_DIR, f'AT-PLAYLISTS-{RUN_DATE}.csv')
 MIN_PLAYS = 300
 MIN_LIKES = 5
 
+
+def engagement_rate_str_from_counts(plays: int, likes: int) -> str:
+    """(likes ÷ plays) × 100 as in R13 QA; CSV string, 0 when no plays."""
+    if plays <= 0:
+        return '0'
+    return f'{(likes / plays) * 100:.6f}'
+
+
 # Fuzzy match score below which a track is flagged as low-confidence in QA
 QA_LOW_CONF  = 80
 QA_HIGH_CONF = 90
@@ -1330,7 +1338,7 @@ def main():
     # pulled forward (right after lyrics_title) for at-a-glance scanning.
     TRACK_HEADERS = [
         'track_title', 'sc_url', 'lyrics_title',
-        'duration', 'play_count', 'like_count',
+        'duration', 'play_count', 'like_count', 'engagement_rate',
         'sutra', 'primary_genre', 'secondary_genre', 'extracted_genre', 'instruments',
         'mood', 'tempo_feel', 'curation_rating',
         'fav_track', 'liked_track', 'track_in_app',
@@ -1351,6 +1359,7 @@ def main():
         pl_clean    = clean_and_resolve_playlist_names(r.get('playlist_names', ''))
         plays       = int(r.get('play_count', 0) or 0)
         likes       = int(r.get('like_count', 0) or 0)
+        engagement_rate_csv = engagement_rate_str_from_counts(plays, likes)
         is_filtered_track = plays >= MIN_PLAYS or likes >= MIN_LIKES
         extracted_genres_std, _ = parse_genres(r.get('tags', ''), r.get('genre', ''))
 
@@ -1381,6 +1390,7 @@ def main():
             'playlist_count':       r.get('playlist_count', ''),
             'play_count':           r.get('play_count', ''),
             'like_count':           r.get('like_count', ''),
+            'engagement_rate':      engagement_rate_csv,
             'repost_count':         r.get('repost_count', ''),
             'comment_count':        r.get('comment_count', ''),
             'duration':             raw_duration,

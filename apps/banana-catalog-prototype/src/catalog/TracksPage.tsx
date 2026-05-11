@@ -516,9 +516,11 @@ export function TracksPage() {
                       value={urlSort}
                       onChange={(e) => setTrackSort(e.target.value as TrackSortMode)}
                     >
-                      <option value="newest">Newest (song / track dates)</option>
-                      <option value="plays">Most plays</option>
+                      <option value="engagement">Most engagement</option>
                       <option value="likes">Most likes</option>
+                      <option value="plays">Most plays</option>
+                      <option value="newest">Newest (publish date)</option>
+                      <option value="title_az">Track title (A–Z)</option>
                     </select>
                   </div>
                 </div>

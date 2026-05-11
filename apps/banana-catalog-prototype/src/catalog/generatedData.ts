@@ -66,6 +66,19 @@ function normalizeBrowseSongRow(row: Partial<SongCatalogItem>): SongCatalogItem 
     track_count_selected: Number(row.track_count_selected ?? 0),
     aggregate_play_count: Number(row.aggregate_play_count ?? 0),
     aggregate_like_count: Number(row.aggregate_like_count ?? 0),
+    aggregate_engagement_rate: (() => {
+      const raw: unknown = row.aggregate_engagement_rate
+      if (typeof raw === 'number' && Number.isFinite(raw)) {
+        return raw
+      }
+      if (typeof raw === 'string' && raw.trim() !== '') {
+        const n = Number(raw)
+        if (Number.isFinite(n)) return n
+      }
+      const ap = Number(row.aggregate_play_count ?? 0)
+      const al = Number(row.aggregate_like_count ?? 0)
+      return ap > 0 ? (al / ap) * 100 : 0
+    })(),
     peak_play_count: Number(row.peak_play_count ?? 0),
     peak_like_count: Number(row.peak_like_count ?? 0),
     aggregate_duration_sec: Number(row.aggregate_duration_sec ?? 0),

@@ -163,6 +163,13 @@ def parse_int(value: str | None, default: int = 0) -> int:
         return default
 
 
+def engagement_rate_from_counts(play_count: int, like_count: int) -> float:
+    """(likes ÷ plays) × 100; 0 when no plays (R13 catalog sort)."""
+    if play_count <= 0:
+        return 0.0
+    return (like_count / play_count) * 100.0
+
+
 def parse_bool(value: str | None) -> bool:
     if value is None:
         return False
@@ -885,14 +892,25 @@ def normalize_track_row(row: dict[str, str]) -> dict[str, Any]:
     ]
     secondary_genres = dedupe_preserve_order(explicit_secondary + inferred_secondary)
     track_in_app = parse_track_in_app(row.get("track_in_app"))
+    play_count = parse_int(row.get("play_count"))
+    like_count = parse_int(row.get("like_count"))
+    er_raw = str(row.get("engagement_rate") or "").strip().replace(",", ".")
+    if er_raw:
+        try:
+            engagement_rate = float(er_raw)
+        except ValueError:
+            engagement_rate = engagement_rate_from_counts(play_count, like_count)
+    else:
+        engagement_rate = engagement_rate_from_counts(play_count, like_count)
     return {
         "track_id": row.get("track_id", "").strip(),
         "lyrics_id": row.get("lyrics_id", "").strip(),
         "track_title": row.get("track_title", "").strip(),
         "lyrics_title": row.get("lyrics_title", "").strip(),
         "sc_url": row.get("sc_url", "").strip(),
-        "play_count": parse_int(row.get("play_count")),
-        "like_count": parse_int(row.get("like_count")),
+        "play_count": play_count,
+        "like_count": like_count,
+        "engagement_rate": engagement_rate,
         "duration_sec": parse_duration_to_seconds(row.get("duration")),
         "duration_raw": row.get("duration", "").strip(),
         "genres": raw_genres,
@@ -1254,6 +1272,7 @@ def build_song_catalog_browse(song_catalog: list[dict[str, Any]]) -> list[dict[s
         "track_count_published",
         "aggregate_play_count",
         "aggregate_like_count",
+        "aggregate_engagement_rate",
         "peak_play_count",
         "peak_like_count",
         "primary_ep_url",
@@ -2029,6 +2048,9 @@ def main() -> None:
 
         aggregate_play_count = sum(int(t["play_count"]) for t in published_tracks)
         aggregate_like_count = sum(int(t["like_count"]) for t in published_tracks)
+        aggregate_engagement_rate = engagement_rate_from_counts(
+            aggregate_play_count, aggregate_like_count
+        )
         aggregate_duration = sum(int(t["duration_sec"]) for t in published_tracks)
         peak_play_count = max((int(t["play_count"]) for t in published_tracks), default=0)
         peak_like_count = max((int(t["like_count"]) for t in published_tracks), default=0)
@@ -2162,6 +2184,7 @@ def main() -> None:
             "track_count_selected": len(selected_tracks),
             "aggregate_play_count": aggregate_play_count,
             "aggregate_like_count": aggregate_like_count,
+            "aggregate_engagement_rate": aggregate_engagement_rate,
             "peak_play_count": peak_play_count,
             "peak_like_count": peak_like_count,
             "aggregate_duration_sec": aggregate_duration,

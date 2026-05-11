@@ -1,6 +1,7 @@
 export type SortMode =
   | 'newest'
   | 'title_az'
+  | 'engagement_total'
   | 'plays_total'
   | 'plays_peak'
   | 'likes_total'
@@ -46,6 +47,8 @@ export type SongCatalogItem = {
   track_count_selected: number
   aggregate_play_count: number
   aggregate_like_count: number
+  /** Combined in-app tracks: (sum likes ÷ sum plays) × 100; sort-only, not displayed (R13). */
+  aggregate_engagement_rate: number
   peak_play_count: number
   peak_like_count: number
   aggregate_duration_sec: number
@@ -159,7 +162,7 @@ export type TracksFacetFilterKey =
 
 export type TracksFilterState = Record<TracksFacetFilterKey, Set<string>>
 
-export type TrackSortMode = 'newest' | 'plays' | 'likes'
+export type TrackSortMode = 'newest' | 'plays' | 'likes' | 'engagement' | 'title_az'
 
 export function emptyTracksFilterState(): TracksFilterState {
   return {
@@ -187,6 +190,8 @@ export type SongDetailTrack = {
   sc_url: string
   play_count: number
   like_count: number
+  /** (likes ÷ plays) × 100; sort-only, not displayed (R13). */
+  engagement_rate: number
   duration_sec: number
   duration_raw: string
   genres: string[]

@@ -45,6 +45,7 @@ export function parseSort(raw: string | null): SortMode {
   if (v === 'likes-peak') return 'likes_peak'
   if (v === 'plays' || v === 'plays-total') return 'plays_total'
   if (v === 'likes' || v === 'likes-total') return 'likes_total'
+  if (v === 'engagement' || v === 'engagement-rate') return 'engagement_total'
   if (v === 'title' || v === 'title-az' || v === 'alpha') return 'title_az'
   return 'newest'
 }
@@ -56,6 +57,7 @@ function serializeSort(mode: SortMode): string | null {
   if (mode === 'plays_peak') return 'plays-peak'
   if (mode === 'likes_total') return 'likes'
   if (mode === 'likes_peak') return 'likes-peak'
+  if (mode === 'engagement_total') return 'engagement'
   return null
 }
 
@@ -160,6 +162,8 @@ function parseTrackSort(raw: string | null): TrackSortMode {
   if (v === 'plays' || v === 'play') return 'plays'
   if (v === 'likes' || v === 'like') return 'likes'
   if (v === 'newest' || v === 'new') return 'newest'
+  if (v === 'engagement' || v === 'engagement-rate') return 'engagement'
+  if (v === 'title' || v === 'title-az' || v === 'alpha') return 'title_az'
   /** Legacy `popularity` / `score` matched build rank — approximate with play count sort. */
   if (v === 'popularity' || v === 'score') return 'plays'
   return 'likes'
@@ -168,6 +172,8 @@ function parseTrackSort(raw: string | null): TrackSortMode {
 function serializeTrackSort(mode: TrackSortMode): string {
   if (mode === 'newest') return 'newest'
   if (mode === 'plays') return 'plays'
+  if (mode === 'engagement') return 'engagement'
+  if (mode === 'title_az') return 'title'
   return 'likes'
 }
 

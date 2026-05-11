@@ -31,6 +31,13 @@ export function sortSongs(songs: SongCatalogItem[], mode: SortMode): SongCatalog
   const out = [...songs]
   if (mode === 'plays_total') {
     out.sort((a, b) => b.aggregate_play_count - a.aggregate_play_count || a.lyrics_id.localeCompare(b.lyrics_id))
+  } else if (mode === 'engagement_total') {
+    out.sort((a, b) => {
+      const ra = a.aggregate_engagement_rate ?? 0
+      const rb = b.aggregate_engagement_rate ?? 0
+      if (rb !== ra) return rb - ra
+      return a.lyrics_id.localeCompare(b.lyrics_id)
+    })
   } else if (mode === 'plays_peak') {
     out.sort((a, b) => b.peak_play_count - a.peak_play_count || a.lyrics_id.localeCompare(b.lyrics_id))
   } else if (mode === 'likes_total') {

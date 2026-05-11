@@ -549,7 +549,7 @@ export function CatalogApp() {
           <div className="catalog-main__sort-row">
             <div
               className="catalog-sort"
-              aria-label="Sort catalog by publish date, song title, combined in-app track stats, or top-track peak"
+              aria-label="Sort songs by engagement, likes, plays, publish date, or title"
             >
               <label className="catalog-sort-label" htmlFor="catalog-sort-select">
                 Sort
@@ -560,16 +560,11 @@ export function CatalogApp() {
                 value={sort}
                 onChange={(e) => setSortAndSync(e.target.value as SortMode)}
               >
-                <option value="newest">Newest (catalog publish date)</option>
+                <option value="engagement_total">Most engagement</option>
+                <option value="likes_total">Most likes</option>
+                <option value="plays_total">Most plays</option>
+                <option value="newest">Newest (publish date)</option>
                 <option value="title_az">Song title (A–Z)</option>
-                <optgroup label="Songs: all in-app tracks combined">
-                  <option value="plays_total">Most plays · songs (combined in-app tracks)</option>
-                  <option value="likes_total">Most likes · songs (combined in-app tracks)</option>
-                </optgroup>
-                <optgroup label="Tracks: strongest single in-app track">
-                  <option value="plays_peak">Most plays · tracks (strongest single in-app)</option>
-                  <option value="likes_peak">Most likes · tracks (strongest single in-app)</option>
-                </optgroup>
               </select>
             </div>
           </div>

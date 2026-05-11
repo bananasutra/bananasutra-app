@@ -74,6 +74,23 @@ export function sortTrackCatalog(list: TrackCatalogItem[], mode: TrackSortMode):
     })
     return out
   }
+  if (mode === 'engagement') {
+    out.sort((a, b) => {
+      const ra = a.engagement_rate ?? 0
+      const rb = b.engagement_rate ?? 0
+      if (rb !== ra) return rb - ra
+      return a.track_id.localeCompare(b.track_id)
+    })
+    return out
+  }
+  if (mode === 'title_az') {
+    out.sort((a, b) => {
+      const cmp = a.track_title.localeCompare(b.track_title, undefined, { sensitivity: 'base' })
+      if (cmp !== 0) return cmp
+      return a.track_id.localeCompare(b.track_id)
+    })
+    return out
+  }
   out.sort((a, b) => {
     if (b.like_count !== a.like_count) return b.like_count - a.like_count
     if (b.play_count !== a.play_count) return b.play_count - a.play_count
