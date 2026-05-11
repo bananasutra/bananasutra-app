@@ -16,6 +16,7 @@ import { SongThumbCard } from './SongThumbCard'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
+import { useExclusiveYoutubeSoundcloudPlayback } from './useExclusiveYoutubeSoundcloudPlayback'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
@@ -81,6 +82,8 @@ export function SongbookPage() {
   const { slug = '' } = useParams()
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
+  const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
+  const soundcloudExclusiveWrapRef = useRef<HTMLDivElement>(null)
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
   const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[]>([])
 
@@ -177,6 +180,22 @@ export function SongbookPage() {
     const id = (featuredSongbookVideo.lyrics_id || '').trim()
     return featuredYoutubeSongPageHref(featuredSongbookVideo, Boolean(id && songCatalogByLyricsId.has(id)))
   }, [featuredSongbookVideo, songCatalogByLyricsId])
+
+  const songbookExclusivePlaybackEnabled = Boolean(
+    !catalogLoading &&
+      songCatalogRows != null &&
+      songbook &&
+      (songbook.playlist_url || '').trim() &&
+      isSutraSongbook &&
+      featuredSongbookVideo,
+  )
+
+  useExclusiveYoutubeSoundcloudPlayback({
+    youtubeIframeRef: youtubeExclusiveRef,
+    soundcloudWrapRef: soundcloudExclusiveWrapRef,
+    enabled: songbookExclusivePlaybackEnabled,
+    syncKey: `${slug}|${featuredSongbookVideo?.video_id ?? ''}|${(songbook?.playlist_url ?? '').trim()}`,
+  })
 
   if (catalogLoading) {
     return (
@@ -302,13 +321,15 @@ export function SongbookPage() {
                 <h2 id="songbook-playlist-heading" className="catalog-section-title">
                   Songbook Playlist on Soundcloud
                 </h2>
-                <SoundCloudEmbed
-                  scUrl={songbook.playlist_url}
-                  title={`SoundCloud playlist: ${songbook.songbook}`}
-                  mode={playlistIsSet ? 'list' : 'visual'}
-                  height={playlistIsSet ? 760 : 680}
-                  loading="eager"
-                />
+                <div ref={soundcloudExclusiveWrapRef}>
+                  <SoundCloudEmbed
+                    scUrl={songbook.playlist_url}
+                    title={`SoundCloud playlist: ${songbook.songbook}`}
+                    mode={playlistIsSet ? 'list' : 'visual'}
+                    height={playlistIsSet ? 760 : 680}
+                    loading="eager"
+                  />
+                </div>
               </section>
             ) : null}
 
@@ -322,8 +343,11 @@ export function SongbookPage() {
                   style={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSongbookVideo.format) }}
                 >
                   <iframe
+                    ref={youtubeExclusiveRef}
                     className="songbooks-page__featured-video-iframe"
-                    src={youtubePrivacyEmbedSrc(featuredSongbookVideo.video_id)}
+                    src={youtubePrivacyEmbedSrc(featuredSongbookVideo.video_id, {
+                      enableJsApi: songbookExclusivePlaybackEnabled,
+                    })}
                     title={featuredSongbookVideo.lyrics_title || featuredSongbookVideo.title || 'Featured video'}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen

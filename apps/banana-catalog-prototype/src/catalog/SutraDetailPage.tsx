@@ -25,6 +25,7 @@ import { songOnWordsSurface } from './wordsStory'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
+import { useExclusiveYoutubeSoundcloudPlayback } from './useExclusiveYoutubeSoundcloudPlayback'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
@@ -148,6 +149,8 @@ export function SutraDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
+  const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
+  const soundcloudExclusiveWrapRef = useRef<HTMLDivElement>(null)
   const pullTypingIntervalRef = useRef<number | undefined>(undefined)
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
   const [typedPullQuote, setTypedPullQuote] = useState('')
@@ -243,6 +246,12 @@ export function SutraDetailPage() {
     return sortedSongbooks.find((b) => (b.playlist_url || '').includes('/sets/')) ?? null
   }, [sortedSongbooks])
 
+  const featuredScUrlForExclusive = useMemo(() => {
+    const epUrl = (entry?.featured_ep?.ep_url || '').trim()
+    if (epUrl.includes('soundcloud.com')) return epUrl
+    return (featuredSongbookFallback?.playlist_url || '').trim()
+  }, [entry?.featured_ep?.ep_url, featuredSongbookFallback?.playlist_url])
+
   const latestDrops = useMemo(() => {
     return [...songsInFamily]
       .filter(songHasAudioOrVideo)
@@ -272,6 +281,20 @@ export function SutraDetailPage() {
     const inCatalog = id ? songCatalogRows.some((s) => (s.lyrics_id || '').trim() === id) : false
     return featuredYoutubeSongPageHref(featuredSutraVideo, inCatalog)
   }, [featuredSutraVideo, songCatalogRows])
+
+  const sutraExclusivePlaybackEnabled = Boolean(
+    !catalogLoading &&
+      songCatalogRows &&
+      featuredSutraVideo &&
+      featuredScUrlForExclusive,
+  )
+
+  useExclusiveYoutubeSoundcloudPlayback({
+    youtubeIframeRef: youtubeExclusiveRef,
+    soundcloudWrapRef: soundcloudExclusiveWrapRef,
+    enabled: sutraExclusivePlaybackEnabled,
+    syncKey: `${familyKey ?? ''}|${featuredSutraVideo?.video_id ?? ''}|${featuredScUrlForExclusive}`,
+  })
 
   const pivotTarget = useMemo(() => {
     if (!familyKey || !entry) return null
@@ -484,8 +507,11 @@ export function SutraDetailPage() {
                   style={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
                 >
                   <iframe
+                    ref={youtubeExclusiveRef}
                     className="sutra-detail__yt-embed"
-                    src={youtubePrivacyEmbedSrc(featuredSutraVideo.video_id)}
+                    src={youtubePrivacyEmbedSrc(featuredSutraVideo.video_id, {
+                      enableJsApi: sutraExclusivePlaybackEnabled,
+                    })}
                     title={featuredSutraVideo.lyrics_title || featuredSutraVideo.title || `${entry.sutra} featured video`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -517,7 +543,7 @@ export function SutraDetailPage() {
             </h2>
             {featuredEp?.ep_url && featuredEp.ep_url.includes('soundcloud.com') ? (
               <div className="sutra-detail__feat">
-                <div className="sutra-detail__feat-embed">
+                <div className="sutra-detail__feat-embed" ref={soundcloudExclusiveWrapRef}>
                   <SoundCloudEmbed
                     scUrl={featuredEp.ep_url}
                     title={featuredEp.ep_title}
@@ -543,7 +569,7 @@ export function SutraDetailPage() {
               </div>
             ) : featuredSongbookFallback ? (
               <div className="sutra-detail__feat">
-                <div className="sutra-detail__feat-embed">
+                <div className="sutra-detail__feat-embed" ref={soundcloudExclusiveWrapRef}>
                   {featuredSongbookFallback.playlist_url ? (
                     <SoundCloudEmbed
                       scUrl={featuredSongbookFallback.playlist_url}
