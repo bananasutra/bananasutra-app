@@ -51,6 +51,29 @@ function payloadIndicatesYoutubePlaying(parsed: Record<string, unknown>): boolea
  * Do not require `event.source === iframe.contentWindow`: the player often posts from an inner frame,
  * so `source` may not match the outer embed’s `contentWindow`.
  */
+/**
+ * SoundCloud’s `Widget.pause()` / internal focus can scroll the playlist iframe into view.
+ * When the embed sits above the YouTube block (songbook layout), that feels like an unwanted “jump back up”.
+ */
+function restoreViewportScroll(left: number, top: number): void {
+  try {
+    window.scrollTo({ left, top, behavior: 'instant' })
+  } catch {
+    window.scrollTo(left, top)
+  }
+}
+
+function scheduleViewportScrollRestores(left: number, top: number): void {
+  const go = () => restoreViewportScroll(left, top)
+  go()
+  queueMicrotask(go)
+  requestAnimationFrame(go)
+  requestAnimationFrame(() => requestAnimationFrame(go))
+  window.setTimeout(go, 0)
+  window.setTimeout(go, 80)
+  window.setTimeout(go, 200)
+}
+
 function messageIndicatesYoutubePlaying(event: MessageEvent): boolean {
   if (!YT_MESSAGE_ORIGINS.has(event.origin)) return false
   const raw = event.data
@@ -101,6 +124,10 @@ export function useExclusiveYoutubeSoundcloudPlayback({
       const wrap = soundcloudWrapRef.current
       const iframe = wrap?.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
       if (!iframe) return
+
+      const left = window.scrollX
+      const top = window.scrollY
+
       const w = scWidgetRef.current
       if (w) {
         try {
@@ -109,6 +136,8 @@ export function useExclusiveYoutubeSoundcloudPlayback({
           // ignore
         }
       }
+      scheduleViewportScrollRestores(left, top)
+
       void loadSoundCloudWidgetApi()
         .then((SC) => {
           if (!document.body.contains(iframe)) return
@@ -117,6 +146,7 @@ export function useExclusiveYoutubeSoundcloudPlayback({
           } catch {
             // ignore
           }
+          scheduleViewportScrollRestores(left, top)
         })
         .catch(() => {
           // ignore
