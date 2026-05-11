@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
-import type { SongCatalogItem, SongDetailRecord, YouTubeCatalogVideo } from './types'
+import type { MuseCatalogItem, QuoteWallItem, SongCatalogItem, SongDetailRecord, YouTubeCatalogVideo } from './types'
 
 let songCatalogResolved: SongCatalogItem[] | null = null
 let songCatalogPromise: Promise<SongCatalogItem[]> | null = null
@@ -8,6 +8,10 @@ let songCatalogBrowseResolved: SongCatalogItem[] | null = null
 let songCatalogBrowsePromise: Promise<SongCatalogItem[]> | null = null
 let songSearchDeepResolved: Record<string, string> | null = null
 let songSearchDeepPromise: Promise<Record<string, string>> | null = null
+let musesCatalogResolved: MuseCatalogItem[] | null = null
+let musesCatalogPromise: Promise<MuseCatalogItem[]> | null = null
+let quotesWallResolved: QuoteWallItem[] | null = null
+let quotesWallPromise: Promise<QuoteWallItem[]> | null = null
 
 let songDetailResolved: Record<string, SongDetailRecord> | null = null
 let songDetailPromise: Promise<Record<string, SongDetailRecord>> | null = null
@@ -131,6 +135,46 @@ export async function loadSongSearchDeep(): Promise<Record<string, string>> {
   return songSearchDeepPromise
 }
 
+export async function loadMusesCatalog(): Promise<MuseCatalogItem[]> {
+  if (musesCatalogResolved) return musesCatalogResolved
+  if (!musesCatalogPromise) {
+    musesCatalogPromise = fetchCatalogData(catalogDataFileUrl('muses_catalog.json'))
+      .then((r) => {
+        if (!r.ok) throw new Error(`muses_catalog.json: HTTP ${r.status}`)
+        return r.json() as Promise<MuseCatalogItem[]>
+      })
+      .then((rows) => {
+        musesCatalogResolved = Array.isArray(rows) ? rows : []
+        return musesCatalogResolved
+      })
+      .catch((e) => {
+        musesCatalogPromise = null
+        throw e
+      })
+  }
+  return musesCatalogPromise
+}
+
+export async function loadQuotesWall(): Promise<QuoteWallItem[]> {
+  if (quotesWallResolved) return quotesWallResolved
+  if (!quotesWallPromise) {
+    quotesWallPromise = fetchCatalogData(catalogDataFileUrl('quotes_wall.json'))
+      .then((r) => {
+        if (!r.ok) throw new Error(`quotes_wall.json: HTTP ${r.status}`)
+        return r.json() as Promise<QuoteWallItem[]>
+      })
+      .then((rows) => {
+        quotesWallResolved = Array.isArray(rows) ? rows : []
+        return quotesWallResolved
+      })
+      .catch((e) => {
+        quotesWallPromise = null
+        throw e
+      })
+  }
+  return quotesWallPromise
+}
+
 /** Full lyrics/detail blobs — load only when needed (e.g. song detail route). */
 export async function loadSongDetail(): Promise<Record<string, SongDetailRecord>> {
   if (songDetailResolved) return songDetailResolved
@@ -154,6 +198,18 @@ export async function loadSongDetail(): Promise<Record<string, SongDetailRecord>
 
 export type SongCatalogLoadState = {
   data: SongCatalogItem[] | null
+  error: string | null
+  loading: boolean
+}
+
+export type MusesCatalogLoadState = {
+  data: MuseCatalogItem[] | null
+  error: string | null
+  loading: boolean
+}
+
+export type QuotesWallLoadState = {
+  data: QuoteWallItem[] | null
   error: string | null
   loading: boolean
 }
@@ -226,6 +282,82 @@ export function useSongCatalogBrowse(): SongCatalogLoadState {
         if (!cancelled) {
           setData(null)
           setError('Could not load song catalog data.')
+          setLoading(false)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return { data, error, loading }
+}
+
+export function useMusesCatalog(): MusesCatalogLoadState {
+  const [data, setData] = useState<MuseCatalogItem[] | null>(() => musesCatalogResolved)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(() => !musesCatalogResolved)
+
+  useEffect(() => {
+    if (musesCatalogResolved) {
+      queueMicrotask(() => {
+        setData(musesCatalogResolved)
+        setError(null)
+        setLoading(false)
+      })
+      return
+    }
+    let cancelled = false
+    loadMusesCatalog()
+      .then((rows) => {
+        if (!cancelled) {
+          setData(rows)
+          setError(null)
+          setLoading(false)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setData(null)
+          setError('Could not load muses data.')
+          setLoading(false)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return { data, error, loading }
+}
+
+export function useQuotesWall(): QuotesWallLoadState {
+  const [data, setData] = useState<QuoteWallItem[] | null>(() => quotesWallResolved)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(() => !quotesWallResolved)
+
+  useEffect(() => {
+    if (quotesWallResolved) {
+      queueMicrotask(() => {
+        setData(quotesWallResolved)
+        setError(null)
+        setLoading(false)
+      })
+      return
+    }
+    let cancelled = false
+    loadQuotesWall()
+      .then((rows) => {
+        if (!cancelled) {
+          setData(rows)
+          setError(null)
+          setLoading(false)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setData(null)
+          setError('Could not load quotes data.')
           setLoading(false)
         }
       })

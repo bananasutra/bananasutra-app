@@ -8,6 +8,9 @@ import { useAnalyticsPageView } from './useAnalyticsPageView'
 
 const HomePortal = lazy(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
 const AboutPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutPage })))
+const AboutSutrasPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutSutrasPage })))
+const AboutMusesPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutMusesPage })))
+const AboutQuotesPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutQuotesPage })))
 const CatalogApp = lazy(() => import('./catalog/CatalogApp').then((m) => ({ default: m.CatalogApp })))
 const SongbookPage = lazy(() => import('./catalog/SongbookPage').then((m) => ({ default: m.SongbookPage })))
 const SongbooksPage = lazy(() => import('./catalog/SongbooksPage').then((m) => ({ default: m.SongbooksPage })))
@@ -200,6 +203,30 @@ export default function App() {
             element={
               <RouteBoundary>
                 <AboutPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/about/sutras"
+            element={
+              <RouteBoundary>
+                <AboutSutrasPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/about/muses"
+            element={
+              <RouteBoundary>
+                <AboutMusesPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/about/quotes"
+            element={
+              <RouteBoundary>
+                <AboutQuotesPage />
               </RouteBoundary>
             }
           />
