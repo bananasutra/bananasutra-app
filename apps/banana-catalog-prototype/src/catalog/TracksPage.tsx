@@ -10,6 +10,7 @@ import { filterTracksByFindQuery, sortTrackCatalog, trackMatchesFilters } from '
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { SoundCloudEmbed } from './SoundCloudEmbed'
+import { loadSoundCloudWidgetApi } from './soundcloudWidgetApi'
 import { songCatalogPath } from './songPaths'
 import type { TrackCatalogItem, TrackSortMode, TracksFacetFilterKey, TracksFilterState } from './types'
 import { emptyTracksFilterState } from './types'
@@ -184,11 +185,49 @@ export function TracksPage() {
   const [scAutoplay, setScAutoplay] = useState(false)
   const skipScAutoplayOffOnNextSelectionChange = useRef(false)
 
+  /** "Play All" queue mode: keep auto-advancing through `filtered` until the user stops or runs out of tracks. */
+  const [playAllActive, setPlayAllActive] = useState(false)
+  const playAllActiveRef = useRef(false)
+  const playerWrapRef = useRef<HTMLDivElement>(null)
+  const filteredRef = useRef<TrackCatalogItem[]>([])
+  const selectedIdRef = useRef<string | null>(null)
+  const safePageRef = useRef(1)
+  const filtersRefForAdvance = useRef<TracksFilterState>(filters)
+  const urlFindRefForAdvance = useRef<string>(urlFind)
+  const urlSortRefForAdvance = useRef<TrackSortMode>(urlSort)
+  const locationSearchRef = useRef(location.search)
+
+  useEffect(() => {
+    filteredRef.current = filtered
+  }, [filtered])
+  useEffect(() => {
+    safePageRef.current = safePage
+  }, [safePage])
+  useEffect(() => {
+    playAllActiveRef.current = playAllActive
+  }, [playAllActive])
+  useEffect(() => {
+    selectedIdRef.current = selectedId
+  }, [selectedId])
+  useEffect(() => {
+    filtersRefForAdvance.current = filters
+  }, [filters])
+  useEffect(() => {
+    urlFindRefForAdvance.current = urlFind
+  }, [urlFind])
+  useEffect(() => {
+    urlSortRefForAdvance.current = urlSort
+  }, [urlSort])
+  useEffect(() => {
+    locationSearchRef.current = location.search
+  }, [location.search])
+
   useEffect(() => {
     if (!pageRows.length) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- clear player when page slice is empty
       setSelectedId(null)
       setScAutoplay(false)
+      setPlayAllActive(false)
       return
     }
     setSelectedId((prev) => {
@@ -255,16 +294,22 @@ export function TracksPage() {
     navigate(buildTracksBrowsePathFull(filters, urlFind, 1, preserve, next), { replace: true })
   }
 
-  const pickTrack = (t: TrackCatalogItem) => {
-    skipScAutoplayOffOnNextSelectionChange.current = true
-    setScAutoplay(true)
-    if (t.track_id === selectedId) {
+  const pickTrack = useCallback(
+    (t: TrackCatalogItem, { keepPlayAll = false }: { keepPlayAll?: boolean } = {}) => {
+      if (!keepPlayAll && playAllActiveRef.current) {
+        setPlayAllActive(false)
+      }
+      skipScAutoplayOffOnNextSelectionChange.current = true
+      setScAutoplay(true)
+      if (t.track_id === selectedIdRef.current) {
+        setEmbedReloadKey((k) => k + 1)
+        return
+      }
+      setSelectedId(t.track_id)
       setEmbedReloadKey((k) => k + 1)
-      return
-    }
-    setSelectedId(t.track_id)
-    setEmbedReloadKey((k) => k + 1)
-  }
+    },
+    [],
+  )
 
   const rowActivate = (e: MouseEvent | KeyboardEvent, t: TrackCatalogItem) => {
     if ((e.target as HTMLElement).closest('a')) return
@@ -278,6 +323,90 @@ export function TracksPage() {
       pickTrack(t)
     }
   }
+
+  /** Move to the next item in the full filtered queue and auto-paginate so the row is visible. */
+  const advanceToNextInQueue = useCallback(() => {
+    const queue = filteredRef.current
+    const currentId = selectedIdRef.current
+    if (!queue.length || !currentId) {
+      setPlayAllActive(false)
+      return
+    }
+    const idx = queue.findIndex((t) => t.track_id === currentId)
+    if (idx < 0) {
+      setPlayAllActive(false)
+      return
+    }
+    const next = queue[idx + 1]
+    if (!next) {
+      setPlayAllActive(false)
+      return
+    }
+    const nextPage = Math.floor((idx + 1) / PAGE_SIZE) + 1
+    if (nextPage !== safePageRef.current) {
+      const preserve = new URLSearchParams(locationSearchRef.current)
+      navigate(
+        buildTracksBrowsePathFull(
+          filtersRefForAdvance.current,
+          urlFindRefForAdvance.current,
+          nextPage,
+          preserve,
+          urlSortRefForAdvance.current,
+        ),
+        { replace: true },
+      )
+    }
+    pickTrack(next, { keepPlayAll: true })
+  }, [navigate, pickTrack])
+
+  const advanceToNextInQueueRef = useRef(advanceToNextInQueue)
+  useEffect(() => {
+    advanceToNextInQueueRef.current = advanceToNextInQueue
+  }, [advanceToNextInQueue])
+
+  const startPlayAll = useCallback(() => {
+    const queue = filteredRef.current
+    if (!queue.length) return
+    setPlayAllActive(true)
+    if (safePageRef.current !== 1) {
+      const preserve = new URLSearchParams(locationSearchRef.current)
+      navigate(
+        buildTracksBrowsePathFull(
+          filtersRefForAdvance.current,
+          urlFindRefForAdvance.current,
+          1,
+          preserve,
+          urlSortRefForAdvance.current,
+        ),
+        { replace: true },
+      )
+    }
+    pickTrack(queue[0], { keepPlayAll: true })
+  }, [navigate, pickTrack])
+
+  const stopPlayAll = useCallback(() => {
+    setPlayAllActive(false)
+  }, [])
+
+  /** Bind FINISH on the SoundCloud widget after each iframe (re)load — each remount creates a fresh widget. */
+  const handlePlayerLoad = useCallback(() => {
+    const wrap = playerWrapRef.current
+    if (!wrap) return
+    const iframe = wrap.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
+    if (!iframe) return
+    loadSoundCloudWidgetApi()
+      .then((SC) => {
+        if (!document.body.contains(iframe)) return
+        const widget = SC.Widget(iframe)
+        widget.bind(SC.Widget.Events.FINISH, () => {
+          if (!playAllActiveRef.current) return
+          advanceToNextInQueueRef.current()
+        })
+      })
+      .catch(() => {
+        // Widget API failed to load; Play All becomes effectively manual.
+      })
+  }, [])
 
   const facetSelections = countTracksSelections(filters)
   const hasActiveContext = facetSelections > 0 || Boolean(urlFind.trim())
@@ -481,7 +610,7 @@ export function TracksPage() {
                 {selected?.sc_url ? (
                   <section className="tracks-page__player" aria-label="Now playing">
                     <h2 className="tracks-page__player-h catalog-section-title">Now playing</h2>
-                    <div className="tracks-page__player-frame">
+                    <div className="tracks-page__player-frame" ref={playerWrapRef}>
                       <SoundCloudEmbed
                         scUrl={selected.sc_url}
                         title={selected.track_title || 'SoundCloud track'}
@@ -490,6 +619,7 @@ export function TracksPage() {
                         autoPlay={scAutoplay}
                         reloadKey={embedReloadKey}
                         loading="eager"
+                        onLoad={handlePlayerLoad}
                       />
                     </div>
                     <p className="tracks-page__sc-link-wrap">
@@ -539,6 +669,49 @@ export function TracksPage() {
                       Show filters
                     </button>
                   </>
+                ) : null}
+
+                {filtered.length > 1 ? (
+                  <div className="tracks-page__play-all" role="group" aria-label="Play all tracks">
+                    <div className="tracks-page__play-all-row">
+                      {playAllActive ? (
+                        <>
+                          <button
+                            type="button"
+                            className="tracks-page__play-all-btn tracks-page__play-all-btn--stop"
+                            onClick={stopPlayAll}
+                          >
+                            <span className="tracks-page__play-all-glyph" aria-hidden>
+                              ■
+                            </span>
+                            Stop playing all
+                          </button>
+                          <span className="tracks-page__play-all-status" aria-live="polite">
+                            {(() => {
+                              const idx = filtered.findIndex((t) => t.track_id === selected?.track_id)
+                              const pos = idx >= 0 ? idx + 1 : 1
+                              return `Playing ${pos} of ${filtered.length}`
+                            })()}
+                          </span>
+                        </>
+                      ) : (
+                        <button
+                          type="button"
+                          className="tracks-page__play-all-btn"
+                          onClick={startPlayAll}
+                        >
+                          <span className="tracks-page__play-all-glyph" aria-hidden>
+                            ▶
+                          </span>
+                          {`Play all ${filtered.length} tracks`}
+                        </button>
+                      )}
+                    </div>
+                    <p className="tracks-page__play-all-note">
+                      Autoplay works best on desktop. On mobile (especially iPhone), you may need to tap each next
+                      track to keep the queue going.
+                    </p>
+                  </div>
                 ) : null}
 
                 {filtered.length > 0 ? (
