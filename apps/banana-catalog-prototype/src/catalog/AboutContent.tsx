@@ -85,7 +85,8 @@ export function AboutContent() {
             <div className="about-page__colophon-row">
               <dt className="about-page__colophon-label">Lyrics</dt>
               <dd className="about-page__colophon-value">
-                100% human-written. Every word is mine. The stories, the wordplay, the rage, the tenderness. All of it.
+                100% human-written. Every word is mine. The stories, the wordplay, the questions, the opinions, the
+                tenderness. All of it.
               </dd>
             </div>
             <div className="about-page__colophon-row">
@@ -106,7 +107,7 @@ export function AboutContent() {
             <div className="about-page__colophon-row">
               <dt className="about-page__colophon-label">Cover art &amp; videos</dt>
               <dd className="about-page__colophon-value">
-                Made by me using a mix of AI image tools, video editors, and stubbornness.
+                Made by me using a mix of AI image tools, video editors, and imagination.
               </dd>
             </div>
             <div className="about-page__colophon-row">
