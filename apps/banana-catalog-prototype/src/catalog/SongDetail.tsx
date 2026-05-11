@@ -14,6 +14,7 @@ import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
 import { SoundCloudEmbed } from './SoundCloudEmbed'
 import { YouTubeEmbed } from './YouTubeEmbed'
+import { loadSoundCloudWidgetApi } from './soundcloudWidgetApi'
 import { catalogPathSlugFromTitleAndSlug, lyricsIdFromSongUrlSlug, songCatalogPath } from './songPaths'
 import { songbookHref } from './songbooks'
 import { sutraClassName } from './sutraTheme'
@@ -358,6 +359,26 @@ function SongDetailLoaded({
     ''
   ).trim()
   const inAppPlayableTracks = orderedTracks.filter((t) => trackIsInApp(t) && t.sc_url.trim())
+
+  const [playAllTopTracksActive, setPlayAllTopTracksActive] = useState(false)
+  const playAllTopTracksActiveRef = useRef(false)
+  const playerWrapRef = useRef<HTMLDivElement | null>(null)
+  const inAppPlayableTracksRef = useRef<SongDetailTrack[]>(inAppPlayableTracks)
+  const playingUrlRef = useRef<string>(playingUrl)
+  const advanceToNextInQueueRef = useRef<() => void>(() => {})
+
+  useEffect(() => {
+    playAllTopTracksActiveRef.current = playAllTopTracksActive
+  }, [playAllTopTracksActive])
+
+  useEffect(() => {
+    inAppPlayableTracksRef.current = inAppPlayableTracks
+  }, [inAppPlayableTracks])
+
+  useEffect(() => {
+    playingUrlRef.current = playingUrl
+  }, [playingUrl])
+
   /** All curated picks reference one EP → use it; otherwise fall back to primary SC EP set when tracks span multiple releases. */
   const sharedPlayableEpUrl = useMemo(() => {
     const set = new Set(
@@ -399,10 +420,89 @@ function SongDetailLoaded({
   const soundcloudMainEmbedHeight =
     playingUrl.includes('/sets/') ? SC_EMBED_HEIGHT_SET_PLAYLIST : SC_EMBED_HEIGHT_TRACK_LIST
 
-  const requestSoundcloudPlayback = (url: string) => {
+  const requestSoundcloudPlayback = useCallback((url: string) => {
     setSelectedUrl(url)
     setSoundcloudReloadKey((k) => k + 1)
-  }
+  }, [])
+
+  const pickTopTrack = useCallback(
+    (url: string, { keepPlayAll = false }: { keepPlayAll?: boolean } = {}) => {
+      if (!keepPlayAll && playAllTopTracksActiveRef.current) {
+        playAllTopTracksActiveRef.current = false
+        setPlayAllTopTracksActive(false)
+      }
+      requestSoundcloudPlayback(url)
+    },
+    [requestSoundcloudPlayback],
+  )
+
+  const stopPlayAllTopTracks = useCallback(() => {
+    playAllTopTracksActiveRef.current = false
+    setPlayAllTopTracksActive(false)
+  }, [])
+
+  const startPlayAllTopTracks = useCallback(() => {
+    const queue = inAppPlayableTracksRef.current
+    const firstUrl = queue[0]?.sc_url.trim()
+    if (!firstUrl) return
+    playAllTopTracksActiveRef.current = true
+    setPlayAllTopTracksActive(true)
+    pickTopTrack(firstUrl, { keepPlayAll: true })
+  }, [pickTopTrack])
+
+  const advanceToNextInQueue = useCallback(() => {
+    const queue = inAppPlayableTracksRef.current
+    const current = playingUrlRef.current.trim()
+
+    if (!queue.length || !current) {
+      stopPlayAllTopTracks()
+      return
+    }
+
+    const idx = queue.findIndex((t) => t.sc_url.trim() === current)
+    if (idx < 0) {
+      stopPlayAllTopTracks()
+      return
+    }
+
+    const next = queue[idx + 1]
+    if (!next) {
+      stopPlayAllTopTracks()
+      return
+    }
+
+    const nextUrl = next.sc_url.trim()
+    if (!nextUrl) {
+      stopPlayAllTopTracks()
+      return
+    }
+
+    // Keep the play-all mode active while auto-advancing.
+    pickTopTrack(nextUrl, { keepPlayAll: true })
+  }, [pickTopTrack, stopPlayAllTopTracks])
+
+  useEffect(() => {
+    advanceToNextInQueueRef.current = advanceToNextInQueue
+  }, [advanceToNextInQueue])
+
+  const handlePlayerLoad = useCallback(() => {
+    const wrap = playerWrapRef.current
+    if (!wrap) return
+    const iframe = wrap.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
+    if (!iframe) return
+
+    void loadSoundCloudWidgetApi()
+      .then((SC) => {
+        const widget = SC.Widget(iframe)
+        widget.bind(SC.Widget.Events.FINISH, () => {
+          if (!playAllTopTracksActiveRef.current) return
+          advanceToNextInQueueRef.current()
+        })
+      })
+      .catch(() => {
+        // Widget API failed to load; Play All becomes effectively manual.
+      })
+  }, [])
 
   const writtenYear = (detail.written_year ?? '').trim()
   const hasHeroPrimaryTags = Boolean(detail.sutra) || Boolean(detail.songbook)
@@ -719,15 +819,18 @@ function SongDetailLoaded({
                         Here&apos;s the SoundCloud version for this song.
                       </p>
                     ) : null}
-                    <SoundCloudEmbed
-                      scUrl={playingUrl}
-                      title={`SoundCloud: ${detail.lyrics_title}`}
-                      mode="list"
-                      height={soundcloudMainEmbedHeight}
-                      autoPlay={Boolean((selectedUrl ?? '').trim())}
-                      reloadKey={soundcloudReloadKey}
-                      loading="eager"
-                    />
+                    <div ref={playerWrapRef}>
+                      <SoundCloudEmbed
+                        scUrl={playingUrl}
+                        title={`SoundCloud: ${detail.lyrics_title}`}
+                        mode="list"
+                        height={soundcloudMainEmbedHeight}
+                        autoPlay={Boolean((selectedUrl ?? '').trim())}
+                        reloadKey={soundcloudReloadKey}
+                        onLoad={handlePlayerLoad}
+                        loading="eager"
+                      />
+                    </div>
                   </>
                 ) : hasEpFallback ? (
                   <>
@@ -769,8 +872,38 @@ function SongDetailLoaded({
               {shouldShowTracksList ? (
                 <section className="song-detail-tracks" aria-labelledby="song-tracks-heading">
                   <h3 id="song-tracks-heading" className="song-detail-subsection-title">
-                    Track picks
+                    {inAppPlayableTracks.length > 1 ? 'Top tracks' : 'Track picks'}
                   </h3>
+                  {inAppPlayableTracks.length > 1 ? (
+                    <div className="song-detail-audio-playall" aria-label="Play all top tracks">
+                      {playAllTopTracksActive ? (
+                        <>
+                          <p className="song-detail-audio-hint" aria-live="polite">
+                            {(() => {
+                              const queue = inAppPlayableTracks
+                              const idx = queue.findIndex((t) => t.sc_url.trim() === playingUrl.trim())
+                              const pos = idx >= 0 ? idx + 1 : 1
+                              return `Playing ${pos} of ${queue.length}`
+                            })()}. Autoplay works best on desktop. On mobile (especially iPhone), you may need to tap each next
+                            track to keep the queue going.
+                          </p>
+                          <button type="button" className="song-detail-audio-action-btn" onClick={stopPlayAllTopTracks}>
+                            Stop playing all
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <p className="song-detail-audio-hint">
+                            Autoplay works best on desktop. On mobile (especially iPhone), you may need to tap each next track to
+                            keep the queue going.
+                          </p>
+                          <button type="button" className="song-detail-audio-action-btn" onClick={startPlayAllTopTracks}>
+                            {`Play all ${inAppPlayableTracks.length} top track${inAppPlayableTracks.length === 1 ? '' : 's'}`}
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ) : null}
                   {activeTrackGenre ? (
                     <p className="song-detail-track-context">
                       Browsing genre: <strong>{activeTrackGenre}</strong>
@@ -789,7 +922,7 @@ function SongDetailLoaded({
                             disabled={!url || hidden}
                           onClick={() => {
                             if (!url || hidden) return
-                            requestSoundcloudPlayback(url)
+                            pickTopTrack(url)
                           }}
                           >
                             <span className="song-detail-track-main">
@@ -818,7 +951,7 @@ function SongDetailLoaded({
                   <button
                     type="button"
                     className="song-detail-audio-action-btn"
-                    onClick={() => requestSoundcloudPlayback(playFullEpSetUrl)}
+                    onClick={() => pickTopTrack(playFullEpSetUrl)}
                   >
                     Play full EP
                   </button>
