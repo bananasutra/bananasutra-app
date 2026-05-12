@@ -1,4 +1,4 @@
-import { searchTokens } from './searchMatch'
+import { haystackTokenMatches, searchTokens } from './searchMatch'
 import type { TrackCatalogItem, TrackSortMode, TracksFilterState } from './types'
 
 function setIntersectsArray(set: Set<string>, arr: string[]): boolean {
@@ -51,7 +51,7 @@ export function filterTracksByFindQuery(tracks: TrackCatalogItem[], raw: string)
   if (!tokens.length) return tracks
   return tracks.filter((t) => {
     const h = trackSearchHaystack(t)
-    return tokens.every((tok) => h.includes(tok))
+    return tokens.every((tok) => haystackTokenMatches(h, tok))
   })
 }
 
