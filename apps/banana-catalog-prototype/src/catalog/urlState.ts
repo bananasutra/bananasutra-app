@@ -179,7 +179,7 @@ function serializeTrackSort(mode: TrackSortMode): string {
 
 /** Header browse → `/tracks` (single facet; multi-facet uses `buildTracksBrowsePathFull`). */
 export function buildTracksBrowsePath(
-  param: 'primary_genre' | 'secondary_genre' | 'mood',
+  param: 'primary_genre' | 'secondary_genre' | 'mood' | 'instrument' | 'tempo_feel',
   value: string,
 ): string {
   const q = new URLSearchParams()

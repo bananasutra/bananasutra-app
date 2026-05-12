@@ -43,9 +43,62 @@ function escapeRegex(s: string): string {
 }
 
 /**
+ * Conservative English singular/plural surface forms for one **ASCII** token (whole-token boundaries).
+ *
+ * **Covered:** simple `-s` (dog/dogs), `-es` after s/x/z/ch/sh (bus/buses, peach/peaches, class/classes),
+ * consonant + `-y` ↔ `-ies` (fly/flies, try/tries; skips vowel+y like day/days via separate +s only),
+ * plural query strip `-es` / `-s` when the above patterns apply. Short tokens: only `do`/`go` → `does`/`goes`.
+ *
+ * **Not covered (by design, to limit noise):** irregular (person/people, mouse/mice), `-f`/`fe` (wolf/wolves),
+ * zero plural (fish), Latin/Greek stems, vowel+`o` except the tiny `do`/`go` exception.
+ */
+function surfaceFormsForInflection(raw: string): readonly string[] {
+  const trimmed = raw.trim().toLowerCase()
+  if (!trimmed || /\s/.test(trimmed)) return [trimmed]
+
+  const out = new Set<string>([trimmed])
+  const MIN_STEM = 3
+  const expands = trimmed.length >= MIN_STEM
+
+  if (expands) {
+    if (/[^aeiou]y$/i.test(trimmed)) {
+      out.add(trimmed.slice(0, -1) + 'ies')
+    } else if (/(ch|sh|[sxz])$/i.test(trimmed)) {
+      out.add(trimmed + 'es')
+    } else {
+      out.add(trimmed + 's')
+    }
+  } else if (trimmed === 'do' || trimmed === 'go') {
+    out.add(trimmed + 'es')
+  }
+
+  if (trimmed.length >= 5 && trimmed.endsWith('ies') && /[^aeiou]ies$/i.test(trimmed)) {
+    const stem = trimmed.slice(0, -3)
+    if (stem.length >= 2) {
+      out.add(stem + 'y')
+    }
+  }
+  if (trimmed.length >= 4 && /(ch|sh|[sxz])es$/i.test(trimmed)) {
+    out.add(trimmed.slice(0, -2))
+  } else if (trimmed.length >= 4 && trimmed.endsWith('s') && !trimmed.endsWith('ss')) {
+    out.add(trimmed.slice(0, -1))
+  }
+
+  return [...out]
+}
+
+/** One surface form as a whole token (ASCII letter/digit boundaries). */
+function exactTokenMatchInHaystack(h: string, form: string): boolean {
+  const f = form.trim().toLowerCase()
+  if (!f) return false
+  const esc = escapeRegex(f)
+  return new RegExp(`(?<![a-z0-9])${esc}(?![a-z0-9])`, 'i').test(h)
+}
+
+/**
  * Match a variant as a whole token in haystack (ASCII letter/digit boundaries).
  * - Avoids `trump` matching inside `trumpet` / `trumpets` while still allowing trump, trumps, trumped, trumping.
- * - Simple English plural fold: `dog` matches `dogs` and vice versa; still avoids `dog` inside `dogma`.
+ * - English inflection variants (see `surfaceFormsForInflection`) for each single-word surface.
  * - Multi-word variants (e.g. "don jr") use flexible whitespace.
  */
 function variantMatchesInHaystack(h: string, v: string): boolean {
@@ -61,14 +114,10 @@ function variantMatchesInHaystack(h: string, v: string): boolean {
     return /\btrump(?!et)(?:s|ing|ed)?\b/i.test(h)
   }
 
-  const esc = escapeRegex(trimmed)
-  /** Simple English singular/plural at token boundaries (e.g. dog ↔ dogs; still rejects dog ⊂ dogma). */
-  if (trimmed.endsWith('s') && trimmed.length >= 4 && !trimmed.endsWith('ss')) {
-    const stem = trimmed.slice(0, -1)
-    const escStem = escapeRegex(stem)
-    return new RegExp(`(?<![a-z0-9])(?:${esc}|${escStem})(?![a-z0-9])`, 'i').test(h)
+  for (const form of surfaceFormsForInflection(trimmed)) {
+    if (exactTokenMatchInHaystack(h, form)) return true
   }
-  return new RegExp(`(?<![a-z0-9])${esc}s?(?![a-z0-9])`, 'i').test(h)
+  return false
 }
 
 function haystack(song: SongCatalogItem, deepLyricsText = ''): string {
@@ -127,6 +176,11 @@ function haystackIncludesAnyVariant(h: string, token: string): boolean {
   return false
 }
 
+/** Same token boundaries + inflection rules as discovery / song search; for `/tracks` find box. */
+export function haystackTokenMatches(haystackLower: string, token: string): boolean {
+  return haystackIncludesAnyVariant(haystackLower, token)
+}
+
 /**
  * Count of query tokens that match as whole tokens in `lyrics_title` (same boundary rules as body search).
  * Used to surface title-strong hits in discovery previews while keeping popularity as the next sort key.
@@ -141,7 +195,7 @@ export function countTitleTokenMatches(song: SongCatalogItem, tokens: string[]):
   return n
 }
 
-/** Every token must match via substring (or synonym group) somewhere on the card search text. */
+/** Every token must match as a whole token (with inflection variants) somewhere on the card search text. */
 export function songMatchesSearchTokens(song: SongCatalogItem, tokens: string[], deepLyricsText = ''): boolean {
   if (tokens.length === 0) return false
   const h = haystack(song, deepLyricsText)
@@ -172,18 +226,32 @@ function albumHaystack(song: SongCatalogItem): string {
 }
 
 function trackHaystack(song: SongCatalogItem): string {
-  return [...song.track_genres, ...song.track_secondary_genres, song.discovery_top_track_genres ?? '']
+  return [
+    ...song.track_genres,
+    ...song.track_secondary_genres,
+    ...(song.track_instruments ?? []),
+    ...(song.track_moods ?? []),
+    ...(song.track_tempo_feels ?? []),
+    song.discovery_top_track_genres ?? '',
+  ]
     .join(' ')
     .toLowerCase()
 }
 
-/** Primary + secondary + headline split — catalog genre fields only (no SC blob). */
+/** Catalog track tags only (genres, instruments, moods, tempo, headline split) — no SC blob. */
 function structuredTrackCatalogGenreHaystack(song: SongCatalogItem): string {
   const head = (song.discovery_top_track_genres ?? '')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
-  const parts = [...song.track_genres, ...song.track_secondary_genres, ...head]
+  const parts = [
+    ...song.track_genres,
+    ...song.track_secondary_genres,
+    ...head,
+    ...(song.track_instruments ?? []),
+    ...(song.track_moods ?? []),
+    ...(song.track_tempo_feels ?? []),
+  ]
   return parts.join(' ').toLowerCase()
 }
 
@@ -211,15 +279,17 @@ function tokensAreAllInFacetSet(tokens: string[], facetValuesLower: ReadonlySet<
 
 export type TrackSearchFilterOpts = {
   /**
-   * Lowercased facet `value`s from `track_genre`, `track_secondary_genre`, and `track_mood`.
+   * Lowercased facet `value`s from `track_genre`, `track_secondary_genre`, `track_mood`,
+   * `track_instrument`, and `track_tempo_feel` in `facets.json`.
    * When **every** query token is in this set, Top Tracks requires each token to match **structured**
-   * catalog genres (`track_genres`, `track_secondary_genres`, `discovery_top_track_genres` headline split)
-   * — not SC blob / notes alone — so genre-shaped queries do not surface EP copy hits without catalog tags.
+   * catalog tags (`track_genres`, `track_secondary_genres`, `discovery_top_track_genres` headline split,
+   * `track_instruments`, `track_moods`, `track_tempo_feels`) — not SC blob / notes alone — so tag-shaped
+   * queries do not surface EP copy hits without catalog tags.
    */
   strictGenreFacetTokens?: ReadonlySet<string>
 }
 
-/** “Top tracks” tab — meaning (sans long lyric/EP blobs) + SC titles/genres. Optional strict genre gate (see opts). */
+/** “Top tracks” tab — meaning (sans long lyric/EP blobs) + catalog track tags. Optional strict facet gate (see opts). */
 export function filterSongsByTrackSearchQuery(
   songs: SongCatalogItem[],
   query: string,

@@ -31,7 +31,13 @@ export const TRACKS_FACET_LABELS: Record<TracksFacetFilterKey, string> = {
 export const HEADER_BROWSE_SONG_FACETS: FilterFacetKey[] = ['sutra', 'light_shadow', 'topic', 'lang']
 
 /** Header empty browse — track-level facets (IA §3.10); chips deep-link to `/tracks`. */
-export const HEADER_BROWSE_TRACK_FACETS = ['track_genre', 'track_secondary_genre', 'track_mood'] as const
+export const HEADER_BROWSE_TRACK_FACETS = [
+  'track_genre',
+  'track_secondary_genre',
+  'track_mood',
+  'track_instrument',
+  'track_tempo_feel',
+] as const
 
 export type HeaderBrowseTrackFacetKey = (typeof HEADER_BROWSE_TRACK_FACETS)[number]
 
@@ -45,6 +51,7 @@ export const DISCOVERY_FACET_LABELS: Record<FacetGroupKey, string> = {
   track_secondary_genre: 'Secondary genre',
   track_instrument: 'Instrument (track)',
   track_mood: 'Mood',
+  track_tempo_feel: 'Tempo / feel (track)',
   lang: 'Language',
 }
 

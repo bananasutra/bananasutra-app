@@ -530,6 +530,17 @@ def collect_track_moods(tracks: list[dict[str, Any]], *, published_only: bool) -
     return sorted(out)
 
 
+def collect_track_tempo_feels(tracks: list[dict[str, Any]], *, published_only: bool) -> list[str]:
+    out: set[str] = set()
+    for track in tracks:
+        if published_only and not track["track_in_app"]:
+            continue
+        token = str(track.get("tempo_feel") or "").strip()
+        if token:
+            out.add(token)
+    return sorted(out)
+
+
 def discovery_top_track_genres_line(detail_tracks: list[dict[str, Any]]) -> str:
     """Single-line genre label for the lead in-app track (same order as song detail / default player)."""
     for track in detail_tracks:
@@ -1213,6 +1224,7 @@ def create_facets(cards: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]
         "track_secondary_genre": Counter(),
         "track_instrument": Counter(),
         "track_mood": Counter(),
+        "track_tempo_feel": Counter(),
         "lang": Counter(),
     }
     for card in cards:
@@ -1238,6 +1250,9 @@ def create_facets(cards: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]
         for mood in card.get("track_moods", []):
             if mood:
                 counters["track_mood"][mood] += 1
+        for tf in card.get("track_tempo_feels", []):
+            if tf:
+                counters["track_tempo_feel"][tf] += 1
 
     facets: dict[str, list[dict[str, Any]]] = {}
     for key, counter in counters.items():
@@ -1268,6 +1283,7 @@ def build_song_catalog_browse(song_catalog: list[dict[str, Any]]) -> list[dict[s
         "track_secondary_genres",
         "track_instruments",
         "track_moods",
+        "track_tempo_feels",
         "discovery_top_track_genres",
         "track_count_published",
         "aggregate_play_count",
@@ -2065,6 +2081,9 @@ def main() -> None:
             collect_track_instruments(tracks, published_only=True) if published_tracks else []
         )
         track_moods = collect_track_moods(tracks, published_only=True) if published_tracks else []
+        track_tempo_feels = (
+            collect_track_tempo_feels(tracks, published_only=True) if published_tracks else []
+        )
         soundcloud_tags = sorted(
             {str(t["soundcloud_genre"]) for t in published_tracks if t.get("soundcloud_genre")}
         )
@@ -2177,6 +2196,7 @@ def main() -> None:
             "track_secondary_genres": track_secondary_genres,
             "track_instruments": track_instruments,
             "track_moods": track_moods,
+            "track_tempo_feels": track_tempo_feels,
             "discovery_top_track_genres": discovery_top_track_genres,
             "soundcloud_genre_tags": soundcloud_tags,
             "track_count_total": len(tracks),

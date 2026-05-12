@@ -12,6 +12,7 @@ export function facetCountsFromSongs(songs: SongCatalogItem[]): FacetsPayload {
   const track_secondary_genre = new Map<string, number>()
   const track_instrument = new Map<string, number>()
   const track_mood = new Map<string, number>()
+  const track_tempo_feel = new Map<string, number>()
   const lang = new Map<string, number>()
 
   for (const card of songs) {
@@ -34,6 +35,9 @@ export function facetCountsFromSongs(songs: SongCatalogItem[]): FacetsPayload {
     for (const m of card.track_moods ?? []) {
       if (m) track_mood.set(m, (track_mood.get(m) ?? 0) + 1)
     }
+    for (const tf of card.track_tempo_feels ?? []) {
+      if (tf) track_tempo_feel.set(tf, (track_tempo_feel.get(tf) ?? 0) + 1)
+    }
   }
 
   const out: Partial<FacetsPayload> = {
@@ -46,6 +50,7 @@ export function facetCountsFromSongs(songs: SongCatalogItem[]): FacetsPayload {
     track_secondary_genre: facetEntriesFromCountMap(track_secondary_genre),
     track_instrument: facetEntriesFromCountMap(track_instrument),
     track_mood: facetEntriesFromCountMap(track_mood),
+    track_tempo_feel: facetEntriesFromCountMap(track_tempo_feel),
     lang: facetEntriesFromCountMap(lang),
   }
   return out as FacetsPayload
