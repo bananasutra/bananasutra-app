@@ -16,11 +16,13 @@ ALLOWED_TRACK_GENRE_TOKENS: frozenset[str] = frozenset(
         "BANJO",
         "BLUES",
         "BURLESQUE",
+        "CIRCUS",
         "COUNTRY",
         "DUB",
         "FLAMENCO",
         "FOLK",
         "GIPSY",
+        "HIP HOP",
         "INDIE",
         "JAZZ",
         "LOFI",
@@ -30,7 +32,9 @@ ALLOWED_TRACK_GENRE_TOKENS: frozenset[str] = frozenset(
         "PUNK",
         "RAGGA",
         "ROCK",
+        "TANGO",
         "TECHNO",
+        "WALTZ",
         "WORLD",
     }
 )

@@ -47,13 +47,29 @@
     "written_year": "2026",
     "published_at": "2026-05-03T01:05:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-iTMnLbPUyo5PZgb5-Yvmp6g-t500x500.png",
-    "track_genres": [],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "bass"
+    "track_genres": [
+      "DUB",
+      "INDIE",
+      "LOFI"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "",
+    "track_secondary_genres": [
+      "DUB",
+      "FLAMENCO",
+      "LOFI",
+      "MOTORIK"
+    ],
+    "track_instruments": [
+      "ACCORDION",
+      "BASS",
+      "BRASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "NERDY",
+      "SILLY"
+    ],
+    "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 8,
     "aggregate_play_count": 8949,
     "aggregate_like_count": 83,
@@ -94,10 +110,13 @@
       "LOFI"
     ],
     "track_instruments": [
-      "banjo"
+      "BANJO",
+      "BASS",
+      "GUITAR"
     ],
     "track_moods": [
-      "😎 CHILL"
+      "KINDLY",
+      "PEACHY"
     ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 4,
@@ -170,9 +189,11 @@
       "BLUES"
     ],
     "track_instruments": [
-      "banjo"
+      "BANJO"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "KINDLY"
+    ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 2,
     "aggregate_play_count": 2853,
@@ -245,14 +266,17 @@
     "track_secondary_genres": [
       "INDIE",
       "LOFI",
-      "MOTORIK",
-      "PUNK"
+      "MOTORIK"
     ],
     "track_instruments": [
-      "cello"
+      "ACCORDION",
+      "BASS",
+      "CELLO",
+      "DRUM"
     ],
     "track_moods": [
-      "😎 CHILL"
+      "KINDLY",
+      "TRIPPY"
     ],
     "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 5,
@@ -290,14 +314,18 @@
     ],
     "track_secondary_genres": [
       "BURLESQUE",
-      "COUNTRY",
       "DUB",
       "FOLK"
     ],
     "track_instruments": [
-      "banjo"
+      "BANJO",
+      "GUITAR"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "NERDY",
+      "PUNKY",
+      "RAINY"
+    ],
     "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 4,
     "aggregate_play_count": 3084,
@@ -370,17 +398,26 @@
     "track_secondary_genres": [
       "BLUES",
       "BURLESQUE",
+      "CIRCUS",
+      "HIP HOP",
       "INDIE",
-      "JAZZ"
+      "JAZZ",
+      "TANGO"
     ],
     "track_instruments": [
-      "accordion",
-      "banjo",
-      "cello",
-      "piano"
+      "ACCORDION",
+      "BANJO",
+      "BASS",
+      "BRASS",
+      "CELLO",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_moods": [
+      "CHEEKY",
+      "GROOVY",
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "LOFI, BLUES, INDIE",
     "track_count_published": 12,
     "aggregate_play_count": 21829,
     "aggregate_like_count": 245,
@@ -418,6 +455,7 @@
     ],
     "track_secondary_genres": [
       "BLUES",
+      "BURLESQUE",
       "DUB",
       "GIPSY",
       "JAZZ",
@@ -425,12 +463,17 @@
       "RAGGA"
     ],
     "track_instruments": [
-      "banjo",
-      "harmonica"
+      "BANJO",
+      "BASS",
+      "BRASS",
+      "GUITAR",
+      "HARMONICA",
+      "PIANO"
     ],
     "track_moods": [
-      "😎 CHILL",
-      "🤔 DEEP"
+      "CHEEKY",
+      "NERDY",
+      "TRIPPY"
     ],
     "discovery_top_track_genres": "JAZZ, DUB",
     "track_count_published": 12,
@@ -473,23 +516,28 @@
     "track_secondary_genres": [
       "DUB",
       "FLAMENCO",
+      "FOLK",
       "GIPSY",
       "INDIE",
-      "LOFI",
       "MOTORIK",
-      "PSYCHEDELIC",
-      "PUNK",
       "RAGGA",
       "TECHNO"
     ],
     "track_instruments": [
-      "cello"
+      "ACCORDION",
+      "BASS",
+      "CELLO",
+      "GUITAR",
+      "VOICE"
     ],
     "track_moods": [
-      "😎 CHILL",
-      "🥳 WOO"
+      "CHEEKY",
+      "GROOVY",
+      "KINDLY",
+      "PUNKY",
+      "RAINY"
     ],
-    "discovery_top_track_genres": "DUB, RAGGA, FLAMENCO",
+    "discovery_top_track_genres": "BURLESQUE, DUB",
     "track_count_published": 11,
     "aggregate_play_count": 18966,
     "aggregate_like_count": 199,
@@ -526,14 +574,24 @@
       "WORLD"
     ],
     "track_secondary_genres": [
+      "BURLESQUE",
       "DUB",
       "FLAMENCO",
+      "FOLK",
       "LOFI",
       "TECHNO"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_instruments": [
+      "BASS",
+      "GUITAR",
+      "PIANO"
+    ],
+    "track_moods": [
+      "HOLY",
+      "KINDLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 8,
     "aggregate_play_count": 16102,
     "aggregate_like_count": 112,
@@ -567,12 +625,19 @@
       "DUB",
       "INDIE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "cello"
+    "track_secondary_genres": [
+      "LOFI",
+      "MANTRA"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE",
+    "track_instruments": [
+      "BASS",
+      "CELLO"
+    ],
+    "track_moods": [
+      "HOLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "INDIE, MANTRA",
     "track_count_published": 2,
     "aggregate_play_count": 2171,
     "aggregate_like_count": 13,
@@ -637,23 +702,28 @@
     "published_at": "2026-03-11T18:25:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-zbyI4lbDpbvjrsBi-cszDDA-t500x500.png",
     "track_genres": [
-      "BURLESQUE",
       "INDIE",
       "JAZZ",
       "LOFI"
     ],
     "track_secondary_genres": [
+      "BURLESQUE",
       "DUB",
       "FLAMENCO",
-      "LOFI"
+      "LOFI",
+      "WALTZ"
     ],
     "track_instruments": [
-      "piano"
+      "BASS",
+      "CELLO",
+      "DRUM",
+      "GUITAR",
+      "PIANO"
     ],
     "track_moods": [
-      "😎 CHILL"
+      "PEACHY"
     ],
-    "discovery_top_track_genres": "LOFI, DUB",
+    "discovery_top_track_genres": "JAZZ, WALTZ, BURLESQUE",
     "track_count_published": 5,
     "aggregate_play_count": 7120,
     "aggregate_like_count": 54,
@@ -722,12 +792,17 @@
       "JAZZ"
     ],
     "track_secondary_genres": [
+      "BURLESQUE",
       "INDIE"
     ],
     "track_instruments": [
-      "piano"
+      "BASS",
+      "PIANO"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "PUNKY",
+      "SILLY"
+    ],
     "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 2487,
@@ -763,11 +838,17 @@
       "LOFI"
     ],
     "track_secondary_genres": [
+      "HIP HOP",
       "RAGGA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "LOFI, HIP HOP",
     "track_count_published": 2,
     "aggregate_play_count": 3037,
     "aggregate_like_count": 10,
@@ -813,14 +894,19 @@
       "PSYCHEDELIC"
     ],
     "track_instruments": [
-      "banjo",
-      "cello"
+      "BANJO",
+      "BASS",
+      "CELLO",
+      "DRUM",
+      "GUITAR"
     ],
     "track_moods": [
-      "😎 CHILL",
-      "🤔 DEEP"
+      "HOLY",
+      "NERDY",
+      "PUNKY",
+      "RAINY"
     ],
-    "discovery_top_track_genres": "BLUES",
+    "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 8,
     "aggregate_play_count": 12691,
     "aggregate_like_count": 123,
@@ -858,18 +944,25 @@
       "LOFI"
     ],
     "track_secondary_genres": [
+      "BURLESQUE",
       "FOLK",
       "GIPSY",
       "INDIE"
     ],
     "track_instruments": [
-      "banjo",
-      "cello"
+      "BANJO",
+      "BASS",
+      "CELLO",
+      "GUITAR",
+      "PIANO"
     ],
     "track_moods": [
-      "😎 CHILL"
+      "HOLY",
+      "KINDLY",
+      "NERDY",
+      "PEACHY"
     ],
-    "discovery_top_track_genres": "DUB, FOLK",
+    "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 9,
     "aggregate_play_count": 14596,
     "aggregate_like_count": 162,
@@ -909,15 +1002,21 @@
       "FLAMENCO",
       "FOLK",
       "INDIE",
-      "JAZZ"
+      "JAZZ",
+      "TANGO"
     ],
     "track_instruments": [
-      "banjo"
+      "BANJO",
+      "BASS",
+      "GUITAR"
     ],
     "track_moods": [
-      "😎 CHILL"
+      "CHEEKY",
+      "HOLY",
+      "KINDLY",
+      "RAINY"
     ],
-    "discovery_top_track_genres": "DUB, FOLK, BLUES",
+    "discovery_top_track_genres": "DUB, BLUES",
     "track_count_published": 6,
     "aggregate_play_count": 12383,
     "aggregate_like_count": 133,
@@ -953,9 +1052,12 @@
     "track_secondary_genres": [
       "GIPSY"
     ],
-    "track_instruments": [],
+    "track_instruments": [
+      "BASS",
+      "GUITAR"
+    ],
     "track_moods": [
-      "😎 CHILL"
+      "CHEEKY"
     ],
     "discovery_top_track_genres": "LOFI, GIPSY",
     "track_count_published": 1,
@@ -996,15 +1098,29 @@
     ],
     "track_secondary_genres": [
       "BURLESQUE",
+      "DUB",
       "FLAMENCO",
+      "FOLK",
+      "GIPSY",
       "JAZZ",
       "ROCK"
     ],
     "track_instruments": [
-      "cello"
+      "BANJO",
+      "BASS",
+      "BRASS",
+      "CELLO",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_moods": [
+      "CHEEKY",
+      "GROOVY",
+      "NERDY",
+      "PUNKY",
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, JAZZ",
     "track_count_published": 14,
     "aggregate_play_count": 27370,
     "aggregate_like_count": 288,
@@ -1040,14 +1156,18 @@
     ],
     "track_secondary_genres": [
       "BURLESQUE",
+      "CIRCUS",
       "JAZZ",
-      "RAGGA"
+      "RAGGA",
+      "WALTZ"
     ],
     "track_instruments": [
-      "accordion",
-      "piano"
+      "ACCORDION",
+      "PIANO"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "NERDY"
+    ],
     "discovery_top_track_genres": "DUB, RAGGA, BURLESQUE",
     "track_count_published": 4,
     "aggregate_play_count": 10042,
@@ -1079,12 +1199,18 @@
     "published_at": "2026-02-16T00:22:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-XITSzbW3Jfw7E2Bb-d1yIpQ-t500x500.png",
     "track_genres": [
+      "INDIE"
+    ],
+    "track_secondary_genres": [
       "FOLK"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "INDIE, FOLK",
     "track_count_published": 1,
     "aggregate_play_count": 376,
     "aggregate_like_count": 3,
@@ -1122,9 +1248,11 @@
       "JAZZ"
     ],
     "track_instruments": [
-      "bass"
+      "BASS"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "NERDY"
+    ],
     "discovery_top_track_genres": "LOFI, DUB",
     "track_count_published": 2,
     "aggregate_play_count": 2419,
@@ -1156,20 +1284,25 @@
     "published_at": "2026-02-13T06:21:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-uDzqzbtn80lOeo3H-hV475g-t500x500.png",
     "track_genres": [
-      "BLUES",
       "INDIE",
+      "JAZZ",
       "LOFI"
     ],
     "track_secondary_genres": [
       "BLUES",
       "BURLESQUE",
-      "FOLK"
+      "HIP HOP"
     ],
     "track_instruments": [
-      "banjo",
-      "cello"
+      "BANJO",
+      "BASS",
+      "CELLO"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "KINDLY",
+      "NERDY",
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "INDIE, BLUES",
     "track_count_published": 4,
     "aggregate_play_count": 6939,
@@ -1202,21 +1335,31 @@
     "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
     "track_genres": [
       "BURLESQUE",
-      "DUB",
       "FOLK",
+      "JAZZ",
       "LOFI"
     ],
     "track_secondary_genres": [
       "BLUES",
-      "JAZZ"
+      "CIRCUS",
+      "HIP HOP",
+      "JAZZ",
+      "LOFI",
+      "TANGO"
     ],
     "track_instruments": [
-      "accordion",
-      "banjo",
-      "bass"
+      "ACCORDION",
+      "BANJO",
+      "BASS",
+      "CELLO",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_moods": [
+      "NERDY",
+      "PUNKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, CIRCUS",
     "track_count_published": 9,
     "aggregate_play_count": 11644,
     "aggregate_like_count": 90,
@@ -1383,20 +1526,31 @@
     "published_at": "2026-01-27T21:09:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-oX7ZY3z8JzrLVWyA-Iz5Tsg-t500x500.png",
     "track_genres": [
+      "BURLESQUE",
       "INDIE",
       "JAZZ",
       "LOFI"
     ],
     "track_secondary_genres": [
       "BURLESQUE",
-      "LOFI"
+      "HIP HOP",
+      "JAZZ",
+      "LOFI",
+      "MANTRA"
     ],
     "track_instruments": [
-      "cello",
-      "piano"
+      "BASS",
+      "CELLO",
+      "GUITAR",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_moods": [
+      "CHEEKY",
+      "NERDY",
+      "PUNKY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, JAZZ, LOFI",
     "track_count_published": 7,
     "aggregate_play_count": 16124,
     "aggregate_like_count": 139,
@@ -1431,23 +1585,34 @@
       "BURLESQUE",
       "DUB",
       "FOLK",
-      "INDIE",
       "LOFI"
     ],
     "track_secondary_genres": [
       "BLUES",
       "DUB",
+      "FOLK",
+      "HIP HOP",
       "INDIE",
       "MANTRA",
       "RAGGA",
       "ROCK"
     ],
     "track_instruments": [
-      "accordion",
-      "cello"
+      "ACCORDION",
+      "BASS",
+      "CELLO",
+      "GUITAR",
+      "XYLOPHONE"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE, ROCK",
+    "track_moods": [
+      "CHEEKY",
+      "KINDLY",
+      "NERDY",
+      "PUNKY",
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 10,
     "aggregate_play_count": 12344,
     "aggregate_like_count": 94,
@@ -1484,13 +1649,19 @@
       "LOFI"
     ],
     "track_secondary_genres": [
-      "FOLK"
+      "FOLK",
+      "INDIE",
+      "JAZZ"
     ],
     "track_instruments": [
-      "banjo"
+      "BANJO",
+      "BASS",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_moods": [
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "FOLK, JAZZ",
     "track_count_published": 8,
     "aggregate_play_count": 15149,
     "aggregate_like_count": 178,
@@ -1559,11 +1730,20 @@
       "JAZZ"
     ],
     "track_secondary_genres": [
+      "BURLESQUE",
       "INDIE"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ, INDIE",
+    "track_instruments": [
+      "BASS",
+      "GUITAR",
+      "PIANO"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "NERDY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, BURLESQUE",
     "track_count_published": 3,
     "aggregate_play_count": 3019,
     "aggregate_like_count": 27,
@@ -1600,9 +1780,11 @@
       "BLUES"
     ],
     "track_instruments": [
-      "banjo"
+      "BANJO"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "PUNKY"
+    ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 1,
     "aggregate_play_count": 343,
@@ -1638,11 +1820,18 @@
       "JAZZ"
     ],
     "track_secondary_genres": [
-      "BURLESQUE"
+      "BURLESQUE",
+      "LOFI"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ, BURLESQUE",
+    "track_instruments": [
+      "BASS",
+      "CELLO"
+    ],
+    "track_moods": [
+      "NERDY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 2,
     "aggregate_play_count": 2389,
     "aggregate_like_count": 22,
@@ -1678,8 +1867,12 @@
     "track_secondary_genres": [
       "JAZZ"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "CELLO"
+    ],
+    "track_moods": [
+      "NERDY"
+    ],
     "discovery_top_track_genres": "INDIE, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 2267,
@@ -1713,12 +1906,16 @@
     "track_genres": [
       "BURLESQUE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "cello"
+    "track_secondary_genres": [
+      "TANGO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_instruments": [
+      "CELLO"
+    ],
+    "track_moods": [
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, TANGO",
     "track_count_published": 1,
     "aggregate_play_count": 2928,
     "aggregate_like_count": 29,
@@ -1823,15 +2020,22 @@
     ],
     "track_secondary_genres": [
       "BURLESQUE",
-      "JAZZ"
+      "GIPSY",
+      "INDIE",
+      "JAZZ",
+      "TANGO"
     ],
     "track_instruments": [
-      "bass",
-      "cello",
-      "piano"
+      "BASS",
+      "CELLO",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_moods": [
+      "CHEEKY",
+      "GROOVY",
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "LOFI, INDIE, GIPSY",
     "track_count_published": 8,
     "aggregate_play_count": 13420,
     "aggregate_like_count": 149,
@@ -1870,10 +2074,15 @@
       "JAZZ"
     ],
     "track_instruments": [
-      "piano"
+      "BASS",
+      "CELLO",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ, BURLESQUE",
+    "track_moods": [
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 2,
     "aggregate_play_count": 2155,
     "aggregate_like_count": 18,
@@ -1904,18 +2113,24 @@
     "published_at": "2026-01-08T07:26:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-ZOzjbG3qBNgMzOWS-9LnxjQ-t500x500.png",
     "track_genres": [
-      "BLUES",
       "BURLESQUE",
+      "JAZZ",
       "LOFI"
     ],
     "track_secondary_genres": [
+      "BLUES",
+      "HIP HOP",
       "JAZZ"
     ],
     "track_instruments": [
-      "piano"
+      "BASS",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_moods": [
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, JAZZ",
     "track_count_published": 3,
     "aggregate_play_count": 3079,
     "aggregate_like_count": 17,
@@ -1952,9 +2167,12 @@
       "BURLESQUE"
     ],
     "track_instruments": [
-      "piano"
+      "BASS",
+      "PIANO"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "RAINY"
+    ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 1,
     "aggregate_play_count": 2578,
@@ -1992,14 +2210,19 @@
     ],
     "track_secondary_genres": [
       "BURLESQUE",
+      "INDIE",
       "JAZZ"
     ],
     "track_instruments": [
-      "bass",
-      "cello",
-      "piano"
+      "BASS",
+      "CELLO",
+      "PIANO"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "CHEEKY",
+      "NERDY",
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 9,
     "aggregate_play_count": 20695,
@@ -2034,13 +2257,21 @@
       "BLUES",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "bass",
-      "piano"
+    "track_secondary_genres": [
+      "GIPSY",
+      "INDIE",
+      "MANTRA"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_instruments": [
+      "BASS",
+      "PIANO"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "HOLY",
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 4,
     "aggregate_play_count": 5763,
     "aggregate_like_count": 89,
@@ -2073,17 +2304,25 @@
     "track_genres": [
       "BLUES",
       "DUB",
-      "INDIE"
+      "INDIE",
+      "JAZZ"
     ],
     "track_secondary_genres": [
       "DUB",
       "FLAMENCO",
-      "INDIE"
+      "INDIE",
+      "MANTRA"
     ],
     "track_instruments": [
-      "banjo"
+      "BANJO",
+      "BASS",
+      "CELLO",
+      "GUITAR"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "HOLY",
+      "KINDLY"
+    ],
     "discovery_top_track_genres": "DUB, INDIE, FLAMENCO",
     "track_count_published": 4,
     "aggregate_play_count": 5853,
@@ -2119,12 +2358,22 @@
       "DUB",
       "FOLK"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "banjo"
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "FOLK",
+      "MANTRA"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_instruments": [
+      "BANJO",
+      "HARMONICA"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "HOLY",
+      "KINDLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 5,
     "aggregate_play_count": 5034,
     "aggregate_like_count": 35,
@@ -2155,15 +2404,22 @@
     "published_at": "2025-12-30T00:34:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-OV8ZRGizQyraCB7N-C8HWOQ-t500x500.png",
     "track_genres": [
-      "LOFI",
-      "MANTRA"
+      "INDIE",
+      "LOFI"
     ],
     "track_secondary_genres": [
-      "INDIE"
+      "INDIE",
+      "MANTRA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_instruments": [
+      "BASS",
+      "CELLO",
+      "DRUM"
+    ],
+    "track_moods": [
+      "HOLY"
+    ],
+    "discovery_top_track_genres": "INDIE, MANTRA",
     "track_count_published": 2,
     "aggregate_play_count": 681,
     "aggregate_like_count": 12,
@@ -2198,12 +2454,23 @@
       "DUB",
       "LOFI"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "accordion"
+    "track_secondary_genres": [
+      "DUB",
+      "FOLK",
+      "JAZZ",
+      "MANTRA"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_instruments": [
+      "ACCORDION",
+      "BASS"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "NERDY",
+      "PUNKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, JAZZ",
     "track_count_published": 4,
     "aggregate_play_count": 8167,
     "aggregate_like_count": 74,
@@ -2241,10 +2508,22 @@
     ],
     "track_secondary_genres": [
       "BURLESQUE",
-      "INDIE"
+      "FOLK",
+      "INDIE",
+      "LOFI"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS",
+      "DRUM",
+      "FIDDLE"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "HOLY",
+      "PUNKY",
+      "SILLY",
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "BURLESQUE, INDIE",
     "track_count_published": 6,
     "aggregate_play_count": 9363,
@@ -2310,16 +2589,22 @@
     "published_at": "2025-12-14T04:18:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-BZeLqNQ4AlXL9NGG-8Sntuw-t500x500.png",
     "track_genres": [
+      "BURLESQUE",
+      "FOLK"
+    ],
+    "track_secondary_genres": [
       "BLUES",
-      "BURLESQUE"
+      "FOLK"
     ],
-    "track_secondary_genres": [],
     "track_instruments": [
-      "accordion",
-      "banjo"
+      "ACCORDION",
+      "BANJO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_moods": [
+      "HOLY",
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 2,
     "aggregate_play_count": 1800,
     "aggregate_like_count": 16,
@@ -2391,17 +2676,29 @@
     ],
     "track_secondary_genres": [
       "BURLESQUE",
+      "CIRCUS",
       "FLAMENCO",
+      "GIPSY",
       "INDIE",
-      "ROCK"
+      "JAZZ",
+      "ROCK",
+      "WALTZ"
     ],
     "track_instruments": [
-      "accordion",
-      "cello",
-      "piano"
+      "ACCORDION",
+      "BASS",
+      "CELLO",
+      "CLARINET",
+      "DRUM",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_moods": [
+      "GROOVY",
+      "KINDLY",
+      "SILLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "LOFI, INDIE, GIPSY",
     "track_count_published": 7,
     "aggregate_play_count": 8386,
     "aggregate_like_count": 81,
@@ -2432,12 +2729,21 @@
     "published_at": "2025-12-06T09:47:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-lciyCEyApUx6fnqe-mWMztg-t500x500.png",
     "track_genres": [
+      "FOLK",
+      "INDIE"
+    ],
+    "track_secondary_genres": [
+      "INDIE",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_instruments": [
+      "GUITAR",
+      "PIANO"
+    ],
+    "track_moods": [
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "FOLK, INDIE",
     "track_count_published": 4,
     "aggregate_play_count": 4609,
     "aggregate_like_count": 59,
@@ -2504,17 +2810,26 @@
     "track_genres": [
       "BLUES",
       "FOLK",
+      "INDIE",
       "LOFI"
     ],
     "track_secondary_genres": [
+      "FOLK",
       "INDIE",
       "LOFI"
     ],
     "track_instruments": [
-      "cello"
+      "BANJO",
+      "BASS",
+      "CELLO",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_moods": [
+      "GROOVY",
+      "NERDY",
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "INDIE, LOFI",
     "track_count_published": 5,
     "aggregate_play_count": 5564,
     "aggregate_like_count": 66,
@@ -2550,8 +2865,12 @@
     "track_secondary_genres": [
       "LOFI"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "JAZZ, LOFI",
     "track_count_published": 1,
     "aggregate_play_count": 704,
@@ -2589,13 +2908,19 @@
     ],
     "track_secondary_genres": [
       "FLAMENCO",
-      "INDIE"
+      "INDIE",
+      "MANTRA"
     ],
     "track_instruments": [
-      "cello"
+      "CELLO",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_moods": [
+      "HOLY",
+      "NERDY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, INDIE, FLAMENCO",
     "track_count_published": 4,
     "aggregate_play_count": 5345,
     "aggregate_like_count": 57,
@@ -2629,13 +2954,19 @@
       "BURLESQUE",
       "INDIE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "accordion",
-      "cello"
+    "track_secondary_genres": [
+      "CIRCUS",
+      "MANTRA",
+      "WALTZ"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_instruments": [
+      "ACCORDION",
+      "CELLO"
+    ],
+    "track_moods": [
+      "FRENCHY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, CIRCUS, WALTZ",
     "track_count_published": 2,
     "aggregate_play_count": 1811,
     "aggregate_like_count": 18,
@@ -2673,17 +3004,29 @@
       "LOFI"
     ],
     "track_secondary_genres": [
+      "BLUES",
+      "BURLESQUE",
       "DUB",
       "FOLK",
       "INDIE",
-      "JAZZ"
+      "JAZZ",
+      "MANTRA"
     ],
     "track_instruments": [
-      "bass",
-      "piano"
+      "BASS",
+      "BRASS",
+      "GUITAR",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_moods": [
+      "HOLY",
+      "KINDLY",
+      "NERDY",
+      "PUNKY",
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 13,
     "aggregate_play_count": 13358,
     "aggregate_like_count": 139,
@@ -2716,17 +3059,30 @@
     "track_genres": [
       "BLUES",
       "DUB",
+      "FOLK",
       "INDIE",
       "LOFI"
     ],
     "track_secondary_genres": [
-      "DUB"
+      "DUB",
+      "FLAMENCO",
+      "FOLK",
+      "GIPSY",
+      "JAZZ",
+      "LOFI"
     ],
     "track_instruments": [
-      "cello"
+      "BANJO",
+      "BASS",
+      "CELLO",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE, DUB",
+    "track_moods": [
+      "KINDLY",
+      "NERDY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "INDIE, DUB, FLAMENCO",
     "track_count_published": 6,
     "aggregate_play_count": 6926,
     "aggregate_like_count": 54,
@@ -2763,14 +3119,19 @@
     ],
     "track_secondary_genres": [
       "BURLESQUE",
-      "INDIE"
+      "INDIE",
+      "JAZZ"
     ],
     "track_instruments": [
-      "bass",
-      "cello"
+      "BASS",
+      "CELLO",
+      "DRUM"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "ROCK, BURLESQUE",
+    "track_moods": [
+      "GROOVY",
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 3,
     "aggregate_play_count": 1589,
     "aggregate_like_count": 22,
@@ -2835,14 +3196,29 @@
     "published_at": "2025-11-23T19:48:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-D95jhvq945VUHBlk-M2mkVQ-t500x500.png",
     "track_genres": [
+      "INDIE",
+      "JAZZ",
+      "LOFI"
+    ],
+    "track_secondary_genres": [
       "DUB",
+      "GIPSY",
+      "HIP HOP",
       "INDIE",
       "LOFI"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_instruments": [
+      "BASS",
+      "BRASS",
+      "CELLO",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "PUNKY",
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 6,
     "aggregate_play_count": 8209,
     "aggregate_like_count": 66,
@@ -2879,11 +3255,19 @@
     ],
     "track_secondary_genres": [
       "BLUES",
+      "GIPSY",
       "RAGGA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_instruments": [
+      "BANJO",
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 4,
     "aggregate_play_count": 1319,
     "aggregate_like_count": 20,
@@ -2922,10 +3306,13 @@
       "JAZZ"
     ],
     "track_instruments": [
-      "banjo",
-      "piano"
+      "BANJO",
+      "PIANO"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "KINDLY",
+      "RAINY"
+    ],
     "discovery_top_track_genres": "JAZZ, BLUES",
     "track_count_published": 4,
     "aggregate_play_count": 4572,
@@ -2993,10 +3380,16 @@
     "track_genres": [
       "BLUES"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_secondary_genres": [
+      "FOLK"
+    ],
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 1,
     "aggregate_play_count": 1229,
     "aggregate_like_count": 8,
@@ -3033,9 +3426,14 @@
       "FOLK",
       "INDIE"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ, FOLK, INDIE",
+    "track_instruments": [
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 796,
     "aggregate_like_count": 14,
@@ -3070,11 +3468,19 @@
       "FOLK"
     ],
     "track_secondary_genres": [
-      "INDIE"
+      "FOLK",
+      "INDIE",
+      "WALTZ"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_instruments": [
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, FOLK",
     "track_count_published": 3,
     "aggregate_play_count": 2973,
     "aggregate_like_count": 28,
@@ -3114,14 +3520,22 @@
     "track_secondary_genres": [
       "BURLESQUE",
       "DUB",
-      "ROCK"
+      "FOLK",
+      "INDIE"
     ],
     "track_instruments": [
-      "cello",
-      "piano"
+      "BASS",
+      "CELLO",
+      "DRUM",
+      "GUITAR",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_moods": [
+      "NERDY",
+      "PUNKY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "ROCK, BURLESQUE",
     "track_count_published": 7,
     "aggregate_play_count": 9974,
     "aggregate_like_count": 97,
@@ -3189,14 +3603,20 @@
       "BURLESQUE"
     ],
     "track_secondary_genres": [
+      "CIRCUS",
       "INDIE"
     ],
     "track_instruments": [
-      "accordion",
-      "piano"
+      "ACCORDION",
+      "BASS",
+      "CELLO",
+      "CLARINET",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_moods": [
+      "FRENCHY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, INDIE, CIRCUS",
     "track_count_published": 5,
     "aggregate_play_count": 4262,
     "aggregate_like_count": 46,
@@ -3261,14 +3681,22 @@
     "published_at": "2025-11-09T01:54:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-O1DJ2yudziIuoAWo-vRdodg-t500x500.png",
     "track_genres": [
-      "INDIE"
+      "INDIE",
+      "JAZZ"
     ],
-    "track_secondary_genres": [],
+    "track_secondary_genres": [
+      "INDIE",
+      "JAZZ",
+      "MANTRA"
+    ],
     "track_instruments": [
-      "piano"
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE",
+    "track_moods": [
+      "KINDLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "INDIE, MANTRA",
     "track_count_published": 3,
     "aggregate_play_count": 3816,
     "aggregate_like_count": 31,
@@ -3306,10 +3734,23 @@
     ],
     "track_secondary_genres": [
       "BURLESQUE",
-      "DUB"
+      "CIRCUS",
+      "DUB",
+      "GIPSY",
+      "INDIE",
+      "MANTRA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "ACCORDION",
+      "BASS",
+      "CELLO"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "KINDLY",
+      "RAINY",
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "JAZZ, DUB",
     "track_count_published": 5,
     "aggregate_play_count": 8120,
@@ -3341,16 +3782,23 @@
     "published_at": "2025-11-06T23:12:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-Tee0LuKXPZj5MLJY-pyJfiA-t500x500.png",
     "track_genres": [
+      "JAZZ",
       "LOFI",
       "MANTRA"
     ],
     "track_secondary_genres": [
-      "INDIE"
+      "INDIE",
+      "JAZZ",
+      "LOFI"
     ],
     "track_instruments": [
-      "cello"
+      "BASS",
+      "CELLO"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "NERDY",
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "MANTRA, INDIE",
     "track_count_published": 3,
     "aggregate_play_count": 4111,
@@ -3385,10 +3833,22 @@
       "BURLESQUE",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_secondary_genres": [
+      "BLUES",
+      "BURLESQUE",
+      "JAZZ"
+    ],
+    "track_instruments": [
+      "BASS",
+      "BRASS",
+      "PIANO"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "KINDLY",
+      "PEACHY"
+    ],
+    "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 4,
     "aggregate_play_count": 3005,
     "aggregate_like_count": 32,
@@ -3423,16 +3883,19 @@
       "INDIE"
     ],
     "track_secondary_genres": [
-      "DUB",
       "INDIE",
-      "JAZZ"
+      "JAZZ",
+      "MANTRA",
+      "WALTZ"
     ],
     "track_instruments": [
-      "cello",
-      "piano"
+      "CELLO",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE",
+    "track_moods": [
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "INDIE, MANTRA",
     "track_count_published": 5,
     "aggregate_play_count": 6475,
     "aggregate_like_count": 121,
@@ -3468,13 +3931,23 @@
     ],
     "track_secondary_genres": [
       "BURLESQUE",
-      "JAZZ"
+      "FOLK",
+      "INDIE",
+      "JAZZ",
+      "MANTRA"
     ],
     "track_instruments": [
-      "cello"
+      "BANJO",
+      "BASS",
+      "CELLO",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_moods": [
+      "HOLY",
+      "KINDLY",
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 5,
     "aggregate_play_count": 10189,
     "aggregate_like_count": 198,
@@ -3510,15 +3983,23 @@
       "LOFI"
     ],
     "track_secondary_genres": [
+      "BURLESQUE",
+      "CIRCUS",
       "FOLK",
-      "LOFI"
+      "INDIE",
+      "LOFI",
+      "MANTRA",
+      "WALTZ"
     ],
     "track_instruments": [
-      "accordion",
-      "cello"
+      "ACCORDION",
+      "BASS",
+      "CELLO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE",
+    "track_moods": [
+      "FRENCHY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, FOLK",
     "track_count_published": 6,
     "aggregate_play_count": 7935,
     "aggregate_like_count": 85,
@@ -3583,18 +4064,26 @@
     "published_at": "2025-10-30T08:21:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-6hfJ7MQsBYyjyhKs-VO8orw-t500x500.png",
     "track_genres": [
-      "BURLESQUE"
-    ],
-    "track_secondary_genres": [
+      "BURLESQUE",
       "INDIE"
     ],
-    "track_instruments": [
-      "accordion",
-      "cello",
-      "piano"
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "CIRCUS",
+      "INDIE",
+      "WALTZ"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_instruments": [
+      "ACCORDION",
+      "BRASS",
+      "CELLO",
+      "PIANO"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, INDIE",
     "track_count_published": 5,
     "aggregate_play_count": 5726,
     "aggregate_like_count": 55,
@@ -3628,13 +4117,20 @@
       "DUB",
       "INDIE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "cello",
-      "piano"
+    "track_secondary_genres": [
+      "FLAMENCO",
+      "GIPSY"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE",
+    "track_instruments": [
+      "CELLO",
+      "GUITAR",
+      "PIANO"
+    ],
+    "track_moods": [
+      "NERDY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "INDIE, GIPSY",
     "track_count_published": 2,
     "aggregate_play_count": 2626,
     "aggregate_like_count": 21,
@@ -3668,12 +4164,20 @@
       "BLUES",
       "LOFI"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "banjo"
+    "track_secondary_genres": [
+      "FOLK",
+      "GIPSY"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_instruments": [
+      "BANJO",
+      "BASS",
+      "DRUM"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "LOFI, GIPSY",
     "track_count_published": 3,
     "aggregate_play_count": 2716,
     "aggregate_like_count": 33,
@@ -3710,13 +4214,24 @@
       "LOFI"
     ],
     "track_secondary_genres": [
-      "INDIE"
+      "DUB",
+      "FLAMENCO",
+      "GIPSY",
+      "INDIE",
+      "JAZZ",
+      "MANTRA"
     ],
     "track_instruments": [
-      "cello",
-      "piano"
+      "BASS",
+      "BRASS",
+      "CELLO",
+      "GUITAR",
+      "PIANO"
     ],
-    "track_moods": [],
+    "track_moods": [
+      "HOLY",
+      "KINDLY"
+    ],
     "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 8,
     "aggregate_play_count": 7475,
@@ -3751,12 +4266,19 @@
       "BLUES",
       "LOFI"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "banjo"
+    "track_secondary_genres": [
+      "FOLK",
+      "HIP HOP"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_instruments": [
+      "BANJO",
+      "BASS"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "LOFI, HIP HOP",
     "track_count_published": 3,
     "aggregate_play_count": 4077,
     "aggregate_like_count": 30,
@@ -3789,14 +4311,25 @@
     "track_genres": [
       "BLUES",
       "BURLESQUE",
-      "DUB"
+      "JAZZ"
     ],
-    "track_secondary_genres": [],
+    "track_secondary_genres": [
+      "CIRCUS",
+      "DUB",
+      "FOLK",
+      "JAZZ"
+    ],
     "track_instruments": [
-      "banjo"
+      "BANJO",
+      "BRASS",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_moods": [
+      "CHEEKY",
+      "NERDY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, JAZZ",
     "track_count_published": 5,
     "aggregate_play_count": 7040,
     "aggregate_like_count": 55,
@@ -3831,12 +4364,22 @@
       "JAZZ",
       "LOFI"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "cello"
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "CIRCUS",
+      "JAZZ",
+      "WALTZ"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_instruments": [
+      "BASS",
+      "CELLO",
+      "CLARINET"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "SILLY"
+    ],
+    "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 4,
     "aggregate_play_count": 1110,
     "aggregate_like_count": 15,
@@ -3975,14 +4518,27 @@
       "LOFI"
     ],
     "track_secondary_genres": [
+      "DUB",
+      "FOLK",
+      "HIP HOP",
+      "INDIE",
       "LOFI",
       "MANTRA"
     ],
     "track_instruments": [
-      "banjo"
+      "BANJO",
+      "BASS",
+      "CELLO",
+      "CLARINET",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_moods": [
+      "HOLY",
+      "KINDLY",
+      "NERDY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 15,
     "aggregate_play_count": 22582,
     "aggregate_like_count": 196,
@@ -4051,11 +4607,17 @@
     ],
     "track_secondary_genres": [
       "FLAMENCO",
+      "GIPSY",
       "LOFI"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE, LOFI, FLAMENCO",
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "HOLY",
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "INDIE, FLAMENCO, GIPSY",
     "track_count_published": 4,
     "aggregate_play_count": 4893,
     "aggregate_like_count": 35,
@@ -4091,8 +4653,12 @@
     "track_secondary_genres": [
       "RAGGA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "KINDLY"
+    ],
     "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 1,
     "aggregate_play_count": 297,
@@ -4129,14 +4695,25 @@
       "INDIE"
     ],
     "track_secondary_genres": [
+      "BLUES",
+      "DUB",
+      "FOLK",
+      "JAZZ",
+      "MANTRA",
       "RAGGA"
     ],
     "track_instruments": [
-      "cello",
-      "fiddle"
+      "BANJO",
+      "BASS",
+      "CELLO",
+      "FIDDLE"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_moods": [
+      "HOLY",
+      "PUNKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "BLUES, MANTRA",
     "track_count_published": 7,
     "aggregate_play_count": 11335,
     "aggregate_like_count": 145,
@@ -4206,8 +4783,12 @@
     "track_secondary_genres": [
       "BURLESQUE"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "PUNKY"
+    ],
     "discovery_top_track_genres": "ROCK, BURLESQUE",
     "track_count_published": 1,
     "aggregate_play_count": 943,
@@ -4243,13 +4824,20 @@
       "DUB"
     ],
     "track_secondary_genres": [
-      "RAGGA"
+      "RAGGA",
+      "WALTZ"
     ],
     "track_instruments": [
-      "accordion"
+      "ACCORDION",
+      "BASS",
+      "BRASS",
+      "CELLO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_moods": [
+      "FRENCHY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, WALTZ",
     "track_count_published": 3,
     "aggregate_play_count": 5355,
     "aggregate_like_count": 44,
@@ -4282,10 +4870,16 @@
     "track_genres": [
       "DUB"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "RAGGA"
+    ],
+    "track_instruments": [
+      "DRUM"
+    ],
+    "track_moods": [
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 1,
     "aggregate_play_count": 405,
     "aggregate_like_count": 7,
@@ -4325,11 +4919,27 @@
     "track_secondary_genres": [
       "BURLESQUE",
       "FLAMENCO",
-      "INDIE"
+      "GIPSY",
+      "INDIE",
+      "JAZZ",
+      "LOFI",
+      "TANGO"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_instruments": [
+      "ACCORDION",
+      "BASS",
+      "BRASS",
+      "CELLO",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "FRENCHY",
+      "KINDLY",
+      "NERDY",
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 10,
     "aggregate_play_count": 10392,
     "aggregate_like_count": 110,
@@ -4364,13 +4974,19 @@
       "DUB"
     ],
     "track_secondary_genres": [
+      "BLUES",
+      "FLAMENCO",
       "INDIE"
     ],
     "track_instruments": [
-      "banjo"
+      "BANJO",
+      "CELLO",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB, INDIE",
+    "track_moods": [
+      "HOLY"
+    ],
+    "discovery_top_track_genres": "DUB, INDIE, FLAMENCO",
     "track_count_published": 2,
     "aggregate_play_count": 615,
     "aggregate_like_count": 11,
@@ -4437,10 +5053,16 @@
     "track_genres": [
       "LOFI"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_secondary_genres": [
+      "JAZZ"
+    ],
+    "track_instruments": [
+      "CELLO"
+    ],
+    "track_moods": [
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 481,
     "aggregate_like_count": 7,
@@ -4473,12 +5095,16 @@
     "track_genres": [
       "BLUES"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "banjo"
+    "track_secondary_genres": [
+      "ROCK"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_instruments": [
+      "BANJO"
+    ],
+    "track_moods": [
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "BLUES, ROCK",
     "track_count_published": 1,
     "aggregate_play_count": 344,
     "aggregate_like_count": 4,
@@ -4510,14 +5136,26 @@
     "cover_image_url": "https://i1.sndcdn.com/artworks-301rwrEjz0M0tuZV-1dVJMg-t500x500.png",
     "track_genres": [
       "DUB",
-      "INDIE",
+      "LOFI",
       "ROCK"
     ],
     "track_secondary_genres": [
-      "BURLESQUE"
+      "BURLESQUE",
+      "FOLK",
+      "GIPSY",
+      "HIP HOP",
+      "INDIE"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS",
+      "DRUM",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "GROOVY",
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "ROCK, BURLESQUE",
     "track_count_published": 4,
     "aggregate_play_count": 1424,
@@ -4556,14 +5194,24 @@
     ],
     "track_secondary_genres": [
       "BURLESQUE",
+      "CIRCUS",
       "INDIE",
+      "JAZZ",
       "RAGGA"
     ],
     "track_instruments": [
-      "accordion"
+      "ACCORDION",
+      "BASS",
+      "CELLO",
+      "DRUM"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB, RAGGA",
+    "track_moods": [
+      "GROOVY",
+      "NERDY",
+      "PUNKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "LOFI, INDIE, JAZZ",
     "track_count_published": 6,
     "aggregate_play_count": 2464,
     "aggregate_like_count": 31,
@@ -4630,10 +5278,17 @@
     "track_genres": [
       "INDIE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE",
+    "track_secondary_genres": [
+      "BLUES",
+      "MANTRA"
+    ],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "INDIE, BLUES, MANTRA",
     "track_count_published": 1,
     "aggregate_play_count": 196,
     "aggregate_like_count": 5,
@@ -4669,12 +5324,22 @@
       "ROCK"
     ],
     "track_secondary_genres": [
+      "BURLESQUE",
       "FOLK",
-      "INDIE"
+      "GIPSY",
+      "INDIE",
+      "MANTRA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "ROCK",
+    "track_instruments": [
+      "BANJO",
+      "BASS"
+    ],
+    "track_moods": [
+      "PUNKY",
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "ROCK, BURLESQUE",
     "track_count_published": 5,
     "aggregate_play_count": 1256,
     "aggregate_like_count": 23,
@@ -4773,12 +5438,22 @@
     "published_at": "2025-09-04T19:56:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-LHMRQArJDO3UAyuX-tkyzjg-t500x500.png",
     "track_genres": [
+      "LOFI",
+      "MANTRA"
+    ],
+    "track_secondary_genres": [
+      "JAZZ",
       "LOFI"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_instruments": [
+      "BASS",
+      "DRUM"
+    ],
+    "track_moods": [
+      "NERDY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 2,
     "aggregate_play_count": 2362,
     "aggregate_like_count": 34,
@@ -4917,9 +5592,15 @@
       "MANTRA",
       "RAGGA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB, RAGGA",
+    "track_instruments": [
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, RAGGA, MANTRA",
     "track_count_published": 5,
     "aggregate_play_count": 3478,
     "aggregate_like_count": 41,
@@ -4953,11 +5634,17 @@
       "INDIE"
     ],
     "track_secondary_genres": [
+      "HIP HOP",
       "LOFI"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE, LOFI",
+    "track_instruments": [
+      "BASS",
+      "DRUM"
+    ],
+    "track_moods": [
+      "CHEEKY"
+    ],
+    "discovery_top_track_genres": "INDIE, LOFI, HIP HOP",
     "track_count_published": 1,
     "aggregate_play_count": 269,
     "aggregate_like_count": 7,
@@ -4991,10 +5678,20 @@
       "BURLESQUE",
       "FOLK"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_secondary_genres": [
+      "BLUES",
+      "CIRCUS",
+      "WALTZ"
+    ],
+    "track_instruments": [
+      "BANJO",
+      "CELLO"
+    ],
+    "track_moods": [
+      "NERDY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 2,
     "aggregate_play_count": 617,
     "aggregate_like_count": 4,
@@ -5093,14 +5790,19 @@
     "published_at": "2025-08-24T06:22:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-jy4Ny3sg2PSbdteq-7zc7yg-t500x500.jpg",
     "track_genres": [
+      "MANTRA"
+    ],
+    "track_secondary_genres": [
       "LOFI"
     ],
-    "track_secondary_genres": [],
     "track_instruments": [
-      "piano"
+      "PIANO",
+      "VOICE"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_moods": [
+      "HOLY"
+    ],
+    "discovery_top_track_genres": "MANTRA, LOFI",
     "track_count_published": 1,
     "aggregate_play_count": 180,
     "aggregate_like_count": 5,
@@ -5272,8 +5974,14 @@
     "track_secondary_genres": [
       "BURLESQUE"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS",
+      "DRUM"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "ROCK, BURLESQUE",
     "track_count_published": 2,
     "aggregate_play_count": 684,
@@ -5345,8 +6053,12 @@
       "FLAMENCO",
       "TECHNO"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "PUNKY"
+    ],
     "discovery_top_track_genres": "WORLD, TECHNO, FLAMENCO",
     "track_count_published": 1,
     "aggregate_play_count": 398,
@@ -5378,14 +6090,21 @@
     "published_at": "2025-08-09T19:13:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-ygtp0Bp5Ccu1zSfd-ysCUOA-t500x500.png",
     "track_genres": [
+      "BURLESQUE",
+      "FOLK"
+    ],
+    "track_secondary_genres": [
+      "BLUES",
       "BURLESQUE"
     ],
-    "track_secondary_genres": [],
     "track_instruments": [
-      "banjo"
+      "BANJO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_moods": [
+      "CHEEKY",
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, BLUES",
     "track_count_published": 3,
     "aggregate_play_count": 767,
     "aggregate_like_count": 16,
@@ -5522,11 +6241,19 @@
       "FOLK"
     ],
     "track_secondary_genres": [
-      "FOLK"
+      "GIPSY",
+      "INDIE"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_instruments": [
+      "BASS",
+      "CELLO",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "FOLK, GIPSY",
     "track_count_published": 2,
     "aggregate_play_count": 524,
     "aggregate_like_count": 8,
@@ -5561,11 +6288,17 @@
       "ROCK"
     ],
     "track_secondary_genres": [
+      "BLUES",
       "INDIE"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_instruments": [
+      "BANJO",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 2,
     "aggregate_play_count": 1683,
     "aggregate_like_count": 10,
@@ -5705,8 +6438,15 @@
       "INDIE",
       "JAZZ"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS",
+      "CLARINET",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "RAINY"
+    ],
     "discovery_top_track_genres": "FOLK, INDIE",
     "track_count_published": 3,
     "aggregate_play_count": 1028,
@@ -5808,10 +6548,16 @@
     "track_genres": [
       "FOLK"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_secondary_genres": [
+      "BLUES"
+    ],
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 1,
     "aggregate_play_count": 219,
     "aggregate_like_count": 5,
@@ -5845,10 +6591,19 @@
       "DUB",
       "MANTRA"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "GIPSY",
+      "INDIE"
+    ],
+    "track_instruments": [
+      "BRASS",
+      "DRUM"
+    ],
+    "track_moods": [
+      "HOLY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "MANTRA, GIPSY",
     "track_count_published": 2,
     "aggregate_play_count": 975,
     "aggregate_like_count": 16,
@@ -5983,10 +6738,16 @@
     "track_genres": [
       "FOLK"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_secondary_genres": [
+      "INDIE"
+    ],
+    "track_instruments": [
+      "BANJO"
+    ],
+    "track_moods": [
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "FOLK, INDIE",
     "track_count_published": 1,
     "aggregate_play_count": 303,
     "aggregate_like_count": 4,
@@ -6022,14 +6783,20 @@
       "JAZZ"
     ],
     "track_secondary_genres": [
+      "BURLESQUE",
       "INDIE",
       "JAZZ"
     ],
     "track_instruments": [
-      "piano"
+      "BASS",
+      "GUITAR",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_moods": [
+      "CHEEKY",
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "FOLK, BURLESQUE",
     "track_count_published": 3,
     "aggregate_play_count": 1083,
     "aggregate_like_count": 13,
@@ -6060,13 +6827,24 @@
     "published_at": "2025-06-27T04:05:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-EtyWMtEaw4pyLtcc-MBCl2Q-t500x500.png",
     "track_genres": [
-      "DUB"
+      "DUB",
+      "MANTRA"
     ],
     "track_secondary_genres": [
+      "DUB",
+      "GIPSY",
+      "INDIE",
       "RAGGA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS",
+      "DRUM"
+    ],
+    "track_moods": [
+      "NERDY",
+      "PUNKY",
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 7,
     "aggregate_play_count": 4978,
@@ -6099,12 +6877,24 @@
     "cover_image_url": "https://i1.sndcdn.com/artworks-NrFEJYn5QiBNXnw5-RFTkHQ-t500x500.png",
     "track_genres": [
       "DUB",
-      "INDIE"
+      "INDIE",
+      "MANTRA"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "DUB",
+      "FOLK"
+    ],
+    "track_instruments": [
+      "BASS",
+      "CELLO",
+      "DRUM"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "MANTRA, DUB",
     "track_count_published": 3,
     "aggregate_play_count": 1282,
     "aggregate_like_count": 11,
@@ -6135,17 +6925,22 @@
     "published_at": "2025-06-24T01:57:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-52aEtWxS2ijbwMuq-syAe6A-t500x500.png",
     "track_genres": [
-      "BLUES",
+      "FOLK",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "banjo",
-      "bass",
-      "cello"
+    "track_secondary_genres": [
+      "BLUES",
+      "INDIE"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_instruments": [
+      "BANJO",
+      "BASS",
+      "CELLO"
+    ],
+    "track_moods": [
+      "HOLY"
+    ],
+    "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 2,
     "aggregate_play_count": 872,
     "aggregate_like_count": 12,
@@ -6180,12 +6975,23 @@
       "INDIE",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "cello"
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "LOFI",
+      "RAGGA"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_instruments": [
+      "BASS",
+      "BRASS",
+      "CELLO",
+      "DRUM"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "HOLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 4,
     "aggregate_play_count": 3332,
     "aggregate_like_count": 21,
@@ -6219,12 +7025,18 @@
       "LOFI",
       "MANTRA"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "cello"
+    "track_secondary_genres": [
+      "INDIE"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "MANTRA",
+    "track_instruments": [
+      "CELLO",
+      "DRUM"
+    ],
+    "track_moods": [
+      "HOLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "MANTRA, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 1370,
     "aggregate_like_count": 9,
@@ -6261,13 +7073,21 @@
       "LOFI"
     ],
     "track_secondary_genres": [
+      "FOLK",
+      "JAZZ",
+      "LOFI",
       "MANTRA"
     ],
     "track_instruments": [
-      "cello"
+      "BASS",
+      "CELLO",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE, MANTRA",
+    "track_moods": [
+      "KINDLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 4,
     "aggregate_play_count": 1924,
     "aggregate_like_count": 21,
@@ -6300,18 +7120,28 @@
     "track_genres": [
       "BURLESQUE",
       "DUB",
-      "INDIE",
-      "JAZZ"
+      "MANTRA"
     ],
     "track_secondary_genres": [
+      "CIRCUS",
+      "INDIE",
+      "JAZZ",
+      "MANTRA",
+      "TANGO",
+      "WALTZ",
       "WORLD"
     ],
     "track_instruments": [
-      "accordion",
-      "cello"
+      "ACCORDION",
+      "BASS",
+      "CELLO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_moods": [
+      "NERDY",
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, MANTRA",
     "track_count_published": 5,
     "aggregate_play_count": 4617,
     "aggregate_like_count": 40,
@@ -6413,11 +7243,16 @@
       "DUB"
     ],
     "track_secondary_genres": [
+      "FOLK",
       "JAZZ"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB, JAZZ",
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "PEACHY"
+    ],
+    "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 2,
     "aggregate_play_count": 1026,
     "aggregate_like_count": 9,
@@ -6552,10 +7387,19 @@
     "track_genres": [
       "BLUES"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "JAZZ"
+    ],
+    "track_instruments": [
+      "BASS",
+      "BRASS"
+    ],
+    "track_moods": [
+      "NERDY",
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "BLUES, BURLESQUE",
     "track_count_published": 2,
     "aggregate_play_count": 661,
     "aggregate_like_count": 13,
@@ -6620,12 +7464,26 @@
     "published_at": "2025-06-02T23:28:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-InO7MMy9vHYpBdDo-YcZoDQ-t500x500.png",
     "track_genres": [
-      "INDIE"
+      "INDIE",
+      "MANTRA"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE",
+    "track_secondary_genres": [
+      "BLUES",
+      "FOLK",
+      "INDIE",
+      "JAZZ",
+      "LOFI"
+    ],
+    "track_instruments": [
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "HOLY",
+      "KINDLY",
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "INDIE, JAZZ",
     "track_count_published": 5,
     "aggregate_play_count": 1202,
     "aggregate_like_count": 34,
@@ -6658,10 +7516,18 @@
     "track_genres": [
       "DUB"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "FOLK",
+      "INDIE"
+    ],
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 4,
     "aggregate_play_count": 3800,
     "aggregate_like_count": 35,
@@ -6692,14 +7558,27 @@
     "published_at": "2025-05-29T03:53:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-abyBryFxsG9vVsON-VYqfCQ-t500x500.png",
     "track_genres": [
-      "BLUES",
       "DUB",
+      "FOLK",
+      "MANTRA"
+    ],
+    "track_secondary_genres": [
+      "BLUES",
+      "FOLK",
+      "INDIE",
       "LOFI"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_instruments": [
+      "BANJO",
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "HOLY",
+      "KINDLY",
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "MANTRA, LOFI",
     "track_count_published": 4,
     "aggregate_play_count": 2664,
     "aggregate_like_count": 31,
@@ -6733,10 +7612,18 @@
       "DUB",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_secondary_genres": [
+      "FOLK",
+      "INDIE"
+    ],
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 1251,
     "aggregate_like_count": 17,
@@ -6769,21 +7656,27 @@
     "track_genres": [
       "BURLESQUE",
       "DUB",
-      "INDIE",
-      "WORLD"
+      "INDIE"
     ],
     "track_secondary_genres": [
-      "FLAMENCO",
+      "GIPSY",
+      "INDIE",
+      "JAZZ",
       "LOFI",
       "WORLD"
     ],
     "track_instruments": [
-      "accordion",
-      "cello",
-      "guitar"
+      "ACCORDION",
+      "BRASS",
+      "CELLO",
+      "GUITAR",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE, WORLD",
+    "track_moods": [
+      "HOLY",
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "INDIE, GIPSY",
     "track_count_published": 5,
     "aggregate_play_count": 3754,
     "aggregate_like_count": 38,
@@ -6820,8 +7713,15 @@
     "track_secondary_genres": [
       "BLUES"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "RAINY",
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "DUB, BLUES",
     "track_count_published": 3,
     "aggregate_play_count": 1926,
@@ -6854,15 +7754,25 @@
     "cover_image_url": "https://i1.sndcdn.com/artworks-58HtMVlI0dnLHSez-V8vJyA-t500x500.png",
     "track_genres": [
       "BURLESQUE",
-      "DUB"
+      "DUB",
+      "JAZZ"
     ],
     "track_secondary_genres": [
+      "DUB",
       "LOFI",
-      "RAGGA"
+      "RAGGA",
+      "ROCK"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_instruments": [
+      "BASS",
+      "DRUM"
+    ],
+    "track_moods": [
+      "NERDY",
+      "PUNKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, ROCK",
     "track_count_published": 4,
     "aggregate_play_count": 2170,
     "aggregate_like_count": 17,
@@ -6895,10 +7805,20 @@
     "track_genres": [
       "BLUES"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_secondary_genres": [
+      "INDIE",
+      "JAZZ",
+      "MANTRA",
+      "ROCK"
+    ],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "PUNKY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "BLUES, ROCK",
     "track_count_published": 4,
     "aggregate_play_count": 2653,
     "aggregate_like_count": 22,
@@ -6933,10 +7853,21 @@
       "FOLK",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_secondary_genres": [
+      "BLUES",
+      "BURLESQUE",
+      "FOLK"
+    ],
+    "track_instruments": [
+      "BANJO",
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "NERDY",
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 3,
     "aggregate_play_count": 1415,
     "aggregate_like_count": 17,
@@ -7003,10 +7934,16 @@
     "track_genres": [
       "INDIE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE",
+    "track_secondary_genres": [
+      "FOLK"
+    ],
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "CHEEKY"
+    ],
+    "discovery_top_track_genres": "INDIE, FOLK",
     "track_count_published": 1,
     "aggregate_play_count": 493,
     "aggregate_like_count": 5,
@@ -7037,17 +7974,31 @@
     "published_at": "2025-05-23T11:53:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-XYwpBnKZkAc8nA2R-sfypIw-t500x500.png",
     "track_genres": [
+      "BURLESQUE",
       "DUB",
       "INDIE",
-      "JAZZ",
       "LOFI"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "bass"
+    "track_secondary_genres": [
+      "CIRCUS",
+      "FOLK",
+      "HIP HOP",
+      "INDIE",
+      "JAZZ",
+      "MANTRA"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_instruments": [
+      "ACCORDION",
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "NERDY",
+      "PUNKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, INDIE",
     "track_count_published": 4,
     "aggregate_play_count": 2315,
     "aggregate_like_count": 24,
@@ -7078,15 +8029,23 @@
     "published_at": "2025-05-21T02:12:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-hEoexhjMEJaTLs2Y-y53BjQ-t500x500.png",
     "track_genres": [
-      "BLUES",
+      "BURLESQUE",
       "DUB"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "banjo"
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "CIRCUS"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_instruments": [
+      "ACCORDION",
+      "BANJO",
+      "DRUM"
+    ],
+    "track_moods": [
+      "PUNKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, CIRCUS, BURLESQUE",
     "track_count_published": 2,
     "aggregate_play_count": 1718,
     "aggregate_like_count": 14,
@@ -7151,12 +8110,22 @@
     "published_at": "2025-05-21T02:07:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-TISJ7mgoFUnIyF3o-Nc2YDg-t500x500.png",
     "track_genres": [
-      "BURLESQUE"
+      "BURLESQUE",
+      "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "CIRCUS"
+    ],
+    "track_instruments": [
+      "ACCORDION",
+      "BASS"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 2,
     "aggregate_play_count": 1468,
     "aggregate_like_count": 15,
@@ -7188,16 +8157,29 @@
     "cover_image_url": "https://i1.sndcdn.com/artworks-JJ4nzGR7Kbx7XkxH-xkazNQ-t500x500.png",
     "track_genres": [
       "DUB",
+      "FOLK",
       "INDIE"
     ],
     "track_secondary_genres": [
+      "DUB",
+      "FOLK",
+      "INDIE",
+      "LOFI",
+      "MANTRA",
       "RAGGA"
     ],
     "track_instruments": [
-      "cello"
+      "BANJO",
+      "BASS",
+      "CELLO",
+      "GUITAR"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_moods": [
+      "KINDLY",
+      "PEACHY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 7,
     "aggregate_play_count": 3420,
     "aggregate_like_count": 29,
@@ -7234,13 +8216,25 @@
       "INDIE"
     ],
     "track_secondary_genres": [
-      "WORLD"
+      "FOLK",
+      "GIPSY",
+      "INDIE",
+      "LOFI",
+      "MANTRA",
+      "RAGGA"
     ],
     "track_instruments": [
-      "cello"
+      "BASS",
+      "CELLO",
+      "DRUM"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_moods": [
+      "NERDY",
+      "PUNKY",
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "INDIE, MANTRA",
     "track_count_published": 8,
     "aggregate_play_count": 6633,
     "aggregate_like_count": 62,
@@ -7305,12 +8299,18 @@
     "published_at": "2025-05-02T03:14:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-xSBf70BkIjbkDGPA-9368AQ-t500x500.png",
     "track_genres": [
+      "BLUES"
+    ],
+    "track_secondary_genres": [
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "BLUES, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 1496,
     "aggregate_like_count": 11,
@@ -7341,14 +8341,21 @@
     "published_at": "2025-05-02T01:18:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-60rWtzt0Ur5yDsl8-lcLgjQ-t500x500.jpg",
     "track_genres": [
-      "BLUES",
       "INDIE",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_secondary_genres": [
+      "BLUES",
+      "JAZZ"
+    ],
+    "track_instruments": [
+      "BANJO",
+      "BASS"
+    ],
+    "track_moods": [
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "INDIE, JAZZ",
     "track_count_published": 3,
     "aggregate_play_count": 3170,
     "aggregate_like_count": 22,
@@ -7447,16 +8454,25 @@
     "published_at": "2025-04-27T06:04:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-AW1E67BzmypJfRI1-6hZzEg-t500x500.png",
     "track_genres": [
-      "BLUES",
       "DUB",
       "FOLK"
     ],
     "track_secondary_genres": [
+      "BLUES",
+      "CIRCUS",
       "MANTRA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_instruments": [
+      "BANJO",
+      "DRUM"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "HOLY",
+      "NERDY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 5,
     "aggregate_play_count": 7452,
     "aggregate_like_count": 49,
@@ -7492,9 +8508,16 @@
     "track_secondary_genres": [
       "RAGGA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "NERDY",
+      "PUNKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 7,
     "aggregate_play_count": 6430,
     "aggregate_like_count": 60,
@@ -7530,8 +8553,12 @@
     "track_secondary_genres": [
       "JAZZ"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 4,
     "aggregate_play_count": 6610,
@@ -7566,10 +8593,19 @@
       "BLUES",
       "LOFI"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "INDIE"
+    ],
+    "track_instruments": [
+      "BANJO",
+      "BASS"
+    ],
+    "track_moods": [
+      "NERDY",
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 1866,
     "aggregate_like_count": 18,
@@ -7605,8 +8641,12 @@
     "track_secondary_genres": [
       "LOFI"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BRASS"
+    ],
+    "track_moods": [
+      "NERDY"
+    ],
     "discovery_top_track_genres": "MANTRA, LOFI",
     "track_count_published": 1,
     "aggregate_play_count": 575,
@@ -7640,10 +8680,19 @@
     "track_genres": [
       "DUB"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "INDIE",
+      "MANTRA"
+    ],
+    "track_instruments": [
+      "BASS",
+      "VOICE"
+    ],
+    "track_moods": [
+      "PUNKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, MANTRA",
     "track_count_published": 2,
     "aggregate_play_count": 583,
     "aggregate_like_count": 8,
@@ -7674,18 +8723,22 @@
     "published_at": "2025-04-22T03:58:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-RDHQvbzOVwhs5g5O-y1W0yw-t500x500.png",
     "track_genres": [
-      "DUB",
       "FOLK",
       "JAZZ"
     ],
     "track_secondary_genres": [
-      "RAGGA"
+      "BLUES",
+      "INDIE"
     ],
     "track_instruments": [
-      "piano"
+      "BANJO",
+      "GUITAR",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_moods": [
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 4,
     "aggregate_play_count": 2138,
     "aggregate_like_count": 17,
@@ -7718,10 +8771,16 @@
     "track_genres": [
       "INDIE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "INDIE",
+    "track_secondary_genres": [
+      "JAZZ"
+    ],
+    "track_instruments": [
+      "CELLO"
+    ],
+    "track_moods": [
+      "HOLY"
+    ],
+    "discovery_top_track_genres": "INDIE, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 305,
     "aggregate_like_count": 2,
@@ -7757,8 +8816,12 @@
     "track_secondary_genres": [
       "BURLESQUE"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "TRIPPY"
+    ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 1,
     "aggregate_play_count": 314,
@@ -7858,12 +8921,18 @@
     "published_at": "2025-04-18T20:27:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-jQRym0eZpol8JOvs-sUKVsw-t500x500.png",
     "track_genres": [
+      "FOLK"
+    ],
+    "track_secondary_genres": [
       "BLUES"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_instruments": [
+      "BANJO"
+    ],
+    "track_moods": [
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 1,
     "aggregate_play_count": 487,
     "aggregate_like_count": 4,
@@ -7899,11 +8968,21 @@
       "FOLK"
     ],
     "track_secondary_genres": [
-      "ROCK"
+      "CIRCUS",
+      "INDIE",
+      "ROCK",
+      "WALTZ"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_instruments": [
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "NERDY",
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, CIRCUS, WALTZ",
     "track_count_published": 4,
     "aggregate_play_count": 1787,
     "aggregate_like_count": 10,
@@ -7973,10 +9052,16 @@
     ],
     "track_secondary_genres": [
       "DUB",
-      "JAZZ"
+      "JAZZ",
+      "MANTRA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS",
+      "DRUM"
+    ],
+    "track_moods": [
+      "NERDY"
+    ],
     "discovery_top_track_genres": "BLUES, JAZZ, DUB",
     "track_count_published": 2,
     "aggregate_play_count": 666,
@@ -8252,9 +9337,13 @@
     "track_secondary_genres": [
       "INDIE"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "DUB, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 659,
     "aggregate_like_count": 6,
@@ -8491,10 +9580,16 @@
     "track_genres": [
       "BURLESQUE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_secondary_genres": [
+      "JAZZ"
+    ],
+    "track_instruments": [
+      "FIDDLE"
+    ],
+    "track_moods": [
+      "CHEEKY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 392,
     "aggregate_like_count": 3,
@@ -8562,12 +9657,20 @@
       "BLUES",
       "BURLESQUE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "accordion"
+    "track_secondary_genres": [
+      "FOLK",
+      "JAZZ"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_instruments": [
+      "ACCORDION",
+      "BANJO",
+      "CELLO"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 2,
     "aggregate_play_count": 631,
     "aggregate_like_count": 6,
@@ -8598,14 +9701,19 @@
     "published_at": "2025-04-06T04:23:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-7xjmVBpcmAIlWBfO-5Ebr4Q-t500x500.png",
     "track_genres": [
-      "LOFI"
+      "JAZZ"
     ],
     "track_secondary_genres": [
-      "BURLESQUE"
+      "BURLESQUE",
+      "LOFI"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI, BURLESQUE",
+    "track_instruments": [
+      "PIANO"
+    ],
+    "track_moods": [
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "JAZZ, BURLESQUE, LOFI",
     "track_count_published": 1,
     "aggregate_play_count": 319,
     "aggregate_like_count": 3,
@@ -8638,10 +9746,18 @@
     "track_genres": [
       "BURLESQUE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_secondary_genres": [
+      "JAZZ",
+      "TANGO"
+    ],
+    "track_instruments": [
+      "ACCORDION",
+      "PIANO"
+    ],
+    "track_moods": [
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, JAZZ, TANGO",
     "track_count_published": 1,
     "aggregate_play_count": 314,
     "aggregate_like_count": 4,
@@ -8712,9 +9828,15 @@
     "track_secondary_genres": [
       "INDIE"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_instruments": [
+      "BASS",
+      "BRASS",
+      "DRUM"
+    ],
+    "track_moods": [
+      "RAINY"
+    ],
+    "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 745,
     "aggregate_like_count": 9,
@@ -8781,10 +9903,16 @@
     "track_genres": [
       "DUB"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "INDIE"
+    ],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "DUB, INDIE",
     "track_count_published": 1,
     "aggregate_play_count": 272,
     "aggregate_like_count": 6,
@@ -8886,13 +10014,23 @@
       "BURLESQUE",
       "FOLK"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "accordion",
-      "cello"
+    "track_secondary_genres": [
+      "BLUES",
+      "INDIE",
+      "MANTRA"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_instruments": [
+      "ACCORDION",
+      "BANJO",
+      "CELLO",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "PUNKY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "FOLK, INDIE",
     "track_count_published": 3,
     "aggregate_play_count": 1563,
     "aggregate_like_count": 17,
@@ -8925,10 +10063,16 @@
     "track_genres": [
       "BLUES"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_secondary_genres": [
+      "FOLK"
+    ],
+    "track_instruments": [
+      "BANJO"
+    ],
+    "track_moods": [
+      "CHEEKY"
+    ],
+    "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 1,
     "aggregate_play_count": 467,
     "aggregate_like_count": 4,
@@ -9165,10 +10309,16 @@
     "track_genres": [
       "DUB"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "LOFI"
+    ],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 1,
     "aggregate_play_count": 368,
     "aggregate_like_count": 2,
@@ -9204,8 +10354,12 @@
     "track_secondary_genres": [
       "DUB"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "HOLY"
+    ],
     "discovery_top_track_genres": "MANTRA, DUB",
     "track_count_published": 1,
     "aggregate_play_count": 296,
@@ -9341,10 +10495,16 @@
     "track_genres": [
       "DUB"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "LOFI"
+    ],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 1,
     "aggregate_play_count": 393,
     "aggregate_like_count": 3,
@@ -9377,10 +10537,16 @@
     "track_genres": [
       "DUB"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "LOFI"
+    ],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 1,
     "aggregate_play_count": 383,
     "aggregate_like_count": 5,
@@ -9448,10 +10614,18 @@
       "BLUES",
       "DUB"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "INDIE"
+    ],
+    "track_instruments": [
+      "BANJO",
+      "BASS"
+    ],
+    "track_moods": [
+      "PEACHY"
+    ],
+    "discovery_top_track_genres": "DUB, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 835,
     "aggregate_like_count": 19,
@@ -9516,12 +10690,20 @@
     "published_at": "2025-01-31T13:03:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-L6YErpavAldzq4cD-HRzVlg-t500x500.png",
     "track_genres": [
-      "DUB"
+      "BLUES"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "DUB",
+      "FOLK",
+      "INDIE"
+    ],
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "BLUES, INDIE, FOLK, DUB",
     "track_count_published": 1,
     "aggregate_play_count": 327,
     "aggregate_like_count": 5,
@@ -9552,12 +10734,18 @@
     "published_at": "2025-01-30T00:32:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-Gpeeqzc8b4frhVCd-pyGbug-t500x500.png",
     "track_genres": [
+      "BLUES"
+    ],
+    "track_secondary_genres": [
       "FOLK"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_instruments": [
+      "BRASS"
+    ],
+    "track_moods": [
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 1,
     "aggregate_play_count": 331,
     "aggregate_like_count": 5,
@@ -9628,8 +10816,12 @@
       "BLUES",
       "MANTRA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "FRENCHY"
+    ],
     "discovery_top_track_genres": "LOFI, MANTRA, BLUES",
     "track_count_published": 1,
     "aggregate_play_count": 532,
@@ -9696,12 +10888,23 @@
     "cover_image_url": "https://i1.sndcdn.com/artworks-w61imgKjvg3ASHMz-HXgbbA-t500x500.jpg",
     "track_genres": [
       "BLUES",
-      "DUB"
+      "DUB",
+      "FOLK"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_secondary_genres": [
+      "BLUES",
+      "FOLK",
+      "MANTRA"
+    ],
+    "track_instruments": [
+      "DRUM",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "NERDY",
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 3,
     "aggregate_play_count": 905,
     "aggregate_like_count": 16,
@@ -9802,10 +11005,20 @@
     "track_genres": [
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_secondary_genres": [
+      "BLUES",
+      "BURLESQUE",
+      "INDIE"
+    ],
+    "track_instruments": [
+      "BASS",
+      "CELLO",
+      "PIANO"
+    ],
+    "track_moods": [
+      "PEACHY"
+    ],
+    "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 3,
     "aggregate_play_count": 904,
     "aggregate_like_count": 13,
@@ -9838,10 +11051,16 @@
     "track_genres": [
       "BLUES"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_secondary_genres": [
+      "FOLK"
+    ],
+    "track_instruments": [
+      "BANJO"
+    ],
+    "track_moods": [
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 1,
     "aggregate_play_count": 197,
     "aggregate_like_count": 6,
@@ -9906,13 +11125,23 @@
     "published_at": "2025-01-08T00:47:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-OWRInG4UzoJJhhFd-ho8qyg-t500x500.jpg",
     "track_genres": [
-      "FOLK",
+      "BLUES",
       "INDIE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_secondary_genres": [
+      "FOLK",
+      "LOFI"
+    ],
+    "track_instruments": [
+      "BASS",
+      "CELLO",
+      "XYLOPHONE"
+    ],
+    "track_moods": [
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "INDIE, LOFI",
     "track_count_published": 3,
     "aggregate_play_count": 1036,
     "aggregate_like_count": 20,
@@ -10015,10 +11244,22 @@
       "DUB",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "BLUES",
+      "CIRCUS",
+      "RAGGA"
+    ],
+    "track_instruments": [
+      "BASS",
+      "BRASS",
+      "DRUM",
+      "FIDDLE",
+      "PIANO"
+    ],
+    "track_moods": [
+      "CHEEKY"
+    ],
+    "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 3,
     "aggregate_play_count": 973,
     "aggregate_like_count": 26,
@@ -10054,8 +11295,12 @@
     "track_secondary_genres": [
       "JAZZ"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "CHEEKY"
+    ],
     "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 1418,
@@ -10089,10 +11334,17 @@
     "track_genres": [
       "BURLESQUE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BURLESQUE",
+    "track_secondary_genres": [
+      "JAZZ"
+    ],
+    "track_instruments": [
+      "ACCORDION",
+      "PIANO"
+    ],
+    "track_moods": [
+      "PEACHY"
+    ],
+    "discovery_top_track_genres": "BURLESQUE, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 183,
     "aggregate_like_count": 5,
@@ -10159,10 +11411,16 @@
     "track_genres": [
       "FOLK"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_secondary_genres": [
+      "MANTRA"
+    ],
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "FOLK, MANTRA",
     "track_count_published": 1,
     "aggregate_play_count": 343,
     "aggregate_like_count": 5,
@@ -10261,13 +11519,22 @@
     "published_at": "2024-12-20T02:30:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-ud5KKsf2ftHwkxwZ-emOxEw-t500x500.jpg",
     "track_genres": [
-      "BLUES",
-      "DUB"
+      "DUB",
+      "INDIE"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "INDIE",
+      "LOFI"
+    ],
+    "track_instruments": [
+      "BANJO",
+      "BASS"
+    ],
+    "track_moods": [
+      "KINDLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "DUB, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 811,
     "aggregate_like_count": 8,
@@ -10336,13 +11603,17 @@
       "DUB"
     ],
     "track_secondary_genres": [
-      "JAZZ"
+      "JAZZ",
+      "TANGO"
     ],
-    "track_instruments": [],
+    "track_instruments": [
+      "CLARINET",
+      "PIANO"
+    ],
     "track_moods": [
-      "🙏 BLESS"
+      "PEACHY"
     ],
-    "discovery_top_track_genres": "DUB",
+    "discovery_top_track_genres": "DUB, JAZZ",
     "track_count_published": 2,
     "aggregate_play_count": 715,
     "aggregate_like_count": 16,
@@ -10480,8 +11751,12 @@
     "track_secondary_genres": [
       "JAZZ"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "CHEEKY"
+    ],
     "discovery_top_track_genres": "DUB, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 1056,
@@ -10581,12 +11856,18 @@
     "published_at": "2024-12-11T21:31:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-otyCSuVjsJ2YL8G1-qQb1mw-t500x500.png",
     "track_genres": [
-      "FOLK"
+      "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "FOLK",
+    "track_secondary_genres": [
+      "INDIE"
+    ],
+    "track_instruments": [
+      "BASS"
+    ],
+    "track_moods": [
+      "FRENCHY"
+    ],
+    "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 1,
     "aggregate_play_count": 465,
     "aggregate_like_count": 3,
@@ -11127,12 +12408,18 @@
     "published_at": "2024-11-20T21:30:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-sm0RyWK8U9ogWbAR-vvmBLg-t500x500.png",
     "track_genres": [
+      "FOLK"
+    ],
+    "track_secondary_genres": [
       "DUB"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_instruments": [
+      "BANJO"
+    ],
+    "track_moods": [
+      "HOLY"
+    ],
+    "discovery_top_track_genres": "FOLK, DUB",
     "track_count_published": 1,
     "aggregate_play_count": 1025,
     "aggregate_like_count": 13,
@@ -11271,8 +12558,12 @@
       "INDIE",
       "JAZZ"
     ],
-    "track_instruments": [],
-    "track_moods": [],
+    "track_instruments": [
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY"
+    ],
     "discovery_top_track_genres": "FOLK, INDIE, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 389,
@@ -11306,10 +12597,17 @@
     "track_genres": [
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_secondary_genres": [
+      "BURLESQUE"
+    ],
+    "track_instruments": [
+      "BASS",
+      "PIANO"
+    ],
+    "track_moods": [
+      "NERDY"
+    ],
+    "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 1,
     "aggregate_play_count": 235,
     "aggregate_like_count": 7,
@@ -11344,10 +12642,23 @@
       "BURLESQUE",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_secondary_genres": [
+      "BLUES",
+      "FOLK",
+      "INDIE",
+      "JAZZ"
+    ],
+    "track_instruments": [
+      "BASS",
+      "CELLO",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "HOLY",
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "JAZZ, BLUES",
     "track_count_published": 4,
     "aggregate_play_count": 4514,
     "aggregate_like_count": 45,
@@ -11378,12 +12689,19 @@
     "published_at": "2024-11-14T04:48:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-EOtdUVjacracHxmj-i0BNoA-t500x500.png",
     "track_genres": [
+      "JAZZ"
+    ],
+    "track_secondary_genres": [
       "BLUES"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_instruments": [
+      "BANJO",
+      "BASS"
+    ],
+    "track_moods": [
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "JAZZ, BLUES",
     "track_count_published": 1,
     "aggregate_play_count": 1441,
     "aggregate_like_count": 11,
@@ -11417,10 +12735,17 @@
       "BLUES",
       "DUB"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_secondary_genres": [
+      "FOLK"
+    ],
+    "track_instruments": [
+      "BANJO",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 3,
     "aggregate_play_count": 4359,
     "aggregate_like_count": 21,
@@ -11454,10 +12779,20 @@
       "FOLK",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "INDIE"
+    ],
+    "track_instruments": [
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "NERDY",
+      "RAINY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 3,
     "aggregate_play_count": 2829,
     "aggregate_like_count": 27,
@@ -11559,12 +12894,21 @@
       "BURLESQUE",
       "JAZZ"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [
-      "accordion"
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "FOLK",
+      "INDIE"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "JAZZ",
+    "track_instruments": [
+      "ACCORDION",
+      "BASS",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "HOLY",
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 3,
     "aggregate_play_count": 4802,
     "aggregate_like_count": 51,
@@ -11595,18 +12939,25 @@
     "published_at": "2024-11-05T03:05:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-IDfjsYaZOumrtQ1L-jseSkw-t500x500.png",
     "track_genres": [
-      "DUB",
+      "FOLK",
       "JAZZ",
       "LOFI"
     ],
     "track_secondary_genres": [
-      "BLUES"
+      "BLUES",
+      "BURLESQUE",
+      "DUB"
     ],
     "track_instruments": [
-      "harmonica"
+      "FIDDLE",
+      "GUITAR",
+      "HARMONICA"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB",
+    "track_moods": [
+      "KINDLY",
+      "TRIPPY"
+    ],
+    "discovery_top_track_genres": "FOLK, DUB",
     "track_count_published": 3,
     "aggregate_play_count": 4938,
     "aggregate_like_count": 42,
@@ -11741,19 +13092,25 @@
     "track_genres": [
       "BURLESQUE",
       "DUB",
-      "JAZZ",
-      "LOFI"
+      "INDIE",
+      "JAZZ"
     ],
     "track_secondary_genres": [
+      "INDIE",
       "JAZZ",
-      "LOFI"
+      "LOFI",
+      "MANTRA"
     ],
     "track_instruments": [
-      "accordion",
-      "piano"
+      "ACCORDION",
+      "BASS",
+      "PIANO"
     ],
-    "track_moods": [],
-    "discovery_top_track_genres": "LOFI",
+    "track_moods": [
+      "CHEEKY",
+      "FRENCHY"
+    ],
+    "discovery_top_track_genres": "INDIE, JAZZ",
     "track_count_published": 6,
     "aggregate_play_count": 3878,
     "aggregate_like_count": 50,
@@ -11820,10 +13177,17 @@
     "track_genres": [
       "BLUES"
     ],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "BLUES",
+    "track_secondary_genres": [
+      "JAZZ"
+    ],
+    "track_instruments": [
+      "BANJO",
+      "FIDDLE"
+    ],
+    "track_moods": [
+      "PUNKY"
+    ],
+    "discovery_top_track_genres": "BLUES, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 1710,
     "aggregate_like_count": 13,
@@ -11925,11 +13289,16 @@
       "DUB"
     ],
     "track_secondary_genres": [
-      "JAZZ"
+      "JAZZ",
+      "RAGGA"
     ],
-    "track_instruments": [],
-    "track_moods": [],
-    "discovery_top_track_genres": "DUB, JAZZ",
+    "track_instruments": [
+      "DRUM"
+    ],
+    "track_moods": [
+      "KINDLY"
+    ],
+    "discovery_top_track_genres": "DUB, JAZZ, RAGGA",
     "track_count_published": 1,
     "aggregate_play_count": 505,
     "aggregate_like_count": 9,

@@ -1,32 +1,5 @@
 /* Phase 3 /tracks — list + player + pagination + filters (URL-synced). */
 
-.tracks-page__filter-notice {
-  display: flex;
-  gap: 0.4em;
-  align-items: flex-start;
-  margin: 0 0 var(--space-4, 16px);
-  padding: var(--space-3, 12px) 0;
-  max-width: 100%;
-  box-sizing: border-box;
-  font-family: var(--font-body);
-  font-size: var(--type-xs, 0.75rem);
-  line-height: 1.45;
-  color: var(--color-text-muted);
-  border-top: 1px solid color-mix(in srgb, var(--color-border) 85%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 85%, transparent);
-}
-
-.tracks-page__filter-notice-glyph {
-  flex-shrink: 0;
-  font-size: 0.95em;
-  line-height: inherit;
-  opacity: 0.85;
-}
-
-.tracks-page__filter-notice-text {
-  min-width: 0;
-}
-
 .tracks-page__intro {
   margin: 0 0 1rem;
   font-size: 0.88rem;
