@@ -36,6 +36,8 @@ function trackSearchHaystack(t: TrackCatalogItem): string {
     t.secondary_genre,
     ...(t.secondary_genres ?? []),
     ...(t.genres ?? []),
+    t.mood,
+    t.tempo_feel,
     ...t.instruments,
     t.ep_title,
   ]
