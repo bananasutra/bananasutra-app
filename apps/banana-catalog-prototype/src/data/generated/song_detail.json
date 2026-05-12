@@ -3208,7 +3208,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "SILLY",
+        "mood": "CHEEKY",
         "tempo_feel": "MIDBEAT",
         "curation_rating": "4",
         "sutra": "KNOWsutra"
@@ -3446,7 +3446,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": true,
-        "mood": "GROOVY",
+        "mood": "PUNKY",
         "tempo_feel": "UPBEAT",
         "curation_rating": "5",
         "sutra": "BLOWsutra"
@@ -8880,7 +8880,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "GROOVY",
+        "mood": "CHEEKY",
         "tempo_feel": "UPBEAT",
         "curation_rating": "4",
         "sutra": "SHOWsutra"
@@ -9023,11 +9023,11 @@
         "duration_sec": 271,
         "duration_raw": "4:31",
         "genres": [
-          "WORLD",
+          "INDIE",
           "TECHNO",
           "FLAMENCO"
         ],
-        "primary_genre": "WORLD",
+        "primary_genre": "INDIE",
         "secondary_genres": [
           "TECHNO",
           "FLAMENCO"
@@ -10939,12 +10939,12 @@
         "duration_sec": 202,
         "duration_raw": "3:22",
         "genres": [
-          "WORLD",
+          "INDIE",
           "TECHNO",
           "FLAMENCO",
           "GIPSY"
         ],
-        "primary_genre": "WORLD",
+        "primary_genre": "INDIE",
         "secondary_genres": [
           "TECHNO",
           "FLAMENCO",
@@ -10952,7 +10952,9 @@
         ],
         "soundcloud_genre": "Soundtrack",
         "secondary_genre": "TECHNO",
-        "instruments": [],
+        "instruments": [
+          "GUITAR"
+        ],
         "ep_title": "Zero Sum (Zero Sean) • GROWsutra (Dare to Care) EPx22",
         "ep_url": "https://soundcloud.com/bananasutra/sets/zero-sum-growsutra-epx22",
         "ep_track_number": 13,
@@ -10964,7 +10966,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "GROOVY",
+        "mood": "CHEEKY",
         "tempo_feel": "UPBEAT",
         "curation_rating": "3",
         "sutra": "GROWsutra"
@@ -11146,12 +11148,12 @@
         "duration_sec": 196,
         "duration_raw": "3:16",
         "genres": [
-          "WORLD",
+          "INDIE",
           "TECHNO",
           "FLAMENCO",
           "GIPSY"
         ],
-        "primary_genre": "WORLD",
+        "primary_genre": "INDIE",
         "secondary_genres": [
           "TECHNO",
           "FLAMENCO",
@@ -13069,7 +13071,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": true,
-        "mood": "GROOVY",
+        "mood": "PUNKY",
         "tempo_feel": "UPBEAT",
         "curation_rating": "5",
         "sutra": "QUACKsutra"
@@ -14041,7 +14043,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "SILLY",
+        "mood": "CHEEKY",
         "tempo_feel": "MIDBEAT",
         "curation_rating": "5",
         "sutra": "SHOWsutra"
@@ -14196,7 +14198,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": true,
-        "mood": "GROOVY",
+        "mood": "NERDY",
         "tempo_feel": "MIDBEAT",
         "curation_rating": "5",
         "sutra": "BLOWsutra"
@@ -18257,7 +18259,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "SILLY",
+        "mood": "CHEEKY",
         "tempo_feel": "UPBEAT",
         "curation_rating": "4",
         "sutra": "SHOWsutra"
@@ -18353,8 +18355,8 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "GROOVY",
-        "tempo_feel": "LOWBEAT",
+        "mood": "NERDY",
+        "tempo_feel": "MIDBEAT",
         "curation_rating": "5",
         "sutra": "GROWsutra"
       },
@@ -18604,8 +18606,8 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "GROOVY",
-        "tempo_feel": "LOWBEAT",
+        "mood": "KINDLY",
+        "tempo_feel": "MIDBEAT",
         "curation_rating": "5",
         "sutra": "GROWsutra"
       },
@@ -32258,7 +32260,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "GROOVY",
+        "mood": "PUNKY",
         "tempo_feel": "UPBEAT",
         "curation_rating": "5",
         "sutra": "BLOWsutra"
@@ -37827,11 +37829,11 @@
         "duration_sec": 227,
         "duration_raw": "3:47",
         "genres": [
-          "WORLD",
+          "INDIE",
           "TECHNO",
           "FLAMENCO"
         ],
-        "primary_genre": "WORLD",
+        "primary_genre": "INDIE",
         "secondary_genres": [
           "TECHNO",
           "FLAMENCO"
@@ -37951,11 +37953,11 @@
         "duration_sec": 265,
         "duration_raw": "4:25",
         "genres": [
-          "WORLD",
+          "INDIE",
           "TECHNO",
           "FLAMENCO"
         ],
-        "primary_genre": "WORLD",
+        "primary_genre": "INDIE",
         "secondary_genres": [
           "TECHNO",
           "FLAMENCO"
@@ -38034,11 +38036,11 @@
         "duration_sec": 274,
         "duration_raw": "4:34",
         "genres": [
-          "WORLD",
+          "INDIE",
           "TECHNO",
           "FLAMENCO"
         ],
-        "primary_genre": "WORLD",
+        "primary_genre": "INDIE",
         "secondary_genres": [
           "TECHNO",
           "FLAMENCO"
@@ -38669,7 +38671,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "SILLY",
+        "mood": "CHEEKY",
         "tempo_feel": "MIDBEAT",
         "curation_rating": "4",
         "sutra": "SHOWsutra"
@@ -39591,7 +39593,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "GROOVY",
+        "mood": "KINDLY",
         "tempo_feel": "MIDBEAT",
         "curation_rating": "4",
         "sutra": "GLOWsutra"
@@ -39717,7 +39719,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "SILLY",
+        "mood": "CHEEKY",
         "tempo_feel": "UPBEAT",
         "curation_rating": "4",
         "sutra": "GLOWsutra"
@@ -41993,7 +41995,7 @@
         "track_status": "",
         "track_in_app": true,
         "fav_track": false,
-        "mood": "GROOVY",
+        "mood": "TRIPPY",
         "tempo_feel": "UPBEAT",
         "curation_rating": "4",
         "sutra": "SHOWsutra"

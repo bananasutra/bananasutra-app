@@ -33,9 +33,13 @@ import { hasListenerCatalogMedia, isLyricsOnlySong } from './listenerCatalog'
 const facets = facetsJson as FacetsPayload
 const DEBOUNCE_MS = 300
 const TRACK_STRICT_GENRE_FACET_TOKENS = new Set<string>(
-  [...(facets.track_genre ?? []), ...(facets.track_secondary_genre ?? []), ...(facets.track_mood ?? [])].map((e) =>
-    e.value.trim().toLowerCase(),
-  ),
+  [
+    ...(facets.track_genre ?? []),
+    ...(facets.track_secondary_genre ?? []),
+    ...(facets.track_mood ?? []),
+    ...(facets.track_instrument ?? []),
+    ...(facets.track_tempo_feel ?? []),
+  ].map((e) => e.value.trim().toLowerCase()),
 )
 
 /** Keyword-state preview rows per tab (IA §3.10). */
@@ -165,6 +169,8 @@ function browseChipHref(group: FacetGroupKey, value: string): string {
   if (group === 'track_genre') return buildTracksBrowsePath('primary_genre', value)
   if (group === 'track_secondary_genre') return buildTracksBrowsePath('secondary_genre', value)
   if (group === 'track_mood') return buildTracksBrowsePath('mood', value)
+  if (group === 'track_instrument') return buildTracksBrowsePath('instrument', value)
+  if (group === 'track_tempo_feel') return buildTracksBrowsePath('tempo_feel', value)
   return buildBrowsePathForFacet(group as FilterFacetKey, value)
 }
 
@@ -817,7 +823,7 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
                     onPick={goSong}
                     subtitleKey="sc"
                     topTracksGenreRollup
-                    emptyHint="No matches in meaning or SoundCloud titles for this query."
+                    emptyHint="No matches in song titles, summaries, or catalog track tags (genres, instruments, moods, tempo) for this query."
                   />
                 ) : null}
                 {tab === 'videos' ? (
@@ -852,8 +858,18 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
                   </span>
                 </Link>
                 <p className="discovery-search__typed-meta discovery-search__typed-foot-meta" aria-live="polite">
-                  Search by meaning first: titles, summaries, lyrics extracts, and lyric text. Use tabs to jump
-                  between songbooks, songs, tracks, and videos.
+                  {tab === 'tracks' ? (
+                    <>
+                      Top Tracks matches song titles, summaries, and catalog track tags (genres, secondary genres,
+                      instruments, moods, tempo, headline genres). Other tabs use meaning-first search (including lyric
+                      excerpts where enabled). Use tabs to jump between songbooks, songs, tracks, and videos.
+                    </>
+                  ) : (
+                    <>
+                      Search by meaning first: titles, summaries, lyrics extracts, and lyric text. Use tabs to jump
+                      between songbooks, songs, tracks, and videos.
+                    </>
+                  )}
                 </p>
               </div>
             </div>

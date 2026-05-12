@@ -184,7 +184,7 @@
     },
     {
       "value": "INDIE",
-      "count": 48
+      "count": 50
     },
     {
       "value": "BLUES",
@@ -201,10 +201,6 @@
     {
       "value": "ROCK",
       "count": 12
-    },
-    {
-      "value": "WORLD",
-      "count": 3
     }
   ],
   "track_secondary_genre": [
@@ -346,7 +342,7 @@
   "track_mood": [
     {
       "value": "TRIPPY",
-      "count": 66
+      "count": 67
     },
     {
       "value": "NERDY",
@@ -354,15 +350,15 @@
     },
     {
       "value": "KINDLY",
-      "count": 56
+      "count": 57
     },
     {
       "value": "PUNKY",
-      "count": 45
+      "count": 46
     },
     {
       "value": "CHEEKY",
-      "count": 41
+      "count": 43
     },
     {
       "value": "RAINY",
@@ -377,16 +373,22 @@
       "count": 10
     },
     {
-      "value": "GROOVY",
-      "count": 9
-    },
-    {
       "value": "FRENCHY",
       "count": 8
+    }
+  ],
+  "track_tempo_feel": [
+    {
+      "value": "LOWBEAT",
+      "count": 166
     },
     {
-      "value": "SILLY",
-      "count": 5
+      "value": "MIDBEAT",
+      "count": 66
+    },
+    {
+      "value": "UPBEAT",
+      "count": 28
     }
   ],
   "lang": [

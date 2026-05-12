@@ -15,6 +15,7 @@
     "track_secondary_genre",
     "track_instrument",
     "track_mood",
+    "track_tempo_feel",
     "lang"
   ],
   "songbooks": 36,
@@ -51,7 +52,7 @@
     },
     "sc_tracks": {
       "path": "AIRTABLE/snapshots/2026-05-12/clean/sc_tracks-2026-05-12.csv",
-      "sha256": "2bef9212ed06e9a8d7f6f22bea71cf286000109f5808401d1dee44bdacc62879",
+      "sha256": "5c16ea0eec132aaa92043df4aee0b266bd3d305a323c9f86322cd656081c76dc",
       "rows": 651
     },
     "sc_eps": {

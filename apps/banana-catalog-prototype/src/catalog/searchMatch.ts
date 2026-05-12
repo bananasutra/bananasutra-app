@@ -172,18 +172,32 @@ function albumHaystack(song: SongCatalogItem): string {
 }
 
 function trackHaystack(song: SongCatalogItem): string {
-  return [...song.track_genres, ...song.track_secondary_genres, song.discovery_top_track_genres ?? '']
+  return [
+    ...song.track_genres,
+    ...song.track_secondary_genres,
+    ...(song.track_instruments ?? []),
+    ...(song.track_moods ?? []),
+    ...(song.track_tempo_feels ?? []),
+    song.discovery_top_track_genres ?? '',
+  ]
     .join(' ')
     .toLowerCase()
 }
 
-/** Primary + secondary + headline split — catalog genre fields only (no SC blob). */
+/** Catalog track tags only (genres, instruments, moods, tempo, headline split) — no SC blob. */
 function structuredTrackCatalogGenreHaystack(song: SongCatalogItem): string {
   const head = (song.discovery_top_track_genres ?? '')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
-  const parts = [...song.track_genres, ...song.track_secondary_genres, ...head]
+  const parts = [
+    ...song.track_genres,
+    ...song.track_secondary_genres,
+    ...head,
+    ...(song.track_instruments ?? []),
+    ...(song.track_moods ?? []),
+    ...(song.track_tempo_feels ?? []),
+  ]
   return parts.join(' ').toLowerCase()
 }
 
@@ -211,15 +225,17 @@ function tokensAreAllInFacetSet(tokens: string[], facetValuesLower: ReadonlySet<
 
 export type TrackSearchFilterOpts = {
   /**
-   * Lowercased facet `value`s from `track_genre`, `track_secondary_genre`, and `track_mood`.
+   * Lowercased facet `value`s from `track_genre`, `track_secondary_genre`, `track_mood`,
+   * `track_instrument`, and `track_tempo_feel` in `facets.json`.
    * When **every** query token is in this set, Top Tracks requires each token to match **structured**
-   * catalog genres (`track_genres`, `track_secondary_genres`, `discovery_top_track_genres` headline split)
-   * — not SC blob / notes alone — so genre-shaped queries do not surface EP copy hits without catalog tags.
+   * catalog tags (`track_genres`, `track_secondary_genres`, `discovery_top_track_genres` headline split,
+   * `track_instruments`, `track_moods`, `track_tempo_feels`) — not SC blob / notes alone — so tag-shaped
+   * queries do not surface EP copy hits without catalog tags.
    */
   strictGenreFacetTokens?: ReadonlySet<string>
 }
 
-/** “Top tracks” tab — meaning (sans long lyric/EP blobs) + SC titles/genres. Optional strict genre gate (see opts). */
+/** “Top tracks” tab — meaning (sans long lyric/EP blobs) + catalog track tags. Optional strict facet gate (see opts). */
 export function filterSongsByTrackSearchQuery(
   songs: SongCatalogItem[],
   query: string,

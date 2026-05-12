@@ -17,6 +17,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -66,8 +67,11 @@
     ],
     "track_moods": [
       "CHEEKY",
-      "NERDY",
-      "SILLY"
+      "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 8,
@@ -118,6 +122,10 @@
       "KINDLY",
       "PEACHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 4,
     "aggregate_play_count": 3018,
@@ -152,6 +160,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -194,6 +203,10 @@
     "track_moods": [
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 2,
     "aggregate_play_count": 2853,
@@ -228,6 +241,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -278,6 +292,10 @@
       "KINDLY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 5,
     "aggregate_play_count": 6196,
@@ -326,6 +344,10 @@
       "PUNKY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 4,
     "aggregate_play_count": 3084,
@@ -360,6 +382,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -414,8 +437,12 @@
     ],
     "track_moods": [
       "CHEEKY",
-      "GROOVY",
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT",
+      "UPBEAT"
     ],
     "discovery_top_track_genres": "LOFI, BLUES, INDIE",
     "track_count_published": 12,
@@ -475,6 +502,10 @@
       "NERDY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, DUB",
     "track_count_published": 12,
     "aggregate_play_count": 21394,
@@ -508,10 +539,10 @@
     "track_genres": [
       "BURLESQUE",
       "DUB",
+      "INDIE",
       "JAZZ",
       "LOFI",
-      "ROCK",
-      "WORLD"
+      "ROCK"
     ],
     "track_secondary_genres": [
       "DUB",
@@ -532,10 +563,14 @@
     ],
     "track_moods": [
       "CHEEKY",
-      "GROOVY",
       "KINDLY",
       "PUNKY",
       "RAINY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT",
+      "UPBEAT"
     ],
     "discovery_top_track_genres": "BURLESQUE, DUB",
     "track_count_published": 11,
@@ -570,8 +605,7 @@
     "track_genres": [
       "DUB",
       "INDIE",
-      "JAZZ",
-      "WORLD"
+      "JAZZ"
     ],
     "track_secondary_genres": [
       "BURLESQUE",
@@ -590,6 +624,10 @@
       "HOLY",
       "KINDLY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 8,
@@ -637,6 +675,9 @@
       "HOLY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "INDIE, MANTRA",
     "track_count_published": 2,
     "aggregate_play_count": 2171,
@@ -671,6 +712,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -723,6 +765,10 @@
     "track_moods": [
       "PEACHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, WALTZ, BURLESQUE",
     "track_count_published": 5,
     "aggregate_play_count": 7120,
@@ -757,6 +803,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -800,8 +847,12 @@
       "PIANO"
     ],
     "track_moods": [
-      "PUNKY",
-      "SILLY"
+      "CHEEKY",
+      "PUNKY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 2,
@@ -847,6 +898,10 @@
     "track_moods": [
       "CHEEKY",
       "PUNKY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "LOFI, HIP HOP",
     "track_count_published": 2,
@@ -906,6 +961,9 @@
       "PUNKY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 8,
     "aggregate_play_count": 12691,
@@ -962,6 +1020,9 @@
       "NERDY",
       "PEACHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 9,
     "aggregate_play_count": 14596,
@@ -1016,6 +1077,10 @@
       "KINDLY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "DUB, BLUES",
     "track_count_published": 6,
     "aggregate_play_count": 12383,
@@ -1058,6 +1123,9 @@
     ],
     "track_moods": [
       "CHEEKY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "LOFI, GIPSY",
     "track_count_published": 1,
@@ -1114,11 +1182,15 @@
     ],
     "track_moods": [
       "CHEEKY",
-      "GROOVY",
       "NERDY",
       "PUNKY",
       "RAINY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT",
+      "UPBEAT"
     ],
     "discovery_top_track_genres": "BURLESQUE, JAZZ",
     "track_count_published": 14,
@@ -1168,6 +1240,9 @@
     "track_moods": [
       "NERDY"
     ],
+    "track_tempo_feels": [
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "DUB, RAGGA, BURLESQUE",
     "track_count_published": 4,
     "aggregate_play_count": 10042,
@@ -1209,6 +1284,9 @@
     ],
     "track_moods": [
       "KINDLY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "INDIE, FOLK",
     "track_count_published": 1,
@@ -1252,6 +1330,9 @@
     ],
     "track_moods": [
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "LOFI, DUB",
     "track_count_published": 2,
@@ -1302,6 +1383,9 @@
       "KINDLY",
       "NERDY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "INDIE, BLUES",
     "track_count_published": 4,
@@ -1359,6 +1443,10 @@
       "PUNKY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, CIRCUS",
     "track_count_published": 9,
     "aggregate_play_count": 11644,
@@ -1393,6 +1481,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -1427,6 +1516,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -1461,6 +1551,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -1495,6 +1586,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -1549,6 +1641,10 @@
       "NERDY",
       "PUNKY",
       "RAINY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "BURLESQUE, JAZZ, LOFI",
     "track_count_published": 7,
@@ -1612,6 +1708,11 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 10,
     "aggregate_play_count": 12344,
@@ -1661,6 +1762,10 @@
     "track_moods": [
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, JAZZ",
     "track_count_published": 8,
     "aggregate_play_count": 15149,
@@ -1695,6 +1800,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -1743,6 +1849,10 @@
       "NERDY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "DUB, BURLESQUE",
     "track_count_published": 3,
     "aggregate_play_count": 3019,
@@ -1784,6 +1894,9 @@
     ],
     "track_moods": [
       "PUNKY"
+    ],
+    "track_tempo_feels": [
+      "UPBEAT"
     ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 1,
@@ -1831,6 +1944,9 @@
       "NERDY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 2,
     "aggregate_play_count": 2389,
@@ -1872,6 +1988,9 @@
     ],
     "track_moods": [
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "INDIE, JAZZ",
     "track_count_published": 1,
@@ -1915,6 +2034,9 @@
     "track_moods": [
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, TANGO",
     "track_count_published": 1,
     "aggregate_play_count": 2928,
@@ -1949,6 +2071,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -1983,6 +2106,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -2032,8 +2156,12 @@
     ],
     "track_moods": [
       "CHEEKY",
-      "GROOVY",
+      "KINDLY",
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "LOFI, INDIE, GIPSY",
     "track_count_published": 8,
@@ -2081,6 +2209,10 @@
     "track_moods": [
       "RAINY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 2,
@@ -2130,6 +2262,9 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, JAZZ",
     "track_count_published": 3,
     "aggregate_play_count": 3079,
@@ -2172,6 +2307,9 @@
     ],
     "track_moods": [
       "RAINY"
+    ],
+    "track_tempo_feels": [
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 1,
@@ -2223,6 +2361,10 @@
       "NERDY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 9,
     "aggregate_play_count": 20695,
@@ -2270,6 +2412,10 @@
       "CHEEKY",
       "HOLY",
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 4,
@@ -2323,6 +2469,9 @@
       "HOLY",
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, INDIE, FLAMENCO",
     "track_count_published": 4,
     "aggregate_play_count": 5853,
@@ -2373,6 +2522,10 @@
       "KINDLY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 5,
     "aggregate_play_count": 5034,
@@ -2418,6 +2571,10 @@
     ],
     "track_moods": [
       "HOLY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "INDIE, MANTRA",
     "track_count_published": 2,
@@ -2470,6 +2627,10 @@
       "PUNKY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "DUB, JAZZ",
     "track_count_published": 4,
     "aggregate_play_count": 8167,
@@ -2521,8 +2682,12 @@
       "CHEEKY",
       "HOLY",
       "PUNKY",
-      "SILLY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT",
+      "UPBEAT"
     ],
     "discovery_top_track_genres": "BURLESQUE, INDIE",
     "track_count_published": 6,
@@ -2558,6 +2723,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -2604,6 +2770,9 @@
       "HOLY",
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 2,
     "aggregate_play_count": 1800,
@@ -2638,6 +2807,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -2693,10 +2863,14 @@
       "GUITAR"
     ],
     "track_moods": [
-      "GROOVY",
+      "CHEEKY",
       "KINDLY",
-      "SILLY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT",
+      "UPBEAT"
     ],
     "discovery_top_track_genres": "LOFI, INDIE, GIPSY",
     "track_count_published": 7,
@@ -2743,6 +2917,9 @@
     "track_moods": [
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, INDIE",
     "track_count_published": 4,
     "aggregate_play_count": 4609,
@@ -2777,6 +2954,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -2825,9 +3003,12 @@
       "GUITAR"
     ],
     "track_moods": [
-      "GROOVY",
       "NERDY",
       "PUNKY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "INDIE, LOFI",
     "track_count_published": 5,
@@ -2870,6 +3051,9 @@
     ],
     "track_moods": [
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, LOFI",
     "track_count_published": 1,
@@ -2920,6 +3104,9 @@
       "NERDY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, INDIE, FLAMENCO",
     "track_count_published": 4,
     "aggregate_play_count": 5345,
@@ -2965,6 +3152,10 @@
     ],
     "track_moods": [
       "FRENCHY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "BURLESQUE, CIRCUS, WALTZ",
     "track_count_published": 2,
@@ -3026,6 +3217,9 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 13,
     "aggregate_play_count": 13358,
@@ -3082,6 +3276,9 @@
       "NERDY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "INDIE, DUB, FLAMENCO",
     "track_count_published": 6,
     "aggregate_play_count": 6926,
@@ -3128,8 +3325,12 @@
       "DRUM"
     ],
     "track_moods": [
-      "GROOVY",
-      "NERDY"
+      "NERDY",
+      "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
     ],
     "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 3,
@@ -3165,6 +3366,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -3218,6 +3420,10 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 6,
     "aggregate_play_count": 8209,
@@ -3267,6 +3473,10 @@
       "CHEEKY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 4,
     "aggregate_play_count": 1319,
@@ -3313,6 +3523,9 @@
       "KINDLY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, BLUES",
     "track_count_published": 4,
     "aggregate_play_count": 4572,
@@ -3347,6 +3560,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -3388,6 +3602,9 @@
     ],
     "track_moods": [
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 1,
@@ -3432,6 +3649,9 @@
     ],
     "track_moods": [
       "KINDLY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 2,
@@ -3479,6 +3699,9 @@
     "track_moods": [
       "KINDLY",
       "RAINY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "BURLESQUE, FOLK",
     "track_count_published": 3,
@@ -3535,6 +3758,10 @@
       "PUNKY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "ROCK, BURLESQUE",
     "track_count_published": 7,
     "aggregate_play_count": 9974,
@@ -3569,6 +3796,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -3616,6 +3844,9 @@
     "track_moods": [
       "FRENCHY"
     ],
+    "track_tempo_feels": [
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, INDIE, CIRCUS",
     "track_count_published": 5,
     "aggregate_play_count": 4262,
@@ -3650,6 +3881,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -3695,6 +3927,9 @@
     "track_moods": [
       "KINDLY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "INDIE, MANTRA",
     "track_count_published": 3,
@@ -3751,6 +3986,10 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, DUB",
     "track_count_published": 5,
     "aggregate_play_count": 8120,
@@ -3798,6 +4037,9 @@
     "track_moods": [
       "NERDY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "MANTRA, INDIE",
     "track_count_published": 3,
@@ -3848,6 +4090,9 @@
       "KINDLY",
       "PEACHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 4,
     "aggregate_play_count": 3005,
@@ -3894,6 +4139,9 @@
     ],
     "track_moods": [
       "KINDLY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "INDIE, MANTRA",
     "track_count_published": 5,
@@ -3947,6 +4195,10 @@
       "KINDLY",
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 5,
     "aggregate_play_count": 10189,
@@ -3999,6 +4251,10 @@
     "track_moods": [
       "FRENCHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, FOLK",
     "track_count_published": 6,
     "aggregate_play_count": 7935,
@@ -4033,6 +4289,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -4083,6 +4340,10 @@
       "KINDLY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, INDIE",
     "track_count_published": 5,
     "aggregate_play_count": 5726,
@@ -4130,6 +4391,9 @@
       "NERDY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "INDIE, GIPSY",
     "track_count_published": 2,
     "aggregate_play_count": 2626,
@@ -4176,6 +4440,9 @@
     "track_moods": [
       "KINDLY",
       "RAINY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "LOFI, GIPSY",
     "track_count_published": 3,
@@ -4232,6 +4499,9 @@
       "HOLY",
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 8,
     "aggregate_play_count": 7475,
@@ -4277,6 +4547,10 @@
     "track_moods": [
       "CHEEKY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "LOFI, HIP HOP",
     "track_count_published": 3,
@@ -4329,6 +4603,10 @@
       "NERDY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, JAZZ",
     "track_count_published": 5,
     "aggregate_play_count": 7040,
@@ -4376,8 +4654,11 @@
       "CLARINET"
     ],
     "track_moods": [
-      "CHEEKY",
-      "SILLY"
+      "CHEEKY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 4,
@@ -4413,6 +4694,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -4447,6 +4729,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -4481,6 +4764,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -4538,6 +4822,10 @@
       "NERDY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 15,
     "aggregate_play_count": 22582,
@@ -4572,6 +4860,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -4617,6 +4906,10 @@
       "HOLY",
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "INDIE, FLAMENCO, GIPSY",
     "track_count_published": 4,
     "aggregate_play_count": 4893,
@@ -4658,6 +4951,9 @@
     ],
     "track_moods": [
       "KINDLY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 1,
@@ -4713,6 +5009,10 @@
       "PUNKY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, MANTRA",
     "track_count_published": 7,
     "aggregate_play_count": 11335,
@@ -4747,6 +5047,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -4788,6 +5089,9 @@
     ],
     "track_moods": [
       "PUNKY"
+    ],
+    "track_tempo_feels": [
+      "UPBEAT"
     ],
     "discovery_top_track_genres": "ROCK, BURLESQUE",
     "track_count_published": 1,
@@ -4837,6 +5141,10 @@
       "FRENCHY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, WALTZ",
     "track_count_published": 3,
     "aggregate_play_count": 5355,
@@ -4878,6 +5186,9 @@
     ],
     "track_moods": [
       "PUNKY"
+    ],
+    "track_tempo_feels": [
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 1,
@@ -4939,6 +5250,10 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 10,
     "aggregate_play_count": 10392,
@@ -4986,6 +5301,9 @@
     "track_moods": [
       "HOLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, INDIE, FLAMENCO",
     "track_count_published": 2,
     "aggregate_play_count": 615,
@@ -5020,6 +5338,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5062,6 +5381,9 @@
     "track_moods": [
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 481,
@@ -5103,6 +5425,9 @@
     ],
     "track_moods": [
       "PUNKY"
+    ],
+    "track_tempo_feels": [
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "BLUES, ROCK",
     "track_count_published": 1,
@@ -5153,8 +5478,12 @@
     ],
     "track_moods": [
       "CHEEKY",
-      "GROOVY",
+      "PUNKY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
     ],
     "discovery_top_track_genres": "ROCK, BURLESQUE",
     "track_count_published": 4,
@@ -5206,10 +5535,13 @@
       "DRUM"
     ],
     "track_moods": [
-      "GROOVY",
       "NERDY",
       "PUNKY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
     ],
     "discovery_top_track_genres": "LOFI, INDIE, JAZZ",
     "track_count_published": 6,
@@ -5245,6 +5577,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5287,6 +5620,9 @@
     ],
     "track_moods": [
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "INDIE, BLUES, MANTRA",
     "track_count_published": 1,
@@ -5339,6 +5675,10 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "ROCK, BURLESQUE",
     "track_count_published": 5,
     "aggregate_play_count": 1256,
@@ -5373,6 +5713,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5407,6 +5748,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5453,6 +5795,9 @@
       "NERDY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 2,
     "aggregate_play_count": 2362,
@@ -5487,6 +5832,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5521,6 +5867,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5555,6 +5902,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5600,6 +5948,9 @@
       "KINDLY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, RAGGA, MANTRA",
     "track_count_published": 5,
     "aggregate_play_count": 3478,
@@ -5643,6 +5994,9 @@
     ],
     "track_moods": [
       "CHEEKY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "INDIE, LOFI, HIP HOP",
     "track_count_published": 1,
@@ -5691,6 +6045,9 @@
       "NERDY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 2,
     "aggregate_play_count": 617,
@@ -5725,6 +6082,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5759,6 +6117,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5802,6 +6161,9 @@
     "track_moods": [
       "HOLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "MANTRA, LOFI",
     "track_count_published": 1,
     "aggregate_play_count": 180,
@@ -5836,6 +6198,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5870,6 +6233,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5904,6 +6268,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5938,6 +6303,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -5982,6 +6348,9 @@
       "KINDLY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "ROCK, BURLESQUE",
     "track_count_published": 2,
     "aggregate_play_count": 684,
@@ -6016,6 +6385,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6047,7 +6417,7 @@
     "published_at": "2025-08-12T02:17:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-vJJyHyvScNYFs8IL-ASDhig-t500x500.png",
     "track_genres": [
-      "WORLD"
+      "INDIE"
     ],
     "track_secondary_genres": [
       "FLAMENCO",
@@ -6059,7 +6429,10 @@
     "track_moods": [
       "PUNKY"
     ],
-    "discovery_top_track_genres": "WORLD, TECHNO, FLAMENCO",
+    "track_tempo_feels": [
+      "UPBEAT"
+    ],
+    "discovery_top_track_genres": "INDIE, TECHNO, FLAMENCO",
     "track_count_published": 1,
     "aggregate_play_count": 398,
     "aggregate_like_count": 6,
@@ -6104,6 +6477,9 @@
       "CHEEKY",
       "NERDY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, BLUES",
     "track_count_published": 3,
     "aggregate_play_count": 767,
@@ -6138,6 +6514,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6172,6 +6549,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6206,6 +6584,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6253,6 +6632,9 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, GIPSY",
     "track_count_published": 2,
     "aggregate_play_count": 524,
@@ -6298,6 +6680,10 @@
     "track_moods": [
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "MIDBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 2,
     "aggregate_play_count": 1683,
@@ -6332,6 +6718,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6366,6 +6753,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6400,6 +6788,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6447,6 +6836,9 @@
       "KINDLY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, INDIE",
     "track_count_published": 3,
     "aggregate_play_count": 1028,
@@ -6481,6 +6873,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6515,6 +6908,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6556,6 +6950,9 @@
     ],
     "track_moods": [
       "KINDLY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 1,
@@ -6603,6 +7000,9 @@
       "HOLY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "MANTRA, GIPSY",
     "track_count_published": 2,
     "aggregate_play_count": 975,
@@ -6637,6 +7037,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6671,6 +7072,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6705,6 +7107,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -6746,6 +7149,9 @@
     ],
     "track_moods": [
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "FOLK, INDIE",
     "track_count_published": 1,
@@ -6796,6 +7202,11 @@
       "CHEEKY",
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, BURLESQUE",
     "track_count_published": 3,
     "aggregate_play_count": 1083,
@@ -6844,6 +7255,10 @@
       "NERDY",
       "PUNKY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 7,
@@ -6894,6 +7309,10 @@
       "CHEEKY",
       "NERDY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "MANTRA, DUB",
     "track_count_published": 3,
     "aggregate_play_count": 1282,
@@ -6939,6 +7358,9 @@
     ],
     "track_moods": [
       "HOLY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 2,
@@ -6991,6 +7413,10 @@
       "HOLY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 4,
     "aggregate_play_count": 3332,
@@ -7035,6 +7461,9 @@
     "track_moods": [
       "HOLY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "MANTRA, INDIE",
     "track_count_published": 2,
@@ -7086,6 +7515,9 @@
     "track_moods": [
       "KINDLY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 4,
@@ -7141,6 +7573,9 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, MANTRA",
     "track_count_published": 5,
     "aggregate_play_count": 4617,
@@ -7175,6 +7610,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -7209,6 +7645,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -7252,6 +7689,9 @@
     "track_moods": [
       "PEACHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 2,
     "aggregate_play_count": 1026,
@@ -7286,6 +7726,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -7320,6 +7761,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -7354,6 +7796,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -7399,6 +7842,9 @@
       "NERDY",
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, BURLESQUE",
     "track_count_published": 2,
     "aggregate_play_count": 661,
@@ -7433,6 +7879,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -7483,6 +7930,9 @@
       "KINDLY",
       "NERDY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "INDIE, JAZZ",
     "track_count_published": 5,
     "aggregate_play_count": 1202,
@@ -7526,6 +7976,9 @@
     "track_moods": [
       "KINDLY",
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 4,
@@ -7578,6 +8031,9 @@
       "KINDLY",
       "NERDY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "MANTRA, LOFI",
     "track_count_published": 4,
     "aggregate_play_count": 2664,
@@ -7622,6 +8078,9 @@
     "track_moods": [
       "KINDLY",
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 2,
@@ -7676,6 +8135,9 @@
       "HOLY",
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "INDIE, GIPSY",
     "track_count_published": 5,
     "aggregate_play_count": 3754,
@@ -7721,6 +8183,9 @@
       "CHEEKY",
       "RAINY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "DUB, BLUES",
     "track_count_published": 3,
@@ -7772,6 +8237,10 @@
       "PUNKY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, ROCK",
     "track_count_published": 4,
     "aggregate_play_count": 2170,
@@ -7817,6 +8286,9 @@
     "track_moods": [
       "PUNKY",
       "RAINY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "BLUES, ROCK",
     "track_count_published": 4,
@@ -7867,6 +8339,9 @@
       "NERDY",
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 3,
     "aggregate_play_count": 1415,
@@ -7901,6 +8376,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -7942,6 +8418,9 @@
     ],
     "track_moods": [
       "CHEEKY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "INDIE, FOLK",
     "track_count_published": 1,
@@ -7998,6 +8477,9 @@
       "PUNKY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, INDIE",
     "track_count_published": 4,
     "aggregate_play_count": 2315,
@@ -8045,6 +8527,10 @@
       "PUNKY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "DUB, CIRCUS, BURLESQUE",
     "track_count_published": 2,
     "aggregate_play_count": 1718,
@@ -8079,6 +8565,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -8124,6 +8611,10 @@
     "track_moods": [
       "CHEEKY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 2,
@@ -8178,6 +8669,10 @@
       "KINDLY",
       "PEACHY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 7,
@@ -8234,6 +8729,10 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "INDIE, MANTRA",
     "track_count_published": 8,
     "aggregate_play_count": 6633,
@@ -8268,6 +8767,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -8309,6 +8809,9 @@
     ],
     "track_moods": [
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "BLUES, JAZZ",
     "track_count_published": 1,
@@ -8355,6 +8858,9 @@
     "track_moods": [
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "INDIE, JAZZ",
     "track_count_published": 3,
     "aggregate_play_count": 3170,
@@ -8389,6 +8895,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -8423,6 +8930,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -8472,6 +8980,10 @@
       "NERDY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 5,
     "aggregate_play_count": 7452,
@@ -8517,6 +9029,10 @@
       "PUNKY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 7,
     "aggregate_play_count": 6430,
@@ -8558,6 +9074,9 @@
     ],
     "track_moods": [
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 4,
@@ -8605,6 +9124,9 @@
       "NERDY",
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "LOFI, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 1866,
@@ -8646,6 +9168,9 @@
     ],
     "track_moods": [
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "MANTRA, LOFI",
     "track_count_published": 1,
@@ -8691,6 +9216,9 @@
     "track_moods": [
       "PUNKY",
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "DUB, MANTRA",
     "track_count_published": 2,
@@ -8738,6 +9266,9 @@
     "track_moods": [
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 4,
     "aggregate_play_count": 2138,
@@ -8779,6 +9310,9 @@
     ],
     "track_moods": [
       "HOLY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "INDIE, JAZZ",
     "track_count_published": 1,
@@ -8822,6 +9356,9 @@
     "track_moods": [
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 1,
     "aggregate_play_count": 314,
@@ -8856,6 +9393,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -8890,6 +9428,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -8931,6 +9470,9 @@
     ],
     "track_moods": [
       "KINDLY"
+    ],
+    "track_tempo_feels": [
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 1,
@@ -8982,6 +9524,9 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, CIRCUS, WALTZ",
     "track_count_published": 4,
     "aggregate_play_count": 1787,
@@ -9016,6 +9561,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9062,6 +9608,9 @@
     "track_moods": [
       "NERDY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, JAZZ, DUB",
     "track_count_published": 2,
     "aggregate_play_count": 666,
@@ -9096,6 +9645,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9130,6 +9680,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9164,6 +9715,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9198,6 +9750,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9232,6 +9785,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9266,6 +9820,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9300,6 +9855,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9343,6 +9899,9 @@
     "track_moods": [
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 659,
@@ -9377,6 +9936,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9411,6 +9971,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9445,6 +10006,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9479,6 +10041,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9513,6 +10076,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9547,6 +10111,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9589,6 +10154,9 @@
     "track_moods": [
       "CHEEKY"
     ],
+    "track_tempo_feels": [
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 392,
@@ -9623,6 +10191,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9670,6 +10239,10 @@
       "CHEEKY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 2,
     "aggregate_play_count": 631,
@@ -9712,6 +10285,9 @@
     ],
     "track_moods": [
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE, LOFI",
     "track_count_published": 1,
@@ -9757,6 +10333,9 @@
     "track_moods": [
       "NERDY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, JAZZ, TANGO",
     "track_count_published": 1,
     "aggregate_play_count": 314,
@@ -9791,6 +10370,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9836,6 +10416,10 @@
     "track_moods": [
       "RAINY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 745,
@@ -9870,6 +10454,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9912,6 +10497,9 @@
     "track_moods": [
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, INDIE",
     "track_count_published": 1,
     "aggregate_play_count": 272,
@@ -9946,6 +10534,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -9980,6 +10569,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10030,6 +10620,10 @@
       "PUNKY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, INDIE",
     "track_count_published": 3,
     "aggregate_play_count": 1563,
@@ -10072,6 +10666,9 @@
     "track_moods": [
       "CHEEKY"
     ],
+    "track_tempo_feels": [
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 1,
     "aggregate_play_count": 467,
@@ -10106,6 +10703,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10140,6 +10738,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10174,6 +10773,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10208,6 +10808,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10242,6 +10843,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10276,6 +10878,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10317,6 +10920,9 @@
     ],
     "track_moods": [
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 1,
@@ -10360,6 +10966,9 @@
     "track_moods": [
       "HOLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "MANTRA, DUB",
     "track_count_published": 1,
     "aggregate_play_count": 296,
@@ -10394,6 +11003,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10428,6 +11038,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10462,6 +11073,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10503,6 +11115,9 @@
     ],
     "track_moods": [
       "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 1,
@@ -10546,6 +11161,9 @@
     "track_moods": [
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, LOFI",
     "track_count_published": 1,
     "aggregate_play_count": 383,
@@ -10580,6 +11198,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10625,6 +11244,9 @@
     "track_moods": [
       "PEACHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 835,
@@ -10659,6 +11281,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10703,6 +11326,9 @@
     "track_moods": [
       "NERDY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, INDIE, FOLK, DUB",
     "track_count_published": 1,
     "aggregate_play_count": 327,
@@ -10745,6 +11371,9 @@
     "track_moods": [
       "NERDY"
     ],
+    "track_tempo_feels": [
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 1,
     "aggregate_play_count": 331,
@@ -10779,6 +11408,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10822,6 +11452,9 @@
     "track_moods": [
       "FRENCHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "LOFI, MANTRA, BLUES",
     "track_count_published": 1,
     "aggregate_play_count": 532,
@@ -10856,6 +11489,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10904,6 +11538,10 @@
       "NERDY",
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, BLUES",
     "track_count_published": 3,
     "aggregate_play_count": 905,
@@ -10938,6 +11576,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -10972,6 +11611,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11018,6 +11658,10 @@
     "track_moods": [
       "PEACHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 3,
     "aggregate_play_count": 904,
@@ -11060,6 +11704,9 @@
     "track_moods": [
       "NERDY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, FOLK",
     "track_count_published": 1,
     "aggregate_play_count": 197,
@@ -11094,6 +11741,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11141,6 +11789,9 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "INDIE, LOFI",
     "track_count_published": 3,
     "aggregate_play_count": 1036,
@@ -11175,6 +11826,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11209,6 +11861,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11259,6 +11912,10 @@
     "track_moods": [
       "CHEEKY"
     ],
+    "track_tempo_feels": [
+      "MIDBEAT",
+      "UPBEAT"
+    ],
     "discovery_top_track_genres": "DUB, RAGGA",
     "track_count_published": 3,
     "aggregate_play_count": 973,
@@ -11300,6 +11957,9 @@
     ],
     "track_moods": [
       "CHEEKY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "LOFI, JAZZ",
     "track_count_published": 1,
@@ -11344,6 +12004,9 @@
     "track_moods": [
       "PEACHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BURLESQUE, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 183,
@@ -11378,6 +12041,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11420,6 +12084,9 @@
     "track_moods": [
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, MANTRA",
     "track_count_published": 1,
     "aggregate_play_count": 343,
@@ -11454,6 +12121,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11488,6 +12156,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11534,6 +12203,9 @@
       "KINDLY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, INDIE",
     "track_count_published": 2,
     "aggregate_play_count": 811,
@@ -11568,6 +12240,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11613,6 +12286,9 @@
     "track_moods": [
       "PEACHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, JAZZ",
     "track_count_published": 2,
     "aggregate_play_count": 715,
@@ -11647,6 +12323,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11681,6 +12358,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11715,6 +12393,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11757,6 +12436,9 @@
     "track_moods": [
       "CHEEKY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 1056,
@@ -11791,6 +12473,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11825,6 +12508,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11867,6 +12551,9 @@
     "track_moods": [
       "FRENCHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 1,
     "aggregate_play_count": 465,
@@ -11901,6 +12588,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11935,6 +12623,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -11969,6 +12658,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12003,6 +12693,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12037,6 +12728,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12071,6 +12763,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12105,6 +12798,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12139,6 +12833,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12173,6 +12868,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12207,6 +12903,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12241,6 +12938,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12275,6 +12973,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12309,6 +13008,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12343,6 +13043,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12377,6 +13078,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12419,6 +13121,9 @@
     "track_moods": [
       "HOLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, DUB",
     "track_count_published": 1,
     "aggregate_play_count": 1025,
@@ -12453,6 +13158,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12487,6 +13193,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12521,6 +13228,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12564,6 +13272,9 @@
     "track_moods": [
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, INDIE, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 389,
@@ -12606,6 +13317,9 @@
     ],
     "track_moods": [
       "NERDY"
+    ],
+    "track_tempo_feels": [
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 1,
@@ -12658,6 +13372,9 @@
       "HOLY",
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, BLUES",
     "track_count_published": 4,
     "aggregate_play_count": 4514,
@@ -12700,6 +13417,9 @@
     ],
     "track_moods": [
       "PUNKY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, BLUES",
     "track_count_published": 1,
@@ -12744,6 +13464,9 @@
     ],
     "track_moods": [
       "KINDLY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT"
     ],
     "discovery_top_track_genres": "DUB, FOLK",
     "track_count_published": 3,
@@ -12792,6 +13515,9 @@
       "RAINY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 3,
     "aggregate_play_count": 2829,
@@ -12826,6 +13552,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12860,6 +13587,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -12907,6 +13635,10 @@
     "track_moods": [
       "HOLY",
       "KINDLY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, BURLESQUE",
     "track_count_published": 3,
@@ -12957,6 +13689,10 @@
       "KINDLY",
       "TRIPPY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "FOLK, DUB",
     "track_count_published": 3,
     "aggregate_play_count": 4938,
@@ -12991,6 +13727,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13025,6 +13762,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13059,6 +13797,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13110,6 +13849,10 @@
       "CHEEKY",
       "FRENCHY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
     "discovery_top_track_genres": "INDIE, JAZZ",
     "track_count_published": 6,
     "aggregate_play_count": 3878,
@@ -13144,6 +13887,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13187,6 +13931,9 @@
     "track_moods": [
       "PUNKY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "BLUES, JAZZ",
     "track_count_published": 1,
     "aggregate_play_count": 1710,
@@ -13221,6 +13968,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13255,6 +14003,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13298,6 +14047,9 @@
     "track_moods": [
       "KINDLY"
     ],
+    "track_tempo_feels": [
+      "LOWBEAT"
+    ],
     "discovery_top_track_genres": "DUB, JAZZ, RAGGA",
     "track_count_published": 1,
     "aggregate_play_count": 505,
@@ -13332,6 +14084,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13366,6 +14119,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13400,6 +14154,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13434,6 +14189,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13468,6 +14224,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13502,6 +14259,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13536,6 +14294,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13570,6 +14329,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13604,6 +14364,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13638,6 +14399,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13672,6 +14434,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13706,6 +14469,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13740,6 +14504,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13774,6 +14539,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13808,6 +14574,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13842,6 +14609,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13876,6 +14644,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13910,6 +14679,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13944,6 +14714,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -13978,6 +14749,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14012,6 +14784,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14046,6 +14819,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14080,6 +14854,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14114,6 +14889,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14148,6 +14924,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14182,6 +14959,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14216,6 +14994,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14250,6 +15029,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14284,6 +15064,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14318,6 +15099,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14352,6 +15134,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14386,6 +15169,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14420,6 +15204,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14454,6 +15239,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14488,6 +15274,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14522,6 +15309,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14556,6 +15344,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14590,6 +15379,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14624,6 +15414,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14658,6 +15449,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14692,6 +15484,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14726,6 +15519,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14760,6 +15554,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14794,6 +15589,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14828,6 +15624,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14862,6 +15659,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14896,6 +15694,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14930,6 +15729,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14964,6 +15764,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -14998,6 +15799,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15032,6 +15834,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15066,6 +15869,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15100,6 +15904,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15134,6 +15939,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15168,6 +15974,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15202,6 +16009,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15236,6 +16044,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15270,6 +16079,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15304,6 +16114,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15338,6 +16149,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15372,6 +16184,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15406,6 +16219,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15440,6 +16254,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15474,6 +16289,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15508,6 +16324,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15542,6 +16359,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15576,6 +16394,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,
@@ -15610,6 +16429,7 @@
     "track_secondary_genres": [],
     "track_instruments": [],
     "track_moods": [],
+    "track_tempo_feels": [],
     "discovery_top_track_genres": "",
     "track_count_published": 0,
     "aggregate_play_count": 0,

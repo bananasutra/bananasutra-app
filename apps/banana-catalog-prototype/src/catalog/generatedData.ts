@@ -59,6 +59,7 @@ function normalizeBrowseSongRow(row: Partial<SongCatalogItem>): SongCatalogItem 
     track_secondary_genres: Array.isArray(row.track_secondary_genres) ? row.track_secondary_genres : [],
     track_instruments: Array.isArray(row.track_instruments) ? row.track_instruments : [],
     track_moods: Array.isArray(row.track_moods) ? row.track_moods : [],
+    track_tempo_feels: Array.isArray(row.track_tempo_feels) ? row.track_tempo_feels : [],
     discovery_top_track_genres: String(row.discovery_top_track_genres ?? ''),
     soundcloud_genre_tags: Array.isArray(row.soundcloud_genre_tags) ? row.soundcloud_genre_tags : [],
     track_count_total: Number(row.track_count_total ?? 0),

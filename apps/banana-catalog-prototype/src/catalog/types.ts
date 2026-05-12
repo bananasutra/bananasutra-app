@@ -39,6 +39,8 @@ export type SongCatalogItem = {
   track_instruments: string[]
   /** Distinct `mood` values from published in-app tracks (facets + header browse). */
   track_moods: string[]
+  /** Distinct `tempo_feel` values from published in-app tracks (facets + discovery). */
+  track_tempo_feels: string[]
   /** Lead in-app track only — for discovery “Top tracks” subtitle (not EP-wide / multi-track join). */
   discovery_top_track_genres: string
   soundcloud_genre_tags: string[]
@@ -178,7 +180,7 @@ export function emptyTracksFilterState(): TracksFilterState {
  * Keys present in `facets.json` (includes values that only deep-link to `/tracks`
  * from the header browse panel until Phase 3 URL sync).
  */
-export type FacetGroupKey = FilterFacetKey | 'track_mood'
+export type FacetGroupKey = FilterFacetKey | 'track_mood' | 'track_tempo_feel'
 
 export type FacetsPayload = Record<FacetGroupKey, FacetEntry[]>
 
