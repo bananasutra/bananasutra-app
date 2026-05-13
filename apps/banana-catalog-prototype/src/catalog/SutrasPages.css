@@ -132,6 +132,15 @@
   margin: 0 0 1rem;
 }
 
+.sutra-detail__spotlight-sub {
+  margin: -0.35rem 0 1rem;
+  max-width: 42rem;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+}
+
 .sutra-detail__song-grid {
   margin-top: 0.35rem;
 }

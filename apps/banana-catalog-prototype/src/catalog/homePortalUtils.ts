@@ -34,12 +34,36 @@ export function songbookPopularity(b: SongbookCatalogItem): number {
   return b.playlist_total_plays + 40 * b.playlist_total_likes + b.songs_with_in_app_playback
 }
 
-/** Deterministic “songbook of the day” — same contract as previous HomePortal inline helper. */
-export function pickFeaturedSongbook(books: SongbookCatalogItem[]): SongbookCatalogItem | null {
-  const eligible = books.filter((b) => (b.playlist_url || '').includes('/sets/')).sort((a, b) => songbookPopularity(b) - songbookPopularity(a))
+function eligiblePlaylistSongbooksSorted(pool: SongbookCatalogItem[]): SongbookCatalogItem[] {
+  return pool
+    .filter((b) => (b.playlist_url || '').includes('/sets/'))
+    .sort((a, b) => songbookPopularity(b) - songbookPopularity(a))
+}
+
+/**
+ * Day-rotating SoundCloud set pick from a caller-filtered pool (e.g. sutra-lane songbooks).
+ *
+ * @param dayIndexOffset — shifts the bucket vs other pages that share the same calendar day.
+ * @param excludeSongbook — optional `songbook` display name to omit when another slot already shows it.
+ */
+export function pickRotatingSongbookFromPool(
+  pool: SongbookCatalogItem[],
+  dayIndexOffset = 0,
+  excludeSongbook: string | null = null,
+): SongbookCatalogItem | null {
+  let eligible = eligiblePlaylistSongbooksSorted(pool)
   if (!eligible.length) return null
+  if (excludeSongbook) {
+    const filtered = eligible.filter((b) => b.songbook !== excludeSongbook)
+    if (filtered.length) eligible = filtered
+  }
   const t = new Date()
   const start = new Date(t.getFullYear(), 0, 0).getTime()
   const dayOfYear = Math.floor((t.getTime() - start) / 86400000)
-  return eligible[dayOfYear % eligible.length]!
+  return eligible[(dayOfYear + dayIndexOffset) % eligible.length]!
+}
+
+/** Deterministic “songbook of the day” over the full in-app catalog (same contract as `/songbooks` featured strip). */
+export function pickFeaturedSongbook(books: SongbookCatalogItem[]): SongbookCatalogItem | null {
+  return pickRotatingSongbookFromPool(books, 0, null)
 }

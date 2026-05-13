@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { SoundCloudEmbed } from './SoundCloudEmbed'
+import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { allSongbooks, songbookHref } from './songbooks'
 import { songCatalogPath } from './songPaths'
 import { buildBrowsePathForFacet } from './urlState'
@@ -13,7 +14,9 @@ import {
   pickPivotTargetFamily,
   pickRandomQuoteSong,
   primarySutraKeyForSongbook,
+  songbookPoolForSutraPageRotation,
   songbooksForSutraDetail,
+  sutraFamilyDayOffset,
   sutraFamilyKeyFromSongField,
 } from './sutraPageUtils'
 import type { SutraFamilyKey } from './sutraContext'
@@ -27,6 +30,11 @@ import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
 import { useExclusiveYoutubeSoundcloudPlayback } from './useExclusiveYoutubeSoundcloudPlayback'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
+import {
+  pickRotatingSongbookFromPool,
+  songbookFeaturedKickerLabel,
+  songbookHrefFromCatalogItem,
+} from './homePortalUtils'
 import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
@@ -246,6 +254,16 @@ export function SutraDetailPage() {
   const featuredSongbookFallback = useMemo(() => {
     return sortedSongbooks.find((b) => (b.playlist_url || '').includes('/sets/')) ?? null
   }, [sortedSongbooks])
+
+  const rotatingSutraSongbook = useMemo(() => {
+    if (!familyKey || !entry) return null
+    const ep = entry.featured_ep
+    const epSlotShowsSoundcloudEmbed = Boolean(ep?.ep_url && ep.ep_url.includes('soundcloud.com'))
+    const pool = songbookPoolForSutraPageRotation(sortedSongbooks)
+    const exclude =
+      !epSlotShowsSoundcloudEmbed && featuredSongbookFallback ? featuredSongbookFallback.songbook : null
+    return pickRotatingSongbookFromPool(pool, sutraFamilyDayOffset(familyKey), exclude)
+  }, [familyKey, entry, sortedSongbooks, featuredSongbookFallback])
 
   const featuredScUrlForExclusive = useMemo(() => {
     const epUrl = (entry?.featured_ep?.ep_url || '').trim()
@@ -594,6 +612,29 @@ export function SutraDetailPage() {
               <p className="sutra-detail__empty">No featured EP or songbook embed on file for this sutra yet.</p>
             )}
           </section>
+
+          {rotatingSutraSongbook ? (
+            <section className="sutra-detail__section sutra-detail__section--songbook-spotlight" aria-labelledby="sutra-spotlight-songbook-heading">
+              <h2 id="sutra-spotlight-songbook-heading" className="catalog-section-title">
+                {entry.sutra} songbook spotlight
+              </h2>
+              <p className="sutra-detail__spotlight-sub">Rotates daily among SoundCloud sets for this sutra (series playlists when available).</p>
+              <div className="songbooks-page__featured-rotator-grid">
+                <LazySoundCloudEmbed scUrl={rotatingSutraSongbook.playlist_url} title={rotatingSutraSongbook.songbook} />
+                <div className="songbooks-page__featured-rotator-copy">
+                  <p className="songbooks-page__featured-rotator-kicker">{songbookFeaturedKickerLabel(rotatingSutraSongbook)}</p>
+                  <h3 className="songbooks-page__featured-rotator-title">{rotatingSutraSongbook.songbook}</h3>
+                  {rotatingSutraSongbook.description ? (
+                    <p className="songbooks-page__featured-rotator-desc">{rotatingSutraSongbook.description}</p>
+                  ) : null}
+                  <SongbookPlaylistMetaLine book={rotatingSutraSongbook} />
+                  <Link className="songbooks-page__featured-rotator-cta" to={songbookHrefFromCatalogItem(rotatingSutraSongbook)}>
+                    Open songbook →
+                  </Link>
+                </div>
+              </div>
+            </section>
+          ) : null}
 
           <section className="sutra-detail__section" aria-labelledby="sutra-books-heading">
             <h2 id="sutra-books-heading" className="catalog-section-title">
