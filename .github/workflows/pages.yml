@@ -41,6 +41,10 @@ jobs:
         env:
           VITE_CONTACT_ENDPOINT: ${{ secrets.VITE_CONTACT_ENDPOINT }}
 
+      - name: Verify SEO artifacts (sitemap + seo-metadata)
+        run: npm run verify:seo
+        working-directory: apps/banana-catalog-prototype
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
