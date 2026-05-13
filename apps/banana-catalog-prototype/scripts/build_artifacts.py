@@ -1102,6 +1102,15 @@ def track_title_from_export_rows_by_norm_url(rows: list[dict[str, Any]], norm: s
     return ""
 
 
+def is_youtube_thumbnail_cover_url(url: str) -> bool:
+    """True when ``cover_image_url`` is YouTube CDN thumbnail art (safe to supersede with SoundCloud)."""
+    u = str(url or "").strip().lower()
+    if not u:
+        return False
+    # Typical API/embed thumbnails (also match regional hosts).
+    return "ytimg.com/" in u
+
+
 def fill_catalog_covers_from_soundcloud_raw_export(
     song_catalog: list[dict[str, Any]],
     *,
@@ -1110,7 +1119,8 @@ def fill_catalog_covers_from_soundcloud_raw_export(
 ) -> int:
     """
     Remaining blank covers: title / EP substring match on ``bananasutra_sc_export.csv`` (same
-    heuristics as listen). Never replaces a non-empty cover.
+    heuristics as listen). Does not replace curated non-YouTube covers; may replace YouTube
+    thumbnail placeholders once SoundCloud art is available.
     """
     if not export_csv or not export_csv.is_file():
         return 0
@@ -1137,7 +1147,8 @@ def fill_catalog_covers_from_soundcloud_raw_export(
         lid = str(song.get("lyrics_id") or "").strip()
         if skip_lyrics_ids and lid in skip_lyrics_ids:
             continue
-        if str(song.get("cover_image_url") or "").strip():
+        existing = str(song.get("cover_image_url") or "").strip()
+        if existing and not is_youtube_thumbnail_cover_url(existing):
             continue
         fb = _norm_soundcloud_url(str(song.get("fallback_sc_url") or ""))
         if fb:
@@ -1186,15 +1197,16 @@ def fill_catalog_covers_from_sc_tracks_full_v4(
 ) -> int:
     """
     For songs still missing cover art: use ``AT-TRACKS-FULL-v4`` only — exact ``fallback_sc_url``
-    match to any row, else best track's ``artwork_url`` for that ``lyrics_id``. Never replaces a
-    non-empty cover.
+    match to any row, else best track's ``artwork_url`` for that ``lyrics_id``. Does not replace
+    curated non-YouTube covers; may replace YouTube thumbnail placeholders once SoundCloud art exists.
     """
     filled = 0
     for song in song_catalog:
         lid = str(song.get("lyrics_id") or "").strip()
         if skip_lyrics_ids and lid in skip_lyrics_ids:
             continue
-        if str(song.get("cover_image_url") or "").strip():
+        existing = str(song.get("cover_image_url") or "").strip()
+        if existing and not is_youtube_thumbnail_cover_url(existing):
             continue
         fb = _norm_soundcloud_url(str(song.get("fallback_sc_url") or ""))
         if fb and fb in by_norm_url:
@@ -1902,8 +1914,9 @@ def fill_catalog_covers_from_youtube_thumbnails(
     youtube_by_lyrics_id: dict[str, list[dict[str, Any]]],
 ) -> int:
     """
-    When choose_artwork left cover_image_url empty (no SC track or EP art), use the first
-    YouTube thumbnail from the snapshot (newest-first list). Never replaces a non-empty SC-derived URL.
+    When choose_artwork and SoundCloud fallbacks still left cover_image_url empty, use the first
+    YouTube thumbnail from the snapshot (newest-first list). Runs after SC export fallbacks so
+    SoundCloud artwork wins when available (including newly in-app tracks).
     """
     filled = 0
     for row in song_catalog:
@@ -2291,7 +2304,8 @@ def main() -> None:
 
     youtube_by_lyrics_id = build_youtube_by_lyrics_index_from_snapshot_rows(yt_videos_rows)
     merge_youtube_flags_into_catalog(song_catalog, youtube_by_lyrics_id)
-    yt_cover_fill = fill_catalog_covers_from_youtube_thumbnails(song_catalog, youtube_by_lyrics_id)
+    # SoundCloud fallbacks must run before YouTube: YT used to win whenever it ran first and blocked
+    # later SC fills (songs that later gained in-app tracks + sndcdn artwork).
     sc_full_cover_fill = fill_catalog_covers_from_sc_tracks_full_v4(
         song_catalog,
         by_lyrics_id=full_v4_by_lid,
@@ -2303,6 +2317,7 @@ def main() -> None:
         export_csv=SC_RAW_EXPORT_CSV if SC_RAW_EXPORT_CSV.is_file() else None,
         skip_lyrics_ids=suppress_sc_fallback_ids,
     )
+    yt_cover_fill = fill_catalog_covers_from_youtube_thumbnails(song_catalog, youtube_by_lyrics_id)
     sync_song_detail_covers_from_catalog(song_catalog, song_detail)
     enrich_youtube_videos_with_catalog_song_fields(youtube_by_lyrics_id, song_catalog)
 

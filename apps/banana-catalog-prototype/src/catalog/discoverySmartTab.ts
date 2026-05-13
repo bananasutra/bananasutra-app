@@ -23,7 +23,7 @@ type SongbookGroup = { songbook: string; matchCount: number }
  *
  * ### 2. Tier-1 selection
  * Among tier-1 tabs with **count > 0**, pick the **largest** hit count
- * (`songbook groups`, `songs.length`, `tracks.length`, `video group count`).
+ * (`songbook groups`, `songs.length`, **SoundCloud track rows** for tracks, `video group count`).
  *
  * ### 3. Ties (tier-1 or not)
  * Same count → prefer **tracks > videos > songs > songbooks** (genre/media-heavy ties lean audio / YT).
@@ -60,6 +60,8 @@ export function pickSmartDiscoveryTab(
   songbookGroups: SongbookGroup[],
   songsTabSongs: SongCatalogItem[],
   tracksTabSongs: SongCatalogItem[],
+  /** Hit volume for the Tracks tab: SoundCloud **track rows** when known, else song-card matches. */
+  tracksTabHitCount: number,
   videosTabFiltered: YouTubeCatalogVideo[],
   videoGroupCount: number,
 ): DiscoveryKeywordTab {
@@ -71,7 +73,7 @@ export function pickSmartDiscoveryTab(
 
   const nb = songbookGroups.length
   const ns = songsTabSongs.length
-  const nt = tracksTabSongs.length
+  const nt = tracksTabHitCount
   const nv = videoGroupCount
 
   const exactSongbook =
