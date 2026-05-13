@@ -1,13 +1,16 @@
-import { useMemo, useRef } from 'react'
+import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { CatalogPageJumpNav } from './CatalogPageJumpNav'
+import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
+import { pickFeaturedSongbook, songbookHrefFromCatalogItem } from './homePortalUtils'
 import { allSongbooks, songbookHref } from './songbooks'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
 import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
+import type { SongbookCatalogItem } from './types'
 import './CatalogApp.css'
 import './SongbooksPage.css'
 
@@ -167,6 +170,19 @@ function SongbookCard({ book }: { book: ListedSongbook }) {
 export function SongbooksPage() {
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
+  const [featuredSongbook, setFeaturedSongbook] = useState<SongbookCatalogItem | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    void import('../data/generated/songbook_catalog.json').then((m) => {
+      if (cancelled) return
+      const books = (m.default as SongbookCatalogItem[]) ?? []
+      startTransition(() => setFeaturedSongbook(pickFeaturedSongbook(books)))
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   usePageMeta({
     title: 'Songbooks & Playlists',
@@ -251,6 +267,37 @@ export function SongbooksPage() {
               one groups the songs, the context, and the music in one place. Hit play.
             </p>
           </header>
+
+          {featuredSongbook ? (
+            <section className="songbooks-page__featured-rotator" aria-labelledby="songbooks-featured-songbook-heading">
+              <h2 id="songbooks-featured-songbook-heading" className="catalog-section-title">
+                Featured songbook
+              </h2>
+              <div className="songbooks-page__featured-rotator-grid">
+                <LazySoundCloudEmbed scUrl={featuredSongbook.playlist_url} title={featuredSongbook.songbook} />
+                <div className="songbooks-page__featured-rotator-copy">
+                  <p className="songbooks-page__featured-rotator-kicker">
+                    {(() => {
+                      const st = (featuredSongbook.songbook_type || '').trim().toLowerCase()
+                      if (st === 'sutra') {
+                        const first = (featuredSongbook.sutras || '').split(',')[0]?.trim()
+                        return `SONGBOOK · ${first || 'SUTRA'}`
+                      }
+                      const label = st ? st.replace(/^\w/, (c) => c.toUpperCase()) : 'Set'
+                      return `SONGBOOK · ${label}`
+                    })()}
+                  </p>
+                  <h3 className="songbooks-page__featured-rotator-title">{featuredSongbook.songbook}</h3>
+                  {featuredSongbook.description ? (
+                    <p className="songbooks-page__featured-rotator-desc">{featuredSongbook.description}</p>
+                  ) : null}
+                  <Link className="songbooks-page__featured-rotator-cta" to={songbookHrefFromCatalogItem(featuredSongbook)}>
+                    Open songbook →
+                  </Link>
+                </div>
+              </div>
+            </section>
+          ) : null}
 
           <div className="catalog-page-shell__jump-region">
             <CatalogPageJumpNav items={jumpNavItems} />
