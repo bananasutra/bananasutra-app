@@ -1,0 +1,22 @@
+{
+  "name": "bananasutra-seo-worker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cloudflare Worker in front of GitHub Pages: fixes SPA deep-link 404s with the / HTML shell (200) and injects per-route SEO metadata for bot/crawler user-agents.",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/botDetection.test.ts tests/seoMetadata.test.ts tests/seoHeadFragment.test.ts tests/spaShell.test.ts tests/handleRequest.test.ts",
+    "verify:spa-curl": "bash scripts/curl-verify-spa.sh"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260511.1",
+    "@types/node": "^25.7.0",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.90.1"
+  }
+}

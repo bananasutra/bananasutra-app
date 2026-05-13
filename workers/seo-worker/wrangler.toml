@@ -1,0 +1,13 @@
+name = "bananasutra-com-seo"
+main = "src/index.ts"
+compatibility_date = "2026-05-13"
+
+# SEO EPIC task 18: zone routes in front of GitHub Pages (apex + www).
+# Deploy (task 19): `wrangler login` then `npm run deploy` from this directory.
+[[routes]]
+pattern = "bananasutra.com/*"
+zone_name = "bananasutra.com"
+
+[[routes]]
+pattern = "www.bananasutra.com/*"
+zone_name = "bananasutra.com"
