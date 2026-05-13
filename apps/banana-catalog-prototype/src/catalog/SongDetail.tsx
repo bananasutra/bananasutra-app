@@ -173,6 +173,7 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
     navigate(`/songs/${canonicalSlug}${tail}`, { replace: true, state: location.state })
   }, [detail, urlSlug, canonicalSlug, fullSearch, navigate, location.state])
 
+  // SEO (R19): same title/description rules as `seo-metadata.json` — see _docs/planning/SEO/SEO-METADATA-PARITY-R19.md
   usePageMeta({
     title: detail ? `${detail.lyrics_title} · Song` : dataLoading ? 'Song' : 'Song not found',
     description: detail

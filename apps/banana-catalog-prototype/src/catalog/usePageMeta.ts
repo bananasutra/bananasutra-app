@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+/** Bot/build parity: keep route copy aligned with `_docs/planning/SEO/SEO-METADATA-PARITY-R19.md`. */
 const SITE = 'BANANASUTRA'
 const DEFAULT_DESC =
   'BANANASUTRA — songs for a world gone bananas. Explore the catalog: browse songs by sutra, topic, intention, and sound.'
