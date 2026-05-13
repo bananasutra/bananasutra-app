@@ -6,10 +6,10 @@ export function songbookHrefFromCatalogItem(b: SongbookCatalogItem): string {
   return `/songbooks/${slug}`
 }
 
-/** Airtable slug for the G-gems “Hidden Peels” collection (R18 homepage spotlight). */
+/** `url_slug_songbook` for the Hidden Peels homepage spotlight. */
 export const HOME_HIDDEN_PEELS_SLUG = 'hidden-peels'
 
-/** Fixed homepage playlist: Hidden Peels / G-gems when present in `songbook_catalog.json`. */
+/** Homepage spotlight: Hidden Peels by slug, else SC→SONGBOOK join row by `songbook_id` if slug alone fails. */
 export function resolveHiddenPeelsSongbook(books: SongbookCatalogItem[]): SongbookCatalogItem | null {
   const slug = HOME_HIDDEN_PEELS_SLUG
   const bySlug = books.find((b) => (b.url_slug_songbook || '').trim().toLowerCase() === slug)
@@ -17,6 +17,17 @@ export function resolveHiddenPeelsSongbook(books: SongbookCatalogItem[]): Songbo
   const byId = books.find((b) => (b.songbook_id || '').trim().toLowerCase() === 'g-gems')
   if (byId && (byId.playlist_url || '').includes('/sets/')) return byId
   return null
+}
+
+/** Small-caps kicker for featured songbook cards (type/sutra — never raw `songbook_id`). */
+export function songbookFeaturedKickerLabel(b: SongbookCatalogItem): string {
+  const st = (b.songbook_type || '').trim().toLowerCase()
+  if (st === 'sutra') {
+    const first = (b.sutras || '').split(',')[0]?.trim()
+    return `SONGBOOK · ${first || 'SUTRA'}`
+  }
+  const label = st ? st.replace(/^\w/, (c) => c.toUpperCase()) : 'Set'
+  return `SONGBOOK · ${label}`
 }
 
 export function songbookPopularity(b: SongbookCatalogItem): number {

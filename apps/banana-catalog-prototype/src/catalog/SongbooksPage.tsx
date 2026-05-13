@@ -4,7 +4,7 @@ import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { CatalogPageJumpNav } from './CatalogPageJumpNav'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
-import { pickFeaturedSongbook, songbookHrefFromCatalogItem } from './homePortalUtils'
+import { pickFeaturedSongbook, songbookFeaturedKickerLabel, songbookHrefFromCatalogItem } from './homePortalUtils'
 import { allSongbooks, songbookHref } from './songbooks'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
@@ -276,17 +276,7 @@ export function SongbooksPage() {
               <div className="songbooks-page__featured-rotator-grid">
                 <LazySoundCloudEmbed scUrl={featuredSongbook.playlist_url} title={featuredSongbook.songbook} />
                 <div className="songbooks-page__featured-rotator-copy">
-                  <p className="songbooks-page__featured-rotator-kicker">
-                    {(() => {
-                      const st = (featuredSongbook.songbook_type || '').trim().toLowerCase()
-                      if (st === 'sutra') {
-                        const first = (featuredSongbook.sutras || '').split(',')[0]?.trim()
-                        return `SONGBOOK · ${first || 'SUTRA'}`
-                      }
-                      const label = st ? st.replace(/^\w/, (c) => c.toUpperCase()) : 'Set'
-                      return `SONGBOOK · ${label}`
-                    })()}
-                  </p>
+                  <p className="songbooks-page__featured-rotator-kicker">{songbookFeaturedKickerLabel(featuredSongbook)}</p>
                   <h3 className="songbooks-page__featured-rotator-title">{featuredSongbook.songbook}</h3>
                   {featuredSongbook.description ? (
                     <p className="songbooks-page__featured-rotator-desc">{featuredSongbook.description}</p>

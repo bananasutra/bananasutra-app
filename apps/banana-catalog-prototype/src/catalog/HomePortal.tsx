@@ -5,7 +5,11 @@ import buildSummaryJson from '../data/generated/_build_summary.json'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
-import { resolveHiddenPeelsSongbook, songbookHrefFromCatalogItem } from './homePortalUtils'
+import {
+  resolveHiddenPeelsSongbook,
+  songbookFeaturedKickerLabel,
+  songbookHrefFromCatalogItem,
+} from './homePortalUtils'
 import { songCatalogPath } from './songPaths'
 import { SongThumbCard } from './SongThumbCard'
 import type { SongCatalogItem, SongbookCatalogItem } from './types'
@@ -349,7 +353,7 @@ export function HomePortal() {
               <div className="home-portal__featured">
                 <LazySoundCloudEmbed scUrl={homePlaylistSongbook.playlist_url} title={homePlaylistSongbook.songbook} />
                 <div className="home-portal__featured-copy">
-                  <p className="home-portal__featured-kicker">Collection · G-gems</p>
+                  <p className="home-portal__featured-kicker">{songbookFeaturedKickerLabel(homePlaylistSongbook)}</p>
                   <h3 className="home-portal__featured-title">{homePlaylistSongbook.songbook}</h3>
                   {homePlaylistSongbook.description ? (
                     <p className="home-portal__featured-desc">{homePlaylistSongbook.description}</p>
