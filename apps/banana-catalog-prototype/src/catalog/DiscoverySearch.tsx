@@ -13,8 +13,10 @@ import {
   sortDiscoverySongbooksForDisplay,
   sortDiscoveryTracksTab,
 } from './discoveryRanking'
+import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
 import { songCatalogPath } from './songPaths'
 import { songbookByName, songbookHref } from './songbooks'
+import { filterTracksByFindQuery, sortTrackCatalog } from './filterTracks'
 import {
   filterSongsByAlbumSearchQuery,
   filterSongsByFindAnyQuery,
@@ -23,8 +25,21 @@ import {
   searchTokens,
 } from './searchMatch'
 import { pickSmartDiscoveryTab } from './discoverySmartTab'
-import type { FacetGroupKey, FacetsPayload, FilterFacetKey, SongCatalogItem, YouTubeCatalogVideo } from './types'
-import { buildBrowsePathForFacet, buildTracksBrowsePath, CATALOG_BROWSE_PATH } from './urlState'
+import type {
+  FacetGroupKey,
+  FacetsPayload,
+  FilterFacetKey,
+  SongCatalogItem,
+  TrackCatalogItem,
+  YouTubeCatalogVideo,
+} from './types'
+import { emptyTracksFilterState } from './types'
+import {
+  buildBrowsePathForFacet,
+  buildTracksBrowsePath,
+  buildTracksBrowsePathFull,
+  CATALOG_BROWSE_PATH,
+} from './urlState'
 import './CatalogApp.css'
 import './DiscoverySearch.css'
 import { loadSongSearchDeep, loadYoutubeByLyricsId, useSongCatalogBrowse } from './generatedData'
@@ -180,6 +195,7 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
   const songCatalog = useMemo(() => songCatalogRows ?? [], [songCatalogRows])
   const listenerSongCatalog = useMemo(() => songCatalog.filter(hasListenerCatalogMedia), [songCatalog])
   const [youtubeFlat, setYoutubeFlat] = useState<YouTubeCatalogVideo[]>([])
+  const [trackCatalogDiscovery, setTrackCatalogDiscovery] = useState<TrackCatalogItem[] | null>(null)
   const [deepSearchByLyricsId, setDeepSearchByLyricsId] = useState<Record<string, string> | null>(null)
   const [deepSearchLoading, setDeepSearchLoading] = useState(false)
   const [youtubeLoadStarted, setYoutubeLoadStarted] = useState(false)
@@ -298,6 +314,26 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
   const tokens = useMemo(() => searchTokens(debounced), [debounced])
   const hasQuery = tokens.length > 0
 
+  /** Align Top Tracks tab counts with `/tracks?q=` — same JSON + `filterTracksByFindQuery` as TracksPage. */
+  useEffect(() => {
+    if (!hasQuery || trackCatalogDiscovery !== null) return
+    let cancelled = false
+    fetchCatalogData(catalogDataFileUrl('track_catalog.json'))
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json() as Promise<TrackCatalogItem[]>
+      })
+      .then((rows) => {
+        if (!cancelled) setTrackCatalogDiscovery(Array.isArray(rows) ? rows : [])
+      })
+      .catch(() => {
+        if (!cancelled) setTrackCatalogDiscovery([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [hasQuery, trackCatalogDiscovery])
+
   const songsTabSongs = useMemo(() => {
     if (!hasQuery) return []
     const tokens = searchTokens(debounced)
@@ -323,6 +359,23 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
       tokens,
     )
   }, [hasQuery, debounced, listenerSongCatalog])
+
+  /**
+   * Same filter + default sort as `/tracks?q=` so preview rows match the tab badge / footer count.
+   * (Song-card Top Tracks matching includes summaries — wider than per-track find.)
+   */
+  const tracksTabFilteredSorted = useMemo(() => {
+    if (!hasQuery || trackCatalogDiscovery === null) return []
+    return sortTrackCatalog(filterTracksByFindQuery(trackCatalogDiscovery, debounced), 'likes')
+  }, [hasQuery, trackCatalogDiscovery, debounced])
+
+  /** Song rows vs SC track rows can diverge (multiple mixes per title); badge matches TracksPage. */
+  const tracksTabRowCount = useMemo(() => {
+    if (!hasQuery) return 0
+    if (trackCatalogDiscovery === null) return tracksTabSongs.length
+    return tracksTabFilteredSorted.length
+  }, [hasQuery, trackCatalogDiscovery, tracksTabFilteredSorted.length, tracksTabSongs.length])
+
   const videosTabFiltered = useMemo(
     () => (hasQuery ? filterYoutubeVideosBySearchQuery(youtubeFlat, debounced) : []),
     [hasQuery, debounced, youtubeFlat],
@@ -360,10 +413,11 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
         songbookResultGroups,
         songsTabSongs,
         tracksTabSongs,
+        tracksTabRowCount,
         videosTabFiltered,
         videosTabGroupsAll.length,
       ),
-    [debounced, songbookResultGroups, songsTabSongs, tracksTabSongs, videosTabFiltered, videosTabGroupsAll.length],
+    [debounced, songbookResultGroups, songsTabSongs, tracksTabSongs, tracksTabRowCount, videosTabFiltered, videosTabGroupsAll.length],
   )
 
   useEffect(() => {
@@ -376,11 +430,15 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
   }, [hasQuery, smartDefaultTab])
 
   const tabPreview = useMemo((): SongCatalogItem[] => {
-    if (!hasQuery) return []
-    if (tab === 'songs') return songsTabSongs.slice(0, PREVIEW_LIMIT)
-    if (tab === 'tracks') return tracksTabSongs.slice(0, PREVIEW_LIMIT)
-    return []
-  }, [hasQuery, tab, songsTabSongs, tracksTabSongs])
+    if (!hasQuery || tab !== 'songs') return []
+    return songsTabSongs.slice(0, PREVIEW_LIMIT)
+  }, [hasQuery, tab, songsTabSongs])
+
+  const typedTracksPreviewLength = useMemo(() => {
+    if (tab !== 'tracks' || !hasQuery) return 0
+    if (trackCatalogDiscovery !== null) return Math.min(tracksTabFilteredSorted.length, PREVIEW_LIMIT)
+    return Math.min(tracksTabSongs.length, PREVIEW_LIMIT)
+  }, [tab, hasQuery, trackCatalogDiscovery, tracksTabFilteredSorted.length, tracksTabSongs.length])
 
   const typedVideoGroups = useMemo(() => {
     if (!hasQuery || tab !== 'videos') return []
@@ -388,7 +446,13 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
   }, [hasQuery, tab, videosTabGroupsAll])
 
   const listLength =
-    tab === 'videos' ? typedVideoGroups.length : tab === 'songbooks' ? songbookResultGroups.length : tabPreview.length
+    tab === 'videos'
+      ? typedVideoGroups.length
+      : tab === 'songbooks'
+        ? songbookResultGroups.length
+        : tab === 'tracks'
+          ? typedTracksPreviewLength
+          : tabPreview.length
 
   const headerBrowseSongCount = songCatalog.length
   const headerBrowseTrackCount = useMemo(
@@ -423,10 +487,10 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
         }
       }
       case 'tracks': {
-        const n = tracksTabSongs.length
+        const n = tracksTabRowCount
         const hasMatches = Boolean(q && n > 0)
         return {
-          href: enc ? `/tracks?find=${enc}` : '/tracks',
+          href: q ? buildTracksBrowsePathFull(emptyTracksFilterState(), q, 1, undefined, 'likes') : '/tracks',
           label: hasMatches ? `See all top tracks with "${q}"` : 'See all top tracks',
           count: hasMatches ? n : headerBrowseTrackCount,
         }
@@ -446,7 +510,7 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
     debounced,
     songbookResultGroups.length,
     songsTabSongs.length,
-    tracksTabSongs.length,
+    tracksTabRowCount,
     videosTabGroupsAll.length,
     headerBrowseTrackCount,
     headerBrowseSongCount,
@@ -459,6 +523,14 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
   const goSong = useCallback(
     (song: SongCatalogItem) => {
       navigate(songCatalogPath(song.lyrics_title, song.url_slug))
+      setOpen(false)
+    },
+    [navigate],
+  )
+
+  const goTrackCatalogRow = useCallback(
+    (row: TrackCatalogItem) => {
+      navigate(songCatalogPath(row.lyrics_title, row.url_slug))
       setOpen(false)
     },
     [navigate],
@@ -504,7 +576,20 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
           goYoutubeSongGroup(typedVideoGroups[activeOptionIndex]!)
           return
         }
-        if (tab !== 'songbooks' && tab !== 'videos' && activeOptionIndex < tabPreview.length) {
+        if (tab === 'tracks') {
+          if (trackCatalogDiscovery !== null) {
+            const slice = tracksTabFilteredSorted.slice(0, PREVIEW_LIMIT)
+            const row = slice[activeOptionIndex]
+            if (row) {
+              goTrackCatalogRow(row)
+              return
+            }
+          } else if (activeOptionIndex < Math.min(tracksTabSongs.length, PREVIEW_LIMIT)) {
+            goSong(tracksTabSongs[activeOptionIndex]!)
+            return
+          }
+        }
+        if (tab === 'songs' && activeOptionIndex < tabPreview.length) {
           goSong(tabPreview[activeOptionIndex]!)
           return
         }
@@ -518,6 +603,7 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
       activeOptionIndex,
       goSong,
       goSongbook,
+      goTrackCatalogRow,
       goYoutubeSongGroup,
       hasQuery,
       navigate,
@@ -525,6 +611,9 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
       songbookResultGroups,
       tab,
       tabPreview,
+      trackCatalogDiscovery,
+      tracksTabFilteredSorted,
+      tracksTabSongs,
       typedVideoGroups,
     ],
   )
@@ -761,7 +850,7 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
                   [
                     ['songbooks', 'Songbooks', songbookResultGroups.length] as const,
                     ['songs', 'Top Songs', songsTabSongs.length] as const,
-                    ['tracks', 'Top Tracks', tracksTabSongs.length] as const,
+                    ['tracks', 'Top Tracks', tracksTabRowCount] as const,
                     ['videos', 'Videos', videosTabGroupsAll.length] as const,
                   ] as const
                 ).map(([key, label, count]) => (
@@ -813,18 +902,32 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
                   />
                 ) : null}
                 {tab === 'tracks' ? (
-                  <TypedSongList
-                    songs={tracksTabSongs}
-                    limit={PREVIEW_LIMIT}
-                    listboxId={typedListboxId}
-                    optionIdPrefix={optionPrefix}
-                    activeIndex={activeOptionIndex}
-                    onHoverOption={setActiveOptionIndex}
-                    onPick={goSong}
-                    subtitleKey="sc"
-                    topTracksGenreRollup
-                    emptyHint="No matches in song titles, summaries, or catalog track tags (genres, instruments, moods, tempo) for this query."
-                  />
+                  trackCatalogDiscovery !== null ? (
+                    <TypedTrackList
+                      tracks={tracksTabFilteredSorted}
+                      limit={PREVIEW_LIMIT}
+                      listboxId={typedListboxId}
+                      optionIdPrefix={optionPrefix}
+                      activeIndex={activeOptionIndex}
+                      onHoverOption={setActiveOptionIndex}
+                      onPick={goTrackCatalogRow}
+                      emptyHint="No SoundCloud tracks match this query in titles and track tags (same search as /tracks)."
+                    />
+                  ) : (
+                    <TypedSongList
+                      songs={tracksTabSongs}
+                      limit={PREVIEW_LIMIT}
+                      listboxId={typedListboxId}
+                      optionIdPrefix={optionPrefix}
+                      activeIndex={activeOptionIndex}
+                      onHoverOption={setActiveOptionIndex}
+                      onPick={goSong}
+                      subtitleKey="sc"
+                      topTracksGenreRollup
+                      listboxAriaLabel="Matching songs (loading track list)"
+                      emptyHint="No matches in song titles, summaries, or catalog track tags (genres, instruments, moods, tempo) for this query."
+                    />
+                  )
                 ) : null}
                 {tab === 'videos' ? (
                   <TypedYoutubeSongGroupList
@@ -860,9 +963,9 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
                 <p className="discovery-search__typed-meta discovery-search__typed-foot-meta" aria-live="polite">
                   {tab === 'tracks' ? (
                     <>
-                      Top Tracks matches song titles, summaries, and catalog track tags (genres, secondary genres,
-                      instruments, moods, tempo, headline genres). Other tabs use meaning-first search (including lyric
-                      excerpts where enabled). Use tabs to jump between songbooks, songs, tracks, and videos.
+                      Top Tracks uses the same SoundCloud track search as the Tracks page (titles, sutra, genres,
+                      instruments, moods, tempo — not lyric summaries). Other tabs use meaning-first search. Use tabs to
+                      jump between songbooks, songs, tracks, and videos.
                     </>
                   ) : (
                     <>
@@ -962,6 +1065,89 @@ function TypedYoutubeSongGroupList({
           </div>
         </li>
       ))}
+    </ul>
+  )
+}
+
+function genreLineDiscoveryTrack(t: TrackCatalogItem): string {
+  const parts = [t.primary_genre, ...(t.secondary_genres ?? [])].map((s) => s.trim()).filter(Boolean)
+  return [...new Set(parts)].slice(0, 6).join(' · ')
+}
+
+/** Top Tracks tab — rows from `track_catalog.json`, aligned with `/tracks?q=` find + sort. */
+function TypedTrackList({
+  tracks,
+  limit,
+  listboxId,
+  optionIdPrefix,
+  activeIndex,
+  onHoverOption,
+  onPick,
+  emptyHint,
+}: {
+  tracks: TrackCatalogItem[]
+  limit: number
+  listboxId: string
+  optionIdPrefix: string
+  activeIndex: number
+  onHoverOption: (i: number) => void
+  onPick: (t: TrackCatalogItem) => void
+  emptyHint: string
+}) {
+  const slice = tracks.slice(0, limit)
+  if (!slice.length) {
+    return (
+      <ul
+        id={listboxId}
+        className="discovery-search__results discovery-search__results--empty"
+        role="listbox"
+        aria-label="Matching SoundCloud tracks"
+      >
+        <li className="discovery-search__result-row discovery-search__result-row--empty" role="presentation">
+          <span className="discovery-search__empty">{emptyHint}</span>
+        </li>
+      </ul>
+    )
+  }
+  return (
+    <ul id={listboxId} className="discovery-search__results" role="listbox" aria-label="Matching SoundCloud tracks">
+      {slice.map((t, i) => {
+        const cover = thumbnailSrc((t.list_cover_url || t.artwork_url || '').trim())
+        const sub = genreLineDiscoveryTrack(t) || (t.soundcloud_genre || '').trim() || 'SoundCloud'
+        return (
+          <li
+            key={t.track_id}
+            id={`${optionIdPrefix}-${i}`}
+            role="option"
+            tabIndex={-1}
+            aria-selected={activeIndex === i}
+            aria-label={(t.track_title || '').trim() || 'Track'}
+            className={`discovery-search__result-row${activeIndex === i ? ' discovery-search__result-row--active' : ''}`}
+            onMouseEnter={() => onHoverOption(i)}
+            onClick={() => onPick(t)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                onPick(t)
+              }
+            }}
+          >
+            <div className="discovery-search__result-main">
+              {cover ? (
+                <img className="discovery-search__result-thumb" src={cover} alt="" width={42} height={42} loading="lazy" />
+              ) : (
+                <span className="discovery-search__result-thumb discovery-search__result-thumb--fallback" aria-hidden>
+                  🍌
+                </span>
+              )}
+              <span className="discovery-search__result-copy">
+                <span className="discovery-search__result-title song-title">{(t.track_title || '').trim()}</span>
+                <span className="discovery-search__result-sub discovery-search__result-sub--muted">{sub}</span>
+              </span>
+            </div>
+          </li>
+        )
+      })}
     </ul>
   )
 }
