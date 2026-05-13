@@ -238,6 +238,18 @@ html {
   border-radius: 4px;
 }
 
+/* SC playlist row: track_count + duration_total (joined at build from sc_playlists). */
+.catalog-songbook-playlist-meta {
+  margin: 0.35rem 0 0;
+  font: 600 0.66rem/1.35 var(--font-ui);
+  letter-spacing: 0.04em;
+  color: var(--color-text-faint);
+}
+
+.songbooks-page__body .catalog-songbook-playlist-meta {
+  margin-top: 0.3rem;
+}
+
 .catalog-header--fixed {
   position: fixed;
   top: 0;

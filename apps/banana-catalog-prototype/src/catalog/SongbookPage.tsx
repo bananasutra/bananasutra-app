@@ -13,6 +13,7 @@ import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { SongThumbCard } from './SongThumbCard'
+import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
@@ -272,6 +273,7 @@ export function SongbookPage() {
               <div className="songbooks-page__hero-text songbooks-page__hero-text--detail">
                 <h1 className="catalog-page-h1 songbooks-page__hero-title">{songbook.songbook}</h1>
                 {songbook.description ? <p className="songbooks-page__hero-description">{songbook.description}</p> : null}
+                <SongbookPlaylistMetaLine book={songbook} />
                 {songbookKindLabel ? (
                   <p className="songbooks-page__kind-row">
                     <span className="songbooks-page__kind-badge">{songbookKindLabel}</span>

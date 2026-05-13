@@ -27,6 +27,7 @@ import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
 import { useExclusiveYoutubeSoundcloudPlayback } from './useExclusiveYoutubeSoundcloudPlayback'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
+import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
 import './SongbooksPage.css'
@@ -583,6 +584,7 @@ export function SutraDetailPage() {
                   {featuredSongbookFallback.description ? (
                     <p className="sutra-detail__feat-desc">{featuredSongbookFallback.description}</p>
                   ) : null}
+                  <SongbookPlaylistMetaLine book={featuredSongbookFallback} className="sutra-detail__feat-sc-playlist-meta" />
                   <Link className="sutra-detail__cta" to={songbookHref(featuredSongbookFallback.songbook)}>
                     Open songbook →
                   </Link>

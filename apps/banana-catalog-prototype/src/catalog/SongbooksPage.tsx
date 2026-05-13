@@ -11,6 +11,7 @@ import { sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
 import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import type { SongbookCatalogItem } from './types'
+import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import './CatalogApp.css'
 import './SongbooksPage.css'
 
@@ -162,6 +163,7 @@ function SongbookCard({ book }: { book: ListedSongbook }) {
       <div className="songbooks-page__body">
         <h3 className="songbooks-page__title">{book.songbook}</h3>
         {book.description ? <p className="songbooks-page__desc">{book.description}</p> : null}
+        <SongbookPlaylistMetaLine book={book} />
       </div>
     </Link>
   )
@@ -281,6 +283,7 @@ export function SongbooksPage() {
                   {featuredSongbook.description ? (
                     <p className="songbooks-page__featured-rotator-desc">{featuredSongbook.description}</p>
                   ) : null}
+                  <SongbookPlaylistMetaLine book={featuredSongbook} />
                   <Link className="songbooks-page__featured-rotator-cta" to={songbookHrefFromCatalogItem(featuredSongbook)}>
                     Open songbook →
                   </Link>

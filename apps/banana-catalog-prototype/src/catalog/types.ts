@@ -358,6 +358,10 @@ export type SongbookCatalogItem = {
   playlist_artwork_url: string
   playlist_total_plays: number
   playlist_total_likes: number
+  /** From joined SC Playlists row (`track_count`). */
+  playlist_track_count: number
+  /** From joined SC Playlists row (`duration_total`), e.g. `4:22:05`. */
+  playlist_duration_total: string
   song_count: number
   songs_with_in_app_playback: number
   member_lyrics_ids: string[]

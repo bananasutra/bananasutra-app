@@ -20,6 +20,7 @@ import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { loadSongCatalog } from './generatedData'
 import { hasListenerCatalogMedia } from './listenerCatalog'
+import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import { songOnWordsSurface } from './wordsStory'
 import './CatalogApp.css'
 import './HomePortal.css'
@@ -358,6 +359,7 @@ export function HomePortal() {
                   {homePlaylistSongbook.description ? (
                     <p className="home-portal__featured-desc">{homePlaylistSongbook.description}</p>
                   ) : null}
+                  <SongbookPlaylistMetaLine book={homePlaylistSongbook} />
                   <Link className="home-portal__featured-cta" to={songbookHrefFromCatalogItem(homePlaylistSongbook)}>
                     Open songbook →
                   </Link>
