@@ -69,6 +69,12 @@ export function songbooksForSutraDetail(
   )
 }
 
+/** Prefer `songbook_type === sutra` rows for sutra-page spotlight pool; fall back to full lane if none. */
+export function songbookPoolForSutraPageRotation(booksForFamily: SongbookCatalogItem[]): SongbookCatalogItem[] {
+  const sutraTyped = booksForFamily.filter((b) => (b.songbook_type || '').trim().toLowerCase() === 'sutra')
+  return sutraTyped.length ? sutraTyped : booksForFamily
+}
+
 /**
  * Canonical pivot targets — the natural "what's next" sutra for each family.
  * Follows the sutra cycle and the hints embedded in each sutra_essence.

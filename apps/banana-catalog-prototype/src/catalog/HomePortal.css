@@ -298,32 +298,6 @@
   }
 }
 
-.home-portal__embed-shell {
-  width: 100%;
-  min-height: 280px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  background: var(--color-bg-inset);
-}
-
-.home-portal__embed-shell .sc-embed-frame {
-  display: block;
-  border: 0;
-}
-
-.home-portal__embed-placeholder {
-  min-height: 280px;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
-  font: 600 0.65rem/1.4 var(--font-ui);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-text-faint);
-  text-align: center;
-}
-
 .home-portal__featured-copy {
   display: flex;
   flex-direction: column;
@@ -438,22 +412,59 @@
   font-weight: 700;
 }
 
-.home-portal__quote-sutra--know { color: var(--sutra-know); }
-.home-portal__quote-sutra--blow { color: var(--sutra-blow); }
-.home-portal__quote-sutra--show { color: var(--sutra-show); }
-.home-portal__quote-sutra--grow { color: var(--sutra-grow); }
-.home-portal__quote-sutra--flow { color: var(--sutra-flow); }
-.home-portal__quote-sutra--glow { color: var(--sutra-glow); }
-.home-portal__quote-sutra--bow { color: var(--sutra-bow); }
-.home-portal__quote-sutra--quack { color: var(--sutra-quack); }
-
-.home-portal__quote-sutra-link {
-  text-decoration: none;
-  text-underline-offset: 2px;
+/* Sutra name in attribution: lane color must override global `a` / `:visited` / `:hover` (index.css). */
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--know,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--know:visited,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--know:hover {
+  color: var(--sutra-know);
 }
 
-.home-portal__quote-sutra-link:hover {
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--blow,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--blow:visited,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--blow:hover {
+  color: var(--sutra-blow);
+}
+
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--show,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--show:visited,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--show:hover {
+  color: var(--sutra-show);
+}
+
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--grow,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--grow:visited,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--grow:hover {
+  color: var(--sutra-grow);
+}
+
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--flow,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--flow:visited,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--flow:hover {
+  color: var(--sutra-flow);
+}
+
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--glow,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--glow:visited,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--glow:hover {
+  color: var(--sutra-glow);
+}
+
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--bow,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--bow:visited,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--bow:hover {
+  color: var(--sutra-bow);
+}
+
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--quack,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--quack:visited,
+.home-portal__quote-meta a.home-portal__quote-sutra-link.home-portal__quote-sutra--quack:hover {
+  color: var(--sutra-quack);
+}
+
+.home-portal__quote-sutra-link {
   text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 .home-portal__quote-sutra-link:focus-visible {

@@ -2,6 +2,82 @@
   width: 100%;
 }
 
+/* Random featured songbook on each visit (moved from homepage for R18). */
+.songbooks-page__featured-rotator {
+  margin: 0 0 1.5rem;
+}
+
+.songbooks-page__featured-rotator .catalog-section-title {
+  margin-bottom: 0.65rem;
+}
+
+.songbooks-page__featured-rotator-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.1rem;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .songbooks-page__featured-rotator-grid {
+    grid-template-columns: 1.05fr 1fr;
+    gap: 1.35rem;
+    align-items: center;
+  }
+}
+
+.songbooks-page__featured-rotator-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.songbooks-page__featured-rotator-kicker {
+  margin: 0;
+  font: 600 0.6rem/1.35 var(--font-ui);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+.songbooks-page__featured-rotator-title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2.2vw, 1.18rem);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-text-strong);
+}
+
+.songbooks-page__featured-rotator-desc {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
+.songbooks-page__featured-rotator-cta {
+  margin-top: 0.35rem;
+  font: 600 0.65rem/1.35 var(--font-ui);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-link);
+  text-decoration: none;
+  width: fit-content;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 2px;
+}
+
+.songbooks-page__featured-rotator-cta:hover {
+  color: var(--color-link-hover);
+  border-bottom-color: var(--color-link-hover);
+}
+
 .songbooks-page__back-link {
   color: var(--color-link);
   font-weight: 600;
@@ -159,7 +235,10 @@
 }
 
 .songbooks-page__card {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
   color: inherit;
   text-decoration: none;
   border: 1px solid var(--color-border);
@@ -179,6 +258,7 @@
 }
 
 .songbooks-page__media {
+  flex-shrink: 0;
   width: 100%;
   aspect-ratio: 1;
   background: var(--color-bg-inset);
@@ -200,7 +280,20 @@
 }
 
 .songbooks-page__body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   padding: 0.7rem;
+}
+
+.songbooks-page__body .catalog-songbook-playlist-meta {
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+.songbooks-page__body > .sutra-detail__songbook-meta:last-child {
+  margin-top: auto;
 }
 
 .songbooks-page__title {

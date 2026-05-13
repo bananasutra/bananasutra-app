@@ -4,11 +4,14 @@ import homeQuotesJson from '../data/generated/home_quotes.json'
 import buildSummaryJson from '../data/generated/_build_summary.json'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { pickFeaturedSongbook } from './homePortalUtils'
+import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
+import {
+  resolveHiddenPeelsSongbook,
+  songbookFeaturedKickerLabel,
+  songbookHrefFromCatalogItem,
+} from './homePortalUtils'
 import { songCatalogPath } from './songPaths'
-import { songbookToUrlSlug } from './slugify'
 import { SongThumbCard } from './SongThumbCard'
-import { SoundCloudEmbed } from './SoundCloudEmbed'
 import type { SongCatalogItem, SongbookCatalogItem } from './types'
 import { buildBrowsePathForFacet, searchHasBrowseParams } from './urlState'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
@@ -17,6 +20,7 @@ import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { loadSongCatalog } from './generatedData'
 import { hasListenerCatalogMedia } from './listenerCatalog'
+import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import { songOnWordsSurface } from './wordsStory'
 import './CatalogApp.css'
 import './HomePortal.css'
@@ -55,11 +59,6 @@ const BUILD_SUMMARY = buildSummaryJson as ChromeBuildSummary
 function buildSummaryCount(key: string): number {
   const v = (buildSummaryJson as Record<string, unknown>)[key]
   return typeof v === 'number' ? v : 0
-}
-
-function songbookHrefFromItem(b: SongbookCatalogItem): string {
-  const slug = (b.url_slug_songbook || '').trim() || songbookToUrlSlug(b.songbook)
-  return `/songbooks/${slug}`
 }
 
 const SUTRA_GRID_KEYS = ['KNOW', 'BLOW', 'SHOW', 'GROW', 'FLOW', 'GLOW', 'BOW', 'QUACK'] as const
@@ -117,39 +116,6 @@ function sutraFamilyFromDisplay(value: string): keyof typeof SUTRA_CONTEXT | nul
   return null
 }
 
-function LazySoundCloudEmbed({ scUrl, title }: { scUrl: string; title: string }) {
-  const wrapRef = useRef<HTMLDivElement>(null)
-  const [active, setActive] = useState(false)
-
-  useEffect(() => {
-    const el = wrapRef.current
-    if (!el || active) return
-    const obs = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setActive(true)
-          obs.disconnect()
-        }
-      },
-      { rootMargin: '160px 0px', threshold: 0.01 },
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [active])
-
-  return (
-    <div ref={wrapRef} className="home-portal__embed-shell">
-      {active ? (
-        <SoundCloudEmbed scUrl={scUrl} title={title} height={280} mode="visual" loading="lazy" />
-      ) : (
-        <div className="home-portal__embed-placeholder" aria-hidden>
-          SoundCloud playlist (loads when in view)
-        </div>
-      )}
-    </div>
-  )
-}
-
 export function HomePortal() {
   const location = useLocation()
   const [searchParams] = useSearchParams()
@@ -158,7 +124,7 @@ export function HomePortal() {
   const legacyRedirect = location.pathname === '/' && searchHasBrowseParams(location.search)
   const fullSearch = searchParams.toString()
 
-  const featuredQuote = useMemo(() => quoteForVisit(HOME_QUOTES), [])
+  const featuredQuote = useMemo(() => quoteForVisit(HOME_QUOTES), [location.key])
   const [typedQuote, setTypedQuote] = useState('')
   const typingIntervalRef = useRef<number | undefined>(undefined)
   const muse = (featuredQuote.muse || '').trim()
@@ -166,7 +132,7 @@ export function HomePortal() {
   const quoteMetaParts = [muse, primarySutraDisplay].filter(Boolean)
 
   const [songCatalog, setSongCatalog] = useState<SongCatalogItem[] | null>(null)
-  const [featuredSongbook, setFeaturedSongbook] = useState<SongbookCatalogItem | null>(null)
+  const [homePlaylistSongbook, setHomePlaylistSongbook] = useState<SongbookCatalogItem | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -183,7 +149,7 @@ export function HomePortal() {
     void import('../data/generated/songbook_catalog.json').then((m) => {
       if (cancelled) return
       const books = (m.default as SongbookCatalogItem[]) ?? []
-      startTransition(() => setFeaturedSongbook(pickFeaturedSongbook(books)))
+      startTransition(() => setHomePlaylistSongbook(resolveHiddenPeelsSongbook(books)))
     })
     return () => {
       cancelled = true
@@ -380,30 +346,21 @@ export function HomePortal() {
             </Link>
           </section>
 
-          {featuredSongbook ? (
-            <section className="home-portal__section" aria-labelledby="home-featured-songbook-heading">
-              <h2 id="home-featured-songbook-heading" className="catalog-section-title">
-                Featured songbook
+          {homePlaylistSongbook ? (
+            <section className="home-portal__section" aria-labelledby="home-hidden-peels-heading">
+              <h2 id="home-hidden-peels-heading" className="catalog-section-title">
+                Hidden Peels
               </h2>
               <div className="home-portal__featured">
-                <LazySoundCloudEmbed scUrl={featuredSongbook.playlist_url} title={featuredSongbook.songbook} />
+                <LazySoundCloudEmbed scUrl={homePlaylistSongbook.playlist_url} title={homePlaylistSongbook.songbook} />
                 <div className="home-portal__featured-copy">
-                  <p className="home-portal__featured-kicker">
-                    {(() => {
-                      const st = (featuredSongbook.songbook_type || '').trim().toLowerCase()
-                      if (st === 'sutra') {
-                        const first = (featuredSongbook.sutras || '').split(',')[0]?.trim()
-                        return `SONGBOOK · ${first || 'SUTRA'}`
-                      }
-                      const label = st ? st.replace(/^\w/, (c) => c.toUpperCase()) : 'Set'
-                      return `SONGBOOK · ${label}`
-                    })()}
-                  </p>
-                  <h3 className="home-portal__featured-title">{featuredSongbook.songbook}</h3>
-                  {featuredSongbook.description ? (
-                    <p className="home-portal__featured-desc">{featuredSongbook.description}</p>
+                  <p className="home-portal__featured-kicker">{songbookFeaturedKickerLabel(homePlaylistSongbook)}</p>
+                  <h3 className="home-portal__featured-title">{homePlaylistSongbook.songbook}</h3>
+                  {homePlaylistSongbook.description ? (
+                    <p className="home-portal__featured-desc">{homePlaylistSongbook.description}</p>
                   ) : null}
-                  <Link className="home-portal__featured-cta" to={songbookHrefFromItem(featuredSongbook)}>
+                  <SongbookPlaylistMetaLine book={homePlaylistSongbook} />
+                  <Link className="home-portal__featured-cta" to={songbookHrefFromCatalogItem(homePlaylistSongbook)}>
                     Open songbook →
                   </Link>
                 </div>

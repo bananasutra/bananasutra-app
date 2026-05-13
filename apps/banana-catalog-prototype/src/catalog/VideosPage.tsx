@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { songMatchesMediaCombo } from './filterSongs'
 import { GlobalFooter } from './GlobalFooter'
@@ -264,6 +264,7 @@ export function VideosPage() {
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const navigate = useNavigate()
+  const { key: routeVisitKey } = useLocation()
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
   const [youtubeCatalogVideos, setYoutubeCatalogVideos] = useState<YouTubeCatalogVideo[]>([])
   const [youtubeCatalogReady, setYoutubeCatalogReady] = useState(false)
@@ -346,7 +347,7 @@ export function VideosPage() {
     () => allVideos.filter((v) => Boolean(v.video_featured) && Boolean(v.can_embed)),
     [allVideos],
   )
-  const featuredVideoHero = useMemo(() => pickRandomVideo(featuredVideos), [featuredVideos])
+  const featuredVideoHero = useMemo(() => pickRandomVideo(featuredVideos), [featuredVideos, routeVisitKey])
 
   const featuredHeroSongPageHref = useMemo(() => {
     if (!featuredVideoHero) return null

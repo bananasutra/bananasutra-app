@@ -1498,6 +1498,8 @@ def build_songbook_catalog(
                 "playlist_artwork_url": pl_art,
                 "playlist_total_plays": parse_int(playlist.get("total_plays")) if playlist else 0,
                 "playlist_total_likes": parse_int(playlist.get("total_likes")) if playlist else 0,
+                "playlist_track_count": parse_int(playlist.get("track_count")) if playlist else 0,
+                "playlist_duration_total": str(playlist.get("duration_total") or "").strip() if playlist else "",
                 "song_count": len(songs_sorted),
                 "songs_with_in_app_playback": sum(
                     1 for s in songs_sorted if bool(s.get("has_in_app_playback"))
@@ -1561,6 +1563,8 @@ def build_songbook_catalog(
                 "playlist_artwork_url": pl_art,
                 "playlist_total_plays": parse_int(playlist.get("total_plays")) if playlist else 0,
                 "playlist_total_likes": parse_int(playlist.get("total_likes")) if playlist else 0,
+                "playlist_track_count": parse_int(playlist.get("track_count")) if playlist else 0,
+                "playlist_duration_total": str(playlist.get("duration_total") or "").strip() if playlist else "",
                 "song_count": 0,
                 "songs_with_in_app_playback": 0,
                 "member_lyrics_ids": [],

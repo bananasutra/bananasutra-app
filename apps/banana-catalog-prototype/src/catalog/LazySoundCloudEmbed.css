@@ -1,0 +1,25 @@
+.catalog-lazy-sc-embed {
+  width: 100%;
+  min-height: 280px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-inset);
+}
+
+.catalog-lazy-sc-embed .sc-embed-frame {
+  display: block;
+  border: 0;
+}
+
+.catalog-lazy-sc-embed__placeholder {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  font: 600 0.65rem/1.4 var(--font-ui);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  text-align: center;
+}

@@ -75,11 +75,10 @@
   color: var(--color-text-secondary, var(--catalog-page-lede-color));
 }
 
-/* Stats row — now lives after pull quote, outside the hero section */
+/* Stats row — lives inside hero; hero border-bottom closes the orientation block */
 .sutra-detail__hero-stats-row {
   margin: 0;
-  padding: 1.25rem 0;
-  border-bottom: 1px solid var(--color-border);
+  padding: 1.25rem 0 0;
 }
 
 .sutra-detail__hero-shortcuts {
@@ -206,41 +205,18 @@
   }
 }
 
-/* Same stacking model as `.songbooks-page__featured-video-*` / `.videos-page__featured-hero-*`:
-   embed + copy are siblings, each `max-width: 980px` + `margin-inline: auto` so left edges line up. */
-.sutra-detail__featured-video-embed {
+.sutra-detail__feat-embed--video-contained {
+  min-width: 0;
+}
+
+.sutra-detail__featured-video-aspect {
   position: relative;
   width: 100%;
-  max-width: 980px;
-  margin: 0 auto;
   overflow: hidden;
   border-radius: var(--radius-sm);
 }
 
-.sutra-detail__featured-video-copy {
-  margin-top: 0.8rem;
-  max-width: 980px;
-  margin-inline: auto;
-  width: 100%;
-  text-align: left;
-}
-
-.sutra-detail__featured-video-copy .sutra-detail__feat-title,
-.sutra-detail__featured-video-copy .sutra-detail__feat-desc {
-  margin-inline: 0;
-  padding-inline: 0;
-}
-
-/* YouTube video embed — 16:9 responsive container */
-.sutra-detail__feat-embed--video {
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
-  height: 0;
-  overflow: hidden;
-  border-radius: var(--radius-sm);
-}
-
-.sutra-detail__featured-video-embed .sutra-detail__yt-embed {
+.sutra-detail__featured-video-aspect .sutra-detail__yt-embed {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -266,11 +242,8 @@
   color: var(--color-text-muted);
 }
 
-.sutra-detail__feat-meta {
-  margin: 0 0 0.5rem;
-  font: 600 0.66rem/1.35 var(--font-ui);
-  letter-spacing: 0.04em;
-  color: var(--color-text-faint);
+.sutra-detail__feat-sc-playlist-meta {
+  margin: 0 0 0.65rem;
 }
 
 .sutra-detail__cta {
@@ -284,6 +257,11 @@
 
 .sutra-detail__cta:hover {
   color: var(--color-link-hover);
+}
+
+.sutra-detail__cta:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 .sutra-detail__empty {
@@ -366,7 +344,7 @@
 
 .sutra-detail__section--pivot {
   border-bottom: none;
-  padding-bottom: 1rem;
+  padding-bottom: 2rem;
 }
 
 .sutra-detail__pivot-title {
@@ -374,43 +352,76 @@
 }
 
 .sutra-detail__pivot-block {
-  padding: 1.15rem 1.2rem;
+  padding: 1.5rem 1.5rem 1.25rem;
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-text-faint);
   background: var(--color-bg-panel);
 }
 
 .sutra-detail__pivot-body {
-  margin: 0;
-  font-size: 1rem;
+  margin: 0 0 1.25rem;
+  font-size: 1.05rem;
   line-height: 1.6;
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
 }
 
-.sutra-detail__bottom-nav {
+.sutra-detail__pivot-nav {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: 0.7rem 1rem;
-  padding-top: 1.15rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
 }
 
-.sutra-detail__bottom-cta {
-  font: 600 0.74rem/1.35 var(--font-ui);
-  letter-spacing: 0.05em;
+.sutra-detail__pivot-cta {
+  font: 600 0.78rem/1.35 var(--font-ui);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-link);
   text-decoration: none;
 }
 
-.sutra-detail__bottom-cta:hover {
+.sutra-detail__pivot-cta:hover {
   color: var(--color-link-hover);
 }
 
-.sutra-detail__bottom-cta--right {
+.sutra-detail__pivot-cta:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.sutra-detail__pivot-cta--next {
   margin-left: auto;
   text-align: right;
+  font-weight: 700;
+}
+
+.sutra-detail--know .sutra-detail__pivot-block {
+  border-left-color: var(--sutra-know);
+}
+.sutra-detail--blow .sutra-detail__pivot-block {
+  border-left-color: var(--sutra-blow);
+}
+.sutra-detail--show .sutra-detail__pivot-block {
+  border-left-color: var(--sutra-show);
+}
+.sutra-detail--grow .sutra-detail__pivot-block {
+  border-left-color: var(--sutra-grow);
+}
+.sutra-detail--flow .sutra-detail__pivot-block {
+  border-left-color: var(--sutra-flow);
+}
+.sutra-detail--glow .sutra-detail__pivot-block {
+  border-left-color: var(--sutra-glow);
+}
+.sutra-detail--bow .sutra-detail__pivot-block {
+  border-left-color: var(--sutra-bow);
+}
+.sutra-detail--quack .sutra-detail__pivot-block {
+  border-left-color: var(--sutra-quack);
 }
 
 @keyframes sutraPullCaret {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { hasListenerCatalogMedia } from './listenerCatalog'
@@ -13,6 +13,7 @@ import { usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { SongThumbCard } from './SongThumbCard'
+import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
@@ -80,6 +81,7 @@ function tracksHrefForPrimaryGenre(token: string): string {
 
 export function SongbookPage() {
   const { slug = '' } = useParams()
+  const { key: routeVisitKey } = useLocation()
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
@@ -170,7 +172,7 @@ export function SongbookPage() {
       (v) => memberLyricsIdSet.has((v.lyrics_id || '').trim()) && Boolean(v.video_featured) && Boolean(v.can_embed),
     )
   }, [isSutraSongbook, memberLyricsIdSet, youtubeVideos])
-  const featuredSongbookVideo = useMemo(() => pickRandomVideo(featuredSongbookVideos), [featuredSongbookVideos])
+  const featuredSongbookVideo = useMemo(() => pickRandomVideo(featuredSongbookVideos), [featuredSongbookVideos, routeVisitKey])
   const featuredSongbookVideoSummary = (featuredSongbookVideo?.lyrics_summary || '').trim() || (
     featuredSongbookVideo?.lyrics_id ? (songCatalogByLyricsId.get(featuredSongbookVideo.lyrics_id)?.summary_short || '').trim() : ''
   )
@@ -192,7 +194,7 @@ export function SongbookPage() {
 
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
-    soundcloudWrapRef: soundcloudExclusiveWrapRef,
+    soundcloudWrapRefs: [soundcloudExclusiveWrapRef],
     enabled: songbookExclusivePlaybackEnabled,
     syncKey: `${slug}|${featuredSongbookVideo?.video_id ?? ''}|${(songbook?.playlist_url ?? '').trim()}`,
   })
@@ -272,6 +274,7 @@ export function SongbookPage() {
               <div className="songbooks-page__hero-text songbooks-page__hero-text--detail">
                 <h1 className="catalog-page-h1 songbooks-page__hero-title">{songbook.songbook}</h1>
                 {songbook.description ? <p className="songbooks-page__hero-description">{songbook.description}</p> : null}
+                <SongbookPlaylistMetaLine book={songbook} />
                 {songbookKindLabel ? (
                   <p className="songbooks-page__kind-row">
                     <span className="songbooks-page__kind-badge">{songbookKindLabel}</span>
