@@ -1,5 +1,5 @@
 import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { CatalogPageJumpNav } from './CatalogPageJumpNav'
@@ -172,6 +172,7 @@ function SongbookCard({ book }: { book: ListedSongbook }) {
 export function SongbooksPage() {
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
+  const { key: routeVisitKey } = useLocation()
   const [featuredSongbook, setFeaturedSongbook] = useState<SongbookCatalogItem | null>(null)
 
   useEffect(() => {
@@ -184,7 +185,7 @@ export function SongbooksPage() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [routeVisitKey])
 
   usePageMeta({
     title: 'Songbooks & Playlists',

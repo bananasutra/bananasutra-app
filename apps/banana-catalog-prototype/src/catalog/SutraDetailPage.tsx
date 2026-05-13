@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { SoundCloudEmbed } from './SoundCloudEmbed'
@@ -16,7 +16,6 @@ import {
   primarySutraKeyForSongbook,
   songbookPoolForSutraPageRotation,
   songbooksForSutraDetail,
-  sutraFamilyDayOffset,
   sutraFamilyKeyFromSongField,
 } from './sutraPageUtils'
 import type { SutraFamilyKey } from './sutraContext'
@@ -29,10 +28,8 @@ import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './you
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
 import { useExclusiveYoutubeSoundcloudPlayback } from './useExclusiveYoutubeSoundcloudPlayback'
-import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import {
-  pickRotatingSongbookFromPool,
-  songbookFeaturedKickerLabel,
+  pickRandomSongbookFromPool,
   songbookHrefFromCatalogItem,
 } from './homePortalUtils'
 import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
@@ -104,12 +101,6 @@ function formatCount(n: number): string {
   return new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(n)
 }
 
-function formatEpDate(raw: string): string {
-  const t = (raw || '').trim()
-  if (!t) return ''
-  return t.slice(0, 10)
-}
-
 function songHasReleasedListenerAudio(song: { has_in_app_playback: boolean; has_sc_catalog_listen: boolean; primary_ep_url: string }): boolean {
   return Boolean(song.has_in_app_playback || song.has_sc_catalog_listen || (song.primary_ep_url || '').trim())
 }
@@ -156,6 +147,7 @@ function formatDurationTotal(raw: string | number | null | undefined): string {
 
 export function SutraDetailPage() {
   const { slug } = useParams<{ slug: string }>()
+  const { key: routeVisitKey } = useLocation()
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
@@ -200,7 +192,7 @@ export function SutraDetailPage() {
   const quoteSong = useMemo(() => {
     if (!familyKey || !songCatalogRows) return null
     return pickRandomQuoteSong(songCatalogRows, familyKey)
-  }, [familyKey, songCatalogRows])
+  }, [familyKey, songCatalogRows, routeVisitKey])
 
   useEffect(() => {
     const full = (quoteSong?.lyrics_extract || '').trim()
@@ -260,15 +252,15 @@ export function SutraDetailPage() {
     return sortedSongbooks.find((b) => (b.playlist_url || '').includes('/sets/')) ?? null
   }, [sortedSongbooks])
 
-  const rotatingSutraSongbook = useMemo(() => {
+  const sutraSpotlightSongbook = useMemo(() => {
     if (!familyKey || !entry) return null
     const ep = entry.featured_ep
     const epSlotShowsSoundcloudEmbed = Boolean(ep?.ep_url && ep.ep_url.includes('soundcloud.com'))
     const pool = songbookPoolForSutraPageRotation(sortedSongbooks)
     const exclude =
       !epSlotShowsSoundcloudEmbed && featuredSongbookFallback ? featuredSongbookFallback.songbook : null
-    return pickRotatingSongbookFromPool(pool, sutraFamilyDayOffset(familyKey), exclude)
-  }, [familyKey, entry, sortedSongbooks, featuredSongbookFallback])
+    return pickRandomSongbookFromPool(pool, exclude)
+  }, [familyKey, entry, sortedSongbooks, featuredSongbookFallback, routeVisitKey])
 
   const featuredScUrlForExclusive = useMemo(() => {
     const epUrl = (entry?.featured_ep?.ep_url || '').trim()
@@ -297,28 +289,21 @@ export function SutraDetailPage() {
       (v) => (v.sutra || '').trim().toLowerCase() === sutra && Boolean(v.video_featured) && Boolean(v.can_embed),
     )
   }, [entry?.sutra, youtubeVideos])
-  const featuredSutraVideo = useMemo(() => pickRandomVideo(featuredSutraVideos), [featuredSutraVideos])
-
-  const featuredSutraSongPageHref = useMemo(() => {
-    if (!featuredSutraVideo || !songCatalogRows) return null
-    const id = (featuredSutraVideo.lyrics_id || '').trim()
-    const inCatalog = id ? songCatalogRows.some((s) => (s.lyrics_id || '').trim() === id) : false
-    return featuredYoutubeSongPageHref(featuredSutraVideo, inCatalog)
-  }, [featuredSutraVideo, songCatalogRows])
+  const featuredSutraVideo = useMemo(() => pickRandomVideo(featuredSutraVideos), [featuredSutraVideos, routeVisitKey])
 
   const sutraExclusivePlaybackEnabled = Boolean(
     !catalogLoading &&
       songCatalogRows &&
       featuredSutraVideo &&
       (Boolean((featuredScUrlForExclusive || '').trim()) ||
-        Boolean((rotatingSutraSongbook?.playlist_url || '').trim())),
+        Boolean((sutraSpotlightSongbook?.playlist_url || '').trim())),
   )
 
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
     soundcloudWrapRefs: sutraSoundcloudWrapRefs,
     enabled: sutraExclusivePlaybackEnabled,
-    syncKey: `${familyKey ?? ''}|${featuredSutraVideo?.video_id ?? ''}|${featuredScUrlForExclusive}|spot:${(rotatingSutraSongbook?.playlist_url || '').trim()}`,
+    syncKey: `${familyKey ?? ''}|${featuredSutraVideo?.video_id ?? ''}|${featuredScUrlForExclusive}|spot:${(sutraSpotlightSongbook?.playlist_url || '').trim()}`,
   })
 
   const pivotTarget = useMemo(() => {
@@ -368,6 +353,16 @@ export function SutraDetailPage() {
     : 0
   const featuredEpDuration = formatDurationTotal(featuredEp?.duration_total ?? featuredEpDurationSeconds)
   const featuredEpSongbookTitle = (featuredEp?.ep_songbook_title || '').trim()
+  const featuredEpPlaylistMetaLine =
+    featuredEp?.ep_url && featuredEp.ep_url.includes('soundcloud.com')
+      ? [
+          featuredEp.ep_total_tracks != null ? `${featuredEp.ep_total_tracks} tracks` : null,
+          featuredEpDuration.trim() || null,
+          `${formatCount(featuredEp.total_plays)} plays`,
+        ]
+          .filter(Boolean)
+          .join(' · ')
+      : ''
 
   const browseHref = buildBrowsePathForFacet('sutra', entry.sutra)
   const tracksHref = `/tracks?q=${encodeURIComponent(entry.sutra)}`
@@ -439,47 +434,27 @@ export function SutraDetailPage() {
                 })()
               ) : null}
             </div>
-          </section>
-
-          {quoteSong ? (
-            <section className="sutra-detail__section sutra-detail__pull" aria-labelledby="sutra-pull-heading">
-              <h2 id="sutra-pull-heading" className="visually-hidden">
-                Lyric pull
-              </h2>
-              <blockquote className="sutra-detail__pull-quote" aria-label="Lyric pull quote">
-                <span className="sutra-detail__pull-quote-text">{typedPullQuote}</span>
-                <span className="sutra-detail__pull-quote-caret" aria-hidden />
-              </blockquote>
-              <p className="sutra-detail__pull-src">
-                ↳ From{' '}
-                <Link className="sutra-detail__pull-link" to={songCatalogPath(quoteSong.lyrics_title, quoteSong.url_slug)}>
-                  &ldquo;{quoteSong.lyrics_title}&rdquo;
-                </Link>{' '}
-                · {quoteSong.sutra}
-              </p>
-            </section>
-          ) : null}
-
-          <div className="sutra-detail__hero-stats-row">
-            <div className="sutra-detail__hero-shortcuts" aria-label={`${entry.sutra} content shortcuts`}>
-              <Link className="sutra-detail__hero-shortcut" to={browseHref}>
-                <span className="sutra-detail__hero-shortcut-k">Songs</span>
-                <span className="sutra-detail__hero-shortcut-v">{formatCount(stats.songs)}</span>
-              </Link>
-              <Link className="sutra-detail__hero-shortcut" to={tracksHref}>
-                <span className="sutra-detail__hero-shortcut-k">Top tracks</span>
-                <span className="sutra-detail__hero-shortcut-v">{formatCount(stats.tracks)}</span>
-              </Link>
-              <Link className="sutra-detail__hero-shortcut" to={videosHref}>
-                <span className="sutra-detail__hero-shortcut-k">Videos</span>
-                <span className="sutra-detail__hero-shortcut-v">{formatCount(videosCount)}</span>
-              </Link>
-              <Link className="sutra-detail__hero-shortcut" to={wordsHref}>
-                <span className="sutra-detail__hero-shortcut-k">Lyrics only</span>
-                <span className="sutra-detail__hero-shortcut-v">{formatCount(lyricsOnlyCount)}</span>
-              </Link>
+            <div className="sutra-detail__hero-stats-row">
+              <div className="sutra-detail__hero-shortcuts" aria-label={`${entry.sutra} content shortcuts`}>
+                <Link className="sutra-detail__hero-shortcut" to={browseHref}>
+                  <span className="sutra-detail__hero-shortcut-k">Songs</span>
+                  <span className="sutra-detail__hero-shortcut-v">{formatCount(stats.songs)}</span>
+                </Link>
+                <Link className="sutra-detail__hero-shortcut" to={tracksHref}>
+                  <span className="sutra-detail__hero-shortcut-k">Top tracks</span>
+                  <span className="sutra-detail__hero-shortcut-v">{formatCount(stats.tracks)}</span>
+                </Link>
+                <Link className="sutra-detail__hero-shortcut" to={videosHref}>
+                  <span className="sutra-detail__hero-shortcut-k">Videos</span>
+                  <span className="sutra-detail__hero-shortcut-v">{formatCount(videosCount)}</span>
+                </Link>
+                <Link className="sutra-detail__hero-shortcut" to={wordsHref}>
+                  <span className="sutra-detail__hero-shortcut-k">Lyrics only</span>
+                  <span className="sutra-detail__hero-shortcut-v">{formatCount(lyricsOnlyCount)}</span>
+                </Link>
+              </div>
             </div>
-          </div>
+          </section>
 
           {familyKey === 'BLOW' ? (
             <section className="sutra-detail__section" aria-labelledby="sutra-quack-heading">
@@ -521,42 +496,59 @@ export function SutraDetailPage() {
             </Link>
           </section>
 
+          {quoteSong ? (
+            <section className="sutra-detail__section sutra-detail__pull" aria-labelledby="sutra-pull-heading">
+              <h2 id="sutra-pull-heading" className="visually-hidden">
+                Lyric pull
+              </h2>
+              <blockquote className="sutra-detail__pull-quote" aria-label="Lyric pull quote">
+                <span className="sutra-detail__pull-quote-text">{typedPullQuote}</span>
+                <span className="sutra-detail__pull-quote-caret" aria-hidden />
+              </blockquote>
+              <p className="sutra-detail__pull-src">
+                ↳ From{' '}
+                <Link className="sutra-detail__pull-link" to={songCatalogPath(quoteSong.lyrics_title, quoteSong.url_slug)}>
+                  &ldquo;{quoteSong.lyrics_title}&rdquo;
+                </Link>{' '}
+                · {quoteSong.sutra}
+              </p>
+            </section>
+          ) : null}
+
           <section className="sutra-detail__section" aria-labelledby="sutra-featured-heading">
             <h2 id="sutra-featured-heading" className="catalog-section-title">
               Featured {entry.sutra} Video
             </h2>
             {featuredSutraVideo ? (
-              <>
-                <div
-                  className="sutra-detail__featured-video-embed"
-                  style={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
-                >
-                  <iframe
-                    ref={youtubeExclusiveRef}
-                    className="sutra-detail__yt-embed"
-                    src={youtubePrivacyEmbedSrc(featuredSutraVideo.video_id, {
-                      enableJsApi: sutraExclusivePlaybackEnabled,
-                    })}
-                    title={featuredSutraVideo.lyrics_title || featuredSutraVideo.title || `${entry.sutra} featured video`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
-                  />
+              <div className="sutra-detail__feat">
+                <div className="sutra-detail__feat-embed sutra-detail__feat-embed--video-contained">
+                  <div
+                    className="sutra-detail__featured-video-aspect"
+                    style={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
+                  >
+                    <iframe
+                      ref={youtubeExclusiveRef}
+                      className="sutra-detail__yt-embed"
+                      src={youtubePrivacyEmbedSrc(featuredSutraVideo.video_id, {
+                        enableJsApi: sutraExclusivePlaybackEnabled,
+                      })}
+                      title={featuredSutraVideo.lyrics_title || featuredSutraVideo.title || `${entry.sutra} featured video`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      loading="lazy"
+                    />
+                  </div>
                 </div>
-                <div className="sutra-detail__featured-video-copy">
+                <div className="sutra-detail__feat-copy">
                   <h3 className="sutra-detail__feat-title">{featuredSutraVideo.lyrics_title || featuredSutraVideo.title}</h3>
                   {(featuredSutraVideo.lyrics_summary || '').trim() ? (
                     <p className="sutra-detail__feat-desc">{featuredSutraVideo.lyrics_summary?.trim()}</p>
                   ) : null}
-                  {featuredSutraSongPageHref ? (
-                    <div className="catalog-featured-video-song-row">
-                      <Link className="catalog-song-page-cta" to={featuredSutraSongPageHref}>
-                        Song page
-                      </Link>
-                    </div>
-                  ) : null}
+                  <Link className="sutra-detail__cta" to={videosHref}>
+                    View {entry.sutra} Videos →
+                  </Link>
                 </div>
-              </>
+              </div>
             ) : (
               <p className="sutra-detail__empty">No featured {entry.sutra} video marked in the catalog yet.</p>
             )}
@@ -577,17 +569,15 @@ export function SutraDetailPage() {
                 </div>
                 <div className="sutra-detail__feat-copy">
                   <h3 className="sutra-detail__feat-title">{featuredEp.ep_title}</h3>
-                  <p className="sutra-detail__feat-meta">
-                    EP×{featuredEp.ep_total_tracks || '—'}
-                    {featuredEpDuration ? ` · ${featuredEpDuration}` : ''} · {formatCount(featuredEp.total_plays)} plays ·{' '}
-                    {formatEpDate(featuredEp.created_at)}
-                  </p>
                   {featuredEp.ep_description ? (
                     <p className="sutra-detail__feat-desc">{featuredEp.ep_description}</p>
                   ) : null}
+                  {featuredEpPlaylistMetaLine ? (
+                    <p className="catalog-songbook-playlist-meta sutra-detail__feat-sc-playlist-meta">{featuredEpPlaylistMetaLine}</p>
+                  ) : null}
                   {featuredEpSongbookTitle ? (
                     <Link className="sutra-detail__cta" to={songbookHref(featuredEpSongbookTitle)}>
-                      View {featuredEpSongbookTitle} →
+                      View Song →
                     </Link>
                   ) : null}
                 </div>
@@ -610,7 +600,7 @@ export function SutraDetailPage() {
                   ) : null}
                   <SongbookPlaylistMetaLine book={featuredSongbookFallback} className="sutra-detail__feat-sc-playlist-meta" />
                   <Link className="sutra-detail__cta" to={songbookHref(featuredSongbookFallback.songbook)}>
-                    Open songbook →
+                    View Songbook →
                   </Link>
                 </div>
               </div>
@@ -619,27 +609,26 @@ export function SutraDetailPage() {
             )}
           </section>
 
-          {rotatingSutraSongbook ? (
+          {sutraSpotlightSongbook ? (
             <section className="sutra-detail__section sutra-detail__section--songbook-spotlight" aria-labelledby="sutra-spotlight-songbook-heading">
               <h2 id="sutra-spotlight-songbook-heading" className="catalog-section-title">
                 {entry.sutra} songbook spotlight
               </h2>
-              <p className="sutra-detail__spotlight-sub">Rotates daily among SoundCloud sets for this sutra (series playlists when available).</p>
-              <div className="songbooks-page__featured-rotator-grid">
-                <LazySoundCloudEmbed
-                  ref={sutraSpotlightSoundcloudWrapRef}
-                  scUrl={rotatingSutraSongbook.playlist_url}
-                  title={rotatingSutraSongbook.songbook}
-                />
-                <div className="songbooks-page__featured-rotator-copy">
-                  <p className="songbooks-page__featured-rotator-kicker">{songbookFeaturedKickerLabel(rotatingSutraSongbook)}</p>
-                  <h3 className="songbooks-page__featured-rotator-title">{rotatingSutraSongbook.songbook}</h3>
-                  {rotatingSutraSongbook.description ? (
-                    <p className="songbooks-page__featured-rotator-desc">{rotatingSutraSongbook.description}</p>
+              <div className="sutra-detail__feat">
+                <div className="sutra-detail__feat-embed" ref={sutraSpotlightSoundcloudWrapRef}>
+                  <LazySoundCloudEmbed
+                    scUrl={sutraSpotlightSongbook.playlist_url}
+                    title={sutraSpotlightSongbook.songbook}
+                  />
+                </div>
+                <div className="sutra-detail__feat-copy">
+                  <h3 className="sutra-detail__feat-title">{sutraSpotlightSongbook.songbook}</h3>
+                  {sutraSpotlightSongbook.description ? (
+                    <p className="sutra-detail__feat-desc">{sutraSpotlightSongbook.description}</p>
                   ) : null}
-                  <SongbookPlaylistMetaLine book={rotatingSutraSongbook} />
-                  <Link className="songbooks-page__featured-rotator-cta" to={songbookHrefFromCatalogItem(rotatingSutraSongbook)}>
-                    Open songbook →
+                  <SongbookPlaylistMetaLine book={sutraSpotlightSongbook} className="sutra-detail__feat-sc-playlist-meta" />
+                  <Link className="sutra-detail__cta" to={songbookHrefFromCatalogItem(sutraSpotlightSongbook)}>
+                    View Songbook →
                   </Link>
                 </div>
               </div>
@@ -692,23 +681,22 @@ export function SutraDetailPage() {
             </h2>
             <div className="sutra-detail__pivot-block">
               <p className="sutra-detail__pivot-body">{WHATS_NEXT[familyKey]?.body ?? entry.mental_health_pivot}</p>
+              <nav className="sutra-detail__pivot-nav" aria-label="Sutra page navigation">
+                <Link className="sutra-detail__pivot-cta sutra-detail__pivot-cta--back" to={ABOUT_SUTRAS_HREF}>
+                  ← The seven sutras
+                </Link>
+                {pivotTarget ? (
+                  <Link className="sutra-detail__pivot-cta sutra-detail__pivot-cta--next" to={sutraHrefForFamily(pivotTarget)}>
+                    Explore {pivotTarget}sutra →
+                  </Link>
+                ) : (
+                  <Link className="sutra-detail__pivot-cta sutra-detail__pivot-cta--next" to="/about#sutras">
+                    Explore all sutras →
+                  </Link>
+                )}
+              </nav>
             </div>
           </section>
-
-          <nav className="sutra-detail__bottom-nav" aria-label="Sutra page navigation">
-            <Link className="sutra-detail__bottom-cta sutra-detail__bottom-cta--left" to={ABOUT_SUTRAS_HREF}>
-              ← The seven sutras
-            </Link>
-            {pivotTarget ? (
-              <Link className="sutra-detail__bottom-cta sutra-detail__bottom-cta--right" to={sutraHrefForFamily(pivotTarget)}>
-                Explore {pivotTarget}sutra →
-              </Link>
-            ) : (
-              <Link className="sutra-detail__bottom-cta sutra-detail__bottom-cta--right" to="/about#sutras">
-                Explore all sutras →
-              </Link>
-            )}
-          </nav>
         </article>
       </div>
 

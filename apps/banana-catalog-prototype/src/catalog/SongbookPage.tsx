@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { hasListenerCatalogMedia } from './listenerCatalog'
@@ -81,6 +81,7 @@ function tracksHrefForPrimaryGenre(token: string): string {
 
 export function SongbookPage() {
   const { slug = '' } = useParams()
+  const { key: routeVisitKey } = useLocation()
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
@@ -171,7 +172,7 @@ export function SongbookPage() {
       (v) => memberLyricsIdSet.has((v.lyrics_id || '').trim()) && Boolean(v.video_featured) && Boolean(v.can_embed),
     )
   }, [isSutraSongbook, memberLyricsIdSet, youtubeVideos])
-  const featuredSongbookVideo = useMemo(() => pickRandomVideo(featuredSongbookVideos), [featuredSongbookVideos])
+  const featuredSongbookVideo = useMemo(() => pickRandomVideo(featuredSongbookVideos), [featuredSongbookVideos, routeVisitKey])
   const featuredSongbookVideoSummary = (featuredSongbookVideo?.lyrics_summary || '').trim() || (
     featuredSongbookVideo?.lyrics_id ? (songCatalogByLyricsId.get(featuredSongbookVideo.lyrics_id)?.summary_short || '').trim() : ''
   )

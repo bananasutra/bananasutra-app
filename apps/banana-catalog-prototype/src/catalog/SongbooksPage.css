@@ -2,7 +2,7 @@
   width: 100%;
 }
 
-/* Day-rotating featured songbook (moved from homepage for R18). */
+/* Random featured songbook on each visit (moved from homepage for R18). */
 .songbooks-page__featured-rotator {
   margin: 0 0 1.5rem;
 }
@@ -235,7 +235,10 @@
 }
 
 .songbooks-page__card {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
   color: inherit;
   text-decoration: none;
   border: 1px solid var(--color-border);
@@ -255,6 +258,7 @@
 }
 
 .songbooks-page__media {
+  flex-shrink: 0;
   width: 100%;
   aspect-ratio: 1;
   background: var(--color-bg-inset);
@@ -276,7 +280,20 @@
 }
 
 .songbooks-page__body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   padding: 0.7rem;
+}
+
+.songbooks-page__body .catalog-songbook-playlist-meta {
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+.songbooks-page__body > .sutra-detail__songbook-meta:last-child {
+  margin-top: auto;
 }
 
 .songbooks-page__title {

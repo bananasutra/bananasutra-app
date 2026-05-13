@@ -124,7 +124,7 @@ export function HomePortal() {
   const legacyRedirect = location.pathname === '/' && searchHasBrowseParams(location.search)
   const fullSearch = searchParams.toString()
 
-  const featuredQuote = useMemo(() => quoteForVisit(HOME_QUOTES), [])
+  const featuredQuote = useMemo(() => quoteForVisit(HOME_QUOTES), [location.key])
   const [typedQuote, setTypedQuote] = useState('')
   const typingIntervalRef = useRef<number | undefined>(undefined)
   const muse = (featuredQuote.muse || '').trim()

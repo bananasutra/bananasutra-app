@@ -40,30 +40,34 @@ function eligiblePlaylistSongbooksSorted(pool: SongbookCatalogItem[]): SongbookC
     .sort((a, b) => songbookPopularity(b) - songbookPopularity(a))
 }
 
-/**
- * Day-rotating SoundCloud set pick from a caller-filtered pool (e.g. sutra-lane songbooks).
- *
- * @param dayIndexOffset — shifts the bucket vs other pages that share the same calendar day.
- * @param excludeSongbook — optional `songbook` display name to omit when another slot already shows it.
- */
-export function pickRotatingSongbookFromPool(
+function eligiblePlaylistSongbooksForPick(
   pool: SongbookCatalogItem[],
-  dayIndexOffset = 0,
-  excludeSongbook: string | null = null,
-): SongbookCatalogItem | null {
+  excludeSongbook: string | null,
+): SongbookCatalogItem[] {
   let eligible = eligiblePlaylistSongbooksSorted(pool)
-  if (!eligible.length) return null
+  if (!eligible.length) return eligible
   if (excludeSongbook) {
     const filtered = eligible.filter((b) => b.songbook !== excludeSongbook)
     if (filtered.length) eligible = filtered
   }
-  const t = new Date()
-  const start = new Date(t.getFullYear(), 0, 0).getTime()
-  const dayOfYear = Math.floor((t.getTime() - start) / 86400000)
-  return eligible[(dayOfYear + dayIndexOffset) % eligible.length]!
+  return eligible
 }
 
-/** Deterministic “songbook of the day” over the full in-app catalog (same contract as `/songbooks` featured strip). */
+/**
+ * Random SoundCloud `/sets/` playlist from `pool`, popularity-sorted then uniformly sampled.
+ *
+ * @param excludeSongbook — optional `songbook` display name to omit when another slot already shows it.
+ */
+export function pickRandomSongbookFromPool(
+  pool: SongbookCatalogItem[],
+  excludeSongbook: string | null = null,
+): SongbookCatalogItem | null {
+  const eligible = eligiblePlaylistSongbooksForPick(pool, excludeSongbook)
+  if (!eligible.length) return null
+  return eligible[Math.floor(Math.random() * eligible.length)]!
+}
+
+/** Random featured songbook for `/songbooks` hero strip (full in-app catalog, SoundCloud sets only). */
 export function pickFeaturedSongbook(books: SongbookCatalogItem[]): SongbookCatalogItem | null {
-  return pickRotatingSongbookFromPool(books, 0, null)
+  return pickRandomSongbookFromPool(books, null)
 }

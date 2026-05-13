@@ -246,10 +246,6 @@ html {
   color: var(--color-text-faint);
 }
 
-.songbooks-page__body .catalog-songbook-playlist-meta {
-  margin-top: 0.3rem;
-}
-
 .catalog-header--fixed {
   position: fixed;
   top: 0;

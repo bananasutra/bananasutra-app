@@ -69,25 +69,10 @@ export function songbooksForSutraDetail(
   )
 }
 
-/** Prefer `songbook_type === sutra` rows for sutra-page rotation; fall back to full lane if none. */
+/** Prefer `songbook_type === sutra` rows for sutra-page spotlight pool; fall back to full lane if none. */
 export function songbookPoolForSutraPageRotation(booksForFamily: SongbookCatalogItem[]): SongbookCatalogItem[] {
   const sutraTyped = booksForFamily.filter((b) => (b.songbook_type || '').trim().toLowerCase() === 'sutra')
   return sutraTyped.length ? sutraTyped : booksForFamily
-}
-
-/** Offset day-of-year index so each sutra page’s rotation differs from /songbooks and from sibling sutras. */
-export function sutraFamilyDayOffset(family: SutraFamilyKey): number {
-  const m: Record<SutraFamilyKey, number> = {
-    KNOW: 0,
-    BLOW: 3,
-    QUACK: 7,
-    SHOW: 11,
-    GROW: 13,
-    FLOW: 17,
-    GLOW: 19,
-    BOW: 23,
-  }
-  return m[family] ?? 0
 }
 
 /**
