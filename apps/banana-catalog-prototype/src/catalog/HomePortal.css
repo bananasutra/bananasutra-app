@@ -106,11 +106,6 @@
   font-family: var(--font-body);
 }
 
-.home-portal__hidden-peels-lede {
-  max-width: 42rem;
-  margin-bottom: 1rem;
-}
-
 .home-portal__sutra-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -346,11 +346,6 @@ export function HomePortal() {
               <h2 id="home-hidden-peels-heading" className="catalog-section-title">
                 Hidden Peels
               </h2>
-              <p className="catalog-page-sub home-portal__hidden-peels-lede">
-                G-gems collection — tracks the algorithms barely surface. Fixed playlist on the homepage; more
-                songbooks on{' '}
-                <Link to="/songbooks">/songbooks</Link>.
-              </p>
               <div className="home-portal__featured">
                 <LazySoundCloudEmbed scUrl={homePlaylistSongbook.playlist_url} title={homePlaylistSongbook.songbook} />
                 <div className="home-portal__featured-copy">
