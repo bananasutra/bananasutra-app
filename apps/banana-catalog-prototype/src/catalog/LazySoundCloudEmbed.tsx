@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useRef, useState, type ForwardedRef, type MutableRefObject } from 'react'
 import { SoundCloudEmbed } from './SoundCloudEmbed'
 import './LazySoundCloudEmbed.css'
 
@@ -9,15 +9,32 @@ type Props = {
   height?: number
 }
 
+function assignForwardedRef<T>(ref: ForwardedRef<T>, node: T | null): void {
+  if (typeof ref === 'function') {
+    ref(node)
+  } else if (ref) {
+    ;(ref as MutableRefObject<T | null>).current = node
+  }
+}
+
 /**
  * Defers loading the SoundCloud iframe until the block is near the viewport.
+ * `ref` attaches to the outer wrapper (for `useExclusiveYoutubeSoundcloudPlayback` and similar).
  */
-export function LazySoundCloudEmbed({ scUrl, title, height = 280 }: Props) {
-  const wrapRef = useRef<HTMLDivElement>(null)
+export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function LazySoundCloudEmbed(
+  { scUrl, title, height = 280 },
+  ref,
+) {
+  const rootRef = useRef<HTMLDivElement | null>(null)
   const [active, setActive] = useState(false)
 
+  const setRootRef = (node: HTMLDivElement | null) => {
+    rootRef.current = node
+    assignForwardedRef(ref, node)
+  }
+
   useEffect(() => {
-    const el = wrapRef.current
+    const el = rootRef.current
     if (!el || active) return
     const obs = new IntersectionObserver(
       (entries) => {
@@ -33,7 +50,7 @@ export function LazySoundCloudEmbed({ scUrl, title, height = 280 }: Props) {
   }, [active])
 
   return (
-    <div ref={wrapRef} className="catalog-lazy-sc-embed">
+    <div ref={setRootRef} className="catalog-lazy-sc-embed">
       {active ? (
         <SoundCloudEmbed scUrl={scUrl} title={title} height={height} mode="visual" loading="lazy" />
       ) : (
@@ -43,4 +60,4 @@ export function LazySoundCloudEmbed({ scUrl, title, height = 280 }: Props) {
       )}
     </div>
   )
-}
+})

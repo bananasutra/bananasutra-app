@@ -193,7 +193,7 @@ export function SongbookPage() {
 
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
-    soundcloudWrapRef: soundcloudExclusiveWrapRef,
+    soundcloudWrapRefs: [soundcloudExclusiveWrapRef],
     enabled: songbookExclusivePlaybackEnabled,
     syncKey: `${slug}|${featuredSongbookVideo?.video_id ?? ''}|${(songbook?.playlist_url ?? '').trim()}`,
   })

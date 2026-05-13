@@ -160,6 +160,11 @@ export function SutraDetailPage() {
   const headerRef = useRef<HTMLElement>(null)
   const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
   const soundcloudExclusiveWrapRef = useRef<HTMLDivElement>(null)
+  const sutraSpotlightSoundcloudWrapRef = useRef<HTMLDivElement>(null)
+  const sutraSoundcloudWrapRefs = useMemo(
+    () => [soundcloudExclusiveWrapRef, sutraSpotlightSoundcloudWrapRef] as const,
+    [],
+  )
   const pullTypingIntervalRef = useRef<number | undefined>(undefined)
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
   const [typedPullQuote, setTypedPullQuote] = useState('')
@@ -305,14 +310,15 @@ export function SutraDetailPage() {
     !catalogLoading &&
       songCatalogRows &&
       featuredSutraVideo &&
-      featuredScUrlForExclusive,
+      (Boolean((featuredScUrlForExclusive || '').trim()) ||
+        Boolean((rotatingSutraSongbook?.playlist_url || '').trim())),
   )
 
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
-    soundcloudWrapRef: soundcloudExclusiveWrapRef,
+    soundcloudWrapRefs: sutraSoundcloudWrapRefs,
     enabled: sutraExclusivePlaybackEnabled,
-    syncKey: `${familyKey ?? ''}|${featuredSutraVideo?.video_id ?? ''}|${featuredScUrlForExclusive}`,
+    syncKey: `${familyKey ?? ''}|${featuredSutraVideo?.video_id ?? ''}|${featuredScUrlForExclusive}|spot:${(rotatingSutraSongbook?.playlist_url || '').trim()}`,
   })
 
   const pivotTarget = useMemo(() => {
@@ -620,7 +626,11 @@ export function SutraDetailPage() {
               </h2>
               <p className="sutra-detail__spotlight-sub">Rotates daily among SoundCloud sets for this sutra (series playlists when available).</p>
               <div className="songbooks-page__featured-rotator-grid">
-                <LazySoundCloudEmbed scUrl={rotatingSutraSongbook.playlist_url} title={rotatingSutraSongbook.songbook} />
+                <LazySoundCloudEmbed
+                  ref={sutraSpotlightSoundcloudWrapRef}
+                  scUrl={rotatingSutraSongbook.playlist_url}
+                  title={rotatingSutraSongbook.songbook}
+                />
                 <div className="songbooks-page__featured-rotator-copy">
                   <p className="songbooks-page__featured-rotator-kicker">{songbookFeaturedKickerLabel(rotatingSutraSongbook)}</p>
                   <h3 className="songbooks-page__featured-rotator-title">{rotatingSutraSongbook.songbook}</h3>

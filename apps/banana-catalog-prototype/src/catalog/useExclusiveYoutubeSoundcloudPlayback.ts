@@ -113,9 +113,23 @@ function messageIndicatesYoutubePlaying(event: MessageEvent): boolean {
   return payloadIndicatesYoutubePlaying(parsed as Record<string, unknown>)
 }
 
+function iframesFromSoundcloudWraps(
+  soundcloudWrapRefs: ReadonlyArray<RefObject<HTMLElement | null>>,
+): HTMLIFrameElement[] {
+  const out: HTMLIFrameElement[] = []
+  for (const r of soundcloudWrapRefs) {
+    const wrap = r.current
+    if (!wrap) continue
+    const iframe = wrap.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
+    if (iframe) out.push(iframe)
+  }
+  return out
+}
+
 export type ExclusiveYoutubeSoundcloudOptions = {
   youtubeIframeRef: RefObject<HTMLIFrameElement | null>
-  soundcloudWrapRef: RefObject<HTMLElement | null>
+  /** Ancestors of each `.sc-embed-frame` iframe (e.g. featured EP wrap + lazy spotlight wrap). */
+  soundcloudWrapRefs: ReadonlyArray<RefObject<HTMLElement | null>>
   /** When false, listeners and widget bindings are not installed. */
   enabled: boolean
   /** Bumps the effect when featured media URLs change (iframe nodes / lazy timing). */
@@ -123,20 +137,19 @@ export type ExclusiveYoutubeSoundcloudOptions = {
 }
 
 /**
- * When both a YouTube featured embed and a SoundCloud widget exist on the same page,
- * ensures only one plays at a time (SoundCloud Widget `PLAY` vs YouTube `onStateChange`).
+ * When a YouTube featured embed and one or more SoundCloud widgets share a page,
+ * ensures only one plays at a time (SoundCloud `PLAY` vs YouTube `onStateChange`), and SoundCloud
+ * widgets pause each other (R16 cacophony-proof, extended for multiple SC regions).
  *
  * Cross-origin iframe clicks do not bubble to the parent, so exclusivity is driven by
  * player APIs / `postMessage`, not wrapper click handlers.
  */
 export function useExclusiveYoutubeSoundcloudPlayback({
   youtubeIframeRef,
-  soundcloudWrapRef,
+  soundcloudWrapRefs,
   enabled,
   syncKey,
 }: ExclusiveYoutubeSoundcloudOptions): void {
-  const scWidgetRef = useRef<SoundCloudWidget | null>(null)
-  const scCleanupRef = useRef<(() => void) | null>(null)
   const scBindSerialRef = useRef(0)
 
   useEffect(() => {
@@ -160,33 +173,30 @@ export function useExclusiveYoutubeSoundcloudPlayback({
       return { left: scrollBurst.left, top: scrollBurst.top }
     }
 
-    const pauseSoundcloudFromDom = () => {
-      const wrap = soundcloudWrapRef.current
-      const iframe = wrap?.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
-      if (!iframe) return
-
+    /** Pause every bound SoundCloud iframe except `excludeIframe` (omit arg to pause all). */
+    const pauseSoundcloudWidgetsExcept = (excludeIframe: HTMLIFrameElement | null) => {
       stabilizeSeq += 1
       const seq = stabilizeSeq
       const { left, top } = readFrozenScrollAnchor()
 
-      const w = scWidgetRef.current
-      if (w) {
-        try {
-          w.pause()
-        } catch {
-          // ignore
-        }
+      const targets = iframesFromSoundcloudWraps(soundcloudWrapRefs).filter((el) => el !== excludeIframe)
+      if (!targets.length) {
+        patchViewportScrollIfDrifted(left, top)
+        return
       }
+
       patchViewportScrollIfDrifted(left, top)
 
       void loadSoundCloudWidgetApi()
         .then((SC) => {
           if (seq !== stabilizeSeq) return
-          if (!document.body.contains(iframe)) return
-          try {
-            SC.Widget(iframe).pause()
-          } catch {
-            // ignore
+          for (const iframe of targets) {
+            if (!document.body.contains(iframe)) continue
+            try {
+              SC.Widget(iframe).pause()
+            } catch {
+              // ignore
+            }
           }
           patchViewportScrollIfDrifted(left, top)
         })
@@ -201,7 +211,7 @@ export function useExclusiveYoutubeSoundcloudPlayback({
 
     const onWindowMessage = (event: MessageEvent) => {
       if (!messageIndicatesYoutubePlaying(event)) return
-      pauseSoundcloudFromDom()
+      pauseSoundcloudWidgetsExcept(null)
     }
     window.addEventListener('message', onWindowMessage)
 
@@ -222,49 +232,57 @@ export function useExclusiveYoutubeSoundcloudPlayback({
     }, 500)
 
     let cancelled = false
+    const scCleanups: Array<() => void> = []
 
-    const tryBindSoundcloud = () => {
+    const tryBindAllSoundcloud = () => {
       if (cancelled) return
-      const wrap = soundcloudWrapRef.current
-      if (!wrap) return
-      const iframe = wrap.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
-      if (!iframe) return
-
-      scCleanupRef.current?.()
-      scCleanupRef.current = null
-      scWidgetRef.current = null
+      for (const c of scCleanups) {
+        try {
+          c()
+        } catch {
+          /* ignore */
+        }
+      }
+      scCleanups.length = 0
 
       scBindSerialRef.current += 1
       const serial = scBindSerialRef.current
 
+      const iframes = iframesFromSoundcloudWraps(soundcloudWrapRefs)
+      if (!iframes.length) return
+
       void loadSoundCloudWidgetApi()
         .then((SC) => {
-          if (cancelled || serial !== scBindSerialRef.current || !document.body.contains(iframe)) return
-          const widget = SC.Widget(iframe)
-          scWidgetRef.current = widget
+          if (cancelled || serial !== scBindSerialRef.current) return
 
-          const onPlay = () => {
-            postMessagePauseYoutubeEmbed(youtubeIframeRef.current)
-          }
+          for (const iframe of iframes) {
+            if (!document.body.contains(iframe)) continue
 
-          const onReady = () => {
-            widget.bind(SC.Widget.Events.PLAY, onPlay)
-          }
+            const widget: SoundCloudWidget = SC.Widget(iframe)
 
-          widget.bind(SC.Widget.Events.READY, onReady)
-
-          scCleanupRef.current = () => {
-            try {
-              widget.unbind(SC.Widget.Events.READY)
-            } catch {
-              /* ignore */
+            const onPlay = () => {
+              postMessagePauseYoutubeEmbed(youtubeIframeRef.current)
+              pauseSoundcloudWidgetsExcept(iframe)
             }
-            try {
-              widget.unbind(SC.Widget.Events.PLAY)
-            } catch {
-              /* ignore */
+
+            const onReady = () => {
+              widget.bind(SC.Widget.Events.PLAY, onPlay)
             }
-            if (scWidgetRef.current === widget) scWidgetRef.current = null
+
+            widget.bind(SC.Widget.Events.READY, onReady)
+
+            scCleanups.push(() => {
+              try {
+                widget.unbind(SC.Widget.Events.READY)
+              } catch {
+                /* ignore */
+              }
+              try {
+                widget.unbind(SC.Widget.Events.PLAY)
+              } catch {
+                /* ignore */
+              }
+            })
           }
         })
         .catch(() => {
@@ -272,14 +290,16 @@ export function useExclusiveYoutubeSoundcloudPlayback({
         })
     }
 
-    const wrap = soundcloudWrapRef.current
-    let mo: MutationObserver | null = null
-    if (wrap) {
-      mo = new MutationObserver(() => tryBindSoundcloud())
+    const mos: MutationObserver[] = []
+    for (const wrapRef of soundcloudWrapRefs) {
+      const wrap = wrapRef.current
+      if (!wrap) continue
+      const mo = new MutationObserver(() => tryBindAllSoundcloud())
       mo.observe(wrap, { childList: true, subtree: true })
+      mos.push(mo)
     }
-    tryBindSoundcloud()
-    const scRetryId = window.setTimeout(tryBindSoundcloud, 600)
+    tryBindAllSoundcloud()
+    const scRetryId = window.setTimeout(tryBindAllSoundcloud, 600)
 
     return () => {
       cancelled = true
@@ -287,9 +307,15 @@ export function useExclusiveYoutubeSoundcloudPlayback({
       cleanupYt()
       window.clearTimeout(ytRetryId)
       window.clearTimeout(scRetryId)
-      mo?.disconnect()
-      scCleanupRef.current?.()
-      scCleanupRef.current = null
+      for (const m of mos) m.disconnect()
+      for (const c of scCleanups) {
+        try {
+          c()
+        } catch {
+          /* ignore */
+        }
+      }
+      scCleanups.length = 0
     }
-  }, [enabled, syncKey, youtubeIframeRef, soundcloudWrapRef])
+  }, [enabled, syncKey, youtubeIframeRef, soundcloudWrapRefs])
 }
