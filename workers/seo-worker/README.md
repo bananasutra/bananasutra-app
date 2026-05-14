@@ -29,7 +29,7 @@ Do this **whenever Worker code changes** (`src/`, `wrangler.toml`, bot list, etc
 
 #### Automatic: GitHub Actions (recommended)
 
-The repo workflow **`.github/workflows/deploy-seo-worker.yml`** runs on **`push` to `main`** when anything under **`workers/seo-worker/**`** changes (or when that workflow file changes). It runs **`npm ci` → `npm test` → `npm run typecheck` → `wrangler deploy`** via [`cloudflare/wrangler-action@v3`](https://github.com/cloudflare/wrangler-action).
+The repo workflow **`.github/workflows/deploy-seo-worker.yml`** runs on **`push` to `main`** when anything under **`workers/seo-worker/**`** changes (or when that workflow file changes). It runs **`npm ci` → `npm test` → `npm run typecheck` → `npm run deploy`** (Wrangler from this package’s `devDependencies`, same as locally — no separate `wrangler-action` step).
 
 **One-time — GitHub Actions:** Open **Settings → Secrets and variables → Actions** and add the encrypted variables the deploy workflow expects. **Never commit** API tokens, global API keys, or raw account identifiers into this repo (or paste them into issues/PRs); GitHub Secrets exist specifically so values stay off disk in clones and history.
 
