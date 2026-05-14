@@ -82,6 +82,14 @@ export function rewriteHtmlMetadata(
         el.setAttribute("content", meta.description);
       },
     })
+    .on('meta[name="twitter:card"]', {
+      element(el) {
+        el.setAttribute(
+          "content",
+          meta.image ? "summary_large_image" : "summary",
+        );
+      },
+    })
     .on('meta[name="twitter:title"]', {
       element(el) {
         el.setAttribute("content", meta.title);

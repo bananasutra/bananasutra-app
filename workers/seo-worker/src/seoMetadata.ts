@@ -19,6 +19,7 @@ export const HOMEPAGE_DEFAULT_META: RouteMeta = {
     "Explore the BANANASUTRA catalog — songs organized by sutra, topic, intention, and sound. Browse songbooks, read lyrics, watch videos, and listen to tracks.",
   canonical: "https://bananasutra.com/",
   type: "website",
+  image: "https://bananasutra.com/og/site.png",
 };
 
 /** Successful fetches stay warm for this long. */

@@ -65,5 +65,8 @@ pipelines/yt/raw/
 # --- Build output ---
 apps/banana-catalog-prototype/src/data/generated/*.tmp
 
-# --- Private/local docs (keep on disk, not on public repo) ---
+# --- Private/local docs ---
+# `_docs/` is intentionally NOT in git: planning, SEO epics, runbooks you keep on your machine.
+# Git never deletes local `_docs/` files—it just does not upload them. Collaborators + CI only see tracked files.
+# See root README.md section “Local `_docs/`”. Do not remove this line to “fix” missing paths on GitHub.
 _docs/

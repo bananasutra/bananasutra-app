@@ -29,6 +29,7 @@ test("buildBotLinkPreviewHeadFragment omits image tags when image absent", () =>
     /property="og:url" content="https:\/\/bananasutra\.com\/songs\/ego-ain-t-your-amigo"/,
   );
   assert.match(html, /rel="canonical" href="https:\/\/bananasutra\.com\/songs\/ego-ain-t-your-amigo"/);
+  assert.match(html, /name="twitter:card" content="summary"/);
   assert.doesNotMatch(html, /og:image/);
   assert.doesNotMatch(html, /twitter:image/);
 });
@@ -42,4 +43,5 @@ test("buildBotLinkPreviewHeadFragment includes image when set", () => {
   });
   assert.match(html, /property="og:image" content="https:\/\/bananasutra\.com\/og\/x\.png"/);
   assert.match(html, /name="twitter:image" content="https:\/\/bananasutra\.com\/og\/x\.png"/);
+  assert.match(html, /name="twitter:card" content="summary_large_image"/);
 });

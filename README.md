@@ -2,20 +2,24 @@
 
 Monorepo-style workspace: Airtable snapshots, pipelines, and the **banana-catalog-prototype** app under `apps/`.
 
-## Workflow source of truth
+## Local `_docs/` (gitignored on purpose)
 
-For all data operations, use:
+The **`_docs/`** tree is listed in **`.gitignore`**: it is for **private / local planning** (runbooks, SEO notes, epics) that you keep on disk but **do not push** to GitHub. A **fresh clone has no `_docs/`**—that is expected, not a broken checkout. Git **does not delete** your local `_docs/` when you pull; it simply never tracks those paths.
 
-- `/_docs/runbooks/AIRTABLE-SOURCE-OF-TRUTH-RUNBOOK.md` (single "what to run when")
-- `/_docs/runbooks/ARTIFACT-LIFECYCLE.md` (what is canonical vs temporary)
-- `/_docs/runbooks/LAUNCH-AND-CHANGE-HANDBOOK.md` (GitHub + staging/production + change management)
-- `/_docs/runbooks/README.md` (the short index of active docs only)
+If you maintain optional local runbooks under `_docs/`, common entry points include:
+
+- `_docs/runbooks/AIRTABLE-SOURCE-OF-TRUTH-RUNBOOK.md`
+- `_docs/runbooks/ARTIFACT-LIFECYCLE.md`
+- `_docs/runbooks/LAUNCH-AND-CHANGE-HANDBOOK.md`
+- `_docs/runbooks/README.md`
+
+**In-repo (tracked) references:** catalog build and deploy are documented under **`apps/banana-catalog-prototype/README.md`**, **`apps/banana-catalog-prototype/docs/BUILD-ENV.md`**, and **`.github/workflows/pages.yml`**.
 
 ## Repo hygiene and safety
 
 - Root `.gitignore` is the authoritative ignore policy for this workspace.
 - Never commit `.env` secrets. Keep only `*.env.example` templates in git.
-- Treat the files listed in `/_docs/runbooks/ARTIFACT-LIFECYCLE.md` as canonical; temporary files should stay in temporary paths or backups.
+- Treat `apps/banana-catalog-prototype/src/data/generated/` and pipeline outputs as build artifacts; keep temporary exports under `backups/` or other disposable paths.
 - Keep root tidy: avoid one-off exports at repo root, and place ad-hoc exports in `backups/`.
 
 ## Catalog prototype — command cheatsheet
