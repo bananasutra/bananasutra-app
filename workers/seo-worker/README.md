@@ -31,14 +31,11 @@ Do this **whenever Worker code changes** (`src/`, `wrangler.toml`, bot list, etc
 
 The repo workflow **`.github/workflows/deploy-seo-worker.yml`** runs on **`push` to `main`** when anything under **`workers/seo-worker/**`** changes (or when that workflow file changes). It runs **`npm ci` → `npm test` → `npm run typecheck` → `wrangler deploy`** via [`cloudflare/wrangler-action@v3`](https://github.com/cloudflare/wrangler-action).
 
-**One-time — GitHub repo secrets** (Settings → Secrets and variables → Actions):
+**One-time — GitHub Actions:** Open **Settings → Secrets and variables → Actions** and add the encrypted variables the deploy workflow expects. **Never commit** API tokens, global API keys, or raw account identifiers into this repo (or paste them into issues/PRs); GitHub Secrets exist specifically so values stay off disk in clones and history.
 
-| Secret | Value |
-|--------|--------|
-| `CLOUDFLARE_API_TOKEN` | API token with permission to deploy this Worker and manage routes on **bananasutra.com**. Use Cloudflare’s token wizard (e.g. **Edit Cloudflare Workers** template) or a custom token with **Workers Scripts:Edit**, **Workers Routes:Edit**, and **Zone:Read** for the zone. See [Wrangler CI/CD — API token](https://developers.cloudflare.com/workers/wrangler/ci-cd/#api-token). |
-| `CLOUDFLARE_ACCOUNT_ID` | Account ID from the Cloudflare dashboard (Workers overview / account sidebar). Required because `wrangler.toml` does not set `account_id`. |
+The **exact variable names** and what Wrangler needs from them live only in **`.github/workflows/deploy-seo-worker.yml`** (see the top comment and the “Deploy to Cloudflare” step). For how to mint a least-privilege Cloudflare API token, use Cloudflare’s guide: [Wrangler CI/CD — API token](https://developers.cloudflare.com/workers/wrangler/ci-cd/#api-token).
 
-After secrets exist, merge a change that touches `workers/seo-worker/` or use **Actions → Deploy SEO Worker (Cloudflare) → Run workflow** (`workflow_dispatch`).
+After those are configured, merge a change that touches `workers/seo-worker/` or use **Actions → Deploy SEO Worker (Cloudflare) → Run workflow** (`workflow_dispatch`).
 
 **Do not** also wire the same Worker through Cloudflare **Worker → Settings → Build → Connect GitHub/GitLab** unless you want a **second** deploy pipeline. Prefer **one** source of truth: this repo’s workflow file.
 

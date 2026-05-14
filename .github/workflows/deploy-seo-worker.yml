@@ -1,9 +1,11 @@
 # Deploy Cloudflare Worker `bananasutra-com-seo` (see workers/seo-worker/wrangler.toml).
 # This replaces ad-hoc `npm run deploy` from your laptop for routine releases.
 #
-# One-time: add repo secrets (GitHub → Settings → Secrets and variables → Actions):
-#   CLOUDFLARE_API_TOKEN   — API token with Workers deploy + zone route permissions
-#   CLOUDFLARE_ACCOUNT_ID  — Cloudflare account ID (Workers overview right sidebar)
+# One-time: GitHub → Settings → Secrets and variables → Actions (never commit values).
+#   CLOUDFLARE_API_TOKEN — least-privilege API token (e.g. Workers Scripts:Edit,
+#     Workers Routes:Edit, Zone:Read for this zone). See Cloudflare “Wrangler CI/CD”.
+#   CLOUDFLARE_ACCOUNT_ID — account ID from the dashboard; required because wrangler.toml
+#     has no account_id. Store as a secret so it is not in cloneable repo files.
 #
 # Do not also use Cloudflare dashboard → Worker → Settings → Build → "Connect GitHub"
 # for this same Worker, or you will have two pipelines fighting the same deploy.
