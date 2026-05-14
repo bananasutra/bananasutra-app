@@ -70,3 +70,4 @@ apps/banana-catalog-prototype/src/data/generated/*.tmp
 # Git never deletes local `_docs/` files—it just does not upload them. Collaborators + CI only see tracked files.
 # See root README.md section “Local `_docs/`”. Do not remove this line to “fix” missing paths on GitHub.
 _docs/
+.venv-tools/
