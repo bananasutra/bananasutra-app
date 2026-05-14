@@ -27,6 +27,23 @@ Order matters: **origin (Pages) must serve new static files before you rely on t
 
 Do this **whenever Worker code changes** (`src/`, `wrangler.toml`, bot list, etc.). If you **only** changed catalog content/OG PNGs/`seo-metadata.json` and **did not** change the Worker, you usually **do not** need a Worker redeploy—the next fetch of `seo-metadata.json` will pick up new JSON after **TTL** (see `seoMetadata.ts`). Redeploy the Worker if you want zero wait or you are unsure.
 
+#### Automatic: GitHub Actions (recommended)
+
+The repo workflow **`.github/workflows/deploy-seo-worker.yml`** runs on **`push` to `main`** when anything under **`workers/seo-worker/**`** changes (or when that workflow file changes). It runs **`npm ci` → `npm test` → `npm run typecheck` → `wrangler deploy`** via [`cloudflare/wrangler-action@v3`](https://github.com/cloudflare/wrangler-action).
+
+**One-time — GitHub repo secrets** (Settings → Secrets and variables → Actions):
+
+| Secret | Value |
+|--------|--------|
+| `CLOUDFLARE_API_TOKEN` | API token with permission to deploy this Worker and manage routes on **bananasutra.com**. Use Cloudflare’s token wizard (e.g. **Edit Cloudflare Workers** template) or a custom token with **Workers Scripts:Edit**, **Workers Routes:Edit**, and **Zone:Read** for the zone. See [Wrangler CI/CD — API token](https://developers.cloudflare.com/workers/wrangler/ci-cd/#api-token). |
+| `CLOUDFLARE_ACCOUNT_ID` | Account ID from the Cloudflare dashboard (Workers overview / account sidebar). Required because `wrangler.toml` does not set `account_id`. |
+
+After secrets exist, merge a change that touches `workers/seo-worker/` or use **Actions → Deploy SEO Worker (Cloudflare) → Run workflow** (`workflow_dispatch`).
+
+**Do not** also wire the same Worker through Cloudflare **Worker → Settings → Build → Connect GitHub/GitLab** unless you want a **second** deploy pipeline. Prefer **one** source of truth: this repo’s workflow file.
+
+#### Manual: from your machine
+
 From repo root:
 
 ```bash

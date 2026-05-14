@@ -1,0 +1,59 @@
+# Deploy Cloudflare Worker `bananasutra-com-seo` (see workers/seo-worker/wrangler.toml).
+# This replaces ad-hoc `npm run deploy` from your laptop for routine releases.
+#
+# One-time: add repo secrets (GitHub → Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN   — API token with Workers deploy + zone route permissions
+#   CLOUDFLARE_ACCOUNT_ID  — Cloudflare account ID (Workers overview right sidebar)
+#
+# Do not also use Cloudflare dashboard → Worker → Settings → Build → "Connect GitHub"
+# for this same Worker, or you will have two pipelines fighting the same deploy.
+
+name: Deploy SEO Worker (Cloudflare)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "workers/seo-worker/**"
+      - ".github/workflows/deploy-seo-worker.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-seo-worker
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: workers/seo-worker/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: workers/seo-worker
+
+      - name: Test
+        run: npm test
+        working-directory: workers/seo-worker
+
+      - name: Typecheck
+        run: npm run typecheck
+        working-directory: workers/seo-worker
+
+      - name: Deploy to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: workers/seo-worker
+          wranglerVersion: "4.90.1"
+          command: deploy
