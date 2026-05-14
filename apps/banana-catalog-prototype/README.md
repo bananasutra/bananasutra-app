@@ -96,6 +96,8 @@ This runs **`tsc` → `vite build` → OG image generation → `seo-metadata.jso
 
 **Required in git:** `scripts/ogSongCard.mjs`, `scripts/generate-og-images.mjs`, and `scripts/preview-og-samples.mjs` must be committed so CI can run the OG step.
 
+**Cloudflare Worker (not part of Pages):** deploy from **`workers/seo-worker`** — see **`workers/seo-worker/README.md`** for the full Pages + Worker checklist.
+
 ## Suggested Future GitHub Setup
 
 When you initialize git, this app is already isolated and can be:
