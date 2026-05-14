@@ -19,6 +19,12 @@ const SITE = 'BANANASUTRA'
 const DEFAULT_DESC =
   'BANANASUTRA — songs for a world gone bananas. Explore the catalog: browse songs by sutra, topic, intention, and sound.'
 const SITE_URL = 'https://bananasutra.com'
+/** Non-song routes — composite `dist/og/site.png` (630 slot + copy). Keep in sync with `ogSongCard.mjs` + `usePageMeta.ts`. */
+const SITE_OG_CARD_IMAGE = `${SITE_URL}/og/site.png`
+
+function songOgImageUrl(pathSlug) {
+  return `${SITE_URL}/og/songs/${pathSlug}.png`
+}
 
 /** Document / OG title as applied by `usePageMeta`. */
 function publicTitle(shortTitle) {
@@ -97,13 +103,14 @@ function readJson(rel) {
   return JSON.parse(fs.readFileSync(p, 'utf8'))
 }
 
-function routeEntry(shortTitle, description, pathname) {
+function routeEntry(shortTitle, description, pathname, image = SITE_OG_CARD_IMAGE) {
   const desc = description ?? DEFAULT_DESC
   return {
     title: publicTitle(shortTitle),
     description: desc,
     canonical: `${SITE_URL}${pathname}`,
     type: 'website',
+    image,
   }
 }
 
@@ -255,7 +262,7 @@ function main() {
     const pathSlug = catalogPathSlugFromTitleAndSlug(lyricsTitle, urlSlug)
     const pathname = `/songs/${pathSlug}`
     const shortTitle = `${lyricsTitle} · Song`
-    addRoute(pathname, routeEntry(shortTitle, songDescription(detail, row), pathname))
+    addRoute(pathname, routeEntry(shortTitle, songDescription(detail, row), pathname, songOgImageUrl(pathSlug)))
   }
   if (missingDetail) {
     console.warn(`generate-seo-metadata: ${missingDetail} browse row(s) missing song_detail.json entry — used browse fallbacks`)

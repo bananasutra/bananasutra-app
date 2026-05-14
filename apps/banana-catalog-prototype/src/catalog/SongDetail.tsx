@@ -21,7 +21,7 @@ import { sutraClassName } from './sutraTheme'
 import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, YouTubeCatalogVideo } from './types'
 import { sutraHrefFromSongSutraField } from './sutraPageUtils'
 import { buildBrowsePathForFacet, CATALOG_BROWSE_PATH } from './urlState'
-import { usePageMeta } from './usePageMeta'
+import { songOgImageUrl, usePageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { SongThumbCard } from './SongThumbCard'
 import { useSongCatalogAndDetail, loadYoutubeByLyricsId } from './generatedData'
@@ -181,6 +181,7 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
         (detail.lyrics_extract || '').trim().split(/\r?\n/).filter(Boolean)[0] ||
         `Listen to ${detail.lyrics_title} on BANANASUTRA.`
       : undefined,
+    image: detail && canonicalSlug ? songOgImageUrl(canonicalSlug) : undefined,
     path: detail && canonicalSlug ? `/songs/${canonicalSlug}` : undefined,
   })
 

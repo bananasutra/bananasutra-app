@@ -38,7 +38,7 @@ All commands below assume your shell’s current directory is **`BANANASUTRA-app
 
 **`build:data` only regenerates JSON** (from the latest Airtable snapshot CSVs). It does **not** start a web server.
 
-**SC catalog fallbacks** (no primary SC EP on the lyrics row): **`data/sc_catalog_listen_overrides.csv`** (optional) → **`pipelines/sc/outputs/AT-TRACKS-FULL-v4.csv`** → title match on **`pipelines/sc/raw/bananasutra_sc_export.csv`**. Re-scrape / rebuild pipelines when joins or SoundCloud titles change, then `npm run catalog:data`. See `/_docs/runbooks/CATALOG-DATA-CYCLE-CHEATSHEET.md`.
+**SC catalog fallbacks** (no primary SC EP on the lyrics row): **`data/sc_catalog_listen_overrides.csv`** (optional) → **`pipelines/sc/outputs/AT-TRACKS-FULL-v4.csv`** → title match on **`pipelines/sc/raw/bananasutra_sc_export.csv`**. Re-scrape / rebuild pipelines when joins or SoundCloud titles change, then `npm run catalog:data`. (Optional local notes: `_docs/runbooks/CATALOG-DATA-CYCLE-CHEATSHEET.md` — that folder is gitignored; see repo root `README.md`.)
 
 **`dev` starts Vite** on `http://localhost:5174` (see `vite.config.ts`; if that port is busy, Vite picks the next free port—check the terminal line `Local:`).
 
@@ -89,6 +89,12 @@ Outputs are written to:
 ```bash
 npm run build --prefix "apps/banana-catalog-prototype"
 ```
+
+This runs **`tsc` → `vite build` → OG image generation → `seo-metadata.json` → sitemap → catalog-data sync** (see `package.json` `build`). The **`dist/`** folder (including **`dist/og/*.png`**) is **gitignored**; it is produced on each machine and on **GitHub Actions** (`.github/workflows/pages.yml` runs `npm run build` then `npm run verify:seo` before uploading `apps/banana-catalog-prototype/dist` to Pages). You do not commit `dist/`—the deploy pipeline is the source of built assets.
+
+**OG layout changes:** incremental skips avoid refetching every cover on every build. For a full re-render after editing `scripts/ogSongCard.mjs`, use **`npm run build:fresh-og`** (same as `FORCE_OG=1 npm run build`) or delete `dist/og` locally, then build. **`npm run og:samples`** writes review PNGs under **`og-samples/`** (also gitignored).
+
+**Required in git:** `scripts/ogSongCard.mjs`, `scripts/generate-og-images.mjs`, and `scripts/preview-og-samples.mjs` must be committed so CI can run the OG step.
 
 ## Suggested Future GitHub Setup
 

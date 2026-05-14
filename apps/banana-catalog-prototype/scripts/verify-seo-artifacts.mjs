@@ -19,6 +19,21 @@ const sitemapPath = path.join(distDir, 'sitemap.xml')
 
 const SITE = 'BANANASUTRA'
 const SITE_URL = 'https://bananasutra.com'
+const SITE_OG_CARD_IMAGE = `${SITE_URL}/og/site.png`
+
+function expectedOgImageUrl(pathname) {
+  if (pathname.startsWith('/songs/') && pathname !== '/songs') {
+    const slug = pathname.slice('/songs/'.length)
+    return `${SITE_URL}/og/songs/${slug}.png`
+  }
+  return SITE_OG_CARD_IMAGE
+}
+
+function isAllowedOgImageUrl(url) {
+  if (url === SITE_OG_CARD_IMAGE) return true
+  if (url.startsWith(`${SITE_URL}/og/songs/`) && url.endsWith('.png')) return true
+  return false
+}
 
 function lyricsTitleToUrlSlug(title) {
   const base = (title || '')
@@ -185,6 +200,13 @@ function main() {
     if (typeof meta?.canonical !== 'string' || !meta.canonical.startsWith(SITE_URL)) {
       fail(`seo-metadata: bad canonical for ${p}`)
     }
+    if (typeof meta?.image !== 'string' || !isAllowedOgImageUrl(meta.image)) {
+      fail(`seo-metadata: missing or invalid image for ${p}`)
+    }
+    const wantImg = expectedOgImageUrl(p)
+    if (meta.image !== wantImg) {
+      fail(`seo-metadata: image mismatch for ${p}\n  want: ${wantImg}\n  got:  ${meta.image}`)
+    }
   }
 
   // Per-route title sanity: home uses known short title → fixed public title
@@ -277,6 +299,22 @@ function main() {
     REQUIRED_SITEMAP_PATHS.length + expectedSutraPaths.size + expectedSongbookPaths.size + expectedSongs.size
   if (sitemapPaths.size !== expectedSitemapSize) {
     fail(`sitemap.xml: total URLs ${sitemapPaths.size} !== expected ${expectedSitemapSize}`)
+  }
+
+  const siteOgPath = path.join(distDir, 'og/site.png')
+  if (!fs.existsSync(siteOgPath)) {
+    fail(`missing ${siteOgPath} — run full catalog build (generate-og-images after vite)`)
+  }
+
+  const ogSongsDir = path.join(distDir, 'og/songs')
+  if (!fs.existsSync(ogSongsDir)) {
+    fail(`missing ${ogSongsDir} — run full catalog build (generate-og-images after vite)`)
+  }
+  const songPngCount = fs.readdirSync(ogSongsDir).filter((f) => f.endsWith('.png')).length
+  if (songPngCount !== expectedSongs.size) {
+    fail(
+      `dist/og/songs: ${songPngCount} png file(s), expected ${expectedSongs.size} (one composite per song route)`,
+    )
   }
 
   // Spot-check: browse length ~ epic (informational)

@@ -5,7 +5,7 @@
 - App code lives in `apps/banana-catalog-prototype/`.
 - Airtable source-of-truth remains in `AIRTABLE/snapshots/.../clean/`.
 - Pipeline scripts remain in `pipelines/`.
-- Catalog SC listen + SC cover fallbacks use **`AT-TRACKS-FULL-v4.csv`**, optional **`data/sc_catalog_listen_overrides.csv`**, and **`pipelines/sc/raw/bananasutra_sc_export.csv`** — see `/_docs/runbooks/CATALOG-DATA-CYCLE-CHEATSHEET.md`.
+- Catalog SC listen + SC cover fallbacks use **`AT-TRACKS-FULL-v4.csv`**, optional **`data/sc_catalog_listen_overrides.csv`**, and **`pipelines/sc/raw/bananasutra_sc_export.csv`**. Optional local notes: `_docs/runbooks/CATALOG-DATA-CYCLE-CHEATSHEET.md` (that tree is gitignored; see repo root `README.md`).
 
 ## Intentional Separation
 

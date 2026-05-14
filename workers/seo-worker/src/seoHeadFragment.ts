@@ -32,13 +32,14 @@ export function buildBotLinkPreviewHeadFragment(meta: BotHeadFragmentMeta): stri
   const d = escapeHtmlAttributeValue(meta.description);
   const c = escapeHtmlAttributeValue(meta.canonical);
   const ogType = escapeHtmlAttributeValue(meta.type ?? "website");
+  const twitterCard = meta.image ? "summary_large_image" : "summary";
   const lines: string[] = [
     `<meta property="og:title" content="${t}" />`,
     `<meta property="og:description" content="${d}" />`,
     `<meta property="og:url" content="${c}" />`,
     `<meta property="og:type" content="${ogType}" />`,
     `<meta property="og:site_name" content="${OG_SITE_NAME}" />`,
-    `<meta name="twitter:card" content="summary" />`,
+    `<meta name="twitter:card" content="${twitterCard}" />`,
     `<meta name="twitter:title" content="${t}" />`,
     `<meta name="twitter:description" content="${d}" />`,
   ];
