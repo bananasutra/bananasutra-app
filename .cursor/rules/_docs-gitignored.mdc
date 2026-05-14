@@ -1,0 +1,11 @@
+---
+description: _docs/ is gitignored local-only; never track, delete, or "fix" it for GitHub
+alwaysApply: true
+---
+
+# `_docs/` is not part of this repository
+
+- **`_docs/` is listed in the root `.gitignore` on purpose.** It is **local / private planning** (epics, QA CSVs, runbooks). It is **not untracked by mistake** — git is **supposed** to ignore it.
+- **Never** `git add _docs/`, **never** suggest removing `_docs/` from `.gitignore` so it "shows up on GitHub", and **never** delete local `_docs/` to "clean" the tree. Ignored files are **not removed** by normal `git pull` / `git checkout`.
+- **Do not** tell the user their checkout is broken because `_docs/` is missing after a clone — a **fresh clone has no `_docs/`**; that is expected.
+- For **tracked** documentation, use paths under **`apps/`**, **`workers/`**, **`README.md`**, **`.github/`**, etc. Root **`README.md`** explains this policy for humans.
