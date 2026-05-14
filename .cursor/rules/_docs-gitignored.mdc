@@ -1,11 +1,14 @@
 ---
-description: _docs/ is gitignored local-only; never track, delete, or "fix" it for GitHub
+description: _docs/ is private and gitignored; never publish, track, or scrub from disk
 alwaysApply: true
 ---
 
-# `_docs/` is not part of this repository
+# `_docs/` — private, local-only, never in git
 
-- **`_docs/` is listed in the root `.gitignore` on purpose.** It is **local / private planning** (epics, QA CSVs, runbooks). It is **not untracked by mistake** — git is **supposed** to ignore it.
-- **Never** `git add _docs/`, **never** suggest removing `_docs/` from `.gitignore` so it "shows up on GitHub", and **never** delete local `_docs/` to "clean" the tree. Ignored files are **not removed** by normal `git pull` / `git checkout`.
-- **Do not** tell the user their checkout is broken because `_docs/` is missing after a clone — a **fresh clone has no `_docs/`**; that is expected.
-- For **tracked** documentation, use paths under **`apps/`**, **`workers/`**, **`README.md`**, **`.github/`**, etc. Root **`README.md`** explains this policy for humans.
+**Contract:** `_docs/` is **private planning** (epics, QA CSVs, runbooks, notes). It must **never** appear on GitHub: **do not** `git add` it, **do not** remove it from `.gitignore`, **do not** paste its **contents** (or large excerpts) into issues, PRs, commits, or tracked `.md` files. A **fresh clone has no `_docs/`** — that is normal, not a broken repo.
+
+**Disk:** Git **does not delete** an existing local `_docs/` when you pull, merge, or rewrite remote history. **Never** tell the user to delete `_docs/` to “fix” git. **Never** run `git clean -fdx` without warning — it can remove ignored folders depending on flags.
+
+**Agents:** Use **tracked** docs only (`README.md`, `apps/**/docs/`, `workers/**/README.md`, `.github/`). Root `README.md` has a short human section on this policy.
+
+**What enforces this:** `.gitignore` + this rule + your discipline. **`.cursor/rules/`** only steers Cursor; it cannot retroactively erase past GitHub leaks (history rewrite + force push handles old commits).
