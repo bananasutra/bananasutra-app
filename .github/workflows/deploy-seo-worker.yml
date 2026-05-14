@@ -35,7 +35,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
           cache-dependency-path: workers/seo-worker/package-lock.json
 
@@ -50,6 +50,23 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
         working-directory: workers/seo-worker
+
+      # Fail fast with a clear message (token empty, wrong account id, or missing API scope).
+      - name: Verify Cloudflare credentials
+        working-directory: workers/seo-worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN is empty. Add it under Settings → Secrets and variables → Actions (repository secrets)."
+            exit 1
+          fi
+          if [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::CLOUDFLARE_ACCOUNT_ID is empty. Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          npx wrangler whoami
 
       - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
