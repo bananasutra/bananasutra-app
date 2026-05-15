@@ -47,12 +47,12 @@ jobs:
         run: npm ci
         working-directory: workers/seo-worker
 
-      - name: Test
-        run: npm test
-        working-directory: workers/seo-worker
-
       - name: Typecheck
         run: npm run typecheck
+        working-directory: workers/seo-worker
+
+      - name: Test
+        run: npm test
         working-directory: workers/seo-worker
 
       # Fail fast with a clear message (token empty, wrong account id, or missing API scope).
