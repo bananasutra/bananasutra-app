@@ -7,7 +7,7 @@ export interface PageMetaProps {
   title: string
   description?: string
   image?: string
-  /** e.g. '/songs' — canonical + og:url */
+  /** e.g. '/songs/' — canonical + og:url (trailing slash on SSG index routes) */
   path?: string
   /** ISO date for article:published_time */
   publishedAt?: string

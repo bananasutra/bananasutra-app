@@ -1,5 +1,6 @@
 import type { To } from 'react-router-dom'
 import songSlugIndexJson from '../data/generated/song_slug_index.json'
+import { canonicalPathForRoute } from './seoPaths'
 import { lyricsTitleToUrlSlug } from './slugify'
 
 type SongSlugIndexPayload = { bySlug: Record<string, string> }
@@ -21,13 +22,13 @@ export function songCatalogPath(lyricsTitle: string, urlSlug?: string | null): s
 /** `/songbooks/:slug/` detail path. */
 export function songbookCatalogPath(slug: string): string {
   const s = slug.trim()
-  return s ? `/songbooks/${s}/` : '/songbooks'
+  return s ? `/songbooks/${s}/` : canonicalPathForRoute('/songbooks')
 }
 
 /** `/about/:slug/` sutra detail path (not `/about/sutras`, etc.). */
 export function sutraDetailPath(slug: string): string {
   const s = slug.trim().toLowerCase()
-  return s ? `/about/${s}/` : '/about/sutras'
+  return s ? `/about/${s}/` : canonicalPathForRoute('/about/sutras')
 }
 
 /** Fresh song detail link — never inherits listing query params. */

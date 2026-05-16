@@ -8,6 +8,7 @@ import { pickFeaturedSongbook, songbookFeaturedKickerLabel, songbookHrefFromCata
 import { allSongbooks, songbookHref } from './songbooks'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
+import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import type { SongbookCatalogItem } from './types'
@@ -190,7 +191,7 @@ export function SongbooksPage() {
   const pageMeta = renderPageMeta({
     title: 'Songbooks & Playlists',
     description: 'Curated SoundCloud playlists that tell a story. By topic, by genre, and by language.',
-    path: '/songbooks',
+    path: canonicalPathForRoute('/songbooks'),
   })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [])
 

@@ -16,6 +16,7 @@ import { CatalogPager } from './CatalogPager'
 import './CatalogPager.css'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
+import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
@@ -104,7 +105,7 @@ export function WordsPage() {
   const pageMeta = renderPageMeta({
     title: 'Lyrics & Words',
     description: 'Read BANANASUTRA lyrics. Searchable song words, meaning first.',
-    path: '/words',
+    path: canonicalPathForRoute('/words'),
   })
 
   useEffect(() => {
@@ -366,7 +367,7 @@ export function WordsPage() {
           <p className="catalog-page-sub">
             Lyrics without music. Pieces still brewing, seedlings waiting for a voice, or songs that live as text
             alone. When they find their sound, they move to{' '}
-            <Link to="/songs">
+            <Link to={canonicalPathForRoute('/songs')}>
               Songs
             </Link>
             .
@@ -419,7 +420,7 @@ export function WordsPage() {
                 <p className="catalog-facet-help" id="words-bucket-desc">
                   Lyrics without a release yet, songs still growing. <em>New seedling</em> = freshly written.{' '}
                   <em>In the works</em> = being produced. Songs that are already published live on{' '}
-                  <Link to="/songs">
+                  <Link to={canonicalPathForRoute('/songs')}>
                     Songs
                   </Link>{' '}
                   instead.

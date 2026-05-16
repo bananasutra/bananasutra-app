@@ -5,6 +5,7 @@ import { GlobalHeader } from './GlobalHeader'
 import { SoundCloudEmbed } from './SoundCloudEmbed'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { allSongbooks, songbookHref } from './songbooks'
+import { browsePathWithQuery } from './seoPaths'
 import { songCatalogPath, sutraDetailPath } from './songPaths'
 import { buildBrowsePathForFacet } from './urlState'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
@@ -369,9 +370,9 @@ export function SutraDetailPage() {
       : ''
 
   const browseHref = buildBrowsePathForFacet('sutra', entry.sutra)
-  const tracksHref = `/tracks?q=${encodeURIComponent(entry.sutra)}`
-  const videosHref = `/videos?sutra=${encodeURIComponent(entry.sutra)}`
-  const wordsHref = `/words?sutra=${encodeURIComponent(entry.sutra)}`
+  const tracksHref = browsePathWithQuery('/tracks', `q=${encodeURIComponent(entry.sutra)}`)
+  const videosHref = browsePathWithQuery('/videos', `sutra=${encodeURIComponent(entry.sutra)}`)
+  const wordsHref = browsePathWithQuery('/words', `sutra=${encodeURIComponent(entry.sutra)}`)
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
@@ -694,7 +695,7 @@ export function SutraDetailPage() {
                     Explore {pivotTarget}sutra →
                   </Link>
                 ) : (
-                  <Link className="sutra-detail__pivot-cta sutra-detail__pivot-cta--next" to="/about#sutras">
+                  <Link className="sutra-detail__pivot-cta sutra-detail__pivot-cta--next" to={ABOUT_SUTRAS_HREF}>
                     Explore all sutras →
                   </Link>
                 )}

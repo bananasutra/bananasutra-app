@@ -8,6 +8,7 @@ import {
   sutraHrefForFamily,
   type SutraContextEntry,
 } from './sutraContext'
+import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import './CatalogApp.css'
@@ -15,42 +16,42 @@ import './SitemapPage.css'
 
 const BROWSE_LINKS: { to: string; label: string; pathLabel: string; description: string }[] = [
   {
-    to: '/songs',
+    to: canonicalPathForRoute('/songs'),
     label: 'Songs Catalog',
-    pathLabel: '/songs',
+    pathLabel: canonicalPathForRoute('/songs'),
     description: 'Browse the full song grid — sutra, topic, intention, genre, language, and text search.',
   },
   {
-    to: '/tracks',
+    to: canonicalPathForRoute('/tracks'),
     label: 'Top Tracks',
-    pathLabel: '/tracks',
+    pathLabel: canonicalPathForRoute('/tracks'),
     description: 'SoundCloud tracks ranked and filtered — tempo, genre, instruments, moods.',
   },
   {
-    to: '/videos',
+    to: canonicalPathForRoute('/videos'),
     label: 'Music Videos',
-    pathLabel: '/videos',
+    pathLabel: canonicalPathForRoute('/videos'),
     description: 'YouTube catalog — filter by sutra, topic, intention, and in-app vs YouTube-only.',
   },
   {
-    to: '/words',
+    to: canonicalPathForRoute('/words'),
     label: 'Lyrics & Words',
-    pathLabel: '/words',
+    pathLabel: canonicalPathForRoute('/words'),
     description: 'Lyrics-first surface — writing stages, searchable words, meaning before polish.',
   },
   {
-    to: '/songbooks',
+    to: canonicalPathForRoute('/songbooks'),
     label: 'Songbooks & Playlists',
-    pathLabel: '/songbooks',
+    pathLabel: canonicalPathForRoute('/songbooks'),
     description: 'Curated SoundCloud playlists by sutra, genre, language, and editorial collections.',
   },
 ]
 
 const ABOUT_LINKS: { to: string; label: string; pathLabel: string; description: string }[] = [
   {
-    to: '/about',
+    to: canonicalPathForRoute('/about'),
     label: 'About the Sutras',
-    pathLabel: '/about',
+    pathLabel: canonicalPathForRoute('/about'),
     description: 'What BANANASUTRA is — the seven sutras as a compass, plus who’s behind the project.',
   },
   {
@@ -76,7 +77,7 @@ export function SitemapPage() {
   const pageMeta = renderPageMeta({
     title: 'Sitemap',
     description: 'Full sitemap of BANANASUTRA — all pages, all sutras, all ways to explore.',
-    path: '/sitemap',
+    path: canonicalPathForRoute('/sitemap'),
   })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [])
 

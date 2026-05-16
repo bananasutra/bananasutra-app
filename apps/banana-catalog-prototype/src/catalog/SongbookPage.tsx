@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { hasListenerCatalogMedia } from './listenerCatalog'
+import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { songCatalogPath, songbookCatalogPath } from './songPaths'
 import { songbookBySlug } from './songbooks'
 import { SoundCloudEmbed } from './SoundCloudEmbed'
@@ -77,7 +78,7 @@ function tracksHrefForPrimaryGenre(token: string): string {
   const q = new URLSearchParams()
   q.set('primary_genre', token)
   q.set('tsort', 'likes')
-  return `/tracks?${q.toString()}`
+  return browsePathWithQuery('/tracks', q.toString())
 }
 
 export function SongbookPage() {
@@ -163,7 +164,7 @@ export function SongbookPage() {
     () =>
       songbook
         ? buildBrowsePath('newest', emptyFilterState(), songbook.songbook.trim(), 'all', 1)
-        : '/songs',
+        : canonicalPathForRoute('/songs'),
     [songbook],
   )
 
@@ -248,7 +249,7 @@ export function SongbookPage() {
           <main id="main-content" className="songbooks-page songbooks-page--missing">
             <p className="songbooks-page__missing-title">Songbook not found.</p>
             <p className="songbooks-page__missing-sub">The link may be outdated or this songbook has not been generated yet.</p>
-            <Link to="/songbooks" className="songbooks-page__back-link">
+            <Link to={canonicalPathForRoute('/songbooks')} className="songbooks-page__back-link">
               ← Back to songbooks
             </Link>
           </main>
@@ -261,7 +262,7 @@ export function SongbookPage() {
               <span className="catalog-breadcrumbs__sep" aria-hidden>
                 /
               </span>
-              <Link to="/songbooks" className="catalog-breadcrumbs__link">
+              <Link to={canonicalPathForRoute('/songbooks')} className="catalog-breadcrumbs__link">
                 Songbooks
               </Link>
               <span className="catalog-breadcrumbs__sep" aria-hidden>
@@ -424,7 +425,8 @@ export function SongbookPage() {
                   ) : (
                     <p className="songbooks-page__playback-empty">
                       No catalog songs with in-app playback are listed for this songbook yet. Lyrics-only pieces may
-                      still be tagged in Airtable. Browse <Link to="/words">Words</Link> or <Link to="/songs">Songs</Link>.
+                      still be tagged in Airtable. Browse <Link to={canonicalPathForRoute('/words')}>Words</Link> or{' '}
+                      <Link to={canonicalPathForRoute('/songs')}>Songs</Link>.
                     </p>
                   )
                 ) : (

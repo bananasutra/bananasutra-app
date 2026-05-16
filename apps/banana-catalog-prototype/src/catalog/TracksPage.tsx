@@ -19,6 +19,7 @@ import {
   readTracksBrowseFromSearch,
   serializeTracksBrowseQuery,
 } from './urlState'
+import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { sutraClassName } from './sutraTheme'
@@ -248,7 +249,7 @@ export function TracksPage() {
     title: 'Top Tracks on SoundCloud',
     description:
       'The best BANANASUTRA tracks, ranked and filterable by tempo, genre, instruments, and moods.',
-    path: '/tracks',
+    path: canonicalPathForRoute('/tracks'),
   })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [
     filtersOpen,
@@ -464,7 +465,7 @@ export function TracksPage() {
 
   const pagerLink = (target: number) => {
     const qs = serializeTracksBrowseQuery(filters, urlFind, target, pagerPreserve(), urlSort)
-    return qs ? `/tracks?${qs}` : '/tracks'
+    return browsePathWithQuery('/tracks', qs)
   }
 
   const total = catalogList.length
@@ -491,7 +492,8 @@ export function TracksPage() {
           <h1 className="catalog-page-h1">Top Tracks</h1>
           <p className="catalog-page-sub">
             The SoundCloud algorithm side of things. Same songs, sorted by popular audio tracks. Search, or filter by
-            tempo, mood, genre, or instrument. If you want the meaning behind the music, <Link to="/songs">Songs</Link>{' '}
+            tempo, mood, genre, or instrument. If you want the meaning behind the music,{' '}
+            <Link to={canonicalPathForRoute('/songs')}>Songs</Link>{' '}
             has the story.
           </p>
         </div>

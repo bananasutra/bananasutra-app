@@ -7,6 +7,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { canonicalPathForRoute } from './seo-canonical-path.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
@@ -72,21 +73,6 @@ function lastmodDateOnly(raw) {
   return new Date(ms).toISOString().slice(0, 10)
 }
 
-/** Detail routes use trailing slash in `<loc>` (directory index.html on GitHub Pages). */
-function pathnameForSitemapLoc(pathname) {
-  if (/^\/songs\/[^/]+$/.test(pathname)) return `${pathname}/`
-  if (/^\/songbooks\/[^/]+$/.test(pathname)) return `${pathname}/`
-  if (
-    /^\/about\/[^/]+$/.test(pathname) &&
-    pathname !== '/about/sutras' &&
-    pathname !== '/about/muses' &&
-    pathname !== '/about/quotes'
-  ) {
-    return `${pathname}/`
-  }
-  return pathname
-}
-
 function songLastmod(browseRow, detail) {
   return (
     lastmodDateOnly(browseRow.published_at) ||
@@ -119,7 +105,7 @@ function main() {
   const rows = []
 
   function push(pathname, opts) {
-    const locPath = pathnameForSitemapLoc(pathname)
+    const locPath = canonicalPathForRoute(pathname)
     const loc = `${SITE_URL}${locPath}`
     rows.push({
       loc,

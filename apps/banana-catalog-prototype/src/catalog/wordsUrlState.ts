@@ -2,11 +2,12 @@ import type { FilterState, SortMode } from './types'
 import type { WordsStoryBucket } from './wordsStory'
 import { parseWordsStoryBucket } from './wordsStory'
 import { searchParamsFromSearchString } from './urlSearchParams'
+import { canonicalPathForRoute } from './seoPaths'
 import { parseSort, readBrowseStateFromSearchParams, readFindFromSearchParams, serializeBrowseQuery } from './urlState'
 
 const PARAM_WB = 'wb'
 
-export const WORDS_BROWSE_PATH = '/words'
+export const WORDS_BROWSE_PATH = canonicalPathForRoute('/words')
 
 /** `/words` only exposes date + title sorts; play/like modes are meaningless for lyrics-only rows. */
 const WORDS_SORT_MODES = new Set<SortMode>(['newest', 'title_az'])

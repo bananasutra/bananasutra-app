@@ -1,15 +1,16 @@
 import type { ReactNode } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import { canonicalPathForRoute } from './seoPaths'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useRef } from 'react'
 
 const ABOUT_TABS = [
-  { to: '/about', label: 'About', end: true },
-  { to: '/about/sutras', label: 'Sutras', end: false },
-  { to: '/about/muses', label: 'Muses', end: false },
-  { to: '/about/quotes', label: 'Quotes', end: false },
+  { to: canonicalPathForRoute('/about'), label: 'About', end: true },
+  { to: canonicalPathForRoute('/about/sutras'), label: 'Sutras', end: false },
+  { to: canonicalPathForRoute('/about/muses'), label: 'Muses', end: false },
+  { to: canonicalPathForRoute('/about/quotes'), label: 'Quotes', end: false },
 ] as const
 
 function activeAboutLabel(pathname: string): string {
@@ -43,7 +44,7 @@ export function AboutTabLayout({ children }: { children: ReactNode }) {
               </span>
             ) : (
               <>
-                <Link className="catalog-breadcrumbs__link" to="/about">
+                <Link className="catalog-breadcrumbs__link" to={canonicalPathForRoute('/about')}>
                   About
                 </Link>
                 <span className="catalog-breadcrumbs__sep" aria-hidden>

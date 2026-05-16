@@ -7,6 +7,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { canonicalPathForRoute } from './seo-canonical-path.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
@@ -117,27 +118,12 @@ function readJson(rel) {
   return JSON.parse(fs.readFileSync(p, 'utf8'))
 }
 
-/** Detail routes use trailing slash (GitHub Pages directory index.html). */
-function pathnameForCanonical(pathname) {
-  if (/^\/songs\/[^/]+$/.test(pathname)) return `${pathname}/`
-  if (/^\/songbooks\/[^/]+$/.test(pathname)) return `${pathname}/`
-  if (
-    /^\/about\/[^/]+$/.test(pathname) &&
-    pathname !== '/about/sutras' &&
-    pathname !== '/about/muses' &&
-    pathname !== '/about/quotes'
-  ) {
-    return `${pathname}/`
-  }
-  return pathname
-}
-
 function routeEntry(shortTitle, description, pathname, image = SITE_OG_CARD_IMAGE, publishedAt = '') {
   const desc = padMetaDescription(description ?? DEFAULT_DESC)
   const entry = {
     title: publicTitle(shortTitle),
     description: desc,
-    canonical: `${SITE_URL}${pathnameForCanonical(pathname)}`,
+    canonical: `${SITE_URL}${canonicalPathForRoute(pathname)}`,
     type: 'website',
     image,
     author: 'BANANASUTRA',
