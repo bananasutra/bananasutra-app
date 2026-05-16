@@ -55,9 +55,11 @@ export function PageMeta({ title, description, image, path, publishedAt, jsonLd 
       {publishedIso ? <meta property="article:published_time" content={publishedIso} /> : null}
       {publishedIso ? <meta property="og:updated_time" content={publishedIso} /> : null}
       {ldBlocks.map((block, i) => (
-        <script key={i} type="application/ld+json">
-          {JSON.stringify(block)}
-        </script>
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(block) }}
+        />
       ))}
     </Helmet>
   )

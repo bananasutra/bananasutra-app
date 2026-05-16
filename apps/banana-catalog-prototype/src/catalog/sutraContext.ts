@@ -1,5 +1,6 @@
 import sutraContextJson from '../data/generated/sutra_context.json'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
+import { sutraDetailPath } from './songPaths'
 
 export type SutraFamilyKey = 'KNOW' | 'BLOW' | 'QUACK' | 'SHOW' | 'GROW' | 'FLOW' | 'GLOW' | 'BOW'
 
@@ -53,7 +54,7 @@ export const SUTRA_INDEX_CORE_ORDER: readonly SutraFamilyKey[] = [
 
 export function sutraHrefForFamily(key: SutraFamilyKey): string {
   const slug = (SUTRA_CONTEXT[key]?.url_slug_sutra || '').trim()
-  return slug ? `/about/${slug}` : ABOUT_SUTRAS_HREF
+  return slug ? sutraDetailPath(slug) : ABOUT_SUTRAS_HREF
 }
 
 /** Given a sutra display name (e.g. "KNOWsutra"), return its guiding question for tooltip use. */

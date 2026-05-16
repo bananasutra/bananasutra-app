@@ -269,6 +269,10 @@ function main() {
 
   const locs = extractSitemapLocs(xml)
   if (locs.length === 0) fail('sitemap.xml: no <loc> entries found')
+  const lastmodCount = (xml.match(/<lastmod>/g) || []).length
+  if (lastmodCount !== locs.length) {
+    fail(`sitemap.xml: ${lastmodCount} <lastmod> tag(s) !== ${locs.length} <loc> entries`)
+  }
 
   const sitemapPaths = new Set()
   const dup = new Set()
@@ -314,11 +318,30 @@ function main() {
     if (!head.includes('application/ld+json')) {
       fail('prerender sample: <head> missing JSON-LD script')
     }
+    if (!head.includes('MusicRecording')) {
+      fail('prerender sample: <head> JSON-LD missing MusicRecording')
+    }
     if ((rootBody.match(/application\/ld\+json/g) || []).length > 0) {
       fail('prerender sample: JSON-LD should not remain inside #root')
     }
   } else {
     warn('prerender sample missing — skip R24 body check (dist/songs/ego-ain-t-your-amigo/index.html)')
+  }
+
+  const songbookPrerender = path.join(distDir, 'songbooks/ask-naked-truth/index.html')
+  if (fs.existsSync(songbookPrerender)) {
+    const head = fs.readFileSync(songbookPrerender, 'utf8').match(/<head>([\s\S]*?)<\/head>/)?.[1] ?? ''
+    if (!head.includes('MusicAlbum') && !head.includes('ItemList')) {
+      fail('prerender songbook sample: <head> JSON-LD missing MusicAlbum or ItemList')
+    }
+  }
+
+  const sutraPrerender = path.join(distDir, 'about/knowsutra/index.html')
+  if (fs.existsSync(sutraPrerender)) {
+    const head = fs.readFileSync(sutraPrerender, 'utf8').match(/<head>([\s\S]*?)<\/head>/)?.[1] ?? ''
+    if (!head.includes('CreativeWork')) {
+      fail('prerender sutra sample: <head> JSON-LD missing CreativeWork')
+    }
   }
 
   const siteOgPath = path.join(distDir, 'og/site.png')

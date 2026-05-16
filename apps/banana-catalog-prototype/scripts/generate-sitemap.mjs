@@ -61,6 +61,8 @@ function readJson(rel) {
   return JSON.parse(fs.readFileSync(p, 'utf8'))
 }
 
+const BUILD_LASTMOD = new Date().toISOString().slice(0, 10)
+
 /** YYYY-MM-DD for `<lastmod>`; empty string if unusable. */
 function lastmodDateOnly(raw) {
   const t = String(raw ?? '').trim()
@@ -68,6 +70,30 @@ function lastmodDateOnly(raw) {
   const ms = Date.parse(t)
   if (!Number.isFinite(ms)) return ''
   return new Date(ms).toISOString().slice(0, 10)
+}
+
+/** Detail routes use trailing slash in `<loc>` (directory index.html on GitHub Pages). */
+function pathnameForSitemapLoc(pathname) {
+  if (/^\/songs\/[^/]+$/.test(pathname)) return `${pathname}/`
+  if (/^\/songbooks\/[^/]+$/.test(pathname)) return `${pathname}/`
+  if (
+    /^\/about\/[^/]+$/.test(pathname) &&
+    pathname !== '/about/sutras' &&
+    pathname !== '/about/muses' &&
+    pathname !== '/about/quotes'
+  ) {
+    return `${pathname}/`
+  }
+  return pathname
+}
+
+function songLastmod(browseRow, detail) {
+  return (
+    lastmodDateOnly(browseRow.published_at) ||
+    lastmodDateOnly(detail?.updated_at) ||
+    lastmodDateOnly(detail?.tracks?.[0]?.created_at) ||
+    BUILD_LASTMOD
+  )
 }
 
 function escapeXml(text) {
@@ -93,31 +119,32 @@ function main() {
   const rows = []
 
   function push(pathname, opts) {
-    const loc = `${SITE_URL}${pathname}`
+    const locPath = pathnameForSitemapLoc(pathname)
+    const loc = `${SITE_URL}${locPath}`
     rows.push({
       loc,
-      lastmod: opts.lastmod || '',
+      lastmod: opts.lastmod || BUILD_LASTMOD,
       changefreq: opts.changefreq,
       priority: opts.priority,
     })
   }
 
   // Epic §2.1 static list (no /style-guide — internal shell page)
-  push('/', { changefreq: 'weekly', priority: '1.0', lastmod: '' })
+  push('/', { changefreq: 'weekly', priority: '1.0', lastmod: BUILD_LASTMOD })
 
   for (const p of ['/songs', '/tracks', '/videos', '/words', '/songbooks']) {
-    push(p, { changefreq: 'weekly', priority: '0.9', lastmod: '' })
+    push(p, { changefreq: 'weekly', priority: '0.9', lastmod: BUILD_LASTMOD })
   }
 
   for (const p of ['/about', '/about/sutras', '/about/muses', '/about/quotes']) {
-    push(p, { changefreq: 'monthly', priority: '0.8', lastmod: '' })
+    push(p, { changefreq: 'monthly', priority: '0.8', lastmod: BUILD_LASTMOD })
   }
 
   for (const familyKey of Object.keys(sutraContext)) {
     const entry = sutraContext[familyKey]
     const slug = (entry.url_slug_sutra || '').trim().toLowerCase()
     if (!slug) continue
-    push(`/about/${slug}`, { changefreq: 'monthly', priority: '0.8', lastmod: '' })
+    push(`/about/${slug}`, { changefreq: 'monthly', priority: '0.8', lastmod: BUILD_LASTMOD })
   }
 
   const seenSongbookSlug = new Set()
@@ -125,7 +152,7 @@ function main() {
     const slug = songbookSlugFromRow(row)
     if (!slug || seenSongbookSlug.has(slug)) continue
     seenSongbookSlug.add(slug)
-    push(`/songbooks/${slug}`, { changefreq: 'monthly', priority: '0.7', lastmod: '' })
+    push(`/songbooks/${slug}`, { changefreq: 'monthly', priority: '0.7', lastmod: BUILD_LASTMOD })
   }
 
   for (const row of songBrowse) {
@@ -135,23 +162,23 @@ function main() {
     const lyricsTitle = (detail?.lyrics_title || row.lyrics_title || '').trim()
     const urlSlug = detail?.url_slug ?? row.url_slug
     const pathSlug = catalogPathSlugFromTitleAndSlug(lyricsTitle, urlSlug)
-    const lm = lastmodDateOnly(row.published_at)
     push(`/songs/${pathSlug}`, {
       changefreq: 'monthly',
       priority: '0.7',
-      lastmod: lm,
+      lastmod: songLastmod(row, detail),
     })
   }
 
-  push('/sitemap', { changefreq: 'yearly', priority: '0.5', lastmod: '' })
+  push('/sitemap', { changefreq: 'yearly', priority: '0.5', lastmod: BUILD_LASTMOD })
 
   rows.sort((a, b) => a.loc.localeCompare(b.loc))
 
   const body = rows
     .map((r) => {
-      const lm = r.lastmod ? `\n    <lastmod>${escapeXml(r.lastmod)}</lastmod>` : ''
+      const lm = r.lastmod || BUILD_LASTMOD
       return `  <url>
-    <loc>${escapeXml(r.loc)}</loc>${lm}
+    <loc>${escapeXml(r.loc)}</loc>
+    <lastmod>${escapeXml(lm)}</lastmod>
     <changefreq>${r.changefreq}</changefreq>
     <priority>${r.priority}</priority>
   </url>`

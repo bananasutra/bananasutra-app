@@ -89,8 +89,9 @@ export function renderRoute(pathname: string, origin = 'https://bananasutra.com'
         .join('\n')
     : ''
 
+  const ldJsonFromBody = bodyHtml.match(/<script\s+type="application\/ld\+json"[\s\S]*?<\/script>/gi) ?? []
   const { headHtml: react19Head, bodyHtml: bodyWithoutHead } = splitHeadFromBody(bodyHtml)
-  const headHtml = [helmetHead, react19Head].filter(Boolean).join('\n')
+  const headHtml = [helmetHead, react19Head, ...ldJsonFromBody].filter(Boolean).join('\n')
   const cleanedBody = bodyWithoutHead
     .replace(/<script\s+type="application\/ld\+json"[\s\S]*?<\/script>/gi, '')
     .replace(/<link\s+rel="preload"[^>]*\/?>\s*/gi, '')
