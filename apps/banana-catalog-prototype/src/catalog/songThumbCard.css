@@ -59,6 +59,35 @@
     border-color 0.12s ease;
 }
 
+/* Footer labels must stay on-image white — override global `a` / `:visited` / `:hover` (index.css). */
+.song-thumb-card:visited,
+.song-thumb-card:hover,
+.song-thumb-card:focus-visible {
+  color: #fff;
+  text-decoration: none;
+}
+
+.song-thumb-card:visited .song-thumb-card__meta,
+.song-thumb-card:hover .song-thumb-card__meta {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.song-thumb-card:visited .song-thumb-card__title,
+.song-thumb-card:hover .song-thumb-card__title,
+.song-thumb-card:focus-visible .song-thumb-card__title {
+  color: #fff;
+}
+
+.song-thumb-card:visited .song-thumb-card__summary,
+.song-thumb-card:hover .song-thumb-card__summary {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.song-thumb-card:visited .song-thumb-card__date,
+.song-thumb-card:hover .song-thumb-card__date {
+  color: #fff;
+}
+
 .song-thumb-card:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);

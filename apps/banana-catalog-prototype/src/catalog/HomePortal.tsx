@@ -58,7 +58,8 @@ type ChromeBuildSummary = {
 
 const BUILD_SUMMARY = buildSummaryJson as ChromeBuildSummary
 const HOME_BROWSE_CATALOG = songCatalogBrowseJson as SongCatalogItem[]
-const LATEST_DROPS_LIMIT = 5
+/** Matches `.song-thumb-grid--home`: 6 cols desktop, 3 cols tablet/mobile */
+const LATEST_DROPS_LIMIT = 6
 
 function buildSummaryCount(key: string): number {
   const v = (buildSummaryJson as Record<string, unknown>)[key]
