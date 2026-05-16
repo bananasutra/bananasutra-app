@@ -13,6 +13,7 @@
     "catalog:dev": "npm run dev --prefix apps/banana-catalog-prototype --",
     "preview": "npm run preview --prefix apps/banana-catalog-prototype",
     "catalog:preview": "npm run build --prefix apps/banana-catalog-prototype && npm run preview --prefix apps/banana-catalog-prototype -- --host",
+    "catalog:preview:dist": "npm run build --prefix apps/banana-catalog-prototype && npm run preview:dist --prefix apps/banana-catalog-prototype",
     "catalog:data:dev": "npm run catalog:data && npm run catalog:dev",
     "catalog:fresh": "npm run catalog:data && npm run build",
     "catalog:fresh:dev": "npm run catalog:data && npm run catalog:dev",

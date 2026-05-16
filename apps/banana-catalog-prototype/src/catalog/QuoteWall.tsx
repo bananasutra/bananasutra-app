@@ -4,7 +4,7 @@ import { useQuotesWall } from './generatedData'
 import type { QuoteWallItem } from './types'
 import { sutraClassName } from './sutraTheme'
 import { SUTRA_CONTEXT, sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
-import { usePageMeta } from './usePageMeta'
+import { renderPageMeta } from './usePageMeta'
 
 function formatCount(n: number): string {
   return new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(n)
@@ -57,7 +57,7 @@ export function QuoteWall() {
   const [topicFilter, setTopicFilter] = useState('all')
   const [findQuote, setFindQuote] = useState('')
 
-  usePageMeta({
+  const pageMeta = renderPageMeta({
     title: 'The Quotes',
     description: 'Explore the quotes and ideas behind BANANASUTRA songs, grouped by theme.',
     path: '/about/quotes',
@@ -96,6 +96,7 @@ export function QuoteWall() {
 
   return (
     <div className="about-page__body">
+      {pageMeta}
       <section className="about-page__section" aria-labelledby="quotes-title">
         <h2 id="quotes-title" className="catalog-section-title about-page__anchor-target">
           The quotes

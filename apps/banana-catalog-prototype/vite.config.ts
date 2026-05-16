@@ -9,6 +9,8 @@ const generatedDir = path.resolve(__dirname, 'src/data/generated')
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Default appType is 'spa': `vite preview` uses SPA fallback (requests without a file match
+  // become root index.html). For QA of pre-rendered nested HTML under dist/, use `npm run preview:dist`.
   // Custom-domain production deploy runs at origin root (https://bananasutra.com),
   // so deep-link recovery from 404.html requires absolute asset URLs.
   base: '/',

@@ -80,6 +80,20 @@ Expect **200** on the document request, and bot HTML containing **`og:image`** U
 
 ---
 
+## R24 — pre-rendered HTML (fallback-only Worker)
+
+After **R24** ships on Pages, each catalog route has static `index.html` with full body + head meta. The Worker behavior is:
+
+| Case | Human | Bot |
+|------|-------|-----|
+| Known route, origin **200** (pre-rendered) | Pass-through | Pass-through (no HTMLRewriter) |
+| Unknown SPA path, origin **404** | **404** + `404.html` | **404** + `404.html` |
+| Legacy deep link still 404 at origin | 200 shell (GET) / 200 headers (HEAD) | Shell + meta rewrite |
+
+Bots on pre-rendered pages rely on origin HTML; the Worker no longer rewrites those documents.
+
+---
+
 ## Local development
 
 ```bash

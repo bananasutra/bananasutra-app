@@ -16,7 +16,7 @@ import { CatalogPager } from './CatalogPager'
 import './CatalogPager.css'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { usePageMeta } from './usePageMeta'
+import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { searchParamsFromSearchString } from './urlSearchParams'
@@ -101,7 +101,7 @@ export function WordsPage() {
     bucketRef.current = bucket
   }, [sort, filters, bucket])
 
-  usePageMeta({
+  const pageMeta = renderPageMeta({
     title: 'Lyrics & Words',
     description: 'Read BANANASUTRA lyrics. Searchable song words, meaning first.',
     path: '/words',
@@ -345,6 +345,7 @@ export function WordsPage() {
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell words-page">
+      {pageMeta}
       <GlobalHeader ref={headerRef} />
 
       <div className="catalog-page__main">

@@ -65,6 +65,9 @@ pipelines/yt/raw/
 # --- Build output ---
 apps/banana-catalog-prototype/src/data/generated/*.tmp
 
+# --- Local snapshots (keep out of repo) ---
+AIRTABLE/snapshots/hidden-peels/
+
 # --- Private/local docs ---
 # `_docs/` is intentionally NOT in git: planning, SEO epics, runbooks you keep on your machine.
 # Git never deletes local `_docs/` files—it just does not upload them. Collaborators + CI only see tracked files.

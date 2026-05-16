@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useMusesCatalog } from './generatedData'
 import type { MuseCatalogItem } from './types'
-import { usePageMeta } from './usePageMeta'
+import { renderPageMeta } from './usePageMeta'
 
 const INITIAL_MUSE_COUNT = 40
 
@@ -143,7 +143,7 @@ export function MuseCardGrid() {
   const [sort, setSort] = useState<'az' | 'songs'>('az')
   const [showAll, setShowAll] = useState(() => Boolean(highlightedMuse))
 
-  usePageMeta({
+  const pageMeta = renderPageMeta({
     title: 'The Muses',
     description: 'Explore the thinkers, fools, poets, and troublemakers who inspired BANANASUTRA songs.',
     path: '/about/muses',
@@ -209,6 +209,7 @@ export function MuseCardGrid() {
 
   return (
     <div className="about-page__body">
+      {pageMeta}
       <section className="about-page__section" aria-labelledby="muses-title">
         <h2 id="muses-title" className="catalog-section-title about-page__anchor-target">
           The muses
