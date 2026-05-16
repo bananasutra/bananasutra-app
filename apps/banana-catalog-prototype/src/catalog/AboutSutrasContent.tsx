@@ -3,7 +3,7 @@ import { buildSutraStats } from './sutraPageUtils'
 import type { SutraContextEntry, SutraFamilyKey } from './sutraContext'
 import { SUTRA_CONTEXT, SUTRA_INDEX_CORE_ORDER, sutraHrefForFamily } from './sutraContext'
 import { sutraClassName } from './sutraTheme'
-import { usePageMeta } from './usePageMeta'
+import { renderPageMeta } from './usePageMeta'
 import { useSongCatalogBrowse } from './generatedData'
 import { useMemo } from 'react'
 
@@ -75,7 +75,7 @@ function AboutSutraMatrixCard({
 export function AboutSutrasContent() {
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalogBrowse()
 
-  usePageMeta({
+  const pageMeta = renderPageMeta({
     title: 'The Seven Sutras',
     description: 'Explore the seven BANANASUTRA sutras, the questions behind them, and the songs they organize.',
     path: '/about/sutras',
@@ -96,6 +96,7 @@ export function AboutSutrasContent() {
 
   return (
     <div className="about-page__body">
+      {pageMeta}
       <section className="about-page__section" aria-labelledby="sutras">
         <h2 id="sutras" className="catalog-section-title about-page__anchor-target">
           The seven sutras

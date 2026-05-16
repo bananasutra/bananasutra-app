@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { CatalogPageJumpNav } from './CatalogPageJumpNav'
-import { usePageMeta } from './usePageMeta'
+import { renderPageMeta } from './usePageMeta'
 
 const ABOUT_JUMP_NAV_ITEMS = [
   { id: 'what', label: 'What is Bananasutra', mobileLabel: 'What is?' },
@@ -13,7 +13,7 @@ export function AboutContent() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  usePageMeta({
+  const pageMeta = renderPageMeta({
     title: 'About Bananasutra',
     description:
       'What is BANANASUTRA? Songs organized by meaning, not genre, rooted in seven sutras and built by one human with practical tools.',
@@ -28,6 +28,7 @@ export function AboutContent() {
 
   return (
     <>
+    {pageMeta}
       <div className="catalog-page-shell__jump-region">
         <CatalogPageJumpNav items={[...ABOUT_JUMP_NAV_ITEMS]} />
       </div>

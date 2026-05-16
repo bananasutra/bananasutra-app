@@ -16,7 +16,8 @@ import type { SongCatalogItem, SongbookCatalogItem } from './types'
 import { buildBrowsePathForFacet, searchHasBrowseParams } from './urlState'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { SUTRA_CONTEXT, sutraHrefForFamily } from './sutraContext'
-import { usePageMeta } from './usePageMeta'
+import { PageMeta } from './PageMeta'
+import { websiteJsonLd } from '../seo/jsonLd'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { loadSongCatalog } from './generatedData'
 import { hasListenerCatalogMedia } from './listenerCatalog'
@@ -240,12 +241,6 @@ export function HomePortal() {
     }
   }, [featuredQuote.quote])
 
-  usePageMeta({
-    title: 'Songs for a World Gone Bananas',
-    description:
-      'Explore the BANANASUTRA catalog — songs organized by sutra, topic, intention, and sound. Browse songbooks, read lyrics, watch videos, and listen to tracks.',
-    path: '/',
-  })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [fullSearch])
 
   if (legacyRedirect) {
@@ -254,6 +249,12 @@ export function HomePortal() {
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell home-portal">
+      <PageMeta
+        title="Songs for a World Gone Bananas"
+        description="Explore the BANANASUTRA catalog — songs organized by sutra, topic, intention, and sound. Browse songbooks, read lyrics, watch videos, and listen to tracks."
+        path="/"
+        jsonLd={websiteJsonLd()}
+      />
       <GlobalHeader ref={headerRef} />
 
       <div className="catalog-page__main">

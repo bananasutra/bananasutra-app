@@ -19,7 +19,7 @@ import {
   readTracksBrowseFromSearch,
   serializeTracksBrowseQuery,
 } from './urlState'
-import { usePageMeta } from './usePageMeta'
+import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { sutraClassName } from './sutraTheme'
 import './CatalogApp.css'
@@ -244,7 +244,7 @@ export function TracksPage() {
     setScAutoplay(false)
   }, [selectedId])
 
-  usePageMeta({
+  const pageMeta = renderPageMeta({
     title: 'Top Tracks on SoundCloud',
     description:
       'The best BANANASUTRA tracks, ranked and filterable by tempo, genre, instruments, and moods.',
@@ -471,6 +471,7 @@ export function TracksPage() {
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
+      {pageMeta}
       <GlobalHeader ref={headerRef} />
 
       <div className="catalog-page__main">

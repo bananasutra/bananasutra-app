@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { CatalogPageJumpNav } from './CatalogPageJumpNav'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { usePageMeta } from './usePageMeta'
+import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import './CatalogApp.css'
 import './HomePortal.css'
@@ -23,7 +23,7 @@ export function StyleGuidePage() {
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
 
-  usePageMeta({
+  const pageMeta = renderPageMeta({
     title: 'Style guide · Shell',
     description:
       'Internal shell reference for the BANANASUTRA catalog: breadcrumbs, page titles, jump nav, and CTAs.',
@@ -33,6 +33,7 @@ export function StyleGuidePage() {
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
+      {pageMeta}
       <GlobalHeader ref={headerRef} />
 
       <div className="catalog-page__main">

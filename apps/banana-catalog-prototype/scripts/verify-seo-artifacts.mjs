@@ -301,6 +301,26 @@ function main() {
     fail(`sitemap.xml: total URLs ${sitemapPaths.size} !== expected ${expectedSitemapSize}`)
   }
 
+  // R24 — spot-check static pre-render (body in #root, JSON-LD in <head>)
+  const prerenderSample = path.join(distDir, 'songs/ego-ain-t-your-amigo/index.html')
+  if (fs.existsSync(prerenderSample)) {
+    const sampleHtml = fs.readFileSync(prerenderSample, 'utf8')
+    const rootM = /<div id="root">([\s\S]*)<\/div>\s*<\/body>/.exec(sampleHtml)
+    const rootBody = rootM ? rootM[1] : ''
+    if (!rootBody.includes('song-detail-title')) {
+      fail('prerender sample: #root missing song-detail body (run prerender-html after vite build)')
+    }
+    const head = sampleHtml.match(/<head>([\s\S]*?)<\/head>/)?.[1] ?? ''
+    if (!head.includes('application/ld+json')) {
+      fail('prerender sample: <head> missing JSON-LD script')
+    }
+    if ((rootBody.match(/application\/ld\+json/g) || []).length > 0) {
+      fail('prerender sample: JSON-LD should not remain inside #root')
+    }
+  } else {
+    warn('prerender sample missing — skip R24 body check (dist/songs/ego-ain-t-your-amigo/index.html)')
+  }
+
   const siteOgPath = path.join(distDir, 'og/site.png')
   if (!fs.existsSync(siteOgPath)) {
     fail(`missing ${siteOgPath} — run full catalog build (generate-og-images after vite)`)

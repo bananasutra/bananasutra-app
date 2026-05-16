@@ -9,7 +9,8 @@ import { SoundCloudEmbed } from './SoundCloudEmbed'
 import { sutraClassName } from './sutraTheme'
 import { buildBrowsePath, buildBrowsePathForFacet } from './urlState'
 import { emptyFilterState, type SongCatalogItem, type SongbookMemberSong } from './types'
-import { usePageMeta } from './usePageMeta'
+import { musicAlbumJsonLd, songbookItemListJsonLd } from '../seo/jsonLd'
+import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { SongThumbCard } from './SongThumbCard'
@@ -94,13 +95,24 @@ export function SongbookPage() {
     return new Map<string, SongCatalogItem>(rows.map((s) => [s.lyrics_id, s]))
   }, [songCatalogRows])
 
-  const songbook = useMemo(() => songbookBySlug(slug), [slug])
-  usePageMeta({
+  const trimmedSlug = slug.trim()
+  const songbook = useMemo(() => songbookBySlug(trimmedSlug), [trimmedSlug])
+  const pageMeta = renderPageMeta({
     title: songbook ? `${songbook.songbook} · Songbook` : 'Songbook not found',
     description: songbook
       ? (songbook.description || '').trim() || `${songbook.songbook} — a curated BANANASUTRA songbook.`
       : undefined,
-    path: songbook ? `/songbooks/${slug.trim()}` : undefined,
+    path: songbook ? `/songbooks/${trimmedSlug}` : undefined,
+    jsonLd: songbook
+      ? (songbook.songbook_type || '').toLowerCase() === 'collection' ||
+        (songbook.songbook_type || '').toLowerCase() === 'genre'
+        ? musicAlbumJsonLd(songbook.songbook, trimmedSlug, songbook.description || '')
+        : songbookItemListJsonLd(
+            songbook.songbook,
+            trimmedSlug,
+            (songbook.member_songs ?? []).map((s) => s.lyrics_title),
+          )
+      : undefined,
   })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [slug, songbook?.songbook, songbook?.song_count])
 
@@ -229,6 +241,7 @@ export function SongbookPage() {
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
+      {pageMeta}
       <GlobalHeader ref={headerRef} />
       <div className="catalog-page__main">
         {!songbook ? (
