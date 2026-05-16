@@ -1017,7 +1017,8 @@ function SongDetailLoaded({
                 ) : focusedYoutubeVideo ? (
                   <div className="song-detail-youtube-no-embed" role="region" aria-label="Selected video not embeddable">
                     <p className="song-detail-youtube-no-embed-lead">
-                      This upload is not available for in-app embed. Use YouTube to watch.
+                      YouTube marks this upload as not embeddable on other sites—that&apos;s their rule, not a bug on
+                      this site.
                     </p>
                     {focusedYoutubeVideo.yt_url ? (
                       <a className="song-detail-youtube-open" href={focusedYoutubeVideo.yt_url} target="_blank" rel="noreferrer">
