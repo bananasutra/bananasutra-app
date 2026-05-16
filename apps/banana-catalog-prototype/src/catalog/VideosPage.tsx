@@ -568,7 +568,7 @@ export function VideosPage() {
           href={v.yt_url}
           target="_blank"
           rel="noreferrer"
-          aria-label={`Open on YouTube (no in-app song page): ${songTitle}`}
+          aria-label={`Watch on YouTube (no in-app song page): ${songTitle}`}
         >
           <VideoCardBody v={v} songTitle={songTitle} ytTitle={ytTitle} inApp={false} />
         </a>
@@ -751,7 +751,6 @@ export function VideosPage() {
                 embedWrapperClassName="videos-page__featured-hero-embed"
                 embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideoHero.format) }}
                 iframeClassName="videos-page__featured-hero-iframe"
-                fallbackClassName="videos-page__featured-hero-yt-fallback"
                 facadeUntilClick
               />
               <div className="videos-page__featured-hero-copy">
