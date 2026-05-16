@@ -5,6 +5,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { handleRequest } from "../src/handleRequest.ts";
+import { __primeSeoMetadataCacheForTests } from "../src/seoMetadata.ts";
 
 function htmlResponse(status: number, body: string): Response {
   return new Response(body, {
@@ -14,6 +15,24 @@ function htmlResponse(status: number, body: string): Response {
 }
 
 test("deep SPA GET: origin 404 → 200 shell body (human)", async () => {
+  __primeSeoMetadataCacheForTests(
+    {
+      generatedAt: "2026-01-01T00:00:00.000Z",
+      routes: {
+        "/": {
+          title: "Home",
+          description: "Home",
+          canonical: "https://example.com/",
+        },
+        "/songs/kiss": {
+          title: "Kiss",
+          description: "Kiss",
+          canonical: "https://example.com/songs/kiss",
+        },
+      },
+    },
+    Date.now(),
+  );
   const fetcher: typeof fetch = async (input) => {
     const req = input instanceof Request ? input : new Request(input);
     const u = new URL(req.url);
@@ -36,6 +55,19 @@ test("deep SPA GET: origin 404 → 200 shell body (human)", async () => {
 });
 
 test("deep SPA HEAD: origin 404 → 200 no body", async () => {
+  __primeSeoMetadataCacheForTests(
+    {
+      generatedAt: "2026-01-01T00:00:00.000Z",
+      routes: {
+        "/about/muses": {
+          title: "Muses",
+          description: "Muses",
+          canonical: "https://example.com/about/muses",
+        },
+      },
+    },
+    Date.now(),
+  );
   const fetcher: typeof fetch = async (input) => {
     const req = input instanceof Request ? input : new Request(input);
     const u = new URL(req.url);
