@@ -92,6 +92,8 @@ npm run build --prefix "apps/banana-catalog-prototype"
 
 This runs **`tsc` → `vite build` → OG image generation → `seo-metadata.json` → sitemap → catalog-data sync** (see `package.json` `build`). The **`dist/`** folder (including **`dist/og/*.png`**) is **gitignored**; it is produced on each machine and on **GitHub Actions** (`.github/workflows/pages.yml` runs `npm run build` then `npm run verify:seo` before uploading `apps/banana-catalog-prototype/dist` to Pages). You do not commit `dist/`—the deploy pipeline is the source of built assets.
 
+**Preview vs production-shaped HTML:** With Vite’s default **`appType: 'spa'`**, **`vite preview`** applies SPA fallback: HTML requests that do not match a file under `dist/` are rewritten to **`dist/index.html`**. Pre-rendered routes live at **`dist/<path>/index.html`** (for example **`dist/songs/<slug>/index.html`**), so **View Source on deep URLs after `npm run preview` can show the home shell** even though the prerendered files on disk are correct. For QA that matches static hosting (no SPA `--single`), serve `dist/` with **`npm run preview:dist`** (uses **`serve`** without `-s`). If a given host differs on trailing slashes (`/about` vs `/about/`), compare behavior to **GitHub Pages**.
+
 **OG layout changes:** incremental skips avoid refetching every cover on every build. For a full re-render after editing `scripts/ogSongCard.mjs`, use **`npm run build:fresh-og`** (same as `FORCE_OG=1 npm run build`) or delete `dist/og` locally, then build. **`npm run og:samples`** writes review PNGs under **`og-samples/`** (also gitignored).
 
 **Required in git:** `scripts/ogSongCard.mjs`, `scripts/generate-og-images.mjs`, and `scripts/preview-og-samples.mjs` must be committed so CI can run the OG step.
