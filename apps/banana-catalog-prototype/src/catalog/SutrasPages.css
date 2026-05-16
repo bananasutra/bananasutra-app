@@ -230,6 +230,11 @@
   border-radius: var(--radius-sm);
 }
 
+.sutra-detail__yt-outbound {
+  max-width: none;
+  margin-inline: 0;
+}
+
 /* Featured EP / video h3 — subordinate to section H2 labels. */
 .sutra-detail__feat-title {
   margin: 0 0 0.5rem;

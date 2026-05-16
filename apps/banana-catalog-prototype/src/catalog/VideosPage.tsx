@@ -752,6 +752,7 @@ export function VideosPage() {
                 embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideoHero.format) }}
                 iframeClassName="videos-page__featured-hero-iframe"
                 facadeUntilClick
+                outboundFooterClassName="videos-page__featured-hero-yt-outbound"
               />
               <div className="videos-page__featured-hero-copy">
                 <h3 className="videos-page__featured-hero-title">{featuredVideoHero.lyrics_title || featuredVideoHero.title}</h3>

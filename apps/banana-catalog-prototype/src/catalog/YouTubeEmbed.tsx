@@ -1,6 +1,10 @@
 import type { CSSProperties, RefObject } from 'react'
 import { useEffect, useMemo, useState } from 'react'
-import { youtubePosterThumbnailUrl, youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
+import {
+  youtubePosterThumbnailUrl,
+  youtubePrivacyEmbedSrc,
+  youtubeWatchPageUrl,
+} from './youtubeEmbedUrl'
 
 type SongDetailProps = {
   videoId: string
@@ -18,6 +22,8 @@ export type YoutubeEmbeddedPlayerProps = {
   embedWrapperClassName?: string
   embedWrapperStyle?: CSSProperties
   loading?: 'lazy' | 'eager'
+  /** Optional layout hook for the outbound line below featured heroes (width alignment). */
+  outboundFooterClassName?: string
   /**
    * Poster + tap mounts the iframe (gesture‑gated). Used everywhere YouTube loads — reduces passive embed
    * probes (logged‑out / incognito) vs autoplaying an iframe as soon as the shell hydrates.
@@ -35,7 +41,24 @@ function useClientMounted(): boolean {
   return mounted
 }
 
-/** YouTube iframe only — no outbound footer (matches pre–SEO-phase-3 chrome). */
+/**
+ * Fallback when YouTube&apos;s embed misbehaves — same upload on youtube.com.
+ */
+export function YoutubeEmbedOutboundFooter({ videoId, className }: { videoId: string; className?: string }) {
+  const href = youtubeWatchPageUrl(videoId)
+  if (!href) return null
+  return (
+    <p className={['yt-embed-outbound', className].filter(Boolean).join(' ')}>
+      <span className="yt-embed-outbound__note">
+        YouTube blocking video playback? Sorry. Proof the world is bananas…{' '}
+      </span>
+      <a href={href} target="_blank" rel="noopener noreferrer" className="yt-embed-outbound__link">
+        Watch on YouTube
+      </a>
+    </p>
+  )
+}
+
 export function YoutubeEmbeddedPlayer({
   videoId,
   title,
@@ -45,6 +68,7 @@ export function YoutubeEmbeddedPlayer({
   embedWrapperClassName = 'yt-embed-shell',
   embedWrapperStyle,
   loading = 'lazy',
+  outboundFooterClassName,
   facadeUntilClick = false,
 }: YoutubeEmbeddedPlayerProps) {
   const id = videoId.trim()
@@ -63,6 +87,8 @@ export function YoutubeEmbeddedPlayer({
   if (!id) return null
   const iframeClass = ['yt-embed-frame', iframeClassName].filter(Boolean).join(' ')
   const poster = youtubePosterThumbnailUrl(id)
+
+  const outbound = <YoutubeEmbedOutboundFooter videoId={id} className={outboundFooterClassName} />
 
   if (!clientMounted) {
     return (
@@ -85,6 +111,7 @@ export function YoutubeEmbeddedPlayer({
             ) : null}
           </div>
         </div>
+        {outbound}
       </div>
     )
   }
@@ -119,6 +146,7 @@ export function YoutubeEmbeddedPlayer({
           />
         )}
       </div>
+      {outbound}
     </div>
   )
 }

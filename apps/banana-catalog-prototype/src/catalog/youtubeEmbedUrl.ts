@@ -5,6 +5,13 @@ export function youtubePosterThumbnailUrl(videoId: string): string {
   return `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
 }
 
+/** Canonical watch URL for this upload (same video as the embed). */
+export function youtubeWatchPageUrl(videoId: string): string {
+  const id = videoId.trim()
+  if (!id) return ''
+  return `https://www.youtube.com/watch?v=${encodeURIComponent(id)}`
+}
+
 export type YoutubePrivacyEmbedOptions = {
   /**
    * Adds `enablejsapi=1` (+ `origin` in the browser) so the parent can receive

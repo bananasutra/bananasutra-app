@@ -47,6 +47,10 @@
   border: none;
 }
 
+.videos-page__featured-hero-yt-outbound {
+  max-width: 980px;
+}
+
 .videos-page__featured-hero-copy {
   margin-top: 0.8rem;
   max-width: 980px;
