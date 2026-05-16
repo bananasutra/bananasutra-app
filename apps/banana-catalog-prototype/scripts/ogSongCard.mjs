@@ -20,8 +20,25 @@ export const OG_HEIGHT = 630
 /** Left visual column = square slot (full canvas height). */
 export const LEFT_SLOT = 630
 
-/** Fetched at build when a song has no `cover_image_url` (same asset as shell favicons). */
+/** Production URL for the brand icon (fallback when local `public/` copy is missing). */
 export const BRAND_ICON_BUILD_URL = 'https://bananasutra.com/android-chrome-512x512.png'
+
+/** Prefer this file at build time — no network required (same asset as shell favicons). */
+export const BRAND_ICON_LOCAL_REL = 'public/android-chrome-512x512.png'
+
+let cachedBrandIconBuffer = null
+
+/** Brand icon bytes: local `public/android-chrome-512x512.png` first, then remote. */
+export async function loadBrandIconBuffer(rootDir) {
+  if (cachedBrandIconBuffer) return cachedBrandIconBuffer
+  const localPath = path.join(rootDir, BRAND_ICON_LOCAL_REL)
+  if (fs.existsSync(localPath)) {
+    cachedBrandIconBuffer = fs.readFileSync(localPath)
+    return cachedBrandIconBuffer
+  }
+  cachedBrandIconBuffer = await fetchUrlBuffer(BRAND_ICON_BUILD_URL)
+  return cachedBrandIconBuffer
+}
 
 /** Non-song composite in `dist/og/site.png` — keep in sync with `usePageMeta` + `generate-seo-metadata.mjs`. */
 export const SITE_OG_CARD_URL = 'https://bananasutra.com/og/site.png'
@@ -421,12 +438,22 @@ async function renderCompositeToPng({ fonts, leftDataUrl, rightChildren }) {
 /**
  * @param {{ rootDir: string; displayTitle: string; coverImageUrl: string | null; lyricsSummary?: string | null; fonts?: ReturnType<typeof loadFonts>; songTypography?: { bodyFontSize?: number; brandFontSize?: number; urlFontSize?: number } }} opts
  */
+async function loadCoverOrBrandBuffer(rootDir, coverImageUrl) {
+  const url = (coverImageUrl || '').trim()
+  if (!url) return loadBrandIconBuffer(rootDir)
+  try {
+    return await fetchUrlBuffer(url)
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e)
+    console.warn(`ogSongCard: cover fetch failed — ${url}\n  ${msg}\n  → using brand icon`)
+    return loadBrandIconBuffer(rootDir)
+  }
+}
+
 export async function renderSongOgToPng(opts) {
   const { rootDir, displayTitle, coverImageUrl, lyricsSummary, fonts: fontsOpt, songTypography } = opts
   const fonts = fontsOpt ?? loadFonts(rootDir)
-  const rawBuf = (coverImageUrl || '').trim()
-    ? await fetchUrlBuffer(coverImageUrl.trim())
-    : await fetchUrlBuffer(BRAND_ICON_BUILD_URL)
+  const rawBuf = await loadCoverOrBrandBuffer(rootDir, coverImageUrl)
   const leftSlot = await buildLeftSlot630PngBuffer(rawBuf)
   const leftDataUrl = bufferToPngDataUrl(leftSlot)
   const summary = (lyricsSummary || '').trim() || null
@@ -446,7 +473,7 @@ export async function renderSongOgToPng(opts) {
 export async function renderSiteOgToPng(opts) {
   const { rootDir, fonts: fontsOpt, ideasLine, heroTitle, metaDescription, siteTypography } = opts
   const fonts = fontsOpt ?? loadFonts(rootDir)
-  const rawBuf = await fetchUrlBuffer(BRAND_ICON_BUILD_URL)
+  const rawBuf = await loadBrandIconBuffer(rootDir)
   const leftSlot = await buildLeftSlot630PngBuffer(rawBuf)
   const leftDataUrl = bufferToPngDataUrl(leftSlot)
   return renderCompositeToPng({

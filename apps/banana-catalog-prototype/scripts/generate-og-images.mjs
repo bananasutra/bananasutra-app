@@ -8,6 +8,9 @@
  * this script skips those paths unless **`FORCE_OG=1`** (re-render everything in `dist/og/`, including overwrites).
  *
  * Run after `vite build` (requires `dist/`). Invoked from `package.json` `build`.
+ *
+ * Brand icon: `public/android-chrome-512x512.png` (no network). Cover CDN failures fall back to that icon.
+ * `SKIP_OG=1` — skip regeneration when `dist/og/` already populated (fast local rebuilds).
  */
 import fs from 'node:fs'
 import path from 'node:path'
@@ -24,6 +27,9 @@ const siteOgPath = path.join(ogRoot, 'site.png')
 
 const forceOg =
   process.env.FORCE_OG === '1' || process.env.FORCE_OG === 'true' || process.env.FORCE_OG === 'yes'
+
+const skipOg =
+  process.env.SKIP_OG === '1' || process.env.SKIP_OG === 'true' || process.env.SKIP_OG === 'yes'
 
 function lyricsTitleToUrlSlug(title) {
   const base = (title || '')
@@ -84,6 +90,20 @@ async function main() {
   if (!fs.existsSync(distDir)) {
     console.error('generate-og-images: dist/ missing — run `vite build` first')
     process.exit(1)
+  }
+
+  if (skipOg) {
+    const songCount = fs.existsSync(ogSongs)
+      ? fs.readdirSync(ogSongs).filter((n) => n.endsWith('.png')).length
+      : 0
+    if (!fs.existsSync(siteOgPath) || songCount === 0) {
+      console.error(
+        'generate-og-images: SKIP_OG set but dist/og/ is empty — run a full build once without SKIP_OG',
+      )
+      process.exit(1)
+    }
+    console.log(`generate-og-images: SKIP_OG — leaving dist/og/ as-is (${songCount} song PNGs)`)
+    return
   }
 
   fs.mkdirSync(ogSongs, { recursive: true })
