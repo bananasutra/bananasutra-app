@@ -209,6 +209,11 @@
   min-width: 0;
 }
 
+.sutra-detail__feat-embed--video-contained > .yt-embed-with-fallback {
+  min-width: 0;
+  width: 100%;
+}
+
 .sutra-detail__featured-video-aspect {
   position: relative;
   width: 100%;
@@ -223,6 +228,12 @@
   height: 100%;
   border: none;
   border-radius: var(--radius-sm);
+}
+
+.sutra-detail__yt-watch-fallback {
+  max-width: none;
+  margin-inline: 0;
+  margin-top: 0.5rem;
 }
 
 /* Featured EP / video h3 — subordinate to section H2 labels. */

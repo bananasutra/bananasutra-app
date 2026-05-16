@@ -189,6 +189,69 @@ a:focus-visible {
   animation: nav-route-loading-bar-move 0.85s ease-in-out infinite;
 }
 
+/* YouTube: bot/sign-in interstitials redirect to URLs that refuse framing — link out is the reliable path */
+.yt-watch-fallback {
+  margin: 0.55rem auto 0;
+  max-width: min(100%, 760px);
+  padding: 0 0.15rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--color-text-muted);
+  font-family: var(--font-ui);
+}
+
+.yt-watch-fallback__link {
+  font-weight: 600;
+}
+
+/* Featured heroes: defer iframe until click (poster + glyph). */
+.yt-embed-facade {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  cursor: pointer;
+  background: var(--color-bg-inset);
+}
+
+.yt-embed-facade:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: -3px;
+}
+
+.yt-embed-facade__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.yt-embed-facade__ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.62);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.yt-embed-facade__glyph {
+  margin-left: 0.18em;
+  font-size: 1.35rem;
+  line-height: 1;
+  color: #fff;
+}
+
 @media print {
   body,
   .catalog,
@@ -214,6 +277,8 @@ a:focus-visible {
   .sc-embed-frame,
   .yt-embed-frame,
   .yt-embed-wrap,
+  .yt-embed-facade,
+  .yt-watch-fallback,
   .nav-route-loading-bar {
     display: none !important;
   }

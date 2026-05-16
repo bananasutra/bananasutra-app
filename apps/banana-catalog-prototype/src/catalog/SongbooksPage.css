@@ -514,6 +514,10 @@
   border: none;
 }
 
+.songbooks-page__featured-video-yt-fallback {
+  max-width: 980px;
+}
+
 .songbooks-page__featured-video-copy {
   margin-top: 0.8rem;
   max-width: 980px;

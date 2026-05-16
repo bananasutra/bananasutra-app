@@ -1,3 +1,17 @@
+/** Poster image for click-to-load facade (official CDN). */
+export function youtubePosterThumbnailUrl(videoId: string): string {
+  const id = videoId.trim()
+  if (!id) return ''
+  return `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
+}
+
+/** Canonical watch URL for opening YouTube outside an iframe (sign-in / bot checks cannot finish inside embeds). */
+export function youtubeWatchPageUrl(videoId: string): string {
+  const id = videoId.trim()
+  if (!id) return ''
+  return `https://www.youtube.com/watch?v=${encodeURIComponent(id)}`
+}
+
 export type YoutubePrivacyEmbedOptions = {
   /**
    * Adds `enablejsapi=1` (+ `origin` in the browser) so the parent can receive
@@ -5,12 +19,20 @@ export type YoutubePrivacyEmbedOptions = {
    * exclusivity on sutra / songbook pages.
    */
   enableJsApi?: boolean
+  /** Use after an explicit user click that mounts the iframe (facade → player). */
+  autoplay?: boolean
 }
 
+/** Origins used by catalog embeds + SoundCloud exclusivity `postMessage` targets. */
+export const YOUTUBE_EMBED_POST_MESSAGE_ORIGINS = ['https://www.youtube.com', 'https://www.youtube-nocookie.com'] as const
+
 /**
- * Privacy-oriented YouTube iframe URLs (youtube-nocookie).
+ * Standard YouTube iframe embed (`www.youtube.com`).
  *
- * Note: `rel=0` limits post-play suggestions to the same channel where supported;
+ * Note: We intentionally avoid `youtube-nocookie.com` here — it tends to interact badly with
+ * Google’s embedded sign-in / bot interstitials (broken flows inside iframes).
+ *
+ * `rel=0` limits post-play suggestions to the same channel where supported;
  * YouTube does not expose a supported way to remove all recommendations inside the
  * standard embed player.
  */
@@ -29,5 +51,6 @@ export function youtubePrivacyEmbedSrc(videoId: string, options?: YoutubePrivacy
       q.set('origin', window.location.origin)
     }
   }
-  return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?${q}`
+  if (options?.autoplay) q.set('autoplay', '1')
+  return `https://www.youtube.com/embed/${encodeURIComponent(id)}?${q}`
 }
