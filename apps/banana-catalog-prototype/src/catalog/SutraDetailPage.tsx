@@ -540,6 +540,7 @@ export function SutraDetailPage() {
                     embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
                     iframeClassName="sutra-detail__yt-embed"
                     facadeUntilClick
+                    outboundFooterClassName="sutra-detail__yt-outbound"
                   />
                 </div>
                 <div className="sutra-detail__feat-copy">
