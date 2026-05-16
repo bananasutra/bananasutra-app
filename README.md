@@ -10,6 +10,9 @@ Shared documentation lives in **tracked** paths (this file, **`apps/banana-catal
 
 ## Repo hygiene and safety
 
+- **Agents — git / releases:** branch naming, merge subjects, and `staging` → `main` promotion are defined in **`.cursor/rules/git-release-workflow.mdc`** (always applied). Production merges must use subject `release: merge staging (<scope>)` — not Git’s default `Merge branch 'staging'`.
+- **Optional — paste into Cursor User Rules** (applies outside this repo too):  
+  `BANANASUTRA: feat/r#-<scope>` branches; ask before `staging → main`; production merge subject must be `release: merge staging (<scope>)` (first line only — GitHub Actions); never `Merge branch 'staging'`.
 - Root `.gitignore` is the authoritative ignore policy for this workspace.
 - Never commit `.env` secrets. Keep only `*.env.example` templates in git.
 - Treat `apps/banana-catalog-prototype/src/data/generated/` and pipeline outputs as build artifacts; keep temporary exports under `backups/` or other disposable paths.

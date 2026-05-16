@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { CatalogPageJumpNav } from './CatalogPageJumpNav'
+import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 
 const ABOUT_JUMP_NAV_ITEMS = [
@@ -17,12 +18,12 @@ export function AboutContent() {
     title: 'About Bananasutra',
     description:
       'What is BANANASUTRA? Songs organized by meaning, not genre, rooted in seven sutras and built by one human with practical tools.',
-    path: '/about',
+    path: canonicalPathForRoute('/about'),
   })
 
   useEffect(() => {
     if (location.hash === '#sutras') {
-      navigate('/about/sutras', { replace: true })
+      navigate(canonicalPathForRoute('/about/sutras'), { replace: true })
     }
   }, [location.hash, navigate])
 

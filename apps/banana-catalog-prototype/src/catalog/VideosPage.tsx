@@ -9,6 +9,7 @@ import { songCatalogLinkTo } from './songPaths'
 import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
 import type { SongCatalogItem, YouTubeCatalogVideo } from './types'
+import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { ScrollRail } from './ScrollRail'
@@ -140,7 +141,7 @@ function hrefVideos(partial: Partial<VideosUrlFilters>, base: VideosUrlFilters):
   const merged: VideosUrlFilters = { ...base, ...partial }
   const keys = Object.keys(partial) as (keyof VideosUrlFilters)[]
   if (keys.some((k) => k !== 'page')) merged.page = 1
-  return `/videos${filtersToQueryString(merged)}`
+  return browsePathWithQuery('/videos', filtersToQueryString(merged).replace(/^\?/, ''))
 }
 
 function isVerticalFormat(video: YouTubeCatalogVideo): boolean {
@@ -311,7 +312,7 @@ export function VideosPage() {
   const pageMeta = renderPageMeta({
     title: videosMetaTitle,
     description: 'BANANASUTRA music videos on YouTube. Browse by sutra, topic, and intention.',
-    path: '/videos',
+    path: canonicalPathForRoute('/videos'),
   })
 
   useEffect(() => {
@@ -371,7 +372,7 @@ export function VideosPage() {
     p.delete('catalog')
     if (!p.get('link')) p.set('link', 'in_app')
     const q = p.toString()
-    navigate(q ? `/videos?${q}` : '/videos', { replace: true })
+    navigate(browsePathWithQuery('/videos', q), { replace: true })
   }, [searchParams, navigate])
 
   useEffect(() => {
@@ -381,13 +382,13 @@ export function VideosPage() {
     p.delete('instrument')
     p.delete('ctype')
     const q = p.toString()
-    navigate(q ? `/videos?${q}` : '/videos', { replace: true })
+    navigate(browsePathWithQuery('/videos', q), { replace: true })
   }, [searchParams, navigate])
 
   useEffect(() => {
     if (filters.linkTarget !== 'off_site') return
     if (orphanUploadCount > 0) return
-    navigate(`/videos${filtersToQueryString({ ...filters, linkTarget: 'all' })}`, { replace: true })
+    navigate(hrefVideos({ linkTarget: 'all' }, filters), { replace: true })
   }, [filters.linkTarget, orphanUploadCount, filters, navigate])
 
   const sutraOptions = useMemo(() => collectDistinctSorted(allVideos, (v) => v.sutra), [allVideos])
@@ -429,7 +430,7 @@ export function VideosPage() {
 
   useEffect(() => {
     if (urlVideoPage === safeVideoPage) return
-    navigate(`/videos${filtersToQueryString({ ...filters, page: safeVideoPage })}`, { replace: true })
+    navigate(hrefVideos({ page: safeVideoPage }, filters), { replace: true })
   }, [urlVideoPage, safeVideoPage, filters, navigate])
 
   const wideVideos = useMemo(
@@ -445,7 +446,7 @@ export function VideosPage() {
   const showWidePager = wideTotal > VIDEO_PAGE_SIZE
 
   const videoPagerLink = useCallback(
-    (target: number) => `/videos${filtersToQueryString({ ...filters, page: target })}`,
+    (target: number) => hrefVideos({ page: target }, filters),
     [filters],
   )
 

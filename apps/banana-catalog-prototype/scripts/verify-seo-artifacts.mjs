@@ -9,6 +9,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
+import { canonicalPathForRoute } from './seo-canonical-path.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
@@ -200,6 +201,10 @@ function main() {
     if (typeof meta?.canonical !== 'string' || !meta.canonical.startsWith(SITE_URL)) {
       fail(`seo-metadata: bad canonical for ${p}`)
     }
+    const wantCanonical = `${SITE_URL}${canonicalPathForRoute(p)}`
+    if (meta.canonical !== wantCanonical) {
+      fail(`seo-metadata: canonical mismatch for ${p}\n  want: ${wantCanonical}\n  got:  ${meta.canonical}`)
+    }
     if (typeof meta?.image !== 'string' || !isAllowedOgImageUrl(meta.image)) {
       fail(`seo-metadata: missing or invalid image for ${p}`)
     }
@@ -279,6 +284,10 @@ function main() {
   for (const loc of locs) {
     const p = pathFromLoc(loc)
     if (!p) fail(`sitemap.xml: bad loc URL ${loc}`)
+    const wantLoc = `${SITE_URL}${canonicalPathForRoute(p)}`
+    if (loc !== wantLoc) {
+      fail(`sitemap.xml: loc mismatch for ${p}\n  want: ${wantLoc}\n  got:  ${loc}`)
+    }
     if (sitemapPaths.has(p)) dup.add(p)
     sitemapPaths.add(p)
   }

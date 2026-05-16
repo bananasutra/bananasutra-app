@@ -8,10 +8,11 @@ import type {
   TracksFilterState,
 } from './types'
 import { emptyFilterState, emptyTracksFilterState } from './types'
+import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { searchParamsFromSearchString } from './urlSearchParams'
 
 /** Path for the filterable song grid (browse). */
-export const CATALOG_BROWSE_PATH = '/songs'
+export const CATALOG_BROWSE_PATH = canonicalPathForRoute('/songs')
 
 const PARAM: Record<FilterFacetKey, string> = {
   sutra: 'sutra',
@@ -184,7 +185,7 @@ export function buildTracksBrowsePath(
 ): string {
   const q = new URLSearchParams()
   q.set(param, value)
-  return `/tracks?${q.toString()}`
+  return browsePathWithQuery('/tracks', q.toString())
 }
 
 export function readTracksBrowseFromSearch(search: string): {
@@ -238,7 +239,7 @@ export function buildTracksBrowsePathFull(
   sort: TrackSortMode = 'likes',
 ): string {
   const qs = serializeTracksBrowseQuery(filters, find ?? '', page ?? 1, preserveParams, sort)
-  return qs ? `/tracks?${qs}` : '/tracks'
+  return browsePathWithQuery('/tracks', qs)
 }
 
 const BROWSE_PARAM_KEYS = new Set<string>(['sort', ...Object.values(PARAM), PARAM_MEDIA, PARAM_BROWSE_PAGE])

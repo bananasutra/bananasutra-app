@@ -144,7 +144,7 @@ function SongDetailInvalidSlug({ urlSlug }: { urlSlug: string }) {
         <main id="main-content" className="song-detail song-detail--missing catalog-layout-shell">
           <p className="song-detail-missing-title">No song for this link.</p>
           <p className="song-detail-missing-hint">The link may be outdated or not in the current snapshot.</p>
-          <Link to="/songs" className="song-detail-back">
+          <Link to={CATALOG_BROWSE_PATH} className="song-detail-back">
             ← Back to Songs
           </Link>
         </main>
@@ -175,7 +175,7 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
     p.delete('section')
     return p.toString()
   }, [fullSearch])
-  const catalogPath = catalogSearch ? `/songs?${catalogSearch}` : '/songs'
+  const catalogPath = catalogSearch ? `${CATALOG_BROWSE_PATH}?${catalogSearch}` : CATALOG_BROWSE_PATH
 
   const wordsListReturn = (location.state as SongDetailNavState | null)?.wordsListReturn
   const listBreadcrumbHref =

@@ -1,7 +1,9 @@
 import type { SongDetailRecord } from '../catalog/types'
 import { padMetaDescription } from '../catalog/pageMetaConstants'
+import { browsePathWithQuery, canonicalPathForRoute } from '../catalog/seoPaths'
 
 const SITE_URL = 'https://bananasutra.com'
+const ABOUT_URL = `${SITE_URL}${canonicalPathForRoute('/about')}`
 const LYRICS_SNIPPET_MAX = 800
 
 function truncateLyrics(text: string): string {
@@ -20,7 +22,7 @@ export function websiteJsonLd(): Record<string, unknown> {
       'Songs for a world gone bananas. Explore the catalog: browse songs by sutra, topic, intention, and sound.',
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${SITE_URL}/songs?find={search_term_string}`,
+      target: `${SITE_URL}${browsePathWithQuery('/songs', 'find={search_term_string}')}`,
       'query-input': 'required name=search_term_string',
     },
   }
@@ -69,7 +71,7 @@ export function songRecordingJsonLd(
     byArtist: {
       '@type': 'MusicGroup',
       name: 'BANANASUTRA',
-      url: `${SITE_URL}/about`,
+      url: ABOUT_URL,
     },
     recordingOf,
     image: `${SITE_URL}/og/songs/${canonicalSlug}.png`,
@@ -97,7 +99,7 @@ export function musicAlbumJsonLd(
     byArtist: {
       '@type': 'MusicGroup',
       name: 'BANANASUTRA',
-      url: `${SITE_URL}/about`,
+      url: ABOUT_URL,
     },
   }
 }

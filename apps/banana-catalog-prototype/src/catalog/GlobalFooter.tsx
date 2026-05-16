@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CATALOG_SNAPSHOT_DATE, formatCatalogSnapshotDate } from './catalogSnapshotMeta'
+import { canonicalPathForRoute } from './seoPaths'
 import { FooterSocialIcon, type FooterSocialId } from './FooterSocialIcons'
 import './GlobalFooter.css'
 
@@ -281,7 +282,7 @@ export function GlobalFooter() {
 
         {/* ---- Sitemap link + snapshot date ---- */}
         <p className="catalog-footer__meta">
-          <Link to="/sitemap" className="catalog-footer__sitemap-link">
+          <Link to={canonicalPathForRoute('/sitemap')} className="catalog-footer__sitemap-link">
             SITEMAP
           </Link>
           {CATALOG_SNAPSHOT_DATE ? (

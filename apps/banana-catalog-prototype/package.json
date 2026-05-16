@@ -11,6 +11,7 @@
     "verify:seo": "node scripts/verify-seo-artifacts.mjs",
     "og:samples": "node scripts/preview-og-samples.mjs",
     "build:fresh-og": "FORCE_OG=1 npm run build",
+    "build:skip-og": "SKIP_OG=1 npm run build",
     "build:data": "python3 scripts/build_artifacts.py",
     "lint": "eslint .",
     "preview": "vite preview",

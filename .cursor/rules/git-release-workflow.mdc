@@ -1,0 +1,57 @@
+---
+description: Branch naming, merge subjects, and staging→main promotion for numbered releases
+alwaysApply: true
+---
+
+# Git / numbered releases (R#)
+
+Tracked companion: root `README.md` (pointer). Full human runbook: `_docs/runbooks/LAUNCH-AND-CHANGE-HANDBOOK.md` §1b and §4 (local only, never commit `_docs/`).
+
+## Branches
+
+- **Integration:** `staging`. **Production:** `main`. **Work:** `feat/r<number>-<short-scope>` (e.g. `feat/r25-seo-followup`).
+- Never force-push `main` or `staging` unless Banana explicitly asks with eyes open.
+- Numbered releases: always **feat → staging → (stop) → main** after explicit approval. Never promote to `main` without permission.
+
+## Feature commits
+
+- Imperative subjects: `feat(scope): …`, `fix(scope): …`, `chore(scope): …`.
+- Never commit `_docs/`, `.env`, or secrets.
+
+## Merge into `staging` (from feat)
+
+```bash
+git checkout staging && git pull origin staging
+git merge --no-ff feat/r#-<scope> -m "merge feat/r#-<scope> (<one-line what shipped>)"
+git push origin staging
+git checkout staging && git pull origin staging
+```
+
+Replace `r#-<scope>` and the parenthetical with the real branch and a short human summary.
+
+## Promote to `main` (production — only after explicit approval)
+
+```bash
+git checkout main && git pull origin main
+git merge --no-ff staging -m "release: merge staging (<one-line what shipped>)"
+git push origin main
+git checkout staging && git pull origin staging
+```
+
+## CRITICAL — merge subject line (GitHub Actions)
+
+GitHub Actions and the commit list show **only the first line** of the merge commit message.
+
+- **Production merges to `main`:** subject **must** be exactly:
+  - `release: merge staging (<one-line what shipped>)`
+- **Never** use `Merge branch 'staging'` or `Merge branch 'feat/...'` as the subject.
+- Put detail in the parenthetical on that same line if needed; optional body is fine but do not rely on it for visibility.
+
+Good production subject examples:
+
+- `release: merge staging (R25 SEO: JSON-LD, trailing slashes, latest drops)`
+- `release: merge staging (YouTube outbound footer under embeds)`
+
+## After staging-side work
+
+End on **`staging`** (pulled) so local preview matches integration unless Banana asks otherwise.
