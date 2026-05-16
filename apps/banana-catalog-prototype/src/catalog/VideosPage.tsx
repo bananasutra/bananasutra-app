@@ -5,7 +5,7 @@ import { songMatchesMediaCombo } from './filterSongs'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { filterYoutubeVideosBySearchQuery } from './searchMatch'
-import { songCatalogPath } from './songPaths'
+import { songCatalogLinkTo } from './songPaths'
 import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
 import type { SongCatalogItem, YouTubeCatalogVideo } from './types'
@@ -543,7 +543,7 @@ export function VideosPage() {
     const ytTitle = (v.title || '').trim()
     const lid = (v.lyrics_id || '').trim()
     const cat = lid ? songsByLyricsId.get(lid) : undefined
-    const songHref = `${songCatalogPath(songTitle, v.url_slug || cat?.url_slug)}?section=video`
+    const songHref = songCatalogLinkTo(songTitle, v.url_slug || cat?.url_slug, { section: 'video' })
     const inApp = inAppIds.has((v.lyrics_id || '').trim())
     const liClass = layout === 'rail' ? 'videos-page__rail-cell' : 'videos-page__grid-cell'
 

@@ -16,7 +16,7 @@ import {
 } from './types'
 import { songMatchesFilters, songMatchesMediaCombo, sortSongs } from './filterSongs'
 import { filterSongsByFindAnyQuery } from './searchMatch'
-import { songCatalogPath } from './songPaths'
+import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
 import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
 import { buildBrowsePath, readBrowseStateFromSearchParams, readCatalogBrowsePage, readStateFromUrl } from './urlState'
@@ -599,16 +599,13 @@ export function CatalogApp() {
                 .map((value) => value.trim())
                 .filter(Boolean)
               const secondaryLine = secondaryMeta.join(' · ')
-              const linkSearchParams = new URLSearchParams(location.search)
-              if (songHasSoundcloudListenPath(song)) linkSearchParams.set('section', 'audio')
-              const linkSearch = linkSearchParams.toString()
               return (
                 <Link
                   key={song.lyrics_id}
-                  to={{
-                    pathname: songCatalogPath(song.lyrics_title, song.url_slug),
-                    search: linkSearch ? `?${linkSearch}` : '',
-                  }}
+                  to={songCatalogLinkTo(song.lyrics_title, song.url_slug, {
+                    section:
+                      songHasSoundcloudListenPath(song) || browseRowHasAudioSection(song) ? 'audio' : undefined,
+                  })}
                   className="catalog-card catalog-card-link"
                 >
                   <div className="catalog-card-art">

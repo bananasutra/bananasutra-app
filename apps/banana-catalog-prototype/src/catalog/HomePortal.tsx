@@ -1,7 +1,9 @@
-import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import homeQuotesJson from '../data/generated/home_quotes.json'
 import buildSummaryJson from '../data/generated/_build_summary.json'
+import songCatalogBrowseJson from '../data/generated/song_catalog_browse.json'
+import songbookCatalogJson from '../data/generated/songbook_catalog.json'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
@@ -10,7 +12,7 @@ import {
   songbookFeaturedKickerLabel,
   songbookHrefFromCatalogItem,
 } from './homePortalUtils'
-import { songCatalogPath } from './songPaths'
+import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
 import { SongThumbCard } from './SongThumbCard'
 import type { SongCatalogItem, SongbookCatalogItem } from './types'
 import { buildBrowsePathForFacet, searchHasBrowseParams } from './urlState'
@@ -19,7 +21,6 @@ import { SUTRA_CONTEXT, sutraHrefForFamily } from './sutraContext'
 import { PageMeta } from './PageMeta'
 import { websiteJsonLd } from '../seo/jsonLd'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
-import { loadSongCatalog } from './generatedData'
 import { hasListenerCatalogMedia } from './listenerCatalog'
 import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import { songOnWordsSurface } from './wordsStory'
@@ -56,6 +57,8 @@ type ChromeBuildSummary = {
 }
 
 const BUILD_SUMMARY = buildSummaryJson as ChromeBuildSummary
+const HOME_BROWSE_CATALOG = songCatalogBrowseJson as SongCatalogItem[]
+const LATEST_DROPS_LIMIT = 5
 
 function buildSummaryCount(key: string): number {
   const v = (buildSummaryJson as Record<string, unknown>)[key]
@@ -132,55 +135,33 @@ export function HomePortal() {
   const primarySutraDisplay = (featuredQuote.primary_sutra || '').trim()
   const quoteMetaParts = [muse, primarySutraDisplay].filter(Boolean)
 
-  const [songCatalog, setSongCatalog] = useState<SongCatalogItem[] | null>(null)
-  const [homePlaylistSongbook, setHomePlaylistSongbook] = useState<SongbookCatalogItem | null>(null)
+  const homePlaylistSongbook = useMemo(
+    () => resolveHiddenPeelsSongbook((songbookCatalogJson as SongbookCatalogItem[]) ?? []),
+    [],
+  )
 
-  useEffect(() => {
-    let cancelled = false
-    loadSongCatalog().then((rows) => {
-      if (!cancelled) startTransition(() => setSongCatalog(rows))
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  const latestDrops = useMemo(
+    () =>
+      [...HOME_BROWSE_CATALOG]
+        .filter((s) => songHasAudioOrVideo(s) && parsePublishedAt(s.published_at) > 0)
+        .sort((a, b) => parsePublishedAt(b.published_at) - parsePublishedAt(a.published_at))
+        .slice(0, LATEST_DROPS_LIMIT),
+    [],
+  )
 
-  useEffect(() => {
-    let cancelled = false
-    void import('../data/generated/songbook_catalog.json').then((m) => {
-      if (cancelled) return
-      const books = (m.default as SongbookCatalogItem[]) ?? []
-      startTransition(() => setHomePlaylistSongbook(resolveHiddenPeelsSongbook(books)))
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  const latestDrops = useMemo(() => {
-    if (!songCatalog) return []
-    return [...songCatalog]
-      .filter(songHasAudioOrVideo)
-      .sort((a, b) => parsePublishedAt(b.published_at) - parsePublishedAt(a.published_at))
-      .slice(0, 6)
-  }, [songCatalog])
-
-  const wordsSurfaceCount = useMemo(() => {
-    if (!songCatalog) return null
-    return songCatalog.filter(songOnWordsSurface).length
-  }, [songCatalog])
+  const wordsSurfaceCount = useMemo(
+    () => HOME_BROWSE_CATALOG.filter(songOnWordsSurface).length,
+    [],
+  )
 
   /** Same inclusion rule as `/songs` browse grid (`CatalogApp` → `hasListenerCatalogMedia`). */
-  const songsBrowseGridCount = useMemo(() => {
-    if (!songCatalog) return null
-    return songCatalog.filter(hasListenerCatalogMedia).length
-  }, [songCatalog])
+  const songsBrowseGridCount = useMemo(
+    () => HOME_BROWSE_CATALOG.filter(hasListenerCatalogMedia).length,
+    [],
+  )
 
   /** Matches searchable catalog rows (same pool as `/words` + rest of catalog). */
-  const searchDiscoverRowCount = useMemo(() => {
-    if (!songCatalog) return null
-    return songCatalog.length
-  }, [songCatalog])
+  const searchDiscoverRowCount = HOME_BROWSE_CATALOG.length
 
   const songbooksCount = BUILD_SUMMARY.songbooks ?? 0
 
@@ -376,24 +357,21 @@ export function HomePortal() {
             <h2 id="home-drops-heading" className="catalog-section-title">
               Latest drops
             </h2>
-            {songCatalog ? (
-              <ul className="song-thumb-grid song-thumb-grid--home">
-                {latestDrops.map((song) => (
-                  <li key={song.lyrics_id} className="song-thumb-grid__cell">
-                    <SongThumbCard
-                      to={songCatalogPath(song.lyrics_title, song.url_slug)}
-                      coverUrl={song.cover_image_url}
-                      title={song.lyrics_title}
-                      metaLabel={song.sutra}
-                    />
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="home-portal__drops-loading" role="status" aria-live="polite">
-                Loading latest songs…
-              </p>
-            )}
+            <ul className="song-thumb-grid song-thumb-grid--home">
+              {latestDrops.map((song) => (
+                <li key={song.lyrics_id} className="song-thumb-grid__cell">
+                  <SongThumbCard
+                    to={songCatalogLinkTo(song.lyrics_title, song.url_slug, {
+                      section: browseRowHasAudioSection(song) ? 'audio' : undefined,
+                    })}
+                    coverUrl={song.cover_image_url}
+                    title={song.lyrics_title}
+                    metaLabel={song.sutra}
+                    publishedAt={song.published_at}
+                  />
+                </li>
+              ))}
+            </ul>
             <Link className="catalog-section-cta" to="/songs?sort=newest">
               Browse newest →
             </Link>
@@ -408,9 +386,7 @@ export function HomePortal() {
                 <Link className="about-page__how-card" to="/songs#catalog-songs-find-input">
                   <span className="about-page__how-label">Search &amp; Discover →</span>
                   <span className="about-page__how-stat">
-                    {searchDiscoverRowCount != null
-                      ? `${formatCount(searchDiscoverRowCount)} songs & lyrics · find + filters`
-                      : '— · find + filters'}
+                    {`${formatCount(searchDiscoverRowCount)} songs & lyrics · find + filters`}
                   </span>
                   <span className="about-page__how-desc">
                     Find any song by title, sutra, muse, topic, or vibe. Start typing, start finding.
@@ -430,9 +406,7 @@ export function HomePortal() {
                 <Link className="about-page__how-card" to="/songs">
                   <span className="about-page__how-label">Explore the fool catalog →</span>
                   <span className="about-page__how-stat">
-                    {songsBrowseGridCount != null
-                      ? `${formatCount(songsBrowseGridCount)} songs · meaning-first`
-                      : '— · meaning-first'}
+                    {`${formatCount(songsBrowseGridCount)} songs · meaning-first`}
                   </span>
                   <span className="about-page__how-desc">
                     Every song in one place—filter, wander, or let something find you.
@@ -465,7 +439,7 @@ export function HomePortal() {
                 <Link className="about-page__how-card" to="/words">
                   <span className="about-page__how-label">Read the Words →</span>
                   <span className="about-page__how-stat">
-                    {wordsSurfaceCount != null ? formatCount(wordsSurfaceCount) : '—'} lyrics-first songs
+                    {formatCount(wordsSurfaceCount)} lyrics-first songs
                   </span>
                   <span className="about-page__how-desc">
                     Lyrics without music. Pieces still brewing, or that live as text alone.

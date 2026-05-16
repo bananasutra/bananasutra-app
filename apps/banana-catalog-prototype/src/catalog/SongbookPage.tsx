@@ -3,7 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { hasListenerCatalogMedia } from './listenerCatalog'
-import { songCatalogPath } from './songPaths'
+import { songCatalogPath, songbookCatalogPath } from './songPaths'
 import { songbookBySlug } from './songbooks'
 import { SoundCloudEmbed } from './SoundCloudEmbed'
 import { sutraClassName } from './sutraTheme'
@@ -102,7 +102,7 @@ export function SongbookPage() {
     description: songbook
       ? (songbook.description || '').trim() || `${songbook.songbook} — a curated BANANASUTRA songbook.`
       : undefined,
-    path: songbook ? `/songbooks/${trimmedSlug}` : undefined,
+    path: songbook ? songbookCatalogPath(trimmedSlug) : undefined,
     jsonLd: songbook
       ? (songbook.songbook_type || '').toLowerCase() === 'collection' ||
         (songbook.songbook_type || '').toLowerCase() === 'genre'

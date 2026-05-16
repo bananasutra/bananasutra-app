@@ -111,6 +111,14 @@
   color: rgba(255, 255, 255, 0.82);
 }
 
+.song-thumb-card__date {
+  display: block;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  opacity: 0.72;
+  margin-top: 0.15rem;
+}
+
 .song-thumb-card__title {
   font-size: 0.78rem;
   font-weight: 700;

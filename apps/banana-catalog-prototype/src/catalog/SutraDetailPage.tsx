@@ -5,7 +5,7 @@ import { GlobalHeader } from './GlobalHeader'
 import { SoundCloudEmbed } from './SoundCloudEmbed'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { allSongbooks, songbookHref } from './songbooks'
-import { songCatalogPath } from './songPaths'
+import { songCatalogPath, sutraDetailPath } from './songPaths'
 import { buildBrowsePathForFacet } from './urlState'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { SUTRA_CONTEXT, sutraEntryBySlug, sutraHrefForFamily } from './sutraContext'
@@ -178,7 +178,7 @@ export function SutraDetailPage() {
       entry && familyKey
         ? `Explore the ${familyKey} sutra — songs, featured video, and related songbooks.`
         : 'BANANASUTRA sutra detail.',
-    path: entry ? `/about/${trimmedSlug}` : undefined,
+    path: entry ? sutraDetailPath(trimmedSlug) : undefined,
     jsonLd:
       entry && familyKey ? sutraCreativeWorkJsonLd(familyKey, trimmedSlug, entry.sutra_when) : undefined,
   })

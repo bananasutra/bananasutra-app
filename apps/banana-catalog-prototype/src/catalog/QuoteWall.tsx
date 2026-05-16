@@ -4,6 +4,7 @@ import { useQuotesWall } from './generatedData'
 import type { QuoteWallItem } from './types'
 import { sutraClassName } from './sutraTheme'
 import { SUTRA_CONTEXT, sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
+import { songCatalogPath } from './songPaths'
 import { renderPageMeta } from './usePageMeta'
 
 function formatCount(n: number): string {
@@ -171,7 +172,7 @@ export function QuoteWall() {
                           )
                         })}
                         {item.inspired_song ? (
-                          <Link className="quote-item__song" to={`/songs/${item.inspired_song.slug}`}>
+                          <Link className="quote-item__song" to={songCatalogPath(item.inspired_song.title, item.inspired_song.slug)}>
                             inspired: {item.inspired_song.title}
                           </Link>
                         ) : null}

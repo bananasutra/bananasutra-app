@@ -1,9 +1,10 @@
 import type { SongbookCatalogItem } from './types'
+import { songbookCatalogPath } from './songPaths'
 import { songbookToUrlSlug } from './slugify'
 
 export function songbookHrefFromCatalogItem(b: SongbookCatalogItem): string {
   const slug = (b.url_slug_songbook || '').trim() || songbookToUrlSlug(b.songbook)
-  return `/songbooks/${slug}`
+  return songbookCatalogPath(slug)
 }
 
 /** `url_slug_songbook` for the Hidden Peels homepage spotlight. */

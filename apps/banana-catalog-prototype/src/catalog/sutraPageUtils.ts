@@ -1,6 +1,7 @@
 import type { SongbookCatalogItem, SongCatalogItem } from './types'
 import type { SutraFamilyKey } from './sutraContext'
 import { SUTRA_CONTEXT } from './sutraContext'
+import { sutraDetailPath } from './songPaths'
 
 const FAMILY_ORDER: SutraFamilyKey[] = ['KNOW', 'BLOW', 'QUACK', 'SHOW', 'GROW', 'FLOW', 'GLOW', 'BOW']
 
@@ -110,5 +111,5 @@ export function sutraHrefFromSongSutraField(sutraField: string): string | null {
   const fam = sutraFamilyKeyFromSongField(sutraField)
   if (!fam) return null
   const slug = (SUTRA_CONTEXT[fam].url_slug_sutra || '').trim()
-  return slug ? `/about/${slug}` : null
+  return slug ? sutraDetailPath(slug) : null
 }
