@@ -14,7 +14,7 @@ import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { ScrollRail } from './ScrollRail'
 import { CatalogPager } from './CatalogPager'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
-import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
+import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import './CatalogPager.css'
 import './CatalogApp.css'
@@ -568,7 +568,7 @@ export function VideosPage() {
           href={v.yt_url}
           target="_blank"
           rel="noreferrer"
-          aria-label={`Open on YouTube (no in-app song page): ${songTitle}`}
+          aria-label={`Watch on YouTube (no in-app song page): ${songTitle}`}
         >
           <VideoCardBody v={v} songTitle={songTitle} ytTitle={ytTitle} inApp={false} />
         </a>
@@ -745,19 +745,14 @@ export function VideosPage() {
               <h2 id="videos-featured-hero-heading" className="catalog-section-title">
                 Featured Video
               </h2>
-              <div
-                className="videos-page__featured-hero-embed"
-                style={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideoHero.format) }}
-              >
-                <iframe
-                  className="videos-page__featured-hero-iframe"
-                  src={youtubePrivacyEmbedSrc(featuredVideoHero.video_id)}
-                  title={featuredVideoHero.lyrics_title || featuredVideoHero.title || 'Featured video'}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  loading="lazy"
-                />
-              </div>
+              <YoutubeEmbeddedPlayer
+                videoId={featuredVideoHero.video_id}
+                title={featuredVideoHero.lyrics_title || featuredVideoHero.title || 'Featured video'}
+                embedWrapperClassName="videos-page__featured-hero-embed"
+                embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideoHero.format) }}
+                iframeClassName="videos-page__featured-hero-iframe"
+                facadeUntilClick
+              />
               <div className="videos-page__featured-hero-copy">
                 <h3 className="videos-page__featured-hero-title">{featuredVideoHero.lyrics_title || featuredVideoHero.title}</h3>
                 {(featuredVideoHero.lyrics_summary || '').trim() ? (

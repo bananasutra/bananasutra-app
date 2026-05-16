@@ -1,8 +1,8 @@
 import { useEffect, useRef, type RefObject } from 'react'
 import { loadSoundCloudWidgetApi, type SoundCloudWidget } from './soundcloudWidgetApi'
+import { YOUTUBE_EMBED_POST_MESSAGE_ORIGINS } from './youtubeEmbedUrl'
 
-const YT_MESSAGE_ORIGINS = new Set(['https://www.youtube-nocookie.com', 'https://www.youtube.com'])
-const YT_POST_TARGET = 'https://www.youtube-nocookie.com'
+const YT_MESSAGE_ORIGINS = new Set<string>([...YOUTUBE_EMBED_POST_MESSAGE_ORIGINS])
 
 /** YouTube IFrame API player states (subset). */
 const YT_PLAYER_STATE_PLAYING = 1
@@ -11,10 +11,12 @@ const YT_PLAYER_STATE_BUFFERING = 3
 function postMessagePauseYoutubeEmbed(iframe: HTMLIFrameElement | null): void {
   if (!iframe?.contentWindow) return
   const payload = JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' })
-  try {
-    iframe.contentWindow.postMessage(payload, YT_POST_TARGET)
-  } catch {
-    // ignore
+  for (const origin of YOUTUBE_EMBED_POST_MESSAGE_ORIGINS) {
+    try {
+      iframe.contentWindow.postMessage(payload, origin)
+    } catch {
+      // ignore
+    }
   }
 }
 
@@ -26,10 +28,12 @@ function postMessageYoutubeListeningHandshake(iframe: HTMLIFrameElement | null):
     JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }),
   ]
   for (const payload of payloads) {
-    try {
-      iframe.contentWindow.postMessage(payload, YT_POST_TARGET)
-    } catch {
-      // ignore
+    for (const origin of YOUTUBE_EMBED_POST_MESSAGE_ORIGINS) {
+      try {
+        iframe.contentWindow.postMessage(payload, origin)
+      } catch {
+        // ignore
+      }
     }
   }
 }

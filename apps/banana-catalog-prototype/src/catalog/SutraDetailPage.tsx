@@ -27,7 +27,7 @@ import { useSongCatalog } from './generatedData'
 import { songOnWordsSurface } from './wordsStory'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
-import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
+import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import { useExclusiveYoutubeSoundcloudPlayback } from './useExclusiveYoutubeSoundcloudPlayback'
 import {
   pickRandomSongbookFromPool,
@@ -527,22 +527,20 @@ export function SutraDetailPage() {
             {featuredSutraVideo ? (
               <div className="sutra-detail__feat">
                 <div className="sutra-detail__feat-embed sutra-detail__feat-embed--video-contained">
-                  <div
-                    className="sutra-detail__featured-video-aspect"
-                    style={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
-                  >
-                    <iframe
-                      ref={youtubeExclusiveRef}
-                      className="sutra-detail__yt-embed"
-                      src={youtubePrivacyEmbedSrc(featuredSutraVideo.video_id, {
-                        enableJsApi: sutraExclusivePlaybackEnabled,
-                      })}
-                      title={featuredSutraVideo.lyrics_title || featuredSutraVideo.title || `${entry.sutra} featured video`}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      loading="lazy"
-                    />
-                  </div>
+                  <YoutubeEmbeddedPlayer
+                    videoId={featuredSutraVideo.video_id}
+                    title={
+                      featuredSutraVideo.lyrics_title ||
+                      featuredSutraVideo.title ||
+                      `${entry.sutra} featured video`
+                    }
+                    enableJsApi={sutraExclusivePlaybackEnabled}
+                    iframeRef={youtubeExclusiveRef}
+                    embedWrapperClassName="sutra-detail__featured-video-aspect"
+                    embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
+                    iframeClassName="sutra-detail__yt-embed"
+                    facadeUntilClick
+                  />
                 </div>
                 <div className="sutra-detail__feat-copy">
                   <h3 className="sutra-detail__feat-title">{featuredSutraVideo.lyrics_title || featuredSutraVideo.title}</h3>

@@ -17,7 +17,7 @@ import { SongThumbCard } from './SongThumbCard'
 import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
-import { youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
+import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import { useExclusiveYoutubeSoundcloudPlayback } from './useExclusiveYoutubeSoundcloudPlayback'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import type { YouTubeCatalogVideo } from './types'
@@ -354,22 +354,16 @@ export function SongbookPage() {
                 <h2 id="songbook-featured-video-heading" className="catalog-section-title">
                   Featured Video
                 </h2>
-                <div
-                  className="songbooks-page__featured-video-embed"
-                  style={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSongbookVideo.format) }}
-                >
-                  <iframe
-                    ref={youtubeExclusiveRef}
-                    className="songbooks-page__featured-video-iframe"
-                    src={youtubePrivacyEmbedSrc(featuredSongbookVideo.video_id, {
-                      enableJsApi: songbookExclusivePlaybackEnabled,
-                    })}
-                    title={featuredSongbookVideo.lyrics_title || featuredSongbookVideo.title || 'Featured video'}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    loading="lazy"
-                  />
-                </div>
+                <YoutubeEmbeddedPlayer
+                  videoId={featuredSongbookVideo.video_id}
+                  title={featuredSongbookVideo.lyrics_title || featuredSongbookVideo.title || 'Featured video'}
+                  enableJsApi={songbookExclusivePlaybackEnabled}
+                  iframeRef={youtubeExclusiveRef}
+                  embedWrapperClassName="songbooks-page__featured-video-embed"
+                  embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSongbookVideo.format) }}
+                  iframeClassName="songbooks-page__featured-video-iframe"
+                  facadeUntilClick
+                />
                 <div className="songbooks-page__featured-video-copy">
                   <h3 className="songbooks-page__featured-video-title">
                     {featuredSongbookVideo.lyrics_title || featuredSongbookVideo.title}
