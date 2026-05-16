@@ -43,6 +43,7 @@ function injectHtml(template, { headHtml, bodyHtml }) {
       .replace(/<meta\s+name="twitter:[^"]+"[^>]*>\s*/gi, '')
       .replace(/<meta\s+name="description"[^>]*>\s*/gi, '')
       .replace(/<link\s+rel="canonical"[^>]*>\s*/gi, '')
+      .replace(/<script\s+type="application\/ld\+json"[\s\S]*?<\/script>\s*/gi, '')
     html = html.replace('</head>', `    ${headHtml}\n  </head>`)
   }
   // Vite 8+ puts module scripts in <head>; match outer #root through its closing tag before </body>.

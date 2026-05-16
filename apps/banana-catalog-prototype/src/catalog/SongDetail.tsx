@@ -15,7 +15,13 @@ import { GlobalFooter } from './GlobalFooter'
 import { SoundCloudEmbed } from './SoundCloudEmbed'
 import { YouTubeEmbed } from './YouTubeEmbed'
 import { loadSoundCloudWidgetApi } from './soundcloudWidgetApi'
-import { catalogPathSlugFromTitleAndSlug, lyricsIdFromSongUrlSlug, songCatalogPath } from './songPaths'
+import {
+  catalogPathSlugFromTitleAndSlug,
+  lyricsIdFromSongUrlSlug,
+  browseRowHasAudioSection,
+  songCatalogLinkTo,
+  songCatalogPath,
+} from './songPaths'
 import { songbookHref } from './songbooks'
 import { sutraClassName } from './sutraTheme'
 import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, YouTubeCatalogVideo } from './types'
@@ -133,7 +139,7 @@ export function SongDetail() {
 function SongDetailInvalidSlug({ urlSlug }: { urlSlug: string }) {
   return (
     <div className="catalog catalog-page catalog-page--shell">
-      <PageMeta title="Song not found" path={urlSlug ? `/songs/${urlSlug}` : undefined} />
+      <PageMeta title="Song not found" path={urlSlug ? songCatalogPath('', urlSlug) : undefined} />
       <div className="catalog-page__main">
         <main id="main-content" className="song-detail song-detail--missing catalog-layout-shell">
           <p className="song-detail-missing-title">No song for this link.</p>
@@ -195,7 +201,7 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
     if (!detail || !canonicalSlug) return
     if (urlSlug === canonicalSlug) return
     const tail = fullSearch ? `?${fullSearch}` : ''
-    navigate(`/songs/${canonicalSlug}${tail}`, { replace: true, state: location.state })
+    navigate(`${songCatalogPath(detail.lyrics_title, canonicalSlug)}${tail}`, { replace: true, state: location.state })
   }, [detail, urlSlug, canonicalSlug, fullSearch, navigate, location.state])
 
   const pageMeta = (
@@ -209,7 +215,7 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
           : undefined
       }
       image={detail && canonicalSlug ? songOgImageUrl(canonicalSlug) : undefined}
-      path={detail && canonicalSlug ? `/songs/${canonicalSlug}` : undefined}
+      path={detail && canonicalSlug ? songCatalogPath(detail.lyrics_title, canonicalSlug) : undefined}
       publishedAt={songCatalogByLyricsId.get(lyricsId)?.published_at || detail?.tracks?.[0]?.created_at}
       jsonLd={
         detail && canonicalSlug ? songRecordingJsonLd(detail, canonicalSlug, { songbookTitle: detail.songbook }) : undefined
@@ -1120,10 +1126,12 @@ function SongDetailLoaded({
                   return (
                     <li key={related.lyrics_id} className="song-thumb-grid__cell">
                       <SongThumbCard
-                        to={{
-                          pathname: songCatalogPath(related.lyrics_title, related.url_slug),
-                          search: location.search,
-                        }}
+                        to={songCatalogLinkTo(related.lyrics_title, related.url_slug, {
+                          section: (() => {
+                            const row = songCatalogByLyricsId.get(related.lyrics_id)
+                            return row && browseRowHasAudioSection(row) ? 'audio' : undefined
+                          })(),
+                        })}
                         coverUrl={related.cover_image_url}
                         title={related.lyrics_title}
                         metaLabel={sutra || undefined}

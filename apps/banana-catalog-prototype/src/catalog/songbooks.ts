@@ -1,5 +1,6 @@
 import songbookCatalogJson from '../data/generated/songbook_catalog.json'
 import type { SongbookCatalogItem } from './types'
+import { songbookCatalogPath } from './songPaths'
 import { songbookToUrlSlug } from './slugify'
 
 const songbookCatalog = songbookCatalogJson as SongbookCatalogItem[]
@@ -33,5 +34,5 @@ export function songbookByName(name: string): SongbookWithSlug | undefined {
 export function songbookHref(name: string): string {
   const known = songbookByName(name)
   const slug = known?.slug ?? songbookToUrlSlug(name)
-  return `/songbooks/${slug}`
+  return songbookCatalogPath(slug)
 }

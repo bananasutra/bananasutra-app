@@ -31,7 +31,7 @@ export function songRecordingJsonLd(
   canonicalSlug: string,
   options?: { songbookTitle?: string },
 ): Record<string, unknown> {
-  const url = `${SITE_URL}/songs/${canonicalSlug}`
+  const url = `${SITE_URL}/songs/${canonicalSlug}/`
   const lyricsRaw = (detail.lyrics_extract || '').trim()
   const firstTrack = detail.tracks?.[0]
   const genres = [
@@ -92,7 +92,7 @@ export function musicAlbumJsonLd(
     '@context': 'https://schema.org',
     '@type': 'MusicAlbum',
     name: songbookTitle,
-    url: `${SITE_URL}/songbooks/${slug}`,
+    url: `${SITE_URL}/songbooks/${slug}/`,
     description: description.trim() || `${songbookTitle} — a curated BANANASUTRA songbook.`,
     byArtist: {
       '@type': 'MusicGroup',
@@ -111,7 +111,7 @@ export function songbookItemListJsonLd(
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: songbookTitle,
-    url: `${SITE_URL}/songbooks/${slug}`,
+    url: `${SITE_URL}/songbooks/${slug}/`,
     itemListElement: songTitles.slice(0, 50).map((name, i) => ({
       '@type': 'ListItem',
       position: i + 1,
@@ -129,7 +129,7 @@ export function sutraCreativeWorkJsonLd(
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     name: `${familyKey} · Sutra`,
-    url: `${SITE_URL}/about/${slug}`,
+    url: `${SITE_URL}/about/${slug}/`,
     description:
       description?.trim() ||
       `Explore the ${familyKey} sutra — songs, featured video, and related songbooks.`,
