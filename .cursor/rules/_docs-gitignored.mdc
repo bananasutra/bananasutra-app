@@ -9,6 +9,6 @@ alwaysApply: true
 
 **Disk:** Git **does not delete** an existing local `_docs/` when you pull, merge, or rewrite remote history. **Never** tell the user to delete `_docs/` to “fix” git. **Never** run `git clean -fdx` without warning — it can remove ignored folders depending on flags.
 
-**Agents:** Use **tracked** docs only (`README.md`, `apps/**/docs/`, `workers/**/README.md`, `.github/`). Root `README.md` has a short human section on this policy.
+**Agents:** Use **tracked** docs only (`README.md`, `apps/**/docs/`, `workers/**/README.md`, `.github/`). Git/release workflow: **`.cursor/rules/git-release-workflow.mdc`**. Root `README.md` has a short human section on this policy.
 
 **What enforces this:** `.gitignore` + this rule + your discipline. **`.cursor/rules/`** only steers Cursor; it cannot retroactively erase past GitHub leaks (history rewrite + force push handles old commits).
