@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useMusesCatalog } from './generatedData'
 import type { MuseCatalogItem } from './types'
+import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 
 const INITIAL_MUSE_COUNT = 40
@@ -146,7 +147,7 @@ export function MuseCardGrid() {
   const pageMeta = renderPageMeta({
     title: 'The Muses',
     description: 'Explore the thinkers, fools, poets, and troublemakers who inspired BANANASUTRA songs.',
-    path: '/about/muses',
+    path: canonicalPathForRoute('/about/muses'),
   })
 
   useEffect(() => {

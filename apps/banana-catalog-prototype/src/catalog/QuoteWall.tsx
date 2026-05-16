@@ -5,6 +5,7 @@ import type { QuoteWallItem } from './types'
 import { sutraClassName } from './sutraTheme'
 import { SUTRA_CONTEXT, sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
 import { songCatalogPath } from './songPaths'
+import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 
 function formatCount(n: number): string {
@@ -61,7 +62,7 @@ export function QuoteWall() {
   const pageMeta = renderPageMeta({
     title: 'The Quotes',
     description: 'Explore the quotes and ideas behind BANANASUTRA songs, grouped by theme.',
-    path: '/about/quotes',
+    path: canonicalPathForRoute('/about/quotes'),
   })
 
   const topicOptions = useMemo(() => {

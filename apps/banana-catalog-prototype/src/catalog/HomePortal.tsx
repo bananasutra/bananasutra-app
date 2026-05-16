@@ -15,7 +15,8 @@ import {
 import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
 import { SongThumbCard } from './SongThumbCard'
 import type { SongCatalogItem, SongbookCatalogItem } from './types'
-import { buildBrowsePathForFacet, searchHasBrowseParams } from './urlState'
+import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
+import { buildBrowsePathForFacet, CATALOG_BROWSE_PATH, searchHasBrowseParams } from './urlState'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { SUTRA_CONTEXT, sutraHrefForFamily } from './sutraContext'
 import { PageMeta } from './PageMeta'
@@ -226,7 +227,7 @@ export function HomePortal() {
   useSyncCatalogHeaderHeight(pageRef, headerRef, [fullSearch])
 
   if (legacyRedirect) {
-    return <Navigate to={{ pathname: '/songs', search: location.search }} replace />
+    return <Navigate to={{ pathname: CATALOG_BROWSE_PATH, search: location.search }} replace />
   }
 
   return (
@@ -282,7 +283,7 @@ export function HomePortal() {
             ) : null}
             <p className="home-portal__hero-why">
               <span className="home-portal__hero-why-inner">
-                <Link to="/about#sutras">About sutras</Link>
+                <Link to={ABOUT_SUTRAS_HREF}>About sutras</Link>
                 {primarySutraDisplay ? (
                   <>
                     <span className="home-portal__hero-why-sep" aria-hidden>
@@ -348,7 +349,7 @@ export function HomePortal() {
                   </Link>
                 </div>
               </div>
-              <Link className="catalog-section-cta" to="/songbooks">
+              <Link className="catalog-section-cta" to={canonicalPathForRoute('/songbooks')}>
                 All {formatCount(songbooksCount)} songbooks →
               </Link>
             </section>
@@ -373,7 +374,7 @@ export function HomePortal() {
                 </li>
               ))}
             </ul>
-            <Link className="catalog-section-cta" to="/songs?sort=newest">
+            <Link className="catalog-section-cta" to={browsePathWithQuery('/songs', 'sort=newest')}>
               Browse newest →
             </Link>
           </section>
@@ -384,7 +385,7 @@ export function HomePortal() {
             </h2>
             <ul className="about-page__how-grid">
               <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to="/songs#catalog-songs-find-input">
+                <Link className="about-page__how-card" to={`${CATALOG_BROWSE_PATH}#catalog-songs-find-input`}>
                   <span className="about-page__how-label">Search &amp; Discover →</span>
                   <span className="about-page__how-stat">
                     {`${formatCount(searchDiscoverRowCount)} songs & lyrics · find + filters`}
@@ -395,7 +396,7 @@ export function HomePortal() {
                 </Link>
               </li>
               <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to="/songbooks">
+                <Link className="about-page__how-card" to={canonicalPathForRoute('/songbooks')}>
                   <span className="about-page__how-label">Browse Songbooks →</span>
                   <span className="about-page__how-stat">{formatCount(buildSummaryCount('songbooks'))} curated collections</span>
                   <span className="about-page__how-desc">
@@ -404,7 +405,7 @@ export function HomePortal() {
                 </Link>
               </li>
               <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to="/songs">
+                <Link className="about-page__how-card" to={CATALOG_BROWSE_PATH}>
                   <span className="about-page__how-label">Explore the fool catalog →</span>
                   <span className="about-page__how-stat">
                     {`${formatCount(songsBrowseGridCount)} songs · meaning-first`}
@@ -415,7 +416,7 @@ export function HomePortal() {
                 </Link>
               </li>
               <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to="/tracks">
+                <Link className="about-page__how-card" to={canonicalPathForRoute('/tracks')}>
                   <span className="about-page__how-label">Listen to Top Tracks →</span>
                   <span className="about-page__how-stat">
                     {formatCount(buildSummaryCount('track_catalog_rows'))} tracks · sound-first
@@ -426,7 +427,7 @@ export function HomePortal() {
                 </Link>
               </li>
               <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to="/videos">
+                <Link className="about-page__how-card" to={canonicalPathForRoute('/videos')}>
                   <span className="about-page__how-label">Watch Music Videos →</span>
                   <span className="about-page__how-stat">
                     {formatCount(buildSummaryCount('youtube_video_rows'))} videos · eyes first
@@ -437,7 +438,7 @@ export function HomePortal() {
                 </Link>
               </li>
               <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to="/words">
+                <Link className="about-page__how-card" to={canonicalPathForRoute('/words')}>
                   <span className="about-page__how-label">Read the Words →</span>
                   <span className="about-page__how-stat">
                     {formatCount(wordsSurfaceCount)} lyrics-first songs
@@ -448,7 +449,7 @@ export function HomePortal() {
                 </Link>
               </li>
             </ul>
-            <Link className="catalog-section-cta" to="/about">
+            <Link className="catalog-section-cta" to={canonicalPathForRoute('/about')}>
               About Bananasutra →
             </Link>
           </section>

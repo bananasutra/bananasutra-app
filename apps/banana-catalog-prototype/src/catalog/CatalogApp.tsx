@@ -25,6 +25,7 @@ import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
 import { CatalogPager } from './CatalogPager'
 import './CatalogPager.css'
+import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { loadSongSearchDeep, useSongCatalogBrowse } from './generatedData'
@@ -115,7 +116,7 @@ export function CatalogApp() {
   const pageMeta = renderPageMeta({
     title: 'Songs Catalog',
     description: 'Browse all BANANASUTRA songs. Filter by sutra, topic, intention, genre, and language.',
-    path: '/songs',
+    path: canonicalPathForRoute('/songs'),
   })
 
   useEffect(() => {
@@ -435,7 +436,7 @@ export function CatalogApp() {
             Every song in the collection, meaning-first. Filter by sutra, light or shadow, topic, intention, or
             language. Each song has a
             short paragraph on why it exists, and music you can play right here. Lyrics-only pieces live on{' '}
-            <Link to="/words">Words</Link>.
+            <Link to={canonicalPathForRoute('/words')}>Words</Link>.
           </p>
         </div>
 
@@ -485,7 +486,8 @@ export function CatalogApp() {
             <section className="catalog-facet" aria-labelledby="catalog-media-heading">
               <h3 id="catalog-media-heading">Media</h3>
               <p className="catalog-facet-help" id="catalog-media-desc">
-                Filter by media paths for songs with listener media. Lyrics-only pieces are on <Link to="/words">Words</Link>.
+                Filter by media paths for songs with listener media. Lyrics-only pieces are on{' '}
+                <Link to={canonicalPathForRoute('/words')}>Words</Link>.
               </p>
               <div className="catalog-facet-chips" role="group" aria-describedby="catalog-media-desc">
                 {MEDIA_FILTER_OPTIONS.map(({ id, label }) => {

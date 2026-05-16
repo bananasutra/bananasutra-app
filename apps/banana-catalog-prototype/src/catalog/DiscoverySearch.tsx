@@ -34,6 +34,7 @@ import type {
   YouTubeCatalogVideo,
 } from './types'
 import { emptyTracksFilterState } from './types'
+import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import {
   buildBrowsePathForFacet,
   buildTracksBrowsePath,
@@ -472,7 +473,7 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
       case 'songbooks': {
         const n = songbookResultGroups.length
         return {
-          href: '/songbooks',
+          href: canonicalPathForRoute('/songbooks'),
           label: 'See all songbooks',
           count: n > 0 ? n : null,
         }
@@ -490,7 +491,9 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
         const n = tracksTabRowCount
         const hasMatches = Boolean(q && n > 0)
         return {
-          href: q ? buildTracksBrowsePathFull(emptyTracksFilterState(), q, 1, undefined, 'likes') : '/tracks',
+          href: q
+            ? buildTracksBrowsePathFull(emptyTracksFilterState(), q, 1, undefined, 'likes')
+            : canonicalPathForRoute('/tracks'),
           label: hasMatches ? `See all top tracks with "${q}"` : 'See all top tracks',
           count: hasMatches ? n : headerBrowseTrackCount,
         }
@@ -499,7 +502,7 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
         const n = videosTabGroupsAll.length
         const hasMatches = Boolean(q && n > 0)
         return {
-          href: enc ? `/videos?find=${enc}` : '/videos',
+          href: enc ? browsePathWithQuery('/videos', `find=${enc}`) : canonicalPathForRoute('/videos'),
           label: hasMatches ? `See all videos with "${q}"` : 'See all videos',
           count: hasMatches ? n : null,
         }
@@ -549,7 +552,11 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
       const title = (group.lyrics_title || '').trim()
       if (lid === '__unlinked__') {
         const find = debounced.trim()
-        navigate(find ? `/videos?find=${encodeURIComponent(find)}&link=off_site` : '/videos?link=off_site')
+        navigate(
+          find
+            ? browsePathWithQuery('/videos', `find=${encodeURIComponent(find)}&link=off_site`)
+            : browsePathWithQuery('/videos', 'link=off_site'),
+        )
         setOpen(false)
         return
       }
@@ -834,7 +841,11 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
                     )
                   })}
                 </ul>
-                <Link className="discovery-search__browse-all" to="/tracks" onClick={() => setOpen(false)}>
+                <Link
+                  className="discovery-search__browse-all"
+                  to={canonicalPathForRoute('/tracks')}
+                  onClick={() => setOpen(false)}
+                >
                   <span className="discovery-search__browse-all-label">Browse all tracks</span>
                   <span className="discovery-search__browse-all-count">{headerBrowseTrackCount}</span>
                   <span className="discovery-search__browse-all-chev" aria-hidden>
