@@ -20,7 +20,8 @@ import {
 } from './sutraPageUtils'
 import type { SutraFamilyKey } from './sutraContext'
 import { SongThumbCard } from './SongThumbCard'
-import { usePageMeta } from './usePageMeta'
+import { sutraCreativeWorkJsonLd } from '../seo/jsonLd'
+import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { songOnWordsSurface } from './wordsStory'
@@ -170,13 +171,16 @@ export function SutraDetailPage() {
   const familyKey = resolved?.key ?? null
   const entry = resolved?.entry ?? null
 
-  usePageMeta({
+  const trimmedSlug = (slug || '').trim()
+  const pageMeta = renderPageMeta({
     title: entry && familyKey ? `${familyKey} · Sutra` : 'Sutra',
     description:
       entry && familyKey
         ? `Explore the ${familyKey} sutra — songs, featured video, and related songbooks.`
         : 'BANANASUTRA sutra detail.',
-    path: slug && entry ? `/about/${slug.trim()}` : undefined,
+    path: entry ? `/about/${trimmedSlug}` : undefined,
+    jsonLd:
+      entry && familyKey ? sutraCreativeWorkJsonLd(familyKey, trimmedSlug, entry.sutra_when) : undefined,
   })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [slug])
 
@@ -371,6 +375,7 @@ export function SutraDetailPage() {
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
+      {pageMeta}
       <GlobalHeader ref={headerRef} />
 
       <div className="catalog-page__main">

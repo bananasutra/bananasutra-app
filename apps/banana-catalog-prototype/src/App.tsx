@@ -1,4 +1,5 @@
 import { Component, lazy, Suspense, type ReactNode, useEffect, useLayoutEffect, useState } from 'react'
+import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
 import { NavigationLoadingBridge } from './NavigationLoadingBridge'
 import { loadSongCatalogBrowse, loadYoutubeByLyricsId } from './catalog/generatedData'
@@ -164,7 +165,7 @@ export default function App() {
       : undefined
 
   return (
-    <>
+    <HelmetProvider>
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
@@ -297,6 +298,6 @@ export default function App() {
           <Route path="*" element={<NotFoundRoute />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </HelmetProvider>
   )
 }

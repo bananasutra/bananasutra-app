@@ -4,7 +4,7 @@
 
 import { detectBotPattern } from "./botDetection.ts";
 import { rewriteHtmlMetadata } from "./metaRewriter.ts";
-import { getRouteMeta, getSeoMetadata } from "./seoMetadata.ts";
+import { getRouteMeta, getSeoMetadata, normalizePathnameForLookup } from "./seoMetadata.ts";
 import { requestMayNeedSpaShell } from "./spaShell.ts";
 
 function isHtmlResponse(response: Response): boolean {
@@ -24,6 +24,33 @@ async function fetchShellDocumentGet(
   fetcher: typeof fetch,
 ): Promise<Response> {
   return fetcher(new Request(`${origin}/`, { method: "GET" }));
+}
+
+async function fetchNotFoundHtml(
+  origin: string,
+  fetcher: typeof fetch,
+): Promise<Response> {
+  const res = await fetcher(new Request(`${origin}/404.html`, { method: "GET" }));
+  if (res.ok && isHtmlResponse(res)) {
+    return new Response(res.body, {
+      status: 404,
+      statusText: "Not Found",
+      headers: cloneHeadersForShellResponse(res.headers),
+    });
+  }
+  return new Response("Not Found", {
+    status: 404,
+    headers: { "content-type": "text/html; charset=utf-8" },
+  });
+}
+
+async function isKnownCatalogRoute(
+  request: Request,
+  fetcher: typeof fetch,
+): Promise<boolean> {
+  const metadata = await getSeoMetadata(fetcher);
+  const key = normalizePathnameForLookup(new URL(request.url));
+  return Object.hasOwn(metadata.routes, key);
 }
 
 async function applyBotRewrite(
@@ -68,10 +95,17 @@ export async function handleRequest(
     if (botPattern === null) {
       return originResponse;
     }
+    if (await isKnownCatalogRoute(request, fetcher)) {
+      return originResponse;
+    }
     return applyBotRewrite(originResponse, request, fetcher, botPattern);
   }
 
   const url = new URL(request.url);
+
+  if (!(await isKnownCatalogRoute(request, fetcher))) {
+    return fetchNotFoundHtml(url.origin, fetcher);
+  }
 
   if (request.method === "HEAD") {
     const headRes = await fetcher(new Request(`${url.origin}/`, { method: "HEAD" }));

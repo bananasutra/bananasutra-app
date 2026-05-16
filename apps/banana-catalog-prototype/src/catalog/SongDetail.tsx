@@ -21,7 +21,8 @@ import { sutraClassName } from './sutraTheme'
 import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, YouTubeCatalogVideo } from './types'
 import { sutraHrefFromSongSutraField } from './sutraPageUtils'
 import { buildBrowsePathForFacet, CATALOG_BROWSE_PATH } from './urlState'
-import { songOgImageUrl, usePageMeta } from './usePageMeta'
+import { songRecordingJsonLd } from '../seo/jsonLd'
+import { PageMeta, songOgImageUrl } from './PageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { SongThumbCard } from './SongThumbCard'
 import { useSongCatalogAndDetail, loadYoutubeByLyricsId } from './generatedData'
@@ -118,8 +119,32 @@ function lyricsCollapsedMaxPx(): number {
 
 export function SongDetail() {
   const { slug = '' } = useParams()
-  const lyricsId = lyricsIdFromSongUrlSlug(slug) ?? ''
-  return <SongDetailInner key={lyricsId || `missing-${slug}`} lyricsId={lyricsId} urlSlug={slug.trim()} />
+  const trimmed = slug.trim()
+  if (!trimmed || trimmed === 'null' || trimmed === 'undefined') {
+    return <SongDetailInvalidSlug urlSlug={trimmed} />
+  }
+  const lyricsId = lyricsIdFromSongUrlSlug(trimmed)
+  if (!lyricsId) {
+    return <SongDetailInvalidSlug urlSlug={trimmed} />
+  }
+  return <SongDetailInner key={lyricsId} lyricsId={lyricsId} urlSlug={trimmed} />
+}
+
+function SongDetailInvalidSlug({ urlSlug }: { urlSlug: string }) {
+  return (
+    <div className="catalog catalog-page catalog-page--shell">
+      <PageMeta title="Song not found" path={urlSlug ? `/songs/${urlSlug}` : undefined} />
+      <div className="catalog-page__main">
+        <main id="main-content" className="song-detail song-detail--missing catalog-layout-shell">
+          <p className="song-detail-missing-title">No song for this link.</p>
+          <p className="song-detail-missing-hint">The link may be outdated or not in the current snapshot.</p>
+          <Link to="/songs" className="song-detail-back">
+            ← Back to Songs
+          </Link>
+        </main>
+      </div>
+    </div>
+  )
 }
 
 /** Shell: canonical slug redirect, missing-song UI, and chrome sync — no hooks after `if (!detail)`. */
@@ -173,23 +198,31 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
     navigate(`/songs/${canonicalSlug}${tail}`, { replace: true, state: location.state })
   }, [detail, urlSlug, canonicalSlug, fullSearch, navigate, location.state])
 
-  // SEO (R19): same title/description rules as `seo-metadata.json` — see _docs/planning/SEO/SEO-METADATA-PARITY-R19.md
-  usePageMeta({
-    title: detail ? `${detail.lyrics_title} · Song` : dataLoading ? 'Song' : 'Song not found',
-    description: detail
-      ? (detail.lyrics_summary || '').trim() ||
-        (detail.lyrics_extract || '').trim().split(/\r?\n/).filter(Boolean)[0] ||
-        `Listen to ${detail.lyrics_title} on BANANASUTRA.`
-      : undefined,
-    image: detail && canonicalSlug ? songOgImageUrl(canonicalSlug) : undefined,
-    path: detail && canonicalSlug ? `/songs/${canonicalSlug}` : undefined,
-  })
+  const pageMeta = (
+    <PageMeta
+      title={detail ? `${detail.lyrics_title} · Song` : dataLoading ? 'Song' : 'Song not found'}
+      description={
+        detail
+          ? (detail.lyrics_summary || '').trim() ||
+            (detail.lyrics_extract || '').trim().split(/\r?\n/).filter(Boolean)[0] ||
+            `Listen to ${detail.lyrics_title} on BANANASUTRA.`
+          : undefined
+      }
+      image={detail && canonicalSlug ? songOgImageUrl(canonicalSlug) : undefined}
+      path={detail && canonicalSlug ? `/songs/${canonicalSlug}` : undefined}
+      publishedAt={songCatalogByLyricsId.get(lyricsId)?.published_at || detail?.tracks?.[0]?.created_at}
+      jsonLd={
+        detail && canonicalSlug ? songRecordingJsonLd(detail, canonicalSlug, { songbookTitle: detail.songbook }) : undefined
+      }
+    />
+  )
 
   useSyncCatalogHeaderHeight(pageRef, headerRef, [detail?.lyrics_id, detail?.lyrics_title, catalogSearch])
 
   if (dataLoading) {
     return (
       <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
+        {pageMeta}
         <GlobalHeader ref={headerRef} />
         <div className="catalog-page__main">
           <main id="main-content" className="song-detail catalog-layout-shell">
@@ -204,6 +237,7 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
   if (dataError || !detailMap || !songCatalogRows) {
     return (
       <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
+        {pageMeta}
         <GlobalHeader ref={headerRef} />
         <div className="catalog-page__main">
           <main id="main-content" className="song-detail song-detail--missing catalog-layout-shell">
@@ -222,6 +256,7 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
   if (!detail) {
     return (
       <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
+        {pageMeta}
         <GlobalHeader ref={headerRef} />
         <div className="catalog-page__main">
           <main id="main-content" className="song-detail song-detail--missing catalog-layout-shell">
@@ -238,15 +273,18 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
   }
 
   return (
-    <SongDetailLoaded
-      detail={detail}
-      lyricsId={lyricsId}
-      pageRef={pageRef}
-      headerRef={headerRef}
-      listBreadcrumbHref={listBreadcrumbHref}
-      listBreadcrumbLabel={listBreadcrumbLabel}
-      songCatalogByLyricsId={songCatalogByLyricsId}
-    />
+    <>
+      {pageMeta}
+      <SongDetailLoaded
+        detail={detail}
+        lyricsId={lyricsId}
+        pageRef={pageRef}
+        headerRef={headerRef}
+        listBreadcrumbHref={listBreadcrumbHref}
+        listBreadcrumbLabel={listBreadcrumbLabel}
+        songCatalogByLyricsId={songCatalogByLyricsId}
+      />
+    </>
   )
 }
 

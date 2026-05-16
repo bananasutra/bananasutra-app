@@ -22,6 +22,20 @@ const SITE_URL = 'https://bananasutra.com'
 /** Non-song routes — composite `dist/og/site.png` (630 slot + copy). Keep in sync with `ogSongCard.mjs` + `usePageMeta.ts`. */
 const SITE_OG_CARD_IMAGE = `${SITE_URL}/og/site.png`
 
+/** Match `pageMetaConstants.ts` `padMetaDescription` (SEO parity). */
+const META_DESC_MIN_LEN = 100
+const META_DESC_PAD =
+  'Part of the BANANASUTRA catalog — explore sutras, songbooks, lyrics, SoundCloud tracks, and curated playlists.'
+
+function padMetaDescription(raw) {
+  const d = (raw || '').trim()
+  if (d.length >= META_DESC_MIN_LEN) return d
+  const punct = d && !d.endsWith('.') ? '.' : ''
+  const combo = `${d}${punct} ${META_DESC_PAD}`.trim()
+  if (combo.length >= META_DESC_MIN_LEN) return combo
+  return combo.padEnd(META_DESC_MIN_LEN, '—').slice(0, META_DESC_MIN_LEN).trimEnd()
+}
+
 function songOgImageUrl(pathSlug) {
   return `${SITE_URL}/og/songs/${pathSlug}.png`
 }
@@ -103,15 +117,22 @@ function readJson(rel) {
   return JSON.parse(fs.readFileSync(p, 'utf8'))
 }
 
-function routeEntry(shortTitle, description, pathname, image = SITE_OG_CARD_IMAGE) {
-  const desc = description ?? DEFAULT_DESC
-  return {
+function routeEntry(shortTitle, description, pathname, image = SITE_OG_CARD_IMAGE, publishedAt = '') {
+  const desc = padMetaDescription(description ?? DEFAULT_DESC)
+  const entry = {
     title: publicTitle(shortTitle),
     description: desc,
     canonical: `${SITE_URL}${pathname}`,
     type: 'website',
     image,
+    author: 'BANANASUTRA',
   }
+  const pub = (publishedAt || '').trim()
+  if (pub) {
+    const iso = pub.includes('T') ? pub : `${pub.slice(0, 10)}T00:00:00Z`
+    entry.publishedAt = iso
+  }
+  return entry
 }
 
 function main() {
@@ -262,7 +283,16 @@ function main() {
     const pathSlug = catalogPathSlugFromTitleAndSlug(lyricsTitle, urlSlug)
     const pathname = `/songs/${pathSlug}`
     const shortTitle = `${lyricsTitle} · Song`
-    addRoute(pathname, routeEntry(shortTitle, songDescription(detail, row), pathname, songOgImageUrl(pathSlug)))
+    addRoute(
+      pathname,
+      routeEntry(
+        shortTitle,
+        songDescription(detail, row),
+        pathname,
+        songOgImageUrl(pathSlug),
+        row.published_at || '',
+      ),
+    )
   }
   if (missingDetail) {
     console.warn(`generate-seo-metadata: ${missingDetail} browse row(s) missing song_detail.json entry — used browse fallbacks`)

@@ -8,7 +8,7 @@ import {
   sutraHrefForFamily,
   type SutraContextEntry,
 } from './sutraContext'
-import { usePageMeta } from './usePageMeta'
+import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import './CatalogApp.css'
 import './SitemapPage.css'
@@ -73,7 +73,7 @@ export function SitemapPage() {
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
 
-  usePageMeta({
+  const pageMeta = renderPageMeta({
     title: 'Sitemap',
     description: 'Full sitemap of BANANASUTRA — all pages, all sutras, all ways to explore.',
     path: '/sitemap',
@@ -82,6 +82,7 @@ export function SitemapPage() {
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
+      {pageMeta}
       <GlobalHeader ref={headerRef} />
 
       <div className="catalog-page__main">

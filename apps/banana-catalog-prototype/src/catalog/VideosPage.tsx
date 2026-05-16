@@ -9,7 +9,7 @@ import { songCatalogPath } from './songPaths'
 import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
 import type { SongCatalogItem, YouTubeCatalogVideo } from './types'
-import { usePageMeta } from './usePageMeta'
+import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { ScrollRail } from './ScrollRail'
 import { CatalogPager } from './CatalogPager'
@@ -308,7 +308,7 @@ export function VideosPage() {
     .filter(Boolean)
     .join(' · ')
   const videosMetaTitle = titleSuffix ? `Music Videos · ${titleSuffix}` : 'Music Videos'
-  usePageMeta({
+  const pageMeta = renderPageMeta({
     title: videosMetaTitle,
     description: 'BANANASUTRA music videos on YouTube. Browse by sutra, topic, and intention.',
     path: '/videos',
@@ -718,6 +718,7 @@ export function VideosPage() {
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
+      {pageMeta}
       <GlobalHeader ref={headerRef} />
       <div className="catalog-page__main">
         <div className="videos-page catalog-layout-shell">

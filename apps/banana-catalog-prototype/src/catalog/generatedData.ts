@@ -456,3 +456,43 @@ export async function loadYoutubeByLyricsId(): Promise<Record<string, YouTubeCat
   }
   return youtubePromise
 }
+
+/** R24 pre-render: seed module caches from disk (call before `renderToString`). */
+export function seedBuildTimeCatalogCaches(data: {
+  songCatalog?: SongCatalogItem[]
+  songCatalogBrowse?: SongCatalogItem[]
+  songDetail?: Record<string, SongDetailRecord>
+  songSearchDeep?: Record<string, string>
+  muses?: MuseCatalogItem[]
+  quotes?: QuoteWallItem[]
+  youtubeByLyricsId?: Record<string, YouTubeCatalogVideo[]>
+}): void {
+  if (data.songCatalog) {
+    songCatalogResolved = data.songCatalog
+    songCatalogPromise = null
+  }
+  if (data.songCatalogBrowse) {
+    songCatalogBrowseResolved = data.songCatalogBrowse
+    songCatalogBrowsePromise = null
+  }
+  if (data.songDetail) {
+    songDetailResolved = data.songDetail
+    songDetailPromise = null
+  }
+  if (data.songSearchDeep) {
+    songSearchDeepResolved = data.songSearchDeep
+    songSearchDeepPromise = null
+  }
+  if (data.muses) {
+    musesCatalogResolved = data.muses
+    musesCatalogPromise = null
+  }
+  if (data.quotes) {
+    quotesWallResolved = data.quotes
+    quotesWallPromise = null
+  }
+  if (data.youtubeByLyricsId) {
+    youtubeResolved = data.youtubeByLyricsId
+    youtubePromise = null
+  }
+}
