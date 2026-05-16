@@ -1021,7 +1021,7 @@ function SongDetailLoaded({
                     </p>
                     {focusedYoutubeVideo.yt_url ? (
                       <a className="song-detail-youtube-open" href={focusedYoutubeVideo.yt_url} target="_blank" rel="noreferrer">
-                        Open on YouTube
+                        Watch on YouTube
                       </a>
                     ) : null}
                   </div>

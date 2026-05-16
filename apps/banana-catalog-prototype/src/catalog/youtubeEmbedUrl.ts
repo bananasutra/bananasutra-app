@@ -5,13 +5,6 @@ export function youtubePosterThumbnailUrl(videoId: string): string {
   return `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
 }
 
-/** Canonical watch URL for opening YouTube outside an iframe (sign-in / bot checks cannot finish inside embeds). */
-export function youtubeWatchPageUrl(videoId: string): string {
-  const id = videoId.trim()
-  if (!id) return ''
-  return `https://www.youtube.com/watch?v=${encodeURIComponent(id)}`
-}
-
 export type YoutubePrivacyEmbedOptions = {
   /**
    * Adds `enablejsapi=1` (+ `origin` in the browser) so the parent can receive
@@ -19,7 +12,10 @@ export type YoutubePrivacyEmbedOptions = {
    * exclusivity on sutra / songbook pages.
    */
   enableJsApi?: boolean
-  /** Use after an explicit user click that mounts the iframe (facade → player). */
+  /**
+   * Start playback as soon as the embed iframe loads. Only pass after an explicit viewer action
+   * (e.g. facade tap)—not ambient page autoplay. Bridges parent gesture → iframe (separate context).
+   */
   autoplay?: boolean
 }
 

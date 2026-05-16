@@ -539,7 +539,6 @@ export function SutraDetailPage() {
                     embedWrapperClassName="sutra-detail__featured-video-aspect"
                     embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
                     iframeClassName="sutra-detail__yt-embed"
-                    fallbackClassName="sutra-detail__yt-watch-fallback"
                     facadeUntilClick
                   />
                 </div>

@@ -362,7 +362,6 @@ export function SongbookPage() {
                   embedWrapperClassName="songbooks-page__featured-video-embed"
                   embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSongbookVideo.format) }}
                   iframeClassName="songbooks-page__featured-video-iframe"
-                  fallbackClassName="songbooks-page__featured-video-yt-fallback"
                   facadeUntilClick
                 />
                 <div className="songbooks-page__featured-video-copy">

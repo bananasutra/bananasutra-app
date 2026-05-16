@@ -1,10 +1,6 @@
 import type { CSSProperties, RefObject } from 'react'
-import { useMemo, useState } from 'react'
-import {
-  youtubePosterThumbnailUrl,
-  youtubePrivacyEmbedSrc,
-  youtubeWatchPageUrl,
-} from './youtubeEmbedUrl'
+import { useEffect, useMemo, useState } from 'react'
+import { youtubePosterThumbnailUrl, youtubePrivacyEmbedSrc } from './youtubeEmbedUrl'
 
 type SongDetailProps = {
   videoId: string
@@ -22,10 +18,9 @@ export type YoutubeEmbeddedPlayerProps = {
   embedWrapperClassName?: string
   embedWrapperStyle?: CSSProperties
   loading?: 'lazy' | 'eager'
-  fallbackClassName?: string
   /**
-   * Featured heroes only: poster + click mounts the iframe (cuts passive embed churn).
-   * Song detail keeps immediate load — opening the Video tab / section is already intent.
+   * Poster + tap mounts the iframe (gesture‑gated). Used everywhere YouTube loads — reduces passive embed
+   * probes (logged‑out / incognito) vs autoplaying an iframe as soon as the shell hydrates.
    */
   facadeUntilClick?: boolean
 }
@@ -33,30 +28,14 @@ export type YoutubeEmbeddedPlayerProps = {
 const YT_IFRAME_ALLOW =
   'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
 
-/**
- * Secondary action below embeds: Google often shows “sign in” inside the iframe, then redirects to pages
- * that cannot be framed (`support.google.com refused to connect`). Watching on youtube.com avoids that trap.
- */
-export function YoutubeWatchFallback({ videoId, className }: { videoId: string; className?: string }) {
-  const href = youtubeWatchPageUrl(videoId)
-  if (!href) return null
-  return (
-    <p className={['yt-watch-fallback', className].filter(Boolean).join(' ')}>
-      <a href={href} target="_blank" rel="noopener noreferrer" className="yt-watch-fallback__link">
-        Open on YouTube
-      </a>
-      <span className="yt-watch-fallback__hint">
-        {' '}
-        — use this if YouTube asks you to sign in; that verification cannot finish inside an embedded player.
-      </span>
-    </p>
-  )
+/** True only after hydration — keeps `<iframe src="youtube…">` out of R24 static HTML / SSR output. */
+function useClientMounted(): boolean {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  return mounted
 }
 
-/**
- * Single iframe implementation for the catalog: always pairs the player with {@link YoutubeWatchFallback}
- * so no surface can ship a naked embed again.
- */
+/** YouTube iframe only — no outbound footer (matches pre–SEO-phase-3 chrome). */
 export function YoutubeEmbeddedPlayer({
   videoId,
   title,
@@ -66,10 +45,10 @@ export function YoutubeEmbeddedPlayer({
   embedWrapperClassName = 'yt-embed-shell',
   embedWrapperStyle,
   loading = 'lazy',
-  fallbackClassName,
   facadeUntilClick = false,
 }: YoutubeEmbeddedPlayerProps) {
   const id = videoId.trim()
+  const clientMounted = useClientMounted()
   const [facadeReleased, setFacadeReleased] = useState(false)
   const showFacade = Boolean(facadeUntilClick && id && !facadeReleased)
 
@@ -85,8 +64,33 @@ export function YoutubeEmbeddedPlayer({
   const iframeClass = ['yt-embed-frame', iframeClassName].filter(Boolean).join(' ')
   const poster = youtubePosterThumbnailUrl(id)
 
+  if (!clientMounted) {
+    return (
+      <div className="yt-embed-root">
+        <div className={embedWrapperClassName} style={embedWrapperStyle}>
+          <div
+            className="yt-embed-client-placeholder"
+            role="status"
+            aria-live="polite"
+            aria-label={`Loading video player: ${title}`}
+          >
+            {poster ? (
+              <img
+                src={poster}
+                alt=""
+                className="yt-embed-client-placeholder__poster"
+                decoding="async"
+                loading="lazy"
+              />
+            ) : null}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="yt-embed-with-fallback">
+    <div className="yt-embed-root">
       <div className={embedWrapperClassName} style={embedWrapperStyle}>
         {showFacade ? (
           <button
@@ -112,20 +116,18 @@ export function YoutubeEmbeddedPlayer({
             loading={loading}
             allow={YT_IFRAME_ALLOW}
             allowFullScreen
-            referrerPolicy="strict-origin-when-cross-origin"
           />
         )}
       </div>
-      <YoutubeWatchFallback videoId={id} className={fallbackClassName} />
     </div>
   )
 }
 
 /**
- * Default song-detail layout (immediate iframe + eager decode).
+ * Song detail: click‑to‑load embed (same gesture gate as heroes), eager iframe decode once mounted.
  */
 export function YouTubeEmbed({ videoId, title = 'YouTube video' }: SongDetailProps) {
   const id = videoId.trim()
   if (!id) return null
-  return <YoutubeEmbeddedPlayer videoId={id} title={title} loading="eager" />
+  return <YoutubeEmbeddedPlayer videoId={id} title={title} loading="eager" facadeUntilClick />
 }
