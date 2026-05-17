@@ -1,6 +1,7 @@
 /* Page shell: fixed header + in-flow layout below (document scroll). */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--catalog-header-h, 220px) + 12px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -13,8 +14,9 @@ html {
   max-width: var(--catalog-layout-max-width);
   margin: 0 auto;
   padding: 0 1rem 2.5rem;
-  /* Space for fixed header; exact height set by JS as --catalog-header-h */
-  padding-top: calc(var(--catalog-header-h, 108px) + 24px);
+  /* Space for fixed header; exact height set by JS as --catalog-header-h (fallback ≈ discovery header) */
+  padding-top: calc(var(--catalog-header-h, 220px) + 28px);
+  overflow-anchor: none;
   color: var(--color-text-primary);
   /* Vertical rhythm after page intros (title + subcopy) before grids / filters / chips */
   --catalog-after-intro-gap: clamp(1.05rem, 2.6vw, 1.85rem);
@@ -445,7 +447,7 @@ html {
   }
 
   .catalog.catalog-page {
-    padding-top: calc(var(--catalog-header-h, 108px) + 18px);
+    padding-top: calc(var(--catalog-header-h, 220px) + 22px);
     --catalog-after-intro-gap: clamp(0.88rem, 2.2vw, 1.45rem);
   }
 

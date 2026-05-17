@@ -18,6 +18,7 @@
 /* Home “Latest drops”: dense columns like the original hero strip */
 .song-thumb-grid--home {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-height: 6.5rem;
 }
 
 @media (min-width: 960px) {

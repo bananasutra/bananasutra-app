@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
@@ -6,20 +6,23 @@ import { hasListenerCatalogMedia } from './listenerCatalog'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { songCatalogPath, songbookCatalogPath } from './songPaths'
 import { songbookBySlug } from './songbooks'
-import { SoundCloudEmbed } from './SoundCloudEmbed'
+import { SoundCloudPassthroughEmbed } from './SoundCloudPassthroughEmbed'
 import { sutraClassName } from './sutraTheme'
 import { buildBrowsePath, buildBrowsePathForFacet } from './urlState'
 import { emptyFilterState, type SongCatalogItem, type SongbookMemberSong } from './types'
 import { musicAlbumJsonLd, songbookItemListJsonLd } from '../seo/jsonLd'
 import { renderPageMeta } from './usePageMeta'
-import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
+import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { SongThumbCard } from './SongThumbCard'
 import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
-import { useExclusiveYoutubeSoundcloudPlayback } from './useExclusiveYoutubeSoundcloudPlayback'
+import {
+  useExclusiveYoutubeSoundcloudPlayback,
+  type ExclusiveYoutubeSoundcloudControls,
+} from './useExclusiveYoutubeSoundcloudPlayback'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
@@ -83,11 +86,15 @@ function tracksHrefForPrimaryGenre(token: string): string {
 
 export function SongbookPage() {
   const { slug = '' } = useParams()
-  const { key: routeVisitKey } = useLocation()
+  const location = useLocation()
+  const { key: routeVisitKey } = location
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
   const soundcloudExclusiveWrapRef = useRef<HTMLDivElement>(null)
+  const songbookSoundcloudWrapRefs = useMemo(() => [soundcloudExclusiveWrapRef] as const, [])
+  const exclusivePlaybackRef = useRef<ExclusiveYoutubeSoundcloudControls | null>(null)
+  const [youtubeIframeGen, setYoutubeIframeGen] = useState(0)
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
   const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[]>([])
 
@@ -207,26 +214,27 @@ export function SongbookPage() {
 
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
-    soundcloudWrapRefs: [soundcloudExclusiveWrapRef],
+    soundcloudWrapRefs: songbookSoundcloudWrapRefs,
     enabled: songbookExclusivePlaybackEnabled,
-    syncKey: `${slug}|${featuredSongbookVideo?.video_id ?? ''}|${(songbook?.playlist_url ?? '').trim()}`,
+    controlsRef: exclusivePlaybackRef,
+    syncKey: `${slug}|${featuredSongbookVideo?.video_id ?? ''}|${(songbook?.playlist_url ?? '').trim()}|yt:${youtubeIframeGen}`,
   })
 
-  if (catalogLoading) {
-    return (
-      <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
-        <GlobalHeader ref={headerRef} />
-        <div className="catalog-page__main">
-          <article className="about-page catalog-layout-shell" id="main-content">
-            <p className="about-page__p">Loading song catalog…</p>
-          </article>
-        </div>
-        <GlobalFooter />
-      </div>
-    )
-  }
+  /** Songbook JSON is sync; only grids need the song catalog. Keep hero on first paint (same idea as /songs/). */
+  useLayoutEffect(() => {
+    if (!songbook) return
+    const anchor = () => {
+      syncCatalogHeaderHeightNow(pageRef, headerRef)
+      window.scrollTo(0, 0)
+    }
+    anchor()
+    requestAnimationFrame(() => {
+      anchor()
+      requestAnimationFrame(anchor)
+    })
+  }, [location.pathname, slug, songbook?.songbook])
 
-  if (catalogError || songCatalogRows === null) {
+  if (!catalogLoading && (catalogError || songCatalogRows === null)) {
     return (
       <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
         <GlobalHeader ref={headerRef} />
@@ -333,23 +341,6 @@ export function SongbookPage() {
               </div>
             </header>
 
-            {songbook.playlist_url ? (
-              <section className="songbooks-page__playlist" aria-labelledby="songbook-playlist-heading">
-                <h2 id="songbook-playlist-heading" className="catalog-section-title">
-                  Songbook Playlist on Soundcloud
-                </h2>
-                <div ref={soundcloudExclusiveWrapRef}>
-                  <SoundCloudEmbed
-                    scUrl={songbook.playlist_url}
-                    title={`SoundCloud playlist: ${songbook.songbook}`}
-                    mode={playlistIsSet ? 'list' : 'visual'}
-                    height={playlistIsSet ? 760 : 680}
-                    loading="eager"
-                  />
-                </div>
-              </section>
-            ) : null}
-
             {isSutraSongbook && featuredSongbookVideo ? (
               <section className="songbooks-page__featured-video" aria-labelledby="songbook-featured-video-heading">
                 <h2 id="songbook-featured-video-heading" className="catalog-section-title">
@@ -364,6 +355,8 @@ export function SongbookPage() {
                   embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSongbookVideo.format) }}
                   iframeClassName="songbooks-page__featured-video-iframe"
                   facadeUntilClick
+                  onBeforePlay={() => exclusivePlaybackRef.current?.pauseAllSoundcloud()}
+                  onIframeLoad={() => setYoutubeIframeGen((g) => g + 1)}
                   outboundFooterClassName="songbooks-page__featured-video-yt-outbound"
                 />
                 <div className="songbooks-page__featured-video-copy">
@@ -381,6 +374,22 @@ export function SongbookPage() {
                     </div>
                   ) : null}
                 </div>
+              </section>
+            ) : null}
+
+            {songbook.playlist_url ? (
+              <section className="songbooks-page__playlist" aria-labelledby="songbook-playlist-heading">
+                <h2 id="songbook-playlist-heading" className="catalog-section-title">
+                  Songbook Playlist on Soundcloud
+                </h2>
+                <SoundCloudPassthroughEmbed
+                  ref={soundcloudExclusiveWrapRef}
+                  scUrl={songbook.playlist_url}
+                  title={`SoundCloud playlist: ${songbook.songbook}`}
+                  mode={playlistIsSet ? 'list' : 'visual'}
+                  height={playlistIsSet ? 760 : 680}
+                  loading="eager"
+                />
               </section>
             ) : null}
 
@@ -413,9 +422,11 @@ export function SongbookPage() {
             {!hideEmptyGenreOrCollectionRelated ? (
               <section className="songbooks-page__songs" aria-labelledby="songbook-songs-heading">
                 <h2 id="songbook-songs-heading" className="songbooks-page__songs-title catalog-section-title">
-                  {relatedSongsHeading}
+                  {catalogLoading ? 'Related songs' : relatedSongsHeading}
                 </h2>
-                {playbackMemberSongs.length === 0 ? (
+                {catalogLoading ? (
+                  <p className="songbooks-page__playback-empty">Loading song catalog…</p>
+                ) : playbackMemberSongs.length === 0 ? (
                   songbookTypeKey === 'genre' ? (
                     <p className="songbooks-page__playback-empty songbooks-page__playback-empty--browse">
                       <Link to={songsBrowseFindHref} className="songbooks-page__songs-browse-link">
