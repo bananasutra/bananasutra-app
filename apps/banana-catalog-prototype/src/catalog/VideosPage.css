@@ -214,8 +214,14 @@
 .videos-page__card-thumb {
   width: 100%;
   height: 100%;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   display: block;
+  background: var(--color-bg-inset);
+}
+
+.videos-page__card--rail .videos-page__card-thumb {
+  aspect-ratio: 9 / 16;
 }
 
 .videos-page__card-thumb--fallback {
