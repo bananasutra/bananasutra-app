@@ -728,7 +728,15 @@ function SongDetailLoaded({
             {!isLyricsOnlyNoCoverHero ? (
               <div className="song-detail-cover">
                 {detail.cover_image_url ? (
-                  <img src={detail.cover_image_url} alt="" width={320} height={320} />
+                  <img
+                    src={detail.cover_image_url}
+                    alt=""
+                    width={320}
+                    height={320}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="sync"
+                  />
                 ) : (
                   <div className="song-detail-cover-fallback" aria-hidden>
                     🍌
