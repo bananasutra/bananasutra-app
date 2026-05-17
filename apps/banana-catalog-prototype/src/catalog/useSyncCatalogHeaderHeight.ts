@@ -12,13 +12,39 @@ export function useSyncCatalogHeaderHeight(
     if (!page || !header) return
 
     const sync = () => {
-      page.style.setProperty('--catalog-header-h', `${header.offsetHeight}px`)
+      const px = `${header.offsetHeight}px`
+      page.style.setProperty('--catalog-header-h', px)
+      document.documentElement.style.setProperty('--catalog-header-h', px)
     }
 
     sync()
+    requestAnimationFrame(sync)
+
     const ro = new ResizeObserver(sync)
     ro.observe(header)
-    return () => ro.disconnect()
+
+    let fontsCancelled = false
+    void document.fonts?.ready.then(() => {
+      if (!fontsCancelled) sync()
+    })
+
+    return () => {
+      fontsCancelled = true
+      ro.disconnect()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- callers pass explicit resize triggers
   }, deps)
+}
+
+/** Imperative remeasure after async layout (e.g. catalog data swap on deep link). */
+export function syncCatalogHeaderHeightNow(
+  pageRef: RefObject<HTMLElement | null>,
+  headerRef: RefObject<HTMLElement | null>,
+): void {
+  const page = pageRef.current
+  const header = headerRef.current
+  if (!page || !header) return
+  const px = `${header.offsetHeight}px`
+  page.style.setProperty('--catalog-header-h', px)
+  document.documentElement.style.setProperty('--catalog-header-h', px)
 }

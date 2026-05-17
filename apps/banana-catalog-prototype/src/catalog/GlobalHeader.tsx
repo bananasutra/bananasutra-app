@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useRef, type ReactNode } from 'react'
+import { forwardRef, useCallback, useEffect, useLayoutEffect, useRef, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import chromeStatsJson from '../data/generated/catalog_chrome_stats.json'
 import { DiscoverySearchLazy } from './DiscoverySearchLazy'
@@ -48,13 +48,50 @@ function useScrollFade(navRef: React.RefObject<HTMLElement | null>) {
   }, [navRef, update])
 }
 
+function syncCatalogHeaderHeightToRoot(header: HTMLElement | null): void {
+  if (!header) return
+  document.documentElement.style.setProperty('--catalog-header-h', `${header.offsetHeight}px`)
+}
+
 export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function GlobalHeader({ right }, ref) {
   const { pathname } = useLocation()
   const navRef = useRef<HTMLElement>(null)
+  const headerElRef = useRef<HTMLElement | null>(null)
   useScrollFade(navRef)
 
+  const setHeaderRef = (node: HTMLElement | null) => {
+    headerElRef.current = node
+    if (typeof ref === 'function') {
+      ref(node)
+    } else if (ref) {
+      ref.current = node
+    }
+  }
+
+  useLayoutEffect(() => {
+    const header = headerElRef.current
+    if (!header) return
+
+    const sync = () => syncCatalogHeaderHeightToRoot(header)
+    sync()
+    requestAnimationFrame(sync)
+
+    const ro = new ResizeObserver(sync)
+    ro.observe(header)
+
+    let cancelled = false
+    void document.fonts?.ready.then(() => {
+      if (!cancelled) sync()
+    })
+
+    return () => {
+      cancelled = true
+      ro.disconnect()
+    }
+  }, [pathname])
+
   return (
-    <header ref={ref} className="catalog-header catalog-header--fixed global-header global-header--discovery-only">
+    <header ref={setHeaderRef} className="catalog-header catalog-header--fixed global-header global-header--discovery-only">
       <div className="catalog-header-inner global-header-inner global-header__bar">
         <div className="global-header-brand global-header__brand">
           <Link to="/" className="global-header-brand-link bananasutra-wordmark">

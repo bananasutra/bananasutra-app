@@ -2,11 +2,13 @@
 
 .sutra-detail {
   padding-bottom: 2rem;
+  overflow-anchor: none;
 }
 
 .sutra-detail__hero {
   margin: 0 0 1rem;
   padding: 0 0 1.35rem;
+  scroll-margin-top: calc(var(--catalog-header-h, 168px) + 0.75rem);
   border-radius: 0;
   border-bottom: 1px solid var(--color-border);
   background: transparent;

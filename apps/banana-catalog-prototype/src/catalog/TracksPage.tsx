@@ -9,7 +9,7 @@ import { facetCountsFromTracks } from './facetCountsFromTracks'
 import { filterTracksByFindQuery, sortTrackCatalog, trackMatchesFilters } from './filterTracks'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { SoundCloudEmbed } from './SoundCloudEmbed'
+import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { loadSoundCloudWidgetApi } from './soundcloudWidgetApi'
 import { songCatalogPath } from './songPaths'
 import type { TrackCatalogItem, TrackSortMode, TracksFacetFilterKey, TracksFilterState } from './types'
@@ -601,14 +601,13 @@ export function TracksPage() {
                   <section className="tracks-page__player" aria-label="Now playing">
                     <h2 className="tracks-page__player-h catalog-section-title">Now playing</h2>
                     <div className="tracks-page__player-frame" ref={playerWrapRef}>
-                      <SoundCloudEmbed
+                      <LazySoundCloudEmbed
                         scUrl={selected.sc_url}
                         title={selected.track_title || 'SoundCloud track'}
                         height={embedHeight}
                         mode="visual"
                         autoPlay={scAutoplay}
                         reloadKey={embedReloadKey}
-                        loading="eager"
                         onLoad={handlePlayerLoad}
                       />
                     </div>

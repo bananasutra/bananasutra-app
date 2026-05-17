@@ -1,4 +1,4 @@
-import { useEffect, useRef, type RefObject } from 'react'
+import { useEffect, useRef, type MutableRefObject, type RefObject } from 'react'
 import { loadSoundCloudWidgetApi, type SoundCloudWidget } from './soundcloudWidgetApi'
 import { YOUTUBE_EMBED_POST_MESSAGE_ORIGINS } from './youtubeEmbedUrl'
 
@@ -51,50 +51,6 @@ function payloadIndicatesYoutubePlaying(parsed: Record<string, unknown>): boolea
 }
 
 /**
- * SoundCloud’s `Widget.pause()` / internal focus can scroll the playlist iframe into view.
- * When the embed sits above the YouTube block (songbook layout), that feels like an unwanted “jump back up”.
- *
- * We only correct when the viewport actually drifts, and we avoid a burst of `scrollTo` calls — those fight
- * YouTube’s own layout and read as a brief “jitter” on the video.
- */
-const VIEWPORT_DRIFT_PX = 2
-
-function restoreViewportScroll(left: number, top: number): void {
-  try {
-    window.scrollTo({ left, top, behavior: 'instant' })
-  } catch {
-    window.scrollTo(left, top)
-  }
-}
-
-function viewportDrifted(left: number, top: number): boolean {
-  return Math.abs(window.scrollX - left) > VIEWPORT_DRIFT_PX || Math.abs(window.scrollY - top) > VIEWPORT_DRIFT_PX
-}
-
-/** Restore scroll only if SoundCloud (or the browser) moved the page — skips redundant scrollTo. */
-function patchViewportScrollIfDrifted(left: number, top: number): void {
-  if (!viewportDrifted(left, top)) return
-  restoreViewportScroll(left, top)
-}
-
-/**
- * Deferred scroll correction; `capturedSeq` must match live `stabilizeSeq` or the work is dropped so
- * stacked handlers from rapid YouTube `postMessage` bursts do not fight each other.
- */
-function scheduleLightViewportScrollPatch(left: number, top: number, capturedSeq: number, getSeq: () => number): void {
-  const run = () => {
-    if (capturedSeq !== getSeq()) return
-    patchViewportScrollIfDrifted(left, top)
-  }
-  queueMicrotask(run)
-  requestAnimationFrame(() => {
-    run()
-    requestAnimationFrame(run)
-  })
-  window.setTimeout(run, 180)
-}
-
-/**
  * Detect “YouTube is playing” from embed postMessage.
  * Do not require `event.source === iframe.contentWindow`: the player often posts from an inner frame,
  * so `source` may not match the outer embed’s `contentWindow`.
@@ -130,6 +86,28 @@ function iframesFromSoundcloudWraps(
   return out
 }
 
+/** SoundCloud pause() scrolls the playlist into view; restore the pre-pause viewport briefly. */
+function restoreViewportAfterSoundcloudPause(left: number, top: number): void {
+  const run = () => {
+    try {
+      window.scrollTo({ left, top, behavior: 'instant' })
+    } catch {
+      window.scrollTo(left, top)
+    }
+  }
+  run()
+  queueMicrotask(run)
+  requestAnimationFrame(run)
+  window.setTimeout(run, 0)
+  window.setTimeout(run, 50)
+  window.setTimeout(run, 150)
+}
+
+export type ExclusiveYoutubeSoundcloudControls = {
+  /** Pause every SoundCloud widget on the page (e.g. before releasing a click-to-load YouTube facade). */
+  pauseAllSoundcloud: () => void
+}
+
 export type ExclusiveYoutubeSoundcloudOptions = {
   youtubeIframeRef: RefObject<HTMLIFrameElement | null>
   /** Ancestors of each `.sc-embed-frame` iframe (e.g. featured EP wrap + lazy spotlight wrap). */
@@ -138,6 +116,8 @@ export type ExclusiveYoutubeSoundcloudOptions = {
   enabled: boolean
   /** Bumps the effect when featured media URLs change (iframe nodes / lazy timing). */
   syncKey: string
+  /** Optional imperative handle for parent-driven pause (facade tap before iframe exists). */
+  controlsRef?: MutableRefObject<ExclusiveYoutubeSoundcloudControls | null>
 }
 
 /**
@@ -153,43 +133,32 @@ export function useExclusiveYoutubeSoundcloudPlayback({
   soundcloudWrapRefs,
   enabled,
   syncKey,
+  controlsRef,
 }: ExclusiveYoutubeSoundcloudOptions): void {
   const scBindSerialRef = useRef(0)
+  const soundcloudWrapRefsRef = useRef(soundcloudWrapRefs)
+  soundcloudWrapRefsRef.current = soundcloudWrapRefs
 
   useEffect(() => {
-    if (!enabled) return
-
-    /**
-     * YouTube emits many `infoDelivery` / state messages in a short window. Each used to capture
-     * `scrollX/Y` again after a partial jump, so restores targeted inconsistent coordinates — especially
-     * on songbooks where the playlist sits above the video.
-     */
-    let scrollBurst: { left: number; top: number; until: number } | null = null
-    let stabilizeSeq = 0
-
-    const readFrozenScrollAnchor = (): { left: number; top: number } => {
-      const now = performance.now()
-      if (!scrollBurst || now > scrollBurst.until) {
-        scrollBurst = { left: window.scrollX, top: window.scrollY, until: now + 800 }
-      } else {
-        scrollBurst.until = now + 800
-      }
-      return { left: scrollBurst.left, top: scrollBurst.top }
+    if (!enabled) {
+      if (controlsRef) controlsRef.current = null
+      return
     }
 
-    /** Pause every bound SoundCloud iframe except `excludeIframe` (omit arg to pause all). */
-    const pauseSoundcloudWidgetsExcept = (excludeIframe: HTMLIFrameElement | null) => {
+    const wraps = () => soundcloudWrapRefsRef.current
+
+    let stabilizeSeq = 0
+
+    const pauseSoundcloudWidgetsExcept = (
+      excludeIframe: HTMLIFrameElement | null,
+      preserveViewport: boolean,
+    ) => {
       stabilizeSeq += 1
       const seq = stabilizeSeq
-      const { left, top } = readFrozenScrollAnchor()
+      const anchor = { left: window.scrollX, top: window.scrollY }
 
-      const targets = iframesFromSoundcloudWraps(soundcloudWrapRefs).filter((el) => el !== excludeIframe)
-      if (!targets.length) {
-        patchViewportScrollIfDrifted(left, top)
-        return
-      }
-
-      patchViewportScrollIfDrifted(left, top)
+      const targets = iframesFromSoundcloudWraps(wraps()).filter((el) => el !== excludeIframe)
+      if (!targets.length) return
 
       void loadSoundCloudWidgetApi()
         .then((SC) => {
@@ -202,38 +171,39 @@ export function useExclusiveYoutubeSoundcloudPlayback({
               // ignore
             }
           }
-          patchViewportScrollIfDrifted(left, top)
+          if (preserveViewport) restoreViewportAfterSoundcloudPause(anchor.left, anchor.top)
         })
         .catch(() => {
           // ignore
         })
-        .finally(() => {
-          if (seq !== stabilizeSeq) return
-          scheduleLightViewportScrollPatch(left, top, seq, () => stabilizeSeq)
-        })
     }
+
+    const pauseAllSoundcloud = () => pauseSoundcloudWidgetsExcept(null, true)
+    if (controlsRef) controlsRef.current = { pauseAllSoundcloud }
 
     const onWindowMessage = (event: MessageEvent) => {
       if (!messageIndicatesYoutubePlaying(event)) return
-      pauseSoundcloudWidgetsExcept(null)
+      pauseAllSoundcloud()
     }
     window.addEventListener('message', onWindowMessage)
 
     const onYtLoad = () => postMessageYoutubeListeningHandshake(youtubeIframeRef.current)
 
-    const attachYtHandshake = (): (() => void) => {
+    let ytLoadCleanup: (() => void) | null = null
+
+    const attachYtHandshake = (): void => {
+      ytLoadCleanup?.()
+      ytLoadCleanup = null
       const el = youtubeIframeRef.current
-      if (!el) return () => {}
+      if (!el) return
       el.addEventListener('load', onYtLoad)
       queueMicrotask(onYtLoad)
-      return () => el.removeEventListener('load', onYtLoad)
+      ytLoadCleanup = () => el.removeEventListener('load', onYtLoad)
     }
 
-    let cleanupYt = attachYtHandshake()
-    const ytRetryId = window.setTimeout(() => {
-      cleanupYt()
-      cleanupYt = attachYtHandshake()
-    }, 500)
+    attachYtHandshake()
+    /** Facade embeds mount the iframe only after tap — poll until the ref exists. */
+    const ytPollId = window.setInterval(attachYtHandshake, 250)
 
     let cancelled = false
     const scCleanups: Array<() => void> = []
@@ -252,7 +222,7 @@ export function useExclusiveYoutubeSoundcloudPlayback({
       scBindSerialRef.current += 1
       const serial = scBindSerialRef.current
 
-      const iframes = iframesFromSoundcloudWraps(soundcloudWrapRefs)
+      const iframes = iframesFromSoundcloudWraps(wraps())
       if (!iframes.length) return
 
       void loadSoundCloudWidgetApi()
@@ -266,7 +236,7 @@ export function useExclusiveYoutubeSoundcloudPlayback({
 
             const onPlay = () => {
               postMessagePauseYoutubeEmbed(youtubeIframeRef.current)
-              pauseSoundcloudWidgetsExcept(iframe)
+              pauseSoundcloudWidgetsExcept(iframe, false)
             }
 
             const onReady = () => {
@@ -295,7 +265,7 @@ export function useExclusiveYoutubeSoundcloudPlayback({
     }
 
     const mos: MutationObserver[] = []
-    for (const wrapRef of soundcloudWrapRefs) {
+    for (const wrapRef of wraps()) {
       const wrap = wrapRef.current
       if (!wrap) continue
       const mo = new MutationObserver(() => tryBindAllSoundcloud())
@@ -303,14 +273,15 @@ export function useExclusiveYoutubeSoundcloudPlayback({
       mos.push(mo)
     }
     tryBindAllSoundcloud()
-    const scRetryId = window.setTimeout(tryBindAllSoundcloud, 600)
+    const scRetryIds = [400, 1200, 2000, 3200].map((ms) => window.setTimeout(tryBindAllSoundcloud, ms))
 
     return () => {
       cancelled = true
+      if (controlsRef) controlsRef.current = null
       window.removeEventListener('message', onWindowMessage)
-      cleanupYt()
-      window.clearTimeout(ytRetryId)
-      window.clearTimeout(scRetryId)
+      ytLoadCleanup?.()
+      window.clearInterval(ytPollId)
+      for (const id of scRetryIds) window.clearTimeout(id)
       for (const m of mos) m.disconnect()
       for (const c of scCleanups) {
         try {
@@ -321,5 +292,5 @@ export function useExclusiveYoutubeSoundcloudPlayback({
       }
       scCleanups.length = 0
     }
-  }, [enabled, syncKey, youtubeIframeRef, soundcloudWrapRefs])
+  }, [enabled, syncKey, youtubeIframeRef, controlsRef])
 }
