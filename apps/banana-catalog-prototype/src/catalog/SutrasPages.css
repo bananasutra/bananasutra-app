@@ -135,6 +135,7 @@
 
 .sutra-detail__song-grid {
   margin-top: 0.35rem;
+  min-height: 6.5rem;
 }
 
 .sutra-detail__pull {
@@ -205,6 +206,13 @@
   .sutra-detail__feat {
     grid-template-columns: 1fr;
   }
+}
+
+.sutra-detail__feat-embed .catalog-lazy-sc-embed,
+.sutra-detail__feat-embed .catalog-lazy-sc-embed__placeholder,
+.sutra-detail__feat-embed .catalog-sc-passthrough-embed,
+.sutra-detail__feat-embed .sc-embed-frame {
+  min-height: 280px;
 }
 
 .sutra-detail__feat-embed--video-contained {
