@@ -20,6 +20,20 @@
   padding: 0;
 }
 
+.tracks-page__player-frame .catalog-lazy-sc-embed,
+.tracks-page__player-frame .catalog-lazy-sc-embed__placeholder,
+.tracks-page__player-frame .sc-embed-frame {
+  min-height: 300px;
+}
+
+@media (max-width: 640px) {
+  .tracks-page__player-frame .catalog-lazy-sc-embed,
+  .tracks-page__player-frame .catalog-lazy-sc-embed__placeholder,
+  .tracks-page__player-frame .sc-embed-frame {
+    min-height: 180px;
+  }
+}
+
 .tracks-page__sc-link-wrap {
   margin: 0.45rem 0 0;
   padding: 0;

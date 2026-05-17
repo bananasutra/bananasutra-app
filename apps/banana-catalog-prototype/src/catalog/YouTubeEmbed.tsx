@@ -29,6 +29,10 @@ export type YoutubeEmbeddedPlayerProps = {
    * probes (logged‑out / incognito) vs autoplaying an iframe as soon as the shell hydrates.
    */
   facadeUntilClick?: boolean
+  /** Runs on facade tap before the iframe mounts (pause competing SoundCloud, etc.). */
+  onBeforePlay?: () => void
+  /** Runs when the embed iframe finishes loading (YouTube JS API handshake). */
+  onIframeLoad?: () => void
 }
 
 const YT_IFRAME_ALLOW =
@@ -70,6 +74,8 @@ export function YoutubeEmbeddedPlayer({
   loading = 'lazy',
   outboundFooterClassName,
   facadeUntilClick = false,
+  onBeforePlay,
+  onIframeLoad,
 }: YoutubeEmbeddedPlayerProps) {
   const id = videoId.trim()
   const clientMounted = useClientMounted()
@@ -124,7 +130,10 @@ export function YoutubeEmbeddedPlayer({
             type="button"
             className="yt-embed-facade"
             aria-label={`Load embedded player: ${title}`}
-            onClick={() => setFacadeReleased(true)}
+            onClick={() => {
+              onBeforePlay?.()
+              setFacadeReleased(true)
+            }}
           >
             {poster ? (
               <img src={poster} alt="" className="yt-embed-facade__poster" decoding="async" loading="lazy" />
@@ -143,6 +152,7 @@ export function YoutubeEmbeddedPlayer({
             loading={loading}
             allow={YT_IFRAME_ALLOW}
             allowFullScreen
+            onLoad={() => onIframeLoad?.()}
           />
         )}
       </div>

@@ -204,11 +204,13 @@ function VideoCardBody({
   songTitle,
   ytTitle,
   inApp,
+  posterEager,
 }: {
   v: YouTubeCatalogVideo
   songTitle: string
   ytTitle: string
   inApp: boolean
+  posterEager: boolean
 }) {
   const showUploadLine = Boolean(ytTitle && ytTitle !== songTitle)
   const instrumentSummary = instrumentSummaryForVideo(v, 2)
@@ -225,7 +227,15 @@ function VideoCardBody({
     <>
       <div className="videos-page__card-media">
         {v.thumbnail_url ? (
-          <img className="videos-page__card-thumb" src={v.thumbnail_url} alt="" width={640} height={360} loading="lazy" />
+          <img
+            className="videos-page__card-thumb"
+            src={v.thumbnail_url}
+            alt=""
+            width={640}
+            height={360}
+            loading={posterEager ? 'eager' : 'lazy'}
+            decoding="async"
+          />
         ) : (
           <span className="videos-page__card-thumb videos-page__card-thumb--fallback" aria-hidden>
             ▶
@@ -539,7 +549,8 @@ export function VideosPage() {
     )
   }
 
-  const renderCard = (v: YouTubeCatalogVideo, layout: 'rail' | 'grid') => {
+  const renderCard = (v: YouTubeCatalogVideo, layout: 'rail' | 'grid', posterIndex: number) => {
+    const posterEager = posterIndex < 3
     const songTitle = (v.lyrics_title || '').trim() || v.title || 'Song'
     const ytTitle = (v.title || '').trim()
     const lid = (v.lyrics_id || '').trim()
@@ -556,7 +567,7 @@ export function VideosPage() {
             to={songHref}
             aria-label={`${songTitle}. ${ytTitle && ytTitle !== songTitle ? ytTitle : 'Video'}`}
           >
-            <VideoCardBody v={v} songTitle={songTitle} ytTitle={ytTitle} inApp />
+            <VideoCardBody v={v} songTitle={songTitle} ytTitle={ytTitle} inApp posterEager={posterEager} />
           </Link>
         </li>
       )
@@ -571,7 +582,7 @@ export function VideosPage() {
           rel="noreferrer"
           aria-label={`Watch on YouTube (no in-app song page): ${songTitle}`}
         >
-          <VideoCardBody v={v} songTitle={songTitle} ytTitle={ytTitle} inApp={false} />
+          <VideoCardBody v={v} songTitle={songTitle} ytTitle={ytTitle} inApp={false} posterEager={posterEager} />
         </a>
       </li>
     )
@@ -666,6 +677,8 @@ export function VideosPage() {
     </section>
   )
 
+  let nextPosterIndex = 0
+
   const listSection = (
     <section className="videos-page__list-wrap" aria-label="Video list">
       {shownVideos.length === 0 ? (
@@ -676,7 +689,9 @@ export function VideosPage() {
             <div className="videos-page__rail-section">
               <h2 className="videos-page__rail-heading catalog-section-title">Music reels</h2>
               <ScrollRail className="videos-page__rail-scroll">
-                <ul className="videos-page__rail">{verticalVideos.map((v) => renderCard(v, 'rail'))}</ul>
+                <ul className="videos-page__rail">
+                  {verticalVideos.map((v) => renderCard(v, 'rail', nextPosterIndex++))}
+                </ul>
               </ScrollRail>
             </div>
           ) : null}
@@ -698,7 +713,9 @@ export function VideosPage() {
                     Music videos
                   </h2>
                 ) : null}
-                <ul className="videos-page__grid">{wideVideos.map((v) => renderCard(v, 'grid'))}</ul>
+                <ul className="videos-page__grid">
+                  {wideVideos.map((v) => renderCard(v, 'grid', nextPosterIndex++))}
+                </ul>
               </div>
               {showWidePager ? (
                 <CatalogPager

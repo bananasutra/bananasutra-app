@@ -12,7 +12,7 @@ import {
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
-import { SoundCloudEmbed } from './SoundCloudEmbed'
+import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { YouTubeEmbed } from './YouTubeEmbed'
 import { loadSoundCloudWidgetApi } from './soundcloudWidgetApi'
 import {
@@ -728,7 +728,15 @@ function SongDetailLoaded({
             {!isLyricsOnlyNoCoverHero ? (
               <div className="song-detail-cover">
                 {detail.cover_image_url ? (
-                  <img src={detail.cover_image_url} alt="" width={320} height={320} />
+                  <img
+                    src={detail.cover_image_url}
+                    alt=""
+                    width={320}
+                    height={320}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="sync"
+                  />
                 ) : (
                   <div className="song-detail-cover-fallback" aria-hidden>
                     🍌
@@ -866,7 +874,7 @@ function SongDetailLoaded({
                       </p>
                     ) : null}
                     <div ref={playerWrapRef}>
-                      <SoundCloudEmbed
+                      <LazySoundCloudEmbed
                         scUrl={playingUrl}
                         title={`SoundCloud: ${detail.lyrics_title}`}
                         mode="list"
@@ -874,7 +882,6 @@ function SongDetailLoaded({
                         autoPlay={Boolean((selectedUrl ?? '').trim())}
                         reloadKey={soundcloudReloadKey}
                         onLoad={handlePlayerLoad}
-                        loading="eager"
                       />
                     </div>
                   </>
@@ -889,13 +896,12 @@ function SongDetailLoaded({
                       <summary className="song-detail-ep-summary">Play full EP</summary>
                       <div className="song-detail-ep-panel">
                       {isEpExpanded ? (
-                        <SoundCloudEmbed
+                        <LazySoundCloudEmbed
                           scUrl={primaryEpUrl}
                           title={primaryEpTitle ? `SoundCloud: ${primaryEpTitle}` : `SoundCloud EP · ${detail.lyrics_title}`}
                           height={primaryEpUrl.includes('/sets/') ? SC_EMBED_HEIGHT_SET_PLAYLIST : 360}
                           mode={primaryEpUrl.includes('/sets/') ? 'list' : 'visual'}
                           autoPlay
-                          loading="eager"
                         />
                       ) : null}
                       <p className="song-detail-ep-only-footer">

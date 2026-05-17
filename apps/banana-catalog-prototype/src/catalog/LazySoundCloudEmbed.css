@@ -1,6 +1,6 @@
 .catalog-lazy-sc-embed {
   width: 100%;
-  min-height: 280px;
+  min-height: 0;
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -12,8 +12,13 @@
   border: 0;
 }
 
+/* Page scroll passes through until the user explicitly enables the embed (click / keyboard). */
+.catalog-lazy-sc-embed:not(.catalog-lazy-sc-embed--interactive) .sc-embed-frame {
+  pointer-events: none;
+}
+
 .catalog-lazy-sc-embed__placeholder {
-  min-height: 280px;
+  min-height: 120px;
   display: grid;
   place-items: center;
   padding: 1rem;

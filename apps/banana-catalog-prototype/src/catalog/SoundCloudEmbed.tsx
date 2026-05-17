@@ -1,7 +1,7 @@
 import { soundcloudPlayerSrc } from './soundcloudPlayerUrl'
 import { useTheme } from './theme'
 
-type Props = {
+export type SoundCloudEmbedProps = {
   scUrl: string
   title?: string
   height?: number
@@ -22,7 +22,7 @@ export function SoundCloudEmbed({
   reloadKey = 0,
   onLoad,
   loading = 'lazy',
-}: Props) {
+}: SoundCloudEmbedProps) {
   const { theme } = useTheme()
 
   return (

@@ -290,6 +290,11 @@
   align-items: start;
 }
 
+.home-portal__featured .catalog-lazy-sc-embed,
+.home-portal__featured .catalog-lazy-sc-embed__placeholder {
+  min-height: 300px;
+}
+
 @media (min-width: 768px) {
   .home-portal__featured {
     grid-template-columns: 1.05fr 1fr;

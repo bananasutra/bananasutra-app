@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { SoundCloudEmbed } from './SoundCloudEmbed'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { allSongbooks, songbookHref } from './songbooks'
 import { browsePathWithQuery } from './seoPaths'
@@ -23,13 +22,16 @@ import type { SutraFamilyKey } from './sutraContext'
 import { SongThumbCard } from './SongThumbCard'
 import { sutraCreativeWorkJsonLd } from '../seo/jsonLd'
 import { renderPageMeta } from './usePageMeta'
-import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
+import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { songOnWordsSurface } from './wordsStory'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
-import { useExclusiveYoutubeSoundcloudPlayback } from './useExclusiveYoutubeSoundcloudPlayback'
+import {
+  useExclusiveYoutubeSoundcloudPlayback,
+  type ExclusiveYoutubeSoundcloudControls,
+} from './useExclusiveYoutubeSoundcloudPlayback'
 import {
   pickRandomSongbookFromPool,
   songbookHrefFromCatalogItem,
@@ -149,7 +151,8 @@ function formatDurationTotal(raw: string | number | null | undefined): string {
 
 export function SutraDetailPage() {
   const { slug } = useParams<{ slug: string }>()
-  const { key: routeVisitKey } = useLocation()
+  const location = useLocation()
+  const { key: routeVisitKey } = location
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
@@ -159,6 +162,8 @@ export function SutraDetailPage() {
     () => [soundcloudExclusiveWrapRef, sutraSpotlightSoundcloudWrapRef] as const,
     [],
   )
+  const exclusivePlaybackRef = useRef<ExclusiveYoutubeSoundcloudControls | null>(null)
+  const [youtubeIframeGen, setYoutubeIframeGen] = useState(0)
   const pullTypingIntervalRef = useRef<number | undefined>(undefined)
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
   const [typedPullQuote, setTypedPullQuote] = useState('')
@@ -308,8 +313,22 @@ export function SutraDetailPage() {
     youtubeIframeRef: youtubeExclusiveRef,
     soundcloudWrapRefs: sutraSoundcloudWrapRefs,
     enabled: sutraExclusivePlaybackEnabled,
-    syncKey: `${familyKey ?? ''}|${featuredSutraVideo?.video_id ?? ''}|${featuredScUrlForExclusive}|spot:${(sutraSpotlightSongbook?.playlist_url || '').trim()}`,
+    controlsRef: exclusivePlaybackRef,
+    syncKey: `${familyKey ?? ''}|${featuredSutraVideo?.video_id ?? ''}|${featuredScUrlForExclusive}|spot:${(sutraSpotlightSongbook?.playlist_url || '').trim()}|yt:${youtubeIframeGen}`,
   })
+
+  useLayoutEffect(() => {
+    if (!entry) return
+    const anchor = () => {
+      syncCatalogHeaderHeightNow(pageRef, headerRef)
+      window.scrollTo(0, 0)
+    }
+    anchor()
+    requestAnimationFrame(() => {
+      anchor()
+      requestAnimationFrame(anchor)
+    })
+  }, [location.pathname, slug, entry?.sutra])
 
   const pivotTarget = useMemo(() => {
     if (!familyKey || !entry) return null
@@ -320,21 +339,7 @@ export function SutraDetailPage() {
     return <Navigate to={ABOUT_SUTRAS_HREF} replace />
   }
 
-  if (catalogLoading) {
-    return (
-      <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
-        <GlobalHeader ref={headerRef} />
-        <div className="catalog-page__main">
-          <article className="about-page catalog-layout-shell" id="main-content">
-            <p className="about-page__p">Loading song catalog…</p>
-          </article>
-        </div>
-        <GlobalFooter />
-      </div>
-    )
-  }
-
-  if (catalogError || !songCatalogRows) {
+  if (!catalogLoading && (catalogError || !songCatalogRows)) {
     return (
       <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
         <GlobalHeader ref={headerRef} />
@@ -348,7 +353,8 @@ export function SutraDetailPage() {
     )
   }
 
-  const stats = sutraStats.get(familyKey) ?? { songs: 0, tracks: 0 }
+  const stats = catalogLoading ? null : sutraStats.get(familyKey) ?? { songs: 0, tracks: 0 }
+  const statCount = (n: number) => (catalogLoading ? '…' : formatCount(n))
   const featuredEp = entry.featured_ep
   const featuredEpUrl = (featuredEp?.ep_url || '').trim()
   const featuredEpDurationSeconds = featuredEpUrl
@@ -444,19 +450,19 @@ export function SutraDetailPage() {
               <div className="sutra-detail__hero-shortcuts" aria-label={`${entry.sutra} content shortcuts`}>
                 <Link className="sutra-detail__hero-shortcut" to={browseHref}>
                   <span className="sutra-detail__hero-shortcut-k">Songs</span>
-                  <span className="sutra-detail__hero-shortcut-v">{formatCount(stats.songs)}</span>
+                  <span className="sutra-detail__hero-shortcut-v">{stats ? statCount(stats.songs) : '…'}</span>
                 </Link>
                 <Link className="sutra-detail__hero-shortcut" to={tracksHref}>
                   <span className="sutra-detail__hero-shortcut-k">Top tracks</span>
-                  <span className="sutra-detail__hero-shortcut-v">{formatCount(stats.tracks)}</span>
+                  <span className="sutra-detail__hero-shortcut-v">{stats ? statCount(stats.tracks) : '…'}</span>
                 </Link>
                 <Link className="sutra-detail__hero-shortcut" to={videosHref}>
                   <span className="sutra-detail__hero-shortcut-k">Videos</span>
-                  <span className="sutra-detail__hero-shortcut-v">{formatCount(videosCount)}</span>
+                  <span className="sutra-detail__hero-shortcut-v">{catalogLoading ? '…' : formatCount(videosCount)}</span>
                 </Link>
                 <Link className="sutra-detail__hero-shortcut" to={wordsHref}>
                   <span className="sutra-detail__hero-shortcut-k">Lyrics only</span>
-                  <span className="sutra-detail__hero-shortcut-v">{formatCount(lyricsOnlyCount)}</span>
+                  <span className="sutra-detail__hero-shortcut-v">{stats ? statCount(lyricsOnlyCount) : '…'}</span>
                 </Link>
               </div>
             </div>
@@ -498,7 +504,7 @@ export function SutraDetailPage() {
               </ul>
             ) : null}
             <Link className="catalog-section-cta" to={browseHref}>
-              View all {formatCount(stats.songs)} {entry.sutra} songs →
+              View all {stats ? formatCount(stats.songs) : '…'} {entry.sutra} songs →
             </Link>
           </section>
 
@@ -541,6 +547,8 @@ export function SutraDetailPage() {
                     embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
                     iframeClassName="sutra-detail__yt-embed"
                     facadeUntilClick
+                    onBeforePlay={() => exclusivePlaybackRef.current?.pauseAllSoundcloud()}
+                    onIframeLoad={() => setYoutubeIframeGen((g) => g + 1)}
                     outboundFooterClassName="sutra-detail__yt-outbound"
                   />
                 </div>
@@ -566,7 +574,7 @@ export function SutraDetailPage() {
             {featuredEp?.ep_url && featuredEp.ep_url.includes('soundcloud.com') ? (
               <div className="sutra-detail__feat">
                 <div className="sutra-detail__feat-embed" ref={soundcloudExclusiveWrapRef}>
-                  <SoundCloudEmbed
+                  <LazySoundCloudEmbed
                     scUrl={featuredEp.ep_url}
                     title={featuredEp.ep_title}
                     height={280}
@@ -591,7 +599,7 @@ export function SutraDetailPage() {
               <div className="sutra-detail__feat">
                 <div className="sutra-detail__feat-embed" ref={soundcloudExclusiveWrapRef}>
                   {featuredSongbookFallback.playlist_url ? (
-                    <SoundCloudEmbed
+                    <LazySoundCloudEmbed
                       scUrl={featuredSongbookFallback.playlist_url}
                       title={featuredSongbookFallback.songbook}
                       height={280}
