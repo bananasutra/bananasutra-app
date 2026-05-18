@@ -10,7 +10,7 @@
     "deploy": "wrangler deploy",
     "tail": "wrangler tail",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test tests/botDetection.test.ts tests/seoMetadata.test.ts tests/seoHeadFragment.test.ts tests/spaShell.test.ts tests/handleRequest.test.ts",
+    "test": "node --experimental-strip-types --test tests/botDetection.test.ts tests/seoMetadata.test.ts tests/seoHeadFragment.test.ts tests/spaShell.test.ts tests/cfImagePassThrough.test.ts tests/handleRequest.test.ts",
     "verify:spa-curl": "bash scripts/curl-verify-spa.sh"
   },
   "devDependencies": {
