@@ -7,6 +7,12 @@
   color: var(--color-text-secondary, #444);
 }
 
+@media (min-width: 900px) {
+  .tracks-page__loading-shell {
+    min-height: 3600px;
+  }
+}
+
 .tracks-page__player {
   margin: 0 0 1.1rem;
 }

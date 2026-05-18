@@ -93,11 +93,22 @@ export function QuoteWall() {
   }, [findQuote, rows, topicFilter])
   const grouped = useMemo(() => groupQuotes(filtered), [filtered])
 
-  if (loading) return <p className="about-page__prose">Loading quotes...</p>
+  if (loading) {
+    return (
+      <div className="about-page__body about-page__body--quotes about-page__body--loading">
+        <section className="about-page__section about-page__section--loading" aria-labelledby="quotes-title-loading">
+          <h2 id="quotes-title-loading" className="catalog-section-title about-page__anchor-target">
+            The quotes
+          </h2>
+          <p className="about-page__prose">Loading quotes...</p>
+        </section>
+      </div>
+    )
+  }
   if (error || !data) return <p className="about-page__prose">{error ?? 'Could not load quotes data.'}</p>
 
   return (
-    <div className="about-page__body">
+    <div className="about-page__body about-page__body--quotes">
       {pageMeta}
       <section className="about-page__section" aria-labelledby="quotes-title">
         <h2 id="quotes-title" className="catalog-section-title about-page__anchor-target">

@@ -17,6 +17,20 @@
   flex-direction: column;
 }
 
+.about-page__section--loading {
+  min-height: 8rem;
+}
+
+@media (min-width: 900px) {
+  .about-page__body--loading.about-page__body--muses .about-page__section--loading {
+    min-height: 2650px;
+  }
+
+  .about-page__body--loading.about-page__body--quotes .about-page__section--loading {
+    min-height: 9000px;
+  }
+}
+
 .about-page__body > .about-page__section {
   margin: 0;
   padding: var(--about-section-pad-y) 0;
