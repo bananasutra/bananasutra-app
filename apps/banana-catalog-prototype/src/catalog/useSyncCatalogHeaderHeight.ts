@@ -21,6 +21,7 @@ export function useSyncCatalogHeaderHeight(
       const entry = entries[0]
       if (entry) applyHeight(entry.contentRect.height)
     })
+    applyHeightFromHeader(page, header)
     ro.observe(header)
 
     return () => {
