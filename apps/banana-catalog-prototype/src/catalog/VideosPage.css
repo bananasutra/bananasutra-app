@@ -7,6 +7,12 @@
   min-height: 72vh;
 }
 
+@media (min-width: 900px) {
+  .videos-page__loading-shell {
+    min-height: 4200px;
+  }
+}
+
 .videos-page__code {
   font-size: 0.65em;
   padding: 0.05em 0.28em;

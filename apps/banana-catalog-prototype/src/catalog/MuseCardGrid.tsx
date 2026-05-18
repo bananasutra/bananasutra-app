@@ -205,11 +205,22 @@ export function MuseCardGrid() {
 
   const visible = showAll ? filtered : filtered.slice(0, INITIAL_MUSE_COUNT)
 
-  if (loading) return <p className="about-page__prose">Loading muses...</p>
+  if (loading) {
+    return (
+      <div className="about-page__body about-page__body--muses about-page__body--loading">
+        <section className="about-page__section about-page__section--loading" aria-labelledby="muses-title-loading">
+          <h2 id="muses-title-loading" className="catalog-section-title about-page__anchor-target">
+            The muses
+          </h2>
+          <p className="about-page__prose">Loading muses...</p>
+        </section>
+      </div>
+    )
+  }
   if (error || !data) return <p className="about-page__prose">{error ?? 'Could not load muses data.'}</p>
 
   return (
-    <div className="about-page__body">
+    <div className="about-page__body about-page__body--muses">
       {pageMeta}
       <section className="about-page__section" aria-labelledby="muses-title">
         <h2 id="muses-title" className="catalog-section-title about-page__anchor-target">

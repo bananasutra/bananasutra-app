@@ -10,7 +10,7 @@ import { SoundCloudPassthroughEmbed } from './SoundCloudPassthroughEmbed'
 import { sutraClassName } from './sutraTheme'
 import { buildBrowsePath, buildBrowsePathForFacet } from './urlState'
 import { emptyFilterState, type SongCatalogItem, type SongbookMemberSong } from './types'
-import { coverImageUrl } from '../seo/imageUrl'
+import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { musicAlbumJsonLd, songbookItemListJsonLd } from '../seo/jsonLd'
 import { renderPageMeta } from './usePageMeta'
 import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -282,16 +282,23 @@ export function SongbookPage() {
 
             <header className="songbooks-page__hero">
               {songbook.playlist_artwork_url ? (
-                <img
-                  className="songbooks-page__hero-art"
-                  src={coverImageUrl(songbook.playlist_artwork_url, { width: 400 })}
-                  alt=""
-                  width={320}
-                  height={320}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="sync"
-                />
+                <picture className="songbooks-page__hero-art">
+                  <source
+                    srcSet={buildSrcset(songbook.playlist_artwork_url)}
+                    sizes="(max-width: 640px) 400px, 640px"
+                    type="image/webp"
+                  />
+                  <img
+                    className="songbooks-page__hero-art"
+                    src={coverImageUrl(songbook.playlist_artwork_url)}
+                    alt=""
+                    width={320}
+                    height={320}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="sync"
+                  />
+                </picture>
               ) : (
                 <div className="songbooks-page__hero-art songbooks-page__hero-art--fallback" aria-hidden>
                   🍌

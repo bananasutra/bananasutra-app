@@ -33,6 +33,8 @@ export type YoutubeEmbeddedPlayerProps = {
   onBeforePlay?: () => void
   /** Runs when the embed iframe finishes loading (YouTube JS API handshake). */
   onIframeLoad?: () => void
+  /** For above-the-fold heroes: eager poster + high fetch priority while facade is visible. */
+  facadePosterEager?: boolean
 }
 
 const YT_IFRAME_ALLOW =
@@ -76,6 +78,7 @@ export function YoutubeEmbeddedPlayer({
   facadeUntilClick = false,
   onBeforePlay,
   onIframeLoad,
+  facadePosterEager = false,
 }: YoutubeEmbeddedPlayerProps) {
   const id = videoId.trim()
   const clientMounted = useClientMounted()
@@ -112,7 +115,8 @@ export function YoutubeEmbeddedPlayer({
                 alt=""
                 className="yt-embed-client-placeholder__poster"
                 decoding="async"
-                loading="lazy"
+                loading={facadePosterEager ? 'eager' : 'lazy'}
+                fetchPriority={facadePosterEager ? 'high' : undefined}
               />
             ) : null}
           </div>
@@ -136,7 +140,14 @@ export function YoutubeEmbeddedPlayer({
             }}
           >
             {poster ? (
-              <img src={poster} alt="" className="yt-embed-facade__poster" decoding="async" loading="lazy" />
+              <img
+                src={poster}
+                alt=""
+                className="yt-embed-facade__poster"
+                decoding="async"
+                loading={facadePosterEager ? 'eager' : 'lazy'}
+                fetchPriority={facadePosterEager ? 'high' : undefined}
+              />
             ) : null}
             <span className="yt-embed-facade__ring" aria-hidden>
               <span className="yt-embed-facade__glyph">▶</span>

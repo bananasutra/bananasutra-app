@@ -476,7 +476,7 @@ export function VideosPage() {
       <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
         <GlobalHeader ref={headerRef} />
         <div className="catalog-page__main">
-          <article className="about-page catalog-layout-shell" id="main-content">
+          <article className="about-page catalog-layout-shell videos-page__loading-shell" id="main-content">
             <p className="about-page__p">Loading…</p>
           </article>
         </div>
@@ -770,6 +770,7 @@ export function VideosPage() {
                 embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideoHero.format) }}
                 iframeClassName="videos-page__featured-hero-iframe"
                 facadeUntilClick
+                facadePosterEager
                 outboundFooterClassName="videos-page__featured-hero-yt-outbound"
               />
               <div className="videos-page__featured-hero-copy">
