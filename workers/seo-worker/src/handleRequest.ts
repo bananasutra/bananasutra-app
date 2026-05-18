@@ -20,6 +20,16 @@ function cloneHeadersForShellResponse(source: Headers): Headers {
   return out;
 }
 
+function withLongLivedCache(source: Response): Response {
+  const headers = new Headers(source.headers);
+  headers.set("cache-control", "public, max-age=31536000, immutable");
+  return new Response(source.body, {
+    status: source.status,
+    statusText: source.statusText,
+    headers,
+  });
+}
+
 async function fetchShellDocumentGet(
   origin: string,
   fetcher: typeof fetch,
@@ -83,9 +93,10 @@ export async function handleRequest(
   const cdnImage = parseCdnCgiImageRequest(url);
   if (cdnImage) {
     // Workers types omit `format: auto` and other URL-transform values; runtime accepts them.
-    return fetcher(cdnImage.sourceUrl, {
+    const imageResponse = await fetcher(cdnImage.sourceUrl, {
       cf: { image: cdnImage.image as RequestInitCfPropertiesImage },
     });
+    return withLongLivedCache(imageResponse);
   }
 
   const botPattern = detectBotPattern(request.headers.get("user-agent"));

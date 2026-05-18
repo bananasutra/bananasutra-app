@@ -452,17 +452,13 @@ export function VideosPage() {
     [filters],
   )
 
-  useSyncCatalogHeaderHeight(pageRef, headerRef, [
-    searchParams.toString(),
-    filtersOpen,
-    featuredVideoHero?.video_id,
-  ])
+  useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString()])
 
   if (catalogLoading || !youtubeCatalogReady) {
     return (
       <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
         <GlobalHeader ref={headerRef} />
-        <div className="catalog-page__main">
+        <div className="catalog-page__main catalog-page__main--videos">
           <article className="about-page catalog-layout-shell videos-page__loading-shell" id="main-content">
             <p className="about-page__p">Loading…</p>
           </article>
@@ -476,7 +472,7 @@ export function VideosPage() {
     return (
       <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
         <GlobalHeader ref={headerRef} />
-        <div className="catalog-page__main">
+        <div className="catalog-page__main catalog-page__main--videos">
           <article className="about-page catalog-layout-shell" id="main-content">
             <p className="about-page__p">{catalogError ?? 'Could not load song catalog data.'}</p>
           </article>

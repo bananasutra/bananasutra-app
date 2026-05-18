@@ -11,15 +11,17 @@ export function useSyncCatalogHeaderHeight(
     const header = headerRef.current
     if (!page || !header) return
 
+    let lastPx = ''
     const applyHeight = (heightPx: number) => {
       const px = `${heightPx}px`
+      if (px === lastPx) return
+      lastPx = px
       page.style.setProperty('--catalog-header-h', px)
       document.documentElement.style.setProperty('--catalog-header-h', px)
     }
 
-    const ro = new ResizeObserver((entries) => {
-      const entry = entries[0]
-      if (entry) applyHeight(entry.contentRect.height)
+    const ro = new ResizeObserver(() => {
+      applyHeight(header.offsetHeight)
     })
     applyHeightFromHeader(page, header)
     ro.observe(header)
@@ -43,7 +45,7 @@ export function syncCatalogHeaderHeightNow(
 }
 
 function applyHeightFromHeader(page: HTMLElement, header: HTMLElement): void {
-  const px = `${header.getBoundingClientRect().height}px`
+  const px = `${header.offsetHeight}px`
   page.style.setProperty('--catalog-header-h', px)
   document.documentElement.style.setProperty('--catalog-header-h', px)
 }

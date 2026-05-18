@@ -63,7 +63,7 @@ html {
   flex: 0 0 auto;
   margin: 0;
   padding: 0.26rem 0.55rem;
-  border: 1px solid var(--color-border, #cfcac0);
+  border: 1px solid var(--color-border-strong, #a8b0a2);
   border-radius: 5px;
   background: var(--color-bg-inset, rgba(0, 0, 0, 0.03));
   font-family: inherit;
@@ -73,7 +73,7 @@ html {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--color-text-secondary, #4a4a46);
+  color: var(--color-text-primary, #2d3a1f);
   white-space: nowrap;
   transition:
     border-color 0.12s ease,
@@ -635,7 +635,7 @@ a.catalog-clear:hover {
   display: block;
   margin: 0 0 0.35rem;
   font-size: 0.72rem;
-  color: var(--color-text-faint, #666);
+  color: var(--color-text-muted, #666);
   line-height: 1.35;
 }
 
@@ -656,7 +656,7 @@ a.catalog-clear:hover {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--color-text-faint);
+  color: var(--color-text-muted);
   font-family: var(--font-ui);
   font-weight: 700;
 }
@@ -665,7 +665,7 @@ a.catalog-clear:hover {
   margin: 0 0 0.45rem;
   font-size: 0.68rem;
   line-height: 1.35;
-  color: var(--color-text-faint);
+  color: var(--color-text-muted);
   font-family: var(--font-ui);
 }
 
@@ -785,7 +785,7 @@ a.catalog-facet-chip.is-active:visited {
 .catalog-facet-count {
   font-size: 0.72rem;
   font-weight: 500;
-  color: var(--color-text-faint);
+  color: var(--color-text-muted);
   line-height: inherit;
   white-space: nowrap;
 }
