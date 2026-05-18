@@ -127,19 +127,8 @@ function NotFoundRoute() {
 
 function BootPrefetch() {
   useEffect(() => {
-    // Route chunks can still be warmed aggressively without blocking first paint.
+    // Route prefetch policy is centralized in routePrefetch.ts.
     prefetchCatalogRoutesIdle()
-    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
-    const shouldSkipYoutubeWarm =
-      conn?.saveData === true || (conn?.effectiveType?.toLowerCase().includes('2g') ?? false)
-    if (shouldSkipYoutubeWarm) return
-    const schedule =
-      'requestIdleCallback' in window
-        ? (cb: IdleRequestCallback) => window.requestIdleCallback(cb, { timeout: 3000 })
-        : (cb: () => void) => window.setTimeout(cb, 600)
-    schedule(() => {
-      void import('./catalog/generatedData').then(({ loadYoutubeByLyricsId }) => loadYoutubeByLyricsId())
-    })
   }, [])
   return null
 }

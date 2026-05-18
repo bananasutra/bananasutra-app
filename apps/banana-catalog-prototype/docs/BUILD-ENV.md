@@ -37,6 +37,30 @@ npm run build:data --prefix "apps/banana-catalog-prototype"
 
 Vite emits fingerprinted assets under `dist/assets/` (e.g. `song_catalog-*.json`, `index-*.js`). Configure your host or CDN to serve those files with **long-lived immutable caching** (`Cache-Control: public, max-age=31536000, immutable` or equivalent). HTML (`index.html`) should stay short-cache or no-cache so clients pick up new hashed filenames after each deploy.
 
+## R31 Lighthouse notes (IDs 61 + 63)
+
+### Deprecated API warnings from `/cdn-cgi/challenge-platform/*`
+
+- Lighthouse "Deprecated APIs" entries such as `SharedStorage`, `Fledge`, and `StorageType.persistent` can appear with source `cdn-cgi/challenge-platform/.../main.js`.
+- Those scripts are injected by Cloudflare challenge/security features and are **not** emitted by this app bundle.
+- Repo code can document/acknowledge this, but fixing those specific warnings requires Cloudflare dashboard/security configuration changes (outside app code).
+
+### Cloudflare cache policy checklist
+
+Apply these rules in Cloudflare for the production zone:
+
+1. Keep long immutable cache for `dist` assets (already expected):
+   - `/assets/*`
+   - `/fonts/*`
+2. Add long cache for transformed image URLs:
+   - `/cdn-cgi/image/*`
+3. Add longer cache for static generated artifacts where acceptable:
+   - `/catalog-data/*`
+   - `/og/*`
+4. Keep HTML routes (`/`, `/about/*`, `/songs/*`, etc.) on short cache/no-cache so new deploys are discoverable quickly.
+
+The seo worker now also sets immutable cache headers on `/cdn-cgi/image/*` responses to prevent fallback to short platform defaults.
+
 ## Near-Term Directory Targets
 
 - `src/features/catalog/` - song grid and card UI

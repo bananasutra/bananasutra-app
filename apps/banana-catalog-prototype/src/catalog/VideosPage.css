@@ -8,12 +8,12 @@
 }
 
 .videos-page__loading-shell {
-  min-height: 2400px;
+  min-height: 1500px;
 }
 
 @media (min-width: 900px) {
   .videos-page__loading-shell {
-    min-height: 4200px;
+    min-height: 2100px;
   }
 }
 

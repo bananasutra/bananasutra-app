@@ -88,7 +88,13 @@ export function AboutSutrasContent() {
   }, [songCatalogRows])
 
   if (catalogLoading) {
-    return <p className="about-page__prose">Loading sutra counts...</p>
+    return (
+      <div className="about-page__body about-page__body--loading about-page__body--sutras">
+        <section className="about-page__section about-page__section--loading" aria-busy="true" aria-live="polite">
+          <p className="about-page__prose">Loading sutra counts...</p>
+        </section>
+      </div>
+    )
   }
 
   if (catalogError || !songCatalogRows) {
