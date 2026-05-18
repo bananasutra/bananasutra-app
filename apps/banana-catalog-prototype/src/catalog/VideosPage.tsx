@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { songMatchesMediaCombo } from './filterSongs'
 import { GlobalFooter } from './GlobalFooter'
@@ -150,12 +150,6 @@ function isVerticalFormat(video: YouTubeCatalogVideo): boolean {
   return f.includes('9:16') || f.includes('vertical') || f === 'shorts'
 }
 
-function pickRandomVideo(videos: YouTubeCatalogVideo[]): YouTubeCatalogVideo | null {
-  if (videos.length === 0) return null
-  const index = Math.floor(Math.random() * videos.length)
-  return videos[index] ?? null
-}
-
 function applyVideoFilters(
   videos: YouTubeCatalogVideo[],
   f: VideosUrlFilters,
@@ -276,7 +270,6 @@ export function VideosPage() {
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const navigate = useNavigate()
-  const { key: routeVisitKey } = useLocation()
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
   const [youtubeCatalogVideos, setYoutubeCatalogVideos] = useState<YouTubeCatalogVideo[]>([])
   const [youtubeCatalogReady, setYoutubeCatalogReady] = useState(false)
@@ -300,10 +293,8 @@ export function VideosPage() {
     }, FIND_DEBOUNCE_MS)
     return () => window.clearTimeout(tid)
   }, [findDraft, filters.find, navigate])
-  // Default closed on mobile so videos are immediately visible without scrolling past filters.
-  const [filtersOpen, setFiltersOpen] = useState(() =>
-    typeof window === 'undefined' ? true : window.innerWidth >= 900,
-  )
+  // Keep server and client first paint aligned; avoid mobile hydration-open/close swaps that register as CLS.
+  const [filtersOpen, setFiltersOpen] = useState(true)
 
   const inAppIds = useMemo(() => {
     const ids = songCatalogRows?.map((s) => (s.lyrics_id || '').trim()).filter(Boolean) ?? []
@@ -359,7 +350,7 @@ export function VideosPage() {
     () => allVideos.filter((v) => Boolean(v.video_featured) && Boolean(v.can_embed)),
     [allVideos],
   )
-  const featuredVideoHero = useMemo(() => pickRandomVideo(featuredVideos), [featuredVideos, routeVisitKey])
+  const featuredVideoHero = useMemo(() => featuredVideos[0] ?? null, [featuredVideos])
 
   const featuredHeroSongPageHref = useMemo(() => {
     if (!featuredVideoHero) return null
@@ -464,12 +455,7 @@ export function VideosPage() {
   useSyncCatalogHeaderHeight(pageRef, headerRef, [
     searchParams.toString(),
     filtersOpen,
-    hasActiveVideoFilters,
-    shownVideos.length,
-    safeVideoPage,
-    wideTotal,
-    verticalVideos.length,
-    findDraft,
+    featuredVideoHero?.video_id,
   ])
 
   if (catalogLoading || !youtubeCatalogReady) {

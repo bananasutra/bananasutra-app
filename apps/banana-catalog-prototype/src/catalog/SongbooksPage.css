@@ -706,7 +706,7 @@
 }
 
 .songbooks-page__secondary-link {
-  color: var(--color-text-faint);
+  color: var(--color-text-muted);
 }
 
 .songbooks-page__secondary-link:hover {

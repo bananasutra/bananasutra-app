@@ -2,7 +2,6 @@ import { Component, lazy, Suspense, type ReactNode, useEffect, useLayoutEffect, 
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
 import { NavigationLoadingBridge } from './NavigationLoadingBridge'
-import { loadSongCatalogBrowse, loadYoutubeByLyricsId } from './catalog/generatedData'
 import { prefetchCatalogRoutesIdle } from './routePrefetch'
 import { SearchRedirect } from './catalog/SearchRedirect'
 import { useAnalyticsPageView } from './useAnalyticsPageView'
@@ -26,7 +25,7 @@ const GITHUB_PROJECT_BASENAME = '/bananasutra-app'
 
 /** Start the main browse payload fetch as soon as the app bundle is evaluated. */
 if (typeof window !== 'undefined') {
-  void loadSongCatalogBrowse()
+  void import('./catalog/generatedData').then(({ loadSongCatalogBrowse }) => loadSongCatalogBrowse())
 }
 
 /** Browse route — `CatalogApp` syncs sort + facet state from `location.search` without remounting
@@ -139,7 +138,7 @@ function BootPrefetch() {
         ? (cb: IdleRequestCallback) => window.requestIdleCallback(cb, { timeout: 3000 })
         : (cb: () => void) => window.setTimeout(cb, 600)
     schedule(() => {
-      void loadYoutubeByLyricsId()
+      void import('./catalog/generatedData').then(({ loadYoutubeByLyricsId }) => loadYoutubeByLyricsId())
     })
   }, [])
   return null

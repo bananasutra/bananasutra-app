@@ -7,6 +7,10 @@
   min-height: 100vh;
 }
 
+.videos-page__loading-shell {
+  min-height: 2400px;
+}
+
 @media (min-width: 900px) {
   .videos-page__loading-shell {
     min-height: 4200px;
@@ -66,6 +70,7 @@
   margin-top: 0.8rem;
   max-width: 980px;
   margin-inline: auto;
+  min-height: 5.8rem;
 }
 
 .videos-page__featured-hero-title {
@@ -81,7 +86,7 @@
   margin: 0 0 0.45rem;
   font-size: 0.9rem;
   line-height: 1.55;
-  color: var(--color-text-muted);
+  color: var(--color-text-primary);
 }
 
 .videos-page__featured-hero-sutra {
@@ -89,7 +94,7 @@
   font: 700 0.68rem/1.35 var(--font-ui);
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: var(--color-text-faint);
+  color: var(--color-text-muted);
 }
 
 .videos-page__grid {
@@ -290,6 +295,10 @@
 .videos-page__card-meta.catalog-card-meta {
   margin-top: auto;
   padding-top: 0.35rem;
+}
+
+.videos-page__card-meta .catalog-card-meta-secondary {
+  color: var(--color-text-primary);
 }
 
 .videos-page__card-off-catalog-note {

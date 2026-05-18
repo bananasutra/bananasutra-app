@@ -931,9 +931,9 @@ function SongDetailLoaded({
 
               {shouldShowTracksList ? (
                 <section className="song-detail-tracks" aria-labelledby="song-tracks-heading">
-                  <h3 id="song-tracks-heading" className="song-detail-subsection-title">
+                  <h2 id="song-tracks-heading" className="song-detail-subsection-title">
                     {inAppPlayableTracks.length > 1 ? 'Top tracks' : 'Track picks'}
-                  </h3>
+                  </h2>
                   {inAppPlayableTracks.length > 1 ? (
                     <div className="song-detail-audio-playall" aria-label="Play all top tracks">
                       {playAllTopTracksActive ? (
