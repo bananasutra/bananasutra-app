@@ -4,11 +4,35 @@
  * Parse the URL and re-fetch the source with `cf.image` so resizing runs at the edge.
  */
 
+/** Parsed from `/cdn-cgi/image/...` option strings (includes `auto`, which URL transforms use). */
+export type CfImageFormat =
+  | 'auto'
+  | 'avif'
+  | 'webp'
+  | 'jpeg'
+  | 'png'
+  | 'json'
+  | 'baseline-jpeg'
+  | 'png-force'
+  | 'svg'
+
+const KNOWN_FORMATS = new Set<CfImageFormat>([
+  'auto',
+  'avif',
+  'webp',
+  'jpeg',
+  'png',
+  'json',
+  'baseline-jpeg',
+  'png-force',
+  'svg',
+])
+
 export type CfImageOptions = {
   width?: number
   height?: number
   quality?: number
-  format?: string
+  format?: CfImageFormat
   fit?: string
 }
 
@@ -22,8 +46,10 @@ export function parseImageOptionString(optionsStr: string): CfImageOptions {
     if (key === 'width' || key === 'height' || key === 'quality') {
       const n = Number(value)
       if (!Number.isNaN(n)) image[key] = n
-    } else if (key === 'format' || key === 'fit') {
-      image[key] = value
+    } else if (key === 'format' && KNOWN_FORMATS.has(value as CfImageFormat)) {
+      image.format = value as CfImageFormat
+    } else if (key === 'fit') {
+      image.fit = value
     }
   }
   return image
