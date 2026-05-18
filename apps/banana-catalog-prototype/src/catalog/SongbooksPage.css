@@ -479,17 +479,17 @@
 
 .songbooks-page__playlist {
   margin-bottom: 1.4rem;
-  min-height: 790px;
+  min-height: 1100px;
 }
 
 .songbooks-page__playlist .catalog-lazy-sc-embed,
 .songbooks-page__playlist .catalog-lazy-sc-embed__placeholder,
 .songbooks-page__playlist .catalog-sc-passthrough-embed {
-  min-height: 790px;
+  min-height: 1100px;
 }
 
 .songbooks-page__playlist .sc-embed-frame {
-  min-height: 790px;
+  min-height: 1100px;
 }
 
 /* Passthrough wrap: border/background live on the iframe (see .sc-embed-frame below). */

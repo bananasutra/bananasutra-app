@@ -10,6 +10,7 @@ import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
 import type { SongCatalogItem, YouTubeCatalogVideo } from './types'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
+import { coverImageUrl } from '../seo/imageUrl'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { ScrollRail } from './ScrollRail'
@@ -229,7 +230,7 @@ function VideoCardBody({
         {v.thumbnail_url ? (
           <img
             className="videos-page__card-thumb"
-            src={v.thumbnail_url}
+            src={coverImageUrl(v.thumbnail_url, { width: 640 })}
             alt=""
             width={640}
             height={360}
@@ -771,6 +772,7 @@ export function VideosPage() {
                 iframeClassName="videos-page__featured-hero-iframe"
                 facadeUntilClick
                 facadePosterEager
+                posterWidth={640}
                 outboundFooterClassName="videos-page__featured-hero-yt-outbound"
               />
               <div className="videos-page__featured-hero-copy">

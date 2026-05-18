@@ -1,5 +1,6 @@
 import type { CSSProperties, RefObject } from 'react'
 import { useEffect, useMemo, useState } from 'react'
+import { coverImageUrl } from '../seo/imageUrl'
 import {
   youtubePosterThumbnailUrl,
   youtubePrivacyEmbedSrc,
@@ -35,6 +36,8 @@ export type YoutubeEmbeddedPlayerProps = {
   onIframeLoad?: () => void
   /** For above-the-fold heroes: eager poster + high fetch priority while facade is visible. */
   facadePosterEager?: boolean
+  /** Poster transformation width for the facade image. */
+  posterWidth?: number
 }
 
 const YT_IFRAME_ALLOW =
@@ -79,6 +82,7 @@ export function YoutubeEmbeddedPlayer({
   onBeforePlay,
   onIframeLoad,
   facadePosterEager = false,
+  posterWidth = 400,
 }: YoutubeEmbeddedPlayerProps) {
   const id = videoId.trim()
   const clientMounted = useClientMounted()
@@ -95,7 +99,7 @@ export function YoutubeEmbeddedPlayer({
 
   if (!id) return null
   const iframeClass = ['yt-embed-frame', iframeClassName].filter(Boolean).join(' ')
-  const poster = youtubePosterThumbnailUrl(id)
+  const poster = coverImageUrl(youtubePosterThumbnailUrl(id), { width: posterWidth })
 
   const outbound = <YoutubeEmbedOutboundFooter videoId={id} className={outboundFooterClassName} />
 
