@@ -6,19 +6,16 @@ export type CoverImageOptions = {
   quality?: number
 }
 
-function isTransformHost(): boolean {
-  if (typeof window !== 'undefined') {
-    return window.location.hostname === CF_IMAGE_HOST || window.location.hostname === `www.${CF_IMAGE_HOST}`
-  }
-  return true
+function isHttpUrl(value: string): boolean {
+  return /^https?:\/\//i.test(value)
 }
 
-/** Wrap a remote cover URL with Cloudflare Image Transformations on production. */
+/** Wrap remote cover URLs with Cloudflare Image Transformations. */
 export function coverImageUrl(source: string | null | undefined, opts: CoverImageOptions = {}): string {
   const trimmed = (source ?? '').trim()
   if (!trimmed) return ''
   if (trimmed.includes('/cdn-cgi/image/')) return trimmed
-  if (!isTransformHost()) return trimmed
+  if (!isHttpUrl(trimmed)) return trimmed
 
   const width = opts.width ?? 400
   const format = opts.format ?? 'auto'
