@@ -82,8 +82,9 @@ export async function handleRequest(
   const url = new URL(request.url);
   const cdnImage = parseCdnCgiImageRequest(url);
   if (cdnImage) {
+    // Workers types omit `format: auto` and other URL-transform values; runtime accepts them.
     return fetcher(cdnImage.sourceUrl, {
-      cf: { image: cdnImage.image },
+      cf: { image: cdnImage.image as RequestInitCfPropertiesImage },
     });
   }
 
