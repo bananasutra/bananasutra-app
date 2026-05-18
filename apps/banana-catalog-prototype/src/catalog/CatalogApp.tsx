@@ -25,7 +25,7 @@ import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
 import { CatalogPager } from './CatalogPager'
 import './CatalogPager.css'
-import { coverImageUrl } from '../seo/imageUrl'
+import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -36,6 +36,8 @@ import './CatalogApp.css'
 
 const PAGE_SIZE = 30
 const FIND_DEBOUNCE_MS = 350
+const SONG_CARD_COVER_REQUEST_WIDTH = 480
+const SONG_CARD_COVER_SIZES = '(max-width: 640px) 48vw, (max-width: 1100px) 32vw, 260px'
 
 function toggleSetMember(set: Set<string>, value: string): Set<string> {
   const next = new Set(set)
@@ -614,11 +616,14 @@ export function CatalogApp() {
                   <div className="catalog-card-art">
                     {song.cover_image_url ? (
                       <img
-                        src={coverImageUrl(song.cover_image_url, { width: 200 })}
+                        srcSet={buildSrcset(song.cover_image_url, [240, 360, SONG_CARD_COVER_REQUEST_WIDTH, 640])}
+                        sizes={SONG_CARD_COVER_SIZES}
+                        src={coverImageUrl(song.cover_image_url, { width: SONG_CARD_COVER_REQUEST_WIDTH })}
                         alt=""
                         loading="lazy"
-                        width={200}
-                        height={200}
+                        decoding="async"
+                        width={400}
+                        height={400}
                       />
                     ) : (
                       <div className="catalog-card-art-fallback" aria-hidden>

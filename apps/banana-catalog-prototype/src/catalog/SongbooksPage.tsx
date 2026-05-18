@@ -8,7 +8,7 @@ import { pickFeaturedSongbook, songbookFeaturedKickerLabel, songbookHrefFromCata
 import { allSongbooks, songbookHref } from './songbooks'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
-import { coverImageUrl } from '../seo/imageUrl'
+import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -73,6 +73,9 @@ const SECTION_MOBILE_LABELS: Partial<Record<SongbookSectionKey, string>> = {
   language: 'Language',
   collection: 'Collections',
 }
+
+const SONGBOOK_CARD_ART_REQUEST_WIDTH = 480
+const SONGBOOK_CARD_ART_SIZES = '(max-width: 640px) 48vw, (max-width: 1024px) 31vw, 260px'
 
 function sectionKeyForType(raw: string | undefined): SongbookSectionKey {
   const t = (raw ?? '').trim().toLowerCase()
@@ -150,11 +153,14 @@ function SongbookCard({ book }: { book: ListedSongbook }) {
         {book.playlist_artwork_url ? (
           <img
             className="songbooks-page__art"
-            src={coverImageUrl(book.playlist_artwork_url, { width: 200 })}
+            srcSet={buildSrcset(book.playlist_artwork_url, [240, 360, SONGBOOK_CARD_ART_REQUEST_WIDTH, 640])}
+            sizes={SONGBOOK_CARD_ART_SIZES}
+            src={coverImageUrl(book.playlist_artwork_url, { width: SONGBOOK_CARD_ART_REQUEST_WIDTH })}
             alt=""
             width={280}
             height={280}
             loading="lazy"
+            decoding="async"
           />
         ) : (
           <div className="songbooks-page__art songbooks-page__art--fallback" aria-hidden>
