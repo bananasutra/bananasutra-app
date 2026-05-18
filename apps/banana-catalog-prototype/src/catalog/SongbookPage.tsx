@@ -290,7 +290,7 @@ export function SongbookPage() {
                   />
                   <img
                     className="songbooks-page__hero-art"
-                    src={coverImageUrl(songbook.playlist_artwork_url)}
+                    src={coverImageUrl(songbook.playlist_artwork_url, { width: 400 })}
                     alt=""
                     width={320}
                     height={320}

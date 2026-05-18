@@ -736,7 +736,7 @@ function SongDetailLoaded({
                       type="image/webp"
                     />
                     <img
-                      src={coverImageUrl(detail.cover_image_url)}
+                      src={coverImageUrl(detail.cover_image_url, { width: 400 })}
                       alt=""
                       width={320}
                       height={320}
@@ -1064,7 +1064,7 @@ function SongDetailLoaded({
                             >
                               {v.thumbnail_url ? (
                                 <span className="song-detail-youtube-vid-thumb">
-                                  <img src={v.thumbnail_url} alt="" width={88} height={50} loading="lazy" />
+                                  <img src={coverImageUrl(v.thumbnail_url, { width: 200 })} alt="" width={88} height={50} loading="lazy" />
                                 </span>
                               ) : (
                                 <span
