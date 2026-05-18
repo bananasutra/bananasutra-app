@@ -505,7 +505,7 @@ export function TracksPage() {
             <p className="about-page__p">Try refreshing the page. If this persists, the catalog asset may be missing from the build.</p>
           </article>
         ) : trackCatalog === null ? (
-          <article className="about-page catalog-layout-shell" id="main-content">
+          <article className="about-page catalog-layout-shell tracks-page__loading-shell" id="main-content">
             <p className="about-page__p">Loading track catalog…</p>
           </article>
         ) : total === 0 ? (
