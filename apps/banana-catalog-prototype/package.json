@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/prerender-html.mjs && node scripts/generate-og-images.mjs && node scripts/generate-seo-metadata.mjs && node scripts/generate-sitemap.mjs && node scripts/sync-catalog-data-dist.mjs",
+    "build": "tsc -b && vite build && node scripts/prerender-html.mjs && node scripts/inline-critical-css.mjs && node scripts/generate-og-images.mjs && node scripts/generate-seo-metadata.mjs && node scripts/generate-sitemap.mjs && node scripts/sync-catalog-data-dist.mjs",
     "prerender": "node scripts/prerender-html.mjs",
     "prerender:pilot": "PRERENDER_PILOT=1 node scripts/prerender-html.mjs",
     "verify:seo": "node scripts/verify-seo-artifacts.mjs",
@@ -31,6 +31,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "beasties": "^0.4.2",
     "eslint": "^9.39.4",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^7.1.1",

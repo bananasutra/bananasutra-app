@@ -8,6 +8,7 @@ import { pickFeaturedSongbook, songbookFeaturedKickerLabel, songbookHrefFromCata
 import { allSongbooks, songbookHref } from './songbooks'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
+import { coverImageUrl } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -149,7 +150,7 @@ function SongbookCard({ book }: { book: ListedSongbook }) {
         {book.playlist_artwork_url ? (
           <img
             className="songbooks-page__art"
-            src={book.playlist_artwork_url}
+            src={coverImageUrl(book.playlist_artwork_url, { width: 200 })}
             alt=""
             width={280}
             height={280}

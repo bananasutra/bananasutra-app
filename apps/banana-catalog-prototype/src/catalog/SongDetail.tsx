@@ -27,6 +27,7 @@ import { sutraClassName } from './sutraTheme'
 import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, YouTubeCatalogVideo } from './types'
 import { sutraHrefFromSongSutraField } from './sutraPageUtils'
 import { buildBrowsePathForFacet, CATALOG_BROWSE_PATH } from './urlState'
+import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { songRecordingJsonLd } from '../seo/jsonLd'
 import { PageMeta, songOgImageUrl } from './PageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -728,15 +729,22 @@ function SongDetailLoaded({
             {!isLyricsOnlyNoCoverHero ? (
               <div className="song-detail-cover">
                 {detail.cover_image_url ? (
-                  <img
-                    src={detail.cover_image_url}
-                    alt=""
-                    width={320}
-                    height={320}
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="sync"
-                  />
+                  <picture>
+                    <source
+                      srcSet={buildSrcset(detail.cover_image_url)}
+                      sizes="(max-width: 640px) 320px, 640px"
+                      type="image/webp"
+                    />
+                    <img
+                      src={coverImageUrl(detail.cover_image_url)}
+                      alt=""
+                      width={320}
+                      height={320}
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="sync"
+                    />
+                  </picture>
                 ) : (
                   <div className="song-detail-cover-fallback" aria-hidden>
                     🍌

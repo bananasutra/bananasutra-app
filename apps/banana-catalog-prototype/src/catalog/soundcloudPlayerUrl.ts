@@ -25,6 +25,7 @@ export function soundcloudPlayerSrc(
     show_teaser: visual ? 'false' : 'true',
     show_artwork: visual ? 'true' : 'false',
     visual: visual ? 'true' : 'false',
+    dnt: '1',
   })
   return `https://w.soundcloud.com/player/?url=${encodeURIComponent(scUrl)}&${params.toString()}`
 }

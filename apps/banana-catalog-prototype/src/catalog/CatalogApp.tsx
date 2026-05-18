@@ -25,6 +25,7 @@ import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
 import { CatalogPager } from './CatalogPager'
 import './CatalogPager.css'
+import { coverImageUrl } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -612,7 +613,13 @@ export function CatalogApp() {
                 >
                   <div className="catalog-card-art">
                     {song.cover_image_url ? (
-                      <img src={song.cover_image_url} alt="" loading="lazy" width={200} height={200} />
+                      <img
+                        src={coverImageUrl(song.cover_image_url, { width: 200 })}
+                        alt=""
+                        loading="lazy"
+                        width={200}
+                        height={200}
+                      />
                     ) : (
                       <div className="catalog-card-art-fallback" aria-hidden>
                         🍌

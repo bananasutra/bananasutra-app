@@ -479,6 +479,7 @@
 
 .songbooks-page__playlist {
   margin-bottom: 1.4rem;
+  min-height: 680px;
 }
 
 .songbooks-page__playlist .catalog-lazy-sc-embed,

@@ -1,0 +1,67 @@
+/* Self-hosted Latin subsets (R27) — see public/fonts/ */
+@font-face {
+  font-family: "Fraunces";
+  src: url("/fonts/fraunces-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("/fonts/fraunces-700.woff2") format("woff2");
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Archivo Black";
+  src: url("/fonts/archivo-black-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Sora";
+  src: url("/fonts/sora-400.woff2") format("woff2");
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Sora";
+  src: url("/fonts/sora-600.woff2") format("woff2");
+  font-weight: 600 800;
+  font-style: normal;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Fraunces Fallback";
+  src: local("Georgia");
+  size-adjust: 105%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Archivo Black Fallback";
+  src: local("Arial Black");
+  size-adjust: 108%;
+  ascent-override: 92%;
+  descent-override: 20%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Sora Fallback";
+  src: local("Segoe UI");
+  size-adjust: 100%;
+  ascent-override: 92%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
