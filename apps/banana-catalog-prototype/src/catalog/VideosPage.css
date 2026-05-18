@@ -2,6 +2,11 @@
   width: 100%;
 }
 
+/* Reserve main column while the video grid hydrates (Lighthouse CLS on catalog-page__main). */
+.catalog-page__main--videos {
+  min-height: 72vh;
+}
+
 .videos-page__code {
   font-size: 0.65em;
   padding: 0.05em 0.28em;

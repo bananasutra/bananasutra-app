@@ -6,6 +6,8 @@
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
+  /* Reserve collapsed footer height (contact toggle + social + meta) to avoid late paint CLS on About pages. */
+  min-height: 11.5rem;
 }
 
 .catalog-footer__inner {

@@ -738,7 +738,7 @@ export function VideosPage() {
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
       {pageMeta}
       <GlobalHeader ref={headerRef} />
-      <div className="catalog-page__main">
+      <div className="catalog-page__main catalog-page__main--videos">
         <div className="videos-page catalog-layout-shell">
           <nav className="catalog-breadcrumbs" aria-label="Breadcrumb">
             <Link to="/" className="catalog-breadcrumbs__link">

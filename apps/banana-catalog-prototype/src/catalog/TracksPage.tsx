@@ -19,6 +19,7 @@ import {
   readTracksBrowseFromSearch,
   serializeTracksBrowseQuery,
 } from './urlState'
+import { coverImageUrl } from '../seo/imageUrl'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -719,7 +720,7 @@ export function TracksPage() {
                     /** Wave overlay reads as “now playing”; only show when this row triggered embed autoplay. */
                     const showPlayingWave = active && scAutoplay
                     const href = songCatalogPath(t.lyrics_title, t.url_slug)
-                    const cover = thumbSrc(t.list_cover_url)
+                    const cover = coverImageUrl(thumbSrc(t.list_cover_url), { width: 200 })
                     const g = genreLine(t)
                     const genreSecondary = g.trim()
                     const sutraText = (t.sutra || '').trim()

@@ -30,7 +30,7 @@ export function AboutTabLayout({ children }: { children: ReactNode }) {
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
       <GlobalHeader ref={headerRef} />
       <div className="catalog-page__main">
-        <article className="about-page catalog-layout-shell" id="main-content">
+        <main className="about-page catalog-layout-shell" id="main-content">
           <nav className="catalog-breadcrumbs" aria-label="Breadcrumb">
             <Link className="catalog-breadcrumbs__link" to="/">
               Home
@@ -80,7 +80,7 @@ export function AboutTabLayout({ children }: { children: ReactNode }) {
           </nav>
 
           {children}
-        </article>
+        </main>
       </div>
       <GlobalFooter />
     </div>
