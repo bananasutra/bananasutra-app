@@ -7,6 +7,10 @@
   color: var(--color-text-secondary, #444);
 }
 
+.tracks-page__loading-shell {
+  min-height: 3200px;
+}
+
 @media (min-width: 900px) {
   .tracks-page__loading-shell {
     min-height: 3600px;
