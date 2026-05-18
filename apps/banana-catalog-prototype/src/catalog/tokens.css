@@ -142,14 +142,14 @@
   --dur-base: 180ms;
   --dur-slow: 250ms;
 
-  --sutra-know: #6488a0;
-  --sutra-blow: #a54f44;
-  --sutra-show: #b77a88;
-  --sutra-grow: #748f73;
-  --sutra-flow: #72a8a7;
-  --sutra-glow: #b48a47;
-  --sutra-bow: #8e768d;
-  --sutra-quack: #c5795e;
+  --sutra-know: #2f4f66;
+  --sutra-blow: #6b2f29;
+  --sutra-show: #6f4050;
+  --sutra-grow: #3f5f3f;
+  --sutra-flow: #316666;
+  --sutra-glow: #6c5224;
+  --sutra-bow: #584758;
+  --sutra-quack: #7a4632;
 
   --sutra-know-soft: rgba(100, 136, 160, 0.16);
   --sutra-blow-soft: rgba(165, 79, 68, 0.16);
@@ -174,8 +174,8 @@
 
   --color-text-primary: #2d3a1f;
   --color-text-strong: #1e2814;
-  --color-text-muted: #5c6650;
-  --color-text-faint: #7a8472;
+  --color-text-muted: #4f5945;
+  --color-text-faint: #66705d;
 
   --color-border: #cdd2c9;
   --color-border-strong: #a8b0a2;
@@ -256,6 +256,15 @@
   --media-off-bg: rgba(255, 255, 255, 0.08);
   --media-off-fg: #b1a290;
   --media-off-border: rgba(255, 255, 255, 0.12);
+
+  --sutra-know: #8fbad7;
+  --sutra-blow: #d98f86;
+  --sutra-show: #d8a4b5;
+  --sutra-grow: #9ac796;
+  --sutra-flow: #8fcfcc;
+  --sutra-glow: #d7b175;
+  --sutra-bow: #bda4c5;
+  --sutra-quack: #d79a7e;
 }
 
 /*

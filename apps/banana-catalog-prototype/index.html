@@ -67,9 +67,7 @@
     <meta name="twitter:image" content="https://bananasutra.com/og/site.png" />
     <link rel="preload" href="/fonts/fraunces-400.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/sora-400.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preconnect" href="https://i1.sndcdn.com" />
-    <link rel="preconnect" href="https://widget.sndcdn.com" crossorigin />
-    <link rel="preconnect" href="https://i.ytimg.com" />
+    <link rel="dns-prefetch" href="//www.googletagmanager.com" />
     <style>
       #app-boot-splash {
         position: fixed;
@@ -121,10 +119,13 @@
         }
       }
     </style>
-    <!-- Google Analytics 4 — deferred until idle (R27) -->
+    <!-- Google Analytics 4 — deferred until after load + idle (R31). -->
     <script>
       (function () {
+        var initialized = false;
         var init = function () {
+          if (initialized) return;
+          initialized = true;
           var s = document.createElement('script');
           s.async = true;
           s.src = 'https://www.googletagmanager.com/gtag/js?id=G-MJLGTXTE5W';
@@ -135,10 +136,17 @@
           gtag('js', new Date());
           gtag('config', 'G-MJLGTXTE5W', { send_page_view: false });
         };
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(init, { timeout: 3000 });
+        var scheduleInit = function () {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(init, { timeout: 5000 });
+            return;
+          }
+          setTimeout(init, 2500);
+        };
+        if (document.readyState === 'complete') {
+          scheduleInit();
         } else {
-          setTimeout(init, 2000);
+          window.addEventListener('load', scheduleInit, { once: true });
         }
       })();
     </script>

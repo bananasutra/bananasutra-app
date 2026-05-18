@@ -21,7 +21,15 @@
   min-height: 8rem;
 }
 
+.about-page__body--loading.about-page__body--sutras .about-page__section--loading {
+  min-height: 1320px;
+}
+
 @media (min-width: 900px) {
+  .about-page__body--loading.about-page__body--sutras .about-page__section--loading {
+    min-height: 1900px;
+  }
+
   .about-page__body--loading.about-page__body--muses .about-page__section--loading {
     min-height: 2650px;
   }
