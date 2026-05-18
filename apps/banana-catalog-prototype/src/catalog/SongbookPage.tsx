@@ -10,6 +10,7 @@ import { SoundCloudPassthroughEmbed } from './SoundCloudPassthroughEmbed'
 import { sutraClassName } from './sutraTheme'
 import { buildBrowsePath, buildBrowsePathForFacet } from './urlState'
 import { emptyFilterState, type SongCatalogItem, type SongbookMemberSong } from './types'
+import { coverImageUrl } from '../seo/imageUrl'
 import { musicAlbumJsonLd, songbookItemListJsonLd } from '../seo/jsonLd'
 import { renderPageMeta } from './usePageMeta'
 import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -283,10 +284,13 @@ export function SongbookPage() {
               {songbook.playlist_artwork_url ? (
                 <img
                   className="songbooks-page__hero-art"
-                  src={songbook.playlist_artwork_url}
+                  src={coverImageUrl(songbook.playlist_artwork_url, { width: 400 })}
                   alt=""
                   width={320}
                   height={320}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="sync"
                 />
               ) : (
                 <div className="songbooks-page__hero-art songbooks-page__hero-art--fallback" aria-hidden>

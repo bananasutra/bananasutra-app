@@ -20,6 +20,7 @@ import {
 } from './sutraPageUtils'
 import type { SutraFamilyKey } from './sutraContext'
 import { SongThumbCard } from './SongThumbCard'
+import { coverImageUrl } from '../seo/imageUrl'
 import { sutraCreativeWorkJsonLd } from '../seo/jsonLd'
 import { renderPageMeta } from './usePageMeta'
 import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -660,7 +661,7 @@ export function SutraDetailPage() {
                       {b.playlist_artwork_url ? (
                         <img
                           className="songbooks-page__art"
-                          src={b.playlist_artwork_url}
+                          src={coverImageUrl(b.playlist_artwork_url, { width: 200 })}
                           alt=""
                           width={280}
                           height={280}

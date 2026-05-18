@@ -16,6 +16,7 @@ import { CatalogPager } from './CatalogPager'
 import './CatalogPager.css'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
+import { coverImageUrl } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -574,7 +575,13 @@ export function WordsPage() {
                     </div>
                     {song.cover_image_url ? (
                       <div className="words-card__thumb" aria-hidden>
-                        <img src={song.cover_image_url} alt="" loading="lazy" width={120} height={120} />
+                        <img
+                          src={coverImageUrl(song.cover_image_url, { width: 200 })}
+                          alt=""
+                          loading="lazy"
+                          width={120}
+                          height={120}
+                        />
                       </div>
                     ) : null}
                   </Link>

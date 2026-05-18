@@ -1,4 +1,5 @@
 import { Link, type To } from 'react-router-dom'
+import { coverImageUrl } from '../seo/imageUrl'
 import { formatPublishDate } from './formatPublishDate'
 import './songThumbCard.css'
 
@@ -16,7 +17,7 @@ export type SongThumbCardProps = {
 }
 
 export function SongThumbCard({ to, coverUrl, title, metaLabel, summary, publishedAt, ariaLabel }: SongThumbCardProps) {
-  const cover = (coverUrl || '').trim()
+  const cover = coverImageUrl(coverUrl, { width: 200 })
   const meta = (metaLabel || '').trim()
   const sum = (summary || '').trim()
   const pubLabel = formatPublishDate(publishedAt || '')

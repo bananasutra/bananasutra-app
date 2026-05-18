@@ -18,8 +18,6 @@ function assignForwardedRef<T>(ref: ForwardedRef<T>, node: T | null): void {
 const IDLE_CALLBACK_TIMEOUT_MS = 2500
 const SET_TIMEOUT_FALLBACK_MS = 1500
 const VIEWPORT_ROOT_MARGIN_PX = 160
-const PLACEHOLDER_MIN_HEIGHT_PX = 120
-
 function isNearViewport(el: HTMLElement): boolean {
   const rect = el.getBoundingClientRect()
   return rect.top < window.innerHeight + VIEWPORT_ROOT_MARGIN_PX && rect.bottom > -VIEWPORT_ROOT_MARGIN_PX
@@ -115,6 +113,7 @@ export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function La
     <div
       ref={setRootRef}
       className={rootClass}
+      style={{ minHeight: height }}
       onClick={() => setInteractive(true)}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') setInteractive(true)
@@ -137,7 +136,7 @@ export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function La
       ) : (
         <div
           className="catalog-lazy-sc-embed__placeholder"
-          style={{ minHeight: PLACEHOLDER_MIN_HEIGHT_PX }}
+          style={{ minHeight: height }}
           aria-hidden
         >
           SoundCloud playlist (loads when in view)

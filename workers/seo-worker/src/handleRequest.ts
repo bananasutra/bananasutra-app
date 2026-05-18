@@ -3,6 +3,7 @@
  */
 
 import { detectBotPattern } from "./botDetection.ts";
+import { parseCdnCgiImageRequest } from "./cfImagePassThrough.ts";
 import { rewriteHtmlMetadata } from "./metaRewriter.ts";
 import { getRouteMeta, getSeoMetadata, normalizePathnameForLookup } from "./seoMetadata.ts";
 import { requestMayNeedSpaShell } from "./spaShell.ts";
@@ -78,6 +79,14 @@ export async function handleRequest(
   deps: HandleRequestDeps = { fetcher: defaultFetcher },
 ): Promise<Response> {
   const { fetcher } = deps;
+  const url = new URL(request.url);
+  const cdnImage = parseCdnCgiImageRequest(url);
+  if (cdnImage) {
+    return fetcher(cdnImage.sourceUrl, {
+      cf: { image: cdnImage.image },
+    });
+  }
+
   const botPattern = detectBotPattern(request.headers.get("user-agent"));
   const tryShell = requestMayNeedSpaShell(request);
 
@@ -100,8 +109,6 @@ export async function handleRequest(
     }
     return applyBotRewrite(originResponse, request, fetcher, botPattern);
   }
-
-  const url = new URL(request.url);
 
   if (!(await isKnownCatalogRoute(request, fetcher))) {
     return fetchNotFoundHtml(url.origin, fetcher);

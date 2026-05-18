@@ -1,10 +1,10 @@
-/* Fonts: single stylesheet linked from index.html (avoid duplicate requests vs @import). */
+/* Fonts: self-hosted woff2 in public/fonts/ (see src/index.css @font-face). */
 
 :root {
-  --font-wordmark: "Archivo Black", "Sora", system-ui, sans-serif;
-  --font-display: "Fraunces", "Times New Roman", Georgia, serif;
-  --font-body: "Sora", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-ui: "Sora", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-wordmark: "Archivo Black", "Archivo Black Fallback", "Sora", system-ui, sans-serif;
+  --font-display: "Fraunces", "Fraunces Fallback", "Times New Roman", Georgia, serif;
+  --font-body: "Sora", "Sora Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui: "Sora", "Sora Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Content column cap — header, footer, `.catalog-layout-shell` (see desktop override below). */
   --catalog-layout-max-width: 1400px;

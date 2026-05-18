@@ -11,25 +11,19 @@ export function useSyncCatalogHeaderHeight(
     const header = headerRef.current
     if (!page || !header) return
 
-    const sync = () => {
-      const px = `${header.offsetHeight}px`
+    const applyHeight = (heightPx: number) => {
+      const px = `${heightPx}px`
       page.style.setProperty('--catalog-header-h', px)
       document.documentElement.style.setProperty('--catalog-header-h', px)
     }
 
-    sync()
-    requestAnimationFrame(sync)
-
-    const ro = new ResizeObserver(sync)
+    const ro = new ResizeObserver((entries) => {
+      const entry = entries[0]
+      if (entry) applyHeight(entry.contentRect.height)
+    })
     ro.observe(header)
 
-    let fontsCancelled = false
-    void document.fonts?.ready.then(() => {
-      if (!fontsCancelled) sync()
-    })
-
     return () => {
-      fontsCancelled = true
       ro.disconnect()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- callers pass explicit resize triggers
@@ -44,7 +38,11 @@ export function syncCatalogHeaderHeightNow(
   const page = pageRef.current
   const header = headerRef.current
   if (!page || !header) return
-  const px = `${header.offsetHeight}px`
+  applyHeightFromHeader(page, header)
+}
+
+function applyHeightFromHeader(page: HTMLElement, header: HTMLElement): void {
+  const px = `${header.getBoundingClientRect().height}px`
   page.style.setProperty('--catalog-header-h', px)
   document.documentElement.style.setProperty('--catalog-header-h', px)
 }
