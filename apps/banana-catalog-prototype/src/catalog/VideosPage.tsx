@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { songMatchesMediaCombo } from './filterSongs'
 import { GlobalFooter } from './GlobalFooter'
@@ -12,7 +12,7 @@ import type { SongCatalogItem, YouTubeCatalogVideo } from './types'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { coverImageUrl } from '../seo/imageUrl'
 import { renderPageMeta } from './usePageMeta'
-import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
+import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { ScrollRail } from './ScrollRail'
 import { CatalogPager } from './CatalogPager'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
@@ -267,8 +267,11 @@ function VideoCardBody({
 }
 
 export function VideosPage() {
+  const location = useLocation()
+  const { key: routeVisitKey } = location
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
+  const filtersPanelRef = useRef<HTMLElement>(null)
   const navigate = useNavigate()
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
   const [youtubeCatalogVideos, setYoutubeCatalogVideos] = useState<YouTubeCatalogVideo[]>([])
@@ -453,6 +456,18 @@ export function VideosPage() {
   )
 
   useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString()])
+  useLayoutEffect(() => {
+    const anchorTop = () => {
+      syncCatalogHeaderHeightNow(pageRef, headerRef)
+      window.scrollTo(0, 0)
+      if (filtersPanelRef.current) filtersPanelRef.current.scrollTop = 0
+    }
+    anchorTop()
+    requestAnimationFrame(() => {
+      anchorTop()
+      requestAnimationFrame(anchorTop)
+    })
+  }, [routeVisitKey])
 
   if (catalogLoading || !youtubeCatalogReady) {
     return (
@@ -743,6 +758,7 @@ export function VideosPage() {
 
           <div className={`catalog-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
             <aside
+              ref={filtersPanelRef}
               className={`catalog-filters${filtersOpen ? ' is-open' : ''}`}
               aria-labelledby="videos-filters-heading"
             >
