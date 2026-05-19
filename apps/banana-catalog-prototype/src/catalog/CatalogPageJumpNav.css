@@ -86,12 +86,12 @@
   outline-offset: 2px;
 }
 
-/* Mobile: swap to short labels when provided */
+/* Phone + tablet: short labels when provided (avoids horizontal clip on /songbooks jump row). */
 .catalog-page-jump-nav__label--short {
   display: none;
 }
 
-@media (max-width: 479px) {
+@media (max-width: 1024px) {
   .catalog-page-jump-nav__label--full {
     display: none;
   }
