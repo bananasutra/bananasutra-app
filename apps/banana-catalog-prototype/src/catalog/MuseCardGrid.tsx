@@ -8,6 +8,39 @@ import './CatalogApp.css'
 
 const INITIAL_MUSE_COUNT = 30
 
+type MuseSortMode = 'last_name_az' | 'first_name_az' | 'songs'
+
+function museNamePart(row: MuseCatalogItem, part: 'first' | 'last'): string {
+  const fromField = (part === 'last' ? row.last_name : row.first_name).trim()
+  if (fromField) return fromField
+
+  const tokens = row.muse.trim().split(/\s+/).filter(Boolean)
+  if (!tokens.length) return row.muse.trim()
+  if (part === 'last') return tokens.length > 1 ? tokens[tokens.length - 1]! : tokens[0]!
+  return tokens[0]!
+}
+
+function compareMuses(a: MuseCatalogItem, b: MuseCatalogItem, sort: MuseSortMode): number {
+  if (sort === 'songs') {
+    return (
+      b.song_count - a.song_count ||
+      museNamePart(a, 'last').localeCompare(museNamePart(b, 'last'), undefined, { sensitivity: 'base' }) ||
+      a.muse.localeCompare(b.muse, undefined, { sensitivity: 'base' })
+    )
+  }
+
+  const part = sort === 'first_name_az' ? 'first' : 'last'
+  return (
+    museNamePart(a, part).localeCompare(museNamePart(b, part), undefined, { sensitivity: 'base' }) ||
+    museNamePart(a, part === 'first' ? 'last' : 'first').localeCompare(
+      museNamePart(b, part === 'first' ? 'last' : 'first'),
+      undefined,
+      { sensitivity: 'base' },
+    ) ||
+    a.muse.localeCompare(b.muse, undefined, { sensitivity: 'base' })
+  )
+}
+
 function formatCount(n: number): string {
   return new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(n)
 }
@@ -149,7 +182,7 @@ export function MuseCardGrid() {
   const [typeFilter, setTypeFilter] = useState('all')
   const [countryFilter, setCountryFilter] = useState('all')
   const [findMuse, setFindMuse] = useState('')
-  const [sort, setSort] = useState<'az' | 'songs'>('az')
+  const [sort, setSort] = useState<MuseSortMode>('last_name_az')
   const [showAll, setShowAll] = useState(() => Boolean(highlightedMuse))
 
   const pageMeta = renderPageMeta({
@@ -225,10 +258,7 @@ export function MuseCardGrid() {
         ].some((value) => normalizeSearch(value).includes(query))
       return eraOk && genderOk && typeOk && countryOk && searchOk
     })
-    next.sort((a, b) => {
-      if (sort === 'songs') return b.song_count - a.song_count || a.muse.localeCompare(b.muse)
-      return a.muse.localeCompare(b.muse)
-    })
+    next.sort((a, b) => compareMuses(a, b, sort))
     return next
   }, [countryFilter, eraFilter, findMuse, genderFilter, rows, sort, typeFilter])
 
@@ -412,9 +442,10 @@ export function MuseCardGrid() {
                   id="muses-sort-select"
                   className="catalog-sort-select"
                   value={sort}
-                  onChange={(event) => setSort(event.target.value as 'az' | 'songs')}
+                  onChange={(event) => setSort(event.target.value as MuseSortMode)}
                 >
-                  <option value="az">Alphabetical</option>
+                  <option value="last_name_az">Last name (A–Z)</option>
+                  <option value="first_name_az">First name (A–Z)</option>
                   <option value="songs">By song count</option>
                 </select>
               </div>
