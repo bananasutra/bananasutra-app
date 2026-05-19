@@ -273,15 +273,48 @@ a:focus-visible {
 }
 
 @media print {
+  :root {
+    /* Same horizontal inset as `.catalog.catalog-page { padding: 0 1rem … }` */
+    --print-chrome-pad-x: 1rem;
+    --print-chrome-pad-top: var(--catalog-breadcrumb-margin-top, 0.75rem);
+  }
+
+  @page {
+    margin: 0.55in 0.7in 0.75in;
+  }
+
+  html {
+    -webkit-print-color-adjust: economy;
+    print-color-adjust: economy;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+  }
+
   body,
   .catalog,
-  .catalog-page {
-    background: white !important;
+  .catalog-page,
+  .catalog-page__main,
+  .about-page,
+  .about-page__section,
+  .muse-card,
+  .song-detail,
+  .song-detail-hero,
+  .song-detail-lyrics-pre,
+  .catalog-breadcrumbs,
+  .catalog-page-intro,
+  .quote-item {
+    background: #fff !important;
+    background-color: #fff !important;
     color: #000 !important;
   }
 
   * {
     box-shadow: none !important;
+    text-shadow: none !important;
   }
 
   a {
@@ -294,13 +327,64 @@ a:focus-visible {
   .catalog-nav,
   .catalog-search-bar,
   .catalog-footer,
+  .about-tab-row,
+  .catalog-filters,
+  .catalog-filter-reopen,
   .sc-embed-frame,
   .yt-embed-frame,
   .yt-embed-wrap,
   .yt-embed-facade,
   .yt-embed-client-placeholder,
   .yt-embed-outbound,
-  .nav-route-loading-bar {
+  .nav-route-loading-bar,
+  .skip-link {
     display: none !important;
+  }
+
+  .catalog.catalog-page {
+    padding-top: 0 !important;
+  }
+
+  .catalog-page__main {
+    padding-top: 0 !important;
+    scroll-padding-top: 0 !important;
+  }
+
+  /* Outside #root — mirror catalog shell width + 1rem inset so header aligns with breadcrumbs */
+  body::before {
+    content: 'BANANASUTRA\A Songs for a world gone bananas.';
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--catalog-layout-max-width);
+    margin: 0 auto 0.65rem;
+    padding: var(--print-chrome-pad-top) 1rem 0.45rem;
+    border-bottom: 1px solid #ccc;
+    font-family: var(--font-body);
+    font-size: 11pt;
+    font-weight: 700;
+    line-height: 1.45;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: pre-wrap;
+    color: #000;
+  }
+
+  body::after {
+    content: '© 2026 BANANASUTRA · Curious. Kind. Silly. Human.\A' var(--print-page-url, 'bananasutra.com');
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--catalog-layout-max-width);
+    margin: 1.25rem auto 0;
+    padding: 0.45rem 1rem 0;
+    border-top: 1px solid #ccc;
+    font-family: var(--font-body);
+    font-size: 8pt;
+    font-weight: 400;
+    line-height: 1.45;
+    text-align: center;
+    white-space: pre-wrap;
+    color: #444;
   }
 }

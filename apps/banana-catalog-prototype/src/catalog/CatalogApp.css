@@ -439,8 +439,20 @@ html {
   .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-empty,
   .catalog-layout:not(.catalog-layout--filters-collapsed) .videos-page__list-wrap,
   .catalog-layout:not(.catalog-layout--filters-collapsed) .words-page__grid,
-  .catalog-layout:not(.catalog-layout--filters-collapsed) .tracks-page__list {
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .tracks-page__list,
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .about-muses-main .muse-grid {
     order: 4;
+    width: 100%;
+  }
+
+  /* /about/muses: result count + load-more share the results band (display:contents on main). */
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .about-muses-main .about-result-count {
+    order: 3;
+    width: 100%;
+  }
+
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .about-muses-main .about-show-all {
+    order: 5;
     width: 100%;
   }
 
