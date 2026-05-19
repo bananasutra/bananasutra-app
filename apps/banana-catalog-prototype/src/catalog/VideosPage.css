@@ -1,12 +1,3 @@
-.videos-page {
-  width: 100%;
-}
-
-/* Reserve main column while the video grid hydrates (Lighthouse CLS on catalog-page__main). */
-.catalog-page__main--videos {
-  min-height: 100vh;
-}
-
 .videos-page__loading-shell {
   min-height: 1500px;
 }
@@ -33,7 +24,7 @@
   text-align: center;
 }
 
-.videos-page:has(.videos-page__featured-hero) .catalog-page-intro {
+.catalog-page-intro:has(~ .videos-page__featured-hero) {
   padding-bottom: 0.65rem;
 }
 
