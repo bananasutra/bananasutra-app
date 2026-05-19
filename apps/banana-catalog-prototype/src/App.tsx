@@ -4,6 +4,8 @@ import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-do
 import { NavigationLoadingBridge } from './NavigationLoadingBridge'
 import { prefetchCatalogRoutesIdle } from './routePrefetch'
 import { SearchRedirect } from './catalog/SearchRedirect'
+import { useBfCacheEmbedTeardown } from './catalog/useBfCacheEmbedTeardown'
+import { useSyncPrintPageUrl } from './catalog/useSyncPrintPageUrl'
 import { useAnalyticsPageView } from './useAnalyticsPageView'
 
 const HomePortal = lazy(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
@@ -136,6 +138,8 @@ function ScrollToTopOnNavigate() {
   }, [pathname])
 
   useAnalyticsPageView()
+  useSyncPrintPageUrl()
+  useBfCacheEmbedTeardown()
 
   return null
 }

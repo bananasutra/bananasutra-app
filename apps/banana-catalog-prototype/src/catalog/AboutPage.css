@@ -532,6 +532,22 @@
   text-transform: uppercase;
 }
 
+.about-page__section--muses .about-page__prose {
+  margin-bottom: 0;
+}
+
+.about-muses-layout {
+  margin-top: var(--about-rhythm);
+}
+
+.about-muses-main .about-result-count {
+  margin-top: 0;
+}
+
+.about-muses-main .about-show-all {
+  margin-top: 1rem;
+}
+
 .muse-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -792,8 +808,8 @@
   }
 }
 
-@media (min-width: 980px) {
-  .muse-grid {
+@media (min-width: 900px) {
+  .about-muses-main .muse-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
