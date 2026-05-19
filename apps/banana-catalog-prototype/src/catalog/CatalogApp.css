@@ -424,6 +424,17 @@ html {
     width: 100%;
   }
 
+  /* /videos: featured hero lives in catalog-main; pin below filters (order 2), above reels (order 4). */
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .videos-page__featured-hero {
+    order: 3;
+    width: 100%;
+  }
+
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-main > .catalog-active-context {
+    order: 1;
+    width: 100%;
+  }
+
   .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-grid,
   .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-empty,
   .catalog-layout:not(.catalog-layout--filters-collapsed) .videos-page__list-wrap,

@@ -346,18 +346,6 @@ export function VideosPage() {
       return a.lyrics_title.localeCompare(b.lyrics_title, undefined, { sensitivity: 'base' })
     })
   }, [youtubeCatalogVideos])
-  const featuredVideos = useMemo(
-    () => allVideos.filter((v) => Boolean(v.video_featured) && Boolean(v.can_embed)),
-    [allVideos],
-  )
-  const featuredVideoHero = useMemo(() => featuredVideos[0] ?? null, [featuredVideos])
-
-  const featuredHeroSongPageHref = useMemo(() => {
-    if (!featuredVideoHero) return null
-    const id = (featuredVideoHero.lyrics_id || '').trim()
-    return featuredYoutubeSongPageHref(featuredVideoHero, Boolean(id && inAppIds.has(id)))
-  }, [featuredVideoHero, inAppIds])
-
   const orphanUploadCount = useMemo(
     () => allVideos.filter((v) => !inAppIds.has(v.lyrics_id)).length,
     [allVideos, inAppIds],
@@ -401,6 +389,18 @@ export function VideosPage() {
     () => applyVideoFilters(allVideos, filters, inAppIds, songsByLyricsId),
     [allVideos, filters, inAppIds, songsByLyricsId],
   )
+  const featuredVideoHero = useMemo(() => {
+    const filteredEmbeddable = shownVideos.filter((v) => Boolean(v.can_embed))
+    if (filteredEmbeddable.length === 0) return null
+    const featuredInFiltered = filteredEmbeddable.find((v) => Boolean(v.video_featured))
+    return featuredInFiltered ?? filteredEmbeddable[0] ?? null
+  }, [shownVideos])
+
+  const featuredHeroSongPageHref = useMemo(() => {
+    if (!featuredVideoHero) return null
+    const id = (featuredVideoHero.lyrics_id || '').trim()
+    return featuredYoutubeSongPageHref(featuredVideoHero, Boolean(id && inAppIds.has(id)))
+  }, [featuredVideoHero, inAppIds])
 
   const hasActiveVideoFilters =
     Boolean(filters.find) ||
@@ -452,13 +452,13 @@ export function VideosPage() {
     [filters],
   )
 
-  useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString()])
+  useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString(), filtersOpen, youtubeCatalogReady])
 
   if (catalogLoading || !youtubeCatalogReady) {
     return (
       <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
         <GlobalHeader ref={headerRef} />
-        <div className="catalog-page__main catalog-page__main--videos">
+        <div className="catalog-page__main">
           <article className="about-page catalog-layout-shell videos-page__loading-shell" id="main-content">
             <p className="about-page__p">Loading…</p>
           </article>
@@ -472,7 +472,7 @@ export function VideosPage() {
     return (
       <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
         <GlobalHeader ref={headerRef} />
-        <div className="catalog-page__main catalog-page__main--videos">
+        <div className="catalog-page__main">
           <article className="about-page catalog-layout-shell" id="main-content">
             <p className="about-page__p">{catalogError ?? 'Could not load song catalog data.'}</p>
           </article>
@@ -721,162 +721,164 @@ export function VideosPage() {
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
       {pageMeta}
       <GlobalHeader ref={headerRef} />
-      <div className="catalog-page__main catalog-page__main--videos">
-        <div className="videos-page catalog-layout-shell">
-          <nav className="catalog-breadcrumbs" aria-label="Breadcrumb">
-            <Link to="/" className="catalog-breadcrumbs__link">
-              Home
-            </Link>
-            <span className="catalog-breadcrumbs__sep" aria-hidden>
-              /
-            </span>
-            <span className="catalog-breadcrumbs__current" aria-current="page">Videos</span>
-          </nav>
 
-          <header className="catalog-page-intro">
-            <h1 className="catalog-page-h1">Picture the Songs</h1>
-            <p className="catalog-page-sub">
-              Same songs, eyes open. Tall reels and wide frames, side by side. Some of these live only on YouTube with
-              no SoundCloud twin. That&apos;s by design, not an oversight.
-            </p>
-          </header>
+      <div className="catalog-page__main">
+        <nav className="catalog-breadcrumbs" aria-label="Breadcrumb">
+          <Link to="/" className="catalog-breadcrumbs__link">
+            Home
+          </Link>
+          <span className="catalog-breadcrumbs__sep" aria-hidden>
+            /
+          </span>
+          <span className="catalog-breadcrumbs__current" aria-current="page">Videos</span>
+        </nav>
 
-          {featuredVideoHero ? (
-            <section className="videos-page__featured-hero" aria-labelledby="videos-featured-hero-heading">
-              <h2 id="videos-featured-hero-heading" className="catalog-section-title">
-                Featured Video
+        <div className="catalog-page-intro catalog-page-intro--song-catalog">
+          <h1 className="catalog-page-h1">Picture the Songs</h1>
+          <p className="catalog-page-sub">
+            Same songs, eyes open. Tall reels and wide frames, side by side. Some of these live only on YouTube with
+            no SoundCloud twin. That&apos;s by design, not an oversight.
+          </p>
+        </div>
+
+        <div className={`catalog-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
+          <aside
+            className={`catalog-filters${filtersOpen ? ' is-open' : ''}`}
+            aria-labelledby="videos-filters-heading"
+          >
+            <div className="catalog-filters-head">
+              <h2 id="videos-filters-heading" className="catalog-section-title">
+                Filters
               </h2>
-              <YoutubeEmbeddedPlayer
-                videoId={featuredVideoHero.video_id}
-                title={featuredVideoHero.lyrics_title || featuredVideoHero.title || 'Featured video'}
-                embedWrapperClassName="videos-page__featured-hero-embed"
-                embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideoHero.format) }}
-                iframeClassName="videos-page__featured-hero-iframe"
-                facadeUntilClick
-                facadePosterEager
-                posterWidth={640}
-                outboundFooterClassName="videos-page__featured-hero-yt-outbound"
-              />
-              <div className="videos-page__featured-hero-copy">
-                <h3 className="videos-page__featured-hero-title">{featuredVideoHero.lyrics_title || featuredVideoHero.title}</h3>
-                {(featuredVideoHero.lyrics_summary || '').trim() ? (
-                  <p className="videos-page__featured-hero-summary">{featuredVideoHero.lyrics_summary?.trim()}</p>
-                ) : null}
-                {(featuredVideoHero.sutra || '').trim() ? (
-                  <p className="videos-page__featured-hero-sutra">{featuredVideoHero.sutra.trim()}</p>
-                ) : null}
-                {featuredHeroSongPageHref ? (
-                  <div className="catalog-featured-video-song-row">
-                    <Link className="catalog-song-page-cta" to={featuredHeroSongPageHref}>
-                      Song page
-                    </Link>
-                  </div>
-                ) : null}
-              </div>
-            </section>
-          ) : null}
+              <button
+                type="button"
+                className="catalog-icon-btn"
+                onClick={() => setFiltersOpen(false)}
+                aria-expanded={filtersOpen}
+                aria-controls="videos-filter-panel"
+              >
+                Hide
+              </button>
+            </div>
 
-          <div className={`catalog-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
-            <aside
-              className={`catalog-filters${filtersOpen ? ' is-open' : ''}`}
-              aria-labelledby="videos-filters-heading"
-            >
-              <div className="catalog-filters-head">
-                <h2 id="videos-filters-heading" className="catalog-section-title">
-                  Filters
-                </h2>
+            {filtersOpen ? videoActiveFilterContext : null}
+
+            <div id="videos-filter-panel" className="catalog-facet-stack">
+              <section className="catalog-facet" aria-labelledby="videos-search-heading">
+                <h3 id="videos-search-heading">Search</h3>
+                <label className="catalog-facet-find-label" htmlFor="videos-find-input">
+                  Search by title or catalog info
+                </label>
+                <input
+                  id="videos-find-input"
+                  className="catalog-facet-find-input"
+                  type="search"
+                  name="videos_find"
+                  inputMode="search"
+                  autoComplete="off"
+                  spellCheck={false}
+                  enterKeyHint="search"
+                  value={findDraft}
+                  onChange={(e) => setFindDraft(e.target.value)}
+                />
+              </section>
+              <section className="catalog-facet" aria-labelledby="videos-media-heading">
+                <h3 id="videos-media-heading">Media</h3>
+                <p className="catalog-facet-help" id="videos-media-desc">
+                  Some videos also have SoundCloud playback or full lyrics—filter by what&apos;s available.
+                </p>
+                <div className="catalog-facet-chips" role="group" aria-describedby="videos-media-desc">
+                  <Link
+                    className={`catalog-facet-chip${filters.media === 'all' && filters.linkTarget !== 'off_site' ? ' is-active' : ''}`}
+                    to={hrefVideos({ media: 'all', linkTarget: 'all' }, filters)}
+                    title={`All ${allVideos.length} videos`}
+                  >
+                    <span>All</span>
+                    <span className="catalog-facet-count">{` (${allVideos.length})`}</span>
+                  </Link>
+                  <Link
+                    className={`catalog-facet-chip${filters.media === 'has_sc' ? ' is-active' : ''}`}
+                    to={hrefVideos({ media: 'has_sc', linkTarget: 'all' }, filters)}
+                    title={`${hasSCCount} videos with linked song on SoundCloud`}
+                  >
+                    <span>+ SoundCloud</span>
+                    <span className="catalog-facet-count">{` (${hasSCCount})`}</span>
+                  </Link>
+                  {orphanUploadCount > 0 ? (
+                    <Link
+                      className={`catalog-facet-chip${filters.linkTarget === 'off_site' ? ' is-active' : ''}`}
+                      to={hrefVideos({ linkTarget: 'off_site', media: 'all' }, filters)}
+                      title={`${orphanUploadCount} videos with no linked song page`}
+                    >
+                      <span>YouTube-only</span>
+                      <span className="catalog-facet-count">{` (${orphanUploadCount})`}</span>
+                    </Link>
+                  ) : null}
+                </div>
+              </section>
+
+              {chipSection('videos-sutra-heading', 'Sutra', sutraOptions, 'sutra', filters.sutra)}
+              {chipSection('videos-topic-heading', 'Topic', topicOptions, 'topic', filters.topic)}
+              {chipSection('videos-intention-heading', 'Intention', intentionOptions, 'intention', filters.intention)}
+
+            </div>
+          </aside>
+
+          <main id="main-content" className="catalog-main">
+            {!filtersOpen ? (
+              <>
+                {videoActiveFilterContext}
                 <button
                   type="button"
-                  className="catalog-icon-btn"
-                  onClick={() => setFiltersOpen(false)}
-                  aria-expanded={filtersOpen}
+                  className="catalog-filter-reopen"
+                  onClick={() => setFiltersOpen(true)}
+                  aria-expanded={false}
                   aria-controls="videos-filter-panel"
                 >
-                  Hide
+                  Show filters
                 </button>
-              </div>
-
-              {filtersOpen ? videoActiveFilterContext : null}
-
-              <div id="videos-filter-panel" className="catalog-facet-stack">
-                <section className="catalog-facet" aria-labelledby="videos-search-heading">
-                  <h3 id="videos-search-heading">Search</h3>
-                  <label className="catalog-facet-find-label" htmlFor="videos-find-input">
-                    Search by title or catalog info
-                  </label>
-                  <input
-                    id="videos-find-input"
-                    className="catalog-facet-find-input"
-                    type="search"
-                    name="videos_find"
-                    inputMode="search"
-                    autoComplete="off"
-                    spellCheck={false}
-                    enterKeyHint="search"
-                    value={findDraft}
-                    onChange={(e) => setFindDraft(e.target.value)}
-                  />
-                </section>
-                <section className="catalog-facet" aria-labelledby="videos-media-heading">
-                  <h3 id="videos-media-heading">Media</h3>
-                  <p className="catalog-facet-help" id="videos-media-desc">
-                    Some videos also have SoundCloud playback or full lyrics—filter by what&apos;s available.
-                  </p>
-                  <div className="catalog-facet-chips" role="group" aria-describedby="videos-media-desc">
-                    <Link
-                      className={`catalog-facet-chip${filters.media === 'all' && filters.linkTarget !== 'off_site' ? ' is-active' : ''}`}
-                      to={hrefVideos({ media: 'all', linkTarget: 'all' }, filters)}
-                      title={`All ${allVideos.length} videos`}
-                    >
-                      <span>All</span>
-                      <span className="catalog-facet-count">{` (${allVideos.length})`}</span>
-                    </Link>
-                    <Link
-                      className={`catalog-facet-chip${filters.media === 'has_sc' ? ' is-active' : ''}`}
-                      to={hrefVideos({ media: 'has_sc', linkTarget: 'all' }, filters)}
-                      title={`${hasSCCount} videos with linked song on SoundCloud`}
-                    >
-                      <span>+ SoundCloud</span>
-                      <span className="catalog-facet-count">{` (${hasSCCount})`}</span>
-                    </Link>
-                    {orphanUploadCount > 0 ? (
-                      <Link
-                        className={`catalog-facet-chip${filters.linkTarget === 'off_site' ? ' is-active' : ''}`}
-                        to={hrefVideos({ linkTarget: 'off_site', media: 'all' }, filters)}
-                        title={`${orphanUploadCount} videos with no linked song page`}
-                      >
-                        <span>YouTube-only</span>
-                        <span className="catalog-facet-count">{` (${orphanUploadCount})`}</span>
-                      </Link>
+              </>
+            ) : null}
+            {featuredVideoHero ? (
+              <section className="videos-page__featured-hero" aria-labelledby="videos-featured-hero-heading">
+                <h2 id="videos-featured-hero-heading" className="catalog-section-title">
+                  Featured Video
+                </h2>
+                <div className="videos-page__featured-hero-grid">
+                  <div className="videos-page__featured-hero-embed-wrap">
+                    <YoutubeEmbeddedPlayer
+                      videoId={featuredVideoHero.video_id}
+                      title={featuredVideoHero.lyrics_title || featuredVideoHero.title || 'Featured video'}
+                      embedWrapperClassName="videos-page__featured-hero-embed"
+                      embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideoHero.format) }}
+                      iframeClassName="videos-page__featured-hero-iframe"
+                      facadeUntilClick
+                      facadePosterEager
+                      posterWidth={640}
+                      outboundFooterClassName="videos-page__featured-hero-yt-outbound"
+                    />
+                  </div>
+                  <div className="videos-page__featured-hero-copy">
+                    <h3 className="videos-page__featured-hero-title">{featuredVideoHero.lyrics_title || featuredVideoHero.title}</h3>
+                    {(featuredVideoHero.lyrics_summary || '').trim() ? (
+                      <p className="videos-page__featured-hero-summary">{featuredVideoHero.lyrics_summary?.trim()}</p>
+                    ) : null}
+                    {(featuredVideoHero.sutra || '').trim() ? (
+                      <p className="videos-page__featured-hero-sutra">{featuredVideoHero.sutra.trim()}</p>
+                    ) : null}
+                    {featuredHeroSongPageHref ? (
+                      <div className="catalog-featured-video-song-row">
+                        <Link className="catalog-song-page-cta" to={featuredHeroSongPageHref}>
+                          Song page
+                        </Link>
+                      </div>
                     ) : null}
                   </div>
-                </section>
-
-                {chipSection('videos-sutra-heading', 'Sutra', sutraOptions, 'sutra', filters.sutra)}
-                {chipSection('videos-topic-heading', 'Topic', topicOptions, 'topic', filters.topic)}
-                {chipSection('videos-intention-heading', 'Intention', intentionOptions, 'intention', filters.intention)}
-
-              </div>
-            </aside>
-
-            <main id="main-content" className="catalog-main">
-              {!filtersOpen ? (
-                <>
-                  {videoActiveFilterContext}
-                  <button
-                    type="button"
-                    className="catalog-filter-reopen"
-                    onClick={() => setFiltersOpen(true)}
-                    aria-expanded={false}
-                    aria-controls="videos-filter-panel"
-                  >
-                    Show filters
-                  </button>
-                </>
-              ) : null}
-              {listSection}
-            </main>
-          </div>
+                </div>
+              </section>
+            ) : null}
+            {listSection}
+          </main>
         </div>
       </div>
       <GlobalFooter />

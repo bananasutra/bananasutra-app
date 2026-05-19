@@ -295,11 +295,11 @@
   min-height: 300px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1025px) {
   .home-portal__featured {
-    grid-template-columns: 1.05fr 1fr;
-    gap: 1.35rem;
-    align-items: center;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 1.15rem;
+    align-items: start;
   }
 }
 
