@@ -14,7 +14,10 @@ export function catalogDataFileUrl(filename: CatalogDataFilename): string {
   return `${prefix}catalog-data/${filename}`
 }
 
-/** Avoid stale intermediary caches after deploys (stable URLs under `/catalog-data/`). */
-export function fetchCatalogData(url: string): Promise<Response> {
-  return fetch(url, { cache: 'no-store' })
+/**
+ * Default stays `no-store` for deploy freshness on stable `/catalog-data/*.json` paths.
+ * Callers can override when route performance benefits from normal browser caching.
+ */
+export function fetchCatalogData(url: string, init?: RequestInit): Promise<Response> {
+  return fetch(url, { cache: 'no-store', ...init })
 }

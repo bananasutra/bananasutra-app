@@ -137,7 +137,9 @@ export function useExclusiveYoutubeSoundcloudPlayback({
 }: ExclusiveYoutubeSoundcloudOptions): void {
   const scBindSerialRef = useRef(0)
   const soundcloudWrapRefsRef = useRef(soundcloudWrapRefs)
-  soundcloudWrapRefsRef.current = soundcloudWrapRefs
+  useEffect(() => {
+    soundcloudWrapRefsRef.current = soundcloudWrapRefs
+  }, [soundcloudWrapRefs])
 
   useEffect(() => {
     if (!enabled) {

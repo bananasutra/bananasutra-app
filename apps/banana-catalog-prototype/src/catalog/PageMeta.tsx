@@ -1,8 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 import { DEFAULT_DESC, DEFAULT_OG_IMAGE_URL, SITE, SITE_URL, publicTitle, padMetaDescription } from './pageMetaConstants'
 
-export { DEFAULT_OG_IMAGE_URL, songOgImageUrl } from './pageMetaConstants'
-
 export interface PageMetaProps {
   title: string
   description?: string

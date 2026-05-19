@@ -46,7 +46,10 @@ const YT_IFRAME_ALLOW =
 /** True only after hydration — keeps `<iframe src="youtube…">` out of R24 static HTML / SSR output. */
 function useClientMounted(): boolean {
   const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  useEffect(() => {
+    const id = window.setTimeout(() => setMounted(true), 0)
+    return () => window.clearTimeout(id)
+  }, [])
   return mounted
 }
 

@@ -1,6 +1,7 @@
 import { createElement } from 'react'
 import type { PageMetaProps } from './PageMeta'
-import { DEFAULT_OG_IMAGE_URL, PageMeta, songOgImageUrl } from './PageMeta'
+import { PageMeta } from './PageMeta'
+import { DEFAULT_OG_IMAGE_URL, songOgImageUrl } from './pageMetaConstants'
 
 export type { PageMetaProps }
 export { DEFAULT_OG_IMAGE_URL, PageMeta, songOgImageUrl }
