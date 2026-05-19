@@ -95,6 +95,8 @@ export type SongCatalogItem = {
 
 export type MuseCatalogItem = {
   muse: string
+  first_name: string
+  last_name: string
   muse_id: string
   gender_pronoun: string
   type_category: string
