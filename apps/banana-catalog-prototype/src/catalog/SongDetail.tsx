@@ -1052,7 +1052,11 @@ function SongDetailLoaded({
                 )}
                 {youtubeVideos.length > 1 ? (
                   <>
-                    <h4 className="song-detail-youtube-subheading">Videos for this song</h4>
+                    {hasTabNav ? (
+                      <h2 className="song-detail-youtube-subheading">Videos for this song</h2>
+                    ) : (
+                      <h3 className="song-detail-youtube-subheading">Videos for this song</h3>
+                    )}
                     <ul className="song-detail-youtube-list" aria-label="YouTube uploads for this song">
                       {youtubeVideos.map((v) => {
                         const active = v.video_id === effectiveYoutubeVideoId

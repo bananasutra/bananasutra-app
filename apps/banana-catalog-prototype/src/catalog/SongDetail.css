@@ -871,6 +871,8 @@
   font-size: 0.86rem;
 }
 
+h2.song-detail-youtube-subheading,
+h3.song-detail-youtube-subheading,
 .song-detail-youtube-subheading {
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -1088,15 +1090,6 @@
 
   .song-detail-secondary-meta-item {
     font-size: 0.7rem !important;
-  }
-
-  .song-detail::after {
-    content: 'bananasutra.com';
-    display: block;
-    margin-top: 2rem;
-    font-size: 0.65rem;
-    color: #999;
-    text-align: center;
   }
 }
 
