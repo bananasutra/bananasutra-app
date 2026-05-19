@@ -5,7 +5,13 @@ import './LazySoundCloudEmbed.css'
 type Props = Pick<
   SoundCloudEmbedProps,
   'scUrl' | 'title' | 'height' | 'mode' | 'autoPlay' | 'reloadKey' | 'onLoad' | 'loading'
->
+> & {
+  /**
+   * `interaction_or_autoplay`: keep iframe out of initial paint until user intent
+   * (tap/click) or explicit autoplay from a row action.
+   */
+  activation?: 'near_viewport_or_idle' | 'interaction_or_autoplay'
+}
 
 function assignForwardedRef<T>(ref: ForwardedRef<T>, node: T | null): void {
   if (typeof ref === 'function') {
@@ -38,6 +44,7 @@ export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function La
     reloadKey = 0,
     onLoad,
     loading = 'lazy',
+    activation = 'near_viewport_or_idle',
   },
   ref,
 ) {
@@ -51,6 +58,7 @@ export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function La
   }
 
   useEffect(() => {
+    if (activation !== 'near_viewport_or_idle') return
     const el = rootRef.current
     if (!el || active) return
 
@@ -65,7 +73,7 @@ export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function La
     )
 
     let idleHandle: number | undefined
-    let timeoutHandle: ReturnType<typeof setTimeout> | undefined
+    const timeoutHandle: ReturnType<typeof setTimeout> = window.setTimeout(() => settle(), SET_TIMEOUT_FALLBACK_MS)
 
     const teardown = () => {
       obs.disconnect()
@@ -94,13 +102,25 @@ export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function La
     if ('requestIdleCallback' in window) {
       idleHandle = window.requestIdleCallback(() => settle(), { timeout: IDLE_CALLBACK_TIMEOUT_MS })
     }
-    timeoutHandle = window.setTimeout(() => settle(), SET_TIMEOUT_FALLBACK_MS)
-
     return () => {
       cancelled = true
       teardown()
     }
-  }, [active])
+  }, [activation, active])
+
+  useEffect(() => {
+    if (activation !== 'interaction_or_autoplay') return
+    if (!autoPlay || active) return
+    setActive(true)
+    setInteractive(true)
+  }, [activation, autoPlay, active, reloadKey])
+
+  const handleUserActivate = () => {
+    if (activation === 'interaction_or_autoplay' && !active) {
+      setActive(true)
+    }
+    setInteractive(true)
+  }
 
   const rootClass = [
     'catalog-lazy-sc-embed',
@@ -114,13 +134,22 @@ export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function La
       ref={setRootRef}
       className={rootClass}
       style={{ minHeight: height }}
-      onClick={() => setInteractive(true)}
+      onClick={handleUserActivate}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') setInteractive(true)
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          handleUserActivate()
+        }
       }}
-      role={active && !interactive ? 'button' : undefined}
-      tabIndex={active && !interactive ? 0 : undefined}
-      aria-label={active && !interactive ? 'Enable SoundCloud player interaction' : undefined}
+      role={(!active && activation === 'interaction_or_autoplay') || (active && !interactive) ? 'button' : undefined}
+      tabIndex={(!active && activation === 'interaction_or_autoplay') || (active && !interactive) ? 0 : undefined}
+      aria-label={
+        !active && activation === 'interaction_or_autoplay'
+          ? 'Load SoundCloud player'
+          : active && !interactive
+            ? 'Enable SoundCloud player interaction'
+            : undefined
+      }
     >
       {active ? (
         <SoundCloudEmbed
@@ -139,7 +168,9 @@ export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function La
           style={{ minHeight: height }}
           aria-hidden
         >
-          SoundCloud playlist (loads when in view)
+          {activation === 'interaction_or_autoplay'
+            ? 'SoundCloud playlist (tap to load player)'
+            : 'SoundCloud playlist (loads when in view)'}
         </div>
       )}
     </div>

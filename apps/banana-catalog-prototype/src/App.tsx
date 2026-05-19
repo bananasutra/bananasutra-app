@@ -23,11 +23,6 @@ const StyleGuidePage = lazy(() => import('./catalog/StyleGuidePage').then((m) =>
 const SitemapPage = lazy(() => import('./catalog/SitemapPage').then((m) => ({ default: m.SitemapPage })))
 const GITHUB_PROJECT_BASENAME = '/bananasutra-app'
 
-/** Start the main browse payload fetch as soon as the app bundle is evaluated. */
-if (typeof window !== 'undefined') {
-  void import('./catalog/generatedData').then(({ loadSongCatalogBrowse }) => loadSongCatalogBrowse())
-}
-
 /** Browse route — `CatalogApp` syncs sort + facet state from `location.search` without remounting
  * so UI state (e.g. filters panel open/closed) survives sort-only URL updates. */
 function CatalogBrowseRoute() {
