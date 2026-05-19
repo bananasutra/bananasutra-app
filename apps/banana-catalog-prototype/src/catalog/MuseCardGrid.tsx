@@ -6,7 +6,7 @@ import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import './CatalogApp.css'
 
-const INITIAL_MUSE_COUNT = 40
+const INITIAL_MUSE_COUNT = 30
 
 function formatCount(n: number): string {
   return new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(n)
@@ -399,9 +399,17 @@ export function MuseCardGrid() {
                 </div>
               </section>
 
-              <label className="catalog-sort about-sort-control">
-                <span className="catalog-sort-label">Sort</span>
+            </div>
+          </aside>
+
+          <div className="catalog-main about-muses-main">
+            <div className="catalog-main__sort-row">
+              <div className="catalog-sort" aria-label="Sort muses">
+                <label className="catalog-sort-label" htmlFor="muses-sort-select">
+                  Sort
+                </label>
                 <select
+                  id="muses-sort-select"
                   className="catalog-sort-select"
                   value={sort}
                   onChange={(event) => setSort(event.target.value as 'az' | 'songs')}
@@ -409,11 +417,9 @@ export function MuseCardGrid() {
                   <option value="az">Alphabetical</option>
                   <option value="songs">By song count</option>
                 </select>
-              </label>
+              </div>
             </div>
-          </aside>
 
-          <div className="catalog-main about-muses-main">
             {!filtersOpen ? (
               <button
                 type="button"

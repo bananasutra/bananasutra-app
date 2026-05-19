@@ -516,14 +516,6 @@
   background: color-mix(in srgb, var(--color-bg-panel) 70%, var(--color-text-strong) 8%);
 }
 
-.about-sort-control {
-  width: fit-content;
-}
-
-.about-sort-control .catalog-sort-select {
-  min-width: 12rem;
-}
-
 .about-result-count {
   margin: 0.8rem 0 0;
   color: var(--color-text-faint);
