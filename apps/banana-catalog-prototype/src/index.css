@@ -273,13 +273,24 @@ a:focus-visible {
 }
 
 @media print {
+  --print-pad-top: 0.55in;
+  --print-pad-x: 0.7in;
+  --print-pad-bottom: 0.75in;
+
   @page {
-    margin: 0.55in 0.7in 0.75in;
+    /* Minimum sheet margin; body padding below completes the intended inset. */
+    margin: 0.4in 0.5in 0.65in;
   }
 
   html {
     -webkit-print-color-adjust: economy;
     print-color-adjust: economy;
+  }
+
+  body {
+    box-sizing: border-box;
+    padding: calc(var(--print-pad-top) - 0.4in) calc(var(--print-pad-x) - 0.5in) 0;
+    font-family: var(--font-body);
   }
 
   body,
@@ -338,15 +349,17 @@ a:focus-visible {
   body::before {
     content: 'BANANASUTRA\A Songs for a world gone bananas.';
     display: block;
+    box-sizing: border-box;
+    width: 100%;
     margin: 0 0 0.65rem;
     padding: 0 0 0.45rem;
     border-bottom: 1px solid #ccc;
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: var(--font-body);
     font-size: 11pt;
     font-weight: 700;
-    line-height: 1.35;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    line-height: 1.45;
+    letter-spacing: normal;
+    text-transform: none;
     white-space: pre-wrap;
     color: #000;
   }
@@ -354,10 +367,14 @@ a:focus-visible {
   body::after {
     content: '© 2026 BANANASUTRA · Curious. Kind. Silly. Human.\A' var(--print-page-url, 'bananasutra.com');
     display: block;
+    box-sizing: border-box;
+    width: 100%;
     margin-top: 1.25rem;
     padding-top: 0.45rem;
     border-top: 1px solid #ccc;
+    font-family: var(--font-body);
     font-size: 8pt;
+    font-weight: 400;
     line-height: 1.45;
     text-align: center;
     white-space: pre-wrap;
