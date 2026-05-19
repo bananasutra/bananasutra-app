@@ -520,11 +520,32 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+.songbooks-page__featured-video .catalog-section-title {
+  margin-bottom: 0.75rem;
+}
+
+.songbooks-page__featured-video {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1025px) {
+  .songbooks-page__featured-video {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    column-gap: 1.15rem;
+    align-items: start;
+  }
+
+  .songbooks-page__featured-video .catalog-section-title {
+    grid-column: 1 / -1;
+  }
+}
+
 .songbooks-page__featured-video-embed {
   position: relative;
   width: 100%;
-  max-width: 980px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
   aspect-ratio: 16 / 9;
   border-radius: 10px;
   overflow: hidden;
@@ -539,13 +560,19 @@
 }
 
 .songbooks-page__featured-video-yt-outbound {
-  max-width: 980px;
+  max-width: none;
 }
 
 .songbooks-page__featured-video-copy {
-  margin-top: 0.8rem;
-  max-width: 980px;
-  margin-inline: auto;
+  margin-top: 0.72rem;
+  max-width: none;
+  margin-inline: 0;
+}
+
+@media (min-width: 1025px) {
+  .songbooks-page__featured-video-copy {
+    margin-top: 0;
+  }
 }
 
 .songbooks-page__featured-video-title {

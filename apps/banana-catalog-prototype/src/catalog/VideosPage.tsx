@@ -346,18 +346,6 @@ export function VideosPage() {
       return a.lyrics_title.localeCompare(b.lyrics_title, undefined, { sensitivity: 'base' })
     })
   }, [youtubeCatalogVideos])
-  const featuredVideos = useMemo(
-    () => allVideos.filter((v) => Boolean(v.video_featured) && Boolean(v.can_embed)),
-    [allVideos],
-  )
-  const featuredVideoHero = useMemo(() => featuredVideos[0] ?? null, [featuredVideos])
-
-  const featuredHeroSongPageHref = useMemo(() => {
-    if (!featuredVideoHero) return null
-    const id = (featuredVideoHero.lyrics_id || '').trim()
-    return featuredYoutubeSongPageHref(featuredVideoHero, Boolean(id && inAppIds.has(id)))
-  }, [featuredVideoHero, inAppIds])
-
   const orphanUploadCount = useMemo(
     () => allVideos.filter((v) => !inAppIds.has(v.lyrics_id)).length,
     [allVideos, inAppIds],
@@ -401,6 +389,18 @@ export function VideosPage() {
     () => applyVideoFilters(allVideos, filters, inAppIds, songsByLyricsId),
     [allVideos, filters, inAppIds, songsByLyricsId],
   )
+  const featuredVideoHero = useMemo(() => {
+    const filteredEmbeddable = shownVideos.filter((v) => Boolean(v.can_embed))
+    if (filteredEmbeddable.length === 0) return null
+    const featuredInFiltered = filteredEmbeddable.find((v) => Boolean(v.video_featured))
+    return featuredInFiltered ?? filteredEmbeddable[0] ?? null
+  }, [shownVideos])
+
+  const featuredHeroSongPageHref = useMemo(() => {
+    if (!featuredVideoHero) return null
+    const id = (featuredVideoHero.lyrics_id || '').trim()
+    return featuredYoutubeSongPageHref(featuredVideoHero, Boolean(id && inAppIds.has(id)))
+  }, [featuredVideoHero, inAppIds])
 
   const hasActiveVideoFilters =
     Boolean(filters.find) ||
@@ -741,41 +741,6 @@ export function VideosPage() {
             </p>
           </header>
 
-          {featuredVideoHero ? (
-            <section className="videos-page__featured-hero" aria-labelledby="videos-featured-hero-heading">
-              <h2 id="videos-featured-hero-heading" className="catalog-section-title">
-                Featured Video
-              </h2>
-              <YoutubeEmbeddedPlayer
-                videoId={featuredVideoHero.video_id}
-                title={featuredVideoHero.lyrics_title || featuredVideoHero.title || 'Featured video'}
-                embedWrapperClassName="videos-page__featured-hero-embed"
-                embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideoHero.format) }}
-                iframeClassName="videos-page__featured-hero-iframe"
-                facadeUntilClick
-                facadePosterEager
-                posterWidth={640}
-                outboundFooterClassName="videos-page__featured-hero-yt-outbound"
-              />
-              <div className="videos-page__featured-hero-copy">
-                <h3 className="videos-page__featured-hero-title">{featuredVideoHero.lyrics_title || featuredVideoHero.title}</h3>
-                {(featuredVideoHero.lyrics_summary || '').trim() ? (
-                  <p className="videos-page__featured-hero-summary">{featuredVideoHero.lyrics_summary?.trim()}</p>
-                ) : null}
-                {(featuredVideoHero.sutra || '').trim() ? (
-                  <p className="videos-page__featured-hero-sutra">{featuredVideoHero.sutra.trim()}</p>
-                ) : null}
-                {featuredHeroSongPageHref ? (
-                  <div className="catalog-featured-video-song-row">
-                    <Link className="catalog-song-page-cta" to={featuredHeroSongPageHref}>
-                      Song page
-                    </Link>
-                  </div>
-                ) : null}
-              </div>
-            </section>
-          ) : null}
-
           <div className={`catalog-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
             <aside
               className={`catalog-filters${filtersOpen ? ' is-open' : ''}`}
@@ -873,6 +838,44 @@ export function VideosPage() {
                     Show filters
                   </button>
                 </>
+              ) : null}
+              {featuredVideoHero ? (
+                <section className="videos-page__featured-hero" aria-labelledby="videos-featured-hero-heading">
+                  <h2 id="videos-featured-hero-heading" className="catalog-section-title">
+                    Featured Video
+                  </h2>
+                  <div className="videos-page__featured-hero-grid">
+                    <div className="videos-page__featured-hero-embed-wrap">
+                      <YoutubeEmbeddedPlayer
+                        videoId={featuredVideoHero.video_id}
+                        title={featuredVideoHero.lyrics_title || featuredVideoHero.title || 'Featured video'}
+                        embedWrapperClassName="videos-page__featured-hero-embed"
+                        embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideoHero.format) }}
+                        iframeClassName="videos-page__featured-hero-iframe"
+                        facadeUntilClick
+                        facadePosterEager
+                        posterWidth={640}
+                        outboundFooterClassName="videos-page__featured-hero-yt-outbound"
+                      />
+                    </div>
+                    <div className="videos-page__featured-hero-copy">
+                      <h3 className="videos-page__featured-hero-title">{featuredVideoHero.lyrics_title || featuredVideoHero.title}</h3>
+                      {(featuredVideoHero.lyrics_summary || '').trim() ? (
+                        <p className="videos-page__featured-hero-summary">{featuredVideoHero.lyrics_summary?.trim()}</p>
+                      ) : null}
+                      {(featuredVideoHero.sutra || '').trim() ? (
+                        <p className="videos-page__featured-hero-sutra">{featuredVideoHero.sutra.trim()}</p>
+                      ) : null}
+                      {featuredHeroSongPageHref ? (
+                        <div className="catalog-featured-video-song-row">
+                          <Link className="catalog-song-page-cta" to={featuredHeroSongPageHref}>
+                            Song page
+                          </Link>
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                </section>
               ) : null}
               {listSection}
             </main>
