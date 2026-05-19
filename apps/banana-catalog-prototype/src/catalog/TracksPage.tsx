@@ -10,9 +10,8 @@ import { filterTracksByFindQuery, sortTrackCatalog, trackMatchesFilters } from '
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
-import { loadSoundCloudWidgetApi } from './soundcloudWidgetApi'
 import { songCatalogPath } from './songPaths'
-import type { TrackCatalogItem, TrackSortMode, TracksFacetFilterKey, TracksFilterState } from './types'
+import type { FacetEntry, TrackCatalogItem, TrackSortMode, TracksFacetFilterKey, TracksFilterState } from './types'
 import { emptyTracksFilterState } from './types'
 import {
   buildTracksBrowsePathFull,
@@ -30,6 +29,13 @@ import './TracksPage.css'
 
 const PAGE_SIZE = 30
 const FIND_DEBOUNCE_MS = 350
+const EMPTY_TRACK_FACETS: Record<TracksFacetFilterKey, FacetEntry[]> = {
+  primary_genre: [],
+  secondary_genre: [],
+  mood: [],
+  instrument: [],
+  tempo_feel: [],
+}
 
 function thumbSrc(url: string, size = 't200x200'): string {
   const u = url.trim()
@@ -98,7 +104,7 @@ export function TracksPage() {
 
   useEffect(() => {
     let cancelled = false
-    fetchCatalogData(catalogDataFileUrl('track_catalog.json'))
+    fetchCatalogData(catalogDataFileUrl('track_catalog.json'), { cache: 'default' })
       .then((r) => {
         if (!cancelled) setCatalogLoadError(null)
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
@@ -117,6 +123,41 @@ export function TracksPage() {
       cancelled = true
     }
   }, [])
+
+  const [nonCriticalReady, setNonCriticalReady] = useState(
+    () =>
+      typeof window === 'undefined' ||
+      countTracksSelections(urlFilters) > 0 ||
+      Boolean(urlFind.trim()) ||
+      urlSort !== 'likes' ||
+      urlPage > 1,
+  )
+
+  useEffect(() => {
+    if (nonCriticalReady) return
+    let cancelled = false
+    const activate = () => {
+      if (!cancelled) setNonCriticalReady(true)
+    }
+    const requestIdle = (
+      window as Window & {
+        requestIdleCallback?: (cb: () => void, options?: { timeout: number }) => number
+      }
+    ).requestIdleCallback
+    const cancelIdle = (window as Window & { cancelIdleCallback?: (handle: number) => void }).cancelIdleCallback
+    if (typeof requestIdle === 'function') {
+      const idleId = requestIdle(activate, { timeout: 900 })
+      return () => {
+        cancelled = true
+        if (typeof cancelIdle === 'function') cancelIdle(idleId)
+      }
+    }
+    const timeoutId = window.setTimeout(activate, 0)
+    return () => {
+      cancelled = true
+      window.clearTimeout(timeoutId)
+    }
+  }, [nonCriticalReady])
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- mirror URL into tracks panel (history / shared links)
@@ -156,7 +197,10 @@ export function TracksPage() {
   }, [])
 
   const catalogList = useMemo(() => trackCatalog ?? [], [trackCatalog])
-  const facetEntries = useMemo(() => facetCountsFromTracks(catalogList), [catalogList])
+  const facetEntries = useMemo(
+    () => (nonCriticalReady ? facetCountsFromTracks(catalogList) : EMPTY_TRACK_FACETS),
+    [catalogList, nonCriticalReady],
+  )
 
   const filtered = useMemo(() => {
     let list = catalogList.filter((t) => trackMatchesFilters(t, filters))
@@ -392,11 +436,13 @@ export function TracksPage() {
 
   /** Bind FINISH on the SoundCloud widget after each iframe (re)load — each remount creates a fresh widget. */
   const handlePlayerLoad = useCallback(() => {
+    if (!playAllActiveRef.current) return
     const wrap = playerWrapRef.current
     if (!wrap) return
     const iframe = wrap.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
     if (!iframe) return
-    loadSoundCloudWidgetApi()
+    void import('./soundcloudWidgetApi')
+      .then(({ loadSoundCloudWidgetApi }) => loadSoundCloudWidgetApi())
       .then((SC) => {
         if (!document.body.contains(iframe)) return
         const widget = SC.Widget(iframe)
@@ -607,6 +653,7 @@ export function TracksPage() {
                         title={selected.track_title || 'SoundCloud track'}
                         height={embedHeight}
                         mode="visual"
+                        activation="interaction_or_autoplay"
                         autoPlay={scAutoplay}
                         reloadKey={embedReloadKey}
                         onLoad={handlePlayerLoad}
