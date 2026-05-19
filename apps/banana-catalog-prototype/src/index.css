@@ -273,9 +273,11 @@ a:focus-visible {
 }
 
 @media print {
-  /* Match `.catalog.catalog-page` horizontal inset (1rem) — print chrome lives outside #root. */
-  --print-chrome-pad-x: 1rem;
-  --print-chrome-pad-top: var(--catalog-breadcrumb-margin-top, 0.75rem);
+  :root {
+    /* Same horizontal inset as `.catalog.catalog-page { padding: 0 1rem … }` */
+    --print-chrome-pad-x: 1rem;
+    --print-chrome-pad-top: var(--catalog-breadcrumb-margin-top, 0.75rem);
+  }
 
   @page {
     margin: 0.55in 0.7in 0.75in;
@@ -341,8 +343,6 @@ a:focus-visible {
 
   .catalog.catalog-page {
     padding-top: 0 !important;
-    padding-left: var(--print-chrome-pad-x) !important;
-    padding-right: var(--print-chrome-pad-x) !important;
   }
 
   .catalog-page__main {
@@ -350,6 +350,7 @@ a:focus-visible {
     scroll-padding-top: 0 !important;
   }
 
+  /* Outside #root — mirror catalog shell width + 1rem inset so header aligns with breadcrumbs */
   body::before {
     content: 'BANANASUTRA\A Songs for a world gone bananas.';
     display: block;
@@ -357,7 +358,7 @@ a:focus-visible {
     width: 100%;
     max-width: var(--catalog-layout-max-width);
     margin: 0 auto 0.65rem;
-    padding: var(--print-chrome-pad-top) var(--print-chrome-pad-x) 0.45rem;
+    padding: var(--print-chrome-pad-top) 1rem 0.45rem;
     border-bottom: 1px solid #ccc;
     font-family: var(--font-body);
     font-size: 11pt;
@@ -376,7 +377,7 @@ a:focus-visible {
     width: 100%;
     max-width: var(--catalog-layout-max-width);
     margin: 1.25rem auto 0;
-    padding: 0.45rem var(--print-chrome-pad-x) 0;
+    padding: 0.45rem 1rem 0;
     border-top: 1px solid #ccc;
     font-family: var(--font-body);
     font-size: 8pt;
