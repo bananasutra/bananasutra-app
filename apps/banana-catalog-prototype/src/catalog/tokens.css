@@ -80,7 +80,7 @@
    * Jump nav band: distance from lede to top rule, from each rule to the link row — keep equal
    * (see `.catalog-page-shell__jump-region` + intro/hero :has(+ …) in CatalogApp / AboutPage).
    */
-  --catalog-shell-jump-band-pad-y: clamp(0.75rem, 1.8vw, 1rem);
+  --catalog-shell-jump-band-pad-y: clamp(1rem, 2.4vw, 1.35rem);
 
   /* Footer site nav — spacing (see GlobalFooter.css); colors match header primary nav. */
   --catalog-footer-nav-gap-row: 0.35rem;

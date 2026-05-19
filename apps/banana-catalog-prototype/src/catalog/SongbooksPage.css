@@ -8,6 +8,11 @@
   margin: 0 0 1.5rem;
 }
 
+/* Extra air before jump band top rule (featured block has no bottom border). */
+.songbooks-page__featured-rotator:has(+ .catalog-page-shell__jump-region) {
+  margin-bottom: clamp(1.75rem, 3.8vw, 2.35rem);
+}
+
 .songbooks-page__featured-rotator .catalog-section-title {
   margin-bottom: 0.65rem;
 }
@@ -15,15 +20,19 @@
 .songbooks-page__featured-rotator-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.1rem;
+  gap: 1rem;
   align-items: start;
 }
 
-@media (min-width: 768px) {
+.songbooks-page__featured-rotator-grid > * {
+  min-width: 0;
+}
+
+@media (min-width: 1025px) {
   .songbooks-page__featured-rotator-grid {
-    grid-template-columns: 1.05fr 1fr;
-    gap: 1.35rem;
-    align-items: center;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 1.15rem;
+    align-items: start;
   }
 }
 
@@ -31,6 +40,13 @@
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
+  margin-top: 0.1rem;
+}
+
+@media (min-width: 1025px) {
+  .songbooks-page__featured-rotator-copy {
+    margin-top: 0;
+  }
 }
 
 .songbooks-page__featured-rotator-kicker {
@@ -170,9 +186,10 @@
   padding-bottom: 0.35rem;
 }
 
+/* Jump targets: html scroll-padding already clears fixed header — only add a little air below chrome. */
 .songbooks-page__section-title {
   margin: 0;
-  scroll-margin-top: calc(var(--catalog-header-h, 108px) + 0.75rem);
+  scroll-margin-top: 1rem;
 }
 
 .songbooks-page__section-intro {
@@ -479,17 +496,23 @@
 
 .songbooks-page__playlist {
   margin-bottom: 1.4rem;
-  min-height: 1100px;
 }
 
+/* Reserve embed height for CLS — match SoundCloudPassthroughEmbed height props (680 / 760), not an oversized shell. */
 .songbooks-page__playlist .catalog-lazy-sc-embed,
 .songbooks-page__playlist .catalog-lazy-sc-embed__placeholder,
-.songbooks-page__playlist .catalog-sc-passthrough-embed {
-  min-height: 1100px;
+.songbooks-page__playlist .catalog-sc-passthrough-embed,
+.songbooks-page__playlist .sc-embed-frame {
+  min-height: 680px;
 }
 
-.songbooks-page__playlist .sc-embed-frame {
-  min-height: 1100px;
+@media (min-width: 761px) {
+  .songbooks-page__playlist .catalog-lazy-sc-embed,
+  .songbooks-page__playlist .catalog-lazy-sc-embed__placeholder,
+  .songbooks-page__playlist .catalog-sc-passthrough-embed,
+  .songbooks-page__playlist .sc-embed-frame {
+    min-height: 760px;
+  }
 }
 
 /* Passthrough wrap: border/background live on the iframe (see .sc-embed-frame below). */
