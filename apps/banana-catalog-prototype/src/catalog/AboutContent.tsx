@@ -1,14 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { CatalogPageJumpNav } from './CatalogPageJumpNav'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
-
-const ABOUT_JUMP_NAV_ITEMS = [
-  { id: 'what', label: 'What is Bananasutra', mobileLabel: 'What is?' },
-  { id: 'who', label: 'Who is behind it', mobileLabel: 'Who?' },
-  { id: 'colophon', label: 'Colophon' },
-] as const
 
 export function AboutContent() {
   const location = useLocation()
@@ -29,10 +22,7 @@ export function AboutContent() {
 
   return (
     <>
-    {pageMeta}
-      <div className="catalog-page-shell__jump-region">
-        <CatalogPageJumpNav items={[...ABOUT_JUMP_NAV_ITEMS]} />
-      </div>
+      {pageMeta}
 
       <div className="about-page__body">
         <section className="about-page__section" aria-labelledby="what">
