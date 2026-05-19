@@ -24,11 +24,12 @@
   text-align: center;
 }
 
-.catalog-page-intro:has(~ .videos-page__featured-hero) {
+.catalog-page-intro:has(~ .catalog-layout .videos-page__featured-hero) {
   padding-bottom: 0.65rem;
 }
 
 .videos-page__featured-hero {
+  min-width: 0;
   margin: 0 0 1.35rem;
   padding: 0 0 1.35rem;
   scroll-margin-top: calc(var(--catalog-header-h, 108px) + 0.75rem);
