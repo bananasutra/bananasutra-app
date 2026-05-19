@@ -452,7 +452,7 @@ export function VideosPage() {
     [filters],
   )
 
-  useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString()])
+  useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString(), filtersOpen, youtubeCatalogReady])
 
   if (catalogLoading || !youtubeCatalogReady) {
     return (
@@ -733,52 +733,13 @@ export function VideosPage() {
           <span className="catalog-breadcrumbs__current" aria-current="page">Videos</span>
         </nav>
 
-        <div className="catalog-page-intro">
+        <div className="catalog-page-intro catalog-page-intro--song-catalog">
           <h1 className="catalog-page-h1">Picture the Songs</h1>
           <p className="catalog-page-sub">
             Same songs, eyes open. Tall reels and wide frames, side by side. Some of these live only on YouTube with
             no SoundCloud twin. That&apos;s by design, not an oversight.
           </p>
         </div>
-
-        {featuredVideoHero ? (
-          <section className="videos-page__featured-hero" aria-labelledby="videos-featured-hero-heading">
-            <h2 id="videos-featured-hero-heading" className="catalog-section-title">
-              Featured Video
-            </h2>
-            <div className="videos-page__featured-hero-grid">
-              <div className="videos-page__featured-hero-embed-wrap">
-                <YoutubeEmbeddedPlayer
-                  videoId={featuredVideoHero.video_id}
-                  title={featuredVideoHero.lyrics_title || featuredVideoHero.title || 'Featured video'}
-                  embedWrapperClassName="videos-page__featured-hero-embed"
-                  embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideoHero.format) }}
-                  iframeClassName="videos-page__featured-hero-iframe"
-                  facadeUntilClick
-                  facadePosterEager
-                  posterWidth={640}
-                  outboundFooterClassName="videos-page__featured-hero-yt-outbound"
-                />
-              </div>
-              <div className="videos-page__featured-hero-copy">
-                <h3 className="videos-page__featured-hero-title">{featuredVideoHero.lyrics_title || featuredVideoHero.title}</h3>
-                {(featuredVideoHero.lyrics_summary || '').trim() ? (
-                  <p className="videos-page__featured-hero-summary">{featuredVideoHero.lyrics_summary?.trim()}</p>
-                ) : null}
-                {(featuredVideoHero.sutra || '').trim() ? (
-                  <p className="videos-page__featured-hero-sutra">{featuredVideoHero.sutra.trim()}</p>
-                ) : null}
-                {featuredHeroSongPageHref ? (
-                  <div className="catalog-featured-video-song-row">
-                    <Link className="catalog-song-page-cta" to={featuredHeroSongPageHref}>
-                      Song page
-                    </Link>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          </section>
-        ) : null}
 
         <div className={`catalog-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
           <aside
@@ -877,6 +838,44 @@ export function VideosPage() {
                   Show filters
                 </button>
               </>
+            ) : null}
+            {featuredVideoHero ? (
+              <section className="videos-page__featured-hero" aria-labelledby="videos-featured-hero-heading">
+                <h2 id="videos-featured-hero-heading" className="catalog-section-title">
+                  Featured Video
+                </h2>
+                <div className="videos-page__featured-hero-grid">
+                  <div className="videos-page__featured-hero-embed-wrap">
+                    <YoutubeEmbeddedPlayer
+                      videoId={featuredVideoHero.video_id}
+                      title={featuredVideoHero.lyrics_title || featuredVideoHero.title || 'Featured video'}
+                      embedWrapperClassName="videos-page__featured-hero-embed"
+                      embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideoHero.format) }}
+                      iframeClassName="videos-page__featured-hero-iframe"
+                      facadeUntilClick
+                      facadePosterEager
+                      posterWidth={640}
+                      outboundFooterClassName="videos-page__featured-hero-yt-outbound"
+                    />
+                  </div>
+                  <div className="videos-page__featured-hero-copy">
+                    <h3 className="videos-page__featured-hero-title">{featuredVideoHero.lyrics_title || featuredVideoHero.title}</h3>
+                    {(featuredVideoHero.lyrics_summary || '').trim() ? (
+                      <p className="videos-page__featured-hero-summary">{featuredVideoHero.lyrics_summary?.trim()}</p>
+                    ) : null}
+                    {(featuredVideoHero.sutra || '').trim() ? (
+                      <p className="videos-page__featured-hero-sutra">{featuredVideoHero.sutra.trim()}</p>
+                    ) : null}
+                    {featuredHeroSongPageHref ? (
+                      <div className="catalog-featured-video-song-row">
+                        <Link className="catalog-song-page-cta" to={featuredHeroSongPageHref}>
+                          Song page
+                        </Link>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              </section>
             ) : null}
             {listSection}
           </main>
