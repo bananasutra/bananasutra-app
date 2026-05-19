@@ -653,7 +653,6 @@ export function TracksPage() {
                         title={selected.track_title || 'SoundCloud track'}
                         height={embedHeight}
                         mode="visual"
-                        activation="interaction_or_autoplay"
                         autoPlay={scAutoplay}
                         reloadKey={embedReloadKey}
                         onLoad={handlePlayerLoad}
