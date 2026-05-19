@@ -717,6 +717,8 @@ def build_muses_catalog(
         out.append(
             {
                 "muse": name,
+                "first_name": str(row.get("first_name") or "").strip(),
+                "last_name": str(row.get("last_name") or "").strip(),
                 "muse_id": str(row.get("muse_id") or "").strip(),
                 "gender_pronoun": str(row.get("gender_pronoun") or "").strip(),
                 "type_category": str(row.get("type_category") or "").strip(),
@@ -738,7 +740,13 @@ def build_muses_catalog(
             }
         )
 
-    out.sort(key=lambda row: str(row.get("muse") or "").lower())
+    out.sort(
+        key=lambda row: (
+            str(row.get("last_name") or row.get("muse") or "").lower(),
+            str(row.get("first_name") or "").lower(),
+            str(row.get("muse") or "").lower(),
+        )
+    )
     return out
 
 
