@@ -722,7 +722,7 @@ export function VideosPage() {
       {pageMeta}
       <GlobalHeader ref={headerRef} />
       <div className="catalog-page__main catalog-page__main--videos">
-        <div className="videos-page catalog-layout-shell">
+        <div id="main-content" className="videos-page catalog-layout-shell">
           <nav className="catalog-breadcrumbs" aria-label="Breadcrumb">
             <Link to="/" className="catalog-breadcrumbs__link">
               Home
@@ -824,7 +824,7 @@ export function VideosPage() {
               </div>
             </aside>
 
-            <main id="main-content" className="catalog-main">
+            <main className="catalog-main">
               {!filtersOpen ? (
                 <>
                   {videoActiveFilterContext}
