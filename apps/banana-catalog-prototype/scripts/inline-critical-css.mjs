@@ -1,5 +1,6 @@
 /**
  * R27 — inline critical CSS into prerendered HTML (runs after prerender-html.mjs).
+ * R35 — preload: false keeps full stylesheet render-blocking (no media=print FOUC).
  */
 import fs from 'node:fs'
 import path from 'node:path'
@@ -23,7 +24,7 @@ function walkHtmlFiles(dir, out = []) {
 const beasties = new Beasties({
   path: distDir,
   publicPath: '/',
-  preload: 'media',
+  preload: false,
   pruneSource: false,
 })
 
