@@ -286,6 +286,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.45rem;
     justify-self: center;
     min-height: 2rem;
     padding: 0.28rem 0.72rem;
@@ -297,6 +298,16 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     cursor: pointer;
+  }
+
+  .global-header-menu-toggle__icon {
+    display: inline-block;
+    width: 0.95rem;
+    height: 0.7rem;
+    background:
+      linear-gradient(currentColor, currentColor) 0 0 / 100% 2px no-repeat,
+      linear-gradient(currentColor, currentColor) 0 50% / 100% 2px no-repeat,
+      linear-gradient(currentColor, currentColor) 0 100% / 100% 2px no-repeat;
   }
 
   .global-header-menu-toggle:focus-visible {
