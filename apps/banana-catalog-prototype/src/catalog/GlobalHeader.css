@@ -89,9 +89,7 @@
 
 .global-header-brand-link:hover {
   color: var(--color-link-hover);
-  text-decoration: underline;
-  text-underline-offset: 0.18em;
-  text-decoration-thickness: 2px;
+  text-decoration: none;
 }
 
 .global-header-brand-link:focus-visible {

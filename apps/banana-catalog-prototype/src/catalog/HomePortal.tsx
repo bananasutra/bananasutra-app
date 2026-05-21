@@ -283,17 +283,18 @@ export function HomePortal() {
             ) : null}
             <div className="home-portal__hero-why" aria-label="Quote actions">
               <div className="home-portal__hero-why-inner">
-                <Link className="catalog-section-cta home-portal__hero-cta" to={ABOUT_SUTRAS_HREF}>
-                  About sutras
-                </Link>
                 {primarySutraDisplay ? (
                   <Link
                     className="catalog-section-cta home-portal__hero-cta"
                     to={buildBrowsePathForFacet('sutra', primarySutraDisplay)}
                   >
-                    All {primarySutraDisplay} songs
+                    Explore all {primarySutraDisplay} songs →
                   </Link>
-                ) : null}
+                ) : (
+                  <Link className="catalog-section-cta home-portal__hero-cta" to={CATALOG_BROWSE_PATH}>
+                    Explore all sutra songs →
+                  </Link>
+                )}
               </div>
             </div>
           </section>

@@ -2,7 +2,7 @@
   "sutra": [
     {
       "value": "BLOWsutra",
-      "count": 90
+      "count": 93
     },
     {
       "value": "KNOWsutra",
@@ -14,7 +14,7 @@
     },
     {
       "value": "GROWsutra",
-      "count": 55
+      "count": 56
     },
     {
       "value": "SHOWsutra",
@@ -22,7 +22,7 @@
     },
     {
       "value": "FLOWsutra",
-      "count": 35
+      "count": 34
     },
     {
       "value": "GLOWsutra",
@@ -36,17 +36,17 @@
   "light_shadow": [
     {
       "value": "LIGHT",
-      "count": 208
+      "count": 209
     },
     {
       "value": "SHADOW",
-      "count": 179
+      "count": 180
     }
   ],
   "topic": [
     {
       "value": "POOLITICS",
-      "count": 79
+      "count": 81
     },
     {
       "value": "BEAUTY",
@@ -84,7 +84,7 @@
   "intention": [
     {
       "value": "beWOKE",
-      "count": 49
+      "count": 50
     },
     {
       "value": "beBRAVE",
@@ -99,11 +99,11 @@
       "count": 25
     },
     {
-      "value": "beGRATEFUL",
-      "count": 24
+      "value": "seeHIStory",
+      "count": 25
     },
     {
-      "value": "seeHIStory",
+      "value": "beGRATEFUL",
       "count": 24
     },
     {
@@ -154,7 +154,7 @@
   "written_year": [
     {
       "value": "2025",
-      "count": 204
+      "count": 207
     },
     {
       "value": "2024",
@@ -168,7 +168,7 @@
   "track_genre": [
     {
       "value": "DUB",
-      "count": 74
+      "count": 76
     },
     {
       "value": "JAZZ",
@@ -176,11 +176,11 @@
     },
     {
       "value": "LOFI",
-      "count": 54
+      "count": 55
     },
     {
       "value": "BURLESQUE",
-      "count": 50
+      "count": 51
     },
     {
       "value": "INDIE",
@@ -206,23 +206,23 @@
   "track_secondary_genre": [
     {
       "value": "INDIE",
-      "count": 78
+      "count": 79
     },
     {
       "value": "JAZZ",
-      "count": 63
+      "count": 64
+    },
+    {
+      "value": "FOLK",
+      "count": 53
     },
     {
       "value": "BURLESQUE",
       "count": 52
     },
     {
-      "value": "FOLK",
-      "count": 52
-    },
-    {
       "value": "LOFI",
-      "count": 40
+      "count": 41
     },
     {
       "value": "BLUES",
@@ -238,14 +238,14 @@
     },
     {
       "value": "GIPSY",
-      "count": 25
-    },
-    {
-      "value": "CIRCUS",
-      "count": 20
+      "count": 26
     },
     {
       "value": "RAGGA",
+      "count": 21
+    },
+    {
+      "value": "CIRCUS",
       "count": 20
     },
     {
@@ -266,11 +266,11 @@
     },
     {
       "value": "ROCK",
-      "count": 7
+      "count": 8
     },
     {
       "value": "MOTORIK",
-      "count": 3
+      "count": 4
     },
     {
       "value": "TECHNO",
@@ -288,11 +288,11 @@
   "track_instrument": [
     {
       "value": "BASS",
-      "count": 119
+      "count": 120
     },
     {
       "value": "GUITAR",
-      "count": 72
+      "count": 75
     },
     {
       "value": "CELLO",
@@ -354,7 +354,7 @@
     },
     {
       "value": "PUNKY",
-      "count": 46
+      "count": 47
     },
     {
       "value": "CHEEKY",
@@ -384,7 +384,7 @@
     },
     {
       "value": "MIDBEAT",
-      "count": 66
+      "count": 67
     },
     {
       "value": "UPBEAT",
@@ -394,7 +394,7 @@
   "lang": [
     {
       "value": "EN",
-      "count": 360
+      "count": 362
     },
     {
       "value": "FR",

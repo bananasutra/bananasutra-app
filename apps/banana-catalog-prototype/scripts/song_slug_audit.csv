@@ -1,4 +1,6 @@
 lyrics_id,lyrics_title,url_slug,lyrics_title_blank,slug_share_count
+L-369,Camus Dit Oui,camus-dit-oui,0,1
+L-344,Grateful For The Weird,grateful-for-the-weird,0,1
 L-169,"No, I'm Not Being Political (CIRCA 2026)",no-i-m-not-being-political-circa-2026,0,1
 L-380,The Sound Of Logic,the-sound-of-logic,0,1
 L-345,Win-Win After Midnight,win-win-after-midnight,0,1
@@ -13,7 +15,6 @@ L-228,"So, What Is Racism?",so-what-is-racism,0,1
 L-312,Zero Sum (Zero Sean),zero-sum-zero-sean,0,1
 L-263,This Is My Quest,this-is-my-quest,0,1
 L-163,My Quest,my-quest,0,1
-L-369,Camus Dit Oui,camus-dit-oui,0,1
 L-54,Curious Like A Kiss,curious-like-a-kiss,0,1
 L-324,Oxytocin,oxytocin,0,1
 L-37,Bo Burnham Covers,bo-burnham-covers,0,1
@@ -31,7 +32,6 @@ L-149,MAHA (Make America Humane Again),maha-make-america-humane-again,0,1
 L-186,"Philosophy, My Dear",philosophy-my-dear,0,1
 L-323,Penguins In Shoes,penguins-in-shoes,0,1
 L-325,"Not Bad, Friendo",not-bad-friendo,0,1
-L-344,Grateful For The Weird,grateful-for-the-weird,0,1
 L-286,What Dissent Looks Like Now,what-dissent-looks-like-now,0,1
 L-114,If We Had But(t) The Truth,if-we-had-but-t-the-truth,0,1
 L-202,Rainbows in the Clouds,rainbows-in-the-clouds,0,1
@@ -89,6 +89,7 @@ L-134,Le Bal Des Salauds,le-bal-des-salauds,0,1
 L-318,The Courage To Care,the-courage-to-care,0,1
 L-88,Gladys in Sonderland,gladys-in-sonderland,0,1
 L-247,The Echo Song,the-echo-song,0,1
+L-417,Masss ShoooTING,masss-shoooting,0,1
 L-392,The Echo Song (Russian Edition),the-echo-song-russian-edition,0,1
 L-173,"Oh, Martine",oh-martine,0,1
 L-49,Creepy Pasta (What The Hella),creepy-pasta-what-the-hella,0,1
@@ -117,6 +118,7 @@ L-317,The Umm Song,the-umm-song,0,1
 L-170,Nous Sommes Le Feu,nous-sommes-le-feu,0,1
 L-117,"It's War, My Friend",it-s-war-my-friend,0,1
 L-330,Hitlus With Your Best Shot,hitlus-with-your-best-shot,0,1
+L-416,Something In My Gut,something-in-my-gut,0,1
 L-66,Dump Trump,dump-trump,0,1
 L-165,Nietzsche's Gift (Muddy Waters),nietzsche-s-gift-muddy-waters,0,1
 L-411,Dudu Duende Murió,dud-duende-murio,0,1
@@ -255,6 +257,7 @@ L-277,Up a San Francisco Hill,up-a-san-francisco-hill,0,1
 L-71,"En Vrai, On Est Tous Frères",en-vrai-on-est-tous-freres,0,1
 L-34,Blessed Be Your Voice,blessed-be-your-voice,0,1
 L-309,Woke 'em Whacks,woke-em-whacks,0,1
+L-418,People or Property,people-or-property,0,1
 L-407,Stardom Is So Dumb,stardom-is-so-dumb,0,1
 L-331,GROCK,grock,0,1
 L-140,Let's Do It,let-s-do-it,0,1
@@ -386,4 +389,4 @@ L-181,Pablo's Grandeur,pablo-s-grandeur,0,1
 L-221,Shining Twins,shining-twins,0,1
 L-253,The Narcissist's Cabaret,the-narcissist-s-cabaret,0,1
 L-2,A Good Witch,a-good-witch,0,1
-L-416,Something In My Gut,something-in-my-gut,0,1
+L-419,Do Panic Now (What A Shit Show) Vol.3,do-panic-now-what-a-shit-show,0,1

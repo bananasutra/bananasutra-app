@@ -407,12 +407,12 @@ export function VideosPage() {
     filters.linkTarget !== 'all' ||
     filters.media !== 'all'
   const featuredVideoHero = useMemo(() => {
-    const filteredEmbeddable = shownVideos.filter((v) => Boolean(v.can_embed))
-    if (filteredEmbeddable.length === 0) return null
+    const featuredPool = shownVideos.filter((v) => Boolean(v.can_embed) && Boolean(v.video_featured))
+    if (featuredPool.length === 0) return null
     const baseSeed = String(visitSeedRef.current)
     const filterSeed = hasActiveVideoFilters ? filtersToQueryString(filters) : '__all__'
-    const pickIdx = hashString(`${baseSeed}|${filterSeed}`) % filteredEmbeddable.length
-    return filteredEmbeddable[pickIdx] ?? null
+    const pickIdx = hashString(`${baseSeed}|${filterSeed}`) % featuredPool.length
+    return featuredPool[pickIdx] ?? null
   }, [shownVideos, hasActiveVideoFilters, filters])
 
   const featuredHeroSongPageHref = useMemo(() => {
