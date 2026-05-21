@@ -113,6 +113,10 @@
   margin-left: 0;
 }
 
+.global-header-menu-toggle {
+  display: none;
+}
+
 .global-header-nav {
   grid-column: 1 / -1;
   grid-row: 2;
@@ -226,6 +230,9 @@
 .catalog-header-inner.global-header-inner .global-header-discovery-fallback {
   grid-column: 1 / -1;
   grid-row: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   align-self: center;
   width: min(100%, 42rem);
   max-width: 42rem;
@@ -241,11 +248,28 @@
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
+.catalog-header-inner.global-header-inner .global-header-discovery-fallback__icon {
+  margin-left: 0.95rem;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.catalog-header-inner.global-header-inner .global-header-discovery-fallback__placeholder {
+  color: var(--color-text-muted);
+  font: 500 0.96rem/1.2 var(--font-body);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .catalog-header-inner.global-header-inner .global-header-discovery-fallback--button {
   appearance: none;
   -webkit-appearance: none;
   text-align: left;
   cursor: text;
+  padding-right: 1rem;
 }
 
 .global-header-stats {
@@ -271,67 +295,86 @@
 }
 
 @media (max-width: 640px) {
+  .catalog-header-inner.global-header-inner.global-header__bar {
+    grid-template-rows: 3.35rem 2.15rem auto 3rem 1.05rem;
+    min-height: 14rem;
+  }
+
+  .global-header-menu-toggle {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    justify-self: center;
+    min-height: 2rem;
+    padding: 0.28rem 0.72rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-panel);
+    color: var(--color-text-primary);
+    font: 700 0.72rem/1 var(--font-ui);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .global-header-menu-toggle__icon {
+    display: inline-block;
+    width: 0.95rem;
+    height: 0.7rem;
+    background:
+      linear-gradient(currentColor, currentColor) 0 0 / 100% 2px no-repeat,
+      linear-gradient(currentColor, currentColor) 0 50% / 100% 2px no-repeat,
+      linear-gradient(currentColor, currentColor) 0 100% / 100% 2px no-repeat;
+  }
+
+  .global-header-menu-toggle:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
+  }
+
   .global-header-nav {
-    position: relative;
+    display: none;
+    grid-column: 1 / -1;
+    grid-row: 3;
+    align-self: start;
+    width: min(100%, 22rem);
+    margin: 0.35rem auto 0;
+    overflow: visible;
   }
 
-  /* Fade hints — match header background (--color-bg-shell). */
-  .global-header-nav::before,
-  .global-header-nav::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 1.5rem;
-    z-index: 1;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity var(--dur-base) ease;
-  }
-
-  .global-header-nav::before {
-    left: 0;
-    background: linear-gradient(to right, var(--color-bg-shell), transparent);
-  }
-
-  .global-header-nav::after {
-    right: 0;
-    background: linear-gradient(to left, var(--color-bg-shell), transparent);
-  }
-
-  /* Show fades when scrollable (toggled via tiny JS) */
-  .global-header-nav.can-scroll-left::before,
-  .global-header-nav.can-scroll-right::after {
-    opacity: 1;
+  .global-header-nav.is-open {
+    display: block;
   }
 
   .global-header-nav__list {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    gap: 0.25rem 0.35rem;
-    padding-top: 0;
-    padding-bottom: 0.12rem;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .global-header-nav__list::-webkit-scrollbar {
-    display: none;
-  }
-
-  .global-header-nav__list li {
-    flex-shrink: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.3rem;
+    padding: 0.35rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-panel);
+    box-shadow: var(--shadow-sm);
   }
 
   .global-header-nav__link {
-    min-height: 1.85rem;
+    width: 100%;
+    min-height: 2rem;
+    justify-content: center;
     font-size: 0.72rem;
     padding: 0.22rem 0.42rem;
   }
 
+  .catalog-header-inner.global-header-inner .discovery-search--header,
+  .catalog-header-inner.global-header-inner .global-header-discovery-fallback {
+    grid-row: 4;
+  }
+
   .global-header-stats {
+    grid-row: 5;
     font-size: 0.62rem;
     letter-spacing: 0.04em;
     line-height: 1.25;

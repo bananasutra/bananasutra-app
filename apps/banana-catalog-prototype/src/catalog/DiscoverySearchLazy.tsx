@@ -19,7 +19,12 @@ export function DiscoverySearchLazy(props: DiscoverySearchProps) {
         onMouseEnter={() => setMountSearch(true)}
         onFocus={() => setMountSearch(true)}
         onClick={() => setMountSearch(true)}
-      />
+      >
+        <span className="global-header-discovery-fallback__icon" aria-hidden>
+          ⌕
+        </span>
+        <span className="global-header-discovery-fallback__placeholder">Search and discover...</span>
+      </button>
     )
   }
 
@@ -30,7 +35,12 @@ export function DiscoverySearchLazy(props: DiscoverySearchProps) {
           className="global-header-discovery-fallback"
           role="status"
           aria-label="Loading search"
-        />
+        >
+          <span className="global-header-discovery-fallback__icon" aria-hidden>
+            ⌕
+          </span>
+          <span className="global-header-discovery-fallback__placeholder">Search and discover...</span>
+        </div>
       }
     >
       <DiscoverySearchRoot {...props} />
