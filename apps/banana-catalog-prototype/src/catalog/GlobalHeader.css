@@ -230,6 +230,9 @@
 .catalog-header-inner.global-header-inner .global-header-discovery-fallback {
   grid-column: 1 / -1;
   grid-row: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   align-self: center;
   width: min(100%, 42rem);
   max-width: 42rem;
@@ -245,11 +248,28 @@
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
+.catalog-header-inner.global-header-inner .global-header-discovery-fallback__icon {
+  margin-left: 0.95rem;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.catalog-header-inner.global-header-inner .global-header-discovery-fallback__placeholder {
+  color: var(--color-text-muted);
+  font: 500 0.96rem/1.2 var(--font-body);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .catalog-header-inner.global-header-inner .global-header-discovery-fallback--button {
   appearance: none;
   -webkit-appearance: none;
   text-align: left;
   cursor: text;
+  padding-right: 1rem;
 }
 
 .global-header-stats {
