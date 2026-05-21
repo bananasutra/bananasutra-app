@@ -63,6 +63,7 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
           aria-controls={primaryNavId}
           onClick={() => setMobileMenuOpen((open) => !open)}
         >
+          <span className="global-header-menu-toggle__icon" aria-hidden="true" />
           {mobileMenuOpen ? 'CLOSE' : 'MENU'}
         </button>
 
