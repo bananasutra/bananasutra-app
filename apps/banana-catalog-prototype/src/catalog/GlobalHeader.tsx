@@ -63,8 +63,7 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
           aria-controls={primaryNavId}
           onClick={() => setMobileMenuOpen((open) => !open)}
         >
-          <span className="global-header-menu-toggle__icon" aria-hidden="true" />
-          MENU
+          {mobileMenuOpen ? 'CLOSE' : 'MENU'}
         </button>
 
         <nav
@@ -80,7 +79,7 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
                 aria-current={pathname === '/' ? 'page' : undefined}
                 aria-label="Home"
               >
-                /
+                HOME
               </Link>
             </li>
             {SITE_NAV_PRIMARY.map((item) => {
