@@ -403,6 +403,8 @@ HEADER_MAP: dict[str, dict[str, str]] = {
         "primary_genre": "primary_genre",
         # Pipeline / Airtable: SC-derived genre line (separate from primary_genre curation)
         "extracted_genre": "extracted_genre",
+        "extracted_instruments": "extracted_instruments",
+        "Extracted instruments": "extracted_instruments",
         "instruments": "instruments",
         # Optional curation metadata + backwards-compatible aliases
         "mood": "mood",

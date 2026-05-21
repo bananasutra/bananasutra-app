@@ -194,6 +194,15 @@ function countVideosWithIntention(videos: YouTubeCatalogVideo[], intention: stri
   return videos.filter((v) => (v.song_intention || '').trim() === intention).length
 }
 
+function hashString(input: string): number {
+  let hash = 0
+  for (let i = 0; i < input.length; i += 1) {
+    hash = (hash << 5) - hash + input.charCodeAt(i)
+    hash |= 0
+  }
+  return Math.abs(hash)
+}
+
 function VideoCardBody({
   v,
   songTitle,
@@ -295,6 +304,7 @@ export function VideosPage() {
   }, [findDraft, filters.find, navigate])
   // Keep server and client first paint aligned; avoid mobile hydration-open/close swaps that register as CLS.
   const [filtersOpen, setFiltersOpen] = useState(true)
+  const visitSeedRef = useRef(Math.floor(Math.random() * 1_000_000_000))
 
   const inAppIds = useMemo(() => {
     const ids = songCatalogRows?.map((s) => (s.lyrics_id || '').trim()).filter(Boolean) ?? []
@@ -389,19 +399,6 @@ export function VideosPage() {
     () => applyVideoFilters(allVideos, filters, inAppIds, songsByLyricsId),
     [allVideos, filters, inAppIds, songsByLyricsId],
   )
-  const featuredVideoHero = useMemo(() => {
-    const filteredEmbeddable = shownVideos.filter((v) => Boolean(v.can_embed))
-    if (filteredEmbeddable.length === 0) return null
-    const featuredInFiltered = filteredEmbeddable.find((v) => Boolean(v.video_featured))
-    return featuredInFiltered ?? filteredEmbeddable[0] ?? null
-  }, [shownVideos])
-
-  const featuredHeroSongPageHref = useMemo(() => {
-    if (!featuredVideoHero) return null
-    const id = (featuredVideoHero.lyrics_id || '').trim()
-    return featuredYoutubeSongPageHref(featuredVideoHero, Boolean(id && inAppIds.has(id)))
-  }, [featuredVideoHero, inAppIds])
-
   const hasActiveVideoFilters =
     Boolean(filters.find) ||
     Boolean(filters.sutra) ||
@@ -409,6 +406,20 @@ export function VideosPage() {
     Boolean(filters.intention) ||
     filters.linkTarget !== 'all' ||
     filters.media !== 'all'
+  const featuredVideoHero = useMemo(() => {
+    const filteredEmbeddable = shownVideos.filter((v) => Boolean(v.can_embed))
+    if (filteredEmbeddable.length === 0) return null
+    const baseSeed = String(visitSeedRef.current)
+    const filterSeed = hasActiveVideoFilters ? filtersToQueryString(filters) : '__all__'
+    const pickIdx = hashString(`${baseSeed}|${filterSeed}`) % filteredEmbeddable.length
+    return filteredEmbeddable[pickIdx] ?? null
+  }, [shownVideos, hasActiveVideoFilters, filters])
+
+  const featuredHeroSongPageHref = useMemo(() => {
+    if (!featuredVideoHero) return null
+    const id = (featuredVideoHero.lyrics_id || '').trim()
+    return featuredYoutubeSongPageHref(featuredVideoHero, Boolean(id && inAppIds.has(id)))
+  }, [featuredVideoHero, inAppIds])
 
   const clearAllVideosFiltersHref = hrefVideos(
     {
