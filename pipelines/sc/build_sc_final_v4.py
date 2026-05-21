@@ -1339,7 +1339,7 @@ def main():
     TRACK_HEADERS = [
         'track_title', 'sc_url', 'lyrics_title',
         'duration', 'play_count', 'like_count', 'engagement_rate',
-        'sutra', 'primary_genre', 'secondary_genre', 'extracted_genre', 'instruments',
+        'sutra', 'primary_genre', 'secondary_genre', 'extracted_genre', 'extracted_instruments', 'instruments',
         'mood', 'tempo_feel', 'curation_rating',
         'fav_track', 'liked_track', 'track_in_app',
         'ep_title', 'ep_url', 'ep_volume', 'ep_track_number', 'ep_total_tracks',
@@ -1407,7 +1407,7 @@ def main():
             'purchase_url':         r.get('purchase_url', ''),
             'download_url':         r.get('download_url', ''),
             'track_id':             tid,
-            'instruments':          parse_instruments(track_title),
+            'extracted_instruments': parse_instruments(track_title),
             'liked_track':          r.get('user_liked', ''),
         }
 
@@ -1460,6 +1460,7 @@ def main():
                 'primary_genre': _pick_first_value(ref, ['primary_genre', 'genres']),
                 'secondary_genre': _pick_first_value(ref, ['secondary_genres', 'secondary_genre']),
                 'extracted_genre': extracted_genres_std,
+                'instruments': _pick_first_value(ref, ['instruments']),
                 'mood': _pick_first_value(ref, TRACK_OPTIONAL_FIELD_ALIASES['mood']),
                 'tempo_feel': _pick_first_value(ref, TRACK_OPTIONAL_FIELD_ALIASES['tempo_feel']),
                 'curation_rating': _pick_first_value(ref, TRACK_OPTIONAL_FIELD_ALIASES['curation_rating']),
@@ -1574,6 +1575,7 @@ def main():
                 'primary_genre': '',
                 'secondary_genre': '',
                 'extracted_genre': genres_std,
+                'instruments': '',
                 'mood': _pick_first_value(qa_overrides.get(tid, {}), TRACK_OPTIONAL_FIELD_ALIASES['mood']),
                 'tempo_feel': _pick_first_value(qa_overrides.get(tid, {}), TRACK_OPTIONAL_FIELD_ALIASES['tempo_feel']),
                 'curation_rating': _pick_first_value(qa_overrides.get(tid, {}), TRACK_OPTIONAL_FIELD_ALIASES['curation_rating']),
