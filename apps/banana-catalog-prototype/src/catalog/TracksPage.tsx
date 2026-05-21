@@ -104,21 +104,31 @@ export function TracksPage() {
 
   useEffect(() => {
     let cancelled = false
-    fetchCatalogData(catalogDataFileUrl('track_catalog.json'), { cache: 'default' })
-      .then((r) => {
-        if (!cancelled) setCatalogLoadError(null)
-        if (!r.ok) throw new Error(`HTTP ${r.status}`)
-        return r.json() as Promise<TrackCatalogItem[]>
-      })
-      .then((rows) => {
-        if (!cancelled) setTrackCatalog(Array.isArray(rows) ? rows : [])
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setTrackCatalog(null)
-          setCatalogLoadError('Could not load track catalog data.')
+    const loadCatalog = async () => {
+      // Keep no-store for local preview reliability: stale/corrupt cached JSON (or cached HTML fallback)
+      // can otherwise persist after a port/server swap and look like intermittent data loss.
+      for (let attempt = 0; attempt < 2; attempt += 1) {
+        try {
+          const r = await fetchCatalogData(catalogDataFileUrl('track_catalog.json'))
+          if (!cancelled) setCatalogLoadError(null)
+          if (!r.ok) throw new Error(`HTTP ${r.status}`)
+          const rows = (await r.json()) as unknown
+          if (!Array.isArray(rows)) throw new Error('Invalid track catalog payload')
+          if (!cancelled) setTrackCatalog(rows as TrackCatalogItem[])
+          return
+        } catch {
+          if (attempt === 0) {
+            await new Promise((resolve) => window.setTimeout(resolve, 350))
+            continue
+          }
+          if (!cancelled) {
+            setTrackCatalog(null)
+            setCatalogLoadError('Could not load track catalog data.')
+          }
         }
-      })
+      }
+    }
+    void loadCatalog()
     return () => {
       cancelled = true
     }
