@@ -296,7 +296,7 @@
 
 @media (max-width: 640px) {
   .catalog-header-inner.global-header-inner.global-header__bar {
-    grid-template-rows: 3.35rem auto 3rem 1.05rem;
+    grid-template-rows: 3.35rem 2.15rem auto 3rem 1.05rem;
     min-height: 14rem;
   }
 
@@ -338,10 +338,10 @@
   .global-header-nav {
     display: none;
     grid-column: 1 / -1;
-    grid-row: 2;
+    grid-row: 3;
     align-self: start;
     width: min(100%, 22rem);
-    margin: 2.15rem auto 0;
+    margin: 0.35rem auto 0;
     overflow: visible;
   }
 
@@ -368,7 +368,13 @@
     padding: 0.22rem 0.42rem;
   }
 
+  .catalog-header-inner.global-header-inner .discovery-search--header,
+  .catalog-header-inner.global-header-inner .global-header-discovery-fallback {
+    grid-row: 4;
+  }
+
   .global-header-stats {
+    grid-row: 5;
     font-size: 0.62rem;
     letter-spacing: 0.04em;
     line-height: 1.25;
