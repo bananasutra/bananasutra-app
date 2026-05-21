@@ -281,21 +281,22 @@ export function HomePortal() {
                 })}
               </p>
             ) : null}
-            <p className="home-portal__hero-why">
-              <span className="home-portal__hero-why-inner">
-                <Link to={ABOUT_SUTRAS_HREF}>About sutras</Link>
+            <div className="home-portal__hero-why" aria-label="Quote actions">
+              <div className="home-portal__hero-why-inner">
                 {primarySutraDisplay ? (
-                  <>
-                    <span className="home-portal__hero-why-sep" aria-hidden>
-                      {' · '}
-                    </span>
-                    <Link to={buildBrowsePathForFacet('sutra', primarySutraDisplay)}>
-                      All {primarySutraDisplay} songs
-                    </Link>
-                  </>
-                ) : null}
-              </span>
-            </p>
+                  <Link
+                    className="catalog-section-cta home-portal__hero-cta"
+                    to={buildBrowsePathForFacet('sutra', primarySutraDisplay)}
+                  >
+                    Explore all {primarySutraDisplay} songs →
+                  </Link>
+                ) : (
+                  <Link className="catalog-section-cta home-portal__hero-cta" to={CATALOG_BROWSE_PATH}>
+                    Explore all sutra songs →
+                  </Link>
+                )}
+              </div>
+            </div>
           </section>
 
           <section className="home-portal__section" aria-labelledby="home-sutra-grid-heading">

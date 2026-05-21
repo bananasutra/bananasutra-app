@@ -17,7 +17,7 @@
     "notes": "",
     "quote_excerpt": "",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Douglas_Adams",
-    "song_count": 0
+    "song_count": 1
   },
   {
     "muse": "Aesop",
@@ -695,7 +695,7 @@
     "secondary_sutras": "GROWsutra",
     "themes": "philosophy,ethics,wisdom,spirituality/agnosticism",
     "notes": "",
-    "quote_excerpt": "\"Beauty is everywhere, not everyone sees it\"",
+    "quote_excerpt": "\"Beauty is everywhere, not everyone sees it.\"",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Confucius",
     "song_count": 0
   },
@@ -1392,7 +1392,7 @@
     "death_year": "",
     "famous_works": "Unbehagen, Nina Hagen Band (album)",
     "core_sutra": "GROWsutra",
-    "secondary_sutras": "BLOWsutra",
+    "secondary_sutras": "BLOWsutra,SHOWsutra",
     "themes": "music,punk,performance,spirituality/agnosticism,resistance",
     "notes": "Inspired 'Seminal Bollocks' (from Personal Jesus) and the 'Dump Trump' (Smack Jack) track.",
     "quote_excerpt": "",
@@ -2972,7 +2972,7 @@
     "death_year": "2003",
     "famous_works": "Feeling Good, Mississippi Goddam, I Put a Spell on You",
     "core_sutra": "KNOWsutra",
-    "secondary_sutras": "GROWsutra",
+    "secondary_sutras": "GROWsutra,GLOWsutra",
     "themes": "music,race/justice,resistance,soul,feminism",
     "notes": "",
     "quote_excerpt": "",
@@ -3012,7 +3012,7 @@
     "death_year": "",
     "famous_works": "Horses",
     "core_sutra": "BLOWsutra",
-    "secondary_sutras": "GROWsutra",
+    "secondary_sutras": "GROWsutra,GLOWsutra",
     "themes": "music,poetry/language,resistance,punk,spirituality/agnosticism",
     "notes": "Inspired the track 'Because The Light'.",
     "quote_excerpt": "",
@@ -3117,7 +3117,7 @@
     "notes": "it me :)",
     "quote_excerpt": "\"Not all cowards are hypocrites, but(t) all hypocrites are cowards.\",All I really know is I dunno shit about fck.,\"I’ll take the hope of a democratic future over the certainty...",
     "wikipedia_url": "",
-    "song_count": 15
+    "song_count": 16
   },
   {
     "muse": "Charles Tart",

@@ -1,10 +1,10 @@
 {
-  "snapshot_date": "2026-05-12",
-  "songs": 387,
-  "details": 387,
-  "featured_with_in_app_playback": 184,
+  "snapshot_date": "2026-05-20",
+  "songs": 390,
+  "details": 390,
+  "featured_with_in_app_playback": 185,
   "featured_with_sc_catalog_listen": 28,
-  "featured_lyrics_only": 203,
+  "featured_lyrics_only": 205,
   "facet_keys": [
     "sutra",
     "light_shadow",
@@ -21,15 +21,15 @@
   "songbooks": 37,
   "top_tracks_per_song": 4,
   "like_weight": 40,
-  "youtube_lyrics_ids": 199,
+  "youtube_lyrics_ids": 200,
   "youtube_video_rows": 469,
   "youtube_rows_missing_lyrics_id": 17,
   "sutra_context_rows": 8,
   "home_quotes": 136,
   "muses_catalog": 177,
   "quotes_wall": 136,
-  "track_catalog_rows": 649,
-  "related_song_links_written": 523,
+  "track_catalog_rows": 660,
+  "related_song_links_written": 646,
   "edition_rows_missing_links_count": 0,
   "edition_rows_missing_links": [],
   "sc_tracks_full_v4_csv": "pipelines/sc/outputs/AT-TRACKS-FULL-v4.csv",
@@ -46,49 +46,49 @@
   },
   "inputs": {
     "lyrics": {
-      "path": "AIRTABLE/snapshots/2026-05-12/clean/lyrics-2026-05-12.csv",
-      "sha256": "b3763dd3b0862f3cd928c9beafb23b6ba1441e43c1c4258189b8890daa281b18",
-      "rows": 394
+      "path": "AIRTABLE/snapshots/2026-05-20/clean/lyrics-2026-05-20.csv",
+      "sha256": "605c6a4284b0d2aac73092fbf69c06dfd1f5d3e11cd251c03870128a9403d493",
+      "rows": 397
     },
     "sc_tracks": {
-      "path": "AIRTABLE/snapshots/2026-05-12/clean/sc_tracks-2026-05-12.csv",
-      "sha256": "5c16ea0eec132aaa92043df4aee0b266bd3d305a323c9f86322cd656081c76dc",
-      "rows": 651
+      "path": "AIRTABLE/snapshots/2026-05-20/clean/sc_tracks-2026-05-20.csv",
+      "sha256": "a6a29bc3f228d5dafdc2bb221904eab6cfb4c2b49fdfaccd6649a858fa017c04",
+      "rows": 662
     },
     "sc_eps": {
-      "path": "AIRTABLE/snapshots/2026-05-12/clean/sc_eps-2026-05-12.csv",
-      "sha256": "3f78c9f1efb02544283bb0c2770bf49d7892cda574400c480347656cb85bb593",
-      "rows": 235
+      "path": "AIRTABLE/snapshots/2026-05-20/clean/sc_eps-2026-05-20.csv",
+      "sha256": "81c819661ee187c1b17014aa110d61d1de55ebd78bbccfce121271f9a2e07ec6",
+      "rows": 237
     },
     "songbooks": {
-      "path": "AIRTABLE/snapshots/2026-05-12/clean/songbooks-2026-05-12.csv",
-      "sha256": "068272cbb7a5f1b0178690c33972579c3d2a4101253dda9c10ba0bdf17f8777c",
+      "path": "AIRTABLE/snapshots/2026-05-20/clean/songbooks-2026-05-20.csv",
+      "sha256": "cf73f6a86a37efcb2d50dc5d53a6174242cf4244d79175d98a764a56b3dd19af",
       "rows": 44
     },
     "sc_playlists": {
-      "path": "AIRTABLE/snapshots/2026-05-12/clean/sc_playlists-2026-05-12.csv",
-      "sha256": "ded1bd407b6829e1910b3cc5c976b4a954907dde062a65f27909326b1bb66c4d",
+      "path": "AIRTABLE/snapshots/2026-05-20/clean/sc_playlists-2026-05-20.csv",
+      "sha256": "ac1a346ef9fe222cc9fe46f1b5b5b9f0678019e447e94cb0662777388c481372",
       "rows": 60
     },
     "sutras": {
-      "path": "AIRTABLE/snapshots/2026-05-12/clean/sutras-2026-05-12.csv",
+      "path": "AIRTABLE/snapshots/2026-05-20/clean/sutras-2026-05-20.csv",
       "sha256": "5c1f7f99194a58b4b7cdee1ad63875925b216965c8849273d162b0943bfb97d0",
       "rows": 8
     },
     "muses": {
-      "path": "AIRTABLE/snapshots/2026-05-12/clean/muses-2026-05-12.csv",
-      "sha256": "b093c924f42437b4ee7b4159c5c01312af89d2a94886079aa55bcfa133a80c36",
+      "path": "AIRTABLE/snapshots/2026-05-20/clean/muses-2026-05-20.csv",
+      "sha256": "a5803897c30ad053dc0bd08855e4c8631a447d752903bf34e0a2cb4f9be1d74b",
       "rows": 181
     },
     "quotes": {
-      "path": "AIRTABLE/snapshots/2026-05-12/clean/quotes-2026-05-12.csv",
-      "sha256": "c4547b0fd77f20980ff880935e7191d32d06c70b5085e442934cfc45caf78f60",
+      "path": "AIRTABLE/snapshots/2026-05-20/clean/quotes-2026-05-20.csv",
+      "sha256": "43839982f1aa2d097043a9aab79cd08087f3ed68f681e209547187d82c29736b",
       "rows": 153
     },
     "yt_videos": {
-      "path": "AIRTABLE/snapshots/2026-05-12/clean/yt_videos-2026-05-12.csv",
-      "sha256": "965da2556913536c6c6137883fc6c8fab682e1a4187d394834575e99c1f13b2d",
-      "rows": 472
+      "path": "AIRTABLE/snapshots/2026-05-20/clean/yt_videos-2026-05-20.csv",
+      "sha256": "f74359957c8ba2937af4c026ca358d0f8015e32ebf0fe5ba1bbfaa1bf01f140e",
+      "rows": 473
     }
   }
 }
