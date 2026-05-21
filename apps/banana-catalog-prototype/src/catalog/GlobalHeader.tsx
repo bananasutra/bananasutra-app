@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useRef, type ReactNode } from 'react'
+import { forwardRef, useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import chromeStatsJson from '../data/generated/catalog_chrome_stats.json'
 import { DiscoverySearchLazy } from './DiscoverySearchLazy'
@@ -25,34 +25,15 @@ type CatalogChromeStats = {
 const chromeStats = chromeStatsJson as CatalogChromeStats
 const { sutraCount, songbookCount, songCount } = chromeStats
 
-/** Toggle can-scroll-left / can-scroll-right on the nav wrapper based on list scroll position. */
-function useScrollFade(navRef: React.RefObject<HTMLElement | null>) {
-  const update = useCallback(() => {
-    const nav = navRef.current
-    if (!nav) return
-    const list = nav.querySelector('.global-header-nav__list') as HTMLElement | null
-    if (!list) return
-    const { scrollLeft, scrollWidth, clientWidth } = list
-    nav.classList.toggle('can-scroll-left', scrollLeft > 2)
-    nav.classList.toggle('can-scroll-right', scrollLeft + clientWidth < scrollWidth - 2)
-  }, [navRef])
-
-  useEffect(() => {
-    const nav = navRef.current
-    const list = nav?.querySelector('.global-header-nav__list') as HTMLElement | null
-    if (!list) return
-    update()
-    list.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update)
-    return () => { list.removeEventListener('scroll', update); window.removeEventListener('resize', update) }
-  }, [navRef, update])
-}
-
 export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function GlobalHeader({ right }, ref) {
   const { pathname } = useLocation()
-  const navRef = useRef<HTMLElement>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const headerElRef = useRef<HTMLElement | null>(null)
-  useScrollFade(navRef)
+  const primaryNavId = useId()
+
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [pathname])
 
   const setHeaderRef = (node: HTMLElement | null) => {
     headerElRef.current = node
@@ -75,7 +56,22 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
           </p>
         </div>
 
-        <nav ref={navRef} className="global-header-nav" aria-label="Primary">
+        <button
+          type="button"
+          className="global-header-menu-toggle"
+          aria-expanded={mobileMenuOpen}
+          aria-controls={primaryNavId}
+          onClick={() => setMobileMenuOpen((open) => !open)}
+        >
+          <span className="global-header-menu-toggle__icon" aria-hidden="true" />
+          MENU
+        </button>
+
+        <nav
+          id={primaryNavId}
+          className={`global-header-nav${mobileMenuOpen ? ' is-open' : ''}`}
+          aria-label="Primary"
+        >
           <ul className="global-header-nav__list">
             <li>
               <Link
