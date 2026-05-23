@@ -30,10 +30,29 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const headerElRef = useRef<HTMLElement | null>(null)
   const primaryNavId = useId()
+  const mobileMenuLabel = mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'
 
   useEffect(() => {
     setMobileMenuOpen(false)
   }, [pathname])
+
+  useEffect(() => {
+    document.body.classList.toggle('global-mobile-menu-open', mobileMenuOpen)
+    return () => {
+      document.body.classList.remove('global-mobile-menu-open')
+    }
+  }, [mobileMenuOpen])
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false)
+      }
+    }
+    window.addEventListener('keydown', onEscape)
+    return () => window.removeEventListener('keydown', onEscape)
+  }, [mobileMenuOpen])
 
   const setHeaderRef = (node: HTMLElement | null) => {
     headerElRef.current = node
@@ -61,10 +80,12 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
           className="global-header-menu-toggle"
           aria-expanded={mobileMenuOpen}
           aria-controls={primaryNavId}
+          aria-label={mobileMenuLabel}
+          title={mobileMenuLabel}
           onClick={() => setMobileMenuOpen((open) => !open)}
         >
           <span className="global-header-menu-toggle__icon" aria-hidden="true" />
-          {mobileMenuOpen ? 'CLOSE' : 'MENU'}
+          <span className="visually-hidden">{mobileMenuLabel}</span>
         </button>
 
         <nav
@@ -72,6 +93,10 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
           className={`global-header-nav${mobileMenuOpen ? ' is-open' : ''}`}
           aria-label="Primary"
         >
+          <div className="global-header-nav__mobile-controls">
+            <span className="global-header-nav__mobile-theme-label">Theme</span>
+            <ThemeToggle />
+          </div>
           <ul className="global-header-nav__list">
             <li>
               <Link
@@ -99,6 +124,14 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
             })}
           </ul>
         </nav>
+
+        <button
+          type="button"
+          className={`global-header-menu-backdrop${mobileMenuOpen ? ' is-open' : ''}`}
+          onClick={() => setMobileMenuOpen(false)}
+          aria-label="Close navigation menu"
+          tabIndex={mobileMenuOpen ? 0 : -1}
+        />
 
         <DiscoverySearchLazy variant="header" />
         <p className="global-header-stats" aria-label="Catalog scale: sutras, songbooks, songs">
