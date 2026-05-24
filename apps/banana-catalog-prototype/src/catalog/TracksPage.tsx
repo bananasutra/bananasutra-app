@@ -23,6 +23,7 @@ import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { sutraClassName } from './sutraTheme'
+import { type SoundCloudWidget } from './soundcloudWidgetApi'
 import './CatalogApp.css'
 import './AboutPage.css'
 import './TracksPage.css'
@@ -245,6 +246,7 @@ export function TracksPage() {
   const [playAllActive, setPlayAllActive] = useState(false)
   const playAllActiveRef = useRef(false)
   const playerWrapRef = useRef<HTMLDivElement>(null)
+  const scWidgetRef = useRef<SoundCloudWidget | null>(null)
   const filteredRef = useRef<TrackCatalogItem[]>([])
   const selectedIdRef = useRef<string | null>(null)
   const safePageRef = useRef(1)
@@ -319,6 +321,9 @@ export function TracksPage() {
     () => pageRows.find((t) => t.track_id === selectedId) ?? pageRows[0],
     [pageRows, selectedId],
   )
+  const queueIndex = selected?.track_id ? filtered.findIndex((t) => t.track_id === selected.track_id) : -1
+  const canGoPrevious = queueIndex > 0
+  const canGoNext = queueIndex >= 0 && queueIndex < filtered.length - 1
 
   const syncToUrl = useCallback(
     (nextFilters: TracksFilterState, find: string, page: number, sort: TrackSortMode) => {
@@ -440,13 +445,50 @@ export function TracksPage() {
     pickTrack(queue[0], { keepPlayAll: true })
   }, [navigate, pickTrack])
 
+  const stopCurrentPlayback = useCallback(() => {
+    try {
+      scWidgetRef.current?.pause()
+    } catch {
+      // Ignore widget pause failures and keep UI state responsive.
+    }
+  }, [])
+
   const stopPlayAll = useCallback(() => {
     setPlayAllActive(false)
-  }, [])
+    stopCurrentPlayback()
+  }, [stopCurrentPlayback])
+
+  const jumpInQueue = useCallback(
+    (delta: -1 | 1) => {
+      const queue = filteredRef.current
+      const currentId = selectedIdRef.current
+      if (!queue.length || !currentId) return
+      const idx = queue.findIndex((t) => t.track_id === currentId)
+      if (idx < 0) return
+      const nextIdx = idx + delta
+      if (nextIdx < 0 || nextIdx >= queue.length) return
+      const next = queue[nextIdx]
+      const nextPage = Math.floor(nextIdx / PAGE_SIZE) + 1
+      if (nextPage !== safePageRef.current) {
+        const preserve = new URLSearchParams(locationSearchRef.current)
+        navigate(
+          buildTracksBrowsePathFull(
+            filtersRefForAdvance.current,
+            urlFindRefForAdvance.current,
+            nextPage,
+            preserve,
+            urlSortRefForAdvance.current,
+          ),
+          { replace: true },
+        )
+      }
+      pickTrack(next, { keepPlayAll: playAllActiveRef.current })
+    },
+    [navigate, pickTrack],
+  )
 
   /** Bind FINISH on the SoundCloud widget after each iframe (re)load — each remount creates a fresh widget. */
   const handlePlayerLoad = useCallback(() => {
-    if (!playAllActiveRef.current) return
     const wrap = playerWrapRef.current
     if (!wrap) return
     const iframe = wrap.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
@@ -456,6 +498,8 @@ export function TracksPage() {
       .then((SC) => {
         if (!document.body.contains(iframe)) return
         const widget = SC.Widget(iframe)
+        scWidgetRef.current = widget
+        widget.unbind(SC.Widget.Events.FINISH)
         widget.bind(SC.Widget.Events.FINISH, () => {
           if (!playAllActiveRef.current) return
           advanceToNextInQueueRef.current()
@@ -716,7 +760,7 @@ export function TracksPage() {
                   </>
                 ) : null}
 
-                {filtered.length > 1 ? (
+                {filtered.length > 0 ? (
                   <div className="tracks-page__play-all" role="group" aria-label="Play all tracks">
                     <div className="tracks-page__play-all-row">
                       {playAllActive ? (
@@ -731,26 +775,42 @@ export function TracksPage() {
                             </span>
                             Stop playing all
                           </button>
-                          <span className="tracks-page__play-all-status" aria-live="polite">
-                            {(() => {
-                              const idx = filtered.findIndex((t) => t.track_id === selected?.track_id)
-                              const pos = idx >= 0 ? idx + 1 : 1
-                              return `Playing ${pos} of ${filtered.length}`
-                            })()}
-                          </span>
                         </>
                       ) : (
+                        filtered.length > 1 ? (
+                          <button
+                            type="button"
+                            className="tracks-page__play-all-btn"
+                            onClick={startPlayAll}
+                          >
+                            <span className="tracks-page__play-all-glyph" aria-hidden>
+                              ▶
+                            </span>
+                            {`Play all ${filtered.length} tracks`}
+                          </button>
+                        ) : null
+                      )}
+                      <div className="tracks-page__queue-nav" role="group" aria-label="Track queue navigation">
                         <button
                           type="button"
-                          className="tracks-page__play-all-btn"
-                          onClick={startPlayAll}
+                          className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
+                          onClick={() => jumpInQueue(-1)}
+                          disabled={!canGoPrevious}
                         >
-                          <span className="tracks-page__play-all-glyph" aria-hidden>
-                            ▶
-                          </span>
-                          {`Play all ${filtered.length} tracks`}
+                          Previous
                         </button>
-                      )}
+                        <button
+                          type="button"
+                          className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
+                          onClick={() => jumpInQueue(1)}
+                          disabled={!canGoNext}
+                        >
+                          Next
+                        </button>
+                      </div>
+                      <span className="tracks-page__play-all-status" aria-live="polite">
+                        {queueIndex >= 0 ? `Track ${queueIndex + 1} of ${filtered.length}` : `Track 0 of ${filtered.length}`}
+                      </span>
                     </div>
                     <p className="tracks-page__play-all-note">
                       Autoplay works best on desktop. On mobile (especially iPhone), you may need to tap each next

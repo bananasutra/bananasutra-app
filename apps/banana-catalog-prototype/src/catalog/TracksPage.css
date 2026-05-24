@@ -401,6 +401,12 @@
   margin: 0;
 }
 
+.tracks-page__queue-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 .tracks-page__play-all-note {
   margin: 0.32rem 0 0;
   font-size: 0.75rem;
@@ -440,6 +446,25 @@
   outline-offset: 2px;
 }
 
+.tracks-page__play-all-btn--queue-nav {
+  background: var(--color-bg-panel, #fff);
+  color: var(--color-text-strong, #111);
+  border-color: var(--color-border-strong, #c9c4b8);
+}
+
+.tracks-page__play-all-btn--queue-nav:hover {
+  background: var(--color-bg-inset, #f4f1ea);
+  color: var(--color-text-strong, #111);
+  border-color: var(--color-border-strong, #c9c4b8);
+}
+
+.tracks-page__play-all-btn--queue-nav:disabled {
+  opacity: 0.52;
+  cursor: not-allowed;
+  background: var(--color-bg-panel, #fff);
+  color: var(--color-text-muted, #5c5c5c);
+}
+
 .tracks-page__play-all-btn--stop {
   background: var(--color-bg-panel, #fff);
   color: var(--color-text-strong, #111);
@@ -474,6 +499,12 @@
   .tracks-page__play-all-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .tracks-page__queue-nav {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .tracks-page__play-all-status {
