@@ -694,6 +694,13 @@
   gap: 0.65rem;
 }
 
+.song-detail-audio-controls {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .song-detail-audio-action-btn {
   min-height: 2.5rem;
   padding: 0.45rem 0.88rem;
@@ -715,6 +722,14 @@
 .song-detail-audio-action-btn:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
+}
+
+.song-detail-audio-action-btn--queue:disabled {
+  opacity: 0.52;
+  cursor: not-allowed;
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+  background: var(--color-bg-panel);
 }
 
 .song-detail-track-list {
@@ -920,6 +935,10 @@ h3.song-detail-youtube-subheading,
     gap: 0.75rem 1rem;
   }
 
+  .song-detail-audio-controls {
+    grid-column: 1 / -1;
+  }
+
   .song-detail-audio-action-btn {
     justify-self: end;
   }
@@ -941,6 +960,12 @@ h3.song-detail-youtube-subheading,
 
   .song-detail-secondary-meta-item {
     font-size: 0.73rem;
+  }
+
+  .song-detail-audio-controls {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .song-detail-tabs {
