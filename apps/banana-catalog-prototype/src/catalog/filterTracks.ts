@@ -1,6 +1,10 @@
 import { haystackTokenMatches, searchTokens } from './searchMatch'
 import type { TrackCatalogItem, TrackSortMode, TracksFilterState } from './types'
 
+const LEADING_TRACK_PREFIX_RE = /^\s*(?:#[0-9]+\s*|[A-Za-z]\s*\[[0-9]+\]\s*|\[[0-9]+\]\s*|\[[A-Za-z][^\]]*\]\s*)+/
+const LEADING_PUNCTUATION_RE = /^[^\p{L}\p{N}]+/u
+const trackTitleAzCollator = new Intl.Collator(undefined, { sensitivity: 'base', numeric: true })
+
 function setIntersectsArray(set: Set<string>, arr: string[]): boolean {
   if (set.size === 0) return true
   return arr.some((x) => set.has(x))
@@ -55,6 +59,13 @@ export function filterTracksByFindQuery(tracks: TrackCatalogItem[], raw: string)
   })
 }
 
+function normalizedTrackTitleForAzSort(title: string): string {
+  const trimmed = title.trim()
+  const withoutPrefix = trimmed.replace(LEADING_TRACK_PREFIX_RE, '').trim()
+  const base = withoutPrefix || trimmed
+  return base.replace(LEADING_PUNCTUATION_RE, '').trim() || base
+}
+
 export function sortTrackCatalog(list: TrackCatalogItem[], mode: TrackSortMode): TrackCatalogItem[] {
   const out = [...list]
   if (mode === 'newest') {
@@ -87,8 +98,14 @@ export function sortTrackCatalog(list: TrackCatalogItem[], mode: TrackSortMode):
   }
   if (mode === 'title_az') {
     out.sort((a, b) => {
-      const cmp = a.track_title.localeCompare(b.track_title, undefined, { sensitivity: 'base' })
-      if (cmp !== 0) return cmp
+      const aSortTitle = normalizedTrackTitleForAzSort(a.track_title)
+      const bSortTitle = normalizedTrackTitleForAzSort(b.track_title)
+      const trackCmp = trackTitleAzCollator.compare(aSortTitle, bSortTitle)
+      if (trackCmp !== 0) return trackCmp
+      const rawCmp = trackTitleAzCollator.compare(a.track_title, b.track_title)
+      if (rawCmp !== 0) return rawCmp
+      const songCmp = trackTitleAzCollator.compare(a.lyrics_title, b.lyrics_title)
+      if (songCmp !== 0) return songCmp
       return a.track_id.localeCompare(b.track_id)
     })
     return out
