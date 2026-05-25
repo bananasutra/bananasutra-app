@@ -2,6 +2,8 @@ import { haystackTokenMatches, searchTokens } from './searchMatch'
 import type { TrackCatalogItem, TrackSortMode, TracksFilterState } from './types'
 
 const LEADING_TRACK_PREFIX_RE = /^\s*(?:#[0-9]+\s*|[A-Za-z]\s*\[[0-9]+\]\s*|\[[0-9]+\]\s*|\[[A-Za-z][^\]]*\]\s*)+/
+const LEADING_ARTICLE_RE = /^(?:a|an|the)\s+/i
+const trackTitleAzCollator = new Intl.Collator(undefined, { sensitivity: 'base', numeric: true })
 
 function setIntersectsArray(set: Set<string>, arr: string[]): boolean {
   if (set.size === 0) return true
@@ -60,12 +62,8 @@ export function filterTracksByFindQuery(tracks: TrackCatalogItem[], raw: string)
 function normalizedTrackTitleForAzSort(title: string): string {
   const trimmed = title.trim()
   const withoutPrefix = trimmed.replace(LEADING_TRACK_PREFIX_RE, '').trim()
-  return withoutPrefix || trimmed
-}
-
-function normalizedSongTitleForAzSort(title: string): string {
-  const trimmed = title.trim()
-  return trimmed
+  const base = withoutPrefix || trimmed
+  return base.replace(LEADING_ARTICLE_RE, '').trim() || base
 }
 
 export function sortTrackCatalog(list: TrackCatalogItem[], mode: TrackSortMode): TrackCatalogItem[] {
@@ -100,16 +98,14 @@ export function sortTrackCatalog(list: TrackCatalogItem[], mode: TrackSortMode):
   }
   if (mode === 'title_az') {
     out.sort((a, b) => {
-      const aSongTitle = normalizedSongTitleForAzSort(a.lyrics_title)
-      const bSongTitle = normalizedSongTitleForAzSort(b.lyrics_title)
-      const cmp = aSongTitle.localeCompare(bSongTitle, undefined, { sensitivity: 'base' })
-      if (cmp !== 0) return cmp
       const aSortTitle = normalizedTrackTitleForAzSort(a.track_title)
       const bSortTitle = normalizedTrackTitleForAzSort(b.track_title)
-      const trackCmp = aSortTitle.localeCompare(bSortTitle, undefined, { sensitivity: 'base' })
+      const trackCmp = trackTitleAzCollator.compare(aSortTitle, bSortTitle)
       if (trackCmp !== 0) return trackCmp
-      const rawCmp = a.track_title.localeCompare(b.track_title, undefined, { sensitivity: 'base' })
+      const rawCmp = trackTitleAzCollator.compare(a.track_title, b.track_title)
       if (rawCmp !== 0) return rawCmp
+      const songCmp = trackTitleAzCollator.compare(a.lyrics_title, b.lyrics_title)
+      if (songCmp !== 0) return songCmp
       return a.track_id.localeCompare(b.track_id)
     })
     return out
