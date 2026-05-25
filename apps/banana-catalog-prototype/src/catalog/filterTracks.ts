@@ -1,6 +1,8 @@
 import { haystackTokenMatches, searchTokens } from './searchMatch'
 import type { TrackCatalogItem, TrackSortMode, TracksFilterState } from './types'
 
+const LEADING_TRACK_INDEX_RE = /^\s*\[\d+\]\s*/
+
 function setIntersectsArray(set: Set<string>, arr: string[]): boolean {
   if (set.size === 0) return true
   return arr.some((x) => set.has(x))
@@ -55,6 +57,12 @@ export function filterTracksByFindQuery(tracks: TrackCatalogItem[], raw: string)
   })
 }
 
+function normalizedTrackTitleForAzSort(title: string): string {
+  const trimmed = title.trim()
+  const withoutIndex = trimmed.replace(LEADING_TRACK_INDEX_RE, '').trim()
+  return withoutIndex || trimmed
+}
+
 export function sortTrackCatalog(list: TrackCatalogItem[], mode: TrackSortMode): TrackCatalogItem[] {
   const out = [...list]
   if (mode === 'newest') {
@@ -87,8 +95,12 @@ export function sortTrackCatalog(list: TrackCatalogItem[], mode: TrackSortMode):
   }
   if (mode === 'title_az') {
     out.sort((a, b) => {
-      const cmp = a.track_title.localeCompare(b.track_title, undefined, { sensitivity: 'base' })
+      const aSortTitle = normalizedTrackTitleForAzSort(a.track_title)
+      const bSortTitle = normalizedTrackTitleForAzSort(b.track_title)
+      const cmp = aSortTitle.localeCompare(bSortTitle, undefined, { sensitivity: 'base' })
       if (cmp !== 0) return cmp
+      const rawCmp = a.track_title.localeCompare(b.track_title, undefined, { sensitivity: 'base' })
+      if (rawCmp !== 0) return rawCmp
       return a.track_id.localeCompare(b.track_id)
     })
     return out
