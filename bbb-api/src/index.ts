@@ -20,7 +20,7 @@ interface RateLimitEntry {
 }
 
 const MEMORY_RATE_LIMIT = new Map<string, RateLimitEntry>();
-const DEFAULT_MODEL = "claude-haiku-4-5-20241022";
+const DEFAULT_MODEL = "claude-haiku-4-5-20251001";
 const DEFAULT_ALLOWED_ORIGINS = ["https://bananasutra.com", "http://localhost:5173"];
 const TEXT_ENCODER = new TextEncoder();
 
