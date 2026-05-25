@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './BbbChatWidget.css'
 import { loadSongCatalogBrowse } from '../catalog/generatedData'
 import {
@@ -18,6 +18,7 @@ const INITIAL_ASSISTANT_TEXT =
 
 export function BbbChatWidget() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState<ChatMessage[]>([{ role: 'assistant', content: INITIAL_ASSISTANT_TEXT }])
@@ -101,7 +102,13 @@ export function BbbChatWidget() {
       const response = await fetch(BBB_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: streamMessages }),
+        body: JSON.stringify({
+          messages: streamMessages,
+          pageContext: {
+            pathname: location.pathname,
+            search: location.search,
+          },
+        }),
         signal: controller.signal,
       })
 

@@ -1,6 +1,11 @@
 import type { ChatMessage } from "./claude-client";
 import type { LibraryInjects } from "./library-data";
 
+export type BbbPageContext = {
+  pathname: string;
+  search?: string;
+};
+
 type SongMeta = {
   title: string;
   summary: string;
@@ -52,6 +57,8 @@ const SUPPORT_STABILIZING_PATTERNS: RegExp[] = [
 ];
 const SUPPORT_AGITATING_PATTERNS: RegExp[] = [/\bpanic|war|outrage|rage|doom|nightmare|maga|trump|felon|anxiety\b/i];
 const SUPPORT_PREFERRED_MOODS = ["KINDLY", "HOLY", "PEACHY", "RAINY"];
+const EXPLICIT_CONTENT_SLUGS = new Set(["freee-la-fille"]);
+const EXPLICIT_INTENT_PATTERN = /\bexplicit|nsfw|adult|dirty|raw|edgy|sexual|breakup|dark\b/i;
 
 const splitPipe = (line: string): string[] => line.split("|").map((part) => part.trim());
 
@@ -142,6 +149,14 @@ type ListeningRouteHint = {
   kind: "tracks" | "songbook";
 };
 
+const inferPageType = (pageContext?: BbbPageContext): "tracks" | "songbook" | "song" | "other" => {
+  const pathname = pageContext?.pathname ?? "";
+  if (pathname.startsWith("/tracks")) return "tracks";
+  if (pathname.startsWith("/songbooks")) return "songbook";
+  if (pathname.startsWith("/songs")) return "song";
+  return "other";
+};
+
 const parseSongbooks = (injects: LibraryInjects): SongbookMeta[] =>
   injects.songbooks
     .split("\n")
@@ -210,6 +225,10 @@ const scoreSong = (
     else score -= 6;
   }
 
+  if (!EXPLICIT_INTENT_PATTERN.test(queryLower) && EXPLICIT_CONTENT_SLUGS.has(song.slug)) {
+    score -= 18;
+  }
+
   if (intent.hiddenGemIntent) {
     if (hasPlayable) {
       if (playableCount <= 3) score += 12;
@@ -230,10 +249,20 @@ const scoreSong = (
   return { song, score, trackCount, videoCount, featured };
 };
 
-export const buildRecommendationContext = (messages: ChatMessage[], injects: LibraryInjects): string => {
+export const buildRecommendationContext = (
+  messages: ChatMessage[],
+  injects: LibraryInjects,
+  pageContext?: BbbPageContext,
+): string => {
   const latestUser = [...messages].reverse().find((message) => message.role === "user")?.content?.trim();
   if (!latestUser) return "";
   const hasPriorAssistantTurn = messages.slice(0, -1).some((message) => message.role === "assistant");
+  const pageType = inferPageType(pageContext);
+  const pageRoute = `${pageContext?.pathname ?? ""}${pageContext?.search ?? ""}`.trim();
+  const pageSearch = pageContext?.search ?? "";
+  const pageParams = new URLSearchParams(pageSearch.startsWith("?") ? pageSearch.slice(1) : pageSearch);
+  const currentMood = (pageParams.get("mood") ?? "").trim().toUpperCase();
+  const isAlreadyFrenchTracks = pageType === "tracks" && currentMood === "FRENCHY";
 
   const queryLower = latestUser.toLowerCase();
   const support = analyzeSupportIntent(latestUser);
@@ -304,7 +333,7 @@ export const buildRecommendationContext = (messages: ChatMessage[], injects: Lib
     }
   }
 
-  const songbookCandidates = songbooks
+  let songbookCandidates = songbooks
     .filter((book) => {
       const hay = `${book.title} ${book.slug}`.toLowerCase();
       return queryTokens.some((token) => hay.includes(token));
@@ -325,8 +354,8 @@ export const buildRecommendationContext = (messages: ChatMessage[], injects: Lib
   }
   if (intent.languageIntentFrench) {
     const langFrench = songbooks.find((book) => book.slug === "lang-french");
-    if (langFrench && !songbookCandidates.some((book) => book.slug === langFrench.slug)) {
-      songbookCandidates.unshift(langFrench);
+    if (langFrench) {
+      songbookCandidates = [langFrench, ...songbookCandidates.filter((book) => book.slug !== langFrench.slug)];
     }
   }
   if (support.supportIntent) {
@@ -339,32 +368,47 @@ export const buildRecommendationContext = (messages: ChatMessage[], injects: Lib
   }
 
   const listeningRoutes: ListeningRouteHint[] = [];
+  const trackRouteHints: ListeningRouteHint[] = [];
+  const songbookRouteHints: ListeningRouteHint[] = [];
   for (const mood of moodCandidates.slice(0, 1)) {
     const href = `/tracks/?mood=${encodeURIComponent(mood)}&tsort=likes`;
     const label = mood === "CHEEKY" ? "Cheeky Mood Tracks" : `${mood} Mood Tracks`;
-    listeningRoutes.push({ label, href, kind: "tracks" });
+    trackRouteHints.push({ label, href, kind: "tracks" });
   }
   for (const book of songbookCandidates.slice(0, 1)) {
-    listeningRoutes.push({
-      label: `${book.title} Songbook`,
+    const label = book.slug === "lang-french" ? "French Language Songbook" : `${book.title} Songbook`;
+    songbookRouteHints.push({
+      label,
       href: `/songbooks/${book.slug}`,
       kind: "songbook",
     });
   }
-  if (!listeningRoutes.length) {
-    listeningRoutes.push({ label: "Top Tracks", href: "/tracks/?tsort=likes", kind: "tracks" });
+  if (!trackRouteHints.length && !songbookRouteHints.length) {
+    trackRouteHints.push({ label: "Top Tracks", href: "/tracks/?tsort=likes", kind: "tracks" });
+  }
+  if (pageType === "songbook") {
+    listeningRoutes.push(...songbookRouteHints, ...trackRouteHints);
+  } else {
+    listeningRoutes.push(...trackRouteHints, ...songbookRouteHints);
   }
 
   return [
     "Dynamic recommendation guidance (apply to this reply):",
     "- Prioritize this ranked shortlist before any lower-ranked songs.",
     "- Keep recommendations emotionally aligned with user intent.",
+    pageRoute ? `- User is currently browsing [${pageRoute}](${pageRoute}). Use this as a hint to keep navigation friction low.` : null,
+    isAlreadyFrenchTracks
+      ? "- User is already on FRENCHY tracks. Explicitly acknowledge that in your first sentence and avoid presenting it as a new discovery."
+      : null,
     "- Meaning-first beats popularity-first. Use popularity only as a soft tie-breaker, and keep room for hidden gems.",
     "- Prefer richer listening options (audio+video) when available, but do not exclude lyrics-only songs if they are meaningful matches.",
     "- Use titled markdown links like [Song Title](/songs/slug).",
     support.supportIntent
       ? "- Because user is in a support/hope context, prefer LIGHT options first unless they explicitly request darker material."
       : "- Prefer playable songs first, then broader exploration options.",
+    support.supportIntent
+      ? "- Keep LIGHT-first support handling for this reply; do not escalate into heavier SHADOW material unless asked."
+      : "- For non-support asks, do not force LIGHT over SHADOW. Use LIGHT/SHADOW as a follow-up calibration question when useful.",
     '- For each recommended song, include one concise "why this might help right now" reason.',
     "- Begin with one short natural sentence that names the sutra angle and links the specific sutra page when known (for example [GLOWsutra](/about/glowsutra)).",
     support.supportIntent
@@ -382,6 +426,17 @@ export const buildRecommendationContext = (messages: ChatMessage[], injects: Lib
     "- Keep the distinction explicit in plain language: one short segue sentence introducing the song picks, then one separate listening-flow sentence.",
     "- In the listening-flow sentence, explain briefly that songbooks are topic-led collections and tracks are mood-led continuous listening.",
     "- Do not reuse the same individual song links in the listening-flow sentence; use /tracks or /songbooks routes for continuous listening.",
+    intent.languageIntentFrench
+      ? "- For French asks, use the exact mood name FRENCHY in links/text (not 'Frenchsutra'), and prefer [Frenchy Mood Tracks](/tracks/?mood=FRENCHY&tsort=likes) plus [French Language Songbook](/songbooks/lang-french) when relevant."
+      : "- Keep route naming precise and consistent with catalog mood names.",
+    pageType === "tracks"
+      ? "- User is already in tracks, so make the first listening route a filtered tracks link when relevant."
+      : pageType === "songbook"
+        ? "- User is already in songbooks, so make the first listening route a relevant songbook when possible."
+        : "- Use page context only as a soft hint; user intent still takes priority.",
+    !EXPLICIT_INTENT_PATTERN.test(queryLower)
+      ? "- Avoid leading with explicit/adult-coded songs unless user explicitly asks for that intensity. If included, add a short mature-content note."
+      : "- User asked for intensity/explicit edge, so stronger material is acceptable when contextually aligned.",
     "- Never show raw route text in prose. Use titled markdown links for songs and listening routes.",
     intent.exhaustiveListIntent
       ? "- User asked for all relevant songs, so provide a broader concise list from this ranked shortlist (up to 8), not only 2-3."
@@ -395,5 +450,7 @@ export const buildRecommendationContext = (messages: ChatMessage[], injects: Lib
     "",
     "Ranked shortlist:",
     ...lines,
-  ].join("\n");
+  ]
+    .filter((line): line is string => Boolean(line))
+    .join("\n");
 };

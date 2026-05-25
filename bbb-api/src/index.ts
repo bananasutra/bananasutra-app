@@ -1,6 +1,6 @@
 import { ClaudeUpstreamError, streamClaudeResponse, type ChatMessage } from "./claude-client";
 import { LIBRARY_INJECTS } from "./library-data";
-import { buildRecommendationContext } from "./recommendation-context";
+import { buildRecommendationContext, type BbbPageContext } from "./recommendation-context";
 import { buildSystemPrompt } from "./system-prompt";
 
 interface Env {
@@ -13,6 +13,7 @@ interface Env {
 
 interface RequestPayload {
   messages: ChatMessage[];
+  pageContext?: BbbPageContext;
 }
 
 interface RateLimitEntry {
@@ -95,6 +96,19 @@ const validateMessages = (payload: unknown): ChatMessage[] | null => {
   return valid ? candidate.messages : null;
 };
 
+const validatePageContext = (payload: unknown): BbbPageContext | undefined => {
+  if (!payload || typeof payload !== "object") return undefined;
+  const candidate = payload as RequestPayload;
+  if (!candidate.pageContext || typeof candidate.pageContext !== "object") return undefined;
+  const pathname = candidate.pageContext.pathname;
+  const search = candidate.pageContext.search;
+  if (typeof pathname !== "string" || !pathname.startsWith("/")) return undefined;
+  if (typeof search !== "undefined" && (typeof search !== "string" || (search.length > 0 && !search.startsWith("?")))) {
+    return undefined;
+  }
+  return { pathname, ...(typeof search === "string" ? { search } : {}) };
+};
+
 const handler: ExportedHandler<Env> = {
   async fetch(request: Request, env: Env): Promise<Response> {
     const origin = request.headers.get("origin");
@@ -135,6 +149,7 @@ const handler: ExportedHandler<Env> = {
     }
 
     const messages = validateMessages(payload);
+    const pageContext = validatePageContext(payload);
     if (!messages) {
       return json(
         400,
@@ -147,7 +162,7 @@ const handler: ExportedHandler<Env> = {
 
     try {
       const baseSystem = buildSystemPrompt(LIBRARY_INJECTS);
-      const recommendationContext = buildRecommendationContext(messages, LIBRARY_INJECTS);
+      const recommendationContext = buildRecommendationContext(messages, LIBRARY_INJECTS, pageContext);
       const system = recommendationContext ? `${baseSystem}\n\n${recommendationContext}` : baseSystem;
       const model = env.BBB_MODEL?.trim() || DEFAULT_MODEL;
       const stream = await streamClaudeResponse({

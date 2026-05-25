@@ -21,6 +21,7 @@ const fixtureInjects: LibraryInjects = {
     "Play: B.J. (Banana Jokes) | Tiny joke pack. | SHOWsutra | FUN | play-bj-banana-jokes",
     "SHOWsutra : Fanana Club | Big absurd stage energy. | SHOWsutra | FUN | showsutra-fanana-club",
     "Play: PEACE CIRCUS | Playful collective chaos. | SHOWsutra | FUN | play-peace-circus",
+    "Lang: French | French language gems. | FLOWsutra | LANGUAGE | lang-french",
   ].join("\n"),
   quotes: "",
   muses: "",
@@ -32,6 +33,7 @@ test("buildRecommendationContext returns ranked playable shortlist for support i
   assert.match(context, /Begin with one short natural sentence that names the sutra angle/);
   assert.match(context, /3-5 short bullets max/);
   assert.match(context, /prefer a stabilizing lens such as \[FLOWsutra\]/);
+  assert.match(context, /Keep LIGHT-first support handling/);
   assert.match(context, /availability:audio\+video/);
   assert.match(context, /\[KINDLY Mood Tracks\]\(\/tracks\/\?mood=KINDLY&tsort=likes\)/);
   assert.match(context, /Bright Morning \| bright-morning/);
@@ -50,9 +52,39 @@ test("buildRecommendationContext suggests listening routes for french queries", 
   const context = buildRecommendationContext(
     [{ role: "user", content: "Any french songs with a listening flow?" }],
     fixtureInjects,
+    { pathname: "/tracks", search: "?mood=KINDLY" },
   );
+  assert.match(context, /User is currently browsing \[\/tracks\?mood=KINDLY\]\(\/tracks\?mood=KINDLY\)/);
+  assert.match(context, /User is already in tracks, so make the first listening route a filtered tracks link/);
+  assert.match(context, /For non-support asks, do not force LIGHT over SHADOW/);
+  assert.match(context, /use the exact mood name FRENCHY/);
+  assert.match(context, /\[Frenchy Mood Tracks\]\(\/tracks\/\?mood=FRENCHY&tsort=likes\)/);
+  assert.match(context, /\[French Language Songbook\]\(\/songbooks\/lang-french\)/);
   assert.match(context, /\[FRENCHY Mood Tracks\]\(\/tracks\/\?mood=FRENCHY&tsort=likes\)/);
   assert.ok(context.indexOf("Paris At Dawn | paris-at-dawn") < context.indexOf("Bright Morning | bright-morning"));
+});
+
+test("buildRecommendationContext prioritizes songbook route first when already in songbooks", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "Any french songs with a listening flow?" }],
+    fixtureInjects,
+    { pathname: "/songbooks/lang-french" },
+  );
+  const routeLine = context
+    .split("\n")
+    .find((line) => line.includes("include one listening-first route option from:"));
+  assert.ok(Boolean(routeLine));
+  assert.ok((routeLine ?? "").indexOf("[French Language Songbook]") < (routeLine ?? "").indexOf("[FRENCHY Mood Tracks]"));
+});
+
+test("buildRecommendationContext acknowledges already-on-frenchy-tracks context", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "give me French hidden gems I can listen to" }],
+    fixtureInjects,
+    { pathname: "/tracks", search: "?mood=FRENCHY&tsort=likes" },
+  );
+  assert.match(context, /User is already on FRENCHY tracks/);
+  assert.match(context, /Avoid leading with explicit\/adult-coded songs/);
 });
 
 test("buildRecommendationContext anchors fun asks to SHOWsutra and cheeky mood route", () => {
