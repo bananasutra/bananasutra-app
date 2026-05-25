@@ -2,7 +2,7 @@ import { haystackTokenMatches, searchTokens } from './searchMatch'
 import type { TrackCatalogItem, TrackSortMode, TracksFilterState } from './types'
 
 const LEADING_TRACK_PREFIX_RE = /^\s*(?:#[0-9]+\s*|[A-Za-z]\s*\[[0-9]+\]\s*|\[[0-9]+\]\s*|\[[A-Za-z][^\]]*\]\s*)+/
-const LEADING_ARTICLE_RE = /^(?:a|an|the)\s+/i
+const LEADING_PUNCTUATION_RE = /^[^\p{L}\p{N}]+/u
 const trackTitleAzCollator = new Intl.Collator(undefined, { sensitivity: 'base', numeric: true })
 
 function setIntersectsArray(set: Set<string>, arr: string[]): boolean {
@@ -63,7 +63,7 @@ function normalizedTrackTitleForAzSort(title: string): string {
   const trimmed = title.trim()
   const withoutPrefix = trimmed.replace(LEADING_TRACK_PREFIX_RE, '').trim()
   const base = withoutPrefix || trimmed
-  return base.replace(LEADING_ARTICLE_RE, '').trim() || base
+  return base.replace(LEADING_PUNCTUATION_RE, '').trim() || base
 }
 
 export function sortTrackCatalog(list: TrackCatalogItem[], mode: TrackSortMode): TrackCatalogItem[] {
