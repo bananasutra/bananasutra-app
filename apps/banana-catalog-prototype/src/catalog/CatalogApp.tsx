@@ -375,8 +375,8 @@ export function CatalogApp() {
             </p>
           </div>
           <main id="main-content" className="catalog-main">
-            <div className="catalog-main__sort-row">
-              <div className="catalog-sort catalog-sort--loading" aria-hidden>
+            <div className="catalog-main__sort-row songs-page__sort-row">
+              <div className="catalog-sort songs-page__sort catalog-sort--loading" aria-hidden>
                 <span className="catalog-sort-label">Sort</span>
                 <span className="catalog-sort-select catalog-skeleton-block" />
               </div>
@@ -552,9 +552,9 @@ export function CatalogApp() {
           </aside>
 
           <main id="main-content" className="catalog-main">
-          <div className="catalog-main__sort-row">
+          <div className="catalog-main__sort-row songs-page__sort-row">
             <div
-              className="catalog-sort"
+              className="catalog-sort songs-page__sort"
               aria-label="Sort songs by engagement, likes, plays, publish date, or title"
             >
               <label className="catalog-sort-label" htmlFor="catalog-sort-select">

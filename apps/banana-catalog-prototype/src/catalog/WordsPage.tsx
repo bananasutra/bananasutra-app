@@ -488,8 +488,8 @@ export function WordsPage() {
           </aside>
 
           <main id="main-content" className="catalog-main">
-            <div className="catalog-main__sort-row">
-              <div className="catalog-sort" aria-label="Sort Words list by date or title">
+            <div className="catalog-main__sort-row words-page__sort-row">
+              <div className="catalog-sort words-page__sort" aria-label="Sort Words list by date or title">
                 <label className="catalog-sort-label" htmlFor="words-sort-select">
                   Sort
                 </label>

@@ -29,7 +29,8 @@ Outputs:
     SoundCloud: Airtable snapshot is source of truth for the catalog). Grouped by lyrics_id (plus a "" bucket when
     lyrics_id is blank). ``pipelines/yt/build_yt_final.py`` / ``AT-VIDEOS-final.csv`` remain for scrape metrics,
     drift QA, and Airtable import — not part of this build.
-  src/data/generated/catalog_chrome_stats.json — tiny header strip counts (avoids loading full catalogs in GlobalHeader).
+  src/data/generated/catalog_chrome_stats.json — tiny header strip counts (sutras/songbooks/songs/top tracks)
+    to avoid loading full catalogs in GlobalHeader.
   src/data/generated/song_slug_index.json — slug → lyrics_id map for `/songs/:slug` routing (avoids loading full song_detail.json in songPaths).
   src/data/generated/track_catalog.json — flat list of in-app SoundCloud tracks (Phase 3 `/tracks`); sorted popularity then newest `created_at`.
 """
@@ -128,6 +129,7 @@ def build_catalog_chrome_stats(
     facets: dict[str, Any],
     song_catalog: list[dict[str, Any]],
     songbook_catalog: list[dict[str, Any]],
+    top_track_count: int,
 ) -> dict[str, int]:
     sutra_entries = facets.get("sutra") or []
     sutra_families = {sutra_family_chrome(str(e.get("value") or "")) for e in sutra_entries}
@@ -137,6 +139,7 @@ def build_catalog_chrome_stats(
         "sutraCount": sutra_count,
         "songbookCount": len(songbook_catalog),
         "songCount": len(song_catalog),
+        "topTrackCount": top_track_count,
     }
 
 
@@ -2461,9 +2464,9 @@ def main() -> None:
                 }
             )
 
-    catalog_chrome_stats = build_catalog_chrome_stats(facets, song_catalog, songbook_catalog)
     song_slug_index = build_song_slug_index(song_detail)
     track_catalog = build_track_catalog_flat(song_detail, cards_by_lyrics_id, config.like_weight)
+    catalog_chrome_stats = build_catalog_chrome_stats(facets, song_catalog, songbook_catalog, len(track_catalog))
 
     outputs = {
         "song_catalog.json": song_catalog,

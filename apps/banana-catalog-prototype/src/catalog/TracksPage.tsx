@@ -513,54 +513,49 @@ export function TracksPage() {
   const facetSelections = countTracksSelections(filters)
   const hasActiveContext = facetSelections > 0 || Boolean(urlFind.trim())
   const contextSummary = hasActiveContext
-    ? `${filtered.length} of ${catalogList.length} tracks · ${facetSelections} filter${facetSelections === 1 ? '' : 's'}${urlFind.trim() ? ' · search' : ''}`
-    : `${catalogList.length} tracks`
+    ? `${filtered.length} of ${catalogList.length} top tracks · ${facetSelections} filter${facetSelections === 1 ? '' : 's'}${urlFind.trim() ? ' · search' : ''}`
+    : `${catalogList.length} top tracks`
 
-  const activeFilterContext = (
-    <section
-      className="catalog-active-context tracks-page__filter-summary"
-      aria-label={hasActiveContext ? 'Active filters and result count' : 'Catalog result count'}
-    >
+  const activeFilterContext = hasActiveContext ? (
+    <section className="catalog-active-context tracks-page__filter-summary" aria-label="Active filters and result count">
       <div className="catalog-active-context__head">
         <p className="catalog-active-context__summary">{contextSummary}</p>
       </div>
-      {hasActiveContext ? (
-        <div className="catalog-chips">
-          {urlFind.trim() ? (
-            <button type="button" className="catalog-chip catalog-chip--find" onClick={clearFindChip}>
-              Search: {urlFind}
+      <div className="catalog-chips">
+        {urlFind.trim() ? (
+          <button type="button" className="catalog-chip catalog-chip--find" onClick={clearFindChip}>
+            Search: {urlFind}
+            <span className="catalog-chip-x" aria-hidden>
+              ×
+            </span>
+          </button>
+        ) : null}
+        {(Object.keys(filters) as TracksFacetFilterKey[]).flatMap((key) =>
+          [...filters[key]].map((value) => (
+            <button
+              key={`${key}-${value}`}
+              type="button"
+              className="catalog-chip"
+              onClick={() =>
+                patchFilters({
+                  ...filters,
+                  [key]: toggleSetMember(filters[key], value),
+                })
+              }
+            >
+              {TRACKS_FACET_LABELS[key]}: {value}
               <span className="catalog-chip-x" aria-hidden>
                 ×
               </span>
             </button>
-          ) : null}
-          {(Object.keys(filters) as TracksFacetFilterKey[]).flatMap((key) =>
-            [...filters[key]].map((value) => (
-              <button
-                key={`${key}-${value}`}
-                type="button"
-                className="catalog-chip"
-                onClick={() =>
-                  patchFilters({
-                    ...filters,
-                    [key]: toggleSetMember(filters[key], value),
-                  })
-                }
-              >
-                {TRACKS_FACET_LABELS[key]}: {value}
-                <span className="catalog-chip-x" aria-hidden>
-                  ×
-                </span>
-              </button>
-            )),
-          )}
-          <button type="button" className="catalog-clear" onClick={clearAllFilters}>
-            Clear all
-          </button>
-        </div>
-      ) : null}
+          )),
+        )}
+        <button type="button" className="catalog-clear" onClick={clearAllFilters}>
+          Clear all
+        </button>
+      </div>
     </section>
-  )
+  ) : null
 
   const pagerPreserve = () => new URLSearchParams(location.search)
 
@@ -592,7 +587,7 @@ export function TracksPage() {
         <div className="catalog-page-intro catalog-page-intro--song-catalog">
           <h1 className="catalog-page-h1">Top Tracks</h1>
           <p className="catalog-page-sub">
-            The SoundCloud algorithm side of things. Same songs, sorted by popular audio tracks. Search, or filter by
+            The SoundCloud algorithm side of things. Same songs, sorted by top tracks. Search, or filter by
             tempo, mood, genre, or instrument. If you want the meaning behind the music,{' '}
             <Link to={canonicalPathForRoute('/songs')}>Songs</Link>{' '}
             has the story.
@@ -611,11 +606,11 @@ export function TracksPage() {
         ) : total === 0 ? (
           <article className="about-page catalog-layout-shell" id="main-content">
             <h2 className="about-page__p" style={{ fontWeight: 700, marginBottom: '0.5rem' }}>
-              No tracks in this snapshot
+              No top tracks in this snapshot
             </h2>
             <p className="about-page__p">
               The build completed, but there are no in-app SoundCloud rows in <code>track_catalog.json</code> right now.
-              That usually means the snapshot export had no qualifying SC tracks, not that your filters are wrong.
+              That usually means the snapshot export had no qualifying SoundCloud top tracks, not that your filters are wrong.
             </p>
           </article>
         ) : (
@@ -683,7 +678,7 @@ export function TracksPage() {
                                     [group]: toggleSetMember(filters[group], value),
                                   })
                                 }
-                                title={`${count} tracks`}
+                                title={`${count} top tracks`}
                               >
                                 <span>{value}</span>
                                 <span className="catalog-facet-count">{` (${count})`}</span>
@@ -725,8 +720,8 @@ export function TracksPage() {
                   </section>
                 ) : null}
 
-                <div className="catalog-main__sort-row">
-                  <div className="catalog-sort" aria-label="Sort tracks">
+                <div className="catalog-main__sort-row tracks-page__sort-row">
+                  <div className="catalog-sort tracks-page__sort" aria-label="Sort top tracks">
                     <label className="catalog-sort-label" htmlFor="tracks-sort-select">
                       Sort
                     </label>
@@ -761,7 +756,7 @@ export function TracksPage() {
                 ) : null}
 
                 {filtered.length > 0 ? (
-                  <div className="tracks-page__play-all" role="group" aria-label="Play all tracks">
+                  <div className="tracks-page__play-all" role="group" aria-label="Play all top tracks">
                     <div className="tracks-page__play-all-row">
                       {playAllActive ? (
                         <>
@@ -786,7 +781,7 @@ export function TracksPage() {
                             <span className="tracks-page__play-all-glyph" aria-hidden>
                               ▶
                             </span>
-                            {`Play all ${filtered.length} tracks`}
+                            {`Play all ${filtered.length} top tracks`}
                           </button>
                         ) : null
                       )}
@@ -809,12 +804,13 @@ export function TracksPage() {
                         </button>
                       </div>
                       <span className="tracks-page__play-all-status" aria-live="polite">
-                        {queueIndex >= 0 ? `Track ${queueIndex + 1} of ${filtered.length}` : `Track 0 of ${filtered.length}`}
+                        {queueIndex >= 0
+                          ? `Top track ${queueIndex + 1} of ${filtered.length}`
+                          : `Top track 0 of ${filtered.length}`}
                       </span>
                     </div>
                     <p className="tracks-page__play-all-note">
-                      Autoplay works best on desktop. On mobile (especially iPhone), you may need to tap each next
-                      track to keep the queue going.
+                      Autoplay is best on desktop. On mobile, tap Next if the queue pauses.
                     </p>
                   </div>
                 ) : null}
@@ -927,7 +923,7 @@ export function TracksPage() {
                 {filtered.length === 0 ? (
                   <div className="catalog-empty tracks-page__empty-filtered">
                     <p>
-                      <strong>No tracks match this view.</strong> Filters and search combine with AND: every filter and
+                      <strong>No top tracks match this view.</strong> Filters and search combine with AND: every filter and
                       every word in your search has to match the same row.
                     </p>
                     <p>

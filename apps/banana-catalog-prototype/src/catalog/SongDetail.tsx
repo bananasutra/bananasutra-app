@@ -972,49 +972,49 @@ function SongDetailLoaded({
                   </h2>
                   {inAppPlayableTracks.length > 1 ? (
                     <div className="song-detail-audio-playall" aria-label="Play all top tracks">
-                      <div className="song-detail-audio-controls" role="group" aria-label="Track queue navigation">
-                        <button
-                          type="button"
-                          className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
-                          onClick={() => jumpInQueue(-1)}
-                          disabled={!canGoPrevious}
-                        >
-                          Previous
-                        </button>
-                        <button
-                          type="button"
-                          className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
-                          onClick={() => jumpInQueue(1)}
-                          disabled={!canGoNext}
-                        >
-                          Next
-                        </button>
-                      </div>
-                      {playAllTopTracksActive ? (
-                        <>
-                          <p className="song-detail-audio-hint" aria-live="polite">
-                            {(() => {
-                              const queue = inAppPlayableTracks
-                              const pos = queueIndex >= 0 ? queueIndex + 1 : 1
-                              return `Playing ${pos} of ${queue.length}`
-                            })()}. Autoplay works best on desktop. On mobile (especially iPhone), you may need to tap each next
-                            track to keep the queue going.
-                          </p>
-                          <button type="button" className="song-detail-audio-action-btn" onClick={stopPlayAllTopTracks}>
+                      <div className="song-detail-audio-playall-row">
+                        {playAllTopTracksActive ? (
+                          <button
+                            type="button"
+                            className="song-detail-audio-action-btn song-detail-audio-action-btn--stop"
+                            onClick={stopPlayAllTopTracks}
+                          >
                             Stop playing all
                           </button>
-                        </>
-                      ) : (
-                        <>
-                          <p className="song-detail-audio-hint">
-                            {queueIndex >= 0 ? `Track ${queueIndex + 1} of ${inAppPlayableTracks.length}. ` : ''}Autoplay works best on desktop. On mobile (especially iPhone), you may need to tap each next track to
-                            keep the queue going.
-                          </p>
-                          <button type="button" className="song-detail-audio-action-btn" onClick={startPlayAllTopTracks}>
+                        ) : (
+                          <button
+                            type="button"
+                            className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
+                            onClick={startPlayAllTopTracks}
+                          >
                             {`Play all ${inAppPlayableTracks.length} top track${inAppPlayableTracks.length === 1 ? '' : 's'}`}
                           </button>
-                        </>
-                      )}
+                        )}
+                        <div className="song-detail-audio-controls" role="group" aria-label="Track queue navigation">
+                          <button
+                            type="button"
+                            className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
+                            onClick={() => jumpInQueue(-1)}
+                            disabled={!canGoPrevious}
+                          >
+                            Previous
+                          </button>
+                          <button
+                            type="button"
+                            className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
+                            onClick={() => jumpInQueue(1)}
+                            disabled={!canGoNext}
+                          >
+                            Next
+                          </button>
+                        </div>
+                        <span className="song-detail-audio-status" aria-live="polite">
+                          {queueIndex >= 0 ? `Track ${queueIndex + 1} of ${inAppPlayableTracks.length}` : `Track 0 of ${inAppPlayableTracks.length}`}
+                        </span>
+                      </div>
+                      <p className="song-detail-audio-hint">
+                        Autoplay is best on desktop. On mobile, tap Next if the queue pauses.
+                      </p>
                     </div>
                   ) : null}
                   {activeTrackGenre ? (

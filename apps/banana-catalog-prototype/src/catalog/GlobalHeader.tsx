@@ -20,10 +20,11 @@ type CatalogChromeStats = {
   sutraCount: number
   songbookCount: number
   songCount: number
+  topTrackCount?: number
 }
 
 const chromeStats = chromeStatsJson as CatalogChromeStats
-const { sutraCount, songbookCount, songCount } = chromeStats
+const { sutraCount, songbookCount, songCount, topTrackCount = 0 } = chromeStats
 
 export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function GlobalHeader({ right }, ref) {
   const { pathname } = useLocation()
@@ -134,8 +135,8 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
         />
 
         <DiscoverySearchLazy variant="header" />
-        <p className="global-header-stats" aria-label="Catalog scale: sutras, songbooks, songs">
-          {`${sutraCount} SUTRAS · ${songbookCount} SONGBOOKS · ${songCount} SONGS`}
+        <p className="global-header-stats" aria-label="Catalog scale: sutras, songbooks, songs, and top tracks">
+          {`${sutraCount} SUTRAS · ${songbookCount} SONGBOOKS · ${songCount} SONGS · ${topTrackCount} TOP TRACKS`}
         </p>
 
         <div className="global-header-right global-header__slot">
