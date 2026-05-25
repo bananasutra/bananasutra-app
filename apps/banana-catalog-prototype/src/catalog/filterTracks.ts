@@ -1,7 +1,7 @@
 import { haystackTokenMatches, searchTokens } from './searchMatch'
 import type { TrackCatalogItem, TrackSortMode, TracksFilterState } from './types'
 
-const LEADING_TRACK_INDEX_RE = /^\s*\[\d+\]\s*/
+const LEADING_TRACK_PREFIX_RE = /^\s*(?:#[0-9]+\s*|[A-Za-z]\s*\[[0-9]+\]\s*|\[[0-9]+\]\s*|\[[A-Za-z][^\]]*\]\s*)+/
 
 function setIntersectsArray(set: Set<string>, arr: string[]): boolean {
   if (set.size === 0) return true
@@ -59,8 +59,13 @@ export function filterTracksByFindQuery(tracks: TrackCatalogItem[], raw: string)
 
 function normalizedTrackTitleForAzSort(title: string): string {
   const trimmed = title.trim()
-  const withoutIndex = trimmed.replace(LEADING_TRACK_INDEX_RE, '').trim()
-  return withoutIndex || trimmed
+  const withoutPrefix = trimmed.replace(LEADING_TRACK_PREFIX_RE, '').trim()
+  return withoutPrefix || trimmed
+}
+
+function normalizedSongTitleForAzSort(title: string): string {
+  const trimmed = title.trim()
+  return trimmed
 }
 
 export function sortTrackCatalog(list: TrackCatalogItem[], mode: TrackSortMode): TrackCatalogItem[] {
@@ -95,10 +100,14 @@ export function sortTrackCatalog(list: TrackCatalogItem[], mode: TrackSortMode):
   }
   if (mode === 'title_az') {
     out.sort((a, b) => {
+      const aSongTitle = normalizedSongTitleForAzSort(a.lyrics_title)
+      const bSongTitle = normalizedSongTitleForAzSort(b.lyrics_title)
+      const cmp = aSongTitle.localeCompare(bSongTitle, undefined, { sensitivity: 'base' })
+      if (cmp !== 0) return cmp
       const aSortTitle = normalizedTrackTitleForAzSort(a.track_title)
       const bSortTitle = normalizedTrackTitleForAzSort(b.track_title)
-      const cmp = aSortTitle.localeCompare(bSortTitle, undefined, { sensitivity: 'base' })
-      if (cmp !== 0) return cmp
+      const trackCmp = aSortTitle.localeCompare(bSortTitle, undefined, { sensitivity: 'base' })
+      if (trackCmp !== 0) return trackCmp
       const rawCmp = a.track_title.localeCompare(b.track_title, undefined, { sensitivity: 'base' })
       if (rawCmp !== 0) return rawCmp
       return a.track_id.localeCompare(b.track_id)
