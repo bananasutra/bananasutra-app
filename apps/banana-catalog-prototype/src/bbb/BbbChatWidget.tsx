@@ -1,69 +1,84 @@
-import { useMemo, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './BbbChatWidget.css'
-
-type Role = 'user' | 'assistant'
-
-type ChatMessage = {
-  role: Role
-  content: string
-}
-
-type BbbSseEvent = {
-  event: string
-  payload: unknown
-}
+import { loadSongCatalogBrowse } from '../catalog/generatedData'
+import {
+  capConversationHistory,
+  parseInlineEmphasis,
+  parseMarkdownLinks,
+  parseSseChunk,
+  updateLastAssistant,
+  type ChatMessage,
+} from './BbbChatUtils'
 
 const DEFAULT_ENDPOINT = 'http://localhost:8787/api/bbb'
 const BBB_ENDPOINT = import.meta.env.VITE_BBB_API_ENDPOINT?.trim() || DEFAULT_ENDPOINT
 const INITIAL_ASSISTANT_TEXT =
-  'Welcome. I am Bertrand, your Banana Butler. But(t) you can call me BBB. This place is a library of songs that tell stories that matter through the seven sutras. How may I best serve you?'
-
-function parseSseChunk(rawChunk: string): BbbSseEvent[] {
-  const events: BbbSseEvent[] = []
-  const blocks = rawChunk.split('\n\n')
-  for (const block of blocks) {
-    const trimmed = block.trim()
-    if (!trimmed) continue
-    const lines = trimmed.split('\n')
-    let event = 'message'
-    const dataLines: string[] = []
-    for (const line of lines) {
-      if (line.startsWith('event:')) {
-        event = line.slice('event:'.length).trim()
-      } else if (line.startsWith('data:')) {
-        dataLines.push(line.slice('data:'.length).trim())
-      }
-    }
-    if (!dataLines.length) continue
-    try {
-      events.push({ event, payload: JSON.parse(dataLines.join('\n')) })
-    } catch {
-      // Skip malformed payloads so one noisy chunk does not kill the stream.
-    }
-  }
-  return events
-}
-
-function updateLastAssistant(messages: ChatMessage[], nextText: string): ChatMessage[] {
-  if (!messages.length || messages[messages.length - 1]?.role !== 'assistant') {
-    return [...messages, { role: 'assistant', content: nextText }]
-  }
-  const next = [...messages]
-  const last = next[next.length - 1]
-  next[next.length - 1] = { ...last, content: nextText }
-  return next
-}
+  'Welcome. I am Bertrand, your Banana Butler. But(t) you can call me BBB. This place is a library of songs that tell stories that matter, through the lens of the seven sutras. How may I best serve you?'
 
 export function BbbChatWidget() {
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState<ChatMessage[]>([{ role: 'assistant', content: INITIAL_ASSISTANT_TEXT }])
   const [isStreaming, setIsStreaming] = useState(false)
   const [error, setError] = useState('')
+  const [songTitleBySlug, setSongTitleBySlug] = useState<Record<string, string>>({})
   const abortRef = useRef<AbortController | null>(null)
   const historyRef = useRef<HTMLDivElement | null>(null)
+  const inputRef = useRef<HTMLTextAreaElement | null>(null)
 
   const canSend = useMemo(() => input.trim().length > 0 && !isStreaming, [input, isStreaming])
+
+  useEffect(() => {
+    if (!open) return
+    queueMicrotask(() => inputRef.current?.focus())
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    if (Object.keys(songTitleBySlug).length > 0) return
+    void loadSongCatalogBrowse()
+      .then((rows) => {
+        const bySlug: Record<string, string> = {}
+        for (const row of rows) {
+          const slug = row.url_slug?.trim()
+          const title = row.lyrics_title?.trim()
+          if (!slug || !title) continue
+          bySlug[slug] = title
+        }
+        setSongTitleBySlug(bySlug)
+      })
+      .catch(() => {
+        // Keep chat usable if catalog fetch fails; link labels will fall back.
+      })
+  }, [open, songTitleBySlug])
+
+  const resolveSongLinkLabel = (rawLabel: string, href: string): string => {
+    const normalizedHref = href.split('?')[0]?.split('#')[0] ?? href
+    if (!normalizedHref.startsWith('/songs/')) return rawLabel
+    const slug = normalizedHref.slice('/songs/'.length).trim()
+    if (!slug) return rawLabel
+
+    if (songTitleBySlug[slug]) return songTitleBySlug[slug] as string
+    if (rawLabel === href || rawLabel === normalizedHref) {
+      return slug
+        .split('-')
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ')
+    }
+    return rawLabel
+  }
+
+  const renderInlineText = (text: string, keyPrefix: string) =>
+    parseInlineEmphasis(text).map((piece, idx) =>
+      piece.bold ? (
+        <strong key={`${keyPrefix}-b-${idx}`}>{piece.text}</strong>
+      ) : (
+        <span key={`${keyPrefix}-t-${idx}`}>{piece.text}</span>
+      ),
+    )
 
   const scrollToBottom = () => {
     const node = historyRef.current
@@ -78,7 +93,7 @@ export function BbbChatWidget() {
     setError('')
     queueMicrotask(scrollToBottom)
 
-    const streamMessages = nextMessages.filter((message) => message.content.trim().length > 0)
+    const streamMessages = capConversationHistory(nextMessages, 5)
     const controller = new AbortController()
     abortRef.current = controller
 
@@ -101,6 +116,7 @@ export function BbbChatWidget() {
       const decoder = new TextDecoder()
       let pending = ''
       let assistantText = ''
+      let streamFinished = false
       while (true) {
         const { value, done } = await reader.read()
         if (done) break
@@ -119,10 +135,16 @@ export function BbbChatWidget() {
             const message = (event.payload as { message?: string })?.message || 'Streaming error'
             setError(message)
           } else if (event.event === 'done') {
+            streamFinished = true
             break
           }
         }
         queueMicrotask(scrollToBottom)
+        if (streamFinished) break
+      }
+
+      if (!assistantText.trim() && !streamFinished) {
+        setMessages((prev) => updateLastAssistant(prev, 'I am chewing on that one. Please try again.'))
       }
     } catch (requestError) {
       if ((requestError as Error).name !== 'AbortError') {
@@ -149,6 +171,17 @@ export function BbbChatWidget() {
     setIsStreaming(false)
   }
 
+  const handleInputKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key !== 'Enter') return
+    if (event.shiftKey) return
+    if (!event.metaKey && !event.ctrlKey) return
+    event.preventDefault()
+    if (!canSend) return
+    const prompt = input.trim()
+    setInput('')
+    void submitPrompt(prompt)
+  }
+
   return (
     <section className={`bbb-widget${open ? ' is-open' : ''}`} aria-label="Bertrand chat widget">
       <button
@@ -158,18 +191,43 @@ export function BbbChatWidget() {
         aria-controls="bbb-widget-panel"
         onClick={() => setOpen((prev) => !prev)}
       >
-        BBB Chat
+        Ring Bertrand
       </button>
       {open ? (
         <div id="bbb-widget-panel" className="bbb-widget__panel">
           <header className="bbb-widget__header">
-            <p className="bbb-widget__title">Bertrand (R42 MVP)</p>
-            <p className="bbb-widget__subtitle">Streaming worker client</p>
+            <p className="bbb-widget__title">Bertrand · Banana Butler</p>
+            <p className="bbb-widget__subtitle">At your service, one hidden gem at a time</p>
           </header>
-          <div ref={historyRef} className="bbb-widget__history" aria-live="polite">
+          <div ref={historyRef} className="bbb-widget__history" aria-live="polite" aria-busy={isStreaming}>
             {messages.map((message, idx) => (
               <p key={`${message.role}-${idx}`} className={`bbb-widget__msg bbb-widget__msg--${message.role}`}>
-                {message.content || (message.role === 'assistant' ? '...' : '')}
+                {message.content
+                  ? parseMarkdownLinks(message.content).map((segment, segmentIdx) =>
+                      segment.type === 'link' ? (
+                        <a
+                          key={`seg-${idx}-${segmentIdx}`}
+                          className="bbb-widget__link"
+                          href={segment.href}
+                          target={segment.external ? '_blank' : undefined}
+                          rel={segment.external ? 'noreferrer noopener' : undefined}
+                          onClick={(event) => {
+                            if (segment.external) return
+                            event.preventDefault()
+                            navigate(segment.href)
+                          }}
+                        >
+                          {renderInlineText(resolveSongLinkLabel(segment.text, segment.href), `link-${idx}-${segmentIdx}`)}
+                        </a>
+                      ) : (
+                        <span key={`seg-${idx}-${segmentIdx}`}>
+                          {renderInlineText(segment.text, `text-${idx}-${segmentIdx}`)}
+                        </span>
+                      ),
+                    )
+                  : message.role === 'assistant'
+                    ? '...'
+                    : ''}
               </p>
             ))}
           </div>
@@ -180,13 +238,16 @@ export function BbbChatWidget() {
             </label>
             <textarea
               id="bbb-widget-input"
+              ref={inputRef}
               className="bbb-widget__input"
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Ask Bertrand…"
+              onKeyDown={handleInputKeyDown}
+              placeholder="How may I best serve your ears and soul today?"
               rows={2}
               disabled={isStreaming}
             />
+            <p className="bbb-widget__hint">Try: "I need hope" or "Give me French hidden gems"</p>
             <div className="bbb-widget__actions">
               <button type="submit" className="bbb-widget__send" disabled={!canSend}>
                 Send

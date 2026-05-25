@@ -72,10 +72,21 @@
 .bbb-widget__msg {
   margin: 0;
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
   line-height: 1.45;
   font-size: 0.8rem;
   padding: 0.45rem 0.55rem;
   border-radius: var(--radius-sm);
+}
+
+.bbb-widget__link {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.bbb-widget__link:hover {
+  text-decoration-thickness: 2px;
 }
 
 .bbb-widget__msg--assistant {
@@ -121,6 +132,12 @@
   gap: 0.45rem;
 }
 
+.bbb-widget__hint {
+  margin: 0;
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+}
+
 .bbb-widget__send,
 .bbb-widget__stop {
   border-radius: 999px;
@@ -149,12 +166,11 @@
 @media (max-width: 640px) {
   .bbb-widget {
     right: 0.65rem;
-    left: 0.65rem;
     bottom: 0.65rem;
   }
 
   .bbb-widget__panel {
-    width: 100%;
+    width: min(92vw, 360px);
     max-height: min(62vh, 520px);
   }
 }

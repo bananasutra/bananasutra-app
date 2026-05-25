@@ -1,5 +1,6 @@
 import { ClaudeUpstreamError, streamClaudeResponse, type ChatMessage } from "./claude-client";
 import { LIBRARY_INJECTS } from "./library-data";
+import { buildRecommendationContext } from "./recommendation-context";
 import { buildSystemPrompt } from "./system-prompt";
 
 interface Env {
@@ -145,7 +146,9 @@ const handler: ExportedHandler<Env> = {
     }
 
     try {
-      const system = buildSystemPrompt(LIBRARY_INJECTS);
+      const baseSystem = buildSystemPrompt(LIBRARY_INJECTS);
+      const recommendationContext = buildRecommendationContext(messages, LIBRARY_INJECTS);
+      const system = recommendationContext ? `${baseSystem}\n\n${recommendationContext}` : baseSystem;
       const model = env.BBB_MODEL?.trim() || DEFAULT_MODEL;
       const stream = await streamClaudeResponse({
         apiKey,
