@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import songCatalogBrowseJson from '../data/generated/song_catalog_browse.json'
 import songbookCatalogJson from '../data/generated/songbook_catalog.json'
+import { CatalogPageJumpNav } from './CatalogPageJumpNav'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { songCatalogPath, songbookCatalogPath } from './songPaths'
@@ -90,6 +91,24 @@ const ABOUT_HUB_LINKS: { to: string; label: string; pathLabel: string; descripti
   },
 ]
 
+const SITEMAP_SECTION_IDS = {
+  core: 'sitemap-section-core',
+  aboutHubs: 'sitemap-section-about-hubs',
+  sutras: 'sitemap-section-sutras',
+  songbooks: 'sitemap-section-songbooks',
+  songs: 'sitemap-section-songs',
+  seo: 'sitemap-section-seo-files',
+} as const
+
+const SITEMAP_JUMP_NAV_ITEMS = [
+  { id: SITEMAP_SECTION_IDS.core, label: 'Core pages', mobileLabel: 'Core' },
+  { id: SITEMAP_SECTION_IDS.aboutHubs, label: 'About hubs', mobileLabel: 'About' },
+  { id: SITEMAP_SECTION_IDS.sutras, label: 'Sutra pages', mobileLabel: 'Sutra' },
+  { id: SITEMAP_SECTION_IDS.songbooks, label: 'Songbook pages', mobileLabel: 'Books' },
+  { id: SITEMAP_SECTION_IDS.songs, label: 'Song pages', mobileLabel: 'Songs' },
+  { id: SITEMAP_SECTION_IDS.seo, label: 'SEO files', mobileLabel: 'SEO' },
+]
+
 const songbookCatalog = songbookCatalogJson as SongbookCatalogItem[]
 const songCatalogBrowse = songCatalogBrowseJson as SongCatalogItem[]
 
@@ -167,13 +186,19 @@ export function SitemapPage() {
             </span>
           </nav>
 
-          <header className="catalog-page-intro">
+          <header className="catalog-page-intro" id="sitemap-page-top">
             <h1 className="catalog-page-h1">Sitemap</h1>
           </header>
 
+          <div className="catalog-page-shell__jump-region">
+            <CatalogPageJumpNav ariaLabel="Sitemap sections" items={SITEMAP_JUMP_NAV_ITEMS} />
+          </div>
+
           <div className="sitemap-page__body">
             <section className="sitemap-page__section">
-              <h2 className="sitemap-page__heading">Core pages</h2>
+              <h2 id={SITEMAP_SECTION_IDS.core} className="sitemap-page__heading">
+                Core pages
+              </h2>
               <ul className="sitemap-page__list">
                 {CORE_LINKS.map((item) => (
                   <li key={item.to} className="sitemap-page__item">
@@ -187,10 +212,17 @@ export function SitemapPage() {
                   </li>
                 ))}
               </ul>
+              <p className="sitemap-page__section-back">
+                <a href="#sitemap-page-top" className="sitemap-page__section-back-link">
+                  ↑ Back to top
+                </a>
+              </p>
             </section>
 
             <section className="sitemap-page__section">
-              <h2 className="sitemap-page__heading">About hubs</h2>
+              <h2 id={SITEMAP_SECTION_IDS.aboutHubs} className="sitemap-page__heading">
+                About hubs
+              </h2>
               <ul className="sitemap-page__list">
                 {ABOUT_HUB_LINKS.map((item) => (
                   <li key={item.to} className="sitemap-page__item">
@@ -204,10 +236,17 @@ export function SitemapPage() {
                   </li>
                 ))}
               </ul>
+              <p className="sitemap-page__section-back">
+                <a href="#sitemap-page-top" className="sitemap-page__section-back-link">
+                  ↑ Back to top
+                </a>
+              </p>
             </section>
 
             <section className="sitemap-page__section">
-              <h2 className="sitemap-page__heading">Sutra pages</h2>
+              <h2 id={SITEMAP_SECTION_IDS.sutras} className="sitemap-page__heading">
+                Sutra pages
+              </h2>
               <p className="sitemap-page__section-lede">
                 Seven core lanes plus QUACK (a BLOW sub-sutra) — same slugs as the About page.
               </p>
@@ -237,10 +276,17 @@ export function SitemapPage() {
                   <p className="sitemap-page__desc">{sutraSearchBlurb(SUTRA_CONTEXT.QUACK)}</p>
                 </li>
               </ul>
+              <p className="sitemap-page__section-back">
+                <a href="#sitemap-page-top" className="sitemap-page__section-back-link">
+                  ↑ Back to top
+                </a>
+              </p>
             </section>
 
             <section className="sitemap-page__section">
-              <h2 className="sitemap-page__heading">Songbook pages ({SONGBOOK_LINKS.length})</h2>
+              <h2 id={SITEMAP_SECTION_IDS.songbooks} className="sitemap-page__heading">
+                Songbook pages ({SONGBOOK_LINKS.length})
+              </h2>
               <ul className="sitemap-page__list">
                 {SONGBOOK_LINKS.map((item) => (
                   <li key={item.to} className="sitemap-page__item">
@@ -254,10 +300,17 @@ export function SitemapPage() {
                   </li>
                 ))}
               </ul>
+              <p className="sitemap-page__section-back">
+                <a href="#sitemap-page-top" className="sitemap-page__section-back-link">
+                  ↑ Back to top
+                </a>
+              </p>
             </section>
 
             <section className="sitemap-page__section">
-              <h2 className="sitemap-page__heading">Song pages ({SONG_LINKS.length})</h2>
+              <h2 id={SITEMAP_SECTION_IDS.songs} className="sitemap-page__heading">
+                Song pages ({SONG_LINKS.length})
+              </h2>
               <ul className="sitemap-page__list">
                 {SONG_LINKS.map((item) => (
                   <li key={item.to} className="sitemap-page__item">
@@ -271,10 +324,17 @@ export function SitemapPage() {
                   </li>
                 ))}
               </ul>
+              <p className="sitemap-page__section-back">
+                <a href="#sitemap-page-top" className="sitemap-page__section-back-link">
+                  ↑ Back to top
+                </a>
+              </p>
             </section>
 
             <section className="sitemap-page__section">
-              <h2 className="sitemap-page__heading">SEO files</h2>
+              <h2 id={SITEMAP_SECTION_IDS.seo} className="sitemap-page__heading">
+                SEO files
+              </h2>
               <ul className="sitemap-page__list">
                 <li className="sitemap-page__item">
                   <div className="sitemap-page__row">
@@ -295,6 +355,11 @@ export function SitemapPage() {
                   <p className="sitemap-page__desc">Crawl directives and XML sitemap reference.</p>
                 </li>
               </ul>
+              <p className="sitemap-page__section-back">
+                <a href="#sitemap-page-top" className="sitemap-page__section-back-link">
+                  ↑ Back to top
+                </a>
+              </p>
             </section>
           </div>
         </article>

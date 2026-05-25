@@ -302,8 +302,9 @@ export function VideosPage() {
     }, FIND_DEBOUNCE_MS)
     return () => window.clearTimeout(tid)
   }, [findDraft, filters.find, navigate])
-  // Keep server and client first paint aligned; avoid mobile hydration-open/close swaps that register as CLS.
-  const [filtersOpen, setFiltersOpen] = useState(true)
+  const [filtersOpen, setFiltersOpen] = useState(() =>
+    typeof window === 'undefined' ? true : window.innerWidth >= 900,
+  )
   const visitSeedRef = useRef(Math.floor(Math.random() * 1_000_000_000))
 
   const inAppIds = useMemo(() => {
@@ -384,6 +385,16 @@ export function VideosPage() {
     const q = p.toString()
     navigate(browsePathWithQuery('/videos', q), { replace: true })
   }, [searchParams, navigate])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 899px)')
+    const sync = () => {
+      if (mq.matches) setFiltersOpen(false)
+    }
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
 
   useEffect(() => {
     if (filters.linkTarget !== 'off_site') return

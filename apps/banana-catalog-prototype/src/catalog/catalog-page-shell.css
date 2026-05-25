@@ -52,6 +52,36 @@
   color: var(--color-link-hover);
 }
 
+@media (max-width: 640px) {
+  .catalog-page-shell__jump-region .catalog-page-jump-nav__list {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow-x: visible;
+    gap: 0.34rem 0.85rem;
+    font-size: 0.63rem;
+    letter-spacing: 0.045em;
+    line-height: 1.2;
+  }
+
+  .catalog-page-shell__jump-region .catalog-page-jump-nav__item {
+    flex: 0 0 auto;
+  }
+
+  .catalog-page-shell__jump-region .catalog-page-jump-nav__link,
+  .catalog-page-shell__jump-region .catalog-page-jump-nav__link:visited {
+    text-decoration: none;
+    padding: 0.1rem 0.08rem;
+  }
+
+  .catalog-page-shell__jump-region .catalog-page-jump-nav__arrow {
+    display: inline-block;
+    margin-right: 0.18rem;
+    font-size: 0.72em;
+    opacity: 0.8;
+  }
+}
+
 /* Readability cap for intro / subcopy — does not replace full-width layout chrome. */
 .catalog-page-shell__measure {
   max-width: min(var(--catalog-shell-lede-measure, 62ch), 100%);
