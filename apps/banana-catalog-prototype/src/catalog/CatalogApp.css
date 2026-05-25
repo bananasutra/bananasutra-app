@@ -1,7 +1,7 @@
 /* Page shell: fixed header + in-flow layout below (document scroll). */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--catalog-header-h, 220px) + 12px);
+  scroll-padding-top: calc(var(--catalog-header-h, 220px) + 8px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -15,7 +15,7 @@ html {
   margin: 0 auto;
   padding: 0 1rem 2.5rem;
   /* Space for fixed header; exact height set by JS as --catalog-header-h (fallback ≈ discovery header) */
-  padding-top: calc(var(--catalog-header-h, 220px) + 28px);
+  padding-top: calc(var(--catalog-header-h, 220px) + 10px);
   overflow-anchor: none;
   color: var(--color-text-primary);
   /* Vertical rhythm after page intros (title + subcopy) before grids / filters / chips */
@@ -338,6 +338,28 @@ html {
   outline: none;
 }
 
+.songs-page__sort-row,
+.words-page__sort-row,
+.muses-page__sort-row {
+  margin-bottom: 0.45rem;
+}
+
+.songs-page__sort .catalog-sort-label,
+.words-page__sort .catalog-sort-label,
+.muses-page__sort .catalog-sort-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+}
+
+.songs-page__sort .catalog-sort-select,
+.words-page__sort .catalog-sort-select,
+.muses-page__sort .catalog-sort-select {
+  min-height: 2.2rem;
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+  font-size: 0.76rem;
+}
+
 .catalog-layout {
   display: grid;
   grid-template-columns: 1fr minmax(240px, 300px);
@@ -470,7 +492,7 @@ html {
   }
 
   .catalog.catalog-page {
-    padding-top: calc(var(--catalog-header-h, 220px) + 22px);
+    padding-top: calc(var(--catalog-header-h, 220px) + 8px);
     --catalog-after-intro-gap: clamp(0.88rem, 2.2vw, 1.45rem);
   }
 

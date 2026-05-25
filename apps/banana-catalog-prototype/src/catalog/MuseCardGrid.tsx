@@ -263,6 +263,80 @@ export function MuseCardGrid() {
   }, [countryFilter, eraFilter, findMuse, genderFilter, rows, sort, typeFilter])
 
   const visible = showAll ? filtered : filtered.slice(0, INITIAL_MUSE_COUNT)
+  const findQuery = findMuse.trim()
+  const activeFilterCount = [
+    eraFilter !== 'all',
+    genderFilter !== 'all',
+    typeFilter !== 'all',
+    countryFilter !== 'all',
+  ].filter(Boolean).length
+  const hasActiveContext = activeFilterCount > 0 || Boolean(findQuery)
+  const contextSummary = hasActiveContext
+    ? `${formatCount(filtered.length)} of ${formatCount(rows.length)} muses · ${activeFilterCount} filter${
+        activeFilterCount === 1 ? '' : 's'
+      }${findQuery ? ' · search' : ''}`
+    : `${formatCount(rows.length)} muses`
+
+  const clearAllFilters = () => {
+    setEraFilter('all')
+    setGenderFilter('all')
+    setTypeFilter('all')
+    setCountryFilter('all')
+    setFindMuse('')
+  }
+
+  const activeFilterContext = (
+    <section className="catalog-active-context" aria-label={hasActiveContext ? 'Active filters and result count' : 'Muses result count'}>
+      <p className="catalog-active-context__summary">{contextSummary}</p>
+      {hasActiveContext ? (
+        <div className="catalog-chips">
+          {findQuery ? (
+            <button type="button" className="catalog-chip catalog-chip--find" onClick={() => setFindMuse('')}>
+              Search: {findQuery}
+              <span className="catalog-chip-x" aria-hidden>
+                ×
+              </span>
+            </button>
+          ) : null}
+          {eraFilter !== 'all' ? (
+            <button type="button" className="catalog-chip" onClick={() => setEraFilter('all')}>
+              Era: {eraFilter}
+              <span className="catalog-chip-x" aria-hidden>
+                ×
+              </span>
+            </button>
+          ) : null}
+          {genderFilter !== 'all' ? (
+            <button type="button" className="catalog-chip" onClick={() => setGenderFilter('all')}>
+              Gender: {genderFilter}
+              <span className="catalog-chip-x" aria-hidden>
+                ×
+              </span>
+            </button>
+          ) : null}
+          {typeFilter !== 'all' ? (
+            <button type="button" className="catalog-chip" onClick={() => setTypeFilter('all')}>
+              Type: {typeFilter}
+              <span className="catalog-chip-x" aria-hidden>
+                ×
+              </span>
+            </button>
+          ) : null}
+          {countryFilter !== 'all' ? (
+            <button type="button" className="catalog-chip" onClick={() => setCountryFilter('all')}>
+              Country: {countryFilter}
+              <span className="catalog-chip-x" aria-hidden>
+                ×
+              </span>
+            </button>
+          ) : null}
+          <button type="button" className="catalog-clear" onClick={clearAllFilters}>
+            Clear all
+          </button>
+        </div>
+      ) : null}
+    </section>
+  )
 
   if (loading) {
     return (
@@ -308,6 +382,8 @@ export function MuseCardGrid() {
                 Hide
               </button>
             </div>
+
+            {activeFilterContext}
 
             <div id="muses-filter-panel" className="catalog-facet-stack">
               <section className="catalog-facet" aria-labelledby="muses-search-heading">
@@ -433,8 +509,8 @@ export function MuseCardGrid() {
           </aside>
 
           <div className="catalog-main about-muses-main">
-            <div className="catalog-main__sort-row">
-              <div className="catalog-sort" aria-label="Sort muses">
+            <div className="catalog-main__sort-row muses-page__sort-row">
+              <div className="catalog-sort muses-page__sort" aria-label="Sort muses">
                 <label className="catalog-sort-label" htmlFor="muses-sort-select">
                   Sort
                 </label>
@@ -452,15 +528,18 @@ export function MuseCardGrid() {
             </div>
 
             {!filtersOpen ? (
-              <button
-                type="button"
-                className="catalog-filter-reopen"
-                onClick={() => setFiltersOpen(true)}
-                aria-expanded={false}
-                aria-controls="muses-filter-panel"
-              >
-                Show filters
-              </button>
+              <>
+                {activeFilterContext}
+                <button
+                  type="button"
+                  className="catalog-filter-reopen"
+                  onClick={() => setFiltersOpen(true)}
+                  aria-expanded={false}
+                  aria-controls="muses-filter-panel"
+                >
+                  Show filters
+                </button>
+              </>
             ) : null}
 
             <p className="about-result-count" aria-live="polite">
