@@ -12,7 +12,7 @@ const fixtureInjects: LibraryInjects = {
     "Paris At Dawn | A playful french morning walk with absurd grace notes. | FLOWsutra | JOY | CURIOSITY | LIGHT | paris-at-dawn",
   ].join("\n"),
   tracks: [
-    "Bright Morning | 5trk | INDIE | CALM | MID | PIANO",
+    "Bright Morning | 5trk | INDIE | CALM,KINDLY | MID | PIANO",
     "Quiet Lantern | 2trk | FOLK | CALM | SLOW | GUITAR",
     "Paris At Dawn | 3trk | JAZZ | FRENCHY,CHEEKY | MID | ACCORDION",
   ].join("\n"),
@@ -31,7 +31,9 @@ test("buildRecommendationContext returns ranked playable shortlist for support i
   assert.match(context, /Ranked shortlist:/);
   assert.match(context, /Begin with one short natural sentence that names the sutra angle/);
   assert.match(context, /3-5 short bullets max/);
+  assert.match(context, /prefer a stabilizing lens such as \[FLOWsutra\]/);
   assert.match(context, /availability:audio\+video/);
+  assert.match(context, /\[KINDLY Mood Tracks\]\(\/tracks\/\?mood=KINDLY&tsort=likes\)/);
   assert.match(context, /Bright Morning \| bright-morning/);
   assert.match(context, /Quiet Lantern \| quiet-lantern/);
   assert.match(context, /Paper Lantern Prayer \| paper-lantern-prayer/);

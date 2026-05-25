@@ -47,6 +47,11 @@ const SUPPORT_PATTERNS: Array<{ pattern: RegExp; keyword: string }> = [
 ];
 
 const FUN_PATTERNS: RegExp[] = [/\bfun\b/i, /\bhumou?r\b/i, /\babsurd(?:ity)?\b/i, /\bplayful|silly|weird\b/i];
+const SUPPORT_STABILIZING_PATTERNS: RegExp[] = [
+  /\bhope|heal(?:ing)?|steady|calm|peace|kind(?:ness)?|gentle|trust|courage|light|breathe|prayer|grace\b/i,
+];
+const SUPPORT_AGITATING_PATTERNS: RegExp[] = [/\bpanic|war|outrage|rage|doom|nightmare|maga|trump|felon|anxiety\b/i];
+const SUPPORT_PREFERRED_MOODS = ["KINDLY", "HOLY", "PEACHY", "RAINY"];
 
 const splitPipe = (line: string): string[] => line.split("|").map((part) => part.trim());
 
@@ -183,6 +188,11 @@ const scoreSong = (
     for (const keyword of support.keywords) {
       if (haystack.includes(keyword)) score += 10;
     }
+    if (SUPPORT_STABILIZING_PATTERNS.some((pattern) => pattern.test(haystack))) score += 12;
+    if (SUPPORT_AGITATING_PATTERNS.some((pattern) => pattern.test(haystack))) score -= 16;
+    if (song.sutra === "FLOWSUTRA" || song.sutra === "GROWSUTRA") score += 10;
+    if (song.sutra === "GLOWSUTRA") score += 4;
+    if (song.sutra === "KNOWSUTRA" || song.sutra === "SHOWSUTRA") score -= 2;
   }
 
   if (intent.funIntent) {
@@ -286,6 +296,13 @@ export const buildRecommendationContext = (messages: ChatMessage[], injects: Lib
   if (intent.languageIntentFrench && Array.from(moodPool).includes("FRENCHY") && !moodCandidates.includes("FRENCHY")) {
     moodCandidates.unshift("FRENCHY");
   }
+  if (support.supportIntent) {
+    for (const mood of [...SUPPORT_PREFERRED_MOODS].reverse()) {
+      if (Array.from(moodPool).includes(mood) && !moodCandidates.includes(mood)) {
+        moodCandidates.unshift(mood);
+      }
+    }
+  }
 
   const songbookCandidates = songbooks
     .filter((book) => {
@@ -310,6 +327,14 @@ export const buildRecommendationContext = (messages: ChatMessage[], injects: Lib
     const langFrench = songbooks.find((book) => book.slug === "lang-french");
     if (langFrench && !songbookCandidates.some((book) => book.slug === langFrench.slug)) {
       songbookCandidates.unshift(langFrench);
+    }
+  }
+  if (support.supportIntent) {
+    const supportBooks = songbooks.filter((book) => /\b(hope|heal|kind|peace|trust|rainbow)\b/i.test(book.title));
+    for (const book of supportBooks.slice(0, 2).reverse()) {
+      if (!songbookCandidates.some((candidate) => candidate.slug === book.slug)) {
+        songbookCandidates.unshift(book);
+      }
     }
   }
 
@@ -342,6 +367,9 @@ export const buildRecommendationContext = (messages: ChatMessage[], injects: Lib
       : "- Prefer playable songs first, then broader exploration options.",
     '- For each recommended song, include one concise "why this might help right now" reason.',
     "- Begin with one short natural sentence that names the sutra angle and links the specific sutra page when known (for example [GLOWsutra](/about/glowsutra)).",
+    support.supportIntent
+      ? "- For support/hope asks, prefer a stabilizing lens such as [FLOWsutra](/about/flowsutra) or [GROWsutra](/about/growsutra). Use [GLOWsutra](/about/glowsutra) when gratitude is explicitly relevant."
+      : "- Keep sutra framing emotionally precise to the ask.",
     intent.funIntent
       ? "- This user asked for fun/absurd energy: anchor the lens on [SHOWsutra](/about/showsutra) and say that clearly."
       : "- Name the likely sutra lens clearly.",
