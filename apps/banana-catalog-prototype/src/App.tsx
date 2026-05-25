@@ -7,6 +7,7 @@ import { SearchRedirect } from './catalog/SearchRedirect'
 import { useBfCacheEmbedTeardown } from './catalog/useBfCacheEmbedTeardown'
 import { useSyncPrintPageUrl } from './catalog/useSyncPrintPageUrl'
 import { useAnalyticsPageView } from './useAnalyticsPageView'
+import { BbbChatWidget } from './bbb/BbbChatWidget'
 
 const HomePortal = lazy(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
 const AboutPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutPage })))
@@ -285,6 +286,7 @@ export default function App() {
           <Route path="*" element={<NotFoundRoute />} />
         </Routes>
       </BrowserRouter>
+      <BbbChatWidget />
     </HelmetProvider>
   )
 }
