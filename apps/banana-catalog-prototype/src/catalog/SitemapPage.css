@@ -21,6 +21,29 @@
   padding-bottom: 0;
 }
 
+.sitemap-page__section-back {
+  margin: 0.35rem 0 0;
+  padding-top: 0.3rem;
+  text-align: right;
+}
+
+.sitemap-page__section-back-link {
+  font: 500 0.62rem/1.35 var(--font-ui);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  text-decoration: none;
+}
+
+.sitemap-page__section-back-link:hover {
+  color: var(--color-link-hover);
+}
+
+.sitemap-page__section-back-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 .sitemap-page__heading {
   margin: 0 0 0.6rem;
   font: 700 0.72rem/1.35 var(--font-ui);
