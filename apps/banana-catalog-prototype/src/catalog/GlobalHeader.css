@@ -86,6 +86,11 @@
   text-decoration: none;
 }
 
+.global-header-brand-link:visited {
+  color: var(--color-text-strong);
+  text-decoration: none;
+}
+
 .global-header-brand-link:hover {
   color: var(--color-link-hover);
   text-decoration: none;

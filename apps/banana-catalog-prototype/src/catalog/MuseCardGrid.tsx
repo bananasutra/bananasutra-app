@@ -176,7 +176,9 @@ export function MuseCardGrid() {
     const params = new URLSearchParams(location.search)
     return (params.get('muse') || params.get('highlight') || '').trim()
   }, [location.search])
-  const [filtersOpen, setFiltersOpen] = useState(true)
+  const [filtersOpen, setFiltersOpen] = useState(() =>
+    typeof window === 'undefined' ? true : window.innerWidth >= 900,
+  )
   const [eraFilter, setEraFilter] = useState('all')
   const [genderFilter, setGenderFilter] = useState('all')
   const [typeFilter, setTypeFilter] = useState('all')
@@ -198,6 +200,16 @@ export function MuseCardGrid() {
       document.getElementById(id)?.scrollIntoView({ block: 'center' })
     })
   }, [highlightedMuse, loading])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 899px)')
+    const sync = () => {
+      if (mq.matches) setFiltersOpen(false)
+    }
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
 
   const eraOptions = useMemo(() => {
     const counts = new Map<string, number>()
