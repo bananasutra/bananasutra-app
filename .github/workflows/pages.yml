@@ -40,6 +40,8 @@ jobs:
         working-directory: apps/banana-catalog-prototype
         env:
           VITE_CONTACT_ENDPOINT: ${{ secrets.VITE_CONTACT_ENDPOINT }}
+          VITE_BBB_API_ENDPOINT: ${{ secrets.VITE_BBB_API_ENDPOINT }}
+          VITE_BBB_CHAT_ENABLED: "true"
 
       - name: Verify SEO artifacts (sitemap + seo-metadata)
         run: npm run verify:seo

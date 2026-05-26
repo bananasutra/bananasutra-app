@@ -7,6 +7,7 @@ import { SearchRedirect } from './catalog/SearchRedirect'
 import { useBfCacheEmbedTeardown } from './catalog/useBfCacheEmbedTeardown'
 import { useSyncPrintPageUrl } from './catalog/useSyncPrintPageUrl'
 import { useAnalyticsPageView } from './useAnalyticsPageView'
+import { BbbChatWidget } from './bbb/BbbChatWidget'
 
 const HomePortal = lazy(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
 const AboutPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutPage })))
@@ -24,6 +25,8 @@ const SutraDetailPage = lazy(() => import('./catalog/SutraDetailPage').then((m) 
 const StyleGuidePage = lazy(() => import('./catalog/StyleGuidePage').then((m) => ({ default: m.StyleGuidePage })))
 const SitemapPage = lazy(() => import('./catalog/SitemapPage').then((m) => ({ default: m.SitemapPage })))
 const GITHUB_PROJECT_BASENAME = '/bananasutra-app'
+const BBB_CHAT_ENABLED =
+  (import.meta.env.VITE_BBB_CHAT_ENABLED?.trim().toLowerCase() ?? (import.meta.env.DEV ? 'true' : 'false')) === 'true'
 
 /** Browse route — `CatalogApp` syncs sort + facet state from `location.search` without remounting
  * so UI state (e.g. filters panel open/closed) survives sort-only URL updates. */
@@ -284,6 +287,7 @@ export default function App() {
           />
           <Route path="*" element={<NotFoundRoute />} />
         </Routes>
+        {BBB_CHAT_ENABLED ? <BbbChatWidget /> : null}
       </BrowserRouter>
     </HelmetProvider>
   )

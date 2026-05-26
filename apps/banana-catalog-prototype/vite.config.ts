@@ -18,13 +18,13 @@ export default defineConfig({
   server: {
     // Listen on LAN (0.0.0.0), not only localhost — phones / other machines on the same network can open the dev URL.
     host: true,
-    // Default Vite is 5173; use 5174 so a stable URL works when another tool already took 5173.
+    // Keep dev on one predictable origin for BBB CORS and local QA.
     port: 5174,
-    strictPort: false,
+    strictPort: true,
   },
   preview: {
     host: true,
     port: 5174,
-    strictPort: false,
+    strictPort: true,
   },
 })
