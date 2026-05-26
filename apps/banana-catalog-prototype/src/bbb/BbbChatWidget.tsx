@@ -30,6 +30,7 @@ export function BbbChatWidget() {
   const inputRef = useRef<HTMLTextAreaElement | null>(null)
 
   const canSend = useMemo(() => input.trim().length > 0 && !isStreaming, [input, isStreaming])
+  const toggleLabel = open ? 'Close Bertrand' : 'Ring Bertrand'
 
   useEffect(() => {
     if (!open) return
@@ -196,9 +197,10 @@ export function BbbChatWidget() {
         className="bbb-widget__toggle"
         aria-expanded={open}
         aria-controls="bbb-widget-panel"
+        aria-label={open ? 'Close Bertrand chat widget' : 'Open Bertrand chat widget'}
         onClick={() => setOpen((prev) => !prev)}
       >
-        Ring Bertrand
+        {toggleLabel}
       </button>
       {open ? (
         <div id="bbb-widget-panel" className="bbb-widget__panel">
