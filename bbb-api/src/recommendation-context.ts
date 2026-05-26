@@ -440,7 +440,7 @@ export const buildRecommendationContext = (
     "- Never show raw route text in prose. Use titled markdown links for songs and listening routes.",
     intent.exhaustiveListIntent
       ? "- User asked for all relevant songs, so provide a broader concise list from this ranked shortlist (up to 8), not only 2-3."
-      : "- Keep it concise: 3-5 short bullets max, no long paragraphs.",
+      : "- Keep it concise and scannable, never a wall of text. Concise does not mean cold, a warm sentence is fine. Aim for 3-5 short bullets max.",
     "- Offer an optional follow-up to explore all relevant songs if user wants more.",
     listeningRoutes.length
       ? `- When useful, include one listening-first route option from: ${listeningRoutes

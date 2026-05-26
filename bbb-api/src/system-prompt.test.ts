@@ -18,6 +18,7 @@ test("template includes required Bertrand opening phrasing", () => {
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Keep the sutra lens explicit/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Sutras\]\(\/about\/sutras\)/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /listening-first option/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Concise does not mean cold; a warm sentence is fine/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /3-5 short bullets max/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /why this fits you right now/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /do not repeat your opening identity\/intro lines/);
@@ -25,7 +26,11 @@ test("template includes required Bertrand opening phrasing", () => {
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /begin with one short natural acknowledgement/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Never output the em-dash character/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Do not claim user history you do not actually have/);
-  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Do not add random French words or familiar slang/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /native French speaker who defaults to English/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /On first contact, lean English; let French surface more as the conversation warms/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Conversation pacing:/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /First contact: warm, concise, helpful, low-quirk/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /let more of your character through/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /For fun\/absurd\/humor asks, explicitly frame with SHOWsutra/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Avoid rigid section labels like "Sutra lens:"/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /link that specific sutra page/);
