@@ -44,18 +44,18 @@ const SUPPORT_PATTERNS: Array<{ pattern: RegExp; keyword: string }> = [
   { pattern: /\banx(?:ious|iety)\b/i, keyword: "anxiety" },
   { pattern: /\bdepress(?:ed|ion)\b/i, keyword: "depression" },
   { pattern: /\bsad(?:ness)?\b/i, keyword: "sadness" },
-  { pattern: /\blonely|alone\b/i, keyword: "loneliness" },
-  { pattern: /\bpanic|afraid|scared\b/i, keyword: "fear" },
+  { pattern: /\b(?:lonely|alone)\b/i, keyword: "loneliness" },
+  { pattern: /\b(?:panic|afraid|scared)\b/i, keyword: "fear" },
   { pattern: /\boverwhelm(?:ed)?\b/i, keyword: "overwhelm" },
   { pattern: /\blost\b/i, keyword: "lost" },
-  { pattern: /\bgrief|grieving\b/i, keyword: "grief" },
+  { pattern: /\b(?:grief|grieving)\b/i, keyword: "grief" },
 ];
 
 const FUN_PATTERNS: RegExp[] = [/\bfun\b/i, /\bhumou?r\b/i, /\babsurd(?:ity)?\b/i, /\bplayful|silly|weird\b/i];
 const SUPPORT_STABILIZING_PATTERNS: RegExp[] = [
-  /\bhope|heal(?:ing)?|steady|calm|peace|kind(?:ness)?|gentle|trust|courage|light|breathe|prayer|grace\b/i,
+  /\b(?:hope|heal(?:ing)?|steady|calm|peace|kind(?:ness)?|gentle|trust|courage|light|breathe|prayer|grace)\b/i,
 ];
-const SUPPORT_AGITATING_PATTERNS: RegExp[] = [/\bpanic|war|outrage|rage|doom|nightmare|maga|trump|felon|anxiety\b/i];
+const SUPPORT_AGITATING_PATTERNS: RegExp[] = [/\b(?:panic|war|outrage|rage|doom|nightmare|maga|trump|felon|anxiety)\b/i];
 const SUPPORT_PREFERRED_MOODS = ["KINDLY", "HOLY", "PEACHY", "RAINY"];
 const EXPLICIT_CONTENT_SLUGS = new Set(["freee-la-fille"]);
 const EXPLICIT_INTENT_PATTERN = /\bexplicit|nsfw|adult|dirty|raw|edgy|sexual|breakup|dark\b/i;

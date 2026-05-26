@@ -65,7 +65,7 @@ export const streamClaudeResponse = async (request: ClaudeStreamRequest): Promis
     },
     body: JSON.stringify({
       model: request.model,
-      max_tokens: request.maxTokens ?? 700,
+      max_tokens: request.maxTokens ?? 1000,
       stream: true,
       system: request.system,
       messages: request.messages,

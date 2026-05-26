@@ -108,3 +108,25 @@ test("buildRecommendationContext expands guidance when user asks for all songs",
   const context = buildRecommendationContext([{ role: "user", content: "show me all hope songs" }], fixtureInjects);
   assert.match(context, /User asked for all relevant songs, so provide a broader concise list/);
 });
+
+test("support regex boundaries do not false-match words like warmth or courage", () => {
+  const boundaryFixtureInjects: LibraryInjects = {
+    ...fixtureInjects,
+    songs: [
+      "Warm Courage | Moving toward the light with warmth and courage. | GROWsutra | HOPE | COURAGE | LIGHT | warm-courage",
+      "Rage Spiral | A raging panic spiral and nightmare loop. | BLOWsutra | FEAR | ANXIETY | SHADOW | rage-spiral",
+    ].join("\n"),
+    tracks: [
+      "Warm Courage | 1trk | INDIE | KINDLY | MID | GUITAR",
+      "Rage Spiral | 1trk | ROCK | STORMY | FAST | DRUMS",
+    ].join("\n"),
+    videos: "",
+  };
+
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "I need hope, something steady and kind" }],
+    boundaryFixtureInjects,
+  );
+
+  assert.ok(context.indexOf("Warm Courage | warm-courage") < context.indexOf("Rage Spiral | rage-spiral"));
+});
