@@ -50,7 +50,7 @@ const parseAnthropicSseData = (line: string): string | null => {
     delta?: { type?: string; text?: string };
   };
   if (typed.type === "content_block_delta" && typed.delta?.type === "text_delta") {
-    return (typed.delta.text ?? "").replace(/—/g, ", ");
+    return (typed.delta.text ?? "").replace(/\s*—\s*/g, ", ");
   }
   return null;
 };

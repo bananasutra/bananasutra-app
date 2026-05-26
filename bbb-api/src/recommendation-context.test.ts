@@ -54,7 +54,7 @@ test("buildRecommendationContext suggests listening routes for french queries", 
     fixtureInjects,
     { pathname: "/tracks", search: "?mood=KINDLY" },
   );
-  assert.match(context, /User is currently browsing \[\/tracks\?mood=KINDLY\]\(\/tracks\?mood=KINDLY\)/);
+  assert.match(context, /User is currently browsing \[this page\]\(\/tracks\?mood=KINDLY\)/);
   assert.match(context, /User is already in tracks, so make the first listening route a filtered tracks link/);
   assert.match(context, /For non-support asks, do not force LIGHT over SHADOW/);
   assert.match(context, /use the exact mood name FRENCHY/);

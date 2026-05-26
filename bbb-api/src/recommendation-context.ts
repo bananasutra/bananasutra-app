@@ -55,8 +55,13 @@ const FUN_PATTERNS: RegExp[] = [/\bfun\b/i, /\bhumou?r\b/i, /\babsurd(?:ity)?\b/
 const SUPPORT_STABILIZING_PATTERNS: RegExp[] = [
   /\b(?:hope|heal(?:ing)?|steady|calm|peace|kind(?:ness)?|gentle|trust|courage|light|breathe|prayer|grace)\b/i,
 ];
-const SUPPORT_AGITATING_PATTERNS: RegExp[] = [/\b(?:panic|war|outrage|rage|doom|nightmare|maga|trump|felon|anxiety)\b/i];
+// NOTE: intentional editorial bias in support ranking; keep this list explicit and review periodically.
+const SUPPORT_AVOID_TOPICAL = ["maga", "trump", "felon"] as const;
+const SUPPORT_AGITATING_PATTERNS: RegExp[] = [
+  new RegExp(`\\b(?:panic|war|outrage|rage|doom|nightmare|anxiety|${SUPPORT_AVOID_TOPICAL.join("|")})\\b`, "i"),
+];
 const SUPPORT_PREFERRED_MOODS = ["KINDLY", "HOLY", "PEACHY", "RAINY"];
+// Manual maintenance list until explicit-content metadata is added to the source catalog.
 const EXPLICIT_CONTENT_SLUGS = new Set(["freee-la-fille"]);
 const EXPLICIT_INTENT_PATTERN = /\bexplicit|nsfw|adult|dirty|raw|edgy|sexual|breakup|dark\b/i;
 
@@ -396,7 +401,7 @@ export const buildRecommendationContext = (
     "Dynamic recommendation guidance (apply to this reply):",
     "- Prioritize this ranked shortlist before any lower-ranked songs.",
     "- Keep recommendations emotionally aligned with user intent.",
-    pageRoute ? `- User is currently browsing [${pageRoute}](${pageRoute}). Use this as a hint to keep navigation friction low.` : null,
+    pageRoute ? `- User is currently browsing [this page](${pageRoute}). Use this as a hint to keep navigation friction low.` : null,
     isAlreadyFrenchTracks
       ? "- User is already on FRENCHY tracks. Explicitly acknowledge that in your first sentence and avoid presenting it as a new discovery."
       : null,
