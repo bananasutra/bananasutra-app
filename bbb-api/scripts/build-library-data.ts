@@ -175,6 +175,8 @@ const buildMuseLines = (muses: MuseRecord[]): string[] =>
     .filter(Boolean)
     .sort((a, b) => a.localeCompare(b));
 
+const lineTitle = (line: string): string => line.split(" | ")[0]?.trim() ?? "";
+
 const main = async (): Promise<void> => {
   const songs = await readJsonFile<SongRecord[]>("song_catalog.json");
   const tracks = await readJsonFile<TrackRecord[]>("track_catalog.json");
@@ -183,10 +185,27 @@ const main = async (): Promise<void> => {
   const quotes = await readJsonFile<QuoteRecord[]>("quotes_wall.json");
   const muses = await readJsonFile<MuseRecord[]>("muses_catalog.json");
 
+  const songLines = buildSongLines(songs);
+  const trackLines = buildTrackLines(tracks);
+  const videoLines = buildVideoLines(videos);
+  const songTitles = new Set(songLines.map(lineTitle).filter(Boolean));
+  const missingTrackTitles = trackLines.map(lineTitle).filter((title) => title && !songTitles.has(title));
+  const missingVideoTitles = videoLines.map(lineTitle).filter((title) => title && !songTitles.has(title));
+  if (missingTrackTitles.length || missingVideoTitles.length) {
+    const uniq = (values: string[]) => Array.from(new Set(values));
+    const detail = [
+      missingTrackTitles.length ? `track titles missing from songs: ${uniq(missingTrackTitles).join(", ")}` : "",
+      missingVideoTitles.length ? `video titles missing from songs: ${uniq(missingVideoTitles).join(", ")}` : "",
+    ]
+      .filter(Boolean)
+      .join(" | ");
+    throw new Error(`Song title join assertion failed: ${detail}`);
+  }
+
   const payload = {
-    songs: buildSongLines(songs).join("\n"),
-    tracks: buildTrackLines(tracks).join("\n"),
-    videos: buildVideoLines(videos).join("\n"),
+    songs: songLines.join("\n"),
+    tracks: trackLines.join("\n"),
+    videos: videoLines.join("\n"),
     songbooks: buildSongbookLines(songbooks).join("\n"),
     quotes: buildQuoteLines(quotes).join("\n"),
     muses: buildMuseLines(muses).join("\n"),
