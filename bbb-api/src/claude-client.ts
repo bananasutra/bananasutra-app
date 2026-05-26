@@ -50,7 +50,7 @@ const parseAnthropicSseData = (line: string): string | null => {
     delta?: { type?: string; text?: string };
   };
   if (typed.type === "content_block_delta" && typed.delta?.type === "text_delta") {
-    return typed.delta.text ?? "";
+    return (typed.delta.text ?? "").replace(/\s*—\s*/g, ", ");
   }
   return null;
 };
@@ -65,7 +65,7 @@ export const streamClaudeResponse = async (request: ClaudeStreamRequest): Promis
     },
     body: JSON.stringify({
       model: request.model,
-      max_tokens: request.maxTokens ?? 700,
+      max_tokens: request.maxTokens ?? 1000,
       stream: true,
       system: request.system,
       messages: request.messages,

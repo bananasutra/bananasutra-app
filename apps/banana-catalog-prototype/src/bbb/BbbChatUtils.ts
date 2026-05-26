@@ -1,0 +1,149 @@
+export type Role = 'user' | 'assistant'
+
+export type ChatMessage = {
+  role: Role
+  content: string
+}
+
+export type BbbSseEvent = {
+  event: string
+  payload: unknown
+}
+
+export type MessageSegment =
+  | { type: 'text'; text: string }
+  | { type: 'link'; text: string; href: string; external: boolean }
+
+export type InlineTextSegment = {
+  text: string
+  bold: boolean
+}
+
+export function parseSseChunk(rawChunk: string): BbbSseEvent[] {
+  const events: BbbSseEvent[] = []
+  const blocks = rawChunk.split('\n\n')
+  for (const block of blocks) {
+    const trimmed = block.trim()
+    if (!trimmed) continue
+    const lines = trimmed.split('\n')
+    let event = 'message'
+    const dataLines: string[] = []
+    for (const line of lines) {
+      if (line.startsWith('event:')) {
+        event = line.slice('event:'.length).trim()
+      } else if (line.startsWith('data:')) {
+        dataLines.push(line.slice('data:'.length).trim())
+      }
+    }
+    if (!dataLines.length) continue
+    try {
+      events.push({ event, payload: JSON.parse(dataLines.join('\n')) })
+    } catch {
+      // Skip malformed payloads so one noisy chunk does not kill the stream.
+    }
+  }
+  return events
+}
+
+export function updateLastAssistant(messages: ChatMessage[], nextText: string): ChatMessage[] {
+  if (!messages.length || messages[messages.length - 1]?.role !== 'assistant') {
+    return [...messages, { role: 'assistant', content: nextText }]
+  }
+  const next = [...messages]
+  const last = next[next.length - 1]
+  next[next.length - 1] = { ...last, content: nextText }
+  return next
+}
+
+export function capConversationHistory(messages: ChatMessage[], maxUserTurns = 5): ChatMessage[] {
+  const nonEmpty = messages.filter((message) => message.content.trim().length > 0)
+  if (maxUserTurns < 1) return nonEmpty
+
+  let userTurnCount = 0
+  let startIndex = 0
+  for (let idx = nonEmpty.length - 1; idx >= 0; idx -= 1) {
+    if (nonEmpty[idx]?.role === 'user') {
+      userTurnCount += 1
+      if (userTurnCount > maxUserTurns) {
+        startIndex = idx + 1
+        break
+      }
+    }
+  }
+  const capped = nonEmpty.slice(startIndex)
+  const trimmedWindow = startIndex > 0
+  while (
+    trimmedWindow &&
+    capped.length > 1 &&
+    capped[0]?.role === 'assistant' &&
+    capped.some((message) => message.role === 'user')
+  ) {
+    capped.shift()
+  }
+  return capped
+}
+
+function classifyHref(href: string): { safe: boolean; external: boolean } {
+  const trimmed = href.trim()
+  if (/^\/[^\s]*$/.test(trimmed)) return { safe: true, external: false }
+  if (/^https?:\/\/[^\s]+$/i.test(trimmed)) return { safe: true, external: true }
+  return { safe: false, external: false }
+}
+
+export function parseInlineEmphasis(text: string): InlineTextSegment[] {
+  const segments: InlineTextSegment[] = []
+  const pattern = /(\*\*([^*]+)\*\*|__([^_]+)__)/g
+  let cursor = 0
+  let match = pattern.exec(text)
+
+  while (match) {
+    const raw = match[0]
+    const boldText = match[2] ?? match[3] ?? ''
+    const matchStart = match.index
+    const matchEnd = matchStart + raw.length
+    if (matchStart > cursor) {
+      segments.push({ text: text.slice(cursor, matchStart), bold: false })
+    }
+    segments.push({ text: boldText, bold: true })
+    cursor = matchEnd
+    match = pattern.exec(text)
+  }
+
+  if (cursor < text.length) {
+    segments.push({ text: text.slice(cursor), bold: false })
+  }
+  return segments.length ? segments : [{ text, bold: false }]
+}
+
+export function parseMarkdownLinks(text: string): MessageSegment[] {
+  const segments: MessageSegment[] = []
+  const pattern = /\[([^\]]+)\]\(([^)\s]+)\)/g
+  let cursor = 0
+  let match = pattern.exec(text)
+
+  while (match) {
+    const [raw, label, href] = match
+    const matchStart = match.index
+    const matchEnd = matchStart + raw.length
+
+    if (matchStart > cursor) {
+      segments.push({ type: 'text', text: text.slice(cursor, matchStart) })
+    }
+
+    const hrefMeta = classifyHref(href)
+    if (hrefMeta.safe) {
+      segments.push({ type: 'link', text: label, href, external: hrefMeta.external })
+    } else {
+      segments.push({ type: 'text', text: raw })
+    }
+
+    cursor = matchEnd
+    match = pattern.exec(text)
+  }
+
+  if (cursor < text.length) {
+    segments.push({ type: 'text', text: text.slice(cursor) })
+  }
+
+  return segments.length ? segments : [{ type: 'text', text }]
+}
