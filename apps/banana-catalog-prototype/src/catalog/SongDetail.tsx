@@ -292,6 +292,7 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
         listBreadcrumbHref={listBreadcrumbHref}
         listBreadcrumbLabel={listBreadcrumbLabel}
         songCatalogByLyricsId={songCatalogByLyricsId}
+        detailByLyricsId={detailMap}
       />
     </>
   )
@@ -305,6 +306,7 @@ type SongDetailLoadedProps = {
   listBreadcrumbHref: string
   listBreadcrumbLabel: string
   songCatalogByLyricsId: Map<string, SongCatalogItem>
+  detailByLyricsId: Record<string, SongDetailRecord>
 }
 
 function SongDetailLoaded({
@@ -315,6 +317,7 @@ function SongDetailLoaded({
   listBreadcrumbHref,
   listBreadcrumbLabel,
   songCatalogByLyricsId,
+  detailByLyricsId,
 }: SongDetailLoadedProps) {
   const navigate = useNavigate()
   const location = useLocation()
@@ -370,13 +373,46 @@ function SongDetailLoaded({
   }, [detail, activeTrackGenre])
 
   const orderedRelatedSongs = useMemo(() => {
+    const hasAnySoundCloudSignal = (
+      songRow: SongCatalogItem | undefined,
+      detailRow: SongDetailRecord | undefined,
+      relatedRow: SongDetailRecord['related_songs'][number],
+    ): boolean => {
+      if (songRow && browseRowHasAudioSection(songRow)) return true
+      if (relatedRow.has_in_app_playback || relatedRow.has_sc_catalog_listen) return true
+      if (detailRow) {
+        if ((detailRow.primary_ep_url || '').trim()) return true
+        if ((detailRow.fallback_sc_url || '').trim()) return true
+        if ((detailRow.sc_catalog_listen_url || '').trim()) return true
+        if (detailRow.tracks.some((t) => (t.sc_url || '').trim())) return true
+      }
+      return false
+    }
+    const mediaTier = (
+      songRow: SongCatalogItem | undefined,
+      detailRow: SongDetailRecord | undefined,
+      relatedRow: SongDetailRecord['related_songs'][number],
+    ): number => {
+      const inAppAudio = Boolean(
+        songRow?.has_in_app_playback ||
+          songRow?.has_sc_catalog_listen ||
+          relatedRow.has_in_app_playback ||
+          relatedRow.has_sc_catalog_listen,
+      )
+      if (inAppAudio) return 0
+      const hasAnyMedia = hasAnySoundCloudSignal(songRow, detailRow, relatedRow) || Boolean(songRow?.has_youtube_video || relatedRow.has_youtube_video)
+      if (hasAnyMedia) return 1
+      return 2
+    }
     const related = [...detail.related_songs]
     related.sort((a, b) => {
       const aRow = songCatalogByLyricsId.get(a.lyrics_id)
       const bRow = songCatalogByLyricsId.get(b.lyrics_id)
-      const aHasAudio = aRow ? browseRowHasAudioSection(aRow) : Boolean(a.has_in_app_playback || a.has_sc_catalog_listen)
-      const bHasAudio = bRow ? browseRowHasAudioSection(bRow) : Boolean(b.has_in_app_playback || b.has_sc_catalog_listen)
-      if (aHasAudio !== bHasAudio) return aHasAudio ? -1 : 1
+      const aDetail = detailByLyricsId[a.lyrics_id]
+      const bDetail = detailByLyricsId[b.lyrics_id]
+      const aTier = mediaTier(aRow, aDetail, a)
+      const bTier = mediaTier(bRow, bDetail, b)
+      if (aTier !== bTier) return aTier - bTier
 
       const aLikes = aRow?.aggregate_like_count ?? 0
       const bLikes = bRow?.aggregate_like_count ?? 0
@@ -389,7 +425,7 @@ function SongDetailLoaded({
       return a.lyrics_title.localeCompare(b.lyrics_title, undefined, { sensitivity: 'base' })
     })
     return related
-  }, [detail.related_songs, songCatalogByLyricsId])
+  }, [detail.related_songs, songCatalogByLyricsId, detailByLyricsId])
 
   const defaultTrack = useMemo(
     () => firstInAppPlayableTrack(orderedTracks, activeTrackGenre),
