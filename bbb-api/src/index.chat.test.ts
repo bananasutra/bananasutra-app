@@ -23,6 +23,15 @@ const makeChatRequest = (): Request =>
     }),
   });
 
+const makeLocalChatRequest = (): Request =>
+  new Request("http://localhost:8787/api/bbb", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      messages: [{ role: "user", content: "hi" }],
+    }),
+  });
+
 test("chat route rejects missing Origin by default", async () => {
   const response = await fetchHandler(
     makeChatRequest(),
@@ -51,7 +60,7 @@ test("chat route allows missing Origin override and sends cached static system b
 
   try {
     const response = await fetchHandler(
-      makeChatRequest(),
+      makeLocalChatRequest(),
       {
         ANTHROPIC_API_KEY: "test-key",
         BBB_ALLOW_NO_ORIGIN: "true",

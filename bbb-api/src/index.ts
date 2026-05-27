@@ -177,11 +177,13 @@ const queueChatLog = (
 
 const handler: ExportedHandler<Env> = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const url = new URL(request.url);
     const origin = request.headers.get("origin");
     const allowedOrigins = getAllowedOrigins(env);
     const corsOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
     const corsHeaders = getCorsHeaders(corsOrigin);
-    const allowNoOrigin = env.BBB_ALLOW_NO_ORIGIN === "true";
+    const isLocalRequest = url.hostname === "localhost" || url.hostname === "127.0.0.1";
+    const allowNoOrigin = isLocalRequest && env.BBB_ALLOW_NO_ORIGIN === "true";
 
     if ((!origin && !allowNoOrigin) || (origin && !allowedOrigins.includes(origin))) {
       return json(403, { error: "Origin not allowed." }, corsHeaders);
@@ -191,7 +193,6 @@ const handler: ExportedHandler<Env> = {
       return new Response(null, { status: 204, headers: corsHeaders });
     }
 
-    const url = new URL(request.url);
     if (isAdminLogsEndpoint(url) || isAdminCleanupEndpoint(url)) {
       if (!isAuthorizedAdmin(request, env.BBB_ADMIN_TOKEN)) {
         return json(401, { error: "Unauthorized." }, corsHeaders);
