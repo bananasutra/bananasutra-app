@@ -6,7 +6,8 @@ export interface ChatMessage {
 export interface ClaudeStreamRequest {
   apiKey: string;
   model: string;
-  system: string;
+  systemStatic: string;
+  systemDynamic?: string;
   messages: ChatMessage[];
   maxTokens?: number;
 }
@@ -23,6 +24,14 @@ export class ClaudeUpstreamError extends Error {
 }
 
 const TEXT_ENCODER = new TextEncoder();
+
+interface ClaudeSystemTextBlock {
+  type: "text";
+  text: string;
+  cache_control?: {
+    type: "ephemeral";
+  };
+}
 
 const safeParseJson = (raw: string): unknown => {
   try {
@@ -56,6 +65,20 @@ const parseAnthropicSseData = (line: string): string | null => {
 };
 
 export const streamClaudeResponse = async (request: ClaudeStreamRequest): Promise<ReadableStream<Uint8Array>> => {
+  const system: ClaudeSystemTextBlock[] = [
+    {
+      type: "text",
+      text: request.systemStatic,
+      cache_control: { type: "ephemeral" },
+    },
+  ];
+  if (request.systemDynamic) {
+    system.push({
+      type: "text",
+      text: request.systemDynamic,
+    });
+  }
+
   const upstreamResponse = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -67,7 +90,7 @@ export const streamClaudeResponse = async (request: ClaudeStreamRequest): Promis
       model: request.model,
       max_tokens: request.maxTokens ?? 1000,
       stream: true,
-      system: request.system,
+      system,
       messages: request.messages,
     }),
   });

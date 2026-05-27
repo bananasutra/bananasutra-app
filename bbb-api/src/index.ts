@@ -7,6 +7,7 @@ interface Env {
   ANTHROPIC_API_KEY?: string;
   BBB_MODEL?: string;
   BBB_ALLOWED_ORIGINS?: string;
+  BBB_ALLOW_NO_ORIGIN?: string;
   BBB_MAX_REQUESTS_PER_WINDOW?: string;
   BBB_RATE_LIMIT_WINDOW_SEC?: string;
 }
@@ -115,8 +116,9 @@ const handler: ExportedHandler<Env> = {
     const allowedOrigins = getAllowedOrigins(env);
     const corsOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
     const corsHeaders = getCorsHeaders(corsOrigin);
+    const allowNoOrigin = env.BBB_ALLOW_NO_ORIGIN === "true";
 
-    if (origin && !allowedOrigins.includes(origin)) {
+    if ((!origin && !allowNoOrigin) || (origin && !allowedOrigins.includes(origin))) {
       return json(403, { error: "Origin not allowed." }, corsHeaders);
     }
 
@@ -161,14 +163,14 @@ const handler: ExportedHandler<Env> = {
     }
 
     try {
-      const baseSystem = buildSystemPrompt(LIBRARY_INJECTS);
-      const recommendationContext = buildRecommendationContext(messages, LIBRARY_INJECTS, pageContext);
-      const system = recommendationContext ? `${baseSystem}\n\n${recommendationContext}` : baseSystem;
+      const systemStatic = buildSystemPrompt(LIBRARY_INJECTS);
+      const systemDynamic = buildRecommendationContext(messages, LIBRARY_INJECTS, pageContext);
       const model = env.BBB_MODEL?.trim() || DEFAULT_MODEL;
       const stream = await streamClaudeResponse({
         apiKey,
         model,
-        system,
+        systemStatic,
+        systemDynamic: systemDynamic || undefined,
         messages,
       });
 
