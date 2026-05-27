@@ -7,3 +7,9 @@ BBB_MODEL = "claude-haiku-4-5-20251001"
 BBB_ALLOWED_ORIGINS = "https://bananasutra.com,https://www.bananasutra.com,http://localhost:5173"
 BBB_MAX_REQUESTS_PER_WINDOW = "20"
 BBB_RATE_LIMIT_WINDOW_SEC = "3600"
+BBB_LOG_RETENTION_DAYS = "30"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bbb-logs"
+database_id = "2b9df1ae-2fa6-4b42-876b-ed0a92c4c41c"

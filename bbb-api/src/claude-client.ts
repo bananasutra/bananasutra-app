@@ -6,9 +6,16 @@ export interface ChatMessage {
 export interface ClaudeStreamRequest {
   apiKey: string;
   model: string;
-  system: string;
+  systemStatic: string;
+  systemDynamic?: string;
   messages: ChatMessage[];
   maxTokens?: number;
+  onFinish?: (result: ClaudeStreamFinishResult) => void;
+}
+
+export interface ClaudeStreamFinishResult {
+  assistantText: string;
+  streamError: string | null;
 }
 
 export class ClaudeUpstreamError extends Error {
@@ -23,6 +30,14 @@ export class ClaudeUpstreamError extends Error {
 }
 
 const TEXT_ENCODER = new TextEncoder();
+
+interface ClaudeSystemTextBlock {
+  type: "text";
+  text: string;
+  cache_control?: {
+    type: "ephemeral";
+  };
+}
 
 const safeParseJson = (raw: string): unknown => {
   try {
@@ -56,6 +71,20 @@ const parseAnthropicSseData = (line: string): string | null => {
 };
 
 export const streamClaudeResponse = async (request: ClaudeStreamRequest): Promise<ReadableStream<Uint8Array>> => {
+  const system: ClaudeSystemTextBlock[] = [
+    {
+      type: "text",
+      text: request.systemStatic,
+      cache_control: { type: "ephemeral" },
+    },
+  ];
+  if (request.systemDynamic) {
+    system.push({
+      type: "text",
+      text: request.systemDynamic,
+    });
+  }
+
   const upstreamResponse = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -67,7 +96,7 @@ export const streamClaudeResponse = async (request: ClaudeStreamRequest): Promis
       model: request.model,
       max_tokens: request.maxTokens ?? 1000,
       stream: true,
-      system: request.system,
+      system,
       messages: request.messages,
     }),
   });
@@ -83,6 +112,14 @@ export const streamClaudeResponse = async (request: ClaudeStreamRequest): Promis
   return new ReadableStream<Uint8Array>({
     async start(controller) {
       let pending = "";
+      let assistantText = "";
+      const notifyFinish = (streamError: string | null) => {
+        try {
+          request.onFinish?.({ assistantText, streamError });
+        } catch {
+          // Do not allow optional callback failures to affect the stream.
+        }
+      };
       try {
         while (true) {
           const { value, done } = await reader.read();
@@ -94,15 +131,19 @@ export const streamClaudeResponse = async (request: ClaudeStreamRequest): Promis
           for (const line of lines) {
             const text = parseAnthropicSseData(line);
             if (text === null) continue;
+            assistantText += text;
             controller.enqueue(toEventLine("token", { text }));
           }
         }
+        notifyFinish(null);
         controller.enqueue(toEventLine("done", { ok: true }));
         controller.close();
       } catch (error) {
+        const message = error instanceof Error ? error.message : "Unknown streaming error";
+        notifyFinish(message);
         controller.enqueue(
           toEventLine("error", {
-            message: error instanceof Error ? error.message : "Unknown streaming error",
+            message,
           }),
         );
         controller.close();

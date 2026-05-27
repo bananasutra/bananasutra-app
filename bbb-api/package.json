@@ -9,8 +9,13 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/*.test.ts",
     "test:prompt": "tsx --test src/system-prompt.test.ts src/recommendation-context.test.ts",
-    "build:library": "tsx scripts/build-library-data.ts"
+    "build:library": "tsx scripts/build-library-data.ts",
+    "logs:local": "bash scripts/bbb-logs.sh logs local",
+    "logs:remote": "bash scripts/bbb-logs.sh logs remote",
+    "logs:cleanup:local": "bash scripts/bbb-logs.sh cleanup local",
+    "logs:cleanup:remote": "bash scripts/bbb-logs.sh cleanup remote"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260511.1",
