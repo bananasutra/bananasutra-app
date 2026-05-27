@@ -10,6 +10,12 @@ export interface ClaudeStreamRequest {
   systemDynamic?: string;
   messages: ChatMessage[];
   maxTokens?: number;
+  onFinish?: (result: ClaudeStreamFinishResult) => void;
+}
+
+export interface ClaudeStreamFinishResult {
+  assistantText: string;
+  streamError: string | null;
 }
 
 export class ClaudeUpstreamError extends Error {
@@ -106,6 +112,14 @@ export const streamClaudeResponse = async (request: ClaudeStreamRequest): Promis
   return new ReadableStream<Uint8Array>({
     async start(controller) {
       let pending = "";
+      let assistantText = "";
+      const notifyFinish = (streamError: string | null) => {
+        try {
+          request.onFinish?.({ assistantText, streamError });
+        } catch {
+          // Do not allow optional callback failures to affect the stream.
+        }
+      };
       try {
         while (true) {
           const { value, done } = await reader.read();
@@ -117,15 +131,19 @@ export const streamClaudeResponse = async (request: ClaudeStreamRequest): Promis
           for (const line of lines) {
             const text = parseAnthropicSseData(line);
             if (text === null) continue;
+            assistantText += text;
             controller.enqueue(toEventLine("token", { text }));
           }
         }
+        notifyFinish(null);
         controller.enqueue(toEventLine("done", { ok: true }));
         controller.close();
       } catch (error) {
+        const message = error instanceof Error ? error.message : "Unknown streaming error";
+        notifyFinish(message);
         controller.enqueue(
           toEventLine("error", {
-            message: error instanceof Error ? error.message : "Unknown streaming error",
+            message,
           }),
         );
         controller.close();

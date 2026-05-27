@@ -1,15 +1,26 @@
-import { ClaudeUpstreamError, streamClaudeResponse, type ChatMessage } from "./claude-client";
+import {
+  ClaudeUpstreamError,
+  streamClaudeResponse,
+  type ChatMessage,
+  type ClaudeStreamFinishResult,
+} from "./claude-client";
 import { LIBRARY_INJECTS } from "./library-data";
 import { buildRecommendationContext, type BbbPageContext } from "./recommendation-context";
 import { buildSystemPrompt } from "./system-prompt";
+import { isAuthorizedAdmin } from "./admin-auth";
+import { cleanupOldLogs, insertBbbLog, parseAdminLogsQuery, queryBbbLogs, type BbbLogStatus } from "./logging";
 
 interface Env {
+  DB?: D1Database;
   ANTHROPIC_API_KEY?: string;
   BBB_MODEL?: string;
   BBB_ALLOWED_ORIGINS?: string;
   BBB_ALLOW_NO_ORIGIN?: string;
   BBB_MAX_REQUESTS_PER_WINDOW?: string;
   BBB_RATE_LIMIT_WINDOW_SEC?: string;
+  BBB_ADMIN_TOKEN?: string;
+  BBB_LOG_IP_SALT?: string;
+  BBB_LOG_RETENTION_DAYS?: string;
 }
 
 interface RequestPayload {
@@ -25,8 +36,6 @@ interface RateLimitEntry {
 const MEMORY_RATE_LIMIT = new Map<string, RateLimitEntry>();
 const DEFAULT_MODEL = "claude-haiku-4-5-20251001";
 const DEFAULT_ALLOWED_ORIGINS = ["https://bananasutra.com", "http://localhost:5173"];
-const TEXT_ENCODER = new TextEncoder();
-
 const json = (status: number, body: unknown, headers: HeadersInit = {}): Response =>
   new Response(JSON.stringify(body), {
     status,
@@ -47,7 +56,7 @@ const getAllowedOrigins = (env: Env): string[] => {
 
 const getCorsHeaders = (origin: string): HeadersInit => ({
   "access-control-allow-origin": origin,
-  "access-control-allow-methods": "POST,OPTIONS",
+  "access-control-allow-methods": "GET,POST,OPTIONS",
   "access-control-allow-headers": "content-type,authorization",
   "access-control-max-age": "86400",
   vary: "Origin",
@@ -81,6 +90,8 @@ const checkRateLimit = (ip: string, env: Env): { allowed: boolean; retryAfterSec
 };
 
 const isChatEndpoint = (url: URL): boolean => url.pathname === "/api/bbb" || url.pathname === "/";
+const isAdminLogsEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/logs";
+const isAdminCleanupEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/logs/cleanup";
 
 const validateMessages = (payload: unknown): ChatMessage[] | null => {
   if (!payload || typeof payload !== "object") return null;
@@ -110,8 +121,62 @@ const validatePageContext = (payload: unknown): BbbPageContext | undefined => {
   return { pathname, ...(typeof search === "string" ? { search } : {}) };
 };
 
+const getLatestUserPrompt = (messages: ChatMessage[]): string =>
+  [...messages].reverse().find((message) => message.role === "user")?.content ?? "";
+
+const getRetentionDays = (env: Env): number => {
+  const parsed = Number.parseInt(env.BBB_LOG_RETENTION_DAYS ?? "30", 10);
+  if (!Number.isFinite(parsed) || parsed < 1) return 30;
+  return parsed;
+};
+
+const toLogStatusFromStreamError = (streamError: string | null): BbbLogStatus => {
+  if (!streamError) return "ok";
+  return /abort/i.test(streamError) ? "aborted" : "network_error";
+};
+
+const hasLogDatabase = (env: Env): env is Env & { DB: D1Database } => Boolean(env.DB);
+
+const queueChatLog = (
+  ctx: ExecutionContext,
+  env: Env,
+  input: {
+    requestId: string;
+    startedAt: number;
+    ip: string;
+    origin: string | null;
+    pageContext?: BbbPageContext;
+    model: string;
+    latestUserPrompt: string;
+    messageCount: number;
+    status: BbbLogStatus;
+    assistantReply?: string;
+    errorMessage?: string;
+  },
+): void => {
+  if (!hasLogDatabase(env)) return;
+  ctx.waitUntil(
+    insertBbbLog(env.DB, {
+      requestId: input.requestId,
+      createdAt: Date.now(),
+      origin: input.origin,
+      pathname: input.pageContext?.pathname ?? null,
+      search: input.pageContext?.search ?? null,
+      ip: input.ip,
+      ipSalt: env.BBB_LOG_IP_SALT,
+      model: input.model,
+      status: input.status,
+      latencyMs: Date.now() - input.startedAt,
+      userPrompt: input.latestUserPrompt,
+      assistantReply: input.assistantReply ?? null,
+      errorMessage: input.errorMessage ?? null,
+      messageCount: input.messageCount,
+    }).catch(() => undefined),
+  );
+};
+
 const handler: ExportedHandler<Env> = {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const origin = request.headers.get("origin");
     const allowedOrigins = getAllowedOrigins(env);
     const corsOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
@@ -127,15 +192,58 @@ const handler: ExportedHandler<Env> = {
     }
 
     const url = new URL(request.url);
+    if (isAdminLogsEndpoint(url) || isAdminCleanupEndpoint(url)) {
+      if (!isAuthorizedAdmin(request, env.BBB_ADMIN_TOKEN)) {
+        return json(401, { error: "Unauthorized." }, corsHeaders);
+      }
+      if (!hasLogDatabase(env)) {
+        return json(500, { error: "Server missing DB binding." }, corsHeaders);
+      }
+
+      if (isAdminLogsEndpoint(url)) {
+        if (request.method !== "GET") {
+          return json(405, { error: "Method not allowed. Use GET." }, corsHeaders);
+        }
+        const parsed = parseAdminLogsQuery(url);
+        if (!parsed.ok) {
+          return json(400, { error: parsed.error }, corsHeaders);
+        }
+        const logs = await queryBbbLogs(env.DB, parsed.value);
+        const nextBefore = logs.length ? logs[logs.length - 1]?.created_at ?? null : null;
+        return json(200, { logs, nextBefore }, corsHeaders);
+      }
+
+      if (request.method !== "POST") {
+        return json(405, { error: "Method not allowed. Use POST." }, corsHeaders);
+      }
+      const retentionDays = getRetentionDays(env);
+      const deleted = await cleanupOldLogs(env.DB, retentionDays);
+      return json(200, { ok: true, deleted, retentionDays }, corsHeaders);
+    }
+
     if (!isChatEndpoint(url)) return json(404, { error: "Not found." }, corsHeaders);
     if (request.method !== "POST") return json(405, { error: "Method not allowed. Use POST." }, corsHeaders);
 
     const apiKey = env.ANTHROPIC_API_KEY?.trim();
     if (!apiKey) return json(500, { error: "Server missing ANTHROPIC_API_KEY secret." }, corsHeaders);
 
+    const requestId = crypto.randomUUID();
+    const startedAt = Date.now();
     const ip = getClientIp(request);
     const rate = checkRateLimit(ip, env);
+    const model = env.BBB_MODEL?.trim() || DEFAULT_MODEL;
     if (!rate.allowed) {
+      queueChatLog(ctx, env, {
+        requestId,
+        startedAt,
+        ip,
+        origin,
+        model,
+        latestUserPrompt: "",
+        messageCount: 0,
+        status: "validation_error",
+        errorMessage: "rate_limit_reached",
+      });
       return json(
         429,
         { error: "Rate limit reached. Please retry soon." },
@@ -147,12 +255,35 @@ const handler: ExportedHandler<Env> = {
     try {
       payload = await request.json();
     } catch {
+      queueChatLog(ctx, env, {
+        requestId,
+        startedAt,
+        ip,
+        origin,
+        model,
+        latestUserPrompt: "",
+        messageCount: 0,
+        status: "validation_error",
+        errorMessage: "invalid_json",
+      });
       return json(400, { error: "Invalid JSON body." }, corsHeaders);
     }
 
     const messages = validateMessages(payload);
     const pageContext = validatePageContext(payload);
     if (!messages) {
+      queueChatLog(ctx, env, {
+        requestId,
+        startedAt,
+        ip,
+        origin,
+        pageContext,
+        model,
+        latestUserPrompt: "",
+        messageCount: 0,
+        status: "validation_error",
+        errorMessage: "invalid_messages",
+      });
       return json(
         400,
         {
@@ -161,18 +292,50 @@ const handler: ExportedHandler<Env> = {
         corsHeaders,
       );
     }
+    const latestUserPrompt = getLatestUserPrompt(messages);
 
     try {
       const systemStatic = buildSystemPrompt(LIBRARY_INJECTS);
       const systemDynamic = buildRecommendationContext(messages, LIBRARY_INJECTS, pageContext);
-      const model = env.BBB_MODEL?.trim() || DEFAULT_MODEL;
+      let resolveStreamResult: ((value: ClaudeStreamFinishResult) => void) | null = null;
+      const streamResultPromise = new Promise<ClaudeStreamFinishResult>((resolve) => {
+        resolveStreamResult = resolve;
+      });
       const stream = await streamClaudeResponse({
         apiKey,
         model,
         systemStatic,
         systemDynamic: systemDynamic || undefined,
         messages,
+        onFinish: (result) => {
+          resolveStreamResult?.(result);
+          resolveStreamResult = null;
+        },
       });
+      if (hasLogDatabase(env)) {
+        ctx.waitUntil(
+          streamResultPromise
+            .then((result) =>
+              insertBbbLog(env.DB, {
+                requestId,
+                createdAt: Date.now(),
+                origin,
+                pathname: pageContext?.pathname ?? null,
+                search: pageContext?.search ?? null,
+                ip,
+                ipSalt: env.BBB_LOG_IP_SALT,
+                model,
+                status: toLogStatusFromStreamError(result.streamError),
+                latencyMs: Date.now() - startedAt,
+                userPrompt: latestUserPrompt,
+                assistantReply: result.assistantText,
+                errorMessage: result.streamError,
+                messageCount: messages.length,
+              }),
+            )
+            .catch(() => undefined),
+        );
+      }
 
       return new Response(stream, {
         status: 200,
@@ -185,6 +348,18 @@ const handler: ExportedHandler<Env> = {
       });
     } catch (error) {
       if (error instanceof ClaudeUpstreamError) {
+        queueChatLog(ctx, env, {
+          requestId,
+          startedAt,
+          ip,
+          origin,
+          pageContext,
+          model,
+          latestUserPrompt,
+          messageCount: messages.length,
+          status: "upstream_error",
+          errorMessage: error.detail,
+        });
         const upstreamStatus = error.status >= 500 ? 502 : 500;
         return json(
           upstreamStatus,
@@ -194,6 +369,18 @@ const handler: ExportedHandler<Env> = {
           corsHeaders,
         );
       }
+      queueChatLog(ctx, env, {
+        requestId,
+        startedAt,
+        ip,
+        origin,
+        pageContext,
+        model,
+        latestUserPrompt,
+        messageCount: messages.length,
+        status: "network_error",
+        errorMessage: error instanceof Error ? error.message : "unknown_error",
+      });
       return json(
         500,
         {
