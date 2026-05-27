@@ -147,6 +147,7 @@ export function buildBrowsePathForFacet(key: FilterFacetKey, value: string): str
 }
 
 const TRACKS_FACET_PARAMS: Record<TracksFacetFilterKey, string> = {
+  sutra: 'sutra',
   primary_genre: 'primary_genre',
   secondary_genre: 'secondary_genre',
   mood: 'mood',
@@ -180,7 +181,7 @@ function serializeTrackSort(mode: TrackSortMode): string {
 
 /** Header browse → `/tracks` (single facet; multi-facet uses `buildTracksBrowsePathFull`). */
 export function buildTracksBrowsePath(
-  param: 'primary_genre' | 'secondary_genre' | 'mood' | 'instrument' | 'tempo_feel',
+  param: 'sutra' | 'primary_genre' | 'secondary_genre' | 'mood' | 'instrument' | 'tempo_feel',
   value: string,
 ): string {
   const q = new URLSearchParams()

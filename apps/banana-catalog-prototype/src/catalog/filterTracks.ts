@@ -17,6 +17,7 @@ function scalarInSet(set: Set<string>, value: string): boolean {
 }
 
 export function trackMatchesFilters(track: TrackCatalogItem, f: TracksFilterState): boolean {
+  if (!scalarInSet(f.sutra, (track.sutra || '').trim())) return false
   if (!scalarInSet(f.primary_genre, track.primary_genre)) return false
   if (f.secondary_genre.size > 0) {
     const secSingle = (track.secondary_genre || '').trim()

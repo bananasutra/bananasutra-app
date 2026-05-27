@@ -163,11 +163,27 @@ def confidence_bucket(score):
     return "LOW"
 
 
-def write_csv(path, fields, rows):
-    with open(path, "w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+def sanitize_csv_cell(value):
+    """Normalize cell values so downstream CSV importers stay happy."""
+    text = "" if value is None else str(value)
+    # Google import can fail on embedded NUL and Unicode line separators.
+    text = text.replace("\x00", "")
+    text = text.replace("\u2028", " ").replace("\u2029", " ")
+    # Flatten hard line breaks in cell content for import robustness.
+    text = text.replace("\r\n", " ").replace("\r", " ").replace("\n", " ")
+    return text.strip()
+
+
+def write_csv(path, fields, rows, *, utf8_bom=False):
+    encoding = "utf-8-sig" if utf8_bom else "utf-8"
+    with open(path, "w", encoding=encoding, newline="") as f:
+        w = csv.DictWriter(
+            f, fieldnames=fields, extrasaction="ignore", lineterminator="\n")
         w.writeheader()
-        w.writerows(rows)
+        w.writerows(
+            {k: sanitize_csv_cell(r.get(k, "")) for k in fields}
+            for r in rows
+        )
 
 
 def dated_copy(path):
@@ -514,7 +530,7 @@ write_csv(OUT_NEW_QA, [
     "auto_applied", "yt_url", "CORRECT_LYRICS_ID",
     "ytvideo_in_app", "CORRECT_ytvideo_in_app",
     "format", "CORRECT_format",
-], new_qa_rows)
+], new_qa_rows, utf8_bom=True)
 print(f"  {OUT_NEW_QA.name} ({len(new_qa_rows)} rows)")
 
 write_csv(OUT_DRIFT, [
