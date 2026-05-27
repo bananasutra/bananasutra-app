@@ -49,9 +49,11 @@ shift 2
 case "${TARGET}" in
   local)
     BASE_URL="http://localhost:8787"
+    ORIGIN_HEADER="Origin: http://localhost:5174"
     ;;
   remote)
     BASE_URL="https://bbb-api.itsbananasutra.workers.dev"
+    ORIGIN_HEADER="Origin: https://bananasutra.com"
     ;;
   *)
     echo "Unknown target: ${TARGET}. Use local or remote."
@@ -73,6 +75,7 @@ fi
 if [[ "${ACTION}" == "cleanup" ]]; then
   curl -sS -X POST "${BASE_URL}/api/bbb/admin/logs/cleanup" \
     -H "Authorization: Bearer ${TOKEN}" \
+    -H "${ORIGIN_HEADER}" \
     -H "Content-Type: application/json"
   echo
   exit 0
@@ -144,7 +147,7 @@ if [[ -n "${BEFORE}" ]]; then
   URL="${URL}&before=${BEFORE}"
 fi
 
-RAW="$(curl -sS "${URL}" -H "Authorization: Bearer ${TOKEN}")"
+RAW="$(curl -sS "${URL}" -H "Authorization: Bearer ${TOKEN}" -H "${ORIGIN_HEADER}")"
 
 FORMAT="${BBB_LOG_FORMAT:-pretty}"
 if [[ "${FORMAT}" == "json" ]]; then
