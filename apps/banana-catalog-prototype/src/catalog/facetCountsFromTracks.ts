@@ -3,6 +3,7 @@ import type { FacetEntry, TrackCatalogItem, TracksFacetFilterKey } from './types
 
 /** Facet value counts for `/tracks` filter sidebar (full flat catalog). */
 export function facetCountsFromTracks(tracks: TrackCatalogItem[]): Record<TracksFacetFilterKey, FacetEntry[]> {
+  const sutra = new Map<string, number>()
   const primary = new Map<string, number>()
   const secondary = new Map<string, number>()
   const mood = new Map<string, number>()
@@ -10,6 +11,8 @@ export function facetCountsFromTracks(tracks: TrackCatalogItem[]): Record<Tracks
   const tempo = new Map<string, number>()
 
   for (const t of tracks) {
+    const s = (t.sutra || '').trim()
+    if (s) sutra.set(s, (sutra.get(s) ?? 0) + 1)
     const pg = (t.primary_genre || '').trim()
     if (pg) primary.set(pg, (primary.get(pg) ?? 0) + 1)
     const secSeen = new Set<string>()
@@ -33,6 +36,7 @@ export function facetCountsFromTracks(tracks: TrackCatalogItem[]): Record<Tracks
   }
 
   return {
+    sutra: facetEntriesFromCountMap(sutra, { sensitivity: 'base' }),
     primary_genre: facetEntriesFromCountMap(primary, { sensitivity: 'base' }),
     secondary_genre: facetEntriesFromCountMap(secondary, { sensitivity: 'base' }),
     mood: facetEntriesFromCountMap(mood, { sensitivity: 'base' }),

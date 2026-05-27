@@ -158,6 +158,7 @@ export type FilterFacetKey = keyof FilterState
 
 /** `/tracks` URL filter params (`primary_genre`, `secondary_genre`, …). */
 export type TracksFacetFilterKey =
+  | 'sutra'
   | 'primary_genre'
   | 'secondary_genre'
   | 'mood'
@@ -170,6 +171,7 @@ export type TrackSortMode = 'newest' | 'plays' | 'likes' | 'engagement' | 'title
 
 export function emptyTracksFilterState(): TracksFilterState {
   return {
+    sutra: new Set(),
     primary_genre: new Set(),
     secondary_genre: new Set(),
     mood: new Set(),
