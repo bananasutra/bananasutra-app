@@ -1,0 +1,63 @@
+name: Deploy BBB API (Cloudflare)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "bbb-api/**"
+      - ".github/workflows/deploy-bbb-api.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-bbb-api
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: bbb-api/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: bbb-api
+
+      - name: Typecheck
+        run: npm run typecheck
+        working-directory: bbb-api
+
+      - name: Test
+        run: npm run test
+        working-directory: bbb-api
+
+      - name: Verify Cloudflare credentials
+        working-directory: bbb-api
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN is empty. Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          if [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::CLOUDFLARE_ACCOUNT_ID is empty. Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          npx wrangler whoami
+
+      - name: Deploy to Cloudflare
+        working-directory: bbb-api
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npm run deploy
