@@ -369,6 +369,28 @@ function SongDetailLoaded({
     })
   }, [detail, activeTrackGenre])
 
+  const orderedRelatedSongs = useMemo(() => {
+    const related = [...detail.related_songs]
+    related.sort((a, b) => {
+      const aRow = songCatalogByLyricsId.get(a.lyrics_id)
+      const bRow = songCatalogByLyricsId.get(b.lyrics_id)
+      const aHasAudio = aRow ? browseRowHasAudioSection(aRow) : Boolean(a.has_in_app_playback || a.has_sc_catalog_listen)
+      const bHasAudio = bRow ? browseRowHasAudioSection(bRow) : Boolean(b.has_in_app_playback || b.has_sc_catalog_listen)
+      if (aHasAudio !== bHasAudio) return aHasAudio ? -1 : 1
+
+      const aLikes = aRow?.aggregate_like_count ?? 0
+      const bLikes = bRow?.aggregate_like_count ?? 0
+      if (bLikes !== aLikes) return bLikes - aLikes
+
+      const aPlays = aRow?.aggregate_play_count ?? 0
+      const bPlays = bRow?.aggregate_play_count ?? 0
+      if (bPlays !== aPlays) return bPlays - aPlays
+
+      return a.lyrics_title.localeCompare(b.lyrics_title, undefined, { sensitivity: 'base' })
+    })
+    return related
+  }, [detail.related_songs, songCatalogByLyricsId])
+
   const defaultTrack = useMemo(
     () => firstInAppPlayableTrack(orderedTracks, activeTrackGenre),
     [orderedTracks, activeTrackGenre],
@@ -1186,13 +1208,13 @@ function SongDetailLoaded({
             ) : null}
           </div>
 
-          {detail.related_songs.length ? (
+          {orderedRelatedSongs.length ? (
             <section className="song-detail-related" aria-labelledby="song-related-heading">
               <h2 id="song-related-heading" className="catalog-section-title">
                 Related songs
               </h2>
               <ul className="song-thumb-grid song-thumb-grid--section">
-                {detail.related_songs.slice(0, 8).map((related) => {
+                {orderedRelatedSongs.slice(0, 8).map((related) => {
                   const sutra = songCatalogByLyricsId.get(related.lyrics_id)?.sutra?.trim() ?? ''
                   return (
                     <li key={related.lyrics_id} className="song-thumb-grid__cell">
