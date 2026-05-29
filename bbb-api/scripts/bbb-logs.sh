@@ -243,6 +243,7 @@ for i, log in enumerate(logs):
     reply = log.get("assistant_reply", "") or ""
     error = log.get("error_message", "") or ""
     ip = log.get("ip_hash", "") or ""
+    actor = log.get("actor_hash", "") or ""
 
     icon = c("[ok]", "green") if status == "ok" else c("[!!]", "red")
     status_text = status_style(status)
@@ -254,6 +255,8 @@ for i, log in enumerate(logs):
         print("     page:  %s%s" % (page, search))
     if ip:
         print("     ip:    %s..." % ip[:12])
+    if actor:
+        print("     actor: %s..." % actor[:12])
 
     if COMPACT:
         print("     user:  %s" % short(prompt))

@@ -20,6 +20,7 @@ interface Env {
   BBB_RATE_LIMIT_WINDOW_SEC?: string;
   BBB_ADMIN_TOKEN?: string;
   BBB_LOG_IP_SALT?: string;
+  BBB_LOG_ACTOR_SALT?: string;
   BBB_LOG_RETENTION_DAYS?: string;
 }
 
@@ -57,13 +58,19 @@ const getAllowedOrigins = (env: Env): string[] => {
 const getCorsHeaders = (origin: string): HeadersInit => ({
   "access-control-allow-origin": origin,
   "access-control-allow-methods": "GET,POST,OPTIONS",
-  "access-control-allow-headers": "content-type,authorization",
+  "access-control-allow-headers": "content-type,authorization,x-bbb-actor",
   "access-control-max-age": "86400",
   vary: "Origin",
 });
 
 const getClientIp = (request: Request): string =>
   request.headers.get("cf-connecting-ip") ?? request.headers.get("x-forwarded-for") ?? "unknown";
+
+const getClientActorId = (request: Request): string | null => {
+  const actorId = request.headers.get("x-bbb-actor")?.trim();
+  if (!actorId) return null;
+  return actorId.length > 200 ? actorId.slice(0, 200) : actorId;
+};
 
 const checkRateLimit = (ip: string, env: Env): { allowed: boolean; retryAfterSec: number } => {
   const maxRequests = Number.parseInt(env.BBB_MAX_REQUESTS_PER_WINDOW ?? "20", 10);
@@ -144,6 +151,7 @@ const queueChatLog = (
     requestId: string;
     startedAt: number;
     ip: string;
+    actorId: string | null;
     origin: string | null;
     pageContext?: BbbPageContext;
     model: string;
@@ -164,6 +172,8 @@ const queueChatLog = (
       search: input.pageContext?.search ?? null,
       ip: input.ip,
       ipSalt: env.BBB_LOG_IP_SALT,
+      actorId: input.actorId,
+      actorSalt: env.BBB_LOG_ACTOR_SALT ?? env.BBB_LOG_IP_SALT,
       model: input.model,
       status: input.status,
       latencyMs: Date.now() - input.startedAt,
@@ -231,6 +241,7 @@ const handler: ExportedHandler<Env> = {
     const requestId = crypto.randomUUID();
     const startedAt = Date.now();
     const ip = getClientIp(request);
+    const actorId = getClientActorId(request);
     const rate = checkRateLimit(ip, env);
     const model = env.BBB_MODEL?.trim() || DEFAULT_MODEL;
     if (!rate.allowed) {
@@ -238,6 +249,7 @@ const handler: ExportedHandler<Env> = {
         requestId,
         startedAt,
         ip,
+        actorId,
         origin,
         model,
         latestUserPrompt: "",
@@ -260,6 +272,7 @@ const handler: ExportedHandler<Env> = {
         requestId,
         startedAt,
         ip,
+        actorId,
         origin,
         model,
         latestUserPrompt: "",
@@ -277,6 +290,7 @@ const handler: ExportedHandler<Env> = {
         requestId,
         startedAt,
         ip,
+        actorId,
         origin,
         pageContext,
         model,
@@ -325,6 +339,8 @@ const handler: ExportedHandler<Env> = {
                 search: pageContext?.search ?? null,
                 ip,
                 ipSalt: env.BBB_LOG_IP_SALT,
+                actorId,
+                actorSalt: env.BBB_LOG_ACTOR_SALT ?? env.BBB_LOG_IP_SALT,
                 model,
                 status: toLogStatusFromStreamError(result.streamError),
                 latencyMs: Date.now() - startedAt,
@@ -353,6 +369,7 @@ const handler: ExportedHandler<Env> = {
           requestId,
           startedAt,
           ip,
+          actorId,
           origin,
           pageContext,
           model,
@@ -374,6 +391,7 @@ const handler: ExportedHandler<Env> = {
         requestId,
         startedAt,
         ip,
+        actorId,
         origin,
         pageContext,
         model,

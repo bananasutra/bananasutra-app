@@ -1,6 +1,13 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { capConversationHistory, parseInlineEmphasis, parseMarkdownLinks, parseSseChunk, updateLastAssistant } from './BbbChatUtils'
+import {
+  capConversationHistory,
+  getOrCreateActorId,
+  parseInlineEmphasis,
+  parseMarkdownLinks,
+  parseSseChunk,
+  updateLastAssistant,
+} from './BbbChatUtils'
 
 test('parseSseChunk parses token and done events in order', () => {
   const raw = [
@@ -118,4 +125,30 @@ test('parseInlineEmphasis identifies markdown bold segments', () => {
   assert.deepEqual(segments[0], { text: '- ', bold: false })
   assert.deepEqual(segments[1], { text: 'Truth that stings', bold: true })
   assert.deepEqual(segments[2], { text: ' when lying feels easier', bold: false })
+})
+
+test('getOrCreateActorId persists actor id in localStorage', () => {
+  const storage = new Map<string, string>()
+  const originalWindow = (globalThis as { window?: unknown }).window
+  ;(globalThis as { window: unknown }).window = {
+    localStorage: {
+      getItem: (key: string) => storage.get(key) ?? null,
+      setItem: (key: string, value: string) => {
+        storage.set(key, value)
+      },
+    },
+  }
+
+  try {
+    const first = getOrCreateActorId('bbb_actor_id_test', 'bbb-test')
+    const second = getOrCreateActorId('bbb_actor_id_test', 'bbb-test')
+    assert.match(first, /^bbb-test-/)
+    assert.equal(second, first)
+  } finally {
+    if (typeof originalWindow === 'undefined') {
+      delete (globalThis as { window?: unknown }).window
+    } else {
+      ;(globalThis as { window: unknown }).window = originalWindow
+    }
+  }
 })

@@ -4,6 +4,7 @@ Bertrand the Banana Butler API on Cloudflare Workers, with Level 1 logging:
 - stores latest user prompt + assistant reply in D1,
 - protects log access with bearer token auth,
 - hashes IPs (no raw IP storage),
+- hashes optional client actor IDs (`X-BBB-Actor`) for stable per-device filtering,
 - supports log cleanup by retention window.
 
 ## What this gives you
@@ -33,6 +34,7 @@ BBB_MODEL=claude-haiku-4-5-20251001
 BBB_ALLOWED_ORIGINS=http://localhost:5174,http://127.0.0.1:5174
 BBB_ADMIN_TOKEN=...      # long random string
 BBB_LOG_IP_SALT=...      # different long random string
+BBB_LOG_ACTOR_SALT=...   # optional; falls back to BBB_LOG_IP_SALT
 ```
 
 ### 3) Create D1 database (once)
@@ -72,6 +74,7 @@ Run each command and paste the matching value from `.dev.vars`:
 npx wrangler secret put ANTHROPIC_API_KEY
 npx wrangler secret put BBB_ADMIN_TOKEN
 npx wrangler secret put BBB_LOG_IP_SALT
+npx wrangler secret put BBB_LOG_ACTOR_SALT
 ```
 
 ### 6) Deploy
@@ -108,6 +111,7 @@ npm run logs:local
 npm run logs:remote -- --limit 25 --status ok
 npm run logs:remote -- --query "hope"
 npm run logs:remote -- --before 1748400000000
+BBB_ME_ACTOR_HASHES='abc123|def456' npm run logs:remote:not-me -- --limit 100
 ```
 
 ### 3b) Readability modes

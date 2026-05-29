@@ -19,6 +19,34 @@ export type InlineTextSegment = {
   bold: boolean
 }
 
+const DEFAULT_ACTOR_STORAGE_KEY = 'bbb_actor_id'
+
+function createActorId(prefix: string): string {
+  try {
+    const bytes = new Uint8Array(8)
+    crypto.getRandomValues(bytes)
+    const suffix = Array.from(bytes)
+      .map((part) => part.toString(16).padStart(2, '0'))
+      .join('')
+    return `${prefix}-${suffix}`
+  } catch {
+    return `${prefix}-${Math.random().toString(36).slice(2, 12)}`
+  }
+}
+
+export function getOrCreateActorId(storageKey = DEFAULT_ACTOR_STORAGE_KEY, prefix = 'bbb-web'): string {
+  if (typeof window === 'undefined') return createActorId(prefix)
+  try {
+    const existing = window.localStorage.getItem(storageKey)?.trim()
+    if (existing) return existing
+    const created = createActorId(prefix)
+    window.localStorage.setItem(storageKey, created)
+    return created
+  } catch {
+    return createActorId(prefix)
+  }
+}
+
 export function parseSseChunk(rawChunk: string): BbbSseEvent[] {
   const events: BbbSseEvent[] = []
   const blocks = rawChunk.split('\n\n')
