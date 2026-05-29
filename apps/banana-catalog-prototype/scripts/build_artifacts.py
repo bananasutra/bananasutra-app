@@ -426,6 +426,8 @@ def build_track_catalog_flat(
             score = score_track(t, like_weight)
             art = str(t.get("artwork_url") or "").strip()
             row = dict(t)
+            # Carry semantic lens from parent song so `/tracks` can filter by LIGHT/SHADOW.
+            row["light_shadow"] = str(card.get("light_shadow") or "").strip()
             row["url_slug"] = slug
             row["list_cover_url"] = art or cover
             row["song_published_at"] = pub_at
