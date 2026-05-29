@@ -14,6 +14,7 @@
     "build:library": "tsx scripts/build-library-data.ts",
     "logs:local": "bash scripts/bbb-logs.sh logs local",
     "logs:remote": "bash scripts/bbb-logs.sh logs remote",
+    "logs:remote:not-me": "bash scripts/bbb-logs-not-me.sh",
     "logs:cleanup:local": "bash scripts/bbb-logs.sh cleanup local",
     "logs:cleanup:remote": "bash scripts/bbb-logs.sh cleanup remote"
   },
