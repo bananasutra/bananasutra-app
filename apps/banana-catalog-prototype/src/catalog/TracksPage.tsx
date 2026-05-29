@@ -32,6 +32,7 @@ const PAGE_SIZE = 30
 const FIND_DEBOUNCE_MS = 350
 const EMPTY_TRACK_FACETS: Record<TracksFacetFilterKey, FacetEntry[]> = {
   sutra: [],
+  light_shadow: [],
   primary_genre: [],
   secondary_genre: [],
   mood: [],
@@ -69,6 +70,7 @@ function toggleSetMember(set: Set<string>, value: string): Set<string> {
 function countTracksSelections(f: TracksFilterState): number {
   return (
     f.sutra.size +
+    f.light_shadow.size +
     f.primary_genre.size +
     f.secondary_genre.size +
     f.mood.size +
