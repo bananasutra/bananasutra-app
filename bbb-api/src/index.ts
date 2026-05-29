@@ -36,7 +36,12 @@ interface RateLimitEntry {
 
 const MEMORY_RATE_LIMIT = new Map<string, RateLimitEntry>();
 const DEFAULT_MODEL = "claude-haiku-4-5-20251001";
-const DEFAULT_ALLOWED_ORIGINS = ["https://bananasutra.com", "http://localhost:5173"];
+const DEFAULT_ALLOWED_ORIGINS = [
+  "https://bananasutra.com",
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://127.0.0.1:5174",
+];
 const json = (status: number, body: unknown, headers: HeadersInit = {}): Response =>
   new Response(JSON.stringify(body), {
     status,

@@ -4,7 +4,7 @@ compatibility_date = "2026-05-25"
 
 [vars]
 BBB_MODEL = "claude-haiku-4-5-20251001"
-BBB_ALLOWED_ORIGINS = "https://bananasutra.com,https://www.bananasutra.com,http://localhost:5173"
+BBB_ALLOWED_ORIGINS = "https://bananasutra.com,https://www.bananasutra.com,http://localhost:5173,http://localhost:5174,http://127.0.0.1:5174"
 BBB_MAX_REQUESTS_PER_WINDOW = "20"
 BBB_RATE_LIMIT_WINDOW_SEC = "3600"
 BBB_LOG_RETENTION_DAYS = "30"
