@@ -16,6 +16,7 @@ export interface BbbLogRecord {
   pathname: string | null;
   search: string | null;
   ip_hash: string | null;
+  actor_hash: string | null;
   model: string | null;
   status: BbbLogStatus;
   latency_ms: number;
@@ -40,6 +41,8 @@ export interface InsertBbbLogInput {
   messageCount: number;
   ip?: string | null;
   ipSalt?: string | null;
+  actorId?: string | null;
+  actorSalt?: string | null;
 }
 
 export interface QueryLogsOptions {
@@ -81,6 +84,18 @@ export const hashIp = async (ip: string | null | undefined, salt: string | null 
   const normalizedSalt = salt?.trim();
   if (!normalizedIp || !normalizedSalt || normalizedIp === "unknown") return null;
   const payload = new TextEncoder().encode(`${normalizedSalt}:${normalizedIp}`);
+  const digest = await crypto.subtle.digest("SHA-256", payload);
+  return toHex(digest);
+};
+
+export const hashActorId = async (
+  actorId: string | null | undefined,
+  salt: string | null | undefined,
+): Promise<string | null> => {
+  const normalizedActorId = actorId?.trim();
+  const normalizedSalt = salt?.trim();
+  if (!normalizedActorId || !normalizedSalt) return null;
+  const payload = new TextEncoder().encode(`${normalizedSalt}:${normalizedActorId}`);
   const digest = await crypto.subtle.digest("SHA-256", payload);
   return toHex(digest);
 };
@@ -142,6 +157,7 @@ export const parseAdminLogsQuery = (url: URL): ParseAdminLogsQueryResult => {
 export const insertBbbLog = async (db: D1Database, input: InsertBbbLogInput): Promise<void> => {
   const logId = crypto.randomUUID();
   const ipHash = await hashIp(input.ip, input.ipSalt);
+  const actorHash = await hashActorId(input.actorId, input.actorSalt);
   await db
     .prepare(
       `INSERT INTO bbb_logs (
@@ -152,6 +168,7 @@ export const insertBbbLog = async (db: D1Database, input: InsertBbbLogInput): Pr
         pathname,
         search,
         ip_hash,
+        actor_hash,
         model,
         status,
         latency_ms,
@@ -159,7 +176,7 @@ export const insertBbbLog = async (db: D1Database, input: InsertBbbLogInput): Pr
         assistant_reply,
         error_message,
         message_count
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       logId,
@@ -169,6 +186,7 @@ export const insertBbbLog = async (db: D1Database, input: InsertBbbLogInput): Pr
       clampText(input.pathname, 500),
       clampText(input.search, 1000),
       ipHash,
+      actorHash,
       clampText(input.model, 250),
       input.status,
       Math.max(0, Math.trunc(input.latencyMs)),
@@ -204,6 +222,7 @@ export const queryBbbLogs = async (db: D1Database, options: QueryLogsOptions): P
         pathname,
         search,
         ip_hash,
+        actor_hash,
         model,
         status,
         latency_ms,

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { hashIp, parseAdminLogsQuery } from "./logging";
+import { hashActorId, hashIp, parseAdminLogsQuery } from "./logging";
 
 test("parseAdminLogsQuery returns defaults", () => {
   const parsed = parseAdminLogsQuery(new URL("https://example.com/api/bbb/admin/logs"));
@@ -52,4 +52,12 @@ test("hashIp returns null when missing required values", async () => {
   assert.equal(await hashIp("", "salt"), null);
   assert.equal(await hashIp("unknown", "salt"), null);
   assert.equal(await hashIp("1.2.3.4", ""), null);
+});
+
+test("hashActorId is stable for same input and salt", async () => {
+  const hashA = await hashActorId("cee-laptop", "salty");
+  const hashB = await hashActorId("cee-laptop", "salty");
+  const hashC = await hashActorId("cee-laptop", "different");
+  assert.equal(hashA, hashB);
+  assert.notEqual(hashA, hashC);
 });

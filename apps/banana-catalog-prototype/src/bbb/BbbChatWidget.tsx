@@ -4,6 +4,7 @@ import './BbbChatWidget.css'
 import { loadSongCatalogBrowse } from '../catalog/generatedData'
 import {
   capConversationHistory,
+  getOrCreateActorId,
   parseInlineEmphasis,
   parseMarkdownLinks,
   parseSseChunk,
@@ -30,6 +31,7 @@ export function BbbChatWidget() {
   const inputRef = useRef<HTMLTextAreaElement | null>(null)
 
   const canSend = useMemo(() => input.trim().length > 0 && !isStreaming, [input, isStreaming])
+  const actorId = useMemo(() => getOrCreateActorId(), [])
   const toggleLabel = open ? 'Close Bertrand' : 'Ring Bertrand'
 
   useEffect(() => {
@@ -102,7 +104,7 @@ export function BbbChatWidget() {
     try {
       const response = await fetch(BBB_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-BBB-Actor': actorId },
         body: JSON.stringify({
           messages: streamMessages,
           pageContext: {
