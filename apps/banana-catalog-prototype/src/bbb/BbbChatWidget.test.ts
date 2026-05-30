@@ -152,9 +152,40 @@ test('parseMarkdownLinks auto-links bare internal routes in plain text', () => {
 test('parseInlineEmphasis identifies markdown bold segments', () => {
   const segments = parseInlineEmphasis('- **Truth that stings** when lying feels easier')
   assert.equal(segments.length, 3)
-  assert.deepEqual(segments[0], { text: '- ', bold: false })
-  assert.deepEqual(segments[1], { text: 'Truth that stings', bold: true })
-  assert.deepEqual(segments[2], { text: ' when lying feels easier', bold: false })
+  assert.deepEqual(segments[0], { text: '- ', bold: false, italic: false })
+  assert.deepEqual(segments[1], { text: 'Truth that stings', bold: true, italic: false })
+  assert.deepEqual(segments[2], { text: ' when lying feels easier', bold: false, italic: false })
+})
+
+test('parseInlineEmphasis identifies markdown italics segments', () => {
+  const segments = parseInlineEmphasis('give me something *dirty* and explicit')
+  assert.equal(segments.length, 3)
+  assert.deepEqual(segments[0], { text: 'give me something ', bold: false, italic: false })
+  assert.deepEqual(segments[1], { text: 'dirty', bold: false, italic: true })
+  assert.deepEqual(segments[2], { text: ' and explicit', bold: false, italic: false })
+})
+
+test('parseInlineEmphasis keeps bold, italics, and links parse-friendly in same line', () => {
+  const segments = parseInlineEmphasis('Try **truth** with *texture* near /tracks/?q=jazz')
+  assert.deepEqual(segments, [
+    { text: 'Try ', bold: false, italic: false },
+    { text: 'truth', bold: true, italic: false },
+    { text: ' with ', bold: false, italic: false },
+    { text: 'texture', bold: false, italic: true },
+    { text: ' near /tracks/?q=jazz', bold: false, italic: false },
+  ])
+})
+
+test('parseInlineEmphasis leaves unmatched or triple-asterisk edge cases as plain text', () => {
+  const unmatched = parseInlineEmphasis('keep *this literal and keep going')
+  assert.deepEqual(unmatched, [{ text: 'keep *this literal and keep going', bold: false, italic: false }])
+
+  const triple = parseInlineEmphasis('***nope***')
+  assert.deepEqual(triple, [
+    { text: '*', bold: false, italic: false },
+    { text: 'nope', bold: true, italic: false },
+    { text: '*', bold: false, italic: false },
+  ])
 })
 
 test('getOrCreateActorId persists actor id in localStorage', () => {

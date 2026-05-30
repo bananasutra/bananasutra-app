@@ -17,6 +17,7 @@ export type MessageSegment =
 export type InlineTextSegment = {
   text: string
   bold: boolean
+  italic: boolean
 }
 
 const DEFAULT_ACTOR_STORAGE_KEY = 'bbb_actor_id'
@@ -158,27 +159,35 @@ function pushTextWithAutoLinks(segments: MessageSegment[], text: string): void {
 
 export function parseInlineEmphasis(text: string): InlineTextSegment[] {
   const segments: InlineTextSegment[] = []
-  const pattern = /(\*\*([^*]+)\*\*|__([^_]+)__)/g
+  // Match bold first, then single-asterisk italics.
+  // Italics require non-adjacent asterisks to avoid colliding with **bold**.
+  const pattern = /(\*\*([^*]+)\*\*|__([^_]+)__|(?<!\*)\*([^*\n]+)\*(?!\*))/g
   let cursor = 0
   let match = pattern.exec(text)
 
   while (match) {
     const raw = match[0]
     const boldText = match[2] ?? match[3] ?? ''
+    const italicText = match[4] ?? ''
+    const isBold = Boolean(boldText)
     const matchStart = match.index
     const matchEnd = matchStart + raw.length
     if (matchStart > cursor) {
-      segments.push({ text: text.slice(cursor, matchStart), bold: false })
+      segments.push({ text: text.slice(cursor, matchStart), bold: false, italic: false })
     }
-    segments.push({ text: boldText, bold: true })
+    segments.push({
+      text: isBold ? boldText : italicText,
+      bold: isBold,
+      italic: !isBold,
+    })
     cursor = matchEnd
     match = pattern.exec(text)
   }
 
   if (cursor < text.length) {
-    segments.push({ text: text.slice(cursor), bold: false })
+    segments.push({ text: text.slice(cursor), bold: false, italic: false })
   }
-  return segments.length ? segments : [{ text, bold: false }]
+  return segments.length ? segments : [{ text, bold: false, italic: false }]
 }
 
 export function parseMarkdownLinks(text: string): MessageSegment[] {
