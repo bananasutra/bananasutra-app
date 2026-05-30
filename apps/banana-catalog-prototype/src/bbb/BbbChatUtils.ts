@@ -118,6 +118,44 @@ function classifyHref(href: string): { safe: boolean; external: boolean } {
   return { safe: false, external: false }
 }
 
+function normalizeHref(href: string): string {
+  let normalized = href.trim()
+  while (normalized.startsWith('(') && normalized.endsWith(')') && normalized.length > 2) {
+    normalized = normalized.slice(1, -1).trim()
+  }
+  return normalized
+}
+
+function pushTextWithAutoLinks(segments: MessageSegment[], text: string): void {
+  const tokens = text.split(/(\s+)/)
+  for (const token of tokens) {
+    if (!token) continue
+    if (/^\s+$/.test(token)) {
+      segments.push({ type: 'text', text: token })
+      continue
+    }
+    const leading = token.match(/^[("'[]+/)?.[0] ?? ''
+    const trailing = token.match(/[.,!?;:)\]'"`]+$/)?.[0] ?? ''
+    const coreStart = leading.length
+    const coreEnd = token.length - trailing.length
+    const core = token.slice(coreStart, Math.max(coreStart, coreEnd))
+    const normalizedCore = normalizeHref(core)
+    const hrefMeta = classifyHref(normalizedCore)
+    if (normalizedCore.startsWith('/') && hrefMeta.safe) {
+      if (leading) segments.push({ type: 'text', text: leading })
+      segments.push({
+        type: 'link',
+        text: normalizedCore,
+        href: normalizedCore,
+        external: false,
+      })
+      if (trailing) segments.push({ type: 'text', text: trailing })
+      continue
+    }
+    segments.push({ type: 'text', text: token })
+  }
+}
+
 export function parseInlineEmphasis(text: string): InlineTextSegment[] {
   const segments: InlineTextSegment[] = []
   const pattern = /(\*\*([^*]+)\*\*|__([^_]+)__)/g
@@ -144,10 +182,11 @@ export function parseInlineEmphasis(text: string): InlineTextSegment[] {
 }
 
 export function parseMarkdownLinks(text: string): MessageSegment[] {
+  const sourceText = text.replace(/\]\(\((\/[^)\s]+)\)\)/g, ']($1)')
   const segments: MessageSegment[] = []
   const pattern = /\[([^\]]+)\]\(([^)\s]+)\)/g
   let cursor = 0
-  let match = pattern.exec(text)
+  let match = pattern.exec(sourceText)
 
   while (match) {
     const [raw, label, href] = match
@@ -155,22 +194,23 @@ export function parseMarkdownLinks(text: string): MessageSegment[] {
     const matchEnd = matchStart + raw.length
 
     if (matchStart > cursor) {
-      segments.push({ type: 'text', text: text.slice(cursor, matchStart) })
+      pushTextWithAutoLinks(segments, sourceText.slice(cursor, matchStart))
     }
 
-    const hrefMeta = classifyHref(href)
+    const normalizedHref = normalizeHref(href)
+    const hrefMeta = classifyHref(normalizedHref)
     if (hrefMeta.safe) {
-      segments.push({ type: 'link', text: label, href, external: hrefMeta.external })
+      segments.push({ type: 'link', text: label, href: normalizedHref, external: hrefMeta.external })
     } else {
-      segments.push({ type: 'text', text: raw })
+      pushTextWithAutoLinks(segments, raw)
     }
 
     cursor = matchEnd
-    match = pattern.exec(text)
+    match = pattern.exec(sourceText)
   }
 
-  if (cursor < text.length) {
-    segments.push({ type: 'text', text: text.slice(cursor) })
+  if (cursor < sourceText.length) {
+    pushTextWithAutoLinks(segments, sourceText.slice(cursor))
   }
 
   return segments.length ? segments : [{ type: 'text', text }]

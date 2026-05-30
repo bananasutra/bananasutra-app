@@ -10,12 +10,19 @@ const fixtureInjects: LibraryInjects = {
     "Quiet Lantern | Soft resilience and small daily courage. | FLOWsutra | HOPE | COURAGE | LIGHT | quiet-lantern",
     "Paper Lantern Prayer | A small, quiet prayer for hope in hard times. | KNOWsutra | HOPE | HEALING | LIGHT | paper-lantern-prayer",
     "Paris At Dawn | A playful french morning walk with absurd grace notes. | FLOWsutra | JOY | CURIOSITY | LIGHT | paris-at-dawn",
+    "Cosmic Drift | A trippy layered dreamscape. | SHOWsutra | WONDER | CURIOSITY | LIGHT | cosmic-drift",
   ].join("\n"),
   tracks: [
     "Bright Morning | 5trk | INDIE | CALM,KINDLY | MID | PIANO",
     "Quiet Lantern | 2trk | FOLK | CALM | SLOW | GUITAR",
     "Paris At Dawn | 3trk | JAZZ | FRENCHY,CHEEKY | MID | ACCORDION",
+    "Cosmic Drift | 7trk | DUB | TRIPPY,RAINY | MID | SYNTH,CELLO",
   ].join("\n"),
+  trackFacetCounts: JSON.stringify({
+    mood: { CALM: 7, KINDLY: 5, FRENCHY: 3, CHEEKY: 3, TRIPPY: 7, RAINY: 7 },
+    primary_genre: { INDIE: 5, FOLK: 2, JAZZ: 3, DUB: 7 },
+    instrument: { PIANO: 5, GUITAR: 2, ACCORDION: 3, SYNTH: 7, CELLO: 7 },
+  }),
   videos: ["Bright Morning | 2vid | INDIE | feat:yes", "Shadow Spiral | 1vid | ROCK | feat:no"].join("\n"),
   songbooks: [
     "Play: B.J. (Banana Jokes) | Tiny joke pack. | SHOWsutra | FUN | play-bj-banana-jokes",
@@ -35,11 +42,21 @@ test("buildRecommendationContext returns ranked playable shortlist for support i
   assert.match(context, /prefer a stabilizing lens such as \[FLOWsutra\]/);
   assert.match(context, /Keep LIGHT-first support handling/);
   assert.match(context, /availability:audio\+video/);
-  assert.match(context, /\[KINDLY Mood Tracks\]\(\/tracks\/\?mood=KINDLY&tsort=likes\)/);
+  assert.match(context, /\[KINDLY Mood Tracks(?: \(\d+ tracks\))?\]\(\/tracks\/\?mood=KINDLY&tsort=likes\)/);
   assert.match(context, /Bright Morning \| bright-morning/);
   assert.match(context, /Quiet Lantern \| quiet-lantern/);
   assert.match(context, /Paper Lantern Prayer \| paper-lantern-prayer/);
   assert.match(context, /availability:lyrics-only/);
+  assert.match(context, /Route safety: songs must link as \/songs\/\{slug\}\./);
+  assert.match(context, /tracks links are list\/filter routes with query params/);
+  assert.match(context, /never \/tracks\/\{song-slug\}/);
+  assert.match(context, /Formatting safety: if you name a specific song, link that title to \/songs\/\{slug\}, not to any \/tracks query link\./);
+  assert.match(
+    context,
+    /Keep song picks separate from listening routes: song picks use \/songs\/\{slug\}; exploration links to \/tracks\/\?\.\.\. should be presented as separate route options with explicit labels\./,
+  );
+  assert.match(context, /Markdown safety: use exact \[Label\]\(\/route\) syntax only\. Never output \[Label\]\(\(\/route\)\)\./);
+  assert.match(context, /Route-link labels must be human-readable \(for example 'Jazz Tracks'\), never raw route text\./);
   assert.ok(context.indexOf("Bright Morning") < context.indexOf("Shadow Spiral"));
 });
 
@@ -60,7 +77,7 @@ test("buildRecommendationContext suggests listening routes for french queries", 
   assert.match(context, /use the exact mood name FRENCHY/);
   assert.match(context, /\[Frenchy Mood Tracks\]\(\/tracks\/\?mood=FRENCHY&tsort=likes\)/);
   assert.match(context, /\[French Language Songbook\]\(\/songbooks\/lang-french\)/);
-  assert.match(context, /\[FRENCHY Mood Tracks\]\(\/tracks\/\?mood=FRENCHY&tsort=likes\)/);
+  assert.match(context, /\[FRENCHY Mood Tracks(?: \(\d+ tracks\))?\]\(\/tracks\/\?mood=FRENCHY&tsort=likes\)/);
   assert.ok(context.indexOf("Paris At Dawn | paris-at-dawn") < context.indexOf("Bright Morning | bright-morning"));
 });
 
@@ -74,7 +91,7 @@ test("buildRecommendationContext prioritizes songbook route first when already i
     .split("\n")
     .find((line) => line.includes("include one listening-first route option from:"));
   assert.ok(Boolean(routeLine));
-  assert.ok((routeLine ?? "").indexOf("[French Language Songbook]") < (routeLine ?? "").indexOf("[FRENCHY Mood Tracks]"));
+  assert.ok((routeLine ?? "").indexOf("[French Language Songbook]") < (routeLine ?? "").indexOf("[FRENCHY Mood Tracks"));
 });
 
 test("buildRecommendationContext acknowledges already-on-frenchy-tracks context", () => {
@@ -96,7 +113,7 @@ test("buildRecommendationContext anchors fun asks to SHOWsutra and cheeky mood r
   assert.match(context, /Do not repeat your identity intro/);
   assert.match(context, /Start with one short natural acknowledgement of the ask/);
   assert.match(context, /not label-style blocks like "Sutra lens:"/);
-  assert.match(context, /\[Cheeky Mood Tracks\]\(\/tracks\/\?mood=CHEEKY&tsort=likes\)/);
+  assert.match(context, /\[Cheeky Mood Tracks(?: \(\d+ tracks\))?\]\(\/tracks\/\?mood=CHEEKY&tsort=likes\)/);
   assert.match(context, /\/songbooks\/(showsutra-fanana-club|play-peace-circus)/);
   assert.equal(context.includes("/songbooks/play-bj-banana-jokes"), false);
   assert.match(context, /Never show raw route text in prose/);
@@ -107,6 +124,69 @@ test("buildRecommendationContext anchors fun asks to SHOWsutra and cheeky mood r
 test("buildRecommendationContext expands guidance when user asks for all songs", () => {
   const context = buildRecommendationContext([{ role: "user", content: "show me all hope songs" }], fixtureInjects);
   assert.match(context, /User asked for all relevant songs, so provide a broader concise list/);
+});
+
+test("buildRecommendationContext adds broad-sound guidance for texture asks", () => {
+  const context = buildRecommendationContext(
+    [{ role: "assistant", content: "prior turn" }, { role: "user", content: "i want to listen to tracks with texture" }],
+    fixtureInjects,
+    { pathname: "/tracks" },
+  );
+  assert.match(context, /Do not dump a long list of genres/);
+  assert.match(context, /Offer 2-3 concrete listening routes max across different filter types/);
+  assert.match(context, /primary genre, secondary genre\/search, mood, and instrument/);
+  assert.match(context, /meaning-first at the song level; \/tracks is a listening-flow lens/);
+});
+
+test("buildRecommendationContext offers cross-filter concrete routes for broad sound asks", () => {
+  const context = buildRecommendationContext(
+    [{ role: "assistant", content: "prior turn" }, { role: "user", content: "i dunno surprise me with specifics, i want texture" }],
+    fixtureInjects,
+    { pathname: "/tracks" },
+  );
+  assert.match(context, /\/tracks\/\?mood=[A-Z]+&tsort=likes/);
+  assert.match(context, /\/tracks\/\?instrument=[A-Z]+&tsort=likes/);
+  assert.match(context, /\/tracks\/\?(primary_genre=[A-Z]+|q=[A-Z]+)&tsort=likes/);
+  assert.match(context, /\(\d+ tracks\)/);
+  assert.match(context, /MUST include one teach-to-fish line: tell the user they can refine with mood \+ instrument \+ primary genre/);
+  assert.match(context, /\/tracks\/\?q=\.\.\./);
+  assert.match(context, /Label fidelity rule: every route label must match the href filters exactly/);
+  assert.match(context, /For \/tracks\/\?primary_genre=<GENRE>, use label shape '<GENRE> Primary Genre Tracks'/);
+  assert.match(context, /secondary-genre exploration, use \/tracks\/\?q=<keyword>&tsort=likes/);
+});
+
+test("buildRecommendationContext uses tracks-first hierarchy for sound-led asks", () => {
+  const context = buildRecommendationContext(
+    [{ role: "assistant", content: "prior turn" }, { role: "user", content: "got trippy music?" }],
+    fixtureInjects,
+    { pathname: "/tracks" },
+    "seed-1",
+  );
+  assert.match(context, /Sound-led hierarchy rule: lead with listening routes first/);
+});
+
+test("broad-sound diversity rotates song shortlist when seed changes", () => {
+  const outputs = new Set<string>();
+  for (const seed of ["seed-a", "seed-b", "seed-c", "seed-d"]) {
+    outputs.add(
+      buildRecommendationContext(
+        [{ role: "assistant", content: "prior turn" }, { role: "user", content: "got trippy music?" }],
+        fixtureInjects,
+        { pathname: "/tracks" },
+        seed,
+      ),
+    );
+  }
+  assert.ok(outputs.size >= 2, "Expected at least two distinct shortlist orderings across seeds");
+});
+
+test("buildRecommendationContext boosts songs whose track facets match the ask", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "got trippy music?" }], fixtureInjects, {
+    pathname: "/tracks",
+  });
+  assert.ok(context.indexOf("Cosmic Drift | cosmic-drift") < context.indexOf("Bright Morning | bright-morning"));
+  assert.match(context, /\[TRIPPY Mood Tracks \(\d+ tracks\)\]\(\/tracks\/\?mood=TRIPPY&tsort=likes\)/);
+  assert.match(context, /MUST include one teach-to-fish line: tell the user they can refine with mood \+ instrument \+ primary genre/);
 });
 
 test("support regex boundaries do not false-match words like warmth or courage", () => {

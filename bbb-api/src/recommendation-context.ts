@@ -19,6 +19,8 @@ type SongMeta = {
 type TrackMeta = {
   count: number;
   moods: string[];
+  primaryGenres: string[];
+  instruments: string[];
 };
 
 type VideoMeta = {
@@ -64,12 +66,24 @@ const SUPPORT_PREFERRED_MOODS = ["KINDLY", "HOLY", "PEACHY", "RAINY"];
 // Manual maintenance list until explicit-content metadata is added to the source catalog.
 const EXPLICIT_CONTENT_SLUGS = new Set(["freee-la-fille"]);
 const EXPLICIT_INTENT_PATTERN = /\bexplicit|nsfw|adult|dirty|raw|edgy|sexual|breakup|dark\b/i;
+const BROAD_SOUND_PATTERN = /\b(texture|textural|vibe|sonic|soundscape|layer(?:ed|ing)?)\b/i;
+const SURPRISE_PATTERN = /\b(surprise me|i dunno|i don't know|you choose|anything)\b/i;
 
 const splitPipe = (line: string): string[] => line.split("|").map((part) => part.trim());
+const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const parseTrackCount = (raw: string): number => {
   const match = raw.match(/^(\d+)/);
   return match ? Number.parseInt(match[1] ?? "0", 10) : 0;
+};
+
+const hashSeed = (seed: string): number => {
+  let hash = 2166136261;
+  for (let i = 0; i < seed.length; i += 1) {
+    hash ^= seed.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return Math.abs(hash >>> 0);
 };
 
 const parseSongs = (injects: LibraryInjects): SongMeta[] =>
@@ -99,13 +113,75 @@ const parseTracks = (injects: LibraryInjects): Map<string, TrackMeta> => {
     if (!title) continue;
     byTitle.set(title, {
       count: parseTrackCount(parts[1] ?? ""),
+      primaryGenres: (parts[2] ?? "")
+        .split(",")
+        .map((g) => g.trim().toUpperCase())
+        .filter(Boolean),
       moods: (parts[3] ?? "")
         .split(",")
         .map((m) => m.trim())
         .filter(Boolean),
+      instruments: (parts[5] ?? "")
+        .split(",")
+        .map((i) => i.trim().toUpperCase())
+        .filter(Boolean),
     });
   }
   return byTitle;
+};
+
+const detectRequestedTrackFacets = (queryLower: string, tracksByTitle: Map<string, TrackMeta>): TrackFacetIntent => {
+  const moods = new Set<string>();
+  const primaryGenres = new Set<string>();
+  const instruments = new Set<string>();
+
+  const moodPool = new Set<string>();
+  const genrePool = new Set<string>();
+  const instrumentPool = new Set<string>();
+  for (const track of tracksByTitle.values()) {
+    for (const mood of track.moods) moodPool.add(mood.toUpperCase());
+    for (const genre of track.primaryGenres) genrePool.add(genre.toUpperCase());
+    for (const instrument of track.instruments) instrumentPool.add(instrument.toUpperCase());
+  }
+
+  for (const mood of moodPool) {
+    if (new RegExp(`\\b${escapeRegExp(mood.toLowerCase())}\\b`, "i").test(queryLower)) moods.add(mood);
+  }
+  for (const genre of genrePool) {
+    if (new RegExp(`\\b${escapeRegExp(genre.toLowerCase())}\\b`, "i").test(queryLower)) primaryGenres.add(genre);
+  }
+  for (const instrument of instrumentPool) {
+    if (new RegExp(`\\b${escapeRegExp(instrument.toLowerCase())}\\b`, "i").test(queryLower)) instruments.add(instrument);
+  }
+
+  return { moods, primaryGenres, instruments };
+};
+
+const parseTrackFacetCounts = (injects: LibraryInjects): TrackFacetCounts | null => {
+  if (!injects.trackFacetCounts?.trim()) return null;
+  try {
+    const parsed = JSON.parse(injects.trackFacetCounts) as Partial<TrackFacetCounts>;
+    if (!parsed || typeof parsed !== "object") return null;
+    return {
+      mood: parsed.mood ?? {},
+      primary_genre: parsed.primary_genre ?? {},
+      genre: parsed.genre ?? {},
+      instrument: parsed.instrument ?? {},
+    };
+  } catch {
+    return null;
+  }
+};
+
+const getFacetCount = (
+  facetCounts: TrackFacetCounts | null,
+  facet: keyof TrackFacetCounts,
+  key: string | undefined,
+): number | undefined => {
+  if (!facetCounts || !key) return undefined;
+  const normalized = key.toUpperCase();
+  const value = facetCounts[facet][normalized];
+  return typeof value === "number" && value > 0 ? value : undefined;
 };
 
 const parseVideos = (injects: LibraryInjects): Map<string, VideoMeta> => {
@@ -152,6 +228,20 @@ type ListeningRouteHint = {
   label: string;
   href: string;
   kind: "tracks" | "songbook";
+  trackCount?: number;
+};
+
+type TrackFacetIntent = {
+  moods: Set<string>;
+  primaryGenres: Set<string>;
+  instruments: Set<string>;
+};
+
+type TrackFacetCounts = {
+  mood: Record<string, number>;
+  primary_genre: Record<string, number>;
+  genre: Record<string, number>;
+  instrument: Record<string, number>;
 };
 
 const inferPageType = (pageContext?: BbbPageContext): "tracks" | "songbook" | "song" | "other" => {
@@ -184,9 +274,13 @@ const scoreSong = (
   support: SupportSignal,
   intent: IntentSignal,
   queryLower: string,
+  requestedTrackFacets: TrackFacetIntent,
 ): RankedSong => {
-  const trackCount = tracksByTitle.get(song.title)?.count ?? 0;
-  const trackMoods = tracksByTitle.get(song.title)?.moods ?? [];
+  const trackMeta = tracksByTitle.get(song.title);
+  const trackCount = trackMeta?.count ?? 0;
+  const trackMoods = trackMeta?.moods.map((mood) => mood.toUpperCase()) ?? [];
+  const trackPrimaryGenres = trackMeta?.primaryGenres ?? [];
+  const trackInstruments = trackMeta?.instruments ?? [];
   const video = videosByTitle.get(song.title);
   const videoCount = video?.count ?? 0;
   const featured = video?.featured ?? false;
@@ -225,9 +319,25 @@ const scoreSong = (
   }
 
   if (intent.languageIntentFrench) {
-    if (trackMoods.some((mood) => mood.toUpperCase() === "FRENCHY")) score += 26;
+    if (trackMoods.includes("FRENCHY")) score += 26;
     if (/(french|francais|français|paris|camus)/i.test(haystack)) score += 16;
     else score -= 6;
+  }
+
+  if (
+    requestedTrackFacets.moods.size ||
+    requestedTrackFacets.primaryGenres.size ||
+    requestedTrackFacets.instruments.size
+  ) {
+    for (const mood of requestedTrackFacets.moods) {
+      if (trackMoods.includes(mood)) score += 14;
+    }
+    for (const genre of requestedTrackFacets.primaryGenres) {
+      if (trackPrimaryGenres.includes(genre)) score += 12;
+    }
+    for (const instrument of requestedTrackFacets.instruments) {
+      if (trackInstruments.includes(instrument)) score += 10;
+    }
   }
 
   if (!EXPLICIT_INTENT_PATTERN.test(queryLower) && EXPLICIT_CONTENT_SLUGS.has(song.slug)) {
@@ -258,6 +368,7 @@ export const buildRecommendationContext = (
   messages: ChatMessage[],
   injects: LibraryInjects,
   pageContext?: BbbPageContext,
+  diversitySeed?: string,
 ): string => {
   const latestUser = [...messages].reverse().find((message) => message.role === "user")?.content?.trim();
   if (!latestUser) return "";
@@ -270,18 +381,28 @@ export const buildRecommendationContext = (
   const isAlreadyFrenchTracks = pageType === "tracks" && currentMood === "FRENCHY";
 
   const queryLower = latestUser.toLowerCase();
+  const broadSoundIntent = BROAD_SOUND_PATTERN.test(queryLower);
+  const surpriseIntent = SURPRISE_PATTERN.test(queryLower);
+  const trackExplorationIntent = /\b(track|tracks|listen|listening|music|mood|genre|instrument)\b/i.test(latestUser);
   const support = analyzeSupportIntent(latestUser);
   const intent = analyzeIntent(latestUser);
-  if (!support.supportIntent && !intent.funIntent && !/\bsong|listen|track|music|video|recommend|suggest\b/i.test(latestUser)) {
+  if (
+    !support.supportIntent &&
+    !intent.funIntent &&
+    !broadSoundIntent &&
+    !/\bsong|listen|track|music|video|recommend|suggest\b/i.test(latestUser)
+  ) {
     return "";
   }
 
   const songs = parseSongs(injects);
   const tracksByTitle = parseTracks(injects);
+  const trackFacetCounts = parseTrackFacetCounts(injects);
   const videosByTitle = parseVideos(injects);
+  const requestedTrackFacets = detectRequestedTrackFacets(queryLower, tracksByTitle);
   const songbooks = parseSongbooks(injects);
   const ranked = songs
-    .map((song) => scoreSong(song, tracksByTitle, videosByTitle, support, intent, queryLower))
+    .map((song) => scoreSong(song, tracksByTitle, videosByTitle, support, intent, queryLower, requestedTrackFacets))
     .sort((a, b) => b.score - a.score || a.song.title.localeCompare(b.song.title));
 
   const playable = ranked.filter((row) => row.trackCount > 0 || row.videoCount > 0);
@@ -291,7 +412,14 @@ export const buildRecommendationContext = (
   shortlist.push(...playable.slice(0, 4));
   if (lyricsOnly.length > 0) shortlist.push(lyricsOnly[0]);
   shortlist.push(...playable.slice(4));
-  const topRanked = (shortlist.length ? shortlist : lyricsOnly).slice(0, 6);
+  const rankedBase = (shortlist.length ? shortlist : lyricsOnly).slice(0, 12);
+  let topRanked = rankedBase.slice(0, 6);
+  // Rotate strong candidates for broad sound asks so repeated refreshes do not anchor to the same song pair.
+  if ((broadSoundIntent || trackExplorationIntent) && diversitySeed && rankedBase.length > 2) {
+    const offset = hashSeed(`${diversitySeed}:${queryLower}`) % rankedBase.length;
+    const rotated = [...rankedBase.slice(offset), ...rankedBase.slice(0, offset)];
+    topRanked = rotated.slice(0, 6);
+  }
   if (topRanked.length === 0) return "";
 
   const lines = topRanked.map((row, idx) => {
@@ -313,8 +441,12 @@ export const buildRecommendationContext = (
     .filter((w) => w.length >= 4);
 
   const moodPool = new Set<string>();
+  const genrePool = new Set<string>();
+  const instrumentPool = new Set<string>();
   for (const track of tracksByTitle.values()) {
     for (const mood of track.moods) moodPool.add(mood);
+    for (const genre of track.primaryGenres) genrePool.add(genre);
+    for (const instrument of track.instruments) instrumentPool.add(instrument);
   }
 
   const moodCandidates = Array.from(moodPool)
@@ -337,6 +469,12 @@ export const buildRecommendationContext = (
       }
     }
   }
+  const preferredTextureGenres = ["DUB", "JAZZ", "LOFI", "BLUES", "WORLD"];
+  const preferredTextureMoods = ["TRIPPY", "RAINY", "NERDY", "KINDLY"];
+  const preferredTextureInstruments = ["CELLO", "ACCORDION", "GUITAR", "BRASS", "PIANO"];
+  const broadMood = preferredTextureMoods.find((mood) => moodPool.has(mood)) ?? moodCandidates[0];
+  const broadGenre = preferredTextureGenres.find((genre) => genrePool.has(genre));
+  const broadInstrument = preferredTextureInstruments.find((instrument) => instrumentPool.has(instrument));
 
   let songbookCandidates = songbooks
     .filter((book) => {
@@ -375,10 +513,46 @@ export const buildRecommendationContext = (
   const listeningRoutes: ListeningRouteHint[] = [];
   const trackRouteHints: ListeningRouteHint[] = [];
   const songbookRouteHints: ListeningRouteHint[] = [];
-  for (const mood of moodCandidates.slice(0, 1)) {
-    const href = `/tracks/?mood=${encodeURIComponent(mood)}&tsort=likes`;
-    const label = mood === "CHEEKY" ? "Cheeky Mood Tracks" : `${mood} Mood Tracks`;
-    trackRouteHints.push({ label, href, kind: "tracks" });
+  if (broadSoundIntent) {
+    if (broadMood) {
+      const moodTrackCount = getFacetCount(trackFacetCounts, "mood", broadMood);
+      trackRouteHints.push({
+        label: `${broadMood} Mood Tracks`,
+        href: `/tracks/?mood=${encodeURIComponent(broadMood)}&tsort=likes`,
+        kind: "tracks",
+        trackCount: moodTrackCount,
+      });
+    }
+    if (broadInstrument) {
+      const instrumentTrackCount = getFacetCount(trackFacetCounts, "instrument", broadInstrument);
+      trackRouteHints.push({
+        label: `${broadInstrument} Instrument Tracks`,
+        href: `/tracks/?instrument=${encodeURIComponent(broadInstrument)}&tsort=likes`,
+        kind: "tracks",
+        trackCount: instrumentTrackCount,
+      });
+    }
+    if (broadGenre) {
+      const primaryGenreCount = getFacetCount(trackFacetCounts, "primary_genre", broadGenre);
+      const anyGenreCount = getFacetCount(trackFacetCounts, "genre", broadGenre);
+      const useSearchRoute =
+        Boolean(anyGenreCount) && (!primaryGenreCount || (anyGenreCount ?? 0) > (primaryGenreCount ?? 0) * 1.5);
+      trackRouteHints.push({
+        label: useSearchRoute ? `${broadGenre} Genre Search Tracks` : `${broadGenre} Genre Tracks`,
+        href: useSearchRoute
+          ? `/tracks/?q=${encodeURIComponent(broadGenre)}&tsort=likes`
+          : `/tracks/?primary_genre=${encodeURIComponent(broadGenre)}&tsort=likes`,
+        kind: "tracks",
+        trackCount: useSearchRoute ? anyGenreCount : primaryGenreCount,
+      });
+    }
+  } else {
+    for (const mood of moodCandidates.slice(0, 1)) {
+      const href = `/tracks/?mood=${encodeURIComponent(mood)}&tsort=likes`;
+      const label = mood === "CHEEKY" ? "Cheeky Mood Tracks" : `${mood} Mood Tracks`;
+      const moodTrackCount = getFacetCount(trackFacetCounts, "mood", mood);
+      trackRouteHints.push({ label, href, kind: "tracks", trackCount: moodTrackCount });
+    }
   }
   for (const book of songbookCandidates.slice(0, 1)) {
     const label = book.slug === "lang-french" ? "French Language Songbook" : `${book.title} Songbook`;
@@ -438,7 +612,38 @@ export const buildRecommendationContext = (
       ? "- User is already in tracks, so make the first listening route a filtered tracks link when relevant."
       : pageType === "songbook"
         ? "- User is already in songbooks, so make the first listening route a relevant songbook when possible."
-        : "- Use page context only as a soft hint; user intent still takes priority.",
+        : "- User page context is high-signal. Acknowledge it in your first sentence when present, then continue with user intent.",
+    "- Route safety: songs must link as /songs/{slug}.",
+    "- Route safety: tracks links are list/filter routes with query params (for example /tracks/?mood=RAINY&tsort=likes), never /tracks/{song-slug}.",
+    "- Formatting safety: if you name a specific song, link that title to /songs/{slug}, not to any /tracks query link.",
+    "- Keep song picks separate from listening routes: song picks use /songs/{slug}; exploration links to /tracks/?... should be presented as separate route options with explicit labels.",
+    "- Markdown safety: use exact [Label](/route) syntax only. Never output [Label]((/route)).",
+    "- Route-link labels must be human-readable (for example 'Jazz Tracks'), never raw route text.",
+    "- Label fidelity rule: every route label must match the href filters exactly. Never claim a blend (for example 'Jazz & Dub') unless both are actually encoded in the URL.",
+    "- For /tracks/?primary_genre=<GENRE>, use label shape '<GENRE> Primary Genre Tracks'. For /tracks/?mood=<MOOD>, use '<MOOD> Mood Tracks'. For /tracks/?instrument=<INSTRUMENT>, use '<INSTRUMENT> Instrument Tracks'. For /tracks/?q=<KEYWORD>, use '<KEYWORD> Genre Search Tracks'.",
+    "- If discussing cross-genre or secondary-genre exploration, use /tracks/?q=<keyword>&tsort=likes with an explicit search label (for example '<keyword> Search Tracks') instead of mislabeling a primary_genre link.",
+    broadSoundIntent
+      ? "- The user asked for a broad sound quality (for example texture). Do not dump a long list of genres. Offer 2-3 concrete listening routes max across different filter types: one primary_genre route, one mood route, and one instrument route."
+      : null,
+    trackExplorationIntent || broadSoundIntent
+      ? "- Sound-led hierarchy rule: lead with listening routes first. Song picks are secondary, optional examples."
+      : null,
+    broadSoundIntent && surpriseIntent
+      ? "- User asked to be surprised. Still provide concrete specifics: include at least one mood route, one instrument route, and one genre route when available."
+      : null,
+    broadSoundIntent
+      ? "- Teach the available tracks filters briefly in plain language: primary genre, secondary genre/search, mood, and instrument."
+      : null,
+    broadSoundIntent
+      ? "- Mention that primary genre is exact genre filtering, while broader/secondary texture discovery can use /tracks/?q=<keyword>&tsort=likes."
+      : null,
+    trackExplorationIntent || broadSoundIntent
+      ? "- MUST include one teach-to-fish line: tell the user they can refine with mood + instrument + primary genre, and use track search (/tracks/?q=...) for secondary/cross-genre exploration."
+      : null,
+    broadSoundIntent
+      ? "- Clarify framing briefly: Bananasutra is meaning-first at the song level; /tracks is a listening-flow lens for sound exploration."
+      : null,
+    "- Count safety: include route counts only when the facet count is exact from known track-level data; otherwise omit the count.",
     !EXPLICIT_INTENT_PATTERN.test(queryLower)
       ? "- Avoid leading with explicit/adult-coded songs unless user explicitly asks for that intensity. If included, add a short mature-content note."
       : "- User asked for intensity/explicit edge, so stronger material is acceptable when contextually aligned.",
@@ -449,7 +654,13 @@ export const buildRecommendationContext = (
     "- Offer an optional follow-up to explore all relevant songs if user wants more.",
     listeningRoutes.length
       ? `- When useful, include one listening-first route option from: ${listeningRoutes
-          .map((route) => `[${route.label}](${route.href})`)
+          .map((route) => {
+            const labelWithCount =
+              route.kind === "tracks" && route.trackCount && route.trackCount > 0
+                ? `${route.label} (${route.trackCount} tracks)`
+                : route.label;
+            return `[${labelWithCount}](${route.href})`;
+          })
           .join(" or ")}`
       : "- When useful, include one listening-first route option from /tracks (mood+sort) or a relevant /songbooks/{slug} page.",
     "",

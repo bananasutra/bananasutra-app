@@ -316,7 +316,8 @@ const handler: ExportedHandler<Env> = {
 
     try {
       const systemStatic = buildSystemPrompt(LIBRARY_INJECTS);
-      const systemDynamic = buildRecommendationContext(messages, LIBRARY_INJECTS, pageContext);
+      const diversitySeed = actorId ? `${actorId}:${requestId}` : requestId;
+      const systemDynamic = buildRecommendationContext(messages, LIBRARY_INJECTS, pageContext, diversitySeed);
       let resolveStreamResult: ((value: ClaudeStreamFinishResult) => void) | null = null;
       const streamResultPromise = new Promise<ClaudeStreamFinishResult>((resolve) => {
         resolveStreamResult = resolve;

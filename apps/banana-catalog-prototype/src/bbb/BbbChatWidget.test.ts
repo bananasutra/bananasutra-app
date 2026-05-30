@@ -99,14 +99,15 @@ test('capConversationHistory preserves initial assistant intro on first user tur
 
 test('parseMarkdownLinks converts safe internal and external links', () => {
   const segments = parseMarkdownLinks('Visit [Songs](/songs) and [Docs](https://example.com).')
-  assert.equal(segments.length, 5)
-  assert.deepEqual(segments[1], {
+  const links = segments.filter((segment) => segment.type === 'link')
+  assert.equal(links.length, 2)
+  assert.deepEqual(links[0], {
     type: 'link',
     text: 'Songs',
     href: '/songs',
     external: false,
   })
-  assert.deepEqual(segments[3], {
+  assert.deepEqual(links[1], {
     type: 'link',
     text: 'Docs',
     href: 'https://example.com',
@@ -117,6 +118,35 @@ test('parseMarkdownLinks converts safe internal and external links', () => {
 test('parseMarkdownLinks leaves unsafe links as text', () => {
   const segments = parseMarkdownLinks('Bad [link](javascript:alert(1)) should stay text.')
   assert.equal(segments.some((segment) => segment.type === 'link'), false)
+})
+
+test('parseMarkdownLinks normalizes malformed double-parenthesis route links', () => {
+  const segments = parseMarkdownLinks('Try [Jazz Tracks]((/tracks/?primary_genre=JAZZ&tsort=likes)).')
+  const link = segments.find((segment) => segment.type === 'link')
+  assert.deepEqual(link, {
+    type: 'link',
+    text: 'Jazz Tracks',
+    href: '/tracks/?primary_genre=JAZZ&tsort=likes',
+    external: false,
+  })
+})
+
+test('parseMarkdownLinks auto-links bare internal routes in plain text', () => {
+  const segments = parseMarkdownLinks('Use /tracks/?primary_genre=JAZZ&tsort=likes or /songs/url-slug.')
+  const links = segments.filter((segment) => segment.type === 'link')
+  assert.equal(links.length, 2)
+  assert.deepEqual(links[0], {
+    type: 'link',
+    text: '/tracks/?primary_genre=JAZZ&tsort=likes',
+    href: '/tracks/?primary_genre=JAZZ&tsort=likes',
+    external: false,
+  })
+  assert.deepEqual(links[1], {
+    type: 'link',
+    text: '/songs/url-slug',
+    href: '/songs/url-slug',
+    external: false,
+  })
 })
 
 test('parseInlineEmphasis identifies markdown bold segments', () => {

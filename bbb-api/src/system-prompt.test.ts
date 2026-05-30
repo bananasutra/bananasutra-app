@@ -37,6 +37,79 @@ test("template includes required Bertrand opening phrasing", () => {
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /prefer \/tracks and \/songbooks links/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /songbooks are topic-led collections and tracks are mood-led continuous listening/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /offer an "explore all" path/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Build links only from sitemap-defined route patterns/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Song links must always use \/songs\/\{url_slug\}/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Tracks links are for listening\/filter views and must use query params/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Never construct \/tracks\/\{song_slug\} links/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Tracks filtered listening: \/tracks\/\?\{filter\}=\{value\}&tsort=likes/);
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /If you name a specific song title, that song title must link to that song's \/songs\/\{url_slug\} page, never to a \/tracks query route/,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Keep song examples and listening routes separate: song bullets link to \/songs\/\{url_slug\}, while exploration routes use clearly labeled \/tracks\/\?\.\.\. links/,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Markdown link syntax must be exact: \[Label\]\(\/route\)\. Never output double-parenthesis links like \[Label\]\(\(\/route\)\)\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /For route links, always use a human label \(for example \[Jazz Tracks\]\(\/tracks\/\?primary_genre=JAZZ&tsort=likes\)\), never a raw URL as link text\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Link-label truthfulness is mandatory: the label must accurately describe the exact filter in the URL\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /If a link uses \/tracks\/\?primary_genre=JAZZ\.\.\., the label must indicate JAZZ only/,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /primary genre is a direct genre filter; secondary\/cross-genre discovery should use \/tracks\/\?q=<keyword>&tsort=likes/,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /For broad sound asks \(for example "texture", "vibe", "something sonic"\), do not dump a long genre list\. Offer 2-3 concrete route options max across different filter types, typically one genre route, one mood route, and one instrument route\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /In those broad sound asks, explicitly teach the available \/tracks filters in plain language: primary genre, mood, and instrument\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /For sound-led asks, answer hierarchy is: tracks listening routes first, songs second\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /In track\/music replies, always include one concise teach-to-fish line covering primary genre, mood, instrument, and secondary\/cross-genre search via \/tracks\/\?q=<keyword>&tsort=likes\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Keep Bananasutra framing clear: songs are meaning-first; \/tracks is a listening-flow lens for sound exploration, not a generic streaming catalog\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /When suggesting a \/tracks route, include the subset size when available/,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Count safety: only show route counts when you can trust them from known track-level facet counts; otherwise omit the number rather than guessing\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /For vague sound asks, include one short "how to refine" line: users can narrow results with mood, instrument, and primary genre filters\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /For track\/music discovery replies, always include one short "how to refine" line with mood \+ instrument \+ primary genre\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /If you include specific song picks for a sound-quality ask, prefer songs whose associated tracks match the requested facet\(s\)/,
+  );
 });
 
 test("template enforces exact numbered sutra order guidance", () => {
