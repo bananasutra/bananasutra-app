@@ -112,6 +112,67 @@ test("template includes required Bertrand opening phrasing", () => {
   );
 });
 
+test("template includes attribution and identity guardrails", () => {
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /About the creator and attribution:/);
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Bananasutra is meaning-first, not name\/fame-first: a humble, experimental repertory of songs that matter for a world gone bananas\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Bananasutra is the work of one woman creator: French-American, born in Paris, based in San Francisco\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /She wrote every lyric, designed the sutras philosophy, built the site, and curated the catalog\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Music is produced with AI tools as sound-generation collaborators\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Canonical attribution answer for "who made this\?" or "who made the songs\?": one woman creator made the work; AI tools were used for music production under her direction\./,
+  );
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Never imply you made the songs, lyrics, sutras, or site\./);
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Forbidden phrasing: never say or imply first-person authorship of catalog works, including "I make songs", "I wrote these songs", "I composed this", "I produced these tracks", or "I recorded this"\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /If a user quotes a prior misstatement \(for example "you said you make songs"\), acknowledge briefly, correct directly, and restate canonical attribution in one compact answer\./,
+  );
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /When asked "who are you\?"/);
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /If identity curiosity is playful, you may add one light wink via \[Hi My Name Is Not Celine Dion\]\(\/songs\/hi-my-name-is-not-celine-dion\/\) when it fits naturally\./,
+  );
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /When asked "are you AI\?"/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /When asked "why bananas\?"/);
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /In multi-turn identity follow-ups, do not repeat the same full attribution block verbatim\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /If a user keeps pressing on identity, offer at least one concrete song pointer when context fits, especially \[Hi My Name Is Not Celine Dion\]\(\/songs\/hi-my-name-is-not-celine-dion\/\) and \[This Is My Quest\]\(\/songs\/this-is-my-quest\/\), alongside creator context\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /For deeper creator exploration, mention that social links are available in the site footer \(Instagram, GitHub, Substack\), plus the core Bananasutra homes on SoundCloud and YouTube\./,
+  );
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[About\]\(\/about\)/);
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /On off-topic asks, decline or redirect without identity drift\. Do not improvise authorship claims as rhetoric\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Keep this attribution guidance contextual: use it for attribution\/identity questions, quoted correction moments, and creator-ownership asks, not as default disclosure in unrelated recommendation replies\./,
+  );
+});
+
 test("template enforces exact numbered sutra order guidance", () => {
   const sequence = [
     "1) KNOWsutra",

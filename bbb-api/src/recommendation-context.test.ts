@@ -127,6 +127,15 @@ test("buildRecommendationContext anchors fun asks to SHOWsutra and cheeky mood r
 test("buildRecommendationContext expands guidance when user asks for all songs", () => {
   const context = buildRecommendationContext([{ role: "user", content: "show me all hope songs" }], fixtureInjects);
   assert.match(context, /User asked for all relevant songs, so provide a broader concise list/);
+  assert.match(context, /include lyrics-only songs as part of catalog completeness, but list all playable entries first/);
+  assert.match(context, /clearly mark them as lyrics-only \/ audio in progress/);
+  assert.match(context, /Paper Lantern Prayer \| paper-lantern-prayer/);
+  assert.ok(context.indexOf("Paper Lantern Prayer | paper-lantern-prayer") > context.indexOf("Bright Morning | bright-morning"));
+  assert.ok(context.indexOf("Paper Lantern Prayer | paper-lantern-prayer") > context.indexOf("Quiet Lantern | quiet-lantern"));
+  assert.match(context, /Lyrics-only ordering rule \(MUST\): in any recommendation list, all playable songs must appear before any lyrics-only songs/);
+  assert.match(context, /Lyrics-only labeling rule \(MUST\): every lyrics-only title must be written with an inline marker/);
+  assert.ok(context.indexOf("Paper Lantern Prayer | paper-lantern-prayer") > context.indexOf("Paris At Dawn | paris-at-dawn"));
+  assert.ok(context.indexOf("Paper Lantern Prayer | paper-lantern-prayer") > context.indexOf("Cosmic Drift | cosmic-drift"));
 });
 
 test("buildRecommendationContext adds broad-sound guidance for texture asks", () => {
@@ -346,6 +355,19 @@ test("listening-focused sound ask de-prioritizes lyrics-only shortlist entries",
 test("meaning-led ask does not force sound-led classification", () => {
   const context = buildRecommendationContext([{ role: "user", content: "I need hope" }], fixtureInjects);
   assert.doesNotMatch(context, /Classify this ask as sound-led/);
+});
+
+test("explicit lyrics-only ask keeps lyrics-only songs eligible", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "show me all hope songs, lyrics-only is fine too" }],
+    fixtureInjects,
+  );
+  assert.match(context, /Paper Lantern Prayer \| paper-lantern-prayer/);
+  assert.match(context, /availability:lyrics-only/);
+  assert.match(
+    context,
+    /If including lyrics-only songs, clearly mark them as lyrics-only \/ audio in progress and frame them as optional pipeline glimpses\./,
+  );
 });
 
 test("multi-turn explicit song ask keeps lyrics-only out of shortlist on follow-up", () => {

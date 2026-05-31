@@ -79,6 +79,7 @@ const SUPPORT_PREFERRED_MOODS = ["KINDLY", "HOLY", "PEACHY", "RAINY"];
 // Manual maintenance list until explicit-content metadata is added to the source catalog.
 const EXPLICIT_CONTENT_SLUGS = new Set(["freee-la-fille"]);
 const EXPLICIT_INTENT_PATTERN = /\bexplicit|nsfw|adult|dirty|raw|edgy|sexual|breakup|dark\b/i;
+const LYRICS_ONLY_INTENT_PATTERN = /\b(lyrics[- ]only|words[- ]only|poem|just the words|no audio)\b/i;
 const BROAD_SOUND_PATTERN = /\b(texture|textural|vibe|sonic|soundscape|layer(?:ed|ing)?)\b/i;
 const SURPRISE_PATTERN = /\b(surprise me|i dunno|i don't know|you choose|anything)\b/i;
 const SUTRA_PAGE_PATH_PATTERN = /^\/about\/([a-z]+sutra)\/?$/i;
@@ -383,6 +384,7 @@ const scoreSong = (
   intent: IntentSignal,
   queryLower: string,
   requestedTrackFacets: TrackFacetIntent,
+  explicitLyricsOnlyIntent: boolean,
 ): RankedSong => {
   const trackMeta = tracksByTitle.get(song.title);
   const trackCount = trackMeta?.count ?? 0;
@@ -450,6 +452,10 @@ const scoreSong = (
 
   if (!EXPLICIT_INTENT_PATTERN.test(queryLower) && EXPLICIT_CONTENT_SLUGS.has(song.slug)) {
     score -= 18;
+  }
+  if (!hasPlayable && !explicitLyricsOnlyIntent) {
+    // Keep lyrics-only discoverable but never crowd out playable picks by default.
+    score -= 28;
   }
 
   if (intent.hiddenGemIntent) {
@@ -521,6 +527,7 @@ export const buildRecommendationContext = (
     (pageType === "songbook" || pageType === "song-detail" || pageType === "sutras-overview" || pageType === "sutra-page");
   const broadSoundIntent = BROAD_SOUND_PATTERN.test(queryLower);
   const surpriseIntent = SURPRISE_PATTERN.test(queryLower);
+  const explicitLyricsOnlyIntent = LYRICS_ONLY_INTENT_PATTERN.test(queryLower);
   const intent = analyzeIntent(latestUser);
   const support = analyzeSupportIntent(latestUser);
   const soundLedIntent = intent.soundLedIntent;
@@ -563,17 +570,37 @@ export const buildRecommendationContext = (
   const totalTrackCount = Array.from(tracksByTitle.values()).reduce((sum, track) => sum + track.count, 0);
   const currentSongbook = songbookSlug ? songbooks.find((book) => book.slug === songbookSlug) : null;
   const ranked = songs
-    .map((song) => scoreSong(song, tracksByTitle, videosByTitle, support, intent, queryLower, requestedTrackFacets))
+    .map((song) =>
+      scoreSong(
+        song,
+        tracksByTitle,
+        videosByTitle,
+        support,
+        intent,
+        queryLower,
+        requestedTrackFacets,
+        explicitLyricsOnlyIntent,
+      ),
+    )
     .sort((a, b) => b.score - a.score || a.song.title.localeCompare(b.song.title));
 
   const playable = ranked.filter((row) => row.trackCount > 0 || row.videoCount > 0);
   const lyricsOnly = ranked.filter((row) => row.trackCount === 0 && row.videoCount === 0);
 
   const shortlist: RankedSong[] = [];
-  shortlist.push(...playable.slice(0, 4));
-  if (!listeningFocusedIntent && lyricsOnly.length > 0) shortlist.push(lyricsOnly[0]);
-  shortlist.push(...playable.slice(4));
-  const rankedBase = (shortlist.length ? shortlist : lyricsOnly).slice(0, 12);
+  if (breadthLedIntent) {
+    // Breadth-led "all songs" asks should include lyrics-only songs, but only after playable entries.
+    shortlist.push(...playable);
+    shortlist.push(...lyricsOnly);
+  } else {
+    shortlist.push(...playable.slice(0, 4));
+    if (!listeningFocusedIntent && lyricsOnly.length > 0) shortlist.push(lyricsOnly[0]);
+    shortlist.push(...playable.slice(4));
+  }
+  const rankedBase =
+    breadthLedIntent
+      ? shortlist.slice(0, 12)
+      : (shortlist.length ? shortlist : lyricsOnly).slice(0, 12);
   let topRanked = rankedBase.slice(0, 6);
   // Rotate strong candidates for broad sound asks so repeated refreshes do not anchor to the same song pair.
   if ((broadSoundIntent || trackExplorationIntent) && diversitySeed && rankedBase.length > 2) {
@@ -815,6 +842,10 @@ export const buildRecommendationContext = (
     breadthLedIntent
       ? "- Classify this ask as breadth-led: lead with filtered /songs and /tracks routes first, then include sutra page and 2-4 relevant songbooks, then offer narrowing."
       : null,
+    breadthLedIntent
+      ? "- For breadth-led 'all songs' asks, include lyrics-only songs as part of catalog completeness, but list all playable entries first."
+      : null,
+    "- If including lyrics-only songs, clearly mark them as lyrics-only / audio in progress and frame them as optional pipeline glimpses.",
     breadthLedIntent && sutraInQuery
       ? `- Sutra breadth route pack for this ask: [${sutraInQuery.toUpperCase()} Songs](/songs/?sutra=${encodeURIComponent(
           sutraInQuery.toUpperCase(),
@@ -834,6 +865,8 @@ export const buildRecommendationContext = (
     listeningFocusedIntent
       ? "- Listening-focused ask: de-prioritize lyrics-only picks unless user explicitly asks for lyrics-only material."
       : null,
+    "- Lyrics-only ordering rule (MUST): in any recommendation list, all playable songs must appear before any lyrics-only songs unless the user explicitly asks for lyrics-only.",
+    "- Lyrics-only labeling rule (MUST): every lyrics-only title must be written with an inline marker, for example '(lyrics-only, audio in progress)'.",
     "- User page context is high-signal. When page context is present, acknowledge it once in your first sentence, then continue with user intent (no page-fixation loops).",
     mustDeliverRouteAware
       ? "- Route-aware delivery rule (MUST): deliver concrete guidance immediately for this ask and page context. Do not reply with questions only."
