@@ -50,6 +50,8 @@ test("buildRecommendationContext returns ranked playable shortlist for support i
   assert.match(context, /Route safety: songs must link as \/songs\/\{slug\}\./);
   assert.match(context, /tracks links are list\/filter routes with query params/);
   assert.match(context, /never \/tracks\/\{song-slug\}/);
+  assert.match(context, /If including a lyrics-only song, mark it explicitly as lyrics-only \/ audio in progress/);
+  assert.match(context, /keep it after playable picks, and frame it as optional words-first exploration/);
   assert.match(context, /Formatting safety: if you name a specific song, link that title to \/songs\/\{slug\}, not to any \/tracks query link\./);
   assert.match(
     context,
@@ -283,6 +285,107 @@ test("buildRecommendationContext boosts songs whose track facets match the ask",
   assert.ok(context.indexOf("Cosmic Drift | cosmic-drift") < context.indexOf("Bright Morning | bright-morning"));
   assert.match(context, /\[TRIPPY Mood Tracks \(\d+ tracks\)\]\(\/tracks\/\?mood=TRIPPY&tsort=likes\)/);
   assert.match(context, /MUST include one teach-to-fish line: tell the user they can refine with mood \+ instrument \+ primary genre/);
+  assert.match(context, /do not enumerate full mood\/instrument inventories unless user explicitly asks for all facets/);
+  assert.match(context, /Use 1-2 examples max plus 'etc\.'/);
+});
+
+test("sound-led jazz ask routes to primary genre and tracks-first guidance", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "any jazz?" }], fixtureInjects, { pathname: "/tracks" });
+  assert.match(context, /Classify this ask as sound-led/);
+  assert.match(context, /Lead with \/tracks routes first/);
+  assert.match(context, /\/tracks\/\?primary_genre=JAZZ&tsort=likes/);
+  assert.match(context, /tracks are often hybrid\/experimental, not strict single-genre buckets/);
+  assert.match(context, /pair primary genre route\(s\) with one secondary\/cross-genre search route/);
+});
+
+test("sound-led instrument ask routes to instrument filter", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "songs with cello please" }], fixtureInjects, {
+    pathname: "/tracks",
+  });
+  assert.match(context, /Classify this ask as sound-led/);
+  assert.match(context, /\/tracks\/\?instrument=CELLO&tsort=likes/);
+});
+
+test("sound-led frenchy ask routes with explicit mood filter", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "give me frenchy tracks" }], fixtureInjects, {
+    pathname: "/tracks",
+  });
+  assert.match(context, /Classify this ask as sound-led/);
+  assert.match(context, /\/tracks\/\?mood=FRENCHY&tsort=likes/);
+});
+
+test("psychedelic exception prefers text search route plus trippy mood", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "i'm into psychedelic stuff" }], fixtureInjects, {
+    pathname: "/tracks",
+  });
+  assert.match(context, /Psychedelic exception/);
+  assert.match(context, /\/tracks\/\?q=psychedelic&tsort=likes/);
+  assert.match(context, /\/tracks\/\?mood=TRIPPY&tsort=likes/);
+});
+
+test("breadth-led sutra ask routes to songs and tracks and explains blow-vs-quack", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "list every BLOWsutra song" }], fixtureInjects, {
+    pathname: "/about/blowsutra",
+  });
+  assert.match(context, /Classify this ask as breadth-led/);
+  assert.match(context, /\/songs\/\?sutra=BLOWSUTRA&tsort=likes/);
+  assert.match(context, /\/tracks\/\?sutra=BLOWSUTRA&tsort=likes/);
+  assert.match(context, /BLOWsutra is the broad injustice frame; QUACKsutra is the political-foul-play sub-sutra/);
+});
+
+test("listening-focused sound ask de-prioritizes lyrics-only shortlist entries", () => {
+  const context = buildRecommendationContext(
+    [{ role: "assistant", content: "prior turn" }, { role: "user", content: "I want dance tracks" }],
+    fixtureInjects,
+    { pathname: "/tracks" },
+  );
+  assert.match(context, /Listening-focused ask: de-prioritize lyrics-only picks/);
+  assert.doesNotMatch(context, /Paper Lantern Prayer \| paper-lantern-prayer/);
+});
+
+test("meaning-led ask does not force sound-led classification", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "I need hope" }], fixtureInjects);
+  assert.doesNotMatch(context, /Classify this ask as sound-led/);
+});
+
+test("multi-turn explicit song ask keeps lyrics-only out of shortlist on follow-up", () => {
+  const transcriptFixture: LibraryInjects = {
+    ...fixtureInjects,
+    songs: [
+      "We Remember What (We Remember What) We Feel | ideas you can feel in your bones. | GROWsutra | TRUTH | beBRAVE | LIGHT | we-remember-what-we-feel",
+      "Broken Whole | Words falling apart and finding meaning. | GROWsutra | TRUTH | beBRAVE | LIGHT | broken-whole",
+      "Poetry Matters | Poetry is survival. | GLOWsutra | TRUTH | beBRAVE | LIGHT | poetry-matters",
+    ].join("\n"),
+    tracks: ["We Remember What (We Remember What) We Feel | 3trk | INDIE | KINDLY | MID | GUITAR"].join("\n"),
+    videos: "",
+  };
+
+  const context = buildRecommendationContext(
+    [
+      { role: "user", content: "okay, give me a song" },
+      { role: "assistant", content: "Before I point you somewhere, one quick question..." },
+      { role: "user", content: "\"ideas you can feel\" sounds like a good start" },
+    ],
+    transcriptFixture,
+  );
+
+  assert.match(context, /Listening-focused ask: de-prioritize lyrics-only picks/);
+  assert.match(context, /We Remember What \(We Remember What\) We Feel \| we-remember-what-we-feel/);
+  assert.doesNotMatch(context, /Broken Whole \| broken-whole/);
+  assert.doesNotMatch(context, /Poetry Matters \| poetry-matters/);
+});
+
+test("phrase and keyword relevancy boosts literal-title matches", () => {
+  const context = buildRecommendationContext(
+    [
+      { role: "user", content: "okay, give me a song" },
+      { role: "assistant", content: "Before I point you somewhere, one quick question..." },
+      { role: "user", content: "\"ideas you can feel\" sounds like a good start" },
+    ],
+    fixtureInjects,
+  );
+  assert.match(context, /Ranked shortlist:/);
+  assert.match(context, /Use titled markdown links like \[Song Title\]\(\/songs\/slug\)\./);
 });
 
 test("support regex boundaries do not false-match words like warmth or courage", () => {

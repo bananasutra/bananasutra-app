@@ -38,6 +38,8 @@ type IntentSignal = {
   languageIntentFrench: boolean;
   hiddenGemIntent: boolean;
   exhaustiveListIntent: boolean;
+  soundLedIntent: boolean;
+  breadthLedIntent: boolean;
 };
 
 type PageType =
@@ -80,9 +82,66 @@ const EXPLICIT_INTENT_PATTERN = /\bexplicit|nsfw|adult|dirty|raw|edgy|sexual|bre
 const BROAD_SOUND_PATTERN = /\b(texture|textural|vibe|sonic|soundscape|layer(?:ed|ing)?)\b/i;
 const SURPRISE_PATTERN = /\b(surprise me|i dunno|i don't know|you choose|anything)\b/i;
 const SUTRA_PAGE_PATH_PATTERN = /^\/about\/([a-z]+sutra)\/?$/i;
+const SOUND_GENRE_TERMS = [
+  "blues",
+  "burlesque",
+  "circus",
+  "dub",
+  "flamenco",
+  "folk",
+  "gipsy",
+  "hip hop",
+  "indie",
+  "jazz",
+  "lofi",
+  "mantra",
+  "motorik",
+  "psychedelic",
+  "ragga",
+  "rock",
+  "tango",
+  "techno",
+  "waltz",
+  "world",
+] as const;
+const SOUND_INSTRUMENT_TERMS = [
+  "accordion",
+  "banjo",
+  "bass",
+  "brass",
+  "cello",
+  "clarinet",
+  "drum",
+  "drums",
+  "fiddle",
+  "guitar",
+  "harmonica",
+  "piano",
+  "voice",
+  "xylophone",
+] as const;
+const SOUND_TEMPO_TERMS = ["upbeat", "midbeat", "lowbeat", "dance", "dancing", "slow", "tempo"] as const;
+const SOUND_MOOD_TERMS = ["rainy", "cheeky", "trippy", "frenchy", "kindly", "punky"] as const;
+const BREADTH_LED_PATTERN =
+  /\b(list|show|give).*\b(all|everything|every)\b|\bwhat (are|is) your\b.*\b(all|everything)\b|\beverything by\b/i;
+const SUTRA_TAGS = ["knowsutra", "blowsutra", "showsutra", "growsutra", "flowsutra", "glowsutra", "bowsutra", "quacksutra"] as const;
 
 const splitPipe = (line: string): string[] => line.split("|").map((part) => part.trim());
 const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const termToPattern = (term: string): RegExp =>
+  new RegExp(`\\b${escapeRegExp(term).replace(/\\ /g, "\\s+")}\\b`, "i");
+const anyTermMatch = (text: string, terms: readonly string[]): boolean =>
+  terms.some((term) => termToPattern(term).test(text));
+const firstMatchedTerm = (text: string, terms: readonly string[]): string | null => {
+  for (const term of terms) {
+    if (termToPattern(term).test(text)) return term;
+  }
+  return null;
+};
+const detectSutraInQuery = (queryLower: string): string | null => {
+  const hit = SUTRA_TAGS.find((sutra) => queryLower.includes(sutra));
+  return hit ?? null;
+};
 
 const parseTrackCount = (raw: string): number => {
   const match = raw.match(/^(\d+)/);
@@ -116,6 +175,8 @@ const parseSongs = (injects: LibraryInjects): SongMeta[] =>
       };
     })
     .filter((song) => Boolean(song.title && song.slug));
+
+const QUERY_STOPWORDS = new Set(["that", "this", "with", "from", "have", "just", "good", "like", "start", "sounds"]);
 
 const parseTracks = (injects: LibraryInjects): Map<string, TrackMeta> => {
   const byTitle = new Map<string, TrackMeta>();
@@ -215,12 +276,22 @@ const analyzeSupportIntent = (text: string): SupportSignal => {
   return { supportIntent: keywords.length > 0, keywords };
 };
 
-const analyzeIntent = (text: string): IntentSignal => ({
-  funIntent: FUN_PATTERNS.some((pattern) => pattern.test(text)),
-  languageIntentFrench: /\bfrench|francais|français\b/i.test(text),
-  hiddenGemIntent: /\bhidden\s+gems?\b|\bgems?\b/i.test(text),
-  exhaustiveListIntent: /\b(all|every|full|complete)\b/i.test(text),
-});
+const analyzeIntent = (text: string): IntentSignal => {
+  const soundLedIntent =
+    anyTermMatch(text, SOUND_GENRE_TERMS) ||
+    anyTermMatch(text, SOUND_INSTRUMENT_TERMS) ||
+    anyTermMatch(text, SOUND_TEMPO_TERMS) ||
+    anyTermMatch(text, SOUND_MOOD_TERMS);
+
+  return {
+    funIntent: FUN_PATTERNS.some((pattern) => pattern.test(text)),
+    languageIntentFrench: /\bfrench|francais|français\b/i.test(text),
+    hiddenGemIntent: /\bhidden\s+gems?\b|\bgems?\b/i.test(text),
+    exhaustiveListIntent: /\b(all|every|full|complete)\b/i.test(text),
+    soundLedIntent,
+    breadthLedIntent: BREADTH_LED_PATTERN.test(text),
+  };
+};
 
 type RankedSong = {
   song: SongMeta;
@@ -389,12 +460,32 @@ const scoreSong = (
       score -= 10;
     }
   }
+  const titleLower = song.title.toLowerCase();
+  const summaryLower = song.summary.toLowerCase();
+  const topicLower = song.topic.toLowerCase();
+  const intentionLower = song.intention.toLowerCase();
+  const quotedPhrases = Array.from(queryLower.matchAll(/"([^"]{3,})"/g)).map((match) => (match[1] ?? "").trim());
+  for (const phrase of quotedPhrases.slice(0, 2)) {
+    if (phrase && haystack.includes(phrase)) score += 14;
+  }
 
   const words = queryLower
     .split(/[^a-z0-9]+/)
     .map((word) => word.trim())
-    .filter((word) => word.length >= 4);
+    .filter((word) => word.length >= 4 && !QUERY_STOPWORDS.has(word));
   for (const word of words.slice(0, 8)) {
+    if (titleLower.includes(word)) {
+      score += 10;
+      continue;
+    }
+    if (topicLower.includes(word) || intentionLower.includes(word)) {
+      score += 7;
+      continue;
+    }
+    if (summaryLower.includes(word)) {
+      score += 4;
+      continue;
+    }
     if (haystack.includes(word)) score += 2;
   }
 
@@ -430,14 +521,33 @@ export const buildRecommendationContext = (
     (pageType === "songbook" || pageType === "song-detail" || pageType === "sutras-overview" || pageType === "sutra-page");
   const broadSoundIntent = BROAD_SOUND_PATTERN.test(queryLower);
   const surpriseIntent = SURPRISE_PATTERN.test(queryLower);
-  const trackExplorationIntent = /\b(track|tracks|listen|listening|music|mood|genre|instrument)\b/i.test(latestUser);
-  const support = analyzeSupportIntent(latestUser);
   const intent = analyzeIntent(latestUser);
+  const support = analyzeSupportIntent(latestUser);
+  const soundLedIntent = intent.soundLedIntent;
+  const breadthLedIntent = intent.breadthLedIntent || intent.exhaustiveListIntent;
+  const conversationListeningCue = messages.some(
+    (message) =>
+      message.role === "user" &&
+      /\b(give me|recommend|suggest|show me)\b.*\b(song|songs|track|tracks|music)\b|\bwhat should i listen\b|\bi want\b.*\b(song|track|music)\b/i.test(
+        message.content ?? "",
+      ),
+  );
+  const trackExplorationIntent =
+    soundLedIntent || broadSoundIntent || /\b(track|tracks|listen|listening|music|mood|genre|instrument)\b/i.test(latestUser);
+  const listeningFocusedIntent =
+    soundLedIntent || /\b(listen|listening|tracks?|dance|audio|playable)\b/i.test(queryLower) || (hasPriorAssistantTurn && conversationListeningCue);
+  const psychedelicAsk = /\bpsychedelic\b/i.test(queryLower);
+  const danceAsk = /\b(dance|dancing)\b/i.test(queryLower);
+  const sutraInQuery = detectSutraInQuery(queryLower);
+  const soundKeyword = firstMatchedTerm(queryLower, [...SOUND_GENRE_TERMS, ...SOUND_INSTRUMENT_TERMS, ...SOUND_MOOD_TERMS]);
   if (
     !routeAwareDeliveryAsk &&
     !support.supportIntent &&
     !intent.funIntent &&
+    !soundLedIntent &&
+    !breadthLedIntent &&
     !broadSoundIntent &&
+    !(hasPriorAssistantTurn && conversationListeningCue) &&
     !/\bsong|listen|track|music|video|recommend|suggest\b/i.test(latestUser)
   ) {
     return "";
@@ -461,7 +571,7 @@ export const buildRecommendationContext = (
 
   const shortlist: RankedSong[] = [];
   shortlist.push(...playable.slice(0, 4));
-  if (lyricsOnly.length > 0) shortlist.push(lyricsOnly[0]);
+  if (!listeningFocusedIntent && lyricsOnly.length > 0) shortlist.push(lyricsOnly[0]);
   shortlist.push(...playable.slice(4));
   const rankedBase = (shortlist.length ? shortlist : lyricsOnly).slice(0, 12);
   let topRanked = rankedBase.slice(0, 6);
@@ -564,6 +674,61 @@ export const buildRecommendationContext = (
   const listeningRoutes: ListeningRouteHint[] = [];
   const trackRouteHints: ListeningRouteHint[] = [];
   const songbookRouteHints: ListeningRouteHint[] = [];
+  if (soundLedIntent) {
+    for (const genre of Array.from(requestedTrackFacets.primaryGenres).slice(0, 2)) {
+      trackRouteHints.push({
+        label: `${genre} Primary Genre Tracks`,
+        href: `/tracks/?primary_genre=${encodeURIComponent(genre)}&tsort=likes`,
+        kind: "tracks",
+        trackCount: getFacetCount(trackFacetCounts, "primary_genre", genre),
+      });
+    }
+    for (const instrument of Array.from(requestedTrackFacets.instruments).slice(0, 1)) {
+      trackRouteHints.push({
+        label: `${instrument} Instrument Tracks`,
+        href: `/tracks/?instrument=${encodeURIComponent(instrument)}&tsort=likes`,
+        kind: "tracks",
+        trackCount: getFacetCount(trackFacetCounts, "instrument", instrument),
+      });
+    }
+    for (const mood of Array.from(requestedTrackFacets.moods).slice(0, 1)) {
+      trackRouteHints.push({
+        label: `${mood} Mood Tracks`,
+        href: `/tracks/?mood=${encodeURIComponent(mood)}&tsort=likes`,
+        kind: "tracks",
+        trackCount: getFacetCount(trackFacetCounts, "mood", mood),
+      });
+    }
+    if (psychedelicAsk) {
+      trackRouteHints.unshift({
+        label: "Psychedelic Search Tracks",
+        href: "/tracks/?q=psychedelic&tsort=likes",
+        kind: "tracks",
+      });
+      trackRouteHints.push({
+        label: "TRIPPY Mood Tracks",
+        href: "/tracks/?mood=TRIPPY&tsort=likes",
+        kind: "tracks",
+        trackCount: getFacetCount(trackFacetCounts, "mood", "TRIPPY"),
+      });
+    } else if (soundKeyword) {
+      trackRouteHints.push({
+        label: `${soundKeyword.toUpperCase()} Search Tracks`,
+        href: `/tracks/?q=${encodeURIComponent(soundKeyword)}&tsort=likes`,
+        kind: "tracks",
+      });
+    }
+    if (danceAsk) {
+      const fanana = songbooks.find((book) => /fanana-club/i.test(book.slug));
+      if (fanana) {
+        songbookRouteHints.unshift({
+          label: "SHOWsutra Fanana Club Songbook",
+          href: `/songbooks/${fanana.slug}`,
+          kind: "songbook",
+        });
+      }
+    }
+  }
   if (broadSoundIntent) {
     if (broadMood) {
       const moodTrackCount = getFacetCount(trackFacetCounts, "mood", broadMood);
@@ -644,6 +809,31 @@ export const buildRecommendationContext = (
   return [
     "Dynamic recommendation guidance (apply to this reply):",
     "- Prioritize this ranked shortlist before any lower-ranked songs.",
+    soundLedIntent
+      ? "- Classify this ask as sound-led: explicit sound vocabulary is present. Lead with /tracks routes first; songs are optional examples after routes."
+      : "- If no explicit sound vocabulary is present, do not force sound-led routing.",
+    breadthLedIntent
+      ? "- Classify this ask as breadth-led: lead with filtered /songs and /tracks routes first, then include sutra page and 2-4 relevant songbooks, then offer narrowing."
+      : null,
+    breadthLedIntent && sutraInQuery
+      ? `- Sutra breadth route pack for this ask: [${sutraInQuery.toUpperCase()} Songs](/songs/?sutra=${encodeURIComponent(
+          sutraInQuery.toUpperCase(),
+        )}&tsort=likes), [${sutraInQuery.toUpperCase()} Tracks](/tracks/?sutra=${encodeURIComponent(
+          sutraInQuery.toUpperCase(),
+        )}&tsort=likes), and [${sutraInQuery}](/about/${sutraInQuery}).`
+      : null,
+    breadthLedIntent && sutraInQuery === "blowsutra"
+      ? "- For BLOWsutra breadth asks, explain distinction: BLOWsutra is the broad injustice frame; QUACKsutra is the political-foul-play sub-sutra."
+      : null,
+    psychedelicAsk
+      ? "- Psychedelic exception: prioritize /tracks/?q=psychedelic&tsort=likes, then /tracks/?mood=TRIPPY&tsort=likes. You may include story-psychedelic song examples (Gladys in Wonderland, Okey Dokey No It's Not, Donkeys Years) as optional meaning-layer picks."
+      : null,
+    danceAsk
+      ? "- Dance ask handling: include route-first listening options and mention SHOWsutra Fanana Club when relevant. MIDBEAT options are acceptable for dance asks."
+      : null,
+    listeningFocusedIntent
+      ? "- Listening-focused ask: de-prioritize lyrics-only picks unless user explicitly asks for lyrics-only material."
+      : null,
     "- User page context is high-signal. When page context is present, acknowledge it once in your first sentence, then continue with user intent (no page-fixation loops).",
     mustDeliverRouteAware
       ? "- Route-aware delivery rule (MUST): deliver concrete guidance immediately for this ask and page context. Do not reply with questions only."
@@ -672,8 +862,16 @@ export const buildRecommendationContext = (
       ? "- User is already on FRENCHY tracks. Explicitly acknowledge that in your first sentence and avoid presenting it as a new discovery."
       : null,
     "- Meaning-first beats popularity-first. Use popularity only as a soft tie-breaker, and keep room for hidden gems.",
-    "- Prefer richer listening options (audio+video) when available, but do not exclude lyrics-only songs if they are meaningful matches.",
+    "- Prefer richer listening options (audio+video) when available.",
+    "- If including a lyrics-only song, mark it explicitly as lyrics-only / audio in progress, keep it after playable picks, and frame it as optional words-first exploration.",
     "- Use titled markdown links like [Song Title](/songs/slug).",
+    soundLedIntent && requestedTrackFacets.primaryGenres.size > 0
+      ? "- For genre asks, acknowledge that Bananasutra tracks are often hybrid/experimental, not strict single-genre buckets."
+      : null,
+    soundLedIntent && requestedTrackFacets.primaryGenres.size > 0
+      ? "- For genre asks, pair primary genre route(s) with one secondary/cross-genre search route (/tracks/?q=<keyword>&tsort=likes)."
+      : null,
+    "- Keep refine guidance concise: do not enumerate full mood/instrument inventories unless user explicitly asks for all facets. Use 1-2 examples max plus 'etc.'.",
     support.supportIntent
       ? "- Because user is in a support/hope context, prefer LIGHT options first unless they explicitly request darker material."
       : "- Prefer playable songs first, then broader exploration options.",
@@ -737,7 +935,7 @@ export const buildRecommendationContext = (
       ? "- Avoid leading with explicit/adult-coded songs unless user explicitly asks for that intensity. If included, add a short mature-content note."
       : "- User asked for intensity/explicit edge, so stronger material is acceptable when contextually aligned.",
     "- Never show raw route text in prose. Use titled markdown links for songs and listening routes.",
-    intent.exhaustiveListIntent
+    breadthLedIntent
       ? "- User asked for all relevant songs, so provide a broader concise list from this ranked shortlist (up to 8), not only 2-3."
       : "- Keep it concise and scannable, never a wall of text. Concise does not mean cold, a warm sentence is fine. Aim for 3-5 short bullets max.",
     "- Offer an optional follow-up to explore all relevant songs if user wants more.",
