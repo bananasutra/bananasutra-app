@@ -82,11 +82,22 @@
 .bbb-widget__link {
   color: var(--color-accent);
   text-decoration: underline;
+  text-decoration-thickness: 1px;
   text-underline-offset: 2px;
+  text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
+  transition:
+    color 120ms ease,
+    text-decoration-color 120ms ease;
 }
 
 .bbb-widget__link:hover {
-  text-decoration-thickness: 2px;
+  color: var(--color-link-hover, var(--color-accent));
+  text-decoration-color: color-mix(in srgb, currentColor 75%, transparent);
+}
+
+.bbb-widget__link:focus-visible {
+  color: var(--color-link-hover, var(--color-accent));
+  text-decoration-color: color-mix(in srgb, currentColor 75%, transparent);
 }
 
 .bbb-widget__msg--assistant {
