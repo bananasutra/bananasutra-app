@@ -75,7 +75,7 @@ test("buildRecommendationContext suggests listening routes for french queries", 
   );
   assert.match(context, /User is currently browsing \[this page\]\(\/tracks\?mood=KINDLY\)/);
   assert.match(context, /User is already in tracks\. Acknowledge that context once in your first sentence/);
-  assert.match(context, /For non-support asks, do not force LIGHT over SHADOW/);
+  assert.match(context, /If calibration helps, use clickable options \[LIGHT Songs\]\(\/songs\/\?ls=LIGHT\) and \[SHADOW Songs\]\(\/songs\/\?ls=SHADOW\)/);
   assert.match(context, /use the exact mood name FRENCHY/);
   assert.match(context, /\[Frenchy Mood Tracks\]\(\/tracks\/\?mood=FRENCHY&tsort=likes\)/);
   assert.match(context, /\[French Language Songbook\]\(\/songbooks\/lang-french\)/);
@@ -287,6 +287,14 @@ test("broad-sound diversity rotates song shortlist when seed changes", () => {
   assert.ok(outputs.size >= 2, "Expected at least two distinct shortlist orderings across seeds");
 });
 
+test("meaning/support diversity rotates song shortlist when seed changes", () => {
+  const outputs = new Set<string>();
+  for (const seed of ["seed-a", "seed-b", "seed-c", "seed-d"]) {
+    outputs.add(buildRecommendationContext([{ role: "user", content: "recommend something hopeful" }], fixtureInjects, undefined, seed));
+  }
+  assert.ok(outputs.size >= 2, "Expected at least two distinct shortlist orderings across seeds");
+});
+
 test("buildRecommendationContext boosts songs whose track facets match the ask", () => {
   const context = buildRecommendationContext([{ role: "user", content: "got trippy music?" }], fixtureInjects, {
     pathname: "/tracks",
@@ -410,6 +418,92 @@ test("phrase and keyword relevancy boosts literal-title matches", () => {
   assert.match(context, /Use titled markdown links like \[Song Title\]\(\/songs\/slug\)\./);
 });
 
+test("multi-turn explicit delivery ask enforces deliver-now guidance", () => {
+  const context = buildRecommendationContext(
+    [
+      { role: "assistant", content: "Prior guidance turn." },
+      { role: "user", content: "okay, give me a song" },
+    ],
+    fixtureInjects,
+  );
+  assert.match(context, /Deliver-the-goods rule \(MUST\): user explicitly asked for a recommendation after prior turns/);
+  assert.match(context, /Do not reply with questions only/);
+  assert.match(context, /Clarifying-question guardrail \(MUST\): you may ask one narrowing question only if paired with a concrete default pick/);
+});
+
+test("recommendation flow enforces one-question budget before concrete delivery", () => {
+  const context = buildRecommendationContext(
+    [
+      { role: "assistant", content: "Welcome." },
+      { role: "user", content: "pls serve my soul and ears" },
+      { role: "assistant", content: "Mood, meaning, or both?" },
+      { role: "user", content: "both :)" },
+    ],
+    fixtureInjects,
+  );
+  assert.match(context, /Deliver-the-goods rule \(MUST\): user explicitly asked for a recommendation after prior turns/);
+  assert.match(context, /Clarifying-question budget \(MUST\): you already asked one clarifying question in this recommendation flow/);
+});
+
+test("hope ask injects universal-light guidance across all sutras", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "I need hope" }], fixtureInjects);
+  assert.match(context, /Hope handling \(MUST\): frame hope as a universal LIGHT lens across all 7 sutras/);
+  assert.match(context, /Hope route literacy: after concrete picks, you may expose \[All LIGHT Songs\]\(\/songs\/\?ls=LIGHT\)/);
+  assert.match(context, /Hope quality guardrail: avoid context-mismatched intimacy picks/);
+});
+
+test("favorite-song ask injects it-depends guidance", () => {
+  const context = buildRecommendationContext(
+    [{ role: "assistant", content: "Prior turn." }, { role: "user", content: "what's your favorite song?" }],
+    fixtureInjects,
+  );
+  assert.match(context, /Favorite-song handling: mirror an 'it depends' stance and offer 2-4 candidates/);
+  assert.match(context, /never claim one definitive favorite/);
+});
+
+test("guidance includes global recommendation funnel and diversity transparency", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "I need hope, can you suggest songs?" }], fixtureInjects);
+  assert.match(context, /Global recommendation funnel \(MUST\): order recommendations as sutra lens first, then listening route\(s\), then specific songs, then optional lyrics-only tail/);
+  assert.match(context, /If user asks about repetition\/diversity, answer plainly: you can diversify strongly within this conversation/);
+  assert.match(context, /Originality\/source rule \(MUST\): prefer original Bananasutra lyrics by default/);
+});
+
+test("meaning-led asks include natural lyrics-extract guidance", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "I feel stuck, recommend something soulful" }], fixtureInjects);
+  assert.match(
+    context,
+    /Lyrics extract usage \(MUST\): for meaning-led asks, use one short lyric extract as an add-on to a specific song recommendation, and explain why it matches the user's ask\./,
+  );
+  assert.match(context, /Lyrics extract stand-alone exception: use a stand-alone lyric quote only when exceptionally relevant/);
+  assert.match(context, /Lyrics extract frequency \(MUST\): include at most one short lyric extract in this reply\./);
+  assert.match(context, /Lyrics extract source safety \(MUST\): quote only from provided lyric_extract snippets/);
+});
+
+test("explicit lyrics asks allow up to two short extracts", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "recommend a song and give me a lyric quote" }], fixtureInjects);
+  assert.match(context, /Lyrics extract frequency \(MUST\): user explicitly asked for words\/quotes, so you may include up to two short lyric extracts\./);
+  assert.match(context, /Lyrics extract length \(MUST\): keep each extract short/);
+});
+
+test("route-first asks do not force lyric excerpts", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "show me the jazz tracks route" }], fixtureInjects, {
+    pathname: "/tracks",
+  });
+  assert.match(context, /For route\/navigation-first asks, do not force lyric excerpts\./);
+});
+
+test("guidance lists previously recommended slugs to avoid repeats", () => {
+  const context = buildRecommendationContext(
+    [
+      { role: "assistant", content: "Try [Bright Morning](/songs/bright-morning) and [Quiet Lantern](/songs/quiet-lantern)." },
+      { role: "user", content: "recommend something hopeful" },
+    ],
+    fixtureInjects,
+  );
+  assert.match(context, /Already used: bright-morning, quiet-lantern/);
+  assert.match(context, /songs already recommended in this conversation should not be repeated/);
+});
+
 test("support regex boundaries do not false-match words like warmth or courage", () => {
   const boundaryFixtureInjects: LibraryInjects = {
     ...fixtureInjects,
@@ -430,4 +524,22 @@ test("support regex boundaries do not false-match words like warmth or courage",
   );
 
   assert.ok(context.indexOf("Warm Courage | warm-courage") < context.indexOf("Rage Spiral | rage-spiral"));
+});
+
+test("non-cover asks prefer original songs over cover/public-domain songs", () => {
+  const coverFixtureInjects: LibraryInjects = {
+    ...fixtureInjects,
+    songs: [
+      "Original Glow | A bright original anthem. | GLOWsutra | HOPE | beBRIGHT | LIGHT | original-glow | A tiny light survives the storm. | false | false",
+      "Traditional Echo | A classic standard reframed. | GLOWsutra | HOPE | beBRIGHT | LIGHT | traditional-echo | Old words, new breath. | true | true",
+    ].join("\n"),
+    tracks: [
+      "Original Glow | 2trk | INDIE | KINDLY | MID | PIANO",
+      "Traditional Echo | 2trk | INDIE | KINDLY | MID | PIANO",
+    ].join("\n"),
+    videos: "",
+  };
+
+  const context = buildRecommendationContext([{ role: "user", content: "recommend a hopeful song" }], coverFixtureInjects);
+  assert.ok(context.indexOf("Original Glow | original-glow") < context.indexOf("Traditional Echo | traditional-echo"));
 });

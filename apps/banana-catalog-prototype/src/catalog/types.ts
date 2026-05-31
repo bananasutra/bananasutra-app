@@ -28,6 +28,10 @@ export type SongCatalogItem = {
   topic: string
   intention: string
   light_shadow: string
+  /** Canonical SONGS flag: this lyrics row is a cover interpretation. */
+  cover: boolean
+  /** Canonical SONGS flag: this lyrics row is public-domain based. */
+  public_domain: boolean
   lang: string
   written_year: string
   song_in_app: boolean
@@ -249,6 +253,10 @@ export type SongDetailRecord = {
   topic: string
   intention: string
   light_shadow: string
+  /** Canonical SONGS flag: this lyrics row is a cover interpretation. */
+  cover: boolean
+  /** Canonical SONGS flag: this lyrics row is public-domain based. */
+  public_domain: boolean
   lang: string
   written_year?: string
   song_in_app: boolean

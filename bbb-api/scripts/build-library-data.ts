@@ -7,11 +7,14 @@ type JsonRecord = Record<string, unknown>;
 interface SongRecord extends JsonRecord {
   lyrics_title?: string;
   summary_short?: string;
+  lyrics_extract?: string;
   sutra?: string;
   topic?: string;
   intention?: string;
   light_shadow?: string;
   url_slug?: string;
+  cover?: boolean;
+  public_domain?: boolean;
 }
 
 interface TrackRecord extends JsonRecord {
@@ -95,6 +98,9 @@ const buildSongLines = (songs: SongRecord[]): string[] =>
         sanitize(song.intention),
         sanitize(song.light_shadow),
         sanitize(song.url_slug),
+        sanitize(song.lyrics_extract),
+        sanitize(song.cover ? "true" : "false"),
+        sanitize(song.public_domain ? "true" : "false"),
       ].join(" | "),
     )
     .filter((line) => line.split(" | ").some((part) => part.length > 0))

@@ -1,5 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import React from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import {
   capConversationHistory,
   getOrCreateActorId,
@@ -8,6 +10,34 @@ import {
   parseSseChunk,
   updateLastAssistant,
 } from './BbbChatUtils'
+
+function renderInlineTextNodes(text: string, keyPrefix: string): React.ReactNode[] {
+  return parseInlineEmphasis(text).map((piece, idx) =>
+    piece.bold
+      ? React.createElement('strong', { key: `${keyPrefix}-b-${idx}` }, piece.text)
+      : piece.italic
+        ? React.createElement('em', { key: `${keyPrefix}-i-${idx}` }, piece.text)
+        : React.createElement('span', { key: `${keyPrefix}-t-${idx}` }, piece.text),
+  )
+}
+
+function renderAssistantMessageHtml(content: string): string {
+  const children = parseMarkdownLinks(content).map((segment, segmentIdx) =>
+    segment.type === 'link'
+      ? React.createElement(
+          'a',
+          { key: `seg-${segmentIdx}`, href: segment.href },
+          ...renderInlineTextNodes(segment.text, `link-${segmentIdx}`),
+        )
+      : React.createElement(
+          'span',
+          { key: `seg-${segmentIdx}` },
+          ...renderInlineTextNodes(segment.text, `text-${segmentIdx}`),
+        ),
+  )
+
+  return renderToStaticMarkup(React.createElement('p', null, ...children))
+}
 
 test('parseSseChunk parses token and done events in order', () => {
   const raw = [
@@ -149,6 +179,33 @@ test('parseMarkdownLinks auto-links bare internal routes in plain text', () => {
   })
 })
 
+test('parseMarkdownLinks preserves bold markdown text with spaces', () => {
+  const raw = '**If you want kindness as a practice:** Dare: KIND(ness) is direct.'
+  const segments = parseMarkdownLinks(raw)
+  assert.deepEqual(segments, [{ type: 'text', text: raw }])
+  const emphasis = parseInlineEmphasis((segments[0] as { type: 'text'; text: string }).text)
+  assert.equal(emphasis[0]?.bold, true)
+  assert.equal(emphasis[0]?.text, 'If you want kindness as a practice:')
+})
+
+test('parseMarkdownLinks keeps emphasis parse-friendly around bare routes', () => {
+  const segments = parseMarkdownLinks('Try **Truth that stings** near /tracks/?q=truth.')
+  const textParts = segments.filter((segment) => segment.type === 'text')
+  const links = segments.filter((segment) => segment.type === 'link')
+  assert.equal(links.length, 1)
+  assert.deepEqual(links[0], {
+    type: 'link',
+    text: '/tracks/?q=truth',
+    href: '/tracks/?q=truth',
+    external: false,
+  })
+  assert.equal(textParts.length, 2)
+  assert.equal((textParts[0] as { type: 'text'; text: string }).text, 'Try **Truth that stings** near ')
+  assert.equal((textParts[1] as { type: 'text'; text: string }).text, '.')
+  const emphasis = parseInlineEmphasis((textParts[0] as { type: 'text'; text: string }).text)
+  assert.equal(emphasis.some((segment) => segment.bold && segment.text === 'Truth that stings'), true)
+})
+
 test('parseInlineEmphasis identifies markdown bold segments', () => {
   const segments = parseInlineEmphasis('- **Truth that stings** when lying feels easier')
   assert.equal(segments.length, 3)
@@ -186,6 +243,12 @@ test('parseInlineEmphasis leaves unmatched or triple-asterisk edge cases as plai
     { text: 'nope', bold: true, italic: false },
     { text: '*', bold: false, italic: false },
   ])
+})
+
+test('assistant render output includes strong tags for markdown bold with spaces', () => {
+  const html = renderAssistantMessageHtml('**If you want kindness as a practice:** Dare: KIND(ness) is direct.')
+  assert.match(html, /<strong>If you want kindness as a practice:<\/strong>/)
+  assert.match(html, /Dare: KIND\(ness\) is direct\./)
 })
 
 test('getOrCreateActorId persists actor id in localStorage', () => {

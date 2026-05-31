@@ -128,32 +128,40 @@ function normalizeHref(href: string): string {
 }
 
 function pushTextWithAutoLinks(segments: MessageSegment[], text: string): void {
-  const tokens = text.split(/(\s+)/)
-  for (const token of tokens) {
-    if (!token) continue
-    if (/^\s+$/.test(token)) {
-      segments.push({ type: 'text', text: token })
-      continue
+  const routePattern = /\/[^\s)\]'"`]+/g
+  let cursor = 0
+  let match = routePattern.exec(text)
+
+  while (match) {
+    const rawRoute = match[0] ?? ''
+    const matchStart = match.index
+    const matchEnd = matchStart + rawRoute.length
+    const trimmedRoute = rawRoute.replace(/[.,!?;:]+$/g, '')
+    const trailingPunctuation = rawRoute.slice(trimmedRoute.length)
+    const hrefMeta = classifyHref(trimmedRoute)
+
+    if (matchStart > cursor) {
+      segments.push({ type: 'text', text: text.slice(cursor, matchStart) })
     }
-    const leading = token.match(/^[("'[]+/)?.[0] ?? ''
-    const trailing = token.match(/[.,!?;:)\]'"`]+$/)?.[0] ?? ''
-    const coreStart = leading.length
-    const coreEnd = token.length - trailing.length
-    const core = token.slice(coreStart, Math.max(coreStart, coreEnd))
-    const normalizedCore = normalizeHref(core)
-    const hrefMeta = classifyHref(normalizedCore)
-    if (normalizedCore.startsWith('/') && hrefMeta.safe) {
-      if (leading) segments.push({ type: 'text', text: leading })
+    if (trimmedRoute.startsWith('/') && hrefMeta.safe) {
       segments.push({
         type: 'link',
-        text: normalizedCore,
-        href: normalizedCore,
+        text: trimmedRoute,
+        href: trimmedRoute,
         external: false,
       })
-      if (trailing) segments.push({ type: 'text', text: trailing })
-      continue
+      if (trailingPunctuation) {
+        segments.push({ type: 'text', text: trailingPunctuation })
+      }
+    } else {
+      segments.push({ type: 'text', text: rawRoute })
     }
-    segments.push({ type: 'text', text: token })
+    cursor = matchEnd
+    match = routePattern.exec(text)
+  }
+
+  if (cursor < text.length) {
+    segments.push({ type: 'text', text: text.slice(cursor) })
   }
 }
 

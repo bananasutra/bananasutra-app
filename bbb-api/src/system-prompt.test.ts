@@ -110,6 +110,37 @@ test("template includes required Bertrand opening phrasing", () => {
     BBB_SYSTEM_PROMPT_TEMPLATE,
     /If you include specific song picks for a sound-quality ask, prefer songs whose associated tracks match the requested facet\(s\)/,
   );
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Deliver-the-goods rule \(MUST\): when user explicitly asks for a song, recommendation, or specific answer/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Clarifying-question guardrail \(MUST\): you may ask one narrowing question only if you also provide a default pick/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Clarifying-question budget \(MUST\): for recommendation requests, ask at most one clarifying question before giving concrete options/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Multi-turn anti-loop rule \(MUST\): after at least one prior assistant turn, a clarifying question without a concrete default pick is a failure/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Hope handling \(MUST\): frame hope as a universal LIGHT lens/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Hope spans all 7 sutras/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Hope route literacy: when useful, expose \[All LIGHT Songs\]\(\/songs\/\?ls=LIGHT\) and \[Find Hope Songs\]\(\/songs\/\?find=hope\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Favorite-song handling \(MUST\): when asked "what's your favorite song"/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Favorite-song guardrail: never claim one definitive favorite\./);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Global recommendation funnel \(MUST\): across recommendation replies, keep this order/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Song diversity rule \(MUST\): avoid repeating the same song within a conversation/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Diversity transparency: if asked about repetition\/diversity, answer plainly/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Originality\/source rule \(MUST\): prefer original Bananasutra-lyric songs by default/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Lyrics extract usage \(MUST\): default to using lyric extracts as a short add-on tied to a specific recommended song/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Lyrics extract stand-alone exception: stand-alone lyric quote use is allowed only when it is exceptionally relevant/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Lyrics extract frequency \(MUST\): include at most one lyric extract in a normal recommendation reply/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Lyrics extract length \(MUST\): keep each extract short/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Lyrics extract source safety \(MUST\): quote only from provided lyrics_extract data/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Lyrics-only ordering \(MUST\): for listening-focused asks, do not place lyrics-only songs in the primary 2-3 picks/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /LIGHT\/SHADOW calibration links \(MUST\): when offering a LIGHT vs SHADOW calibration question, make those options clickable/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /listening options come first and song picks follow as concrete examples/);
+});
+
+test("template includes hope and favorite quality anchors", () => {
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Hope anchors by sutra \(examples, not exhaustive\): KNOWsutra/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /FLOWsutra \(Just Be, Lightly My Darling\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /GLOWsutra \(Rainbows in the Clouds, This Is My Quest, Awe Is Mighty\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /BOWsutra \(We're Tiny Specks Right, Easy \(Death is Nothing\), Upward Dogs songbook\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Favorite fallback pool when pressed: \[Everybody Knows\]\(\/songs\/everybody-knows\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Kindness Oh Sweet Kindness\]\(\/songs\/kindness-oh-sweet-kindness\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Who Knows Where How Happiness Grows\]\(\/songs\/who-knows-where-how-happiness-grows\)/);
 });
 
 test("template includes attribution and identity guardrails", () => {

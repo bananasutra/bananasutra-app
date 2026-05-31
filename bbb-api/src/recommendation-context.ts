@@ -14,6 +14,9 @@ type SongMeta = {
   intention: string;
   lightShadow: string;
   slug: string;
+  lyricsExtract: string;
+  isCover: boolean;
+  isPublicDomain: boolean;
 };
 
 type TrackMeta = {
@@ -80,6 +83,7 @@ const SUPPORT_PREFERRED_MOODS = ["KINDLY", "HOLY", "PEACHY", "RAINY"];
 const EXPLICIT_CONTENT_SLUGS = new Set(["freee-la-fille"]);
 const EXPLICIT_INTENT_PATTERN = /\bexplicit|nsfw|adult|dirty|raw|edgy|sexual|breakup|dark\b/i;
 const LYRICS_ONLY_INTENT_PATTERN = /\b(lyrics[- ]only|words[- ]only|poem|just the words|no audio)\b/i;
+const COVER_OR_PD_INTENT_PATTERN = /\b(cover|covers|public\s+domain|traditional)\b/i;
 const BROAD_SOUND_PATTERN = /\b(texture|textural|vibe|sonic|soundscape|layer(?:ed|ing)?)\b/i;
 const SURPRISE_PATTERN = /\b(surprise me|i dunno|i don't know|you choose|anything)\b/i;
 const SUTRA_PAGE_PATH_PATTERN = /^\/about\/([a-z]+sutra)\/?$/i;
@@ -126,6 +130,16 @@ const SOUND_MOOD_TERMS = ["rainy", "cheeky", "trippy", "frenchy", "kindly", "pun
 const BREADTH_LED_PATTERN =
   /\b(list|show|give).*\b(all|everything|every)\b|\bwhat (are|is) your\b.*\b(all|everything)\b|\beverything by\b/i;
 const SUTRA_TAGS = ["knowsutra", "blowsutra", "showsutra", "growsutra", "flowsutra", "glowsutra", "bowsutra", "quacksutra"] as const;
+const EXPLICIT_DELIVERY_PATTERNS: RegExp[] = [
+  /\b(give me|recommend|suggest|show me)\b/i,
+  /\bokay,?\s+(give|show|let)\b/i,
+  /\bwhat (should i|do you recommend)\b/i,
+  /\bi want\b/i,
+  /\bplaylists?\b/i,
+  /\bserve\b.*\b(soul|ears?)\b/i,
+];
+const FAVORITE_SONG_PATTERN = /\b(favou?rite|best)\b.*\bsong\b|\bwhat'?s your favou?rite\b/i;
+const SONG_LINK_SLUG_PATTERN = /\/songs\/([a-z0-9-]+)/gi;
 
 const splitPipe = (line: string): string[] => line.split("|").map((part) => part.trim());
 const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -143,6 +157,17 @@ const detectSutraInQuery = (queryLower: string): string | null => {
   const hit = SUTRA_TAGS.find((sutra) => queryLower.includes(sutra));
   return hit ?? null;
 };
+const extractPreviouslyRecommendedSlugs = (messages: ChatMessage[]): string[] => {
+  const slugs = new Set<string>();
+  for (const message of messages) {
+    if (message.role !== "assistant") continue;
+    for (const match of message.content.matchAll(SONG_LINK_SLUG_PATTERN)) {
+      const slug = (match[1] ?? "").trim().toLowerCase();
+      if (slug) slugs.add(slug);
+    }
+  }
+  return Array.from(slugs);
+};
 
 const parseTrackCount = (raw: string): number => {
   const match = raw.match(/^(\d+)/);
@@ -156,6 +181,11 @@ const hashSeed = (seed: string): number => {
     hash = Math.imul(hash, 16777619);
   }
   return Math.abs(hash >>> 0);
+};
+const clipText = (text: string, maxLength: number): string => {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  if (normalized.length <= maxLength) return normalized;
+  return `${normalized.slice(0, Math.max(0, maxLength - 1)).trim()}…`;
 };
 
 const parseSongs = (injects: LibraryInjects): SongMeta[] =>
@@ -173,6 +203,9 @@ const parseSongs = (injects: LibraryInjects): SongMeta[] =>
         intention: parts[4] ?? "",
         lightShadow: (parts[5] ?? "").toUpperCase(),
         slug: parts[6] ?? "",
+        lyricsExtract: parts[7] ?? "",
+        isCover: (parts[8] ?? "").toLowerCase() === "true",
+        isPublicDomain: (parts[9] ?? "").toLowerCase() === "true",
       };
     })
     .filter((song) => Boolean(song.title && song.slug));
@@ -395,7 +428,8 @@ const scoreSong = (
   const videoCount = video?.count ?? 0;
   const featured = video?.featured ?? false;
   const hasPlayable = trackCount > 0 || videoCount > 0;
-  const haystack = `${song.title} ${song.summary} ${song.topic} ${song.intention}`.toLowerCase();
+  const haystack = `${song.title} ${song.summary} ${song.lyricsExtract} ${song.topic} ${song.intention}`.toLowerCase();
+  const coverOrPdIntent = COVER_OR_PD_INTENT_PATTERN.test(queryLower);
 
   let score = 0;
   if (hasPlayable) score += 55;
@@ -453,6 +487,12 @@ const scoreSong = (
   if (!EXPLICIT_INTENT_PATTERN.test(queryLower) && EXPLICIT_CONTENT_SLUGS.has(song.slug)) {
     score -= 18;
   }
+  if ((song.isCover || song.isPublicDomain) && !coverOrPdIntent) {
+    // Prefer original catalog voice by default unless user explicitly asks for covers/public-domain.
+    score -= 8;
+  } else if ((song.isCover || song.isPublicDomain) && coverOrPdIntent) {
+    score += 8;
+  }
   if (!hasPlayable && !explicitLyricsOnlyIntent) {
     // Keep lyrics-only discoverable but never crowd out playable picks by default.
     score -= 28;
@@ -468,6 +508,7 @@ const scoreSong = (
   }
   const titleLower = song.title.toLowerCase();
   const summaryLower = song.summary.toLowerCase();
+  const lyricsExtractLower = song.lyricsExtract.toLowerCase();
   const topicLower = song.topic.toLowerCase();
   const intentionLower = song.intention.toLowerCase();
   const quotedPhrases = Array.from(queryLower.matchAll(/"([^"]{3,})"/g)).map((match) => (match[1] ?? "").trim());
@@ -489,6 +530,10 @@ const scoreSong = (
       continue;
     }
     if (summaryLower.includes(word)) {
+      score += 4;
+      continue;
+    }
+    if (lyricsExtractLower.includes(word)) {
       score += 4;
       continue;
     }
@@ -535,7 +580,7 @@ export const buildRecommendationContext = (
   const conversationListeningCue = messages.some(
     (message) =>
       message.role === "user" &&
-      /\b(give me|recommend|suggest|show me)\b.*\b(song|songs|track|tracks|music)\b|\bwhat should i listen\b|\bi want\b.*\b(song|track|music)\b/i.test(
+      /\b(give me|recommend|suggest|show me)\b.*\b(song|songs|track|tracks|music|playlist|playlists)\b|\bwhat should i listen\b|\bi want\b.*\b(song|track|music)\b|\bplaylists?\b|\bserve\b.*\b(soul|ears?)\b/i.test(
         message.content ?? "",
       ),
   );
@@ -545,6 +590,33 @@ export const buildRecommendationContext = (
     soundLedIntent || /\b(listen|listening|tracks?|dance|audio|playable)\b/i.test(queryLower) || (hasPriorAssistantTurn && conversationListeningCue);
   const psychedelicAsk = /\bpsychedelic\b/i.test(queryLower);
   const danceAsk = /\b(dance|dancing)\b/i.test(queryLower);
+  const explicitDelivery = EXPLICIT_DELIVERY_PATTERNS.some((pattern) => pattern.test(latestUser));
+  let seenUserTurn = false;
+  let priorAssistantQuestionCount = 0;
+  for (const message of messages.slice(0, -1)) {
+    if (message.role === "user") {
+      seenUserTurn = true;
+      continue;
+    }
+    if (seenUserTurn && message.role === "assistant" && /\?/.test(message.content ?? "")) {
+      priorAssistantQuestionCount += 1;
+    }
+  }
+  const recommendationFlow = explicitDelivery || conversationListeningCue || /\b(song|songs|track|tracks|music|playlist|playlists)\b/i.test(queryLower);
+  const questionBudgetExhausted = recommendationFlow && priorAssistantQuestionCount >= 1;
+  const mustDeliverNow = (explicitDelivery && hasPriorAssistantTurn) || questionBudgetExhausted;
+  const explicitLyricsExtractAsk = /\b(lyrics?|line|lines|quote|quotes|excerpt|wording|words)\b/i.test(queryLower);
+  const pureNavigationAsk = /\b(where|link|route|filter|browse|tracks\?|songs\?)\b/i.test(queryLower) && !support.supportIntent;
+  const meaningLedAsk =
+    !soundLedIntent &&
+    !breadthLedIntent &&
+    !pureNavigationAsk &&
+    (support.supportIntent ||
+      /\b(meaning|theme|themes|intention|intentions|topic|topics|sutra|why|resonate|resonates|stuck|hope|grief|loss|lonely|alone|healing)\b/i.test(
+        queryLower,
+      ));
+  const hopeAsk = /\bhope\b/i.test(queryLower);
+  const favoriteSongAsk = FAVORITE_SONG_PATTERN.test(queryLower);
   const sutraInQuery = detectSutraInQuery(queryLower);
   const soundKeyword = firstMatchedTerm(queryLower, [...SOUND_GENRE_TERMS, ...SOUND_INSTRUMENT_TERMS, ...SOUND_MOOD_TERMS]);
   if (
@@ -554,6 +626,7 @@ export const buildRecommendationContext = (
     !soundLedIntent &&
     !breadthLedIntent &&
     !broadSoundIntent &&
+    !explicitDelivery &&
     !(hasPriorAssistantTurn && conversationListeningCue) &&
     !/\bsong|listen|track|music|video|recommend|suggest\b/i.test(latestUser)
   ) {
@@ -569,6 +642,8 @@ export const buildRecommendationContext = (
   const uniqueSutras = new Set(songs.map((song) => song.sutra).filter(Boolean));
   const totalTrackCount = Array.from(tracksByTitle.values()).reduce((sum, track) => sum + track.count, 0);
   const currentSongbook = songbookSlug ? songbooks.find((book) => book.slug === songbookSlug) : null;
+  const previouslyRecommendedSlugs = extractPreviouslyRecommendedSlugs(messages);
+  const previouslyRecommendedSlugSet = new Set(previouslyRecommendedSlugs);
   const ranked = songs
     .map((song) =>
       scoreSong(
@@ -601,11 +676,15 @@ export const buildRecommendationContext = (
     breadthLedIntent
       ? shortlist.slice(0, 12)
       : (shortlist.length ? shortlist : lyricsOnly).slice(0, 12);
-  let topRanked = rankedBase.slice(0, 6);
-  // Rotate strong candidates for broad sound asks so repeated refreshes do not anchor to the same song pair.
-  if ((broadSoundIntent || trackExplorationIntent) && diversitySeed && rankedBase.length > 2) {
-    const offset = hashSeed(`${diversitySeed}:${queryLower}`) % rankedBase.length;
-    const rotated = [...rankedBase.slice(offset), ...rankedBase.slice(0, offset)];
+  const dedupedRankedBase = previouslyRecommendedSlugSet.size
+    ? rankedBase.filter((row) => !previouslyRecommendedSlugSet.has(row.song.slug))
+    : rankedBase;
+  const effectiveRankedBase = dedupedRankedBase.length >= 3 ? dedupedRankedBase : rankedBase;
+  let topRanked = effectiveRankedBase.slice(0, 6);
+  // Rotate strong candidates so repeated asks do not anchor to the same song pair.
+  if (diversitySeed && effectiveRankedBase.length > 2) {
+    const offset = hashSeed(`${diversitySeed}:${queryLower}`) % effectiveRankedBase.length;
+    const rotated = [...effectiveRankedBase.slice(offset), ...effectiveRankedBase.slice(0, offset)];
     topRanked = rotated.slice(0, 6);
   }
   if (topRanked.length === 0) return "";
@@ -619,7 +698,8 @@ export const buildRecommendationContext = (
           : row.videoCount > 0
             ? "video-only"
             : "lyrics-only";
-    const details = `availability:${availability}, tracks:${row.trackCount}, videos:${row.videoCount}${row.featured ? ", featured:yes" : ""}`;
+    const lyricExtract = row.song.lyricsExtract ? clipText(row.song.lyricsExtract, 140) : "";
+    const details = `availability:${availability}, tracks:${row.trackCount}, videos:${row.videoCount}${row.featured ? ", featured:yes" : ""}${lyricExtract ? `, lyric_extract:${lyricExtract}` : ""}`;
     return `${idx + 1}. ${row.song.title} | ${row.song.slug} | ${row.song.lightShadow || "n/a"} | ${details}`;
   });
 
@@ -865,8 +945,53 @@ export const buildRecommendationContext = (
     listeningFocusedIntent
       ? "- Listening-focused ask: de-prioritize lyrics-only picks unless user explicitly asks for lyrics-only material."
       : null,
+    mustDeliverNow
+      ? "- Deliver-the-goods rule (MUST): user explicitly asked for a recommendation after prior turns. Deliver at least one specific pick in this response. Do not reply with questions only."
+      : null,
+    explicitDelivery
+      ? "- Clarifying-question guardrail (MUST): you may ask one narrowing question only if paired with a concrete default pick the user can take now."
+      : null,
+    questionBudgetExhausted
+      ? "- Clarifying-question budget (MUST): you already asked one clarifying question in this recommendation flow. Do not ask another question before concrete options."
+      : null,
+    hopeAsk
+      ? "- Hope handling (MUST): frame hope as a universal LIGHT lens across all 7 sutras, then match picks to the user's emotional shape."
+      : null,
+    hopeAsk
+      ? "- Hope route literacy: after concrete picks, you may expose [All LIGHT Songs](/songs/?ls=LIGHT) and [Find Hope Songs](/songs/?find=hope)."
+      : null,
+    hopeAsk
+      ? "- Hope quality guardrail: avoid context-mismatched intimacy picks and avoid leading with lyrics-only entries for listening-focused hope asks."
+      : null,
+    favoriteSongAsk
+      ? "- Favorite-song handling: mirror an 'it depends' stance and offer 2-4 candidates; never claim one definitive favorite."
+      : null,
+    meaningLedAsk
+      ? "- Lyrics extract usage (MUST): for meaning-led asks, use one short lyric extract as an add-on to a specific song recommendation, and explain why it matches the user's ask."
+      : null,
+    "- Lyrics extract stand-alone exception: use a stand-alone lyric quote only when exceptionally relevant to the user's exact wording and unlikely to confuse.",
+    explicitLyricsExtractAsk
+      ? "- Lyrics extract frequency (MUST): user explicitly asked for words/quotes, so you may include up to two short lyric extracts."
+      : "- Lyrics extract frequency (MUST): include at most one short lyric extract in this reply.",
+    "- Lyrics extract length (MUST): keep each extract short (about 1-2 lines, roughly <= 140 characters).",
+    "- Lyrics extract source safety (MUST): quote only from provided lyric_extract snippets; never invent quote text.",
+    pureNavigationAsk
+      ? "- For route/navigation-first asks, do not force lyric excerpts. Prioritize navigation clarity."
+      : null,
+    "- Lyrics extract content safety: avoid explicit/intimate lyric quoting unless user intent clearly asks for that intensity.",
+    "- Global recommendation funnel (MUST): order recommendations as sutra lens first, then listening route(s), then specific songs, then optional lyrics-only tail.",
+    previouslyRecommendedSlugs.length
+      ? `- Conversation diversity rule (MUST): songs already recommended in this conversation should not be repeated unless the user asks for them. Already used: ${previouslyRecommendedSlugs
+          .slice(0, 8)
+          .join(", ")}.`
+      : "- Conversation diversity rule (MUST): avoid repeating the same songs in this conversation; rotate to other strong matches.",
+    "- If user asks about repetition/diversity, answer plainly: you can diversify strongly within this conversation, may not retain cross-session memory, and can provide a fresh angle now.",
+    "- Originality/source rule (MUST): prefer original Bananasutra lyrics by default. If recommending a cover or public-domain song, label it transparently and pair with at least one original option unless user explicitly asked for covers/public-domain.",
     "- Lyrics-only ordering rule (MUST): in any recommendation list, all playable songs must appear before any lyrics-only songs unless the user explicitly asks for lyrics-only.",
     "- Lyrics-only labeling rule (MUST): every lyrics-only title must be written with an inline marker, for example '(lyrics-only, audio in progress)'.",
+    listeningFocusedIntent
+      ? "- Listening-focused lyrics-only rule (MUST): keep lyrics-only options out of the primary 2-3 picks; if included, place them only as an optional tail after playable picks."
+      : null,
     "- User page context is high-signal. When page context is present, acknowledge it once in your first sentence, then continue with user intent (no page-fixation loops).",
     mustDeliverRouteAware
       ? "- Route-aware delivery rule (MUST): deliver concrete guidance immediately for this ask and page context. Do not reply with questions only."
@@ -910,7 +1035,7 @@ export const buildRecommendationContext = (
       : "- Prefer playable songs first, then broader exploration options.",
     support.supportIntent
       ? "- Keep LIGHT-first support handling for this reply; do not escalate into heavier SHADOW material unless asked."
-      : "- For non-support asks, do not force LIGHT over SHADOW. Use LIGHT/SHADOW as a follow-up calibration question when useful.",
+      : "- For non-support asks, do not force LIGHT over SHADOW. If calibration helps, use clickable options [LIGHT Songs](/songs/?ls=LIGHT) and [SHADOW Songs](/songs/?ls=SHADOW).",
     '- For each recommended song, include one concise "why this might help right now" reason.',
     "- Begin with one short natural sentence that names the sutra angle and links the specific sutra page when known (for example [GLOWsutra](/about/glowsutra)).",
     support.supportIntent
@@ -925,7 +1050,7 @@ export const buildRecommendationContext = (
       : "- If this is the first turn, keep the opening intro concise.",
     '- Do not assume profile/history facts you cannot know. Never claim "first visit", "first time here", or "new user" unless the user explicitly says it.',
     '- Keep it conversational and concise with short natural sentences, not label-style blocks like "Sutra lens:".',
-    "- Keep the distinction explicit in plain language: one short segue sentence introducing the song picks, then one separate listening-flow sentence.",
+    "- Keep the distinction explicit in plain language: one short listening-flow sentence first, then one short segue sentence introducing song picks.",
     "- In the listening-flow sentence, explain briefly that songbooks are topic-led collections and tracks are mood-led continuous listening.",
     "- Do not reuse the same individual song links in the listening-flow sentence; use /tracks or /songbooks routes for continuous listening.",
     intent.languageIntentFrench
