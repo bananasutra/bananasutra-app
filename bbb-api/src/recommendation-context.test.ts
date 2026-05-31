@@ -72,7 +72,7 @@ test("buildRecommendationContext suggests listening routes for french queries", 
     { pathname: "/tracks", search: "?mood=KINDLY" },
   );
   assert.match(context, /User is currently browsing \[this page\]\(\/tracks\?mood=KINDLY\)/);
-  assert.match(context, /User is already in tracks, so make the first listening route a filtered tracks link/);
+  assert.match(context, /User is already in tracks\. Acknowledge that context once in your first sentence/);
   assert.match(context, /For non-support asks, do not force LIGHT over SHADOW/);
   assert.match(context, /use the exact mood name FRENCHY/);
   assert.match(context, /\[Frenchy Mood Tracks\]\(\/tracks\/\?mood=FRENCHY&tsort=likes\)/);
@@ -92,6 +92,7 @@ test("buildRecommendationContext prioritizes songbook route first when already i
     .find((line) => line.includes("include one listening-first route option from:"));
   assert.ok(Boolean(routeLine));
   assert.ok((routeLine ?? "").indexOf("[French Language Songbook]") < (routeLine ?? "").indexOf("[FRENCHY Mood Tracks"));
+  assert.match(context, /User is already in songbooks\. Acknowledge that context once in your first sentence/);
 });
 
 test("buildRecommendationContext acknowledges already-on-frenchy-tracks context", () => {
@@ -163,6 +164,101 @@ test("buildRecommendationContext uses tracks-first hierarchy for sound-led asks"
     "seed-1",
   );
   assert.match(context, /Sound-led hierarchy rule: lead with listening routes first/);
+});
+
+test("buildRecommendationContext adds song-detail page acknowledgement guidance", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "recommend more like this please" }],
+    fixtureInjects,
+    { pathname: "/songs/tell-the-truth" },
+  );
+  assert.match(context, /User is on a song-detail page \(\/songs\/tell-the-truth\)/);
+  assert.match(context, /ask one axis-choice question \(topic\/intention vs\. sound\/genre\)/);
+});
+
+test("buildRecommendationContext adds sutras-overview acknowledgement guidance", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "what should I listen to here?" }],
+    fixtureInjects,
+    { pathname: "/about/sutras" },
+  );
+  assert.match(context, /User is on \/about\/sutras \(the compass page\)/);
+});
+
+test("buildRecommendationContext adds sutra-page acknowledgement guidance", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "what should I listen to?" }],
+    fixtureInjects,
+    { pathname: "/about/knowsutra" },
+  );
+  assert.match(context, /User is on a specific sutra page \(\/about\/knowsutra\)/);
+  assert.match(context, /ground guidance in this sutra before expanding/);
+});
+
+test("buildRecommendationContext adds muses page acknowledgement guidance", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "what should I listen to?" }],
+    fixtureInjects,
+    { pathname: "/about/muses" },
+  );
+  assert.match(context, /User is on \/about\/muses/);
+});
+
+test("buildRecommendationContext keeps generic high-signal page guidance on root route", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "what should I listen to?" }],
+    fixtureInjects,
+    { pathname: "/" },
+  );
+  assert.match(context, /User page context is high-signal when present/);
+});
+
+test("buildRecommendationContext enforces route-aware delivery on songbook asks", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "what should i listen to?" }],
+    fixtureInjects,
+    { pathname: "/songbooks/lang-french" },
+  );
+  assert.match(context, /Route-aware delivery rule \(MUST\): deliver concrete guidance immediately/);
+  assert.match(context, /Songbook-page behavior \(MUST\): start with the current songbook and one complementary listening route/);
+  assert.match(
+    context,
+    /Songbook-page concrete anchor \(MUST\): explicitly reference \[Lang: French\]\(\/songbooks\/lang-french\)/,
+  );
+});
+
+test("buildRecommendationContext enforces route-aware delivery on sutras overview asks", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "what's good here\?" }],
+    fixtureInjects,
+    { pathname: "/about/sutras" },
+  );
+  assert.match(context, /Route-aware delivery rule \(MUST\): deliver concrete guidance immediately/);
+  assert.match(context, /Sutras-overview behavior \(MUST\): start with one concrete sutra entry point and one concrete listening path/);
+  assert.match(context, /Sutras-overview concrete anchor \(MUST\): include at least one direct sutra link/);
+});
+
+test("buildRecommendationContext enforces route-aware delivery on song-detail more-like-this asks", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "more like this" }],
+    fixtureInjects,
+    { pathname: "/songs/tell-the-truth" },
+  );
+  assert.match(context, /Route-aware delivery rule \(MUST\): deliver concrete guidance immediately/);
+  assert.match(context, /Song-detail 'more like this' behavior \(MUST\): name the current song, then provide one similar pick and one listening route/);
+});
+
+test("buildRecommendationContext provides exact global catalog totals and bans approximations", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "what's good here?" }],
+    fixtureInjects,
+    { pathname: "/about/sutras" },
+  );
+  assert.match(
+    context,
+    /Catalog stats safety \(P0, MUST\): if you mention global totals, use exact values from this data only: 6 songs, 17 tracks, 4 songbooks, 5 sutras\./,
+  );
+  assert.match(context, /never use approximate totals .* and never guess counts/);
 });
 
 test("broad-sound diversity rotates song shortlist when seed changes", () => {

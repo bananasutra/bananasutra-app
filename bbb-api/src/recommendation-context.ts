@@ -40,6 +40,17 @@ type IntentSignal = {
   exhaustiveListIntent: boolean;
 };
 
+type PageType =
+  | "tracks"
+  | "songbook"
+  | "song-detail"
+  | "sutras-overview"
+  | "sutra-page"
+  | "muses"
+  | "quotes"
+  | "about"
+  | "other";
+
 const SUPPORT_PATTERNS: Array<{ pattern: RegExp; keyword: string }> = [
   { pattern: /\bhope\b/i, keyword: "hope" },
   { pattern: /\bheal(?:ing)?\b/i, keyword: "healing" },
@@ -68,6 +79,7 @@ const EXPLICIT_CONTENT_SLUGS = new Set(["freee-la-fille"]);
 const EXPLICIT_INTENT_PATTERN = /\bexplicit|nsfw|adult|dirty|raw|edgy|sexual|breakup|dark\b/i;
 const BROAD_SOUND_PATTERN = /\b(texture|textural|vibe|sonic|soundscape|layer(?:ed|ing)?)\b/i;
 const SURPRISE_PATTERN = /\b(surprise me|i dunno|i don't know|you choose|anything)\b/i;
+const SUTRA_PAGE_PATH_PATTERN = /^\/about\/([a-z]+sutra)\/?$/i;
 
 const splitPipe = (line: string): string[] => line.split("|").map((part) => part.trim());
 const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -244,12 +256,37 @@ type TrackFacetCounts = {
   instrument: Record<string, number>;
 };
 
-const inferPageType = (pageContext?: BbbPageContext): "tracks" | "songbook" | "song" | "other" => {
-  const pathname = pageContext?.pathname ?? "";
+const inferPageType = (pageContext?: BbbPageContext): PageType => {
+  const pathname = (pageContext?.pathname ?? "").trim();
+  const normalized = pathname.toLowerCase();
+
   if (pathname.startsWith("/tracks")) return "tracks";
   if (pathname.startsWith("/songbooks")) return "songbook";
-  if (pathname.startsWith("/songs")) return "song";
+  if (pathname.startsWith("/songs/")) return "song-detail";
+  if (normalized === "/about/sutras" || normalized === "/about/sutras/") return "sutras-overview";
+  if (SUTRA_PAGE_PATH_PATTERN.test(normalized)) return "sutra-page";
+  if (normalized.startsWith("/about/muses")) return "muses";
+  if (normalized.startsWith("/about/quotes")) return "quotes";
+  if (normalized.startsWith("/about")) return "about";
   return "other";
+};
+
+const extractSongSlugFromPath = (pathname?: string): string | null => {
+  if (!pathname) return null;
+  const match = pathname.match(/^\/songs\/([^/?#]+)/i);
+  return match?.[1] ?? null;
+};
+
+const extractSutraSlugFromPath = (pathname?: string): string | null => {
+  if (!pathname) return null;
+  const match = pathname.match(SUTRA_PAGE_PATH_PATTERN);
+  return match?.[1] ?? null;
+};
+
+const extractSongbookSlugFromPath = (pathname?: string): string | null => {
+  if (!pathname) return null;
+  const match = pathname.match(/^\/songbooks\/([^/?#]+)/i);
+  return match?.[1] ?? null;
 };
 
 const parseSongbooks = (injects: LibraryInjects): SongbookMeta[] =>
@@ -375,18 +412,29 @@ export const buildRecommendationContext = (
   const hasPriorAssistantTurn = messages.slice(0, -1).some((message) => message.role === "assistant");
   const pageType = inferPageType(pageContext);
   const pageRoute = `${pageContext?.pathname ?? ""}${pageContext?.search ?? ""}`.trim();
+  const songDetailSlug = extractSongSlugFromPath(pageContext?.pathname);
+  const sutraPageSlug = extractSutraSlugFromPath(pageContext?.pathname);
+  const songbookSlug = extractSongbookSlugFromPath(pageContext?.pathname);
   const pageSearch = pageContext?.search ?? "";
   const pageParams = new URLSearchParams(pageSearch.startsWith("?") ? pageSearch.slice(1) : pageSearch);
   const currentMood = (pageParams.get("mood") ?? "").trim().toUpperCase();
   const isAlreadyFrenchTracks = pageType === "tracks" && currentMood === "FRENCHY";
 
   const queryLower = latestUser.toLowerCase();
+  const routeAwareDeliveryAsk =
+    /\b(what should i listen to|what should i hear|what's good here|what is good here|more like this|tell me about this song|tell me about this track)\b/i.test(
+      queryLower,
+    );
+  const mustDeliverRouteAware =
+    routeAwareDeliveryAsk &&
+    (pageType === "songbook" || pageType === "song-detail" || pageType === "sutras-overview" || pageType === "sutra-page");
   const broadSoundIntent = BROAD_SOUND_PATTERN.test(queryLower);
   const surpriseIntent = SURPRISE_PATTERN.test(queryLower);
   const trackExplorationIntent = /\b(track|tracks|listen|listening|music|mood|genre|instrument)\b/i.test(latestUser);
   const support = analyzeSupportIntent(latestUser);
   const intent = analyzeIntent(latestUser);
   if (
+    !routeAwareDeliveryAsk &&
     !support.supportIntent &&
     !intent.funIntent &&
     !broadSoundIntent &&
@@ -401,6 +449,9 @@ export const buildRecommendationContext = (
   const videosByTitle = parseVideos(injects);
   const requestedTrackFacets = detectRequestedTrackFacets(queryLower, tracksByTitle);
   const songbooks = parseSongbooks(injects);
+  const uniqueSutras = new Set(songs.map((song) => song.sutra).filter(Boolean));
+  const totalTrackCount = Array.from(tracksByTitle.values()).reduce((sum, track) => sum + track.count, 0);
+  const currentSongbook = songbookSlug ? songbooks.find((book) => book.slug === songbookSlug) : null;
   const ranked = songs
     .map((song) => scoreSong(song, tracksByTitle, videosByTitle, support, intent, queryLower, requestedTrackFacets))
     .sort((a, b) => b.score - a.score || a.song.title.localeCompare(b.song.title));
@@ -571,11 +622,52 @@ export const buildRecommendationContext = (
     listeningRoutes.push(...trackRouteHints, ...songbookRouteHints);
   }
 
+  const pageSpecificAcknowledgementRule =
+    pageType === "tracks"
+      ? "- User is already in tracks. Acknowledge that context once in your first sentence, then lead with a relevant filtered tracks route."
+      : pageType === "songbook"
+        ? "- User is already in songbooks. Acknowledge that context once in your first sentence, then lead with a relevant songbook when possible."
+        : pageType === "song-detail"
+          ? `- User is on a song-detail page (${songDetailSlug ? `/songs/${songDetailSlug}` : "/songs/<slug>"}). In your first sentence, explicitly acknowledge this song context. For "more like this" asks, ask one axis-choice question (topic/intention vs. sound/genre) while still continuing with the user's intent.`
+          : pageType === "sutras-overview"
+            ? "- User is on /about/sutras (the compass page). Acknowledge that once in your first sentence, then continue directly with their intent."
+            : pageType === "sutra-page"
+              ? `- User is on a specific sutra page (${sutraPageSlug ? `/about/${sutraPageSlug}` : "/about/<sutra>sutra"}). Acknowledge that once in your first sentence and ground guidance in this sutra before expanding.`
+              : pageType === "muses"
+                ? "- User is on /about/muses. Acknowledge that once in your first sentence, then continue with the user's ask."
+                : pageType === "quotes"
+                  ? "- User is on /about/quotes. Acknowledge that once in your first sentence, then continue with the user's ask."
+                  : pageType === "about"
+                    ? "- User is on an /about page. Acknowledge that once in your first sentence, then continue with the user's intent."
+                    : "- User page context is high-signal when present. Acknowledge it once in your first sentence, then follow user intent.";
+
   return [
     "Dynamic recommendation guidance (apply to this reply):",
     "- Prioritize this ranked shortlist before any lower-ranked songs.",
+    "- User page context is high-signal. When page context is present, acknowledge it once in your first sentence, then continue with user intent (no page-fixation loops).",
+    mustDeliverRouteAware
+      ? "- Route-aware delivery rule (MUST): deliver concrete guidance immediately for this ask and page context. Do not reply with questions only."
+      : null,
+    pageType === "songbook" && routeAwareDeliveryAsk
+      ? "- Songbook-page behavior (MUST): start with the current songbook and one complementary listening route before any optional follow-up question."
+      : null,
+    pageType === "songbook" && routeAwareDeliveryAsk && songbookSlug
+      ? `- Songbook-page concrete anchor (MUST): explicitly reference [${currentSongbook?.title ?? "Current Songbook"}](/songbooks/${songbookSlug}) in the first recommendation sentence before any question.`
+      : null,
+    pageType === "sutras-overview" && routeAwareDeliveryAsk
+      ? "- Sutras-overview behavior (MUST): start with one concrete sutra entry point and one concrete listening path before any optional follow-up question."
+      : null,
+    pageType === "sutras-overview" && routeAwareDeliveryAsk
+      ? "- Sutras-overview concrete anchor (MUST): include at least one direct sutra link (for example /about/knowsutra) and one listening route link in the initial answer."
+      : null,
+    pageType === "song-detail" && /\b(more like this|similar|like this)\b/i.test(queryLower)
+      ? "- Song-detail 'more like this' behavior (MUST): name the current song, then provide one similar pick and one listening route before any optional axis question."
+      : null,
+    pageSpecificAcknowledgementRule,
     "- Keep recommendations emotionally aligned with user intent.",
-    pageRoute ? `- User is currently browsing [this page](${pageRoute}). Use this as a hint to keep navigation friction low.` : null,
+    pageRoute
+      ? `- User is currently browsing [this page](${pageRoute}). Treat this as high-signal context for acknowledgement and low-friction routing.`
+      : null,
     isAlreadyFrenchTracks
       ? "- User is already on FRENCHY tracks. Explicitly acknowledge that in your first sentence and avoid presenting it as a new discovery."
       : null,
@@ -608,11 +700,6 @@ export const buildRecommendationContext = (
     intent.languageIntentFrench
       ? "- For French asks, use the exact mood name FRENCHY in links/text (not 'Frenchsutra'), and prefer [Frenchy Mood Tracks](/tracks/?mood=FRENCHY&tsort=likes) plus [French Language Songbook](/songbooks/lang-french) when relevant."
       : "- Keep route naming precise and consistent with catalog mood names.",
-    pageType === "tracks"
-      ? "- User is already in tracks, so make the first listening route a filtered tracks link when relevant."
-      : pageType === "songbook"
-        ? "- User is already in songbooks, so make the first listening route a relevant songbook when possible."
-        : "- User page context is high-signal. Acknowledge it in your first sentence when present, then continue with user intent.",
     "- Route safety: songs must link as /songs/{slug}.",
     "- Route safety: tracks links are list/filter routes with query params (for example /tracks/?mood=RAINY&tsort=likes), never /tracks/{song-slug}.",
     "- Formatting safety: if you name a specific song, link that title to /songs/{slug}, not to any /tracks query link.",
@@ -644,6 +731,8 @@ export const buildRecommendationContext = (
       ? "- Clarify framing briefly: Bananasutra is meaning-first at the song level; /tracks is a listening-flow lens for sound exploration."
       : null,
     "- Count safety: include route counts only when the facet count is exact from known track-level data; otherwise omit the count.",
+    `- Catalog stats safety (P0, MUST): if you mention global totals, use exact values from this data only: ${songs.length} songs, ${totalTrackCount} tracks, ${songbooks.length} songbooks, ${uniqueSutras.size} sutras.`,
+    '- Catalog stats safety (P0, MUST): never use approximate totals (for example "about", "~", "around") and never guess counts. If unsure, omit totals.',
     !EXPLICIT_INTENT_PATTERN.test(queryLower)
       ? "- Avoid leading with explicit/adult-coded songs unless user explicitly asks for that intensity. If included, add a short mature-content note."
       : "- User asked for intensity/explicit edge, so stronger material is acceptable when contextually aligned.",
