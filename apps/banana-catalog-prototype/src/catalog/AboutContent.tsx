@@ -47,8 +47,8 @@ export function AboutContent() {
               It&apos;s not a bible. It&apos;s not a gospel. It&apos;s not a book. It&apos;s not an album. It&apos;s not a
               musical. It&apos;s a magic world of wonders to wander in. It&apos;s a warm, honest conversation, and sometimes
               just a silly joke. It&apos;s a dance, it&apos;s a cry, it&apos;s a laugh. It&apos;s what a friend would want to
-              tell a friend, or maybe a parent to a kid. It&apos;s not just songs. It&apos;s intentions. It&apos;s true stories
-              that matter. It&apos;s ideas you can feel.
+              tell a friend, or maybe a parent to a kid. It&apos;s not just songs. It&apos;s important questions, and clear
+              intentions. It&apos;s true stories that matter. It&apos;s ideas you can feel.
             </p>
             <p>
               Why music? Because I agree with Frank Zappa: music is the only religion that delivers the goods.
