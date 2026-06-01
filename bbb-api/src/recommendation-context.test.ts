@@ -536,6 +536,8 @@ test("orientation asks inject concise actionable link-pack guidance", () => {
   assert.match(context, /Search-link relevance \(MUST\): do not inject unrelated hardcoded search queries/);
   assert.match(context, /If no keyword is present, point to \[Songs\]\(\/songs\) and \[Tracks\]\(\/tracks\)/);
   assert.match(context, /Songbook actionability \(MUST\): avoid dropping unlinked songbook title examples/);
+  assert.match(context, /Songbook map wording \(MUST\): when describing sutra buckets, name the noun explicitly/);
+  assert.match(context, /Songbook lane count safety \(MUST\): do not invent per-sutra ranges/);
 });
 
 test("feedback/contact asks inject footer contact-form honesty guidance", () => {

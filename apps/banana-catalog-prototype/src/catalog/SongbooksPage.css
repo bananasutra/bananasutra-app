@@ -93,16 +93,14 @@
 
 /* Random featured songbook on each visit (moved from homepage for R18). */
 .songbooks-page__featured-rotator {
-  margin: 0 0 1.5rem;
-}
-
-/* Extra air before jump band top rule (featured block has no bottom border). */
-.songbooks-page__featured-rotator:has(+ .catalog-page-shell__jump-region) {
-  margin-bottom: clamp(1.75rem, 3.8vw, 2.35rem);
+  min-width: 0;
+  margin: 0 0 1.35rem;
+  padding: 0 0 1.35rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .songbooks-page__featured-rotator .catalog-section-title {
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.75rem;
 }
 
 .songbooks-page__featured-rotator-grid {
@@ -116,25 +114,11 @@
   min-width: 0;
 }
 
-@media (min-width: 1025px) {
-  .songbooks-page__featured-rotator-grid {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    gap: 1.15rem;
-    align-items: start;
-  }
-}
-
 .songbooks-page__featured-rotator-copy {
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
-  margin-top: 0.1rem;
-}
-
-@media (min-width: 1025px) {
-  .songbooks-page__featured-rotator-copy {
-    margin-top: 0;
-  }
+  margin-top: 0;
 }
 
 .songbooks-page__featured-rotator-kicker {
