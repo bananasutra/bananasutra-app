@@ -65,6 +65,86 @@
   margin-bottom: 0;
 }
 
+.about-page__subhead {
+  margin: 1.1rem 0 0.55rem;
+  font: 700 0.88rem/1.35 var(--font-ui);
+  letter-spacing: 0.03em;
+  color: var(--color-text-strong);
+}
+
+.about-page__sutra-glance {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.about-page__sutra-glance-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.5rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--color-border) 72%, transparent);
+  border-left: 3px solid color-mix(in srgb, var(--color-border) 40%, transparent);
+  text-decoration: none;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  font-family: var(--font-body);
+  transition: background 0.16s ease, border 0.16s ease;
+}
+
+.about-page__sutra-glance-item:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.about-page__sutra-glance-name {
+  font: 700 0.78rem/1.35 var(--font-ui);
+  letter-spacing: 0.06em;
+}
+
+.about-page__sutra-glance-item.is-sutra-know .about-page__sutra-glance-name { color: var(--sutra-know); }
+.about-page__sutra-glance-item.is-sutra-blow .about-page__sutra-glance-name { color: var(--sutra-blow); }
+.about-page__sutra-glance-item.is-sutra-show .about-page__sutra-glance-name { color: var(--sutra-show); }
+.about-page__sutra-glance-item.is-sutra-grow .about-page__sutra-glance-name { color: var(--sutra-grow); }
+.about-page__sutra-glance-item.is-sutra-flow .about-page__sutra-glance-name { color: var(--sutra-flow); }
+.about-page__sutra-glance-item.is-sutra-glow .about-page__sutra-glance-name { color: var(--sutra-glow); }
+.about-page__sutra-glance-item.is-sutra-bow .about-page__sutra-glance-name { color: var(--sutra-bow); }
+
+.about-page__sutra-glance-item.is-sutra-know { border-left-color: color-mix(in srgb, var(--sutra-know) 45%, transparent); }
+.about-page__sutra-glance-item.is-sutra-blow { border-left-color: color-mix(in srgb, var(--sutra-blow) 45%, transparent); }
+.about-page__sutra-glance-item.is-sutra-show { border-left-color: color-mix(in srgb, var(--sutra-show) 45%, transparent); }
+.about-page__sutra-glance-item.is-sutra-grow { border-left-color: color-mix(in srgb, var(--sutra-grow) 45%, transparent); }
+.about-page__sutra-glance-item.is-sutra-flow { border-left-color: color-mix(in srgb, var(--sutra-flow) 45%, transparent); }
+.about-page__sutra-glance-item.is-sutra-glow { border-left-color: color-mix(in srgb, var(--sutra-glow) 45%, transparent); }
+.about-page__sutra-glance-item.is-sutra-bow { border-left-color: color-mix(in srgb, var(--sutra-bow) 45%, transparent); }
+
+.about-page__sutra-glance-tagline {
+  color: var(--color-text-muted);
+}
+
+.about-page__sutra-glance-more {
+  margin: 0.85rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.about-page__text-link {
+  color: var(--color-link);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.about-page__text-link:hover,
+.about-page__text-link:focus-visible {
+  text-decoration: underline;
+}
+
 .about-page__sutra-matrix {
   /* Space between sutra cards matches intro → QUACK card (see --about-sutra-card-gap). */
   --about-sutra-card-gap: 0.75rem;
