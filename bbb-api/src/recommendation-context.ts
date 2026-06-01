@@ -1158,6 +1158,12 @@ export const buildRecommendationContext = (
     orientationAsk
       ? "- Songbook actionability (MUST): avoid dropping unlinked songbook title examples. If naming songbooks, use clickable markdown links and only context-relevant examples."
       : null,
+    orientationAsk
+      ? "- Songbook map wording (MUST): when describing sutra buckets, name the noun explicitly (for example 'each sutra lane') and avoid ambiguous pronouns like 'each one'."
+      : null,
+    orientationAsk
+      ? "- Songbook lane count safety (MUST): do not invent per-sutra ranges (for example '2-10 songbooks'). If exact lane counts are unavailable, use qualitative wording like 'several songbooks'."
+      : null,
     feedbackContactAsk
       ? '- Feedback/contact handling (MUST): point user to [Contact](/#footer-contact-panel) in the site footer ("Questions? Feedback? Get in touch").'
       : null,
