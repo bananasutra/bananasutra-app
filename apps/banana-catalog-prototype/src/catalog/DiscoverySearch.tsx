@@ -15,7 +15,7 @@ import {
 } from './discoveryRanking'
 import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
 import { songCatalogPath } from './songPaths'
-import { songbookByName, songbookHref } from './songbooks'
+import { songbookByName, songbookHref, songbooksBrowseHref } from './songbooks'
 import { filterTracksByFindQuery, sortTrackCatalog } from './filterTracks'
 import {
   filterSongsByAlbumSearchQuery,
@@ -473,8 +473,8 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
       case 'songbooks': {
         const n = songbookResultGroups.length
         return {
-          href: canonicalPathForRoute('/songbooks'),
-          label: 'See all songbooks',
+          href: songbooksBrowseHref(q),
+          label: q && n > 0 ? `See all songbooks with "${q}"` : 'See all songbooks',
           count: n > 0 ? n : null,
         }
       }

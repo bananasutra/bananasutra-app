@@ -337,7 +337,9 @@ type RankedSong = {
 
 type SongbookMeta = {
   title: string;
+  description: string;
   sutra: string;
+  topic: string;
   slug: string;
 };
 
@@ -403,7 +405,9 @@ const parseSongbooks = (injects: LibraryInjects): SongbookMeta[] =>
       const parts = splitPipe(line);
       return {
         title: parts[0] ?? "",
+        description: parts[1] ?? "",
         sutra: (parts[2] ?? "").toUpperCase(),
+        topic: parts[3] ?? "",
         slug: parts[4] ?? "",
       };
     })
@@ -756,7 +760,7 @@ export const buildRecommendationContext = (
 
   let songbookCandidates = songbooks
     .filter((book) => {
-      const hay = `${book.title} ${book.slug}`.toLowerCase();
+      const hay = `${book.title} ${book.description} ${book.topic} ${book.sutra} ${book.slug}`.toLowerCase();
       return queryTokens.some((token) => hay.includes(token));
     })
     .slice(0, 2);
@@ -791,6 +795,14 @@ export const buildRecommendationContext = (
   const listeningRoutes: ListeningRouteHint[] = [];
   const trackRouteHints: ListeningRouteHint[] = [];
   const songbookRouteHints: ListeningRouteHint[] = [];
+  const songbookFindToken = queryTokens.find((token) => !QUERY_STOPWORDS.has(token));
+  if (songbookFindToken) {
+    songbookRouteHints.push({
+      label: `${songbookFindToken.toUpperCase()} Songbooks`,
+      href: `/songbooks/?find=${encodeURIComponent(songbookFindToken)}`,
+      kind: "songbook",
+    });
+  }
   if (soundLedIntent) {
     for (const genre of Array.from(requestedTrackFacets.primaryGenres).slice(0, 2)) {
       trackRouteHints.push({
@@ -930,7 +942,7 @@ export const buildRecommendationContext = (
       ? "- Classify this ask as sound-led: explicit sound vocabulary is present. Lead with /tracks routes first; songs are optional examples after routes."
       : "- If no explicit sound vocabulary is present, do not force sound-led routing.",
     breadthLedIntent
-      ? "- Classify this ask as breadth-led: lead with filtered /songs and /tracks routes first, then include sutra page and 2-4 relevant songbooks, then offer narrowing."
+      ? "- Classify this ask as breadth-led: lead with filtered /songs and /tracks routes first, then include sutra page plus a filtered /songbooks/?find=<keyword> route and 2-4 relevant songbook links, then offer narrowing."
       : null,
     breadthLedIntent
       ? "- For breadth-led 'all songs' asks, include lyrics-only songs as part of catalog completeness, but list all playable entries first."
@@ -1145,6 +1157,12 @@ export const buildRecommendationContext = (
       : null,
     orientationAsk
       ? "- Songbook actionability (MUST): avoid dropping unlinked songbook title examples. If naming songbooks, use clickable markdown links and only context-relevant examples."
+      : null,
+    orientationAsk
+      ? "- Songbook map wording (MUST): when describing sutra buckets, name the noun explicitly (for example 'each sutra lane') and avoid ambiguous pronouns like 'each one'."
+      : null,
+    orientationAsk
+      ? "- Songbook lane count safety (MUST): do not invent per-sutra ranges (for example '2-10 songbooks'). If exact lane counts are unavailable, use qualitative wording like 'several songbooks'."
       : null,
     feedbackContactAsk
       ? '- Feedback/contact handling (MUST): point user to [Contact](/#footer-contact-panel) in the site footer ("Questions? Feedback? Get in touch").'
