@@ -44,6 +44,11 @@ type IntentSignal = {
   soundLedIntent: boolean;
   breadthLedIntent: boolean;
   newnessAsk: boolean;
+  feedbackAsk: boolean;
+  contactRoutingAsk: boolean;
+  songIdeaAsk: boolean;
+  bugReportAsk: boolean;
+  brokenLinkAsk: boolean;
 };
 
 type PageType =
@@ -152,8 +157,24 @@ const FAVORITE_SONG_PATTERN = /\b(favou?rite|best)\b.*\bsong\b|\bwhat'?s your fa
 const SONG_LINK_SLUG_PATTERN = /\/songs\/([a-z0-9-]+)/gi;
 const ORIENTATION_ASK_PATTERN =
   /\b(what is this place|what's this place|where should i start|how does this work|how do i explore|what can i do here)\b/i;
-const FEEDBACK_CONTACT_PATTERN =
-  /\b(feedback|contact|get in touch|reach (you|the creator)|song idea|leave a message)\b/i;
+const FEEDBACK_ASK_PATTERNS: RegExp[] = [
+  /\b(leave|share|give)\s+(some\s+)?feedback\b/i,
+  /\bfeedback\b/i,
+  /\bleave (a|this) message\b/i,
+];
+const CONTACT_ROUTING_ASK_PATTERNS: RegExp[] = [
+  /\bhow (?:do|can) i (?:contact|reach|get in touch)\b/i,
+  /\b(?:contact|reach|get in touch with) (?:the )?(?:human|creator|banana|person behind)\b/i,
+  /\b(?:contact|reach) (?:you|the human)\b/i,
+  /\bwho (?:is|made|runs|built) (?:this|the site|bananasutra|behind)\b/i,
+  /\bwhere (?:do i|can i) (?:contact|reach|write|send (?:a )?(?:message|note|email))\b/i,
+];
+const SONG_IDEA_ASK_PATTERNS: RegExp[] = [/\b(song idea|idea for (a )?song|pitch (a )?song)\b/i];
+const BUG_REPORT_ASK_PATTERNS: RegExp[] = [/\b(this is broken|bug report|report (a )?bug|something('?s| is) broken)\b/i];
+const BROKEN_LINK_ASK_PATTERNS: RegExp[] = [
+  /\b(broken link|dead link|404|not found|bad path|wrong url)\b/i,
+  /\boops page\b/i,
+];
 const FRENCH_INTENT_PATTERN = /\b(french|francais|français|francaise|française|francophone)\b/i;
 const RECOMMENDATION_CUE_PATTERN =
   /\b(song|songs|track|tracks|music|video|recommend|suggest|playlist|playlists|musique|chanson|chansons|recommande(?:r|z|s)?|suggestion|suggestions)\b/i;
@@ -327,6 +348,12 @@ const analyzeIntent = (text: string): IntentSignal => {
     anyTermMatch(text, SOUND_TEMPO_TERMS) ||
     anyTermMatch(text, SOUND_MOOD_TERMS);
 
+  const feedbackAsk = FEEDBACK_ASK_PATTERNS.some((pattern) => pattern.test(text));
+  const contactRoutingAsk = CONTACT_ROUTING_ASK_PATTERNS.some((pattern) => pattern.test(text));
+  const songIdeaAsk = SONG_IDEA_ASK_PATTERNS.some((pattern) => pattern.test(text));
+  const bugReportAsk = BUG_REPORT_ASK_PATTERNS.some((pattern) => pattern.test(text));
+  const brokenLinkAsk = BROKEN_LINK_ASK_PATTERNS.some((pattern) => pattern.test(text));
+
   return {
     funIntent: FUN_PATTERNS.some((pattern) => pattern.test(text)),
     languageIntentFrench: FRENCH_INTENT_PATTERN.test(text),
@@ -335,6 +362,11 @@ const analyzeIntent = (text: string): IntentSignal => {
     soundLedIntent,
     breadthLedIntent: BREADTH_LED_PATTERN.test(text),
     newnessAsk: NEWNESS_PATTERNS.some((pattern) => pattern.test(text)),
+    feedbackAsk,
+    contactRoutingAsk,
+    songIdeaAsk,
+    bugReportAsk,
+    brokenLinkAsk,
   };
 };
 
@@ -639,7 +671,24 @@ export const buildRecommendationContext = (
   const hopeAsk = /\bhope\b/i.test(queryLower);
   const favoriteSongAsk = FAVORITE_SONG_PATTERN.test(queryLower);
   const orientationAsk = ORIENTATION_ASK_PATTERN.test(queryLower);
-  const feedbackContactAsk = FEEDBACK_CONTACT_PATTERN.test(queryLower);
+  const feedbackAsk = intent.feedbackAsk;
+  const contactRoutingAsk = intent.contactRoutingAsk;
+  const songIdeaAsk = intent.songIdeaAsk;
+  const bugReportAsk = intent.bugReportAsk;
+  const brokenLinkAsk = intent.brokenLinkAsk;
+  const feedbackContactAsk =
+    feedbackAsk || contactRoutingAsk || songIdeaAsk || bugReportAsk || brokenLinkAsk;
+  const contactRoutingOnlyAsk =
+    contactRoutingAsk && !songIdeaAsk && !bugReportAsk && !brokenLinkAsk && !feedbackAsk;
+  const feedbackIntent: "feedback" | "song-idea" | "bug-report" | "broken-link" | null = brokenLinkAsk
+    ? "broken-link"
+    : bugReportAsk
+      ? "bug-report"
+      : songIdeaAsk
+        ? "song-idea"
+        : feedbackAsk
+          ? "feedback"
+          : null;
   const primaryExperienceMode = support.supportIntent
     ? "support-forward (stabilize first, then widen)"
     : soundLedIntent || broadSoundIntent || trackExplorationIntent
@@ -1183,11 +1232,19 @@ export const buildRecommendationContext = (
     orientationAsk
       ? "- Songbook lane count safety (MUST): do not invent per-sutra ranges (for example '2-10 songbooks'). If exact lane counts are unavailable, use qualitative wording like 'several songbooks'."
       : null,
-    feedbackContactAsk
-      ? '- Feedback/contact handling (MUST): point user to [Contact](/#footer-contact-panel) in the site footer ("Questions? Feedback? Get in touch").'
+    contactRoutingOnlyAsk
+      ? "- Contact routing (MUST): user asked how to reach the creator — answer in 2-3 short sentences, warm but not brochure-long. Primary path: [Send Banana a note](#bbb-send). Same inbox as footer [Contact](/#footer-contact-panel) if they would rather use that. Do not call one longer-form or more substantial — both are the same note to Banana. No bullet lists, no flow jargon (inline send flow, intent, etc.). Do not end with chat prompts like \"What's on your mind?\" — typing in chat does not deliver mail; tell them to click the link when ready. Social: skip platform lists unless asked; at most one optional line that footer social links exist."
+      : null,
+    songIdeaAsk
+      ? "- Song idea handoff (MUST): user has a song idea for Banana — welcome it warmly in 1-2 sentences, then immediately offer [Send Banana a note](#bbb-send?intent=song-idea) as the way to pass it to her. Song ideas are feedback; typing the pitch in chat does NOT deliver it. Do not interrogate the idea in chat first (no \"what's it about?\" before the send link). Do not end with chat-only prompts like \"What's on your mind?\". If they ask what happens to the idea, say Banana reads send-form notes, the idea stays theirs, and offer the same send link again."
+      : null,
+    feedbackContactAsk && !contactRoutingOnlyAsk && !songIdeaAsk
+      ? `- Feedback handoff (MUST): offer [Send Banana a note](#bbb-send${
+          feedbackIntent ? `?intent=${feedbackIntent}` : ""
+        }). Footer [Contact](/#footer-contact-panel) is the same inbox if the chat send path fails — not a separate longer-form channel. Keep it brief (2-4 sentences).`
       : null,
     feedbackContactAsk
-      ? "- Never claim you can personally deliver messages to the creator."
+      ? "- Honesty guardrail (MUST): do not claim the message was sent until the system confirms delivery."
       : null,
     "- Keep the distinction explicit in plain language: one short listening-flow sentence first, then one short segue sentence introducing song picks.",
     "- In the listening-flow sentence, explain briefly that songbooks are topic-led collections and tracks are mood-led continuous listening.",

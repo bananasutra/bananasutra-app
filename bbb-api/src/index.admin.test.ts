@@ -118,3 +118,61 @@ test("admin logs route returns logs for valid token", async () => {
   assert.equal(body.logs[0]?.id, "log-1");
   assert.equal(body.nextBefore, 123);
 });
+
+test("admin feedback route returns feedback rows for valid token", async () => {
+  const response = await fetchHandler(
+    new Request("https://example.com/api/bbb/admin/feedback?limit=1&intent_type=bug-report", {
+      headers: {
+        authorization: "Bearer test-admin-token",
+        origin: "http://localhost:5173",
+      },
+    }),
+    {
+      ...baseEnv,
+      DB: new FakeDb([
+        {
+          id: "feedback-1",
+          created_at: 456,
+          intent_type: "bug-report",
+          message: "broken route",
+          delivery_status: "delivered",
+        },
+      ]) as unknown as D1Database,
+    },
+    testCtx,
+  );
+
+  assert.equal(response.status, 200);
+  const body = (await response.json()) as {
+    logs: Array<{ id: string; created_at: number; intent_type: string }>;
+    nextBefore: number | null;
+  };
+  assert.equal(body.logs.length, 1);
+  assert.equal(body.logs[0]?.id, "feedback-1");
+  assert.equal(body.logs[0]?.intent_type, "bug-report");
+  assert.equal(body.nextBefore, 456);
+});
+
+test("admin feedback cleanup uses feedback retention fallback", async () => {
+  const response = await fetchHandler(
+    new Request("https://example.com/api/bbb/admin/feedback/cleanup", {
+      method: "POST",
+      headers: {
+        authorization: "Bearer test-admin-token",
+        origin: "http://localhost:5173",
+      },
+    }),
+    {
+      ...baseEnv,
+      BBB_LOG_RETENTION_DAYS: "21",
+      DB: new FakeDb([], 4) as unknown as D1Database,
+    },
+    testCtx,
+  );
+
+  assert.equal(response.status, 200);
+  const body = (await response.json()) as { ok: boolean; deleted: number; retentionDays: number };
+  assert.equal(body.ok, true);
+  assert.equal(body.deleted, 4);
+  assert.equal(body.retentionDays, 21);
+});

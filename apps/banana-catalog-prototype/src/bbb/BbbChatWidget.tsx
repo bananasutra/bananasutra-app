@@ -4,14 +4,19 @@ import './BbbChatWidget.css'
 import { loadSongCatalogBrowse } from '../catalog/generatedData'
 import { toBbbPageContextPathname } from './notFoundRouting'
 import { registerBbbOpenListener } from './openEvent'
+import { openFooterContactPanel, isFooterContactHref } from '../catalog/footerContactConstants'
+import { BbbFeedbackForm } from './BbbFeedbackForm'
 import {
+  buildConversationTail,
   capConversationHistory,
   getOrCreateActorId,
+  parseBbbSendIntentFromHref,
   parseInlineEmphasis,
   parseMarkdownLinks,
   parseSseChunk,
   updateLastAssistant,
   type ChatMessage,
+  type FeedbackIntentType,
 } from './BbbChatUtils'
 
 const DEFAULT_ENDPOINT = 'http://localhost:8787/api/bbb'
@@ -36,6 +41,10 @@ export function BbbChatWidget() {
   const [messages, setMessages] = useState<ChatMessage[]>([{ role: 'assistant', content: INITIAL_ASSISTANT_TEXT }])
   const [isStreaming, setIsStreaming] = useState(false)
   const [error, setError] = useState('')
+  const [mode, setMode] = useState<'chat' | 'feedback'>('chat')
+  const [feedbackIntentType, setFeedbackIntentType] = useState<FeedbackIntentType>('feedback')
+  const [feedbackInitialMessage, setFeedbackInitialMessage] = useState('')
+  const [feedbackTail, setFeedbackTail] = useState('')
   const [songTitleBySlug, setSongTitleBySlug] = useState<Record<string, string>>({})
   const abortRef = useRef<AbortController | null>(null)
   const historyRef = useRef<HTMLDivElement | null>(null)
@@ -113,6 +122,14 @@ export function BbbChatWidget() {
         <span key={`${keyPrefix}-t-${idx}`}>{piece.text}</span>
       ),
     )
+
+  const openFeedbackFlow = (intentType: FeedbackIntentType) => {
+    const lastUserMessage = [...messages].reverse().find((message) => message.role === 'user')?.content?.trim() ?? ''
+    setFeedbackIntentType(intentType)
+    setFeedbackInitialMessage(lastUserMessage)
+    setFeedbackTail(buildConversationTail(messages, 600))
+    setMode('feedback')
+  }
 
   const scrollToBottom = () => {
     const node = historyRef.current
@@ -240,66 +257,97 @@ export function BbbChatWidget() {
             <p className="bbb-widget__title">Bertrand · Banana Butler</p>
             <p className="bbb-widget__subtitle">At your service, one hidden gem at a time</p>
           </header>
-          <div ref={historyRef} className="bbb-widget__history" aria-live="polite" aria-busy={isStreaming}>
-            {messages.map((message, idx) => (
-              <p key={`${message.role}-${idx}`} className={`bbb-widget__msg bbb-widget__msg--${message.role}`}>
-                {message.content
-                  ? parseMarkdownLinks(message.content).map((segment, segmentIdx) =>
-                      segment.type === 'link' ? (
-                        <a
-                          key={`seg-${idx}-${segmentIdx}`}
-                          className="bbb-widget__link"
-                          href={segment.href}
-                          target={segment.external ? '_blank' : undefined}
-                          rel={segment.external ? 'noreferrer noopener' : undefined}
-                          onClick={(event) => {
-                            if (segment.external) return
-                            event.preventDefault()
-                            navigate(segment.href)
-                          }}
-                        >
-                          {renderInlineText(resolveSongLinkLabel(segment.text, segment.href), `link-${idx}-${segmentIdx}`)}
-                        </a>
-                      ) : (
-                        <span key={`seg-${idx}-${segmentIdx}`}>
-                          {renderInlineText(segment.text, `text-${idx}-${segmentIdx}`)}
-                        </span>
-                      ),
-                    )
-                  : message.role === 'assistant'
-                    ? '...'
-                    : ''}
-              </p>
-            ))}
-          </div>
-          {error ? <p className="bbb-widget__error">{error}</p> : null}
-          <form className="bbb-widget__composer" onSubmit={handleSubmit}>
-            <label htmlFor="bbb-widget-input" className="visually-hidden">
-              Ask Bertrand
-            </label>
-            <textarea
-              id="bbb-widget-input"
-              ref={inputRef}
-              className="bbb-widget__input"
-              value={input}
-              onChange={(event) => setInput(event.target.value)}
-              onKeyDown={handleInputKeyDown}
-              placeholder="How may I best serve your ears and soul today?"
-              rows={2}
-              disabled={isStreaming}
+          {mode === 'feedback' ? (
+            <BbbFeedbackForm
+              intentType={feedbackIntentType}
+              initialMessage={feedbackInitialMessage}
+              conversationTail={feedbackTail}
+              pageContext={{
+                pathname: toBbbPageContextPathname(location.pathname),
+                search: location.search,
+              }}
+              onCancel={() => setMode('chat')}
+              onSent={() => {
+                setMessages((prev) => [...prev, { role: 'assistant', content: "Your note is sent. Thank you." }])
+                setMode('chat')
+                queueMicrotask(scrollToBottom)
+              }}
             />
-            <p className="bbb-widget__hint">Try: "I need hope" or "Give me French hidden gems"</p>
-            <div className="bbb-widget__actions">
-              <button type="submit" className="bbb-widget__send" disabled={!canSend}>
-                Send
-              </button>
-              {isStreaming ? (
-                <button type="button" className="bbb-widget__stop" onClick={handleStop}>
-                  Stop
-                </button>
-              ) : null}
-            </div>
-          </form>
+          ) : (
+            <>
+              <div ref={historyRef} className="bbb-widget__history" aria-live="polite" aria-busy={isStreaming}>
+                {messages.map((message, idx) => (
+                  <p key={`${message.role}-${idx}`} className={`bbb-widget__msg bbb-widget__msg--${message.role}`}>
+                    {message.content
+                      ? parseMarkdownLinks(message.content).map((segment, segmentIdx) =>
+                          segment.type === 'link' ? (
+                            <a
+                              key={`seg-${idx}-${segmentIdx}`}
+                              className="bbb-widget__link"
+                              href={segment.href}
+                              target={segment.external ? '_blank' : undefined}
+                              rel={segment.external ? 'noreferrer noopener' : undefined}
+                              onClick={(event) => {
+                                if (segment.external) return
+                                const sendIntent = parseBbbSendIntentFromHref(segment.href)
+                                if (sendIntent) {
+                                  event.preventDefault()
+                                  openFeedbackFlow(sendIntent)
+                                  return
+                                }
+                                if (isFooterContactHref(segment.href)) {
+                                  event.preventDefault()
+                                  openFooterContactPanel()
+                                  return
+                                }
+                                event.preventDefault()
+                                navigate(segment.href)
+                              }}
+                            >
+                              {renderInlineText(resolveSongLinkLabel(segment.text, segment.href), `link-${idx}-${segmentIdx}`)}
+                            </a>
+                          ) : (
+                            <span key={`seg-${idx}-${segmentIdx}`}>
+                              {renderInlineText(segment.text, `text-${idx}-${segmentIdx}`)}
+                            </span>
+                          ),
+                        )
+                      : message.role === 'assistant'
+                        ? '...'
+                        : ''}
+                  </p>
+                ))}
+              </div>
+              {error ? <p className="bbb-widget__error">{error}</p> : null}
+              <form className="bbb-widget__composer" onSubmit={handleSubmit}>
+                <label htmlFor="bbb-widget-input" className="visually-hidden">
+                  Ask Bertrand
+                </label>
+                <textarea
+                  id="bbb-widget-input"
+                  ref={inputRef}
+                  className="bbb-widget__input"
+                  value={input}
+                  onChange={(event) => setInput(event.target.value)}
+                  onKeyDown={handleInputKeyDown}
+                  placeholder="How may I best serve your ears and soul today?"
+                  rows={2}
+                  disabled={isStreaming}
+                />
+                <p className="bbb-widget__hint">Try: "I need hope" or "Give me French hidden gems"</p>
+                <div className="bbb-widget__actions">
+                  <button type="submit" className="bbb-widget__send" disabled={!canSend}>
+                    Send
+                  </button>
+                  {isStreaming ? (
+                    <button type="button" className="bbb-widget__stop" onClick={handleStop}>
+                      Stop
+                    </button>
+                  ) : null}
+                </div>
+              </form>
+            </>
+          )}
         </div>
       ) : null}
     </section>

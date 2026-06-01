@@ -20,11 +20,79 @@
 const NOTIFY_EMAIL = 'itsbananasutra@gmail.com'
 const SHEET_NAME   = 'Sheet1'   // Name of the tab in your spreadsheet
 
+// ---- HELPERS ----
+
+function parseRequestData(e) {
+  if (e.postData && e.postData.contents) {
+    const type = (e.postData.type || '').toLowerCase()
+    if (type.indexOf('application/json') !== -1) {
+      try {
+        return JSON.parse(e.postData.contents)
+      } catch (err) {
+        return null
+      }
+    }
+  }
+  return e.parameter || {}
+}
+
+function parseTruthy(value) {
+  if (value === true || value === 'true' || value === '1' || value === 'on') return true
+  return false
+}
+
+function jsonResponse(payload, statusCode) {
+  const output = ContentService
+    .createTextOutput(JSON.stringify(payload))
+    .setMimeType(ContentService.MimeType.JSON)
+  if (typeof statusCode === 'number') {
+    // Apps Script web apps cannot set HTTP status codes directly.
+    output.setMimeType(ContentService.MimeType.JSON)
+  }
+  return output
+}
+
+function sendSenderCopy(data) {
+  const sendCopy = parseTruthy(data.sendCopy)
+  const email = (data.email || '').substring(0, 300).trim()
+  if (!sendCopy || !email) return
+
+  const name = (data.name || '').substring(0, 200).trim()
+  const subject = (data.subject || '').substring(0, 300).trim()
+  const copyMessage = (data.userMessage || data.message || '').substring(0, 10000).trim()
+  if (!copyMessage) return
+
+  const greeting = name ? `Hi ${name},` : 'Hi there,'
+  const subjectLine = subject
+    ? `Copy of your message to BANANASUTRA (${subject})`
+    : 'Copy of your message to BANANASUTRA'
+
+  const body = [
+    greeting,
+    '',
+    "Here's a copy of what you sent:",
+    '',
+    copyMessage,
+    '',
+    '---',
+    'Bananasutra',
+  ].join('\n')
+
+  MailApp.sendEmail({
+    to: email,
+    subject: subjectLine,
+    body: body,
+  })
+}
+
 // ---- HANDLER ----
 
 function doPost(e) {
   try {
-    const data = e.parameter
+    const data = parseRequestData(e)
+    if (!data) {
+      return jsonResponse({ ok: false, error: 'Invalid JSON body.' })
+    }
 
     const name    = (data.name    || '').substring(0, 200)
     const email   = (data.email   || '').substring(0, 300)
@@ -62,20 +130,16 @@ function doPost(e) {
       replyTo: email,
     })
 
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: 'ok' }))
-      .setMimeType(ContentService.MimeType.JSON)
+    sendSenderCopy(data)
+
+    return jsonResponse({ ok: true, status: 'ok' })
 
   } catch (err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: 'error', message: err.toString() }))
-      .setMimeType(ContentService.MimeType.JSON)
+    return jsonResponse({ ok: false, status: 'error', error: err.toString() })
   }
 }
 
 // Allow GET for testing (just returns a status message)
 function doGet() {
-  return ContentService
-    .createTextOutput(JSON.stringify({ status: 'ok', message: 'Contact form endpoint is live.' }))
-    .setMimeType(ContentService.MimeType.JSON)
+  return jsonResponse({ ok: true, status: 'ok', message: 'Contact form endpoint is live.' })
 }

@@ -183,8 +183,16 @@ test("template includes required Bertrand opening phrasing", () => {
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation personality floor \(MUST\): first-contact orientation openers should include one light BBB flourish/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation attribution scope \(MUST\): do not inject creator\/AI-attribution blocks in orientation\/map replies unless the user explicitly asked/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /do not hardcode unrelated sample keywords/);
-  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Contact and feedback honesty \(MUST\): a contact form exists in the site footer/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Contact\/send-flow behavior \(MUST\): BBB can relay notes through \[Send Banana a note\]\(#bbb-send\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /same inbox, backup path, not a separate longer-form channel/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Send Banana a note\]\(#bbb-send\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /never claim "I sent it" or imply confirmed delivery before the system explicitly confirms send success/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /typing in chat does not deliver mail/i);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Contact\]\(\/#footer-contact-panel\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /When user shares a song idea \(or asks to pitch one\):/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Send Banana a note\]\(#bbb-send\?intent=song-idea\)/);
+  assert.doesNotMatch(BBB_SYSTEM_PROMPT_TEMPLATE, /longer-form fallback/);
+  assert.doesNotMatch(BBB_SYSTEM_PROMPT_TEMPLATE, /BBB cannot directly deliver messages to the creator/);
 });
 
 test("template includes hope and favorite quality anchors", () => {

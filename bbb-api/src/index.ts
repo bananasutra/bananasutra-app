@@ -10,13 +10,23 @@ import { buildSystemPrompt } from "./system-prompt";
 import { isOrientationAsk, normalizeOrientationReply } from "./reply-normalizer";
 import { isAuthorizedAdmin } from "./admin-auth";
 import {
+  FEEDBACK_INTENT_TYPES,
+  postFeedbackToAppsScript,
+  type FeedbackIntentType,
+  type FeedbackDeliveryStatus,
+} from "./feedback";
+import {
+  cleanupOldFeedbackLogs,
   cleanupOld404Logs,
   cleanupOldLogs,
   insertBbb404Log,
+  insertBbbFeedback,
   insertBbbLog,
   parseAdmin404LogsQuery,
+  parseAdminFeedbackLogsQuery,
   parseAdminLogsQuery,
   queryBbb404Logs,
+  queryBbbFeedback,
   queryBbbLogs,
   type BbbLogStatus,
 } from "./logging";
@@ -35,6 +45,9 @@ interface Env {
   BBB_LOG_RETENTION_DAYS?: string;
   BBB_404_MAX_PER_HOUR?: string;
   BBB_404_RETENTION_DAYS?: string;
+  BBB_FEEDBACK_MAX_PER_HOUR?: string;
+  BBB_FEEDBACK_RETENTION_DAYS?: string;
+  CONTACT_ENDPOINT_URL?: string;
 }
 
 interface RequestPayload {
@@ -46,6 +59,15 @@ interface NotFoundLogPayload {
   bad_path: string;
   referrer?: string;
   user_agent?: string;
+}
+
+interface FeedbackPayload {
+  intentType?: string;
+  message?: string;
+  name?: string;
+  email?: string;
+  conversationTail?: string;
+  pageContext?: BbbPageContext;
 }
 
 interface RateLimitEntry {
@@ -132,12 +154,20 @@ const check404RateLimit = (ip: string, env: Env): { allowed: boolean; retryAfter
   return checkRateLimit(ip, "404", maxRequests, 3600);
 };
 
+const checkFeedbackRateLimit = (ip: string, env: Env): { allowed: boolean; retryAfterSec: number } => {
+  const maxRequests = Number.parseInt(env.BBB_FEEDBACK_MAX_PER_HOUR ?? "5", 10);
+  return checkRateLimit(ip, "feedback", maxRequests, 3600);
+};
+
 const isChatEndpoint = (url: URL): boolean => url.pathname === "/api/bbb" || url.pathname === "/";
 const is404LogEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/404-log";
+const isFeedbackEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/feedback";
 const isAdminLogsEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/logs";
 const isAdminCleanupEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/logs/cleanup";
 const isAdmin404Endpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/404";
 const isAdmin404CleanupEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/404/cleanup";
+const isAdminFeedbackEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/feedback";
+const isAdminFeedbackCleanupEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/feedback/cleanup";
 
 const validateMessages = (payload: unknown): ChatMessage[] | null => {
   if (!payload || typeof payload !== "object") return null;
@@ -182,6 +212,12 @@ const get404RetentionDays = (env: Env): number => {
   return parsed;
 };
 
+const getFeedbackRetentionDays = (env: Env): number => {
+  const parsed = Number.parseInt(env.BBB_FEEDBACK_RETENTION_DAYS ?? env.BBB_LOG_RETENTION_DAYS ?? "30", 10);
+  if (!Number.isFinite(parsed) || parsed < 1) return 30;
+  return parsed;
+};
+
 const validate404LogPayload = (payload: unknown): NotFoundLogPayload | null => {
   if (!payload || typeof payload !== "object") return null;
   const candidate = payload as Partial<NotFoundLogPayload>;
@@ -193,6 +229,76 @@ const validate404LogPayload = (payload: unknown): NotFoundLogPayload | null => {
     bad_path: badPath,
     ...(typeof candidate.referrer === "string" ? { referrer: candidate.referrer.trim() } : {}),
     ...(typeof candidate.user_agent === "string" ? { user_agent: candidate.user_agent.trim() } : {}),
+  };
+};
+
+const stripHtml = (input: string): string => input.replace(/<[^>]*>/g, "");
+
+const isValidEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+const parseFeedbackIntentType = (raw: string | undefined): FeedbackIntentType | null => {
+  if (!raw) return null;
+  const normalized = raw.trim().toLowerCase();
+  return FEEDBACK_INTENT_TYPES.find((value) => value === normalized) ?? null;
+};
+
+const parseSendCopy = (value: unknown): boolean => {
+  if (value === true) return true;
+  if (typeof value === "string" && value.trim().toLowerCase() === "true") return true;
+  return false;
+};
+
+const validateFeedbackPayload = (
+  payload: unknown,
+):
+  | {
+      ok: true;
+      value: FeedbackPayload & { intentType: FeedbackIntentType; message: string; name: string; email: string };
+    }
+  | { ok: false; error: string } => {
+  if (!payload || typeof payload !== "object") {
+    return { ok: false, error: "Body must be a JSON object." };
+  }
+
+  const candidate = payload as FeedbackPayload;
+  const intentType = parseFeedbackIntentType(candidate.intentType);
+  if (!intentType) {
+    return { ok: false, error: "intentType must be one of: feedback, song-idea, bug-report, broken-link." };
+  }
+
+  const message = stripHtml((candidate.message ?? "").trim());
+  if (!message) return { ok: false, error: "message is required." };
+  if (message.length > 5000) return { ok: false, error: "message must be 5000 characters or less." };
+
+  const name = typeof candidate.name === "string" ? stripHtml(candidate.name).trim() : "";
+  const email = typeof candidate.email === "string" ? candidate.email.trim() : "";
+  if (!name) return { ok: false, error: "name is required." };
+  if (!email) return { ok: false, error: "email is required." };
+  if (!isValidEmail(email)) return { ok: false, error: "email must be a valid email address." };
+
+  const conversationTail = typeof candidate.conversationTail === "string" ? stripHtml(candidate.conversationTail).trim() : "";
+  if (conversationTail.length > 600) {
+    return { ok: false, error: "conversationTail must be 600 characters or less." };
+  }
+
+  let pageContext: BbbPageContext | undefined;
+  if (typeof candidate.pageContext !== "undefined") {
+    pageContext = validatePageContext({ messages: [], pageContext: candidate.pageContext });
+  }
+
+  const sendCopy = parseSendCopy(candidate.sendCopy);
+
+  return {
+    ok: true,
+    value: {
+      intentType,
+      message,
+      name,
+      email,
+      ...(conversationTail ? { conversationTail } : {}),
+      ...(pageContext ? { pageContext } : {}),
+      ...(sendCopy ? { sendCopy: true } : {}),
+    },
   };
 };
 
@@ -262,7 +368,14 @@ const handler: ExportedHandler<Env> = {
       return new Response(null, { status: 204, headers: corsHeaders });
     }
 
-    if (isAdminLogsEndpoint(url) || isAdminCleanupEndpoint(url) || isAdmin404Endpoint(url) || isAdmin404CleanupEndpoint(url)) {
+    if (
+      isAdminLogsEndpoint(url) ||
+      isAdminCleanupEndpoint(url) ||
+      isAdmin404Endpoint(url) ||
+      isAdmin404CleanupEndpoint(url) ||
+      isAdminFeedbackEndpoint(url) ||
+      isAdminFeedbackCleanupEndpoint(url)
+    ) {
       if (!isAuthorizedAdmin(request, env.BBB_ADMIN_TOKEN)) {
         return json(401, { error: "Unauthorized." }, corsHeaders);
       }
@@ -302,6 +415,28 @@ const handler: ExportedHandler<Env> = {
         }
         const retentionDays = get404RetentionDays(env);
         const deleted = await cleanupOld404Logs(env.DB, retentionDays);
+        return json(200, { ok: true, deleted, retentionDays }, corsHeaders);
+      }
+
+      if (isAdminFeedbackEndpoint(url)) {
+        if (request.method !== "GET") {
+          return json(405, { error: "Method not allowed. Use GET." }, corsHeaders);
+        }
+        const parsed = parseAdminFeedbackLogsQuery(url);
+        if (!parsed.ok) {
+          return json(400, { error: parsed.error }, corsHeaders);
+        }
+        const logs = await queryBbbFeedback(env.DB, parsed.value);
+        const nextBefore = logs.length ? logs[logs.length - 1]?.created_at ?? null : null;
+        return json(200, { logs, nextBefore }, corsHeaders);
+      }
+
+      if (isAdminFeedbackCleanupEndpoint(url)) {
+        if (request.method !== "POST") {
+          return json(405, { error: "Method not allowed. Use POST." }, corsHeaders);
+        }
+        const retentionDays = getFeedbackRetentionDays(env);
+        const deleted = await cleanupOldFeedbackLogs(env.DB, retentionDays);
         return json(200, { ok: true, deleted, retentionDays }, corsHeaders);
       }
 
@@ -347,6 +482,87 @@ const handler: ExportedHandler<Env> = {
         ipSalt: env.BBB_LOG_IP_SALT,
       });
       return json(200, { ok: true }, corsHeaders);
+    }
+
+    if (isFeedbackEndpoint(url)) {
+      if (request.method !== "POST") return json(405, { error: "Method not allowed. Use POST." }, corsHeaders);
+      if (!hasLogDatabase(env)) return json(500, { error: "Server missing DB binding." }, corsHeaders);
+
+      const ip = getClientIp(request);
+      const rate = checkFeedbackRateLimit(ip, env);
+      if (!rate.allowed) {
+        return json(
+          429,
+          { error: "Rate limit reached. Please retry soon." },
+          { ...corsHeaders, "retry-after": String(rate.retryAfterSec) },
+        );
+      }
+
+      let payload: unknown;
+      try {
+        payload = await request.json();
+      } catch {
+        return json(400, { error: "Invalid JSON body." }, corsHeaders);
+      }
+
+      const validated = validateFeedbackPayload(payload);
+      if (!validated.ok) {
+        return json(400, { error: validated.error }, corsHeaders);
+      }
+
+      const requestId = crypto.randomUUID();
+      const endpointUrl = env.CONTACT_ENDPOINT_URL?.trim();
+      let deliveryStatus: FeedbackDeliveryStatus = "dropped";
+      let deliveryError: string | undefined;
+
+      if (!endpointUrl) {
+        deliveryError = "Feedback relay endpoint is not configured.";
+      } else {
+        try {
+          const delivery = await postFeedbackToAppsScript({
+            url: endpointUrl,
+            payload: {
+              intentType: validated.value.intentType,
+              message: validated.value.message,
+              name: validated.value.name,
+              email: validated.value.email,
+              conversationTail: validated.value.conversationTail,
+              requestId,
+              pageContext: validated.value.pageContext,
+              sendCopy: validated.value.sendCopy,
+            },
+          });
+          deliveryStatus = delivery.ok ? "delivered" : "apps_script_error";
+          deliveryError = delivery.error;
+        } catch (error) {
+          deliveryStatus = "apps_script_error";
+          deliveryError = error instanceof Error ? error.message : "Apps Script request failed.";
+        }
+      }
+
+      await insertBbbFeedback(env.DB, {
+        createdAt: Date.now(),
+        requestId,
+        intentType: validated.value.intentType,
+        name: validated.value.name,
+        email: validated.value.email,
+        message: validated.value.message,
+        pathname: validated.value.pageContext?.pathname ?? null,
+        search: validated.value.pageContext?.search ?? null,
+        conversationTail: validated.value.conversationTail,
+        deliveryStatus,
+        deliveryError: deliveryError ?? null,
+      });
+
+      if (deliveryStatus === "delivered") {
+        return json(200, { ok: true }, corsHeaders);
+      }
+
+      return json(
+        200,
+        { ok: false, error: deliveryError ?? "Feedback relay failed. Please try again or use the footer contact form." },
+        corsHeaders,
+      );
     }
 
     if (!isChatEndpoint(url)) return json(404, { error: "Not found." }, corsHeaders);

@@ -580,10 +580,49 @@ test("orientation asks inject concise actionable link-pack guidance", () => {
   assert.match(context, /Songbook lane count safety \(MUST\): do not invent per-sutra ranges/);
 });
 
-test("feedback/contact asks inject footer contact-form honesty guidance", () => {
+test("feedback/contact asks inject #bbb-send handoff with footer fallback", () => {
   const context = buildRecommendationContext([{ role: "user", content: "I want to leave feedback for the creator" }], fixtureInjects);
-  assert.match(context, /Feedback\/contact handling \(MUST\): point user to \[Contact\]\(\/#footer-contact-panel\)/);
-  assert.match(context, /Never claim you can personally deliver messages to the creator/);
+  assert.match(context, /\[Send Banana a note\]\(#bbb-send\?intent=feedback\)/);
+  assert.match(context, /\[Contact\]\(\/#footer-contact-panel\)/);
+  assert.match(context, /same inbox if the chat send path fails/);
+  assert.match(context, /Honesty guardrail \(MUST\): do not claim the message was sent until the system confirms delivery/);
+});
+
+test("contact routing asks use brief same-inbox guidance without longer-form framing", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "how do I contact the human behind this?" }],
+    fixtureInjects,
+  );
+  assert.match(context, /Contact routing \(MUST\): user asked how to reach the creator/);
+  assert.match(context, /\[Send Banana a note\]\(#bbb-send\)/);
+  assert.match(context, /\[Contact\]\(\/#footer-contact-panel\)/);
+  assert.match(context, /same note to Banana/);
+  assert.match(context, /typing in chat does not deliver mail/);
+  assert.doesNotMatch(context, /longer-form fallback/);
+});
+
+test("song idea asks inject immediate song-idea send link without chat-only prompts", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "I have an idea for a song" }], fixtureInjects);
+  assert.match(context, /Song idea handoff \(MUST\): user has a song idea for Banana/);
+  assert.match(context, /\[Send Banana a note\]\(#bbb-send\?intent=song-idea\)/);
+  assert.match(context, /typing the pitch in chat does NOT deliver it/);
+  assert.match(context, /Do not interrogate the idea in chat first/);
+  assert.match(context, /What's on your mind/);
+});
+
+test("feedback intent patterns classify all four handoff intents", () => {
+  const feedbackContext = buildRecommendationContext([{ role: "user", content: "I want to leave feedback" }], fixtureInjects);
+  const songIdeaContext = buildRecommendationContext([{ role: "user", content: "I have an idea for a song" }], fixtureInjects);
+  const bugContext = buildRecommendationContext([{ role: "user", content: "this is broken, who do I tell?" }], fixtureInjects);
+  const brokenLinkContext = buildRecommendationContext([{ role: "user", content: "that 404 is a broken link" }], fixtureInjects);
+
+  assert.match(feedbackContext, /\[Send Banana a note\]\(#bbb-send\?intent=feedback\)/);
+  assert.match(songIdeaContext, /\[Send Banana a note\]\(#bbb-send\?intent=song-idea\)/);
+  assert.match(bugContext, /\[Send Banana a note\]\(#bbb-send\?intent=bug-report\)/);
+  assert.match(brokenLinkContext, /\[Send Banana a note\]\(#bbb-send\?intent=broken-link\)/);
+
+  const redHerring = buildRecommendationContext([{ role: "user", content: "this playlist idea sounds fun" }], fixtureInjects);
+  assert.doesNotMatch(redHerring, /#bbb-send/);
 });
 
 test("guidance lists previously recommended slugs to avoid repeats", () => {

@@ -10,8 +10,11 @@ Bertrand the Banana Butler API on Cloudflare Workers, with Level 1 logging:
 ## What this gives you
 
 - Chat endpoint: `POST /api/bbb` (existing behavior preserved)
+- Feedback relay endpoint: `POST /api/bbb/feedback` (BBB -> Worker -> Apps Script, mirrored to D1)
 - Admin logs endpoint: `GET /api/bbb/admin/logs`
 - Cleanup endpoint: `POST /api/bbb/admin/logs/cleanup`
+- Admin feedback endpoint: `GET /api/bbb/admin/feedback`
+- Admin feedback cleanup endpoint: `POST /api/bbb/admin/feedback/cleanup`
 
 ---
 
@@ -35,6 +38,9 @@ BBB_ALLOWED_ORIGINS=http://localhost:5174,http://127.0.0.1:5174
 BBB_ADMIN_TOKEN=...      # long random string
 BBB_LOG_IP_SALT=...      # different long random string
 BBB_LOG_ACTOR_SALT=...   # optional; falls back to BBB_LOG_IP_SALT
+CONTACT_ENDPOINT_URL=... # existing Apps Script web app URL used by footer form
+BBB_FEEDBACK_MAX_PER_HOUR=5
+BBB_FEEDBACK_RETENTION_DAYS=30
 ```
 
 ### 3) Create D1 database (once)
@@ -75,7 +81,12 @@ npx wrangler secret put ANTHROPIC_API_KEY
 npx wrangler secret put BBB_ADMIN_TOKEN
 npx wrangler secret put BBB_LOG_IP_SALT
 npx wrangler secret put BBB_LOG_ACTOR_SALT
+npx wrangler secret put CONTACT_ENDPOINT_URL
 ```
+
+Optional runtime env vars (non-secret) in `wrangler.toml`:
+- `BBB_FEEDBACK_MAX_PER_HOUR` (default `5`)
+- `BBB_FEEDBACK_RETENTION_DAYS` (fallback to `BBB_LOG_RETENTION_DAYS`, default `30`)
 
 ### 6) Deploy
 
@@ -135,6 +146,32 @@ Filter options:
 - `compact` (one-line per entry)
 - `no-reply` (omit assistant body)
 - `no-color` (plain text output)
+
+### 3c) Query BBB feedback mirror
+
+`GET /api/bbb/admin/feedback` uses the same bearer token auth as logs and supports:
+- `limit` (default `50`, max `200`)
+- `before` or `cursor` (unix ms for pagination)
+- `intent_type` (`feedback`, `song-idea`, `bug-report`, `broken-link`)
+
+`POST /api/bbb/admin/feedback/cleanup` deletes rows older than:
+- `BBB_FEEDBACK_RETENTION_DAYS`, or
+- `BBB_LOG_RETENTION_DAYS` fallback, default `30`.
+
+Helper script (mirrors chat logs):
+
+```bash
+npm run feedback:local
+npm run feedback:remote -- --limit 10 --intent feedback
+npm run feedback:remote -- --before 1717286400123
+npm run feedback:cleanup:remote
+```
+
+R46-100A-31 failure-path check (local only, restores your `.dev.vars` URL on exit):
+
+```bash
+npm run feedback:failure-test:local
+```
 
 ### 4) Cleanup old logs
 
