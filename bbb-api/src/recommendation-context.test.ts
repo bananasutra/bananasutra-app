@@ -272,29 +272,6 @@ test("buildRecommendationContext provides exact global catalog totals and bans a
   assert.match(context, /never use approximate totals .* and never guess counts/);
 });
 
-test("broad-sound diversity rotates song shortlist when seed changes", () => {
-  const outputs = new Set<string>();
-  for (const seed of ["seed-a", "seed-b", "seed-c", "seed-d"]) {
-    outputs.add(
-      buildRecommendationContext(
-        [{ role: "assistant", content: "prior turn" }, { role: "user", content: "got trippy music?" }],
-        fixtureInjects,
-        { pathname: "/tracks" },
-        seed,
-      ),
-    );
-  }
-  assert.ok(outputs.size >= 2, "Expected at least two distinct shortlist orderings across seeds");
-});
-
-test("meaning/support diversity rotates song shortlist when seed changes", () => {
-  const outputs = new Set<string>();
-  for (const seed of ["seed-a", "seed-b", "seed-c", "seed-d"]) {
-    outputs.add(buildRecommendationContext([{ role: "user", content: "recommend something hopeful" }], fixtureInjects, undefined, seed));
-  }
-  assert.ok(outputs.size >= 2, "Expected at least two distinct shortlist orderings across seeds");
-});
-
 test("buildRecommendationContext boosts songs whose track facets match the ask", () => {
   const context = buildRecommendationContext([{ role: "user", content: "got trippy music?" }], fixtureInjects, {
     pathname: "/tracks",
@@ -468,6 +445,12 @@ test("guidance includes global recommendation funnel and diversity transparency"
   assert.match(context, /Originality\/source rule \(MUST\): prefer original Bananasutra lyrics by default/);
 });
 
+test("guidance includes coherence mode and metadata bridge language", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "I feel stuck, recommend something soulful" }], fixtureInjects);
+  assert.match(context, /Recommendation coherence mode \(MUST\): this ask is best served as meaning-first/);
+  assert.match(context, /Metadata bridge rule \(MUST\): tie each recommendation to explicit catalog metadata/);
+});
+
 test("meaning-led asks include natural lyrics-extract guidance", () => {
   const context = buildRecommendationContext([{ role: "user", content: "I feel stuck, recommend something soulful" }], fixtureInjects);
   assert.match(
@@ -500,8 +483,42 @@ test("guidance lists previously recommended slugs to avoid repeats", () => {
     ],
     fixtureInjects,
   );
-  assert.match(context, /Already used: bright-morning, quiet-lantern/);
-  assert.match(context, /songs already recommended in this conversation should not be repeated/);
+  assert.match(context, /Already used slugs: bright-morning, quiet-lantern/);
+  assert.match(context, /avoid exact slug repeats from this conversation unless the user asks for the same song again/);
+});
+
+test("support guidance includes R-rated contextual safety rule", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "I feel completely alone" }], fixtureInjects);
+  assert.match(context, /Support safety rule \(MUST\): avoid R-rated intimacy material/);
+  assert.match(context, /when-we-duende-all-night/);
+});
+
+test("guidance names shortlist lyrics-only titles for inline labeling", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "show me all hope songs" }], fixtureInjects);
+  assert.match(context, /This shortlist includes lyrics-only titles:/);
+  assert.match(context, /Paper Lantern Prayer \(paper-lantern-prayer\)/);
+  assert.match(context, /append '\(lyrics-only, audio in progress\)' directly after the title/);
+  assert.match(context, /do not present them as playable/);
+});
+
+test("support scoring de-prioritizes when-we-duende-all-night in sensitive support contexts", () => {
+  const supportFixture: LibraryInjects = {
+    ...fixtureInjects,
+    songs: [
+      "When We Duende (All Night) | Intimate peachy heat. | FLOWsutra | LOVE | beCLOSE | LIGHT | when-we-duende-all-night",
+      "We Remember What (We Remember What) We Feel | Gentle grounding and remembrance. | FLOWsutra | HEALING | beKIND | LIGHT | we-remember-what-we-feel",
+    ].join("\n"),
+    tracks: [
+      "When We Duende (All Night) | 2trk | INDIE | PEACHY | MID | GUITAR",
+      "We Remember What (We Remember What) We Feel | 2trk | INDIE | KINDLY | MID | GUITAR",
+    ].join("\n"),
+    videos: "",
+  };
+  const context = buildRecommendationContext([{ role: "user", content: "I feel lonely and grieving" }], supportFixture);
+  assert.ok(
+    context.indexOf("We Remember What (We Remember What) We Feel | we-remember-what-we-feel") <
+      context.indexOf("When We Duende (All Night) | when-we-duende-all-night"),
+  );
 });
 
 test("support regex boundaries do not false-match words like warmth or courage", () => {

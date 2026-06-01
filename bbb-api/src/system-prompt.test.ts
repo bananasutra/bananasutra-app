@@ -120,8 +120,11 @@ test("template includes required Bertrand opening phrasing", () => {
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Favorite-song handling \(MUST\): when asked "what's your favorite song"/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Favorite-song guardrail: never claim one definitive favorite\./);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Global recommendation funnel \(MUST\): across recommendation replies, keep this order/);
-  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Song diversity rule \(MUST\): avoid repeating the same song within a conversation/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Song diversity rule \(MUST\): avoid exact song-slug repeats within a conversation/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Diversity transparency: if asked about repetition\/diversity, answer plainly/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Recommendation coherence mode \(MUST\): choose one primary experience mode per reply/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Metadata bridge rule \(MUST\): make at least one explicit bridge from the user's ask to catalog metadata/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /R-rated contextual safety \(MUST\): treat FLOWsutra: Wet My Friend as adult\/intimate context/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Originality\/source rule \(MUST\): prefer original Bananasutra-lyric songs by default/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Lyrics extract usage \(MUST\): default to using lyric extracts as a short add-on tied to a specific recommended song/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Lyrics extract stand-alone exception: stand-alone lyric quote use is allowed only when it is exceptionally relevant/);
