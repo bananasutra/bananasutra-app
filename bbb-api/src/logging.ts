@@ -52,6 +52,65 @@ export interface QueryLogsOptions {
   query?: string;
 }
 
+export interface InsertBbb404LogInput {
+  createdAt: number;
+  badPath: string;
+  referrer?: string | null;
+  ip?: string | null;
+  ipSalt?: string | null;
+  userAgent?: string | null;
+}
+
+export interface Query404LogsOptions {
+  limit: number;
+  before: number;
+  badPath?: string;
+}
+
+export interface Bbb404LogRecord {
+  id: string;
+  created_at: number;
+  bad_path: string;
+  referrer: string | null;
+  ip_hash: string | null;
+  user_agent_short: string | null;
+}
+
+export interface InsertBbbFeedbackInput {
+  createdAt: number;
+  requestId?: string | null;
+  intentType: string;
+  name?: string | null;
+  email?: string | null;
+  message: string;
+  pathname?: string | null;
+  search?: string | null;
+  conversationTail?: string | null;
+  deliveryStatus: string;
+  deliveryError?: string | null;
+}
+
+export interface QueryFeedbackLogsOptions {
+  limit: number;
+  before: number;
+  intentType?: string;
+}
+
+export interface BbbFeedbackRecord {
+  id: string;
+  created_at: number;
+  request_id: string | null;
+  intent_type: string;
+  name: string | null;
+  email: string | null;
+  message: string;
+  pathname: string | null;
+  search: string | null;
+  conversation_tail: string | null;
+  delivery_status: string;
+  delivery_error: string | null;
+}
+
 export type ParseAdminLogsQueryResult =
   | { ok: true; value: QueryLogsOptions }
   | { ok: false; error: string };
@@ -59,6 +118,8 @@ export type ParseAdminLogsQueryResult =
 const DEFAULT_LIMIT = 50;
 const MAX_LIMIT = 200;
 const MAX_QUERY_LENGTH = 200;
+const MAX_BAD_PATH_QUERY_LENGTH = 200;
+const MAX_INTENT_QUERY_LENGTH = 100;
 const MAX_TEXT_FIELD = 10_000;
 const MAX_ERROR_FIELD = 1_500;
 
@@ -154,6 +215,98 @@ export const parseAdminLogsQuery = (url: URL): ParseAdminLogsQueryResult => {
   };
 };
 
+export const parseAdmin404LogsQuery = (
+  url: URL,
+): { ok: true; value: Query404LogsOptions } | { ok: false; error: string } => {
+  const limitRaw = url.searchParams.get("limit");
+  const beforeRaw = url.searchParams.get("before") ?? url.searchParams.get("cursor");
+  const badPathRaw = url.searchParams.get("bad_path");
+
+  let limit = DEFAULT_LIMIT;
+  if (limitRaw !== null) {
+    const parsed = Number.parseInt(limitRaw, 10);
+    if (!Number.isFinite(parsed) || parsed < 1) {
+      return { ok: false, error: "Invalid limit. Use a positive integer." };
+    }
+    limit = Math.min(parsed, MAX_LIMIT);
+  }
+
+  let before = Date.now();
+  if (beforeRaw !== null) {
+    const parsed = Number.parseInt(beforeRaw, 10);
+    if (!Number.isFinite(parsed) || parsed < 0) {
+      return { ok: false, error: "Invalid cursor/before value. Use unix milliseconds." };
+    }
+    before = parsed;
+  }
+
+  let badPath: string | undefined;
+  if (badPathRaw !== null) {
+    const normalized = badPathRaw.trim();
+    if (normalized.length > MAX_BAD_PATH_QUERY_LENGTH) {
+      return { ok: false, error: `Invalid bad_path. Keep it at or below ${MAX_BAD_PATH_QUERY_LENGTH} characters.` };
+    }
+    if (normalized.length > 0) {
+      badPath = normalized;
+    }
+  }
+
+  return {
+    ok: true,
+    value: {
+      limit,
+      before,
+      ...(badPath ? { badPath } : {}),
+    },
+  };
+};
+
+export const parseAdminFeedbackLogsQuery = (
+  url: URL,
+): { ok: true; value: QueryFeedbackLogsOptions } | { ok: false; error: string } => {
+  const limitRaw = url.searchParams.get("limit");
+  const beforeRaw = url.searchParams.get("before") ?? url.searchParams.get("cursor");
+  const intentTypeRaw = url.searchParams.get("intent_type");
+
+  let limit = DEFAULT_LIMIT;
+  if (limitRaw !== null) {
+    const parsed = Number.parseInt(limitRaw, 10);
+    if (!Number.isFinite(parsed) || parsed < 1) {
+      return { ok: false, error: "Invalid limit. Use a positive integer." };
+    }
+    limit = Math.min(parsed, MAX_LIMIT);
+  }
+
+  let before = Date.now();
+  if (beforeRaw !== null) {
+    const parsed = Number.parseInt(beforeRaw, 10);
+    if (!Number.isFinite(parsed) || parsed < 0) {
+      return { ok: false, error: "Invalid cursor/before value. Use unix milliseconds." };
+    }
+    before = parsed;
+  }
+
+  let intentType: string | undefined;
+  if (intentTypeRaw !== null) {
+    const normalized = intentTypeRaw.trim().toLowerCase();
+    if (normalized.length > MAX_INTENT_QUERY_LENGTH) {
+      return { ok: false, error: `Invalid intent_type. Keep it at or below ${MAX_INTENT_QUERY_LENGTH} characters.` };
+    }
+    if (normalized.length > 0) {
+      intentType = normalized;
+    }
+  }
+
+  return {
+    ok: true,
+    value: {
+      limit,
+      before,
+      ...(intentType ? { intentType } : {}),
+    },
+  };
+};
+
 export const insertBbbLog = async (db: D1Database, input: InsertBbbLogInput): Promise<void> => {
   const logId = crypto.randomUUID();
   const ipHash = await hashIp(input.ip, input.ipSalt);
@@ -241,9 +394,148 @@ export const queryBbbLogs = async (db: D1Database, options: QueryLogsOptions): P
   return result.results ?? [];
 };
 
+export const insertBbb404Log = async (db: D1Database, input: InsertBbb404LogInput): Promise<void> => {
+  const logId = crypto.randomUUID();
+  const ipHash = await hashIp(input.ip, input.ipSalt);
+  await db
+    .prepare(
+      `INSERT INTO bbb_404_logs (
+        id,
+        created_at,
+        bad_path,
+        referrer,
+        ip_hash,
+        user_agent_short
+      ) VALUES (?, ?, ?, ?, ?, ?)`,
+    )
+    .bind(
+      logId,
+      input.createdAt,
+      clampText(input.badPath, 500),
+      clampText(input.referrer, 1000),
+      ipHash,
+      clampText(input.userAgent, 100),
+    )
+    .run();
+};
+
+export const queryBbb404Logs = async (db: D1Database, options: Query404LogsOptions): Promise<Bbb404LogRecord[]> => {
+  const where: string[] = ["created_at <= ?"];
+  const bindings: unknown[] = [options.before];
+
+  if (options.badPath) {
+    where.push("LOWER(bad_path) LIKE LOWER(?) ESCAPE '\\'");
+    bindings.push(`%${escapeLikeTerm(options.badPath)}%`);
+  }
+
+  const statement = db
+    .prepare(
+      `SELECT
+        id,
+        created_at,
+        bad_path,
+        referrer,
+        ip_hash,
+        user_agent_short
+       FROM bbb_404_logs
+       WHERE ${where.join(" AND ")}
+       ORDER BY created_at DESC
+       LIMIT ?`,
+    )
+    .bind(...bindings, options.limit);
+
+  const result = await statement.all<Bbb404LogRecord>();
+  return result.results ?? [];
+};
+
 export const cleanupOldLogs = async (db: D1Database, retentionDays: number): Promise<number> => {
   const safeDays = Number.isFinite(retentionDays) ? Math.max(1, Math.trunc(retentionDays)) : 30;
   const cutoff = Date.now() - safeDays * 24 * 60 * 60 * 1000;
   const result = await db.prepare("DELETE FROM bbb_logs WHERE created_at < ?").bind(cutoff).run();
+  return Number(result.meta?.changes ?? 0);
+};
+
+export const cleanupOld404Logs = async (db: D1Database, retentionDays: number): Promise<number> => {
+  const safeDays = Number.isFinite(retentionDays) ? Math.max(1, Math.trunc(retentionDays)) : 30;
+  const cutoff = Date.now() - safeDays * 24 * 60 * 60 * 1000;
+  const result = await db.prepare("DELETE FROM bbb_404_logs WHERE created_at < ?").bind(cutoff).run();
+  return Number(result.meta?.changes ?? 0);
+};
+
+export const insertBbbFeedback = async (db: D1Database, input: InsertBbbFeedbackInput): Promise<void> => {
+  const logId = crypto.randomUUID();
+  await db
+    .prepare(
+      `INSERT INTO bbb_feedback (
+        id,
+        created_at,
+        request_id,
+        intent_type,
+        name,
+        email,
+        message,
+        pathname,
+        search,
+        conversation_tail,
+        delivery_status,
+        delivery_error
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    )
+    .bind(
+      logId,
+      input.createdAt,
+      clampText(input.requestId, 200),
+      clampText(input.intentType, 100),
+      clampText(input.name, 250),
+      clampText(input.email, 250),
+      clampText(input.message, MAX_TEXT_FIELD),
+      clampText(input.pathname, 500),
+      clampText(input.search, 1000),
+      clampText(input.conversationTail, 700),
+      clampText(input.deliveryStatus, 50),
+      clampText(input.deliveryError, MAX_ERROR_FIELD),
+    )
+    .run();
+};
+
+export const queryBbbFeedback = async (db: D1Database, options: QueryFeedbackLogsOptions): Promise<BbbFeedbackRecord[]> => {
+  const where: string[] = ["created_at <= ?"];
+  const bindings: unknown[] = [options.before];
+
+  if (options.intentType) {
+    where.push("intent_type = ?");
+    bindings.push(options.intentType);
+  }
+
+  const statement = db
+    .prepare(
+      `SELECT
+        id,
+        created_at,
+        request_id,
+        intent_type,
+        name,
+        email,
+        message,
+        pathname,
+        search,
+        conversation_tail,
+        delivery_status,
+        delivery_error
+       FROM bbb_feedback
+       WHERE ${where.join(" AND ")}
+       ORDER BY created_at DESC
+       LIMIT ?`,
+    )
+    .bind(...bindings, options.limit);
+
+  const result = await statement.all<BbbFeedbackRecord>();
+  return result.results ?? [];
+};
+
+export const cleanupOldFeedbackLogs = async (db: D1Database, retentionDays: number): Promise<number> => {
+  const safeDays = Number.isFinite(retentionDays) ? Math.max(1, Math.trunc(retentionDays)) : 30;
+  const cutoff = Date.now() - safeDays * 24 * 60 * 60 * 1000;
+  const result = await db.prepare("DELETE FROM bbb_feedback WHERE created_at < ?").bind(cutoff).run();
   return Number(result.meta?.changes ?? 0);
 };

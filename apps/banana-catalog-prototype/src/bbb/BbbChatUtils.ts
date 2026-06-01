@@ -1,3 +1,5 @@
+import { isKnownCatalogPath } from './notFoundRouting'
+
 export type Role = 'user' | 'assistant'
 
 export type ChatMessage = {
@@ -19,6 +21,8 @@ export type InlineTextSegment = {
   bold: boolean
   italic: boolean
 }
+
+export type FeedbackIntentType = 'feedback' | 'song-idea' | 'bug-report' | 'broken-link'
 
 const DEFAULT_ACTOR_STORAGE_KEY = 'bbb_actor_id'
 
@@ -112,9 +116,27 @@ export function capConversationHistory(messages: ChatMessage[], maxUserTurns = 5
   return capped
 }
 
+function pathnameFromInternalHref(href: string): string {
+  const trimmed = href.trim()
+  if (!trimmed.startsWith('/')) return trimmed
+  const withoutHash = trimmed.split('#')[0] ?? trimmed
+  const withoutQuery = withoutHash.split('?')[0] ?? withoutHash
+  return withoutQuery || '/'
+}
+
+function isSafeInternalPath(href: string): boolean {
+  const trimmed = href.trim()
+  if (trimmed === '/#footer-contact-panel') return true
+  return isKnownCatalogPath(pathnameFromInternalHref(trimmed))
+}
+
 function classifyHref(href: string): { safe: boolean; external: boolean } {
   const trimmed = href.trim()
-  if (/^\/[^\s]*$/.test(trimmed)) return { safe: true, external: false }
+  if (trimmed.startsWith('/') && isSafeInternalPath(trimmed)) return { safe: true, external: false }
+  if (/^#bbb-send(?:\?intent=[\w-]+)?$/i.test(trimmed)) return { safe: true, external: false }
+  if (trimmed === '#footer-contact-panel' || trimmed === '/#footer-contact-panel') {
+    return { safe: true, external: false }
+  }
   if (/^https?:\/\/[^\s]+$/i.test(trimmed)) return { safe: true, external: true }
   return { safe: false, external: false }
 }
@@ -136,6 +158,8 @@ function pushTextWithAutoLinks(segments: MessageSegment[], text: string): void {
     const rawRoute = match[0] ?? ''
     const matchStart = match.index
     const matchEnd = matchStart + rawRoute.length
+    const prevChar = matchStart > 0 ? text[matchStart - 1] : ''
+    const isMidWordSlash = /[A-Za-z0-9_]/.test(prevChar)
     const trimmedRoute = rawRoute.replace(/[.,!?;:]+$/g, '')
     const trailingPunctuation = rawRoute.slice(trimmedRoute.length)
     const hrefMeta = classifyHref(trimmedRoute)
@@ -143,7 +167,7 @@ function pushTextWithAutoLinks(segments: MessageSegment[], text: string): void {
     if (matchStart > cursor) {
       segments.push({ type: 'text', text: text.slice(cursor, matchStart) })
     }
-    if (trimmedRoute.startsWith('/') && hrefMeta.safe) {
+    if (!isMidWordSlash && trimmedRoute.startsWith('/') && hrefMeta.safe) {
       segments.push({
         type: 'link',
         text: trimmedRoute,
@@ -247,4 +271,53 @@ export function parseMarkdownLinks(text: string): MessageSegment[] {
   }
 
   return segments.length ? segments : [{ type: 'text', text }]
+}
+
+export function parseBbbSendIntentFromHref(href: string): FeedbackIntentType | null {
+  if (!href.startsWith('#bbb-send')) return null
+  const queryIndex = href.indexOf('?')
+  if (queryIndex === -1) return 'feedback'
+  const params = new URLSearchParams(href.slice(queryIndex + 1))
+  const intent = (params.get('intent') ?? '').trim()
+  if (intent === 'feedback' || intent === 'song-idea' || intent === 'bug-report' || intent === 'broken-link') {
+    return intent
+  }
+  return 'feedback'
+}
+
+export function plainTextForFeedbackReview(text: string): string {
+  return text
+    .split('\n')
+    .map((line) =>
+      line
+        .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+        .replace(/\*\*([^*]+)\*\*/g, '$1')
+        .replace(/__([^_]+)__/g, '$1')
+        .replace(/\s+/g, ' ')
+        .trim(),
+    )
+    .filter(Boolean)
+    .join('\n')
+}
+
+export function buildConversationTail(messages: ChatMessage[], maxChars = 600): string {
+  if (maxChars < 20) return ''
+  const cleaned = messages
+    .map((message) => {
+      const text = plainTextForFeedbackReview(message.content)
+      if (!text) return ''
+      const speaker = message.role === 'user' ? 'User' : 'BBB'
+      return `${speaker}: ${text}`
+    })
+    .filter(Boolean)
+  if (!cleaned.length) return ''
+  const joined = cleaned.join('\n')
+  if (joined.length <= maxChars) return joined
+  const budget = Math.max(1, maxChars - 1)
+  let slice = joined.slice(joined.length - budget)
+  const firstNewline = slice.indexOf('\n')
+  if (firstNewline > 0 && firstNewline < 80) {
+    slice = slice.slice(firstNewline + 1)
+  }
+  return `…${slice.trimStart()}`.slice(0, maxChars)
 }

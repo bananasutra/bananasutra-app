@@ -43,12 +43,19 @@ type IntentSignal = {
   exhaustiveListIntent: boolean;
   soundLedIntent: boolean;
   breadthLedIntent: boolean;
+  newnessAsk: boolean;
+  feedbackAsk: boolean;
+  contactRoutingAsk: boolean;
+  songIdeaAsk: boolean;
+  bugReportAsk: boolean;
+  brokenLinkAsk: boolean;
 };
 
 type PageType =
   | "tracks"
   | "songbook"
   | "song-detail"
+  | "not-found"
   | "sutras-overview"
   | "sutra-page"
   | "muses"
@@ -129,6 +136,14 @@ const SOUND_TEMPO_TERMS = ["upbeat", "midbeat", "lowbeat", "dance", "dancing", "
 const SOUND_MOOD_TERMS = ["rainy", "cheeky", "trippy", "frenchy", "kindly", "punky"] as const;
 const BREADTH_LED_PATTERN =
   /\b(list|show|give).*\b(all|everything|every)\b|\bwhat (are|is) your\b.*\b(all|everything)\b|\beverything by\b/i;
+const NEWNESS_PATTERNS: RegExp[] = [
+  /\bwhat(?:'s| is)\s+new\b/i,
+  /\bwhat(?:'s| is)\s+recent\b/i,
+  /\bany(?:thing)?\s+new\b/i,
+  /\blatest(?:\s+drops?)?\b/i,
+  /\bwhat should i check first\b/i,
+  /\brecent(?:ly)?\s+(released|dropped|added|published)\b/i,
+];
 const SUTRA_TAGS = ["knowsutra", "blowsutra", "showsutra", "growsutra", "flowsutra", "glowsutra", "bowsutra", "quacksutra"] as const;
 const EXPLICIT_DELIVERY_PATTERNS: RegExp[] = [
   /\b(give me|recommend|suggest|show me)\b/i,
@@ -142,8 +157,24 @@ const FAVORITE_SONG_PATTERN = /\b(favou?rite|best)\b.*\bsong\b|\bwhat'?s your fa
 const SONG_LINK_SLUG_PATTERN = /\/songs\/([a-z0-9-]+)/gi;
 const ORIENTATION_ASK_PATTERN =
   /\b(what is this place|what's this place|where should i start|how does this work|how do i explore|what can i do here)\b/i;
-const FEEDBACK_CONTACT_PATTERN =
-  /\b(feedback|contact|get in touch|reach (you|the creator)|song idea|leave a message)\b/i;
+const FEEDBACK_ASK_PATTERNS: RegExp[] = [
+  /\b(leave|share|give)\s+(some\s+)?feedback\b/i,
+  /\bfeedback\b/i,
+  /\bleave (a|this) message\b/i,
+];
+const CONTACT_ROUTING_ASK_PATTERNS: RegExp[] = [
+  /\bhow (?:do|can) i (?:contact|reach|get in touch)\b/i,
+  /\b(?:contact|reach|get in touch with) (?:the )?(?:human|creator|banana|person behind)\b/i,
+  /\b(?:contact|reach) (?:you|the human)\b/i,
+  /\bwho (?:is|made|runs|built) (?:this|the site|bananasutra|behind)\b/i,
+  /\bwhere (?:do i|can i) (?:contact|reach|write|send (?:a )?(?:message|note|email))\b/i,
+];
+const SONG_IDEA_ASK_PATTERNS: RegExp[] = [/\b(song idea|idea for (a )?song|pitch (a )?song)\b/i];
+const BUG_REPORT_ASK_PATTERNS: RegExp[] = [/\b(this is broken|bug report|report (a )?bug|something('?s| is) broken)\b/i];
+const BROKEN_LINK_ASK_PATTERNS: RegExp[] = [
+  /\b(broken link|dead link|404|not found|bad path|wrong url)\b/i,
+  /\boops page\b/i,
+];
 const FRENCH_INTENT_PATTERN = /\b(french|francais|français|francaise|française|francophone)\b/i;
 const RECOMMENDATION_CUE_PATTERN =
   /\b(song|songs|track|tracks|music|video|recommend|suggest|playlist|playlists|musique|chanson|chansons|recommande(?:r|z|s)?|suggestion|suggestions)\b/i;
@@ -317,6 +348,12 @@ const analyzeIntent = (text: string): IntentSignal => {
     anyTermMatch(text, SOUND_TEMPO_TERMS) ||
     anyTermMatch(text, SOUND_MOOD_TERMS);
 
+  const feedbackAsk = FEEDBACK_ASK_PATTERNS.some((pattern) => pattern.test(text));
+  const contactRoutingAsk = CONTACT_ROUTING_ASK_PATTERNS.some((pattern) => pattern.test(text));
+  const songIdeaAsk = SONG_IDEA_ASK_PATTERNS.some((pattern) => pattern.test(text));
+  const bugReportAsk = BUG_REPORT_ASK_PATTERNS.some((pattern) => pattern.test(text));
+  const brokenLinkAsk = BROKEN_LINK_ASK_PATTERNS.some((pattern) => pattern.test(text));
+
   return {
     funIntent: FUN_PATTERNS.some((pattern) => pattern.test(text)),
     languageIntentFrench: FRENCH_INTENT_PATTERN.test(text),
@@ -324,6 +361,12 @@ const analyzeIntent = (text: string): IntentSignal => {
     exhaustiveListIntent: /\b(all|every|full|complete)\b/i.test(text),
     soundLedIntent,
     breadthLedIntent: BREADTH_LED_PATTERN.test(text),
+    newnessAsk: NEWNESS_PATTERNS.some((pattern) => pattern.test(text)),
+    feedbackAsk,
+    contactRoutingAsk,
+    songIdeaAsk,
+    bugReportAsk,
+    brokenLinkAsk,
   };
 };
 
@@ -363,13 +406,14 @@ type TrackFacetCounts = {
   instrument: Record<string, number>;
 };
 
-const inferPageType = (pageContext?: BbbPageContext): PageType => {
+export const inferPageType = (pageContext?: BbbPageContext): PageType => {
   const pathname = (pageContext?.pathname ?? "").trim();
   const normalized = pathname.toLowerCase();
 
   if (pathname.startsWith("/tracks")) return "tracks";
   if (pathname.startsWith("/songbooks")) return "songbook";
   if (pathname.startsWith("/songs/")) return "song-detail";
+  if (normalized === "/oops" || normalized === "/oops/") return "not-found";
   if (normalized === "/about/sutras" || normalized === "/about/sutras/") return "sutras-overview";
   if (SUTRA_PAGE_PATH_PATTERN.test(normalized)) return "sutra-page";
   if (normalized.startsWith("/about/muses")) return "muses";
@@ -583,6 +627,7 @@ export const buildRecommendationContext = (
   const explicitLyricsOnlyIntent = LYRICS_ONLY_INTENT_PATTERN.test(queryLower);
   const intent = analyzeIntent(latestUser);
   const support = analyzeSupportIntent(latestUser);
+  const newnessAsk = intent.newnessAsk;
   const soundLedIntent = intent.soundLedIntent;
   const breadthLedIntent = intent.breadthLedIntent || intent.exhaustiveListIntent;
   const conversationListeningCue = messages.some(
@@ -626,7 +671,24 @@ export const buildRecommendationContext = (
   const hopeAsk = /\bhope\b/i.test(queryLower);
   const favoriteSongAsk = FAVORITE_SONG_PATTERN.test(queryLower);
   const orientationAsk = ORIENTATION_ASK_PATTERN.test(queryLower);
-  const feedbackContactAsk = FEEDBACK_CONTACT_PATTERN.test(queryLower);
+  const feedbackAsk = intent.feedbackAsk;
+  const contactRoutingAsk = intent.contactRoutingAsk;
+  const songIdeaAsk = intent.songIdeaAsk;
+  const bugReportAsk = intent.bugReportAsk;
+  const brokenLinkAsk = intent.brokenLinkAsk;
+  const feedbackContactAsk =
+    feedbackAsk || contactRoutingAsk || songIdeaAsk || bugReportAsk || brokenLinkAsk;
+  const contactRoutingOnlyAsk =
+    contactRoutingAsk && !songIdeaAsk && !bugReportAsk && !brokenLinkAsk && !feedbackAsk;
+  const feedbackIntent: "feedback" | "song-idea" | "bug-report" | "broken-link" | null = brokenLinkAsk
+    ? "broken-link"
+    : bugReportAsk
+      ? "bug-report"
+      : songIdeaAsk
+        ? "song-idea"
+        : feedbackAsk
+          ? "feedback"
+          : null;
   const primaryExperienceMode = support.supportIntent
     ? "support-forward (stabilize first, then widen)"
     : soundLedIntent || broadSoundIntent || trackExplorationIntent
@@ -646,6 +708,7 @@ export const buildRecommendationContext = (
     !explicitDelivery &&
     !(hasPriorAssistantTurn && conversationListeningCue) &&
     !RECOMMENDATION_CUE_PATTERN.test(latestUser) &&
+    !newnessAsk &&
     !orientationAsk &&
     !feedbackContactAsk
   ) {
@@ -923,6 +986,8 @@ export const buildRecommendationContext = (
         ? "- User is already in songbooks. Acknowledge that context once in your first sentence, then lead with a relevant songbook when possible."
         : pageType === "song-detail"
           ? `- User is on a song-detail page (${songDetailSlug ? `/songs/${songDetailSlug}` : "/songs/<slug>"}). In your first sentence, explicitly acknowledge this song context. For "more like this" asks, ask one axis-choice question (topic/intention vs. sound/genre) while still continuing with the user's intent.`
+          : pageType === "not-found"
+            ? "- User is on /oops (not-found recovery context). Open with brief empathy, ask what they were trying to find, suggest [Sitemap](/sitemap), and if route hints exist offer one closest match plus 1-2 adjacent options."
           : pageType === "sutras-overview"
             ? "- User is on /about/sutras (the compass page). Acknowledge that once in your first sentence, then continue directly with their intent."
             : pageType === "sutra-page"
@@ -941,6 +1006,9 @@ export const buildRecommendationContext = (
     soundLedIntent
       ? "- Classify this ask as sound-led: explicit sound vocabulary is present. Lead with /tracks routes first; songs are optional examples after routes."
       : "- If no explicit sound vocabulary is present, do not force sound-led routing.",
+    newnessAsk
+      ? "- Classify this ask as newness-led: lead with 1-3 latest drops from the injected LATEST_DROPS block, then include [Newest Songs](/songs/?sort=newest), [Newest Tracks](/tracks/?tsort=newest), and [Latest Words](/words), and invite following on SoundCloud + YouTube."
+      : null,
     breadthLedIntent
       ? "- Classify this ask as breadth-led: lead with filtered /songs and /tracks routes first, then include sutra page plus a filtered /songbooks/?find=<keyword> route and 2-4 relevant songbook links, then offer narrowing."
       : null,
@@ -1164,11 +1232,19 @@ export const buildRecommendationContext = (
     orientationAsk
       ? "- Songbook lane count safety (MUST): do not invent per-sutra ranges (for example '2-10 songbooks'). If exact lane counts are unavailable, use qualitative wording like 'several songbooks'."
       : null,
-    feedbackContactAsk
-      ? '- Feedback/contact handling (MUST): point user to [Contact](/#footer-contact-panel) in the site footer ("Questions? Feedback? Get in touch").'
+    contactRoutingOnlyAsk
+      ? "- Contact routing (MUST): user asked how to reach the creator — answer in 2-3 short sentences, warm but not brochure-long. Primary path: [Send Banana a note](#bbb-send). Same inbox as footer [Contact](/#footer-contact-panel) if they would rather use that. Do not call one longer-form or more substantial — both are the same note to Banana. No bullet lists, no flow jargon (inline send flow, intent, etc.). Do not end with chat prompts like \"What's on your mind?\" — typing in chat does not deliver mail; tell them to click the link when ready. Social: skip platform lists unless asked; at most one optional line that footer social links exist."
+      : null,
+    songIdeaAsk
+      ? "- Song idea handoff (MUST): user has a song idea for Banana — welcome it warmly in 1-2 sentences, then immediately offer [Send Banana a note](#bbb-send?intent=song-idea) as the way to pass it to her. Song ideas are feedback; typing the pitch in chat does NOT deliver it. Do not interrogate the idea in chat first (no \"what's it about?\" before the send link). Do not end with chat-only prompts like \"What's on your mind?\". If they ask what happens to the idea, say Banana reads send-form notes, the idea stays theirs, and offer the same send link again."
+      : null,
+    feedbackContactAsk && !contactRoutingOnlyAsk && !songIdeaAsk
+      ? `- Feedback handoff (MUST): offer [Send Banana a note](#bbb-send${
+          feedbackIntent ? `?intent=${feedbackIntent}` : ""
+        }). Footer [Contact](/#footer-contact-panel) is the same inbox if the chat send path fails — not a separate longer-form channel. Keep it brief (2-4 sentences).`
       : null,
     feedbackContactAsk
-      ? "- Never claim you can personally deliver messages to the creator."
+      ? "- Honesty guardrail (MUST): do not claim the message was sent until the system confirms delivery."
       : null,
     "- Keep the distinction explicit in plain language: one short listening-flow sentence first, then one short segue sentence introducing song picks.",
     "- In the listening-flow sentence, explain briefly that songbooks are topic-led collections and tracks are mood-led continuous listening.",

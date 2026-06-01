@@ -8,6 +8,7 @@ import { useBfCacheEmbedTeardown } from './catalog/useBfCacheEmbedTeardown'
 import { useSyncPrintPageUrl } from './catalog/useSyncPrintPageUrl'
 import { useAnalyticsPageView } from './useAnalyticsPageView'
 import { BbbChatWidget } from './bbb/BbbChatWidget'
+import { NotFoundRoute } from './catalog/NotFoundRoute'
 
 const HomePortal = lazy(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
 const AboutPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutPage })))
@@ -104,24 +105,6 @@ function RouteBoundary({ children }: { children: ReactNode }) {
     <RouteErrorBoundary>
       <Suspense fallback={<AppRouteFallback />}>{children}</Suspense>
     </RouteErrorBoundary>
-  )
-}
-
-function NotFoundRoute() {
-  return (
-    <div className="catalog catalog-page catalog-page--shell">
-      <div className="catalog-page__main">
-        <main id="main-content" className="songbooks-page songbooks-page--missing">
-          <p className="songbooks-page__missing-title">OOPS — page not found.</p>
-          <p className="songbooks-page__missing-sub">
-            The route does not exist in this build. Use Home to keep exploring.
-          </p>
-          <Link to="/" className="songbooks-page__back-link">
-            Peel me back home
-          </Link>
-        </main>
-      </div>
-    </div>
   )
 }
 

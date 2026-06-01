@@ -2,7 +2,7 @@
  * R24 — SSR tree for static pre-render (eager imports, StaticRouter, no analytics/boot prefetch).
  */
 import { StrictMode } from 'react'
-import { Link, Route, Routes, StaticRouter } from 'react-router-dom'
+import { Route, Routes, StaticRouter } from 'react-router-dom'
 import { ThemeProvider } from '../catalog/theme'
 import { HomePortal } from '../catalog/HomePortal'
 import { AboutPage, AboutMusesPage, AboutQuotesPage, AboutSutrasPage } from '../catalog/AboutPage'
@@ -17,21 +17,7 @@ import { SutraDetailPage } from '../catalog/SutraDetailPage'
 import { StyleGuidePage } from '../catalog/StyleGuidePage'
 import { SitemapPage } from '../catalog/SitemapPage'
 import { SearchRedirect } from '../catalog/SearchRedirect'
-
-function NotFoundRoute() {
-  return (
-    <div className="catalog catalog-page catalog-page--shell">
-      <div className="catalog-page__main">
-        <main id="main-content" className="songbooks-page songbooks-page--missing">
-          <p className="songbooks-page__missing-title">OOPS — page not found.</p>
-          <Link to="/" className="songbooks-page__back-link">
-            Peel me back home
-          </Link>
-        </main>
-      </div>
-    </div>
-  )
-}
+import { NotFoundRoute } from '../catalog/NotFoundRoute'
 
 function CatalogBrowseRoute() {
   return <CatalogApp />

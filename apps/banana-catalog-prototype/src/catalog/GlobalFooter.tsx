@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { FOOTER_CONTACT_OPEN_EVENT, FOOTER_CONTACT_PANEL_HASH } from './footerContactConstants'
 import { CATALOG_SNAPSHOT_DATE, formatCatalogSnapshotDate } from './catalogSnapshotMeta'
 import { canonicalPathForRoute } from './seoPaths'
 import { FooterSocialIcon, type FooterSocialId } from './FooterSocialIcons'
@@ -40,6 +41,8 @@ function FooterContactForm() {
   const [fields, setFields] = useState<FormFields>(EMPTY)
   const [status, setStatus] = useState<FormStatus>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const [sendCopy, setSendCopy] = useState(false)
+  const [requestedCopy, setRequestedCopy] = useState(false)
   const [honeypot, setHoneypot] = useState('')
   const loadedAt = useRef(0)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -52,6 +55,22 @@ function FooterContactForm() {
   useEffect(() => {
     if (open) loadedAt.current = Date.now()
   }, [open])
+
+  /* Deep links (#footer-contact-panel) and BBB fallback should expand, not just scroll. */
+  useEffect(() => {
+    const openFromHash = () => {
+      if (window.location.hash === FOOTER_CONTACT_PANEL_HASH) setOpen(true)
+    }
+    const openFromEvent = () => setOpen(true)
+
+    openFromHash()
+    window.addEventListener('hashchange', openFromHash)
+    window.addEventListener(FOOTER_CONTACT_OPEN_EVENT, openFromEvent)
+    return () => {
+      window.removeEventListener('hashchange', openFromHash)
+      window.removeEventListener(FOOTER_CONTACT_OPEN_EVENT, openFromEvent)
+    }
+  }, [])
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -86,32 +105,39 @@ function FooterContactForm() {
 
       setStatus('sending')
       try {
+        const params = new URLSearchParams({
+          name: fields.name.trim(),
+          email: fields.email.trim(),
+          subject: '',
+          message: fields.message.trim(),
+          _timestamp: new Date().toISOString(),
+        })
+        if (sendCopy) params.set('sendCopy', 'true')
+
         await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({
-            name: fields.name.trim(),
-            email: fields.email.trim(),
-            subject: '',
-            message: fields.message.trim(),
-            _timestamp: new Date().toISOString(),
-          }).toString(),
+          body: params.toString(),
         })
         sessionSubmitCount++
+        setRequestedCopy(sendCopy)
         setFields(EMPTY)
+        setSendCopy(false)
         setStatus('sent')
       } catch {
         setStatus('error')
         setErrorMsg('Something went wrong — please try again or email me directly.')
       }
     },
-    [fields, honeypot],
+    [fields, honeypot, sendCopy],
   )
 
   const handleReset = useCallback(() => {
     setStatus('idle')
     setErrorMsg('')
+    setSendCopy(false)
+    setRequestedCopy(false)
     loadedAt.current = Date.now()
   }, [])
 
@@ -143,6 +169,7 @@ function FooterContactForm() {
             <div className="footer-contact__success" role="status">
               <p className="footer-contact__success-text">
                 Thanks for reaching out. I'll get back to you soon.
+                {requestedCopy ? ' If you asked for a copy, check your inbox.' : ''}
               </p>
               <button type="button" className="footer-contact__link-btn" onClick={handleReset}>
                 Send another message
@@ -223,6 +250,15 @@ function FooterContactForm() {
                     maxLength={5000}
                   />
                 </div>
+
+                <label className="footer-contact__checkbox">
+                  <input
+                    type="checkbox"
+                    checked={sendCopy}
+                    onChange={(event) => setSendCopy(event.target.checked)}
+                  />
+                  Email me a copy of this message
+                </label>
 
                 {errorMsg && (
                   <p className="footer-contact__error" role="alert">

@@ -3,13 +3,19 @@ import assert from 'node:assert/strict'
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import {
+  buildConversationTail,
   capConversationHistory,
   getOrCreateActorId,
+  parseBbbSendIntentFromHref,
+  plainTextForFeedbackReview,
   parseInlineEmphasis,
   parseMarkdownLinks,
   parseSseChunk,
   updateLastAssistant,
 } from './BbbChatUtils'
+import { isFooterContactHref } from '../catalog/footerContactConstants'
+import { buildNotFoundOpenEventDetail, isKnownCatalogPath, toBbbPageContextPathname } from './notFoundRouting'
+import { registerBbbOpenListener } from './openEvent'
 
 function renderInlineTextNodes(text: string, keyPrefix: string): React.ReactNode[] {
   return parseInlineEmphasis(text).map((piece, idx) =>
@@ -161,6 +167,97 @@ test('parseMarkdownLinks normalizes malformed double-parenthesis route links', (
   })
 })
 
+test('parseMarkdownLinks renders #bbb-send hash links as clickable internal links', () => {
+  const segments = parseMarkdownLinks(
+    'Click [Send Banana a note](#bbb-send?intent=feedback) to open the send form.',
+  )
+  const link = segments.find((segment) => segment.type === 'link')
+  assert.deepEqual(link, {
+    type: 'link',
+    text: 'Send Banana a note',
+    href: '#bbb-send?intent=feedback',
+    external: false,
+  })
+  assert.equal(segments.some((segment) => segment.type === 'text' && segment.text.includes('[Send Banana')), false)
+})
+
+test('parseMarkdownLinks renders #bbb-send links when wrapped in bold markdown', () => {
+  const segments = parseMarkdownLinks('Try **[Send Banana a note](#bbb-send?intent=song-idea)** here.')
+  const link = segments.find((segment) => segment.type === 'link')
+  assert.deepEqual(link, {
+    type: 'link',
+    text: 'Send Banana a note',
+    href: '#bbb-send?intent=song-idea',
+    external: false,
+  })
+})
+
+test('parseBbbSendIntentFromHref extracts intent from #bbb-send links', () => {
+  assert.equal(parseBbbSendIntentFromHref('#bbb-send'), 'feedback')
+  assert.equal(parseBbbSendIntentFromHref('#bbb-send?intent=song-idea'), 'song-idea')
+  assert.equal(parseBbbSendIntentFromHref('#bbb-send?intent=bug-report'), 'bug-report')
+  assert.equal(parseBbbSendIntentFromHref('#bbb-send?intent=broken-link'), 'broken-link')
+  assert.equal(parseBbbSendIntentFromHref('#bbb-send?intent=not-real'), 'feedback')
+  assert.equal(parseBbbSendIntentFromHref('/songs/foo'), null)
+})
+
+test('parseMarkdownLinks renders footer contact hash links as clickable internal links', () => {
+  const segments = parseMarkdownLinks('Use [Contact](/#footer-contact-panel) for longer messages.')
+  const link = segments.find((segment) => segment.type === 'link')
+  assert.deepEqual(link, {
+    type: 'link',
+    text: 'Contact',
+    href: '/#footer-contact-panel',
+    external: false,
+  })
+  assert.equal(isFooterContactHref('/#footer-contact-panel'), true)
+  assert.equal(isFooterContactHref('#footer-contact-panel'), true)
+})
+
+test('plainTextForFeedbackReview strips markdown links and emphasis for readable review text', () => {
+  const plain = plainTextForFeedbackReview(
+    '**Quick note:** Use [Send Banana a note](#bbb-send) inline. **Longer form:** [Contact](/#footer-contact-panel) opens the footer panel.',
+  )
+  assert.equal(
+    plain,
+    'Quick note: Use Send Banana a note inline. Longer form: Contact opens the footer panel.',
+  )
+})
+
+test('buildConversationTail interleaves chat roles and caps to last 600 chars', () => {
+  const tail = buildConversationTail(
+    [
+      { role: 'assistant', content: 'Welcome aboard.' },
+      { role: 'user', content: 'I have feedback.' },
+      { role: 'assistant', content: 'I can help send that.' },
+    ],
+    600,
+  )
+  assert.match(tail, /BBB: Welcome aboard\./)
+  assert.match(tail, /User: I have feedback\./)
+  assert.match(tail, /BBB: I can help send that\./)
+
+  const longTail = buildConversationTail(
+    [
+      { role: 'user', content: 'x'.repeat(500) },
+      { role: 'assistant', content: 'y'.repeat(500) },
+    ],
+    120,
+  )
+  assert.ok(longTail.length <= 120)
+})
+
+test('parseMarkdownLinks does not auto-link slash prose like mood/instrument/genre', () => {
+  const segments = parseMarkdownLinks('Tracks are curated by mood/instrument/genre for continuous flow.')
+  const links = segments.filter((segment) => segment.type === 'link')
+  const combinedText = segments
+    .filter((segment) => segment.type === 'text')
+    .map((segment) => segment.text)
+    .join('')
+  assert.equal(links.length, 0)
+  assert.match(combinedText, /mood\/instrument\/genre/)
+})
+
 test('parseMarkdownLinks auto-links bare internal routes in plain text', () => {
   const segments = parseMarkdownLinks('Use /tracks/?primary_genre=JAZZ&tsort=likes or /songs/url-slug.')
   const links = segments.filter((segment) => segment.type === 'link')
@@ -291,6 +388,67 @@ test('getOrCreateActorId persists actor id in localStorage', () => {
     const second = getOrCreateActorId('bbb_actor_id_test', 'bbb-test')
     assert.match(first, /^bbb-test-/)
     assert.equal(second, first)
+  } finally {
+    if (typeof originalWindow === 'undefined') {
+      delete (globalThis as { window?: unknown }).window
+    } else {
+      ;(globalThis as { window: unknown }).window = originalWindow
+    }
+  }
+})
+
+test('toBbbPageContextPathname maps unknown routes to /oops', () => {
+  assert.equal(toBbbPageContextPathname('/tracks'), '/tracks')
+  assert.equal(toBbbPageContextPathname('/banana-republic'), '/oops')
+  assert.equal(isKnownCatalogPath('/about/sutras'), true)
+  assert.equal(isKnownCatalogPath('/banana-republic'), false)
+})
+
+test('buildNotFoundOpenEventDetail standardizes 404 event payload', () => {
+  assert.deepEqual(buildNotFoundOpenEventDetail('/banana-republic'), {
+    reason: '404',
+    badPath: '/banana-republic',
+  })
+})
+
+test('registerBbbOpenListener opens on bbb:open event and unsubscribes cleanly', () => {
+  const listeners = new Map<string, EventListener[]>()
+  const originalWindow = (globalThis as { window?: unknown }).window
+  ;(globalThis as { window: unknown }).window = {
+    addEventListener: (name: string, listener: EventListener) => {
+      const list = listeners.get(name) ?? []
+      list.push(listener)
+      listeners.set(name, list)
+    },
+    removeEventListener: (name: string, listener: EventListener) => {
+      const list = listeners.get(name) ?? []
+      listeners.set(
+        name,
+        list.filter((candidate) => candidate !== listener),
+      )
+    },
+    dispatchEvent: (event: { type: string }) => {
+      for (const listener of listeners.get(event.type) ?? []) listener(event as unknown as Event)
+      return true
+    },
+  }
+
+  try {
+    let openCount = 0
+    let lastDetail: unknown = null
+    const unsubscribe = registerBbbOpenListener((detail) => {
+      openCount += 1
+      lastDetail = detail
+    })
+    ;(window as { dispatchEvent: (event: { type: string; detail?: unknown }) => boolean }).dispatchEvent({
+      type: 'bbb:open',
+      detail: { reason: '404', badPath: '/banana-republic' },
+    })
+    assert.equal(openCount, 1)
+    assert.deepEqual(lastDetail, { reason: '404', badPath: '/banana-republic' })
+    unsubscribe()
+    ;(window as { dispatchEvent: (event: { type: string; detail?: unknown }) => boolean }).dispatchEvent({ type: 'bbb:open' })
+    assert.equal(openCount, 1)
   } finally {
     if (typeof originalWindow === 'undefined') {
       delete (globalThis as { window?: unknown }).window

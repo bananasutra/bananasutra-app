@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildRecommendationContext } from "./recommendation-context";
+import { buildRecommendationContext, inferPageType } from "./recommendation-context";
 import type { LibraryInjects } from "./library-data";
 
 const fixtureInjects: LibraryInjects = {
@@ -249,6 +249,19 @@ test("buildRecommendationContext keeps generic high-signal page guidance on root
   assert.match(context, /User page context is high-signal when present/);
 });
 
+test("inferPageType classifies /oops as not-found", () => {
+  assert.equal(inferPageType({ pathname: "/oops" }), "not-found");
+  assert.equal(inferPageType({ pathname: "/oops/" }), "not-found");
+});
+
+test("buildRecommendationContext adds not-found recovery guidance on /oops", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "what should I listen to here?" }], fixtureInjects, {
+    pathname: "/oops",
+  });
+  assert.match(context, /User is on \/oops \(not-found recovery context\)/);
+  assert.match(context, /\[Sitemap\]\(\/sitemap\)/);
+});
+
 test("buildRecommendationContext enforces route-aware delivery on songbook asks", () => {
   const context = buildRecommendationContext(
     [{ role: "user", content: "what should i listen to?" }],
@@ -331,6 +344,33 @@ test("sound-led frenchy ask routes with explicit mood filter", () => {
   });
   assert.match(context, /Classify this ask as sound-led/);
   assert.match(context, /\/tracks\/\?mood=FRENCHY&tsort=likes/);
+});
+
+test("newness intent fires on canonical what-is-new phrases", () => {
+  const prompts = [
+    "what's new?",
+    "what's recent",
+    "anything new",
+    "latest drops please",
+    "what should i check first",
+    "recently released tracks?",
+  ];
+
+  for (const prompt of prompts) {
+    const context = buildRecommendationContext([{ role: "user", content: prompt }], fixtureInjects, { pathname: "/" });
+    assert.match(context, /Classify this ask as newness-led/);
+    assert.match(context, /\[Newest Songs\]\(\/songs\/\?sort=newest\)/);
+    assert.match(context, /\[Newest Tracks\]\(\/tracks\/\?tsort=newest\)/);
+    assert.match(context, /\[Latest Words\]\(\/words\)/);
+  }
+});
+
+test("newness intent does not false-fire on red-herring new phrases", () => {
+  const redHerrings = ["I'm new here", "new to me", "new song idea"];
+  for (const prompt of redHerrings) {
+    const context = buildRecommendationContext([{ role: "user", content: prompt }], fixtureInjects, { pathname: "/" });
+    assert.doesNotMatch(context, /Classify this ask as newness-led/);
+  }
 });
 
 test("psychedelic exception prefers text search route plus trippy mood", () => {
@@ -540,10 +580,49 @@ test("orientation asks inject concise actionable link-pack guidance", () => {
   assert.match(context, /Songbook lane count safety \(MUST\): do not invent per-sutra ranges/);
 });
 
-test("feedback/contact asks inject footer contact-form honesty guidance", () => {
+test("feedback/contact asks inject #bbb-send handoff with footer fallback", () => {
   const context = buildRecommendationContext([{ role: "user", content: "I want to leave feedback for the creator" }], fixtureInjects);
-  assert.match(context, /Feedback\/contact handling \(MUST\): point user to \[Contact\]\(\/#footer-contact-panel\)/);
-  assert.match(context, /Never claim you can personally deliver messages to the creator/);
+  assert.match(context, /\[Send Banana a note\]\(#bbb-send\?intent=feedback\)/);
+  assert.match(context, /\[Contact\]\(\/#footer-contact-panel\)/);
+  assert.match(context, /same inbox if the chat send path fails/);
+  assert.match(context, /Honesty guardrail \(MUST\): do not claim the message was sent until the system confirms delivery/);
+});
+
+test("contact routing asks use brief same-inbox guidance without longer-form framing", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "how do I contact the human behind this?" }],
+    fixtureInjects,
+  );
+  assert.match(context, /Contact routing \(MUST\): user asked how to reach the creator/);
+  assert.match(context, /\[Send Banana a note\]\(#bbb-send\)/);
+  assert.match(context, /\[Contact\]\(\/#footer-contact-panel\)/);
+  assert.match(context, /same note to Banana/);
+  assert.match(context, /typing in chat does not deliver mail/);
+  assert.doesNotMatch(context, /longer-form fallback/);
+});
+
+test("song idea asks inject immediate song-idea send link without chat-only prompts", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "I have an idea for a song" }], fixtureInjects);
+  assert.match(context, /Song idea handoff \(MUST\): user has a song idea for Banana/);
+  assert.match(context, /\[Send Banana a note\]\(#bbb-send\?intent=song-idea\)/);
+  assert.match(context, /typing the pitch in chat does NOT deliver it/);
+  assert.match(context, /Do not interrogate the idea in chat first/);
+  assert.match(context, /What's on your mind/);
+});
+
+test("feedback intent patterns classify all four handoff intents", () => {
+  const feedbackContext = buildRecommendationContext([{ role: "user", content: "I want to leave feedback" }], fixtureInjects);
+  const songIdeaContext = buildRecommendationContext([{ role: "user", content: "I have an idea for a song" }], fixtureInjects);
+  const bugContext = buildRecommendationContext([{ role: "user", content: "this is broken, who do I tell?" }], fixtureInjects);
+  const brokenLinkContext = buildRecommendationContext([{ role: "user", content: "that 404 is a broken link" }], fixtureInjects);
+
+  assert.match(feedbackContext, /\[Send Banana a note\]\(#bbb-send\?intent=feedback\)/);
+  assert.match(songIdeaContext, /\[Send Banana a note\]\(#bbb-send\?intent=song-idea\)/);
+  assert.match(bugContext, /\[Send Banana a note\]\(#bbb-send\?intent=bug-report\)/);
+  assert.match(brokenLinkContext, /\[Send Banana a note\]\(#bbb-send\?intent=broken-link\)/);
+
+  const redHerring = buildRecommendationContext([{ role: "user", content: "this playlist idea sounds fun" }], fixtureInjects);
+  assert.doesNotMatch(redHerring, /#bbb-send/);
 });
 
 test("guidance lists previously recommended slugs to avoid repeats", () => {
