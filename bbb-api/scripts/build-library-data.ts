@@ -7,19 +7,30 @@ type JsonRecord = Record<string, unknown>;
 interface SongRecord extends JsonRecord {
   lyrics_title?: string;
   summary_short?: string;
+  lyrics_extract?: string;
   sutra?: string;
   topic?: string;
   intention?: string;
   light_shadow?: string;
   url_slug?: string;
+  cover?: boolean;
+  public_domain?: boolean;
 }
 
 interface TrackRecord extends JsonRecord {
   lyrics_title?: string;
   genres?: string[];
+  primary_genre?: string;
   mood?: string;
   tempo_feel?: string;
   instruments?: string[];
+}
+
+interface TrackFacetCounts {
+  mood: Record<string, number>;
+  primary_genre: Record<string, number>;
+  genre: Record<string, number>;
+  instrument: Record<string, number>;
 }
 
 interface VideoRecord extends JsonRecord {
@@ -87,6 +98,9 @@ const buildSongLines = (songs: SongRecord[]): string[] =>
         sanitize(song.intention),
         sanitize(song.light_shadow),
         sanitize(song.url_slug),
+        sanitize(song.lyrics_extract),
+        sanitize(song.cover ? "true" : "false"),
+        sanitize(song.public_domain ? "true" : "false"),
       ].join(" | "),
     )
     .filter((line) => line.split(" | ").some((part) => part.length > 0))
@@ -128,6 +142,35 @@ const buildTrackLines = (tracks: TrackRecord[]): string[] => {
       ].join(" | "),
     )
     .sort((a, b) => a.localeCompare(b));
+};
+
+const buildTrackFacetCounts = (tracks: TrackRecord[]): TrackFacetCounts => {
+  const mood: Record<string, number> = {};
+  const primary_genre: Record<string, number> = {};
+  const genre: Record<string, number> = {};
+  const instrument: Record<string, number> = {};
+
+  for (const track of tracks) {
+    const moodKey = sanitize(track.mood).toUpperCase();
+    if (moodKey) mood[moodKey] = (mood[moodKey] ?? 0) + 1;
+
+    const primaryGenre = sanitize(track.primary_genre).toUpperCase();
+    if (primaryGenre) primary_genre[primaryGenre] = (primary_genre[primaryGenre] ?? 0) + 1;
+
+    for (const value of track.genres ?? []) {
+      const key = sanitize(value).toUpperCase();
+      if (!key) continue;
+      genre[key] = (genre[key] ?? 0) + 1;
+    }
+
+    for (const value of track.instruments ?? []) {
+      const key = sanitize(value).toUpperCase();
+      if (!key) continue;
+      instrument[key] = (instrument[key] ?? 0) + 1;
+    }
+  }
+
+  return { mood, primary_genre, genre, instrument };
 };
 
 const buildVideoLines = (videosByLyricsId: Record<string, VideoRecord[]>): string[] => {
@@ -205,6 +248,7 @@ const main = async (): Promise<void> => {
   const payload = {
     songs: songLines.join("\n"),
     tracks: trackLines.join("\n"),
+    trackFacetCounts: JSON.stringify(buildTrackFacetCounts(tracks)),
     videos: videoLines.join("\n"),
     songbooks: buildSongbookLines(songbooks).join("\n"),
     quotes: buildQuoteLines(quotes).join("\n"),
@@ -215,6 +259,7 @@ const main = async (): Promise<void> => {
     `export interface LibraryInjects {\n` +
     `  songs: string;\n` +
     `  tracks: string;\n` +
+    `  trackFacetCounts?: string;\n` +
     `  videos: string;\n` +
     `  songbooks: string;\n` +
     `  quotes: string;\n` +

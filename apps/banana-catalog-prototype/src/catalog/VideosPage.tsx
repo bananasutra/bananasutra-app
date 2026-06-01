@@ -181,19 +181,6 @@ function applyVideoFilters(
   return out
 }
 
-function countVideosWithSutra(videos: YouTubeCatalogVideo[], sutra: string): number {
-  const s = sutra.toLowerCase()
-  return videos.filter((v) => (v.sutra || '').trim().toLowerCase() === s).length
-}
-
-function countVideosWithTopic(videos: YouTubeCatalogVideo[], topic: string): number {
-  return videos.filter((v) => (v.song_topic || '').trim() === topic).length
-}
-
-function countVideosWithIntention(videos: YouTubeCatalogVideo[], intention: string): number {
-  return videos.filter((v) => (v.song_intention || '').trim() === intention).length
-}
-
 function hashString(input: string): number {
   let hash = 0
   for (let i = 0; i < input.length; i += 1) {
@@ -362,11 +349,6 @@ export function VideosPage() {
     [allVideos, inAppIds],
   )
 
-  const hasSCCount = useMemo(
-    () => allVideos.filter((v) => videoLinkedSongHasSC(v, songsByLyricsId)).length,
-    [allVideos, songsByLyricsId],
-  )
-
   useEffect(() => {
     if (searchParams.get('catalog') !== '1') return
     const p = new URLSearchParams(searchParams.toString())
@@ -408,6 +390,22 @@ export function VideosPage() {
 
   const shownVideos = useMemo(
     () => applyVideoFilters(allVideos, filters, inAppIds, songsByLyricsId),
+    [allVideos, filters, inAppIds, songsByLyricsId],
+  )
+  const contextualRowsWithoutSutra = useMemo(
+    () => applyVideoFilters(allVideos, { ...filters, sutra: '', page: 1 }, inAppIds, songsByLyricsId),
+    [allVideos, filters, inAppIds, songsByLyricsId],
+  )
+  const contextualRowsWithoutTopic = useMemo(
+    () => applyVideoFilters(allVideos, { ...filters, topic: '', page: 1 }, inAppIds, songsByLyricsId),
+    [allVideos, filters, inAppIds, songsByLyricsId],
+  )
+  const contextualRowsWithoutIntention = useMemo(
+    () => applyVideoFilters(allVideos, { ...filters, intention: '', page: 1 }, inAppIds, songsByLyricsId),
+    [allVideos, filters, inAppIds, songsByLyricsId],
+  )
+  const contextualRowsWithoutMediaLink = useMemo(
+    () => applyVideoFilters(allVideos, { ...filters, media: 'all', linkTarget: 'all', page: 1 }, inAppIds, songsByLyricsId),
     [allVideos, filters, inAppIds, songsByLyricsId],
   )
   const hasActiveVideoFilters =
@@ -496,9 +494,10 @@ export function VideosPage() {
     options: string[],
     paramKey: VideoFacetChipKey,
     current: string,
+    contextualRows: YouTubeCatalogVideo[],
   ) => {
     if (!options.length) return null
-    const total = allVideos.length
+    const total = contextualRows.length
     return (
       <section className="catalog-facet" aria-labelledby={id}>
         <h3 id={id}>{heading}</h3>
@@ -513,18 +512,25 @@ export function VideosPage() {
           </Link>
           {options.map((opt) => {
             const active = current === opt
-            const count =
+            const count = contextualRows.filter((video) =>
               paramKey === 'sutra'
-                ? countVideosWithSutra(allVideos, opt)
+                ? (video.sutra || '').trim().toLowerCase() === opt.toLowerCase()
                 : paramKey === 'topic'
-                  ? countVideosWithTopic(allVideos, opt)
-                  : countVideosWithIntention(allVideos, opt)
+                  ? (video.song_topic || '').trim() === opt
+                  : (video.song_intention || '').trim() === opt,
+            ).length
+            const disabled = !active && count === 0
             return (
               <Link
                 key={`${paramKey}-${opt}`}
-                className={`catalog-facet-chip${active ? ' is-active' : ''}`}
+                className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
                 to={hrefVideos({ [paramKey]: active ? '' : opt }, filters)}
                 title={paramKey === 'sutra' ? `${sutraQuestionFromDisplay(opt)} (${count} videos)` : `${count} videos`}
+                aria-disabled={disabled}
+                tabIndex={disabled ? -1 : undefined}
+                onClick={(event) => {
+                  if (disabled) event.preventDefault()
+                }}
               >
                 {paramKey === 'sutra' ? (
                   <span className={`catalog-facet-sutra-name ${sutraClassName(opt)}`}>{opt}</span>
@@ -800,38 +806,78 @@ export function VideosPage() {
                   Some videos also have SoundCloud playback or full lyrics—filter by what&apos;s available.
                 </p>
                 <div className="catalog-facet-chips" role="group" aria-describedby="videos-media-desc">
+                  {/*
+                    Global filter contract: contextual counts use current selection context
+                    excluding the group being rendered.
+                  */}
+                  {(() => {
+                    const allCount = contextualRowsWithoutMediaLink.length
+                    const hasScCount = contextualRowsWithoutMediaLink.filter((video) =>
+                      videoLinkedSongHasSC(video, songsByLyricsId),
+                    ).length
+                    const youtubeOnlyCount = contextualRowsWithoutMediaLink.filter(
+                      (video) => !inAppIds.has((video.lyrics_id || '').trim()),
+                    ).length
+                    const allActive = filters.media === 'all' && filters.linkTarget !== 'off_site'
+                    const hasScActive = filters.media === 'has_sc'
+                    const offSiteActive = filters.linkTarget === 'off_site'
+                    const disableHasSc = !hasScActive && hasScCount === 0
+                    const disableOffSite = !offSiteActive && youtubeOnlyCount === 0
+                    return (
+                      <>
                   <Link
-                    className={`catalog-facet-chip${filters.media === 'all' && filters.linkTarget !== 'off_site' ? ' is-active' : ''}`}
+                    className={`catalog-facet-chip${allActive ? ' is-active' : ''}`}
                     to={hrefVideos({ media: 'all', linkTarget: 'all' }, filters)}
-                    title={`All ${allVideos.length} videos`}
+                    title={`All ${allCount} videos`}
                   >
                     <span>All</span>
-                    <span className="catalog-facet-count">{` (${allVideos.length})`}</span>
+                    <span className="catalog-facet-count">{` (${allCount})`}</span>
                   </Link>
                   <Link
-                    className={`catalog-facet-chip${filters.media === 'has_sc' ? ' is-active' : ''}`}
+                    className={`catalog-facet-chip${hasScActive ? ' is-active' : ''}${disableHasSc ? ' is-disabled' : ''}`}
                     to={hrefVideos({ media: 'has_sc', linkTarget: 'all' }, filters)}
-                    title={`${hasSCCount} videos with linked song on SoundCloud`}
+                    title={`${hasScCount} videos with linked song on SoundCloud`}
+                    aria-disabled={disableHasSc}
+                    tabIndex={disableHasSc ? -1 : undefined}
+                    onClick={(event) => {
+                      if (disableHasSc) event.preventDefault()
+                    }}
                   >
                     <span>+ SoundCloud</span>
-                    <span className="catalog-facet-count">{` (${hasSCCount})`}</span>
+                    <span className="catalog-facet-count">{` (${hasScCount})`}</span>
                   </Link>
-                  {orphanUploadCount > 0 ? (
-                    <Link
-                      className={`catalog-facet-chip${filters.linkTarget === 'off_site' ? ' is-active' : ''}`}
-                      to={hrefVideos({ linkTarget: 'off_site', media: 'all' }, filters)}
-                      title={`${orphanUploadCount} videos with no linked song page`}
-                    >
-                      <span>YouTube-only</span>
-                      <span className="catalog-facet-count">{` (${orphanUploadCount})`}</span>
-                    </Link>
-                  ) : null}
+                  <Link
+                    className={`catalog-facet-chip${offSiteActive ? ' is-active' : ''}${disableOffSite ? ' is-disabled' : ''}`}
+                    to={hrefVideos({ linkTarget: 'off_site', media: 'all' }, filters)}
+                    title={`${youtubeOnlyCount} videos with no linked song page`}
+                    aria-disabled={disableOffSite}
+                    tabIndex={disableOffSite ? -1 : undefined}
+                    onClick={(event) => {
+                      if (disableOffSite) event.preventDefault()
+                    }}
+                  >
+                    <span>YouTube-only</span>
+                    <span className="catalog-facet-count">{` (${youtubeOnlyCount})`}</span>
+                  </Link>
+                      </>
+                    )
+                  })()}
                 </div>
               </section>
 
-              {chipSection('videos-sutra-heading', 'Sutra', sutraOptions, 'sutra', filters.sutra)}
-              {chipSection('videos-topic-heading', 'Topic', topicOptions, 'topic', filters.topic)}
-              {chipSection('videos-intention-heading', 'Intention', intentionOptions, 'intention', filters.intention)}
+              <p className="catalog-facet-help">
+                Filters combine across groups (AND). Multiple picks inside one group combine as OR.
+              </p>
+              {chipSection('videos-sutra-heading', 'Sutra', sutraOptions, 'sutra', filters.sutra, contextualRowsWithoutSutra)}
+              {chipSection('videos-topic-heading', 'Topic', topicOptions, 'topic', filters.topic, contextualRowsWithoutTopic)}
+              {chipSection(
+                'videos-intention-heading',
+                'Intention',
+                intentionOptions,
+                'intention',
+                filters.intention,
+                contextualRowsWithoutIntention,
+              )}
 
             </div>
           </aside>

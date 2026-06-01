@@ -13,15 +13,17 @@ export const CATALOG_BROWSER_FACET_ORDER: FilterFacetKey[] = [
 /** `/tracks` filter panel order (URL: `primary_genre`, `secondary_genre`, …). */
 export const TRACKS_BROWSER_FACET_ORDER: TracksFacetFilterKey[] = [
   'sutra',
+  'light_shadow',
+  'primary_genre',
   'tempo_feel',
   'mood',
-  'primary_genre',
   'secondary_genre',
   'instrument',
 ]
 
 export const TRACKS_FACET_LABELS: Record<TracksFacetFilterKey, string> = {
   sutra: 'Sutra',
+  light_shadow: 'Light / Shadow',
   primary_genre: 'Primary Genre',
   secondary_genre: 'Secondary Genres',
   mood: 'Mood',

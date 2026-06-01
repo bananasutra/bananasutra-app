@@ -28,6 +28,10 @@ export type SongCatalogItem = {
   topic: string
   intention: string
   light_shadow: string
+  /** Canonical SONGS flag: this lyrics row is a cover interpretation. */
+  cover: boolean
+  /** Canonical SONGS flag: this lyrics row is public-domain based. */
+  public_domain: boolean
   lang: string
   written_year: string
   song_in_app: boolean
@@ -159,6 +163,7 @@ export type FilterFacetKey = keyof FilterState
 /** `/tracks` URL filter params (`primary_genre`, `secondary_genre`, …). */
 export type TracksFacetFilterKey =
   | 'sutra'
+  | 'light_shadow'
   | 'primary_genre'
   | 'secondary_genre'
   | 'mood'
@@ -172,6 +177,7 @@ export type TrackSortMode = 'newest' | 'plays' | 'likes' | 'engagement' | 'title
 export function emptyTracksFilterState(): TracksFilterState {
   return {
     sutra: new Set(),
+    light_shadow: new Set(),
     primary_genre: new Set(),
     secondary_genre: new Set(),
     mood: new Set(),
@@ -226,6 +232,8 @@ export type SongDetailTrack = {
 
 /** Flat `track_catalog.json` row: published in-app SC track + parent song join (Phase 3 `/tracks`). */
 export type TrackCatalogItem = SongDetailTrack & {
+  /** Parent song semantic lens (LIGHT|SHADOW) used by `/tracks` filters. */
+  light_shadow: string
   url_slug: string
   list_cover_url: string
   song_published_at: string
@@ -245,6 +253,10 @@ export type SongDetailRecord = {
   topic: string
   intention: string
   light_shadow: string
+  /** Canonical SONGS flag: this lyrics row is a cover interpretation. */
+  cover: boolean
+  /** Canonical SONGS flag: this lyrics row is public-domain based. */
+  public_domain: boolean
   lang: string
   written_year?: string
   song_in_app: boolean

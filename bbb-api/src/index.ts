@@ -7,6 +7,7 @@ import {
 import { LIBRARY_INJECTS } from "./library-data";
 import { buildRecommendationContext, type BbbPageContext } from "./recommendation-context";
 import { buildSystemPrompt } from "./system-prompt";
+import { isOrientationAsk, normalizeOrientationReply } from "./reply-normalizer";
 import { isAuthorizedAdmin } from "./admin-auth";
 import { cleanupOldLogs, insertBbbLog, parseAdminLogsQuery, queryBbbLogs, type BbbLogStatus } from "./logging";
 
@@ -313,10 +314,13 @@ const handler: ExportedHandler<Env> = {
       );
     }
     const latestUserPrompt = getLatestUserPrompt(messages);
+    const orientationAsk = isOrientationAsk(latestUserPrompt);
+    const hasPriorAssistantTurn = messages.slice(0, -1).some((message) => message.role === "assistant");
 
     try {
       const systemStatic = buildSystemPrompt(LIBRARY_INJECTS);
-      const systemDynamic = buildRecommendationContext(messages, LIBRARY_INJECTS, pageContext);
+      const diversitySeed = actorId ? `${actorId}:${requestId}` : requestId;
+      const systemDynamic = buildRecommendationContext(messages, LIBRARY_INJECTS, pageContext, diversitySeed);
       let resolveStreamResult: ((value: ClaudeStreamFinishResult) => void) | null = null;
       const streamResultPromise = new Promise<ClaudeStreamFinishResult>((resolve) => {
         resolveStreamResult = resolve;
@@ -327,6 +331,10 @@ const handler: ExportedHandler<Env> = {
         systemStatic,
         systemDynamic: systemDynamic || undefined,
         messages,
+        bufferUntilDone: orientationAsk,
+        finalizeAssistantText: orientationAsk
+          ? (assistantText) => normalizeOrientationReply(assistantText, { hasPriorAssistantTurn })
+          : undefined,
         onFinish: (result) => {
           resolveStreamResult?.(result);
           resolveStreamResult = null;

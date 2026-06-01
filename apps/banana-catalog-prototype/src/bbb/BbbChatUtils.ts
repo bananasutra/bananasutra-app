@@ -17,6 +17,7 @@ export type MessageSegment =
 export type InlineTextSegment = {
   text: string
   bold: boolean
+  italic: boolean
 }
 
 const DEFAULT_ACTOR_STORAGE_KEY = 'bbb_actor_id'
@@ -118,36 +119,107 @@ function classifyHref(href: string): { safe: boolean; external: boolean } {
   return { safe: false, external: false }
 }
 
-export function parseInlineEmphasis(text: string): InlineTextSegment[] {
-  const segments: InlineTextSegment[] = []
-  const pattern = /(\*\*([^*]+)\*\*|__([^_]+)__)/g
+function normalizeHref(href: string): string {
+  let normalized = href.trim()
+  while (normalized.startsWith('(') && normalized.endsWith(')') && normalized.length > 2) {
+    normalized = normalized.slice(1, -1).trim()
+  }
+  return normalized
+}
+
+function pushTextWithAutoLinks(segments: MessageSegment[], text: string): void {
+  const routePattern = /\/[^\s)\]'"`]+/g
   let cursor = 0
-  let match = pattern.exec(text)
+  let match = routePattern.exec(text)
+
+  while (match) {
+    const rawRoute = match[0] ?? ''
+    const matchStart = match.index
+    const matchEnd = matchStart + rawRoute.length
+    const trimmedRoute = rawRoute.replace(/[.,!?;:]+$/g, '')
+    const trailingPunctuation = rawRoute.slice(trimmedRoute.length)
+    const hrefMeta = classifyHref(trimmedRoute)
+
+    if (matchStart > cursor) {
+      segments.push({ type: 'text', text: text.slice(cursor, matchStart) })
+    }
+    if (trimmedRoute.startsWith('/') && hrefMeta.safe) {
+      segments.push({
+        type: 'link',
+        text: trimmedRoute,
+        href: trimmedRoute,
+        external: false,
+      })
+      if (trailingPunctuation) {
+        segments.push({ type: 'text', text: trailingPunctuation })
+      }
+    } else {
+      segments.push({ type: 'text', text: rawRoute })
+    }
+    cursor = matchEnd
+    match = routePattern.exec(text)
+  }
+
+  if (cursor < text.length) {
+    segments.push({ type: 'text', text: text.slice(cursor) })
+  }
+}
+
+export function parseInlineEmphasis(text: string): InlineTextSegment[] {
+  const sanitized = text
+    .split('\n')
+    .map((line) => {
+      // Keep normal markdown behavior, but remove dangling double-markers per line
+      // so malformed model output does not leak raw ** / __ into UI text.
+      const boldMarkerCount = (line.match(/\*\*/g) ?? []).length
+      const underscoreBoldMarkerCount = (line.match(/__/g) ?? []).length
+      let nextLine = line
+      if (boldMarkerCount % 2 === 1) nextLine = nextLine.replace(/\*\*/g, '')
+      if (underscoreBoldMarkerCount % 2 === 1) nextLine = nextLine.replace(/__/g, '')
+      return nextLine
+    })
+    .join('\n')
+
+  const segments: InlineTextSegment[] = []
+  // Match bold first, then single-asterisk italics.
+  // Italics require non-adjacent asterisks to avoid colliding with **bold**.
+  // Bold/italic are intentionally single-line only so malformed markers cannot
+  // create accidental emphasis spans across multiple bullets/paragraphs.
+  const pattern = /(\*\*([^*\n]+)\*\*|__([^_\n]+)__|(?<!\*)\*([^*\n]+)\*(?!\*))/g
+  let cursor = 0
+  let match = pattern.exec(sanitized)
 
   while (match) {
     const raw = match[0]
     const boldText = match[2] ?? match[3] ?? ''
+    const italicText = match[4] ?? ''
+    const isBold = Boolean(boldText)
     const matchStart = match.index
     const matchEnd = matchStart + raw.length
     if (matchStart > cursor) {
-      segments.push({ text: text.slice(cursor, matchStart), bold: false })
+      segments.push({ text: sanitized.slice(cursor, matchStart), bold: false, italic: false })
     }
-    segments.push({ text: boldText, bold: true })
+    segments.push({
+      text: isBold ? boldText : italicText,
+      bold: isBold,
+      italic: !isBold,
+    })
     cursor = matchEnd
     match = pattern.exec(text)
   }
 
-  if (cursor < text.length) {
-    segments.push({ text: text.slice(cursor), bold: false })
+  if (cursor < sanitized.length) {
+    segments.push({ text: sanitized.slice(cursor), bold: false, italic: false })
   }
-  return segments.length ? segments : [{ text, bold: false }]
+  return segments.length ? segments : [{ text: sanitized, bold: false, italic: false }]
 }
 
 export function parseMarkdownLinks(text: string): MessageSegment[] {
+  const sourceText = text.replace(/\]\(\((\/[^)\s]+)\)\)/g, ']($1)')
   const segments: MessageSegment[] = []
   const pattern = /\[([^\]]+)\]\(([^)\s]+)\)/g
   let cursor = 0
-  let match = pattern.exec(text)
+  let match = pattern.exec(sourceText)
 
   while (match) {
     const [raw, label, href] = match
@@ -155,22 +227,23 @@ export function parseMarkdownLinks(text: string): MessageSegment[] {
     const matchEnd = matchStart + raw.length
 
     if (matchStart > cursor) {
-      segments.push({ type: 'text', text: text.slice(cursor, matchStart) })
+      pushTextWithAutoLinks(segments, sourceText.slice(cursor, matchStart))
     }
 
-    const hrefMeta = classifyHref(href)
+    const normalizedHref = normalizeHref(href)
+    const hrefMeta = classifyHref(normalizedHref)
     if (hrefMeta.safe) {
-      segments.push({ type: 'link', text: label, href, external: hrefMeta.external })
+      segments.push({ type: 'link', text: label, href: normalizedHref, external: hrefMeta.external })
     } else {
-      segments.push({ type: 'text', text: raw })
+      pushTextWithAutoLinks(segments, raw)
     }
 
     cursor = matchEnd
-    match = pattern.exec(text)
+    match = pattern.exec(sourceText)
   }
 
-  if (cursor < text.length) {
-    segments.push({ type: 'text', text: text.slice(cursor) })
+  if (cursor < sourceText.length) {
+    pushTextWithAutoLinks(segments, sourceText.slice(cursor))
   }
 
   return segments.length ? segments : [{ type: 'text', text }]

@@ -18,6 +18,7 @@ function scalarInSet(set: Set<string>, value: string): boolean {
 
 export function trackMatchesFilters(track: TrackCatalogItem, f: TracksFilterState): boolean {
   if (!scalarInSet(f.sutra, (track.sutra || '').trim())) return false
+  if (!scalarInSet(f.light_shadow, (track.light_shadow || '').trim())) return false
   if (!scalarInSet(f.primary_genre, track.primary_genre)) return false
   if (f.secondary_genre.size > 0) {
     const secSingle = (track.secondary_genre || '').trim()
@@ -36,6 +37,7 @@ function trackSearchHaystack(t: TrackCatalogItem): string {
     t.track_title,
     t.lyrics_title,
     t.sutra,
+    t.light_shadow,
     t.primary_genre,
     t.soundcloud_genre,
     t.secondary_genre,

@@ -6,8 +6,9 @@ import {
   CATALOG_BROWSER_FACET_ORDER as FACET_GROUPS,
 } from './catalogFacetConfig'
 import { facetCountsFromSongs } from './facetCountsFromSongs'
+import { buildContextualSongFacetEntries } from './facetCountsContextual'
 import { filterSongsByFindAnyQuery } from './searchMatch'
-import { emptyFilterState, type FacetGroupKey, type FilterState, type SongDetailNavState, type SortMode } from './types'
+import { emptyFilterState, type FacetGroupKey, type FilterFacetKey, type FilterState, type SongDetailNavState, type SortMode } from './types'
 import { songMatchesFilters, sortSongs } from './filterSongs'
 import { songCatalogPath } from './songPaths'
 import { sutraClassName } from './sutraTheme'
@@ -123,7 +124,7 @@ export function WordsPage() {
     if (!songCatalogRows) return []
     return songCatalogRows.filter(songOnWordsSurface)
   }, [songCatalogRows])
-  const facets = useMemo(() => facetCountsFromSongs(wordsPool), [wordsPool])
+  const fullFacetEntries = useMemo(() => facetCountsFromSongs(wordsPool), [wordsPool])
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- keep find draft aligned when `find` param changes externally
@@ -148,13 +149,30 @@ export function WordsPage() {
   }, [findDraft, findQuery, navigate])
 
   const bucketCounts = useMemo(() => {
-    const counts: Record<WordsStoryBucket, number> = { all: wordsPool.length, seedling: 0, works: 0 }
-    for (const s of wordsPool) {
+    let base = wordsPool.filter((song) => songMatchesFilters(song, filters))
+    if (findQuery) base = filterSongsByFindAnyQuery(base, findQuery)
+    const counts: Record<WordsStoryBucket, number> = { all: base.length, seedling: 0, works: 0 }
+    for (const s of base) {
       if (songMatchesWordsBucket(s, 'seedling')) counts.seedling += 1
       if (songMatchesWordsBucket(s, 'works')) counts.works += 1
     }
     return counts
-  }, [wordsPool])
+  }, [wordsPool, filters, findQuery])
+
+  const contextualFacetEntries = useMemo(
+    () =>
+      buildContextualSongFacetEntries(
+        wordsPool.filter((song) => songMatchesWordsBucket(song, bucket)),
+        Object.fromEntries(
+          FACET_GROUPS.map((group) => [group, fullFacetEntries[group] ?? []]),
+        ) as Record<FilterFacetKey, { value: string; count: number }[]>,
+        FACET_GROUPS,
+        filters,
+        'all',
+        findQuery,
+      ),
+    [wordsPool, bucket, fullFacetEntries, filters, findQuery],
+  )
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)
@@ -398,6 +416,9 @@ export function WordsPage() {
             {filtersOpen ? activeFilterContext : null}
 
             <div id="words-filter-panel" className="catalog-facet-stack">
+              <p className="catalog-facet-help">
+                Filters combine across groups (AND). Multiple picks inside one group combine as OR.
+              </p>
               <section className="catalog-facet" aria-labelledby="words-search-heading">
                 <h3 id="words-search-heading">Search</h3>
                 <label className="catalog-facet-find-label" htmlFor="words-find-input">
@@ -430,11 +451,13 @@ export function WordsPage() {
                   {BUCKET_OPTIONS.map(({ id, label, help }) => {
                     const active = bucket === id
                     const count = bucketCounts[id]
+                    const disabled = !active && count === 0
                     return (
                       <button
                         key={id}
                         type="button"
-                        className={`catalog-facet-chip${active ? ' is-active' : ''}`}
+                        className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
+                        disabled={disabled}
                         onClick={() => setBucketAndSync(id)}
                         title={help}
                       >
@@ -446,7 +469,7 @@ export function WordsPage() {
                 </div>
               </section>
               {FACET_GROUPS.map((group) => {
-                const entries = facets[group] ?? []
+                const entries = contextualFacetEntries[group] ?? []
                 if (!entries.length) return null
                 const filterKey = group as keyof FilterState
                 const headingId = `words-${group}-heading`
@@ -458,11 +481,13 @@ export function WordsPage() {
                     <div className="catalog-facet-chips" role="group" aria-labelledby={headingId}>
                       {entries.map(({ value, count }) => {
                         const active = filters[filterKey].has(value)
+                        const disabled = !active && count === 0
                         return (
                           <button
                             key={value}
                             type="button"
-                            className={`catalog-facet-chip${active ? ' is-active' : ''}`}
+                            className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
+                            disabled={disabled}
                             onClick={() =>
                               patchFilters({
                                 ...filters,

@@ -516,6 +516,15 @@
   background: color-mix(in srgb, var(--color-bg-panel) 70%, var(--color-text-strong) 8%);
 }
 
+.about-filter-pill:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.about-filter-pill:disabled span {
+  color: var(--color-text-faint);
+}
+
 .about-result-count {
   margin: 0.8rem 0 0;
   color: var(--color-text-faint);

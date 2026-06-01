@@ -820,6 +820,18 @@ a.catalog-facet-chip.is-active:visited {
   background: color-mix(in srgb, var(--color-text-faint) 12%, transparent);
 }
 
+.catalog-facet-chip:disabled,
+.catalog-facet-chip.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.catalog-facet-chip:disabled .catalog-facet-count,
+.catalog-facet-chip.is-disabled .catalog-facet-count {
+  color: var(--color-text-faint);
+}
+
 @media (max-width: 767px), (pointer: coarse) {
   .catalog-facet-chip {
     min-height: 44px;

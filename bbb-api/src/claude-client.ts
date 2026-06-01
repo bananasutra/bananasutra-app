@@ -10,6 +10,8 @@ export interface ClaudeStreamRequest {
   systemDynamic?: string;
   messages: ChatMessage[];
   maxTokens?: number;
+  bufferUntilDone?: boolean;
+  finalizeAssistantText?: (text: string) => string;
   onFinish?: (result: ClaudeStreamFinishResult) => void;
 }
 
@@ -132,8 +134,16 @@ export const streamClaudeResponse = async (request: ClaudeStreamRequest): Promis
             const text = parseAnthropicSseData(line);
             if (text === null) continue;
             assistantText += text;
-            controller.enqueue(toEventLine("token", { text }));
+            if (!request.bufferUntilDone) {
+              controller.enqueue(toEventLine("token", { text }));
+            }
           }
+        }
+        if (request.finalizeAssistantText) {
+          assistantText = request.finalizeAssistantText(assistantText);
+        }
+        if (request.bufferUntilDone && assistantText.length > 0) {
+          controller.enqueue(toEventLine("token", { text: assistantText }));
         }
         notifyFinish(null);
         controller.enqueue(toEventLine("done", { ok: true }));

@@ -79,6 +79,8 @@ export function BbbChatWidget() {
     parseInlineEmphasis(text).map((piece, idx) =>
       piece.bold ? (
         <strong key={`${keyPrefix}-b-${idx}`}>{piece.text}</strong>
+      ) : piece.italic ? (
+        <em key={`${keyPrefix}-i-${idx}`}>{piece.text}</em>
       ) : (
         <span key={`${keyPrefix}-t-${idx}`}>{piece.text}</span>
       ),
