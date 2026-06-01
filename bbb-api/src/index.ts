@@ -68,6 +68,7 @@ interface FeedbackPayload {
   email?: string;
   conversationTail?: string;
   pageContext?: BbbPageContext;
+  sendCopy?: boolean;
 }
 
 interface RateLimitEntry {

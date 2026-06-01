@@ -163,8 +163,9 @@ test("feedback endpoint accepts optional sendCopy flag", async () => {
       testCtx,
     );
     assert.equal(response.status, 200);
-    assert.equal(capturedBody?.sendCopy, "true");
-    assert.equal(capturedBody?.userMessage, "hello world");
+    assert.ok(capturedBody);
+    assert.equal(capturedBody["sendCopy"], "true");
+    assert.equal(capturedBody["userMessage"], "hello world");
   } finally {
     globalThis.fetch = originalFetch;
   }
