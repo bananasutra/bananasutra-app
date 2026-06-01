@@ -51,9 +51,6 @@ export function AboutContent() {
               that matter. It&apos;s ideas you can feel.
             </p>
             <p>
-              Songs for a world gone bananas. This is us in sonderland.
-            </p>
-            <p>
               Why music? Because I agree with Frank Zappa: music is the only religion that delivers the goods.
             </p>
             <h3 className="about-page__subhead">So what does the name actually mean?</h3>
