@@ -73,7 +73,7 @@ export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function La
     )
 
     let idleHandle: number | undefined
-    const timeoutHandle: ReturnType<typeof setTimeout> = window.setTimeout(() => settle(), SET_TIMEOUT_FALLBACK_MS)
+    const timeoutHandle = window.setTimeout(() => settle(), SET_TIMEOUT_FALLBACK_MS)
 
     const teardown = () => {
       obs.disconnect()
