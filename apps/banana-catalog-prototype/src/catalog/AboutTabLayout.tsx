@@ -60,7 +60,7 @@ export function AboutTabLayout({ children }: { children: ReactNode }) {
           <header className="catalog-page-intro">
             <h1 className="catalog-page-h1">Ideas you can feel.</h1>
             <p className="catalog-page-sub">
-              Songs for a world gone bananas, each one rooted in a question and written with purpose.
+              Songs for a world gone bananas. This is us in sonderland.
             </p>
           </header>
 
