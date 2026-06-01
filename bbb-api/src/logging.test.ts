@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { hashActorId, hashIp, parseAdminLogsQuery } from "./logging";
+import { hashActorId, hashIp, parseAdmin404LogsQuery, parseAdminLogsQuery } from "./logging";
 
 test("parseAdminLogsQuery returns defaults", () => {
   const parsed = parseAdminLogsQuery(new URL("https://example.com/api/bbb/admin/logs"));
@@ -60,4 +60,31 @@ test("hashActorId is stable for same input and salt", async () => {
   const hashC = await hashActorId("cee-laptop", "different");
   assert.equal(hashA, hashB);
   assert.notEqual(hashA, hashC);
+});
+
+test("parseAdmin404LogsQuery parses before, limit, and bad_path filter", () => {
+  const parsed = parseAdmin404LogsQuery(
+    new URL("https://example.com/api/bbb/admin/404?limit=25&before=111&bad_path=%2Foops"),
+  );
+  assert.equal(parsed.ok, true);
+  if (!parsed.ok) return;
+  assert.equal(parsed.value.limit, 25);
+  assert.equal(parsed.value.before, 111);
+  assert.equal(parsed.value.badPath, "/oops");
+});
+
+test("parseAdmin404LogsQuery rejects invalid bad_path and limit", () => {
+  const badLimit = parseAdmin404LogsQuery(new URL("https://example.com/api/bbb/admin/404?limit=0"));
+  assert.equal(badLimit.ok, false);
+  if (!badLimit.ok) {
+    assert.match(badLimit.error, /Invalid limit/);
+  }
+
+  const tooLong = parseAdmin404LogsQuery(
+    new URL(`https://example.com/api/bbb/admin/404?bad_path=${"a".repeat(201)}`),
+  );
+  assert.equal(tooLong.ok, false);
+  if (!tooLong.ok) {
+    assert.match(tooLong.error, /Invalid bad_path/);
+  }
 });

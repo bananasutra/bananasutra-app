@@ -50,6 +50,7 @@ type PageType =
   | "tracks"
   | "songbook"
   | "song-detail"
+  | "not-found"
   | "sutras-overview"
   | "sutra-page"
   | "muses"
@@ -373,13 +374,14 @@ type TrackFacetCounts = {
   instrument: Record<string, number>;
 };
 
-const inferPageType = (pageContext?: BbbPageContext): PageType => {
+export const inferPageType = (pageContext?: BbbPageContext): PageType => {
   const pathname = (pageContext?.pathname ?? "").trim();
   const normalized = pathname.toLowerCase();
 
   if (pathname.startsWith("/tracks")) return "tracks";
   if (pathname.startsWith("/songbooks")) return "songbook";
   if (pathname.startsWith("/songs/")) return "song-detail";
+  if (normalized === "/oops" || normalized === "/oops/") return "not-found";
   if (normalized === "/about/sutras" || normalized === "/about/sutras/") return "sutras-overview";
   if (SUTRA_PAGE_PATH_PATTERN.test(normalized)) return "sutra-page";
   if (normalized.startsWith("/about/muses")) return "muses";
@@ -935,6 +937,8 @@ export const buildRecommendationContext = (
         ? "- User is already in songbooks. Acknowledge that context once in your first sentence, then lead with a relevant songbook when possible."
         : pageType === "song-detail"
           ? `- User is on a song-detail page (${songDetailSlug ? `/songs/${songDetailSlug}` : "/songs/<slug>"}). In your first sentence, explicitly acknowledge this song context. For "more like this" asks, ask one axis-choice question (topic/intention vs. sound/genre) while still continuing with the user's intent.`
+          : pageType === "not-found"
+            ? "- User is on /oops (not-found recovery context). Open with brief empathy, ask what they were trying to find, suggest [Sitemap](/sitemap), and if route hints exist offer one closest match plus 1-2 adjacent options."
           : pageType === "sutras-overview"
             ? "- User is on /about/sutras (the compass page). Acknowledge that once in your first sentence, then continue directly with their intent."
             : pageType === "sutra-page"

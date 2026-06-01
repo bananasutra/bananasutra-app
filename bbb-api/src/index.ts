@@ -9,7 +9,17 @@ import { buildRecommendationContext, type BbbPageContext } from "./recommendatio
 import { buildSystemPrompt } from "./system-prompt";
 import { isOrientationAsk, normalizeOrientationReply } from "./reply-normalizer";
 import { isAuthorizedAdmin } from "./admin-auth";
-import { cleanupOldLogs, insertBbbLog, parseAdminLogsQuery, queryBbbLogs, type BbbLogStatus } from "./logging";
+import {
+  cleanupOld404Logs,
+  cleanupOldLogs,
+  insertBbb404Log,
+  insertBbbLog,
+  parseAdmin404LogsQuery,
+  parseAdminLogsQuery,
+  queryBbb404Logs,
+  queryBbbLogs,
+  type BbbLogStatus,
+} from "./logging";
 
 interface Env {
   DB?: D1Database;
@@ -23,11 +33,19 @@ interface Env {
   BBB_LOG_IP_SALT?: string;
   BBB_LOG_ACTOR_SALT?: string;
   BBB_LOG_RETENTION_DAYS?: string;
+  BBB_404_MAX_PER_HOUR?: string;
+  BBB_404_RETENTION_DAYS?: string;
 }
 
 interface RequestPayload {
   messages: ChatMessage[];
   pageContext?: BbbPageContext;
+}
+
+interface NotFoundLogPayload {
+  bad_path: string;
+  referrer?: string;
+  user_agent?: string;
 }
 
 interface RateLimitEntry {
@@ -78,33 +96,48 @@ const getClientActorId = (request: Request): string | null => {
   return actorId.length > 200 ? actorId.slice(0, 200) : actorId;
 };
 
-const checkRateLimit = (ip: string, env: Env): { allowed: boolean; retryAfterSec: number } => {
-  const maxRequests = Number.parseInt(env.BBB_MAX_REQUESTS_PER_WINDOW ?? "20", 10);
-  const windowSec = Number.parseInt(env.BBB_RATE_LIMIT_WINDOW_SEC ?? "3600", 10);
+const checkRateLimit = (ip: string, keyPrefix: string, maxRequests: number, windowSec: number): { allowed: boolean; retryAfterSec: number } => {
   const now = Date.now();
-  const windowMs = windowSec * 1000;
+  const safeMaxRequests = Number.isFinite(maxRequests) && maxRequests > 0 ? Math.trunc(maxRequests) : 20;
+  const safeWindowSec = Number.isFinite(windowSec) && windowSec > 0 ? Math.trunc(windowSec) : 3600;
+  const windowMs = safeWindowSec * 1000;
   for (const [key, entry] of MEMORY_RATE_LIMIT.entries()) {
     if (entry.resetAt <= now) MEMORY_RATE_LIMIT.delete(key);
   }
-  const existing = MEMORY_RATE_LIMIT.get(ip);
+  const bucketKey = `${keyPrefix}:${ip}`;
+  const existing = MEMORY_RATE_LIMIT.get(bucketKey);
 
   if (!existing || existing.resetAt <= now) {
-    MEMORY_RATE_LIMIT.set(ip, { count: 1, resetAt: now + windowMs });
-    return { allowed: true, retryAfterSec: windowSec };
+    MEMORY_RATE_LIMIT.set(bucketKey, { count: 1, resetAt: now + windowMs });
+    return { allowed: true, retryAfterSec: safeWindowSec };
   }
 
-  if (existing.count >= maxRequests) {
+  if (existing.count >= safeMaxRequests) {
     return { allowed: false, retryAfterSec: Math.ceil((existing.resetAt - now) / 1000) };
   }
 
   existing.count += 1;
-  MEMORY_RATE_LIMIT.set(ip, existing);
+  MEMORY_RATE_LIMIT.set(bucketKey, existing);
   return { allowed: true, retryAfterSec: Math.ceil((existing.resetAt - now) / 1000) };
 };
 
+const checkChatRateLimit = (ip: string, env: Env): { allowed: boolean; retryAfterSec: number } => {
+  const maxRequests = Number.parseInt(env.BBB_MAX_REQUESTS_PER_WINDOW ?? "20", 10);
+  const windowSec = Number.parseInt(env.BBB_RATE_LIMIT_WINDOW_SEC ?? "3600", 10);
+  return checkRateLimit(ip, "chat", maxRequests, windowSec);
+};
+
+const check404RateLimit = (ip: string, env: Env): { allowed: boolean; retryAfterSec: number } => {
+  const maxRequests = Number.parseInt(env.BBB_404_MAX_PER_HOUR ?? "30", 10);
+  return checkRateLimit(ip, "404", maxRequests, 3600);
+};
+
 const isChatEndpoint = (url: URL): boolean => url.pathname === "/api/bbb" || url.pathname === "/";
+const is404LogEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/404-log";
 const isAdminLogsEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/logs";
 const isAdminCleanupEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/logs/cleanup";
+const isAdmin404Endpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/404";
+const isAdmin404CleanupEndpoint = (url: URL): boolean => url.pathname === "/api/bbb/admin/404/cleanup";
 
 const validateMessages = (payload: unknown): ChatMessage[] | null => {
   if (!payload || typeof payload !== "object") return null;
@@ -141,6 +174,26 @@ const getRetentionDays = (env: Env): number => {
   const parsed = Number.parseInt(env.BBB_LOG_RETENTION_DAYS ?? "30", 10);
   if (!Number.isFinite(parsed) || parsed < 1) return 30;
   return parsed;
+};
+
+const get404RetentionDays = (env: Env): number => {
+  const parsed = Number.parseInt(env.BBB_404_RETENTION_DAYS ?? env.BBB_LOG_RETENTION_DAYS ?? "30", 10);
+  if (!Number.isFinite(parsed) || parsed < 1) return 30;
+  return parsed;
+};
+
+const validate404LogPayload = (payload: unknown): NotFoundLogPayload | null => {
+  if (!payload || typeof payload !== "object") return null;
+  const candidate = payload as Partial<NotFoundLogPayload>;
+  const badPath = candidate.bad_path?.trim();
+  if (!badPath || !badPath.startsWith("/") || badPath.length > 500) return null;
+  if (typeof candidate.referrer !== "undefined" && typeof candidate.referrer !== "string") return null;
+  if (typeof candidate.user_agent !== "undefined" && typeof candidate.user_agent !== "string") return null;
+  return {
+    bad_path: badPath,
+    ...(typeof candidate.referrer === "string" ? { referrer: candidate.referrer.trim() } : {}),
+    ...(typeof candidate.user_agent === "string" ? { user_agent: candidate.user_agent.trim() } : {}),
+  };
 };
 
 const toLogStatusFromStreamError = (streamError: string | null): BbbLogStatus => {
@@ -209,7 +262,7 @@ const handler: ExportedHandler<Env> = {
       return new Response(null, { status: 204, headers: corsHeaders });
     }
 
-    if (isAdminLogsEndpoint(url) || isAdminCleanupEndpoint(url)) {
+    if (isAdminLogsEndpoint(url) || isAdminCleanupEndpoint(url) || isAdmin404Endpoint(url) || isAdmin404CleanupEndpoint(url)) {
       if (!isAuthorizedAdmin(request, env.BBB_ADMIN_TOKEN)) {
         return json(401, { error: "Unauthorized." }, corsHeaders);
       }
@@ -230,12 +283,70 @@ const handler: ExportedHandler<Env> = {
         return json(200, { logs, nextBefore }, corsHeaders);
       }
 
+      if (isAdmin404Endpoint(url)) {
+        if (request.method !== "GET") {
+          return json(405, { error: "Method not allowed. Use GET." }, corsHeaders);
+        }
+        const parsed = parseAdmin404LogsQuery(url);
+        if (!parsed.ok) {
+          return json(400, { error: parsed.error }, corsHeaders);
+        }
+        const logs = await queryBbb404Logs(env.DB, parsed.value);
+        const nextBefore = logs.length ? logs[logs.length - 1]?.created_at ?? null : null;
+        return json(200, { logs, nextBefore }, corsHeaders);
+      }
+
+      if (isAdmin404CleanupEndpoint(url)) {
+        if (request.method !== "POST") {
+          return json(405, { error: "Method not allowed. Use POST." }, corsHeaders);
+        }
+        const retentionDays = get404RetentionDays(env);
+        const deleted = await cleanupOld404Logs(env.DB, retentionDays);
+        return json(200, { ok: true, deleted, retentionDays }, corsHeaders);
+      }
+
       if (request.method !== "POST") {
         return json(405, { error: "Method not allowed. Use POST." }, corsHeaders);
       }
       const retentionDays = getRetentionDays(env);
       const deleted = await cleanupOldLogs(env.DB, retentionDays);
       return json(200, { ok: true, deleted, retentionDays }, corsHeaders);
+    }
+
+    if (is404LogEndpoint(url)) {
+      if (request.method !== "POST") return json(405, { error: "Method not allowed. Use POST." }, corsHeaders);
+      if (!hasLogDatabase(env)) return json(500, { error: "Server missing DB binding." }, corsHeaders);
+
+      const ip = getClientIp(request);
+      const rate = check404RateLimit(ip, env);
+      if (!rate.allowed) {
+        return json(
+          429,
+          { error: "Rate limit reached. Please retry soon." },
+          { ...corsHeaders, "retry-after": String(rate.retryAfterSec) },
+        );
+      }
+
+      let payload: unknown;
+      try {
+        payload = await request.json();
+      } catch {
+        return json(400, { error: "Invalid JSON body." }, corsHeaders);
+      }
+      const validated = validate404LogPayload(payload);
+      if (!validated) {
+        return json(400, { error: "Body must include bad_path starting with '/'." }, corsHeaders);
+      }
+
+      await insertBbb404Log(env.DB, {
+        createdAt: Date.now(),
+        badPath: validated.bad_path,
+        referrer: validated.referrer ?? null,
+        userAgent: validated.user_agent ?? request.headers.get("user-agent"),
+        ip,
+        ipSalt: env.BBB_LOG_IP_SALT,
+      });
+      return json(200, { ok: true }, corsHeaders);
     }
 
     if (!isChatEndpoint(url)) return json(404, { error: "Not found." }, corsHeaders);
@@ -248,7 +359,7 @@ const handler: ExportedHandler<Env> = {
     const startedAt = Date.now();
     const ip = getClientIp(request);
     const actorId = getClientActorId(request);
-    const rate = checkRateLimit(ip, env);
+    const rate = checkChatRateLimit(ip, env);
     const model = env.BBB_MODEL?.trim() || DEFAULT_MODEL;
     if (!rate.allowed) {
       queueChatLog(ctx, env, {

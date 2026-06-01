@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildRecommendationContext } from "./recommendation-context";
+import { buildRecommendationContext, inferPageType } from "./recommendation-context";
 import type { LibraryInjects } from "./library-data";
 
 const fixtureInjects: LibraryInjects = {
@@ -247,6 +247,19 @@ test("buildRecommendationContext keeps generic high-signal page guidance on root
     { pathname: "/" },
   );
   assert.match(context, /User page context is high-signal when present/);
+});
+
+test("inferPageType classifies /oops as not-found", () => {
+  assert.equal(inferPageType({ pathname: "/oops" }), "not-found");
+  assert.equal(inferPageType({ pathname: "/oops/" }), "not-found");
+});
+
+test("buildRecommendationContext adds not-found recovery guidance on /oops", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "what should I listen to here?" }], fixtureInjects, {
+    pathname: "/oops",
+  });
+  assert.match(context, /User is on \/oops \(not-found recovery context\)/);
+  assert.match(context, /\[Sitemap\]\(\/sitemap\)/);
 });
 
 test("buildRecommendationContext enforces route-aware delivery on songbook asks", () => {

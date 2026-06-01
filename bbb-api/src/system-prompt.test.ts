@@ -96,6 +96,12 @@ test("template includes required Bertrand opening phrasing", () => {
     BBB_SYSTEM_PROMPT_TEMPLATE,
     /Newness-led ask \("what's new", "what's recent", "latest drops", "what should I check first"\): lead with 1-3 latest drops from \[INJECT: LATEST_DROPS\]/,
   );
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Not-found page recovery \(\/oops\): open with brief empathy/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Sitemap\]\(\/sitemap\)/);
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Broken-link reports from \/oops: if BBB send-note flow exists, route to that flow with intent "broken-link"/,
+  );
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Newest Songs\]\(\/songs\/\?sort=newest\)/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Newest Tracks\]\(\/tracks\/\?tsort=newest\)/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Latest Words\]\(\/words\)/);

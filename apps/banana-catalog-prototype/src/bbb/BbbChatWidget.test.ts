@@ -10,6 +10,8 @@ import {
   parseSseChunk,
   updateLastAssistant,
 } from './BbbChatUtils'
+import { buildNotFoundOpenEventDetail, isKnownCatalogPath, toBbbPageContextPathname } from './notFoundRouting'
+import { registerBbbOpenListener } from './openEvent'
 
 function renderInlineTextNodes(text: string, keyPrefix: string): React.ReactNode[] {
   return parseInlineEmphasis(text).map((piece, idx) =>
@@ -291,6 +293,67 @@ test('getOrCreateActorId persists actor id in localStorage', () => {
     const second = getOrCreateActorId('bbb_actor_id_test', 'bbb-test')
     assert.match(first, /^bbb-test-/)
     assert.equal(second, first)
+  } finally {
+    if (typeof originalWindow === 'undefined') {
+      delete (globalThis as { window?: unknown }).window
+    } else {
+      ;(globalThis as { window: unknown }).window = originalWindow
+    }
+  }
+})
+
+test('toBbbPageContextPathname maps unknown routes to /oops', () => {
+  assert.equal(toBbbPageContextPathname('/tracks'), '/tracks')
+  assert.equal(toBbbPageContextPathname('/banana-republic'), '/oops')
+  assert.equal(isKnownCatalogPath('/about/sutras'), true)
+  assert.equal(isKnownCatalogPath('/banana-republic'), false)
+})
+
+test('buildNotFoundOpenEventDetail standardizes 404 event payload', () => {
+  assert.deepEqual(buildNotFoundOpenEventDetail('/banana-republic'), {
+    reason: '404',
+    badPath: '/banana-republic',
+  })
+})
+
+test('registerBbbOpenListener opens on bbb:open event and unsubscribes cleanly', () => {
+  const listeners = new Map<string, EventListener[]>()
+  const originalWindow = (globalThis as { window?: unknown }).window
+  ;(globalThis as { window: unknown }).window = {
+    addEventListener: (name: string, listener: EventListener) => {
+      const list = listeners.get(name) ?? []
+      list.push(listener)
+      listeners.set(name, list)
+    },
+    removeEventListener: (name: string, listener: EventListener) => {
+      const list = listeners.get(name) ?? []
+      listeners.set(
+        name,
+        list.filter((candidate) => candidate !== listener),
+      )
+    },
+    dispatchEvent: (event: { type: string }) => {
+      for (const listener of listeners.get(event.type) ?? []) listener(event as unknown as Event)
+      return true
+    },
+  }
+
+  try {
+    let openCount = 0
+    let lastDetail: unknown = null
+    const unsubscribe = registerBbbOpenListener((detail) => {
+      openCount += 1
+      lastDetail = detail
+    })
+    ;(window as { dispatchEvent: (event: { type: string; detail?: unknown }) => boolean }).dispatchEvent({
+      type: 'bbb:open',
+      detail: { reason: '404', badPath: '/banana-republic' },
+    })
+    assert.equal(openCount, 1)
+    assert.deepEqual(lastDetail, { reason: '404', badPath: '/banana-republic' })
+    unsubscribe()
+    ;(window as { dispatchEvent: (event: { type: string; detail?: unknown }) => boolean }).dispatchEvent({ type: 'bbb:open' })
+    assert.equal(openCount, 1)
   } finally {
     if (typeof originalWindow === 'undefined') {
       delete (globalThis as { window?: unknown }).window

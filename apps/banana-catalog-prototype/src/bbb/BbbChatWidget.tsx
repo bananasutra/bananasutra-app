@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEven
 import { useLocation, useNavigate } from 'react-router-dom'
 import './BbbChatWidget.css'
 import { loadSongCatalogBrowse } from '../catalog/generatedData'
+import { toBbbPageContextPathname } from './notFoundRouting'
+import { registerBbbOpenListener } from './openEvent'
 import {
   capConversationHistory,
   getOrCreateActorId,
@@ -16,6 +18,15 @@ const DEFAULT_ENDPOINT = 'http://localhost:8787/api/bbb'
 const BBB_ENDPOINT = import.meta.env.VITE_BBB_API_ENDPOINT?.trim() || DEFAULT_ENDPOINT
 const INITIAL_ASSISTANT_TEXT =
   'Welcome. I am Bertrand, your Banana Butler. But(t) you can call me BBB. This place is a library of songs that tell stories that matter, through the lens of the seven sutras. How may I best serve you?'
+const INITIAL_ASSISTANT_NOT_FOUND_TEXT =
+  "OOOPS detour. I can help you get back on track. Were you looking for a specific song, sutra, or vibe?"
+const INITIAL_ASSISTANT_BACK_ON_TRACK_TEXT =
+  'Back on track. Want a quick recommendation, or would you rather browse by sutra, songbook, or vibe?'
+
+const isDefaultIntroOnly = (messages: ChatMessage[]): boolean =>
+  messages.length === 1 && messages[0]?.role === 'assistant' && messages[0]?.content === INITIAL_ASSISTANT_TEXT
+const isNotFoundIntroOnly = (messages: ChatMessage[]): boolean =>
+  messages.length === 1 && messages[0]?.role === 'assistant' && messages[0]?.content === INITIAL_ASSISTANT_NOT_FOUND_TEXT
 
 export function BbbChatWidget() {
   const navigate = useNavigate()
@@ -29,6 +40,7 @@ export function BbbChatWidget() {
   const abortRef = useRef<AbortController | null>(null)
   const historyRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLTextAreaElement | null>(null)
+  const openedFromNotFoundRef = useRef(false)
 
   const canSend = useMemo(() => input.trim().length > 0 && !isStreaming, [input, isStreaming])
   const actorId = useMemo(() => getOrCreateActorId(), [])
@@ -38,6 +50,22 @@ export function BbbChatWidget() {
     if (!open) return
     queueMicrotask(() => inputRef.current?.focus())
   }, [open])
+
+  useEffect(() => {
+    return registerBbbOpenListener((detail) => {
+      setOpen(true)
+      if (detail?.reason !== '404') return
+      openedFromNotFoundRef.current = true
+      setMessages((prev) => (isDefaultIntroOnly(prev) ? [{ role: 'assistant', content: INITIAL_ASSISTANT_NOT_FOUND_TEXT }] : prev))
+    })
+  }, [])
+
+  useEffect(() => {
+    if (location.pathname === '/oops') return
+    if (!openedFromNotFoundRef.current) return
+    openedFromNotFoundRef.current = false
+    setMessages((prev) => (isNotFoundIntroOnly(prev) ? [{ role: 'assistant', content: INITIAL_ASSISTANT_BACK_ON_TRACK_TEXT }] : prev))
+  }, [location.pathname])
 
   useEffect(() => {
     if (!open) return
@@ -110,7 +138,7 @@ export function BbbChatWidget() {
         body: JSON.stringify({
           messages: streamMessages,
           pageContext: {
-            pathname: location.pathname,
+            pathname: toBbbPageContextPathname(location.pathname),
             search: location.search,
           },
         }),
