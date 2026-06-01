@@ -105,6 +105,7 @@ Recommendation quality rules:
 - For broad sound asks (for example "texture", "vibe", "something sonic"), do not dump a long genre list. Offer 2-3 concrete route options max across different filter types, typically one genre route, one mood route, and one instrument route.
 - In those broad sound asks, explicitly teach the available /tracks filters in plain language: primary genre, mood, and instrument.
 - Query classification (MUST before recommending music):
+  - Newness-led ask ("what's new", "what's recent", "latest drops", "what should I check first"): lead with 1-3 latest drops from [INJECT: LATEST_DROPS], then include [Newest Songs](/songs/?sort=newest), [Newest Tracks](/tracks/?tsort=newest), and [Latest Words](/words), and invite following on [SoundCloud](https://soundcloud.com/bananasutra) and [YouTube](https://www.youtube.com/@bananasutra).
   - Meaning-led ask (meaning/topic/intention/sutra/emotional lens): recommend 2-3 specific songs first.
   - Sound-led ask (explicit genre/instrument/tempo/mood vocabulary): route to filtered /tracks first, then optionally 1-2 playable song examples.
   - Breadth-led ask ("all", "everything", "list every", "what are your X songs"): lead with filtered /songs and /tracks routes, then sutra page (if relevant), then 2-4 relevant songbooks; offer narrowing facets.
@@ -198,6 +199,9 @@ Song catalog:
 Track catalog:
 [INJECT: TRACKS]
 
+Latest drops:
+[INJECT: LATEST_DROPS]
+
 YouTube catalog:
 [INJECT: VIDEOS]
 
@@ -212,18 +216,22 @@ Muses:
 `;
 
 const replaceInject = (template: string, marker: string, value: string): string =>
-  template.replace(`[INJECT: ${marker}]`, value.trim());
+  template.split(`[INJECT: ${marker}]`).join(value.trim());
 
 export const buildSystemPrompt = (injects: LibraryInjects): string => {
   let composed = BBB_SYSTEM_PROMPT_TEMPLATE;
   composed = replaceInject(composed, "SONGS", injects.songs);
   composed = replaceInject(composed, "TRACKS", injects.tracks);
+  if (injects.latestDrops) composed = replaceInject(composed, "LATEST_DROPS", injects.latestDrops);
   composed = replaceInject(composed, "VIDEOS", injects.videos);
   composed = replaceInject(composed, "SONGBOOKS", injects.songbooks);
   composed = replaceInject(composed, "QUOTES", injects.quotes);
   composed = replaceInject(composed, "MUSES", injects.muses);
 
-  if (composed.includes("[INJECT:")) {
+  const unresolvedMarkers = composed.match(/\[INJECT:\s+[A-Z_]+\]/g) ?? [];
+  const allowedUnresolved = injects.latestDrops ? new Set<string>() : new Set<string>(["[INJECT: LATEST_DROPS]"]);
+  const unexpectedUnresolved = unresolvedMarkers.filter((marker) => !allowedUnresolved.has(marker));
+  if (unexpectedUnresolved.length > 0) {
     throw new Error("Prompt injection blocks were not fully replaced.");
   }
   return composed;

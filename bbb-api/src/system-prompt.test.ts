@@ -94,6 +94,15 @@ test("template includes required Bertrand opening phrasing", () => {
   );
   assert.match(
     BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Newness-led ask \("what's new", "what's recent", "latest drops", "what should I check first"\): lead with 1-3 latest drops from \[INJECT: LATEST_DROPS\]/,
+  );
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Newest Songs\]\(\/songs\/\?sort=newest\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Newest Tracks\]\(\/tracks\/\?tsort=newest\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Latest Words\]\(\/words\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /invite following on \[SoundCloud\]/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[INJECT: LATEST_DROPS\]/);
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
     /In those broad sound asks, explicitly teach the available \/tracks filters in plain language: primary genre, mood, and instrument\./,
   );
   assert.match(
@@ -274,7 +283,27 @@ test("buildSystemPrompt replaces all inject markers", () => {
     quotes: "quotes",
     muses: "muses",
   });
-  assert.equal(composed.includes("[INJECT:"), false);
+  assert.equal(composed.includes("[INJECT: SONGS]"), false);
+  assert.equal(composed.includes("[INJECT: TRACKS]"), false);
+  assert.equal(composed.includes("[INJECT: VIDEOS]"), false);
+  assert.equal(composed.includes("[INJECT: SONGBOOKS]"), false);
+  assert.equal(composed.includes("[INJECT: QUOTES]"), false);
+  assert.equal(composed.includes("[INJECT: MUSES]"), false);
+  assert.equal(composed.includes("[INJECT: LATEST_DROPS]"), true);
   assert.match(composed, /songs/);
   assert.match(composed, /tracks/);
+});
+
+test("buildSystemPrompt replaces LATEST_DROPS when provided", () => {
+  const composed = buildSystemPrompt({
+    songs: "songs",
+    tracks: "tracks",
+    videos: "videos",
+    songbooks: "songbooks",
+    quotes: "quotes",
+    muses: "muses",
+    latestDrops: "Refresh date: 2026-06-01\nLatest songs:\n- Test Song (KNOWSUTRA) - published 2026-05-31 - /songs/test-song",
+  });
+  assert.equal(composed.includes("[INJECT: LATEST_DROPS]"), false);
+  assert.match(composed, /Refresh date: 2026-06-01/);
 });

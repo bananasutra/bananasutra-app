@@ -333,6 +333,33 @@ test("sound-led frenchy ask routes with explicit mood filter", () => {
   assert.match(context, /\/tracks\/\?mood=FRENCHY&tsort=likes/);
 });
 
+test("newness intent fires on canonical what-is-new phrases", () => {
+  const prompts = [
+    "what's new?",
+    "what's recent",
+    "anything new",
+    "latest drops please",
+    "what should i check first",
+    "recently released tracks?",
+  ];
+
+  for (const prompt of prompts) {
+    const context = buildRecommendationContext([{ role: "user", content: prompt }], fixtureInjects, { pathname: "/" });
+    assert.match(context, /Classify this ask as newness-led/);
+    assert.match(context, /\[Newest Songs\]\(\/songs\/\?sort=newest\)/);
+    assert.match(context, /\[Newest Tracks\]\(\/tracks\/\?tsort=newest\)/);
+    assert.match(context, /\[Latest Words\]\(\/words\)/);
+  }
+});
+
+test("newness intent does not false-fire on red-herring new phrases", () => {
+  const redHerrings = ["I'm new here", "new to me", "new song idea"];
+  for (const prompt of redHerrings) {
+    const context = buildRecommendationContext([{ role: "user", content: prompt }], fixtureInjects, { pathname: "/" });
+    assert.doesNotMatch(context, /Classify this ask as newness-led/);
+  }
+});
+
 test("psychedelic exception prefers text search route plus trippy mood", () => {
   const context = buildRecommendationContext([{ role: "user", content: "i'm into psychedelic stuff" }], fixtureInjects, {
     pathname: "/tracks",

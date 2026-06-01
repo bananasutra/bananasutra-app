@@ -43,6 +43,7 @@ type IntentSignal = {
   exhaustiveListIntent: boolean;
   soundLedIntent: boolean;
   breadthLedIntent: boolean;
+  newnessAsk: boolean;
 };
 
 type PageType =
@@ -129,6 +130,14 @@ const SOUND_TEMPO_TERMS = ["upbeat", "midbeat", "lowbeat", "dance", "dancing", "
 const SOUND_MOOD_TERMS = ["rainy", "cheeky", "trippy", "frenchy", "kindly", "punky"] as const;
 const BREADTH_LED_PATTERN =
   /\b(list|show|give).*\b(all|everything|every)\b|\bwhat (are|is) your\b.*\b(all|everything)\b|\beverything by\b/i;
+const NEWNESS_PATTERNS: RegExp[] = [
+  /\bwhat(?:'s| is)\s+new\b/i,
+  /\bwhat(?:'s| is)\s+recent\b/i,
+  /\bany(?:thing)?\s+new\b/i,
+  /\blatest(?:\s+drops?)?\b/i,
+  /\bwhat should i check first\b/i,
+  /\brecent(?:ly)?\s+(released|dropped|added|published)\b/i,
+];
 const SUTRA_TAGS = ["knowsutra", "blowsutra", "showsutra", "growsutra", "flowsutra", "glowsutra", "bowsutra", "quacksutra"] as const;
 const EXPLICIT_DELIVERY_PATTERNS: RegExp[] = [
   /\b(give me|recommend|suggest|show me)\b/i,
@@ -324,6 +333,7 @@ const analyzeIntent = (text: string): IntentSignal => {
     exhaustiveListIntent: /\b(all|every|full|complete)\b/i.test(text),
     soundLedIntent,
     breadthLedIntent: BREADTH_LED_PATTERN.test(text),
+    newnessAsk: NEWNESS_PATTERNS.some((pattern) => pattern.test(text)),
   };
 };
 
@@ -583,6 +593,7 @@ export const buildRecommendationContext = (
   const explicitLyricsOnlyIntent = LYRICS_ONLY_INTENT_PATTERN.test(queryLower);
   const intent = analyzeIntent(latestUser);
   const support = analyzeSupportIntent(latestUser);
+  const newnessAsk = intent.newnessAsk;
   const soundLedIntent = intent.soundLedIntent;
   const breadthLedIntent = intent.breadthLedIntent || intent.exhaustiveListIntent;
   const conversationListeningCue = messages.some(
@@ -646,6 +657,7 @@ export const buildRecommendationContext = (
     !explicitDelivery &&
     !(hasPriorAssistantTurn && conversationListeningCue) &&
     !RECOMMENDATION_CUE_PATTERN.test(latestUser) &&
+    !newnessAsk &&
     !orientationAsk &&
     !feedbackContactAsk
   ) {
@@ -941,6 +953,9 @@ export const buildRecommendationContext = (
     soundLedIntent
       ? "- Classify this ask as sound-led: explicit sound vocabulary is present. Lead with /tracks routes first; songs are optional examples after routes."
       : "- If no explicit sound vocabulary is present, do not force sound-led routing.",
+    newnessAsk
+      ? "- Classify this ask as newness-led: lead with 1-3 latest drops from the injected LATEST_DROPS block, then include [Newest Songs](/songs/?sort=newest), [Newest Tracks](/tracks/?tsort=newest), and [Latest Words](/words), and invite following on SoundCloud + YouTube."
+      : null,
     breadthLedIntent
       ? "- Classify this ask as breadth-led: lead with filtered /songs and /tracks routes first, then include sutra page plus a filtered /songbooks/?find=<keyword> route and 2-4 relevant songbook links, then offer narrowing."
       : null,
