@@ -166,12 +166,28 @@ function pushTextWithAutoLinks(segments: MessageSegment[], text: string): void {
 }
 
 export function parseInlineEmphasis(text: string): InlineTextSegment[] {
+  const sanitized = text
+    .split('\n')
+    .map((line) => {
+      // Keep normal markdown behavior, but remove dangling double-markers per line
+      // so malformed model output does not leak raw ** / __ into UI text.
+      const boldMarkerCount = (line.match(/\*\*/g) ?? []).length
+      const underscoreBoldMarkerCount = (line.match(/__/g) ?? []).length
+      let nextLine = line
+      if (boldMarkerCount % 2 === 1) nextLine = nextLine.replace(/\*\*/g, '')
+      if (underscoreBoldMarkerCount % 2 === 1) nextLine = nextLine.replace(/__/g, '')
+      return nextLine
+    })
+    .join('\n')
+
   const segments: InlineTextSegment[] = []
   // Match bold first, then single-asterisk italics.
   // Italics require non-adjacent asterisks to avoid colliding with **bold**.
-  const pattern = /(\*\*([^*]+)\*\*|__([^_]+)__|(?<!\*)\*([^*\n]+)\*(?!\*))/g
+  // Bold/italic are intentionally single-line only so malformed markers cannot
+  // create accidental emphasis spans across multiple bullets/paragraphs.
+  const pattern = /(\*\*([^*\n]+)\*\*|__([^_\n]+)__|(?<!\*)\*([^*\n]+)\*(?!\*))/g
   let cursor = 0
-  let match = pattern.exec(text)
+  let match = pattern.exec(sanitized)
 
   while (match) {
     const raw = match[0]
@@ -181,7 +197,7 @@ export function parseInlineEmphasis(text: string): InlineTextSegment[] {
     const matchStart = match.index
     const matchEnd = matchStart + raw.length
     if (matchStart > cursor) {
-      segments.push({ text: text.slice(cursor, matchStart), bold: false, italic: false })
+      segments.push({ text: sanitized.slice(cursor, matchStart), bold: false, italic: false })
     }
     segments.push({
       text: isBold ? boldText : italicText,
@@ -192,10 +208,10 @@ export function parseInlineEmphasis(text: string): InlineTextSegment[] {
     match = pattern.exec(text)
   }
 
-  if (cursor < text.length) {
-    segments.push({ text: text.slice(cursor), bold: false, italic: false })
+  if (cursor < sanitized.length) {
+    segments.push({ text: sanitized.slice(cursor), bold: false, italic: false })
   }
-  return segments.length ? segments : [{ text, bold: false, italic: false }]
+  return segments.length ? segments : [{ text: sanitized, bold: false, italic: false }]
 }
 
 export function parseMarkdownLinks(text: string): MessageSegment[] {

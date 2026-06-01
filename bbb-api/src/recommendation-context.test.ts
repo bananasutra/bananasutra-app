@@ -475,6 +475,50 @@ test("route-first asks do not force lyric excerpts", () => {
   assert.match(context, /For route\/navigation-first asks, do not force lyric excerpts\./);
 });
 
+test("orientation asks inject concise actionable link-pack guidance", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "what is this place?" }], fixtureInjects, {
+    pathname: "/",
+  });
+  assert.match(context, /Orientation ask handling \(MUST\): keep response concise/);
+  assert.match(context, /Orientation structure \(MUST\): format as \(1\) one warm intro line, \(2\) a quick-map section with 3-5 bullets in order \(Sutras, Songbooks, Songs, Tracks\)/);
+  assert.match(context, /Orientation first line \(MUST\): start warm and human, and avoid mechanical opener forms/);
+  assert.match(context, /avoid "You're in Bananasutra" phrasing entirely/);
+  assert.match(context, /do not start with "You're in Bananasutra" or "You're exploring Bananasutra"/);
+  assert.match(context, /do not start with "This is Bananasutra:"/);
+  assert.match(context, /start with a warm welcome-style sentence/);
+  assert.match(context, /do not lead with song\/track totals unless user explicitly asked for numbers/);
+  assert.match(context, /Orientation opening anti-brochure rule \(MUST\): do not open with a provenance\/attribution paragraph/);
+  assert.match(context, /Orientation link pack \(MUST\): include \[Sutras\]\(\/about\/sutras\), \[Songs\]\(\/songs\), \[Tracks\]\(\/tracks\), and \[About\]\(\/about\)/);
+  assert.match(context, /present the quick map in this order: Sutras, Songbooks, Songs, then Tracks/);
+  assert.match(context, /Orientation link formatting \(MUST\): embed links inline as markdown labels/);
+  assert.match(context, /never parenthetical raw routes like 'Songs \(\/songs\)'/);
+  assert.match(context, /Framing balance \(MUST\): do not dismiss listening-forward behavior/);
+  assert.match(context, /Avoid contrast phrasing like "not a jukebox"/);
+  assert.match(context, /Framing hard-ban \(MUST\): never output the phrase "not a jukebox"/);
+  assert.match(context, /Orientation markdown safety \(MUST\): do not use unmatched emphasis markers/);
+  assert.match(context, /For orientation bullets, prefer plain bullets over decorative bold wrappers/);
+  assert.match(context, /Orientation markdown safe-style \(MUST\): if using emphasis, only use label-form bold at bullet starts/);
+  assert.match(context, /with open\+close markers on the same line/);
+  assert.match(context, /Orientation quick-map bullets \(MUST\): use concise bullets in order Sutras, Songbooks, Songs, Tracks, with label\+link pattern/);
+  assert.match(context, /First-contact tone floor \(MUST\): keep one light butler flourish/);
+  assert.match(context, /First-contact warmth anchor \(MUST\): start with a welcome-style sentence that feels warm and human/);
+  assert.match(context, /Orientation anti-repetition style \(MUST\): avoid repeated-label phrasing like "Sutras: Start with Sutras\.\.\."/);
+  assert.match(context, /Orientation attribution scope \(MUST\): skip creator\/AI attribution blocks here unless the user explicitly asked authorship\/identity/);
+  assert.match(context, /songs are meaning-first storytelling \(sutra\/topic\/intention/);
+  assert.match(context, /Orientation LIGHT\/SHADOW pairing \(MUST\): if you mention LIGHT or SHADOW, include both clickable links together/);
+  assert.match(context, /\[LIGHT Songs\]\(\/songs\/\?ls=LIGHT\) and \[SHADOW Songs\]\(\/songs\/\?ls=SHADOW\)/);
+  assert.match(context, /and secondary\/cross-genre search/);
+  assert.match(context, /Search-link relevance \(MUST\): do not inject unrelated hardcoded search queries/);
+  assert.match(context, /If no keyword is present, point to \[Songs\]\(\/songs\) and \[Tracks\]\(\/tracks\)/);
+  assert.match(context, /Songbook actionability \(MUST\): avoid dropping unlinked songbook title examples/);
+});
+
+test("feedback/contact asks inject footer contact-form honesty guidance", () => {
+  const context = buildRecommendationContext([{ role: "user", content: "I want to leave feedback for the creator" }], fixtureInjects);
+  assert.match(context, /Feedback\/contact handling \(MUST\): point user to \[Contact\]\(\/#footer-contact-panel\)/);
+  assert.match(context, /Never claim you can personally deliver messages to the creator/);
+});
+
 test("guidance lists previously recommended slugs to avoid repeats", () => {
   const context = buildRecommendationContext(
     [

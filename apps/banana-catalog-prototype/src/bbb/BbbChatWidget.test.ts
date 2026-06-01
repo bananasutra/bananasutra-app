@@ -245,6 +245,29 @@ test('parseInlineEmphasis leaves unmatched or triple-asterisk edge cases as plai
   ])
 })
 
+test('parseInlineEmphasis does not span bold across multiple lines', () => {
+  const multiline = parseInlineEmphasis(
+    '**Sutras are the frameworks\nThen explore Songs\nTracks** are for listening flow.',
+  )
+  assert.deepEqual(multiline, [
+    {
+      text: 'Sutras are the frameworks\nThen explore Songs\nTracks are for listening flow.',
+      bold: false,
+      italic: false,
+    },
+  ])
+})
+
+test('parseInlineEmphasis strips dangling double-marker emphasis per line', () => {
+  const multiline = parseInlineEmphasis(
+    '**Sutras are the frameworks\nSongbooks are curated collections\nTracks** are for listening flow.',
+  )
+  const flattened = multiline.map((segment) => segment.text).join('')
+  assert.equal(flattened.includes('**'), false)
+  assert.match(flattened, /Sutras are the frameworks/)
+  assert.match(flattened, /Tracks are for listening flow\./)
+})
+
 test('assistant render output includes strong tags for markdown bold with spaces', () => {
   const html = renderAssistantMessageHtml('**If you want kindness as a practice:** Dare: KIND(ness) is direct.')
   assert.match(html, /<strong>If you want kindness as a practice:<\/strong>/)

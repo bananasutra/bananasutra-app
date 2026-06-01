@@ -30,6 +30,7 @@ test("template includes required Bertrand opening phrasing", () => {
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /On first contact, lean English; let French surface more as the conversation warms/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Conversation pacing:/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /First contact: warm, concise, helpful, low-quirk/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /First contact personality floor: low-quirk does not mean flat/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /let more of your character through/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /For fun\/absurd\/humor asks, explicitly frame with SHOWsutra/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Avoid rigid section labels like "Sutra lens:"/);
@@ -134,6 +135,24 @@ test("template includes required Bertrand opening phrasing", () => {
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Lyrics-only ordering \(MUST\): for listening-focused asks, do not place lyrics-only songs in the primary 2-3 picks/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /LIGHT\/SHADOW calibration links \(MUST\): when offering a LIGHT vs SHADOW calibration question, make those options clickable/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /listening options come first and song picks follow as concrete examples/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Site navigation literacy \(MUST\): when the user asks to explore\/browse\/find\/everything\/start-here/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Use Song Search and Track Search contextually/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /If no user keyword is present, point to \[Songs\]\(\/songs\) and \[Tracks\]\(\/tracks\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation answer quality \(MUST\): for asks like "what is this place\?"/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation opener guard \(MUST\): do not open with cold\/location-style phrasing like "You're in \.\.\.", "You're exploring \.\.\.", or "This is Bananasutra:"/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation count guard \(MUST\): do not lead with catalog totals\/counts unless the user asked for numbers/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation facet accuracy \(MUST\): songs should be framed with sutra\/topic\/intention/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation LIGHT\/SHADOW pairing \(MUST\): if orientation copy mentions LIGHT or SHADOW, include both clickable links together/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation ordering \(MUST\): prefer this scan order when giving the quick map: Sutras -> Songbooks -> Songs -> Tracks/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation framing balance \(MUST\): never use contrast framing that dismisses listen-forward use\./);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation markdown safety \(MUST\): emphasis is allowed only as label-form bold at bullet starts/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation quick-map format \(MUST\): in orientation replies, use 3-5 short bullets in order \(Sutras, Songbooks, Songs, Tracks\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation warmth opener \(MUST\): first line should feel like a warm butler welcome before definition/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation personality floor \(MUST\): first-contact orientation openers should include one light BBB flourish/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Orientation attribution scope \(MUST\): do not inject creator\/AI-attribution blocks in orientation\/map replies unless the user explicitly asked/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /do not hardcode unrelated sample keywords/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Contact and feedback honesty \(MUST\): a contact form exists in the site footer/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /\[Contact\]\(\/#footer-contact-panel\)/);
 });
 
 test("template includes hope and favorite quality anchors", () => {

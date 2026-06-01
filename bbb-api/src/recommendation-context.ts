@@ -140,6 +140,10 @@ const EXPLICIT_DELIVERY_PATTERNS: RegExp[] = [
 ];
 const FAVORITE_SONG_PATTERN = /\b(favou?rite|best)\b.*\bsong\b|\bwhat'?s your favou?rite\b/i;
 const SONG_LINK_SLUG_PATTERN = /\/songs\/([a-z0-9-]+)/gi;
+const ORIENTATION_ASK_PATTERN =
+  /\b(what is this place|what's this place|where should i start|how does this work|how do i explore|what can i do here)\b/i;
+const FEEDBACK_CONTACT_PATTERN =
+  /\b(feedback|contact|get in touch|reach (you|the creator)|song idea|leave a message)\b/i;
 
 const splitPipe = (line: string): string[] => line.split("|").map((part) => part.trim());
 const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -614,6 +618,8 @@ export const buildRecommendationContext = (
       ));
   const hopeAsk = /\bhope\b/i.test(queryLower);
   const favoriteSongAsk = FAVORITE_SONG_PATTERN.test(queryLower);
+  const orientationAsk = ORIENTATION_ASK_PATTERN.test(queryLower);
+  const feedbackContactAsk = FEEDBACK_CONTACT_PATTERN.test(queryLower);
   const primaryExperienceMode = support.supportIntent
     ? "support-forward (stabilize first, then widen)"
     : soundLedIntent || broadSoundIntent || trackExplorationIntent
@@ -632,7 +638,9 @@ export const buildRecommendationContext = (
     !broadSoundIntent &&
     !explicitDelivery &&
     !(hasPriorAssistantTurn && conversationListeningCue) &&
-    !/\bsong|listen|track|music|video|recommend|suggest\b/i.test(latestUser)
+    !/\bsong|listen|track|music|video|recommend|suggest\b/i.test(latestUser) &&
+    !orientationAsk &&
+    !feedbackContactAsk
   ) {
     return "";
   }
@@ -1060,6 +1068,87 @@ export const buildRecommendationContext = (
       : "- If this is the first turn, keep the opening intro concise.",
     '- Do not assume profile/history facts you cannot know. Never claim "first visit", "first time here", or "new user" unless the user explicitly says it.',
     '- Keep it conversational and concise with short natural sentences, not label-style blocks like "Sutra lens:".',
+    orientationAsk
+      ? "- Orientation ask handling (MUST): keep response concise (max ~4 short bullets or ~3 short paragraphs), and include at least 3 actionable links."
+      : null,
+    orientationAsk
+      ? "- Orientation structure (MUST): format as (1) one warm intro line, (2) a quick-map section with 3-5 bullets in order (Sutras, Songbooks, Songs, Tracks), (3) one short closing curiosity question."
+      : null,
+    orientationAsk
+      ? '- Orientation first line (MUST): start warm and human, and avoid mechanical opener forms like "You\'re in Bananasutra:".'
+      : null,
+    orientationAsk
+      ? '- Orientation opener wording (MUST): avoid "You\'re in Bananasutra" phrasing entirely; use a friendly welcome-style first sentence.'
+      : null,
+    orientationAsk
+      ? '- Orientation opener hard-ban (MUST): do not start with "You\'re in Bananasutra" or "You\'re exploring Bananasutra".'
+      : null,
+    orientationAsk
+      ? '- Orientation opener hard-ban (MUST): do not start with "This is Bananasutra:".'
+      : null,
+    orientationAsk && !hasPriorAssistantTurn
+      ? '- First-contact opener shape (MUST): start with a warm welcome-style sentence, for example "Welcome to Bananasutra..." in Bertrand voice.'
+      : null,
+    orientationAsk
+      ? "- Orientation count guard (MUST): do not lead with song/track totals unless user explicitly asked for numbers."
+      : null,
+    orientationAsk
+      ? "- Orientation opening anti-brochure rule (MUST): do not open with a provenance/attribution paragraph. Start with a warm welcome line, then quick-map actions."
+      : null,
+    orientationAsk
+      ? "- Orientation link pack (MUST): include [Sutras](/about/sutras), [Songs](/songs), [Tracks](/tracks), and [About](/about)."
+      : null,
+    orientationAsk
+      ? "- Orientation ordering (MUST): present the quick map in this order: Sutras, Songbooks, Songs, then Tracks."
+      : null,
+    orientationAsk
+      ? "- Orientation link formatting (MUST): embed links inline as markdown labels, for example [Songs](/songs) and [Tracks](/tracks), never parenthetical raw routes like 'Songs (/songs)'."
+      : null,
+    orientationAsk
+      ? '- Framing balance (MUST): do not dismiss listening-forward behavior. Avoid contrast phrasing like "not a jukebox"; acknowledge both meaning-first exploration and listen-forward routes.'
+      : null,
+    orientationAsk
+      ? '- Framing hard-ban (MUST): never output the phrase "not a jukebox".'
+      : null,
+    orientationAsk
+      ? "- Orientation markdown safety (MUST): do not use unmatched emphasis markers (** or _). Never open emphasis in one bullet and close it in another. For orientation bullets, prefer plain bullets over decorative bold wrappers."
+      : null,
+    orientationAsk
+      ? '- Orientation markdown safe-style (MUST): if using emphasis, only use label-form bold at bullet starts with open+close markers on the same line (for example "**Sutras:** ...").'
+      : null,
+    orientationAsk
+      ? '- Orientation quick-map bullets (MUST): use concise bullets in order Sutras, Songbooks, Songs, Tracks, with label+link pattern (for example "**Sutras:** [Sutras](/about/sutras) ...").'
+      : null,
+    orientationAsk && !hasPriorAssistantTurn
+      ? "- First-contact tone floor (MUST): keep one light butler flourish (curious/polite/cheeky) so the reply feels warm and characterful, not sterile."
+      : null,
+    orientationAsk && !hasPriorAssistantTurn
+      ? '- First-contact warmth anchor (MUST): start with a welcome-style sentence that feels warm and human (for example "Welcome to Bananasutra..."), not a neutral encyclopedia definition or number-heavy opener.'
+      : null,
+    orientationAsk
+      ? '- Orientation anti-repetition style (MUST): avoid repeated-label phrasing like "Sutras: Start with Sutras...". Prefer label + linked noun + purpose in one short line.'
+      : null,
+    orientationAsk
+      ? "- Orientation attribution scope (MUST): skip creator/AI attribution blocks here unless the user explicitly asked authorship/identity."
+      : null,
+    orientationAsk
+      ? "- Teach-to-fish line (MUST): explain briefly that songs are meaning-first storytelling (sutra/topic/intention, plus LIGHT/SHADOW when relevant), while tracks are listen-forward filtering by mood/instrument/primary genre and secondary/cross-genre search."
+      : null,
+    orientationAsk
+      ? "- Orientation LIGHT/SHADOW pairing (MUST): if you mention LIGHT or SHADOW, include both clickable links together: [LIGHT Songs](/songs/?ls=LIGHT) and [SHADOW Songs](/songs/?ls=SHADOW). Never link only one."
+      : null,
+    orientationAsk
+      ? "- Search-link relevance (MUST): do not inject unrelated hardcoded search queries (for example hope/psychedelic) unless user asked for them. If no keyword is present, point to [Songs](/songs) and [Tracks](/tracks) and explain how to use search/filter controls."
+      : null,
+    orientationAsk
+      ? "- Songbook actionability (MUST): avoid dropping unlinked songbook title examples. If naming songbooks, use clickable markdown links and only context-relevant examples."
+      : null,
+    feedbackContactAsk
+      ? '- Feedback/contact handling (MUST): point user to [Contact](/#footer-contact-panel) in the site footer ("Questions? Feedback? Get in touch").'
+      : null,
+    feedbackContactAsk
+      ? "- Never claim you can personally deliver messages to the creator."
+      : null,
     "- Keep the distinction explicit in plain language: one short listening-flow sentence first, then one short segue sentence introducing song picks.",
     "- In the listening-flow sentence, explain briefly that songbooks are topic-led collections and tracks are mood-led continuous listening.",
     "- Do not reuse the same individual song links in the listening-flow sentence; use /tracks or /songbooks routes for continuous listening.",
