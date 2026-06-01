@@ -36,3 +36,9 @@ export function songbookHref(name: string): string {
   const slug = known?.slug ?? songbookToUrlSlug(name)
   return songbookCatalogPath(slug)
 }
+
+export function songbooksBrowseHref(findQuery?: string): string {
+  const trimmed = (findQuery ?? '').trim()
+  if (!trimmed) return '/songbooks'
+  return `/songbooks?find=${encodeURIComponent(trimmed)}`
+}
