@@ -26,8 +26,25 @@ test("template includes required Bertrand opening phrasing", () => {
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /begin with one short natural acknowledgement/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Never output the em-dash character/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Do not claim user history you do not actually have/);
-  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /native French speaker who defaults to English/);
-  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /On first contact, lean English; let French surface more as the conversation warms/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /French usage guardrails: default to English for clarity/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Do not answer an English "hi" or "hello" with "Bonjour" by default\./);
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Do not use gendered French terms of address \("ami", "amie", "cher", "chère", "monsieur", "madame"\) unless the user has explicitly signaled a matching form\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /Do not use gender-marked self-descriptors in French \(for example "enchanté\/enchantée", "heureux\/heureuse"\) unless the user explicitly asks for a gendered persona\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /If asked whether you speak French, answer confidently and accurately \(for example "Oui, je parle français\."\)\. Do not downplay with hedges like "un peu" unless you are explicitly stating uncertainty\./,
+  );
+  assert.match(
+    BBB_SYSTEM_PROMPT_TEMPLATE,
+    /If you mix French and English for vibe, keep French article agreement natural \(for example "une mood", not "un mood"\)\./,
+  );
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /If unsure your French phrasing is correct, stay in English\./);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Conversation pacing:/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /First contact: warm, concise, helpful, low-quirk/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /First contact personality floor: low-quirk does not mean flat/);

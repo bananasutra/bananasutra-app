@@ -144,6 +144,9 @@ const ORIENTATION_ASK_PATTERN =
   /\b(what is this place|what's this place|where should i start|how does this work|how do i explore|what can i do here)\b/i;
 const FEEDBACK_CONTACT_PATTERN =
   /\b(feedback|contact|get in touch|reach (you|the creator)|song idea|leave a message)\b/i;
+const FRENCH_INTENT_PATTERN = /\b(french|francais|français|francaise|française|francophone)\b/i;
+const RECOMMENDATION_CUE_PATTERN =
+  /\b(song|songs|track|tracks|music|video|recommend|suggest|playlist|playlists|musique|chanson|chansons|recommande(?:r|z|s)?|suggestion|suggestions)\b/i;
 
 const splitPipe = (line: string): string[] => line.split("|").map((part) => part.trim());
 const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -316,7 +319,7 @@ const analyzeIntent = (text: string): IntentSignal => {
 
   return {
     funIntent: FUN_PATTERNS.some((pattern) => pattern.test(text)),
-    languageIntentFrench: /\bfrench|francais|français\b/i.test(text),
+    languageIntentFrench: FRENCH_INTENT_PATTERN.test(text),
     hiddenGemIntent: /\bhidden\s+gems?\b|\bgems?\b/i.test(text),
     exhaustiveListIntent: /\b(all|every|full|complete)\b/i.test(text),
     soundLedIntent,
@@ -465,7 +468,7 @@ const scoreSong = (
 
   if (intent.languageIntentFrench) {
     if (trackMoods.includes("FRENCHY")) score += 26;
-    if (/(french|francais|français|paris|camus)/i.test(haystack)) score += 16;
+    if (/(french|francais|français|francaise|française|francophone|paris|camus)/i.test(haystack)) score += 16;
     else score -= 6;
   }
 
@@ -603,7 +606,7 @@ export const buildRecommendationContext = (
       priorAssistantQuestionCount += 1;
     }
   }
-  const recommendationFlow = explicitDelivery || conversationListeningCue || /\b(song|songs|track|tracks|music|playlist|playlists)\b/i.test(queryLower);
+  const recommendationFlow = explicitDelivery || conversationListeningCue || RECOMMENDATION_CUE_PATTERN.test(queryLower);
   const questionBudgetExhausted = recommendationFlow && priorAssistantQuestionCount >= 1;
   const mustDeliverNow = (explicitDelivery && hasPriorAssistantTurn) || questionBudgetExhausted;
   const explicitLyricsExtractAsk = /\b(lyrics?|line|lines|quote|quotes|excerpt|wording|words)\b/i.test(queryLower);
@@ -638,7 +641,7 @@ export const buildRecommendationContext = (
     !broadSoundIntent &&
     !explicitDelivery &&
     !(hasPriorAssistantTurn && conversationListeningCue) &&
-    !/\bsong|listen|track|music|video|recommend|suggest\b/i.test(latestUser) &&
+    !RECOMMENDATION_CUE_PATTERN.test(latestUser) &&
     !orientationAsk &&
     !feedbackContactAsk
   ) {
@@ -1153,8 +1156,20 @@ export const buildRecommendationContext = (
     "- In the listening-flow sentence, explain briefly that songbooks are topic-led collections and tracks are mood-led continuous listening.",
     "- Do not reuse the same individual song links in the listening-flow sentence; use /tracks or /songbooks routes for continuous listening.",
     intent.languageIntentFrench
-      ? "- For French asks, use the exact mood name FRENCHY in links/text (not 'Frenchsutra'), and prefer [Frenchy Mood Tracks](/tracks/?mood=FRENCHY&tsort=likes) plus [French Language Songbook](/songbooks/lang-french) when relevant."
+      ? "- French-language route-first hierarchy (MUST): lead with exploration routes before individual songs, starting with [French Songs](/songs/?lang=FR), then [Frenchy Mood Tracks](/tracks/?mood=FRENCHY&tsort=likes), then [French Language Songbook](/songbooks/lang-french). After that, give 1-3 concrete song examples."
+      : null,
+    intent.languageIntentFrench
+      ? "- French wording guardrail (MUST): in French/Franglais refinement questions, if you mention mood, use feminine article agreement (for example 'une mood')."
+      : null,
+    intent.languageIntentFrench
+      ? "- For French asks, use the exact mood name FRENCHY in links/text, and prefer [Frenchy Mood Tracks](/tracks/?mood=FRENCHY&tsort=likes) plus [French Language Songbook](/songbooks/lang-french) when relevant."
       : "- Keep route naming precise and consistent with catalog mood names.",
+    intent.languageIntentFrench
+      ? "- Tracks facet coaching for French asks: propose refinement in this order for clarity, primary genre first, then mood, then instrument."
+      : null,
+    intent.languageIntentFrench
+      ? "- Taxonomy safety (MUST): French is a language/mood context, not a sutra. Never invent French-as-sutra labels."
+      : null,
     "- Route safety: songs must link as /songs/{slug}.",
     "- Route safety: tracks links are list/filter routes with query params (for example /tracks/?mood=RAINY&tsort=likes), never /tracks/{song-slug}.",
     "- Formatting safety: if you name a specific song, link that title to /songs/{slug}, not to any /tracks query link.",

@@ -77,10 +77,35 @@ test("buildRecommendationContext suggests listening routes for french queries", 
   assert.match(context, /User is already in tracks\. Acknowledge that context once in your first sentence/);
   assert.match(context, /If calibration helps, use clickable options \[LIGHT Songs\]\(\/songs\/\?ls=LIGHT\) and \[SHADOW Songs\]\(\/songs\/\?ls=SHADOW\)/);
   assert.match(context, /use the exact mood name FRENCHY/);
+  assert.match(context, /\[French Songs\]\(\/songs\/\?lang=FR\)/);
   assert.match(context, /\[Frenchy Mood Tracks\]\(\/tracks\/\?mood=FRENCHY&tsort=likes\)/);
   assert.match(context, /\[French Language Songbook\]\(\/songbooks\/lang-french\)/);
+  assert.match(context, /French-language route-first hierarchy \(MUST\): lead with exploration routes before individual songs/);
+  assert.match(context, /French wording guardrail \(MUST\): in French\/Franglais refinement questions, if you mention mood, use feminine article agreement/);
+  assert.match(context, /Tracks facet coaching for French asks: propose refinement in this order for clarity, primary genre first, then mood, then instrument\./);
+  assert.equal(context.includes("Frenchsutra"), false);
   assert.match(context, /\[FRENCHY Mood Tracks(?: \(\d+ tracks\))?\]\(\/tracks\/\?mood=FRENCHY&tsort=likes\)/);
   assert.ok(context.indexOf("Paris At Dawn | paris-at-dawn") < context.indexOf("Bright Morning | bright-morning"));
+});
+
+test("buildRecommendationContext detects french intent for unaccented francaise phrasing", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "donne moi de la bonne musique francaise, recommande-moi des chansons" }],
+    fixtureInjects,
+  );
+  assert.match(context, /\[French Songs\]\(\/songs\/\?lang=FR\)/);
+  assert.match(context, /\[Frenchy Mood Tracks\]\(\/tracks\/\?mood=FRENCHY&tsort=likes\)/);
+  assert.match(context, /\[French Language Songbook\]\(\/songbooks\/lang-french\)/);
+  assert.equal(context.includes("Frenchsutra"), false);
+});
+
+test("buildRecommendationContext detects french intent for accented française phrasing", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "donne-moi de la bonne musique française, recommande-moi des chansons" }],
+    fixtureInjects,
+  );
+  assert.match(context, /\[French Songs\]\(\/songs\/\?lang=FR\)/);
+  assert.match(context, /French-language route-first hierarchy \(MUST\): lead with exploration routes before individual songs/);
 });
 
 test("buildRecommendationContext prioritizes songbook route first when already in songbooks", () => {
