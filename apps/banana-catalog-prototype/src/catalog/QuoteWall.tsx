@@ -74,6 +74,21 @@ export function QuoteWall() {
     return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]))
   }, [rows])
 
+  const contextualTopicRows = useMemo(() => {
+    const query = normalizeSearch(findQuote)
+    return rows.filter((row) => {
+      if (!query) return true
+      return [
+        row.quote,
+        row.muse,
+        row.primary_sutra,
+        row.secondary_sutras,
+        row.core_topic,
+        row.inspired_song?.title ?? '',
+      ].some((value) => normalizeSearch(value).includes(query))
+    })
+  }, [rows, findQuote])
+
   const filtered = useMemo(() => {
     const query = normalizeSearch(findQuote)
     return rows.filter((row) => {
@@ -129,24 +144,32 @@ export function QuoteWall() {
         </label>
 
         <div className="about-filter-stack" aria-label="Quote filters">
+          <p className="catalog-facet-help">
+            Filters combine across groups (AND). Multiple picks inside one group combine as OR.
+          </p>
           <div className="about-filter-group" aria-label="Filter quotes by topic">
             <button
               type="button"
               className={`about-filter-pill${topicFilter === 'all' ? ' is-active' : ''}`}
               onClick={() => setTopicFilter('all')}
             >
-              All topics <span>{formatCount(rows.length)}</span>
+              All topics <span>{formatCount(contextualTopicRows.length)}</span>
             </button>
-            {topicOptions.map(([topic, count]) => (
-              <button
-                key={topic}
-                type="button"
-                className={`about-filter-pill${topicFilter === topic ? ' is-active' : ''}`}
-                onClick={() => setTopicFilter(topic)}
-              >
-                {topic} <span>{formatCount(count)}</span>
-              </button>
-            ))}
+            {topicOptions.map(([topic]) => {
+              const count = contextualTopicRows.filter((row) => topicLabel(row.core_topic) === topic).length
+              const disabled = topicFilter !== topic && count === 0
+              return (
+                <button
+                  key={topic}
+                  type="button"
+                  className={`about-filter-pill${topicFilter === topic ? ' is-active' : ''}`}
+                  onClick={() => setTopicFilter(topic)}
+                  disabled={disabled}
+                >
+                  {topic} <span>{formatCount(count)}</span>
+                </button>
+              )
+            })}
           </div>
         </div>
 

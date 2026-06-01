@@ -6,6 +6,7 @@ import { TRACKS_BROWSER_FACET_ORDER, TRACKS_FACET_LABELS } from './catalogFacetC
 import { CatalogPager } from './CatalogPager'
 import './CatalogPager.css'
 import { facetCountsFromTracks } from './facetCountsFromTracks'
+import { buildContextualTrackFacetEntries } from './facetCountsContextual'
 import { filterTracksByFindQuery, sortTrackCatalog, trackMatchesFilters } from './filterTracks'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
@@ -212,9 +213,20 @@ export function TracksPage() {
   }, [])
 
   const catalogList = useMemo(() => trackCatalog ?? [], [trackCatalog])
-  const facetEntries = useMemo(
+  const fullFacetEntries = useMemo(
     () => (nonCriticalReady ? facetCountsFromTracks(catalogList) : EMPTY_TRACK_FACETS),
     [catalogList, nonCriticalReady],
+  )
+  const facetEntries = useMemo(
+    () =>
+      buildContextualTrackFacetEntries(
+        catalogList,
+        fullFacetEntries,
+        TRACKS_BROWSER_FACET_ORDER,
+        filters,
+        urlFind,
+      ),
+    [catalogList, fullFacetEntries, filters, urlFind],
   )
 
   const filtered = useMemo(() => {
@@ -642,6 +654,9 @@ export function TracksPage() {
                 {filtersOpen ? activeFilterContext : null}
 
                 <div id="tracks-filter-panel" className="catalog-facet-stack">
+                  <p className="catalog-facet-help">
+                    Filters combine across groups (AND). Multiple picks inside one group combine as OR.
+                  </p>
                   <section className="catalog-facet" aria-labelledby="tracks-find-heading">
                     <h3 id="tracks-find-heading">Search</h3>
                     <label className="catalog-facet-find-label" htmlFor="tracks-find-input">
@@ -671,11 +686,13 @@ export function TracksPage() {
                         <div className="catalog-facet-chips" role="group" aria-labelledby={headingId}>
                           {entries.map(({ value, count }) => {
                             const active = filters[group].has(value)
+                            const disabled = !active && count === 0
                             return (
                               <button
                                 key={value}
                                 type="button"
-                                className={`catalog-facet-chip${active ? ' is-active' : ''}`}
+                                className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
+                                disabled={disabled}
                                 onClick={() =>
                                   patchFilters({
                                     ...filters,

@@ -49,6 +49,8 @@ function normalizeBrowseSongRow(row: Partial<SongCatalogItem>): SongCatalogItem 
     topic: String(row.topic ?? ''),
     intention: String(row.intention ?? ''),
     light_shadow: String(row.light_shadow ?? ''),
+    cover: Boolean(row.cover),
+    public_domain: Boolean(row.public_domain),
     lang: String(row.lang ?? ''),
     written_year: String(row.written_year ?? ''),
     song_in_app: Boolean(row.song_in_app),

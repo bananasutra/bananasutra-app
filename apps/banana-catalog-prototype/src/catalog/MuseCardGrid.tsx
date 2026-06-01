@@ -56,14 +56,6 @@ function splitList(value: string): string[] {
     .filter(Boolean)
 }
 
-function filterCount(rows: MuseCatalogItem[], field: 'era' | 'type_category', value: string): number {
-  return rows.filter((row) => splitList(row[field]).includes(value)).length
-}
-
-function filterCountCountry(rows: MuseCatalogItem[], country: string): number {
-  return rows.filter((row) => row.country.trim() === country).length
-}
-
 function formatCommaList(value: string): string {
   return splitList(value).join(', ')
 }
@@ -91,6 +83,34 @@ function eraSortRank(era: string): number {
 
 function formatTypeCategory(value: string): string {
   return formatCommaList(value)
+}
+
+type MuseFilters = {
+  era: string
+  gender: string
+  type: string
+  country: string
+  query: string
+}
+
+function museMatchesFilters(row: MuseCatalogItem, f: MuseFilters): boolean {
+  const eraOk = f.era === 'all' || splitList(row.era).includes(f.era)
+  const genderOk = f.gender === 'all' || row.gender_pronoun === f.gender
+  const typeOk = f.type === 'all' || splitList(row.type_category).includes(f.type)
+  const countryOk = f.country === 'all' || row.country.trim() === f.country
+  const searchOk =
+    !f.query ||
+    [
+      row.muse,
+      row.type_category,
+      row.country,
+      row.era,
+      row.themes,
+      row.famous_works,
+      row.notes,
+      row.quote_excerpt,
+    ].some((value) => normalizeSearch(value).includes(f.query))
+  return eraOk && genderOk && typeOk && countryOk && searchOk
 }
 
 function formatLifespan(item: MuseCatalogItem): string {
@@ -249,30 +269,73 @@ export function MuseCardGrid() {
     return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]))
   }, [rows])
 
+  const normalizedFindQuery = useMemo(() => normalizeSearch(findMuse), [findMuse])
+  const contextualEraRows = useMemo(
+    () =>
+      rows.filter((row) =>
+        museMatchesFilters(row, {
+          era: 'all',
+          gender: genderFilter,
+          type: typeFilter,
+          country: countryFilter,
+          query: normalizedFindQuery,
+        }),
+      ),
+    [rows, genderFilter, typeFilter, countryFilter, normalizedFindQuery],
+  )
+  const contextualGenderRows = useMemo(
+    () =>
+      rows.filter((row) =>
+        museMatchesFilters(row, {
+          era: eraFilter,
+          gender: 'all',
+          type: typeFilter,
+          country: countryFilter,
+          query: normalizedFindQuery,
+        }),
+      ),
+    [rows, eraFilter, typeFilter, countryFilter, normalizedFindQuery],
+  )
+  const contextualTypeRows = useMemo(
+    () =>
+      rows.filter((row) =>
+        museMatchesFilters(row, {
+          era: eraFilter,
+          gender: genderFilter,
+          type: 'all',
+          country: countryFilter,
+          query: normalizedFindQuery,
+        }),
+      ),
+    [rows, eraFilter, genderFilter, countryFilter, normalizedFindQuery],
+  )
+  const contextualCountryRows = useMemo(
+    () =>
+      rows.filter((row) =>
+        museMatchesFilters(row, {
+          era: eraFilter,
+          gender: genderFilter,
+          type: typeFilter,
+          country: 'all',
+          query: normalizedFindQuery,
+        }),
+      ),
+    [rows, eraFilter, genderFilter, typeFilter, normalizedFindQuery],
+  )
+
   const filtered = useMemo(() => {
-    const query = normalizeSearch(findMuse)
     const next = rows.filter((row) => {
-      const eraOk = eraFilter === 'all' || splitList(row.era).includes(eraFilter)
-      const genderOk = genderFilter === 'all' || row.gender_pronoun === genderFilter
-      const typeOk = typeFilter === 'all' || splitList(row.type_category).includes(typeFilter)
-      const countryOk = countryFilter === 'all' || row.country.trim() === countryFilter
-      const searchOk =
-        !query ||
-        [
-          row.muse,
-          row.type_category,
-          row.country,
-          row.era,
-          row.themes,
-          row.famous_works,
-          row.notes,
-          row.quote_excerpt,
-        ].some((value) => normalizeSearch(value).includes(query))
-      return eraOk && genderOk && typeOk && countryOk && searchOk
+      return museMatchesFilters(row, {
+        era: eraFilter,
+        gender: genderFilter,
+        type: typeFilter,
+        country: countryFilter,
+        query: normalizedFindQuery,
+      })
     })
     next.sort((a, b) => compareMuses(a, b, sort))
     return next
-  }, [countryFilter, eraFilter, findMuse, genderFilter, rows, sort, typeFilter])
+  }, [countryFilter, eraFilter, normalizedFindQuery, genderFilter, rows, sort, typeFilter])
 
   const visible = showAll ? filtered : filtered.slice(0, INITIAL_MUSE_COUNT)
   const findQuery = findMuse.trim()
@@ -398,6 +461,9 @@ export function MuseCardGrid() {
             {activeFilterContext}
 
             <div id="muses-filter-panel" className="catalog-facet-stack">
+              <p className="catalog-facet-help">
+                Filters combine across groups (AND). Multiple picks inside one group combine as OR.
+              </p>
               <section className="catalog-facet" aria-labelledby="muses-search-heading">
                 <h3 id="muses-search-heading">Search</h3>
                 <label className="catalog-facet-find-label" htmlFor="muses-find-input">
@@ -426,17 +492,20 @@ export function MuseCardGrid() {
                     onClick={() => setEraFilter('all')}
                   >
                     <span>All eras</span>
-                    <span className="catalog-facet-count">{` (${formatCount(rows.length)})`}</span>
+                    <span className="catalog-facet-count">{` (${formatCount(contextualEraRows.length)})`}</span>
                   </button>
                   {eraOptions.map(([era]) => (
                     <button
                       key={era}
                       type="button"
                       className={`catalog-facet-chip${eraFilter === era ? ' is-active' : ''}`}
+                      disabled={eraFilter !== era && contextualEraRows.filter((row) => splitList(row.era).includes(era)).length === 0}
                       onClick={() => setEraFilter(era)}
                     >
                       <span>{era}</span>
-                      <span className="catalog-facet-count">{` (${formatCount(filterCount(rows, 'era', era))})`}</span>
+                      <span className="catalog-facet-count">
+                        {` (${formatCount(contextualEraRows.filter((row) => splitList(row.era).includes(era)).length)})`}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -451,17 +520,23 @@ export function MuseCardGrid() {
                     onClick={() => setGenderFilter('all')}
                   >
                     <span>All</span>
-                    <span className="catalog-facet-count">{` (${formatCount(rows.length)})`}</span>
+                    <span className="catalog-facet-count">{` (${formatCount(contextualGenderRows.length)})`}</span>
                   </button>
-                  {genderOptions.map(([gender, count]) => (
+                  {genderOptions.map(([gender]) => (
                     <button
                       key={gender}
                       type="button"
                       className={`catalog-facet-chip${genderFilter === gender ? ' is-active' : ''}`}
+                      disabled={
+                        genderFilter !== gender &&
+                        contextualGenderRows.filter((row) => row.gender_pronoun.trim() === gender).length === 0
+                      }
                       onClick={() => setGenderFilter(gender)}
                     >
                       <span>{gender}</span>
-                      <span className="catalog-facet-count">{` (${formatCount(count)})`}</span>
+                      <span className="catalog-facet-count">
+                        {` (${formatCount(contextualGenderRows.filter((row) => row.gender_pronoun.trim() === gender).length)})`}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -476,17 +551,23 @@ export function MuseCardGrid() {
                     onClick={() => setTypeFilter('all')}
                   >
                     <span>All types</span>
-                    <span className="catalog-facet-count">{` (${formatCount(rows.length)})`}</span>
+                    <span className="catalog-facet-count">{` (${formatCount(contextualTypeRows.length)})`}</span>
                   </button>
                   {typeOptions.map(([type]) => (
                     <button
                       key={type}
                       type="button"
                       className={`catalog-facet-chip${typeFilter === type ? ' is-active' : ''}`}
+                      disabled={
+                        typeFilter !== type &&
+                        contextualTypeRows.filter((row) => splitList(row.type_category).includes(type)).length === 0
+                      }
                       onClick={() => setTypeFilter(type)}
                     >
                       <span>{type}</span>
-                      <span className="catalog-facet-count">{` (${formatCount(filterCount(rows, 'type_category', type))})`}</span>
+                      <span className="catalog-facet-count">
+                        {` (${formatCount(contextualTypeRows.filter((row) => splitList(row.type_category).includes(type)).length)})`}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -501,17 +582,23 @@ export function MuseCardGrid() {
                     onClick={() => setCountryFilter('all')}
                   >
                     <span>All countries</span>
-                    <span className="catalog-facet-count">{` (${formatCount(rows.length)})`}</span>
+                    <span className="catalog-facet-count">{` (${formatCount(contextualCountryRows.length)})`}</span>
                   </button>
                   {countryOptions.map(([country]) => (
                     <button
                       key={country}
                       type="button"
                       className={`catalog-facet-chip${countryFilter === country ? ' is-active' : ''}`}
+                      disabled={
+                        countryFilter !== country &&
+                        contextualCountryRows.filter((row) => row.country.trim() === country).length === 0
+                      }
                       onClick={() => setCountryFilter(country)}
                     >
                       <span>{country}</span>
-                      <span className="catalog-facet-count">{` (${formatCount(filterCountCountry(rows, country))})`}</span>
+                      <span className="catalog-facet-count">
+                        {` (${formatCount(contextualCountryRows.filter((row) => row.country.trim() === country).length)})`}
+                      </span>
                     </button>
                   ))}
                 </div>

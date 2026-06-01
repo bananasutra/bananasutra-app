@@ -14,9 +14,9 @@ export const CATALOG_BROWSER_FACET_ORDER: FilterFacetKey[] = [
 export const TRACKS_BROWSER_FACET_ORDER: TracksFacetFilterKey[] = [
   'sutra',
   'light_shadow',
+  'primary_genre',
   'tempo_feel',
   'mood',
-  'primary_genre',
   'secondary_genre',
   'instrument',
 ]

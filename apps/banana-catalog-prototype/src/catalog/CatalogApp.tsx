@@ -8,6 +8,7 @@ import {
 import { facetCountsFromSongs } from './facetCountsFromSongs'
 import {
   emptyFilterState,
+  type FilterFacetKey,
   type FacetGroupKey,
   type FilterState,
   type MediaComboFilter,
@@ -16,6 +17,7 @@ import {
 } from './types'
 import { songMatchesFilters, songMatchesMediaCombo, sortSongs } from './filterSongs'
 import { filterSongsByFindAnyQuery } from './searchMatch'
+import { buildContextualSongFacetEntries } from './facetCountsContextual'
 import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
 import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
@@ -104,7 +106,7 @@ export function CatalogApp() {
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalogBrowse()
   const catalogSongs = useMemo(() => songCatalogRows ?? [], [songCatalogRows])
   const listenerCatalogSongs = useMemo(() => catalogSongs.filter(hasListenerCatalogMedia), [catalogSongs])
-  const facets = useMemo(() => facetCountsFromSongs(listenerCatalogSongs), [listenerCatalogSongs])
+  const fullFacetEntries = useMemo(() => facetCountsFromSongs(listenerCatalogSongs), [listenerCatalogSongs])
 
   const [browseSeed] = useState(() =>
     readBrowseStateFromSearchParams(searchParamsFromSearchString(window.location.search)),
@@ -138,6 +140,21 @@ export function CatalogApp() {
   const [findInputFocused, setFindInputFocused] = useState(false)
   const [deepSearchByLyricsId, setDeepSearchByLyricsId] = useState<Record<string, string> | null>(null)
   const [deepSearchLoading, setDeepSearchLoading] = useState(false)
+  const contextualFacetEntries = useMemo(
+    () =>
+      buildContextualSongFacetEntries(
+        listenerCatalogSongs,
+        Object.fromEntries(
+          FACET_GROUPS.map((group) => [group, fullFacetEntries[group] ?? []]),
+        ) as Record<FilterFacetKey, { value: string; count: number }[]>,
+        FACET_GROUPS,
+        filters,
+        media,
+        findQuery,
+        deepSearchByLyricsId ?? undefined,
+      ),
+    [listenerCatalogSongs, fullFacetEntries, filters, media, findQuery, deepSearchByLyricsId],
+  )
   const filtersRef = useRef(filters)
   const sortRef = useRef(sort)
   const mediaRef = useRef(media)
@@ -466,6 +483,9 @@ export function CatalogApp() {
             {filtersOpen ? activeFilterContext : null}
 
             <div id="catalog-filter-panel" className="catalog-facet-stack">
+            <p className="catalog-facet-help">
+              Filters combine across groups (AND). Multiple picks inside one group combine as OR.
+            </p>
             <section className="catalog-facet" aria-labelledby="catalog-songs-search-heading">
               <h3 id="catalog-songs-search-heading">Search</h3>
               <label className="catalog-facet-find-label" htmlFor="catalog-songs-find-input">
@@ -512,7 +532,7 @@ export function CatalogApp() {
               </div>
             </section>
             {FACET_GROUPS.map((group) => {
-              const entries = facets[group] ?? []
+              const entries = contextualFacetEntries[group] ?? []
               if (!entries.length) return null
               const filterKey = group as keyof FilterState
               const headingId = `catalog-${group}-heading`
@@ -522,11 +542,13 @@ export function CatalogApp() {
                   <div className="catalog-facet-chips" role="group" aria-labelledby={headingId}>
                     {entries.map(({ value, count }) => {
                       const active = filters[filterKey].has(value)
+                      const disabled = !active && count === 0
                       return (
                         <button
                           key={value}
                           type="button"
-                          className={`catalog-facet-chip${active ? ' is-active' : ''}`}
+                          className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
+                          disabled={disabled}
                           onClick={() =>
                             patchFilters({
                               ...filters,
