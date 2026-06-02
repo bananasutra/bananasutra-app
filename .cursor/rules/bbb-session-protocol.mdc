@@ -1,0 +1,181 @@
+---
+description: BBB (Bertrand the Banana Butler) Cursor session protocol — gates, chat switching, handoff format
+alwaysApply: false
+globs: ["bbb-api/**", "apps/banana-catalog-prototype/src/bbb/**", "_docs/planning/QA/**"]
+---
+
+# BBB Session Protocol
+
+You are working on BBB (Bertrand the Banana Butler), a Claude-powered chat agent embedded on bananasutra.com. The work is sequenced into discrete **iterations** (one per Cursor chat session), each implementing a single root-cause cluster from a refinement plan.
+
+This rule defines how you behave inside a BBB session: how you start, how you pace, when to suggest switching chats, and what handoff you produce at the end.
+
+For state and per-iteration spec routing: `_docs/planning/QA/BBB-ITERATION-LOG.csv` — each row's `brief_reference` field points to the detailed spec. Two possibilities only: a section of `R44-BBB-PROMPT-REFINEMENT-PLAN.md` (for prompt clusters) or a row in `Release-QA-pipeline.csv` (for non-prompt issues). Always follow `brief_reference` rather than guessing. For broader workflow explanation: `_docs/planning/QA/R42-BBB-CURSOR-WORKFLOW.md`.
+
+---
+
+## Session start protocol — do these in order, every time
+
+1. **Read the iteration log row in FULL.** Always read `_docs/planning/QA/BBB-ITERATION-LOG.csv` first. Do not cap or truncate any field — descriptions, watch, and notes columns may be hundreds or thousands of characters long and contain critical scope detail. If you cap the read, declare it explicitly to Banana.
+
+2. **Identify the iteration.** Either Banana named it in her kickoff, or find the row in the iteration log CSV where `status = Next Up` (there should be exactly one). If unclear, or multiple rows have `Next Up`, **stop and ask** before reading further.
+
+3. **Read the spec file in FULL.** The iteration row's `brief_reference` column names the spec — either a section of `R44-BBB-PROMPT-REFINEMENT-PLAN.md` (for prompt clusters) or a row in `Release-QA-pipeline.csv` (for non-prompt issues). Read the entire referenced section or row. **Never summarize from a truncated read.** If the spec exceeds your context budget, tell Banana before working from a partial read.
+
+4. **Produce a 5-line plan, then wait.** Before touching any file, output a concise plan in this shape:
+
+   ```
+   PROPOSED PLAN — <cluster-tag>
+   1. <step 1 — what file, what change>
+   2. <step 2 — what file, what change>
+   3. <step 3 — what file, what change>
+   4. Tests: <which test files to run/add>
+   5. Acceptance: <which manual P0 prompts will validate>
+
+   Awaiting approval before editing any files.
+   ```
+
+   Do not edit code until Banana approves the plan. If she pushes back, refine and re-present. Plan-approval is a gate.
+
+---
+
+## Three acceptance gates — non-negotiable
+
+### Gate 1 — Diff before apply
+
+When the plan is approved, **propose a unified diff covering all changes before applying**. Do not stream edits straight to disk.
+
+- Show the diff for each file in scope, with file path headers.
+- Include test file changes in the diff.
+- Explicitly list any file you intend to modify that wasn't named in the plan — that's scope expansion and requires re-approval.
+
+After Banana approves the diff, then apply.
+
+### Gate 2 — Tests, then stop
+
+After applying the diff:
+
+- Run the automated tests called for in the cluster's acceptance gate (typically `npm run test:prompt`, `npm run test:bbb`, `npm run typecheck`, and lint on touched files).
+- Report results in a compact format: which tests ran, which passed, which failed.
+- **Stop. Do not commit. Wait for Banana to run manual P0 regression.**
+
+If a test fails: report the failure, propose a fix, get approval before applying the fix.
+
+### Gate 3 — Commit only after Banana confirms manual P0
+
+After Banana confirms manual P0 passes:
+
+- Propose the commit subject in the form `fix(bbb): <one-line>` or `feat(bbb): <one-line>` per `.cursor/rules/git-release-workflow.mdc`.
+- Wait for approval of the subject.
+- Commit only the cluster scope. Do not bundle unrelated changes, do not auto-fix lint warnings outside scope, do not rename adjacent files "while you're there."
+- Push to the feat branch. Do not merge to staging or main without explicit instruction.
+
+---
+
+## Chat-switching signals — when to suggest pausing the chat
+
+Proactively tell Banana when a chat should end. Use these signals:
+
+| Signal | What to say |
+|---|---|
+| **Cluster merged successfully** | "This cluster is complete and merged. Strongly recommend closing this chat and starting a fresh one for the next iteration. Here's the handoff block to paste in the next chat:" + [HANDOFF BLOCK] |
+| **Cluster rolled back** | "This cluster was rolled back. Fresh chat strongly recommended for the next attempt — the context here will bias the next fix toward the same approach that failed. Here's the handoff:" + [HANDOFF BLOCK] |
+| **Chat exceeds 30 turns and cluster isn't close to done** | "This chat is getting long. Performance can degrade past this length. Suggest pausing and continuing in a fresh chat with the following handoff:" + [HANDOFF BLOCK] |
+| **Scope shifted to a different cluster** | "What you're asking is in a different cluster than the one this session started on. Recommend capturing handoff and starting a new chat for that cluster. Here's the handoff:" + [HANDOFF BLOCK] |
+| **Banana context-switched (next day, after long pause)** | "Welcome back. Before continuing, suggest a fresh chat so context loads cleanly. Here's the handoff to paste:" + [HANDOFF BLOCK] |
+
+Suggest, don't force. Banana decides whether to switch. But always include the handoff block when you suggest — make it trivially easy for her to accept.
+
+---
+
+## The handoff block — standardized format
+
+When suggesting a chat switch, produce this block exactly. It's what Banana copies into the next chat:
+
+```
+═══════════════════════════════════════════════════════════════
+HANDOFF FOR NEXT CHAT
+═══════════════════════════════════════════════════════════════
+
+JUST COMPLETED: <iteration-tag>
+- Branch: <feat-branch-name>
+- Status: <Merged to main | Merged to staging | Rolled back | In progress>
+- One-line summary: <what changed>
+
+KICKOFF FOR NEXT CHAT — paste this verbatim:
+─────────────────────────────────────────────
+You are picking up BBB (Bertrand the Banana Butler) work in this repo.
+
+Follow the BBB session protocol in @.cursor/rules/bbb-session-protocol.mdc.
+
+Current state: @_docs/planning/QA/BBB-ITERATION-LOG.csv
+Spec for this iteration: @<NEXT-SPEC-FILE-PATH>
+This session's work: implement <NEXT-ITERATION-TAG> per the spec above.
+Read the spec in full before producing the plan — do not skim.
+
+Continuing from <PREVIOUS-ITERATION-TAG> which just merged. Watch for
+regressions in: <SPECIFIC AREAS the prior cluster might affect>.
+
+Start by reading the iteration log row for this iteration, then the spec
+file. Then give me a 5-line plan of what you will change and in what
+order. Wait for my approval before touching code.
+─────────────────────────────────────────────
+
+DECIDE LATER — items raised but out of scope:
+- <item 1, if any>
+- <item 2, if any>
+
+CSV ROW UPDATE — update these fields in Airtable for this iteration:
+─────────────────────────────────────────────
+iteration_tag: <tag>
+status: <Done | Rolled Back | Paused | etc.>
+merge_date: YYYY-MM-DD (if merged)
+description: <update to add what actually shipped, if needed>
+watch: <update if new risk flags surfaced>
+notes: <any new notes — Cursor session findings, decide-later items>
+─────────────────────────────────────────────
+
+═══════════════════════════════════════════════════════════════
+```
+
+Fill in every field. Don't skip "DECIDE LATER" — if there's nothing, write `none`. The "CSV ROW UPDATE" section gives Banana the exact field=value pairs to update in Airtable for the iteration_tag row.
+
+---
+
+## Communication style with Banana
+
+- **Be direct.** No sycophancy, no hedging filler. She's flagged this preference explicitly.
+- **Push back when she's wrong.** If she asks for a change that would regress something or violate a brief's scope, say so plainly and propose the better path.
+- **Show your work.** When you choose between two implementation approaches, name the tradeoff and pick one with reasoning. Don't present a buffet of options.
+- **Flag capability gaps upfront.** If a request requires something you can't do (browse the internet, access an external service), say so at the top of your response. Don't bury limitations.
+- **Honor the gates.** Even if she asks "just commit it" in the middle of a session, remind her of the gate she's about to skip. She can override; you should still flag.
+
+---
+
+## When NOT to follow this protocol
+
+This protocol applies to BBB iteration work (the prompt, the worker, the widget, the test/methodology docs). For one-off bug investigations, README updates, or exploratory chats not tied to a cluster:
+
+- You don't need the iteration log + cluster brief at start.
+- You don't need the 5-line plan gate (you can just diff-then-apply).
+- You don't need the handoff block at end.
+
+But ask first: "This doesn't look like a cluster iteration. Want me to skip the formal protocol?" Let Banana confirm.
+
+---
+
+## What good looks like
+
+A BBB session that runs this protocol cleanly:
+1. Banana pastes kickoff; you read the log, identify the cluster, read the spec.
+2. You output a 5-line plan; she approves.
+3. You output a diff; she approves.
+4. You run tests; report green; stop.
+5. She runs manual P0; confirms pass.
+6. You propose commit subject; she approves; you commit.
+7. She merges per the git rule.
+8. You produce the handoff block; she applies the CSV row update in Airtable; she closes the chat.
+
+Total messages in chat: roughly 8–15 (excluding any test-failure iteration). No drift, no surprise commits, no "wait, what did we change?" — and the next chat starts with full context.
+
+That's the bar.
