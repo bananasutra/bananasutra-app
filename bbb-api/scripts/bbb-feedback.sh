@@ -24,11 +24,12 @@ read_dev_var() {
 usage() {
   cat <<'EOF'
 Usage:
-  bash scripts/bbb-feedback.sh logs <local|remote> [--limit N] [--intent TYPE] [--before UNIX_MS] [--compact] [--no-color]
+  bash scripts/bbb-feedback.sh logs <local|remote> [--limit N] [--tail N] [--intent TYPE] [--before UNIX_MS] [--compact] [--no-color] [--api-order]
   bash scripts/bbb-feedback.sh cleanup <local|remote>
 
 Examples:
   bash scripts/bbb-feedback.sh logs local
+  bash scripts/bbb-feedback.sh logs remote --tail 10 --compact
   bash scripts/bbb-feedback.sh logs remote --limit 10 --intent feedback
   bash scripts/bbb-feedback.sh logs remote --before 1717286400123
   bash scripts/bbb-feedback.sh cleanup remote
@@ -85,15 +86,21 @@ if [[ "${ACTION}" != "logs" ]]; then
 fi
 
 LIMIT="50"
+TAIL=""
 INTENT=""
 BEFORE=""
 COMPACT="0"
 NO_COLOR="0"
+API_ORDER="0"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --limit)
       LIMIT="${2:-}"
+      shift 2
+      ;;
+    --tail)
+      TAIL="${2:-}"
       shift 2
       ;;
     --intent)
@@ -112,6 +119,10 @@ while [[ $# -gt 0 ]]; do
       NO_COLOR="1"
       shift 1
       ;;
+    --api-order)
+      API_ORDER="1"
+      shift 1
+      ;;
     *)
       echo "Unknown option: $1"
       usage
@@ -119,6 +130,13 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+if [[ -n "${TAIL}" ]]; then
+  LIMIT="${TAIL}"
+  if [[ "${COMPACT}" == "0" ]]; then
+    COMPACT="1"
+  fi
+fi
 
 URL="${BASE_URL}/api/bbb/admin/feedback?limit=${LIMIT}"
 if [[ -n "${INTENT}" ]]; then
@@ -136,7 +154,7 @@ if [[ "${FORMAT}" == "json" ]]; then
   exit 0
 fi
 
-BBB_FEEDBACK_COMPACT="${COMPACT}" BBB_FEEDBACK_NO_COLOR="${NO_COLOR}" python3 - "${RAW}" <<'PYEOF'
+BBB_FEEDBACK_COMPACT="${COMPACT}" BBB_FEEDBACK_NO_COLOR="${NO_COLOR}" BBB_FEEDBACK_API_ORDER="${API_ORDER}" python3 - "${RAW}" <<'PYEOF'
 import datetime
 import json
 import os
@@ -146,6 +164,7 @@ import textwrap
 SEP = "-" * 70
 COMPACT = os.environ.get("BBB_FEEDBACK_COMPACT") == "1"
 NO_COLOR = os.environ.get("BBB_FEEDBACK_NO_COLOR") == "1"
+API_ORDER = os.environ.get("BBB_FEEDBACK_API_ORDER") == "1"
 USE_COLOR = (not NO_COLOR) and sys.stdout.isatty()
 
 COLOR = {
@@ -206,12 +225,20 @@ if not logs:
     print("No feedback rows found.")
     sys.exit(0)
 
+display_logs = logs if API_ORDER else list(reversed(logs))
+next_before = data.get("nextBefore")
+
 print()
 print(c(SEP, "dim"))
-print("  %d feedback row(s) returned" % len(logs))
+if API_ORDER:
+    print("  %d feedback row(s) — #1 = newest (API order)" % len(logs))
+else:
+    print("  %d feedback row(s) — newest at bottom (#%d = latest)" % (len(logs), len(logs)))
+if next_before:
+    print("  Older page: npm run feedback:remote -- --before %s" % c(str(next_before), "yellow"))
 print(c(SEP, "dim"))
 
-for i, log in enumerate(logs):
+for i, log in enumerate(display_logs):
     ts = fmt_time(log.get("created_at", 0))
     intent = log.get("intent_type", "?")
     status = log.get("delivery_status", "?")
@@ -251,9 +278,5 @@ for i, log in enumerate(logs):
     print()
     print(c(SEP, "dim"))
 
-next_before = data.get("nextBefore")
-if next_before:
-    print()
-    print("  Next page: --before %s" % c(str(next_before), "yellow"))
-    print()
+print()
 PYEOF

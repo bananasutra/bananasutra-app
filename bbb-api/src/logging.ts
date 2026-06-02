@@ -24,6 +24,8 @@ export interface BbbLogRecord {
   assistant_reply: string | null;
   error_message: string | null;
   message_count: number;
+  page_type: string | null;
+  intent_json: string | null;
 }
 
 export interface InsertBbbLogInput {
@@ -39,11 +41,22 @@ export interface InsertBbbLogInput {
   assistantReply?: string | null;
   errorMessage?: string | null;
   messageCount: number;
+  pageType?: string | null;
+  intentJson?: string | null;
   ip?: string | null;
   ipSalt?: string | null;
   actorId?: string | null;
   actorSalt?: string | null;
 }
+
+export const serializeBbbLogSignals = (input: {
+  pageType: string;
+  intentFlags: string[];
+  supportKeywords: string[];
+}): { pageType: string; intentJson: string } => ({
+  pageType: input.pageType,
+  intentJson: JSON.stringify({ flags: input.intentFlags, support: input.supportKeywords }),
+});
 
 export interface QueryLogsOptions {
   limit: number;
@@ -328,8 +341,10 @@ export const insertBbbLog = async (db: D1Database, input: InsertBbbLogInput): Pr
         user_prompt,
         assistant_reply,
         error_message,
-        message_count
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        message_count,
+        page_type,
+        intent_json
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       logId,
@@ -347,6 +362,8 @@ export const insertBbbLog = async (db: D1Database, input: InsertBbbLogInput): Pr
       clampText(input.assistantReply, MAX_TEXT_FIELD),
       clampText(input.errorMessage, MAX_ERROR_FIELD),
       Math.max(0, Math.trunc(input.messageCount)),
+      clampText(input.pageType, 50),
+      clampText(input.intentJson, 500),
     )
     .run();
 };
@@ -382,7 +399,9 @@ export const queryBbbLogs = async (db: D1Database, options: QueryLogsOptions): P
         user_prompt,
         assistant_reply,
         error_message,
-        message_count
+        message_count,
+        page_type,
+        intent_json
        FROM bbb_logs
        WHERE ${where.join(" AND ")}
        ORDER BY created_at DESC

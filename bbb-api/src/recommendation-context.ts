@@ -422,6 +422,27 @@ export const inferPageType = (pageContext?: BbbPageContext): PageType => {
   return "other";
 };
 
+export type BbbLogSignals = {
+  pageType: PageType;
+  intentFlags: string[];
+  supportKeywords: string[];
+};
+
+/** Deterministic signals for D1 logging (same heuristics as live recommendation context). */
+export const buildBbbLogSignals = (latestUserPrompt: string, pageContext?: BbbPageContext): BbbLogSignals => {
+  const pageType = inferPageType(pageContext);
+  const intent = analyzeIntent(latestUserPrompt);
+  const support = analyzeSupportIntent(latestUserPrompt);
+  const intentFlags = (Object.entries(intent) as Array<[keyof IntentSignal, boolean]>)
+    .filter(([, active]) => active)
+    .map(([key]) => key);
+  return {
+    pageType,
+    intentFlags,
+    supportKeywords: support.keywords,
+  };
+};
+
 const extractSongSlugFromPath = (pathname?: string): string | null => {
   if (!pathname) return null;
   const match = pathname.match(/^\/songs\/([^/?#]+)/i);

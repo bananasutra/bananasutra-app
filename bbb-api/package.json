@@ -16,11 +16,13 @@
     "build:library": "tsx scripts/build-library-data.ts",
     "logs:local": "bash scripts/bbb-logs.sh logs local",
     "logs:remote": "bash scripts/bbb-logs.sh logs remote",
+    "logs:remote:tail": "bash scripts/bbb-logs.sh logs remote --tail 15 --compact",
     "logs:remote:not-me": "bash scripts/bbb-logs-not-me.sh",
     "logs:cleanup:local": "bash scripts/bbb-logs.sh cleanup local",
     "logs:cleanup:remote": "bash scripts/bbb-logs.sh cleanup remote",
     "feedback:local": "bash scripts/bbb-feedback.sh logs local",
     "feedback:remote": "bash scripts/bbb-feedback.sh logs remote",
+    "feedback:remote:tail": "bash scripts/bbb-feedback.sh logs remote --tail 10 --compact",
     "feedback:cleanup:local": "bash scripts/bbb-feedback.sh cleanup local",
     "feedback:cleanup:remote": "bash scripts/bbb-feedback.sh cleanup remote",
     "feedback:failure-test:local": "bash scripts/bbb-feedback-failure-test.sh"

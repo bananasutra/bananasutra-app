@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { hashActorId, hashIp, parseAdmin404LogsQuery, parseAdminLogsQuery } from "./logging";
+import { hashActorId, hashIp, parseAdmin404LogsQuery, parseAdminLogsQuery, serializeBbbLogSignals } from "./logging";
 
 test("parseAdminLogsQuery returns defaults", () => {
   const parsed = parseAdminLogsQuery(new URL("https://example.com/api/bbb/admin/logs"));
@@ -52,6 +52,18 @@ test("hashIp returns null when missing required values", async () => {
   assert.equal(await hashIp("", "salt"), null);
   assert.equal(await hashIp("unknown", "salt"), null);
   assert.equal(await hashIp("1.2.3.4", ""), null);
+});
+
+test("serializeBbbLogSignals stores active flags and support keywords", () => {
+  const serialized = serializeBbbLogSignals({
+    pageType: "song-detail",
+    intentFlags: ["soundLedIntent", "funIntent"],
+    supportKeywords: ["hope"],
+  });
+  assert.equal(serialized.pageType, "song-detail");
+  const parsed = JSON.parse(serialized.intentJson) as { flags: string[]; support: string[] };
+  assert.deepEqual(parsed.flags, ["soundLedIntent", "funIntent"]);
+  assert.deepEqual(parsed.support, ["hope"]);
 });
 
 test("hashActorId is stable for same input and salt", async () => {
