@@ -24,15 +24,15 @@ read_dev_var() {
 usage() {
   cat <<'EOF'
 Usage:
-  bash scripts/bbb-logs.sh logs <local|remote> [--limit N] [--status VALUE] [--query TEXT] [--before UNIX_MS] [--compact] [--no-reply] [--no-color]
+  bash scripts/bbb-logs.sh logs <local|remote> [--limit N] [--tail N] [--status VALUE] [--query TEXT] [--before UNIX_MS] [--compact] [--no-reply] [--no-color] [--api-order]
   bash scripts/bbb-logs.sh cleanup <local|remote>
 
 Examples:
   bash scripts/bbb-logs.sh logs remote
+  bash scripts/bbb-logs.sh logs remote --tail 15 --compact
   bash scripts/bbb-logs.sh logs remote --limit 25 --status ok
   bash scripts/bbb-logs.sh logs remote --query hope
-  bash scripts/bbb-logs.sh logs remote --compact
-  bash scripts/bbb-logs.sh logs remote --no-reply
+  bash scripts/bbb-logs.sh logs remote --compact --no-reply
   bash scripts/bbb-logs.sh cleanup remote
 EOF
 }
@@ -87,17 +87,23 @@ if [[ "${ACTION}" != "logs" ]]; then
 fi
 
 LIMIT="50"
+TAIL=""
 STATUS=""
 QUERY=""
 BEFORE=""
 COMPACT="0"
 NO_REPLY="0"
 NO_COLOR="0"
+API_ORDER="0"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --limit)
       LIMIT="${2:-}"
+      shift 2
+      ;;
+    --tail)
+      TAIL="${2:-}"
       shift 2
       ;;
     --status)
@@ -124,6 +130,10 @@ while [[ $# -gt 0 ]]; do
       NO_COLOR="1"
       shift 1
       ;;
+    --api-order)
+      API_ORDER="1"
+      shift 1
+      ;;
     *)
       echo "Unknown option: $1"
       usage
@@ -131,6 +141,13 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+if [[ -n "${TAIL}" ]]; then
+  LIMIT="${TAIL}"
+  if [[ "${COMPACT}" == "0" ]]; then
+    COMPACT="1"
+  fi
+fi
 
 if [[ -n "${QUERY}" ]]; then
   QUERY="$(python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1]))" "${QUERY}")"
@@ -155,7 +172,7 @@ if [[ "${FORMAT}" == "json" ]]; then
   exit 0
 fi
 
-BBB_LOG_COMPACT="${COMPACT}" BBB_LOG_NO_REPLY="${NO_REPLY}" BBB_LOG_NO_COLOR="${NO_COLOR}" python3 - "${RAW}" <<'PYEOF'
+BBB_LOG_COMPACT="${COMPACT}" BBB_LOG_NO_REPLY="${NO_REPLY}" BBB_LOG_NO_COLOR="${NO_COLOR}" BBB_LOG_API_ORDER="${API_ORDER}" python3 - "${RAW}" <<'PYEOF'
 import datetime
 import json
 import os
@@ -166,6 +183,7 @@ SEP = "-" * 70
 COMPACT = os.environ.get("BBB_LOG_COMPACT") == "1"
 NO_REPLY = os.environ.get("BBB_LOG_NO_REPLY") == "1"
 NO_COLOR = os.environ.get("BBB_LOG_NO_COLOR") == "1"
+API_ORDER = os.environ.get("BBB_LOG_API_ORDER") == "1"
 USE_COLOR = (not NO_COLOR) and sys.stdout.isatty()
 
 COLOR = {
@@ -215,6 +233,27 @@ def status_style(status):
         return c(status, "red")
     return c(status, "yellow")
 
+def format_signals(log):
+    page_type = (log.get("page_type") or "").strip()
+    raw = log.get("intent_json") or ""
+    flags = []
+    support = []
+    if raw:
+        try:
+            parsed = json.loads(raw)
+            flags = parsed.get("flags") or []
+            support = parsed.get("support") or []
+        except Exception:
+            pass
+    parts = []
+    if page_type:
+        parts.append("page:%s" % page_type)
+    if flags:
+        parts.append("intent:%s" % ",".join(flags[:6]))
+    if support:
+        parts.append("support:%s" % ",".join(support[:4]))
+    return "  ".join(parts)
+
 try:
     data = json.loads(sys.argv[1])
 except Exception:
@@ -226,12 +265,20 @@ if not logs:
     print("No logs found.")
     sys.exit(0)
 
+display_logs = logs if API_ORDER else list(reversed(logs))
+next_before = data.get("nextBefore")
+
 print()
 print(c(SEP, "dim"))
-print("  %d log(s) returned" % len(logs))
+if API_ORDER:
+    print("  %d log(s) — #1 = newest (API order; use default view for terminal-friendly order)" % len(logs))
+else:
+    print("  %d log(s) — newest at bottom (#%d = latest in this batch)" % (len(logs), len(logs)))
+if next_before:
+    print("  Older page: npm run logs:remote -- --before %s" % c(str(next_before), "yellow"))
 print(c(SEP, "dim"))
 
-for i, log in enumerate(logs):
+for i, log in enumerate(display_logs):
     ts = fmt_time(log.get("created_at", 0))
     status = log.get("status", "?")
     latency = log.get("latency_ms", "?")
@@ -253,6 +300,9 @@ for i, log in enumerate(logs):
     print("     model: %s" % model)
     if page:
         print("     page:  %s%s" % (page, search))
+    signals = format_signals(log)
+    if signals:
+        print("     sig:   %s" % signals)
     if ip:
         print("     ip:    %s..." % ip[:12])
     if actor:
@@ -284,9 +334,5 @@ for i, log in enumerate(logs):
     print()
     print(c(SEP, "dim"))
 
-next_before = data.get("nextBefore")
-if next_before:
-    print()
-    print("  Next page: --before %s" % c(str(next_before), "yellow"))
-    print()
+print()
 PYEOF

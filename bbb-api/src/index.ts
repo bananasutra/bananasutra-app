@@ -5,7 +5,7 @@ import {
   type ClaudeStreamFinishResult,
 } from "./claude-client";
 import { LIBRARY_INJECTS } from "./library-data";
-import { buildRecommendationContext, type BbbPageContext } from "./recommendation-context";
+import { buildBbbLogSignals, buildRecommendationContext, type BbbPageContext } from "./recommendation-context";
 import { buildSystemPrompt } from "./system-prompt";
 import { isOrientationAsk, normalizeOrientationReply } from "./reply-normalizer";
 import { isAuthorizedAdmin } from "./admin-auth";
@@ -22,6 +22,7 @@ import {
   insertBbb404Log,
   insertBbbFeedback,
   insertBbbLog,
+  serializeBbbLogSignals,
   parseAdmin404LogsQuery,
   parseAdminFeedbackLogsQuery,
   parseAdminLogsQuery,
@@ -329,6 +330,8 @@ const queueChatLog = (
   },
 ): void => {
   if (!hasLogDatabase(env)) return;
+  const signals = buildBbbLogSignals(input.latestUserPrompt, input.pageContext);
+  const serialized = serializeBbbLogSignals(signals);
   ctx.waitUntil(
     insertBbbLog(env.DB, {
       requestId: input.requestId,
@@ -347,6 +350,8 @@ const queueChatLog = (
       assistantReply: input.assistantReply ?? null,
       errorMessage: input.errorMessage ?? null,
       messageCount: input.messageCount,
+      pageType: serialized.pageType,
+      intentJson: serialized.intentJson,
     }).catch(() => undefined),
   );
 };
@@ -669,6 +674,7 @@ const handler: ExportedHandler<Env> = {
         },
       });
       if (hasLogDatabase(env)) {
+        const logSignals = serializeBbbLogSignals(buildBbbLogSignals(latestUserPrompt, pageContext));
         ctx.waitUntil(
           streamResultPromise
             .then((result) =>
@@ -689,6 +695,8 @@ const handler: ExportedHandler<Env> = {
                 assistantReply: result.assistantText,
                 errorMessage: result.streamError,
                 messageCount: messages.length,
+                pageType: logSignals.pageType,
+                intentJson: logSignals.intentJson,
               }),
             )
             .catch(() => undefined),

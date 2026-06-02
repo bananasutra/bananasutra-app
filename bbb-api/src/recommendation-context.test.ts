@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildRecommendationContext, inferPageType } from "./recommendation-context";
+import { buildBbbLogSignals, buildRecommendationContext, inferPageType } from "./recommendation-context";
 import type { LibraryInjects } from "./library-data";
 
 const fixtureInjects: LibraryInjects = {
@@ -33,6 +33,15 @@ const fixtureInjects: LibraryInjects = {
   quotes: "",
   muses: "",
 };
+
+test("buildBbbLogSignals captures page type, intent flags, and support keywords", () => {
+  const signals = buildBbbLogSignals("I need hope and calm piano", {
+    pathname: "/songs/bright-morning",
+  });
+  assert.equal(signals.pageType, "song-detail");
+  assert.ok(signals.intentFlags.includes("soundLedIntent"));
+  assert.ok(signals.supportKeywords.includes("hope"));
+});
 
 test("buildRecommendationContext returns ranked playable shortlist for support intent", () => {
   const context = buildRecommendationContext([{ role: "user", content: "I need hope, can you suggest songs?" }], fixtureInjects);
