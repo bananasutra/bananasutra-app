@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "test:bbb": "tsx --test src/bbb/BbbChatWidget.test.ts",
-    "test:analytics": "tsx --test src/lib/analytics.test.ts",
+    "test:analytics": "tsx --test src/lib/analytics.test.ts src/catalog/catalogAnalytics.test.ts",
     "build": "tsc -b && vite build && node scripts/prerender-html.mjs && node scripts/inline-critical-css.mjs && node scripts/generate-og-images.mjs && node scripts/generate-seo-metadata.mjs && node scripts/generate-sitemap.mjs && node scripts/sync-catalog-data-dist.mjs",
     "prerender": "node scripts/prerender-html.mjs",
     "prerender:pilot": "PRERENDER_PILOT=1 node scripts/prerender-html.mjs",

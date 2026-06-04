@@ -9,6 +9,7 @@ import { facetCountsFromSongs } from './facetCountsFromSongs'
 import { buildContextualSongFacetEntries } from './facetCountsContextual'
 import { filterSongsByFindAnyQuery } from './searchMatch'
 import { emptyFilterState, type FacetGroupKey, type FilterFacetKey, type FilterState, type SongDetailNavState, type SortMode } from './types'
+import { reportWordsFilterPatch } from './catalogAnalytics'
 import { songMatchesFilters, sortSongs } from './filterSongs'
 import { songCatalogPath } from './songPaths'
 import { sutraClassName } from './sutraTheme'
@@ -217,6 +218,7 @@ export function WordsPage() {
   }
 
   const patchFilters = (next: FilterState) => {
+    reportWordsFilterPatch(filters, next)
     setFilters(next)
     syncUrl(sort, next, undefined, bucket, 1)
   }
@@ -262,6 +264,7 @@ export function WordsPage() {
 
   const clearAllFilters = () => {
     const cleared = emptyFilterState()
+    reportWordsFilterPatch(filters, cleared)
     setFilters(cleared)
     setBucket('all')
     setFindDraft('')
