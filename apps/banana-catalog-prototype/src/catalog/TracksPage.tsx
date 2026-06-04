@@ -7,6 +7,17 @@ import { CatalogPager } from './CatalogPager'
 import './CatalogPager.css'
 import { facetCountsFromTracks } from './facetCountsFromTracks'
 import { buildContextualTrackFacetEntries } from './facetCountsContextual'
+import {
+  trackCatalogPlayAllStarted,
+  trackCatalogPlayAllStopped,
+  trackCatalogPlayStarted,
+  trackCatalogQueueAdvanced,
+  trackCatalogQueueSkipped,
+  tracksFilterContext,
+  reportTracksFilterPatch,
+  type PlaybackIntent,
+} from './catalogAnalytics'
+import type { QueueSource } from '../lib/analytics'
 import { filterTracksByFindQuery, sortTrackCatalog, trackMatchesFilters } from './filterTracks'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
@@ -270,6 +281,7 @@ export function TracksPage() {
   const urlFindRefForAdvance = useRef<string>(urlFind)
   const urlSortRefForAdvance = useRef<TrackSortMode>(urlSort)
   const locationSearchRef = useRef(location.search)
+  const playbackIntentRef = useRef<PlaybackIntent>('user_pick')
 
   useEffect(() => {
     filteredRef.current = filtered
@@ -350,6 +362,7 @@ export function TracksPage() {
   )
 
   const patchFilters = (next: TracksFilterState) => {
+    reportTracksFilterPatch(filters, next)
     setFilters(next)
     syncToUrl(next, urlFind, 1, urlSort)
   }
@@ -361,6 +374,7 @@ export function TracksPage() {
 
   const clearAllFilters = () => {
     const cleared = emptyTracksFilterState()
+    reportTracksFilterPatch(filters, cleared)
     setFilters(cleared)
     setFindDraft('')
     syncToUrl(cleared, '', 1, urlSort)
@@ -374,8 +388,14 @@ export function TracksPage() {
   const pickTrack = useCallback(
     (t: TrackCatalogItem, { keepPlayAll = false }: { keepPlayAll?: boolean } = {}) => {
       if (!keepPlayAll && playAllActiveRef.current) {
+        const queue = filteredRef.current
+        const idx = queue.findIndex((row) => row.track_id === selectedIdRef.current)
+        trackCatalogPlayAllStopped('tracks_filter', idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
         setPlayAllActive(false)
       }
+      const source: QueueSource = playAllActiveRef.current ? 'tracks_filter' : 'single'
+      trackCatalogPlayStarted(t, source, playbackIntentRef.current)
+      playbackIntentRef.current = 'user_pick'
       skipScAutoplayOffOnNextSelectionChange.current = true
       setScAutoplay(true)
       if (t.track_id === selectedIdRef.current) {
@@ -416,9 +436,21 @@ export function TracksPage() {
     }
     const next = queue[idx + 1]
     if (!next) {
+      trackCatalogPlayAllStopped('tracks_filter', queue.length, queue.length, 'queue_exhausted')
       setPlayAllActive(false)
       return
     }
+    const current = queue[idx]
+    if (current) {
+      trackCatalogQueueAdvanced({
+        from: current,
+        to: next,
+        position: idx + 2,
+        total: queue.length,
+        source: 'tracks_filter',
+      })
+    }
+    playbackIntentRef.current = 'queue_advance'
     const nextPage = Math.floor((idx + 1) / PAGE_SIZE) + 1
     if (nextPage !== safePageRef.current) {
       const preserve = new URLSearchParams(locationSearchRef.current)
@@ -444,6 +476,8 @@ export function TracksPage() {
   const startPlayAll = useCallback(() => {
     const queue = filteredRef.current
     if (!queue.length) return
+    trackCatalogPlayAllStarted('tracks_filter', queue.length, tracksFilterContext(filtersRefForAdvance.current))
+    playbackIntentRef.current = 'play_all_start'
     setPlayAllActive(true)
     if (safePageRef.current !== 1) {
       const preserve = new URLSearchParams(locationSearchRef.current)
@@ -470,6 +504,9 @@ export function TracksPage() {
   }, [])
 
   const stopPlayAll = useCallback(() => {
+    const queue = filteredRef.current
+    const idx = queue.findIndex((row) => row.track_id === selectedIdRef.current)
+    trackCatalogPlayAllStopped('tracks_filter', idx >= 0 ? idx + 1 : 0, queue.length, 'user_stop')
     setPlayAllActive(false)
     stopCurrentPlayback()
   }, [stopCurrentPlayback])
@@ -484,6 +521,16 @@ export function TracksPage() {
       const nextIdx = idx + delta
       if (nextIdx < 0 || nextIdx >= queue.length) return
       const next = queue[nextIdx]
+      const current = queue[idx]
+      if (current) {
+        trackCatalogQueueSkipped({
+          from: current,
+          to: next,
+          direction: delta === 1 ? 'next' : 'previous',
+          source: playAllActiveRef.current ? 'tracks_filter' : 'single',
+        })
+      }
+      playbackIntentRef.current = 'queue_skip'
       const nextPage = Math.floor(nextIdx / PAGE_SIZE) + 1
       if (nextPage !== safePageRef.current) {
         const preserve = new URLSearchParams(locationSearchRef.current)

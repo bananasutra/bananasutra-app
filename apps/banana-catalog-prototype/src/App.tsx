@@ -6,6 +6,7 @@ import { prefetchCatalogRoutesIdle } from './routePrefetch'
 import { SearchRedirect } from './catalog/SearchRedirect'
 import { useBfCacheEmbedTeardown } from './catalog/useBfCacheEmbedTeardown'
 import { useSyncPrintPageUrl } from './catalog/useSyncPrintPageUrl'
+import { applyAnalyticsDebugFromSearch } from './lib/analytics'
 import { useAnalyticsPageView } from './useAnalyticsPageView'
 import { BbbChatWidget } from './bbb/BbbChatWidget'
 import { NotFoundRoute } from './catalog/NotFoundRoute'
@@ -118,10 +119,14 @@ function BootPrefetch() {
 
 /** SPA default keeps scroll position on navigate; restore document scroll when the path changes. */
 function ScrollToTopOnNavigate() {
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
+
+  useEffect(() => {
+    applyAnalyticsDebugFromSearch(search)
+  }, [search])
 
   useAnalyticsPageView()
   useSyncPrintPageUrl()

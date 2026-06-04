@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { reportVideosFilterTransition } from './catalogAnalytics'
 import { flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { songMatchesMediaCombo } from './filterSongs'
 import { GlobalFooter } from './GlobalFooter'
@@ -273,8 +274,32 @@ export function VideosPage() {
   const filters = useMemo(() => readFiltersFromParams(searchParams), [searchParams])
   const [findDraft, setFindDraft] = useState(filters.find)
   const filtersRef = useRef(filters)
+  const prevVideoFiltersRef = useRef<VideosUrlFilters | null>(null)
   useEffect(() => {
     filtersRef.current = filters
+  }, [filters])
+
+  useEffect(() => {
+    const prev = prevVideoFiltersRef.current
+    if (prev) {
+      reportVideosFilterTransition(
+        {
+          sutra: prev.sutra,
+          topic: prev.topic,
+          intention: prev.intention,
+          media: prev.media,
+          linkTarget: prev.linkTarget,
+        },
+        {
+          sutra: filters.sutra,
+          topic: filters.topic,
+          intention: filters.intention,
+          media: filters.media,
+          linkTarget: filters.linkTarget,
+        },
+      )
+    }
+    prevVideoFiltersRef.current = filters
   }, [filters])
 
   useEffect(() => {

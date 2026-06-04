@@ -14,6 +14,15 @@ import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { YouTubeEmbed } from './YouTubeEmbed'
+import {
+  findTrackByScUrl,
+  trackSongDetailPlayAllStarted,
+  trackSongDetailPlayAllStopped,
+  trackSongDetailPlayStarted,
+  trackSongDetailQueueAdvanced,
+  trackSongDetailQueueSkipped,
+  type PlaybackIntent,
+} from './catalogAnalytics'
 import { loadSoundCloudWidgetApi } from './soundcloudWidgetApi'
 import type { SoundCloudWidget } from './soundcloudWidgetApi'
 import {
@@ -474,6 +483,7 @@ function SongDetailLoaded({
   const inAppPlayableTracksRef = useRef<SongDetailTrack[]>(inAppPlayableTracks)
   const playingUrlRef = useRef<string>(playingUrl)
   const advanceToNextInQueueRef = useRef<() => void>(() => {})
+  const playbackIntentRef = useRef<PlaybackIntent>('user_pick')
   const queueIndex = useMemo(
     () => inAppPlayableTracks.findIndex((t) => t.sc_url.trim() === playingUrl.trim()),
     [inAppPlayableTracks, playingUrl],
@@ -541,10 +551,18 @@ function SongDetailLoaded({
 
   const pickTopTrack = useCallback(
     (url: string, { keepPlayAll = false }: { keepPlayAll?: boolean } = {}) => {
+      const queue = inAppPlayableTracksRef.current
+      const track = findTrackByScUrl(queue, url)
       if (!keepPlayAll && playAllTopTracksActiveRef.current) {
+        const idx = queue.findIndex((t) => t.sc_url.trim() === playingUrlRef.current.trim())
+        trackSongDetailPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
         playAllTopTracksActiveRef.current = false
         setPlayAllTopTracksActive(false)
       }
+      if (track) {
+        trackSongDetailPlayStarted(track, playbackIntentRef.current)
+      }
+      playbackIntentRef.current = 'user_pick'
       requestSoundcloudPlayback(url)
     },
     [requestSoundcloudPlayback],
@@ -559,6 +577,9 @@ function SongDetailLoaded({
   }, [])
 
   const stopPlayAllTopTracks = useCallback(() => {
+    const queue = inAppPlayableTracksRef.current
+    const idx = queue.findIndex((t) => t.sc_url.trim() === playingUrlRef.current.trim())
+    trackSongDetailPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'user_stop')
     playAllTopTracksActiveRef.current = false
     setPlayAllTopTracksActive(false)
     stopCurrentPlayback()
@@ -568,6 +589,8 @@ function SongDetailLoaded({
     const queue = inAppPlayableTracksRef.current
     const firstUrl = queue[0]?.sc_url.trim()
     if (!firstUrl) return
+    trackSongDetailPlayAllStarted(queue.length)
+    playbackIntentRef.current = 'play_all_start'
     playAllTopTracksActiveRef.current = true
     setPlayAllTopTracksActive(true)
     pickTopTrack(firstUrl, { keepPlayAll: true })
@@ -584,6 +607,16 @@ function SongDetailLoaded({
       if (nextIdx < 0 || nextIdx >= queue.length) return
       const nextUrl = queue[nextIdx]?.sc_url.trim()
       if (!nextUrl) return
+      const currentTrack = findTrackByScUrl(queue, current)
+      const nextTrack = findTrackByScUrl(queue, nextUrl)
+      if (currentTrack && nextTrack) {
+        trackSongDetailQueueSkipped({
+          from: currentTrack,
+          to: nextTrack,
+          direction: delta === 1 ? 'next' : 'previous',
+        })
+      }
+      playbackIntentRef.current = 'queue_skip'
       pickTopTrack(nextUrl, { keepPlayAll: playAllTopTracksActiveRef.current })
     },
     [pickTopTrack],
@@ -606,6 +639,7 @@ function SongDetailLoaded({
 
     const next = queue[idx + 1]
     if (!next) {
+      trackSongDetailPlayAllStopped(queue.length, queue.length, 'queue_exhausted')
       stopPlayAllTopTracks()
       return
     }
@@ -616,7 +650,16 @@ function SongDetailLoaded({
       return
     }
 
-    // Keep the play-all mode active while auto-advancing.
+    const currentTrack = findTrackByScUrl(queue, current)
+    if (currentTrack) {
+      trackSongDetailQueueAdvanced({
+        from: currentTrack,
+        to: next,
+        position: idx + 2,
+        total: queue.length,
+      })
+    }
+    playbackIntentRef.current = 'queue_advance'
     pickTopTrack(nextUrl, { keepPlayAll: true })
   }, [pickTopTrack, stopPlayAllTopTracks])
 
