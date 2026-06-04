@@ -15,6 +15,7 @@ import {
   type FeedbackIntentType,
   type FeedbackDeliveryStatus,
 } from "./feedback";
+import { isAllowedBbbOrigin } from "./origin-allowlist";
 import {
   cleanupOldFeedbackLogs,
   cleanupOld404Logs,
@@ -361,12 +362,13 @@ const handler: ExportedHandler<Env> = {
     const url = new URL(request.url);
     const origin = request.headers.get("origin");
     const allowedOrigins = getAllowedOrigins(env);
-    const corsOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+    const corsOrigin =
+      origin && isAllowedBbbOrigin(origin, allowedOrigins) ? origin : allowedOrigins[0];
     const corsHeaders = getCorsHeaders(corsOrigin);
     const isLocalRequest = url.hostname === "localhost" || url.hostname === "127.0.0.1";
     const allowNoOrigin = isLocalRequest && env.BBB_ALLOW_NO_ORIGIN === "true";
 
-    if ((!origin && !allowNoOrigin) || (origin && !allowedOrigins.includes(origin))) {
+    if ((!origin && !allowNoOrigin) || (origin && !isAllowedBbbOrigin(origin, allowedOrigins))) {
       return json(403, { error: "Origin not allowed." }, corsHeaders);
     }
 
