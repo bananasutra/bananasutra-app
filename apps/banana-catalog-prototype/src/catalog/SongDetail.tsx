@@ -870,7 +870,6 @@ function SongDetailLoaded({
                     <source
                       srcSet={buildSrcset(detail.cover_image_url)}
                       sizes="(max-width: 640px) 400px, 640px"
-                      type="image/webp"
                     />
                     <img
                       src={coverImageUrl(detail.cover_image_url, { width: 400 })}
