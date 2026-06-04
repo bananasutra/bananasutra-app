@@ -78,12 +78,27 @@ function stripUndefined(params: EventParams): Record<string, string | number | b
   )
 }
 
-/** Enable GA4 DebugView when local URL includes ?debug_mode=1 (see GA4-SETUP-GUIDE.md). */
+const DEBUG_SEARCH = /(?:^|[?&])debug_mode=1(?:&|$)/
+
+function enableDebugModeOnGtag(): boolean {
+  if (!window.gtag) return false
+  window.gtag('config', MEASUREMENT_ID, { debug_mode: true })
+  if (isDevBuild()) console.debug('[analytics] debug_mode enabled for DebugView')
+  return true
+}
+
+/** Enable GA4 DebugView when URL includes ?debug_mode=1 (retries until gtag loads). */
 export function applyAnalyticsDebugFromSearch(search: string): void {
   if (typeof window === 'undefined') return
-  if (!search.includes('debug_mode=1')) return
-  window.gtag?.('config', MEASUREMENT_ID, { debug_mode: true })
-  if (isDevBuild()) console.debug('[analytics] debug_mode enabled for DebugView')
+  if (!DEBUG_SEARCH.test(search)) return
+  if (enableDebugModeOnGtag()) return
+  let attempts = 0
+  const id = window.setInterval(() => {
+    attempts += 1
+    if (enableDebugModeOnGtag() || attempts >= 40) {
+      window.clearInterval(id)
+    }
+  }, 250)
 }
 
 export function track(name: AnalyticsEventName, params: EventParams = {}): void {
