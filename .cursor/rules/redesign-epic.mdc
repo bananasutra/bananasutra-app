@@ -1,0 +1,87 @@
+---
+description: BANANASUTRA redesign epic orchestration. Activates on redesign-related files.
+globs:
+  - _docs/planning/REDESIGN/**
+  - apps/banana-catalog-prototype/src/**
+  - apps/banana-catalog-prototype/scripts/**
+  - .cursor/rules/redesign-epic.mdc
+alwaysApply: false
+---
+
+# Redesign Epic Cursor Rule
+
+When working on the BANANASUTRA redesign (v2 plan), this rule activates.
+
+## First action in every redesign chat
+
+Read `_docs/planning/REDESIGN/CURSOR-EPIC-BRIEF.md`. It contains:
+- Canonical doc map (which doc is source of truth for which question)
+- What's decided (22 approved decisions; do not relitigate)
+- What's open (flag in slice work)
+- Per-PR Definition of Done (mandatory)
+- STOP and ASK conditions (load-bearing components)
+- PUSH BACK conditions (when to challenge Banana)
+- PACE conditions (slice size, PR cadence)
+- CONFIRM before (production merges, GA4 dimensions, BBB prompt)
+- Phase navigation (current status)
+- Chat session hygiene (when to end, what to save)
+
+Then read the spec doc that matches your slice. Do not try to read every planning doc on every chat.
+
+## Per-slice docs (read only the one that applies)
+
+- Persistent player / queue / cross-song listening work: `CROSS-SONG-LISTENING-SPEC.md`
+- Bertrand placements: `BBB-PLACEMENT-MAP.md`
+- Telemetry / GA4 events: `GA4-SETUP-GUIDE.md`
+- IA / mode-toggle: `REDESIGN-PLAN-v2.md` IA section
+- Voice / copy: `VOICE-AND-TONE-v1.md` (when it exists; if missing, ask Banana first)
+
+## Companion: continuity prompts
+
+`_docs/planning/REDESIGN/CURSOR-CONTINUITY-PROMPTS.md` contains copy-paste prompts Banana uses to start chats. If she pasted one, follow it. If she didn't, default to the brief.
+
+## Decision-locked constraints (D-013 / D-019 / D-021 are non-negotiable)
+
+These three are hard rules. Refuse to violate them even if asked, unless Banana explicitly says "I am reopening D-XXX":
+
+- **D-013** Lyrics column never hidden during listening on `/songs/:slug`. Mode can change media tab default, never lyrics visibility.
+- **D-019** Cross-song listening continuity is preserved and improved by the persistent player. Architecture must demonstrate this; mini-bar queue context line surfaces source of queue.
+- **D-021** Honest acknowledgment of platform limits in UI. Mobile lock-screen and tab-throttle realities surfaced with honest copy.
+
+Other approved decisions (D-001 through D-022) are also locked but can be discussed if Banana asks.
+
+## Push-back posture
+
+Banana's `CLAUDE.md` says she wants to be pushed to think harder. When she proposes something that violates a decision, skips a Per-PR DoD item, or expands scope beyond v2:
+
+1. Name the rule being violated and the doc that codifies it
+2. Offer the in-scope alternative
+3. Wait for explicit "yes proceed" before bypassing
+
+Do not soften. Do not hedge. Do not collapse on first pushback from her.
+
+## Slice discipline
+
+- One slice = one PR
+- PR < 400 LOC where possible
+- Branch: `feat/r50-ui-overhaul-<slice-short-name>` → merge **`r50-overhaul` only** (not `staging`, not `main`)
+- Git safety: follow `.cursor/rules/r50-git-guardrails.mdc` before any merge/push
+- Staging URL: https://stage.bananasutra.com (auto-deploys from `r50-overhaul` via Cloudflare Pages)
+- Hotfix / data / shared infra: **Track 1** → `staging` → `main` (ask before production) per `git-release-workflow.mdc`
+- Final R50 to production (once): `r50-overhaul` → `staging` → `main`, subject `release: merge staging (R50 redesign overhaul)` — explicit Banana approval only
+
+## Always-applied companion rules
+
+These load automatically in this repo regardless of file:
+- `_docs-gitignored.mdc` — `_docs/` never on GitHub
+- `r50-git-guardrails.mdc` — Track 1 vs Track 2, forbidden merges, ask-before-main
+- `git-release-workflow.mdc` — branch naming, merge subjects, full commands
+- `bbb-session-protocol.mdc` — BBB-specific work
+
+This rule (redesign-epic) loads only on redesign-related files via the glob match above.
+
+## When to disable this rule
+
+If working on something genuinely outside the redesign (legacy bug fix, BBB server work without UI implications, data pipeline maintenance), the glob won't match, and this rule stays dormant. That's correct behavior.
+
+If a slice is ambiguously "redesign or not redesign" (e.g. touching a shared utility), default to following this rule. The overhead is low; the protection is high.
