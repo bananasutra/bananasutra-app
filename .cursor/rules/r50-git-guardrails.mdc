@@ -1,0 +1,132 @@
+---
+description: R50 dual-track git guardrails — which branch to use, forbidden merges, ask-before-main. Read before any git merge/push.
+alwaysApply: true
+---
+
+# R50 git guardrails (agents)
+
+**Full command recipes:** `.cursor/rules/git-release-workflow.mdc`. This file is the **safety layer** — classify work first, then run only the matching track.
+
+## One question before any git work
+
+**Is this R50 redesign UI work** (mode toggle, player, redesign slices per `_docs/planning/REDESIGN/`)?
+
+| Answer | Track | Integration branch | Production site |
+|--------|-------|-------------------|-----------------|
+| **Yes** | **Track 2** | `r50-overhaul` | https://stage.bananasutra.com |
+| **No** | **Track 1** | `staging` → `main` (with approval) | https://bananasutra.com |
+| **Unsure** | **Stop** | Ask Banana | Do not guess |
+
+**Shared code** (`bbb-api/`, `workers/`, generated data, hotfixes): almost always **Track 1**, even during the overhaul — unless Banana explicitly says the change is redesign-only on `r50-overhaul`.
+
+---
+
+## Track 2 — redesign only (keeps `main` clean)
+
+**Use when:** catalog app redesign slices, anything that should preview on staging redesign URL.
+
+| Step | Do |
+|------|-----|
+| Branch from | `r50-overhaul` (pulled) |
+| Work branch | `feat/r50-ui-overhaul-<slice>` |
+| Merge into | **`r50-overhaul` only** |
+| Verify | https://stage.bananasutra.com |
+| End session on | `r50-overhaul` (pulled) |
+
+```bash
+git checkout r50-overhaul && git pull origin r50-overhaul
+git checkout -b feat/r50-ui-overhaul-<slice>
+# … commits on feat branch …
+git checkout r50-overhaul && git pull origin r50-overhaul
+git merge --no-ff feat/r50-ui-overhaul-<slice> -m "merge feat/r50-ui-overhaul-<slice> (R50 <what shipped>)"
+git push origin r50-overhaul
+```
+
+### Track 2 — forbidden (agents must refuse)
+
+- Merge `feat/r50-ui-overhaul-*` into **`staging`** or **`main`**
+- Merge **`r50-overhaul`** into **`staging`** or **`main`** (except final R50 ship — see below)
+- Merge **`staging`** into **`r50-overhaul`** (wrong direction)
+- Cherry-pick redesign commits onto Track 1 branches without Banana’s explicit plan
+- `git push origin main` or `staging → main` for redesign work
+
+**Final R50 ship to production** (once, end of overhaul): only after Banana explicitly approves → `r50-overhaul` → `staging` → `main` with subject `release: merge staging (R50 redesign overhaul)`. See `git-release-workflow.mdc`.
+
+---
+
+## Track 1 — production lane (unchanged)
+
+**Use when:** data refresh, hotfix, BBB/worker fix, copy on live site, numbered release R51/R52…, anything that must ship to **bananasutra.com** during the overhaul.
+
+| Step | Do |
+|------|-----|
+| Branch from | `staging` (pulled) |
+| Work branch | `feat/r##-<scope>` (not `r50-ui-overhaul`) |
+| Merge into | **`staging`** |
+| Production | **`staging` → `main` only after explicit Banana approval** |
+| End session on | `staging` (pulled) unless Banana asks otherwise |
+
+```bash
+git checkout staging && git pull origin staging
+git checkout -b feat/r##-<scope>
+# … commits …
+git checkout staging && git pull origin staging
+git merge --no-ff feat/r##-<scope> -m "merge feat/r##-<scope> (<what shipped>)"
+git push origin staging
+# STOP — ask before staging → main
+```
+
+Production merge subject (first line only): `release: merge staging (<one-line what shipped>)`.
+
+---
+
+## Keeping redesign current with production (maintenance, not every PR)
+
+After **`main`** gets data or hotfixes, **`r50-overhaul`** should absorb them so staging doesn’t drift:
+
+```bash
+git checkout r50-overhaul && git pull origin r50-overhaul
+git merge origin/main
+# resolve conflicts if any
+git push origin r50-overhaul
+```
+
+Run when Banana asks, or after a data release on `main` — not as part of every redesign slice.
+
+---
+
+## Sanity check (run before merge/push)
+
+```bash
+git branch --show-current
+```
+
+| Current branch | About to merge | OK? |
+|----------------|----------------|-----|
+| `feat/r50-ui-overhaul-*` | → `r50-overhaul` | Yes |
+| `feat/r50-ui-overhaul-*` | → `staging` / `main` | **No** |
+| `feat/r##-*` (not r50-ui) | → `staging` | Yes |
+| `feat/r##-*` | → `r50-overhaul` | **No** (unless Banana says otherwise) |
+| `r50-overhaul` | → `main` | **No** (until final R50 approval) |
+| any | `git push --force` on `main` / `staging` / `r50-overhaul` | **No** unless Banana explicitly requests |
+
+---
+
+## Deploy map (which URL proves what)
+
+| URL | Branch | Meaning |
+|-----|--------|---------|
+| https://bananasutra.com | `main` | Live users |
+| https://stage.bananasutra.com | `r50-overhaul` | Redesign integration |
+| (none) | `staging` | Git integration only — not a public site |
+| `*.bananasutra-redesign.pages.dev` | feat preview / `r50-overhaul` | Cloudflare Pages |
+
+**seo-worker:** do not route `stage.bananasutra.com` through seo-worker.
+
+---
+
+## When in doubt
+
+1. State which track you believe applies and why.
+2. Name source branch, target branch, and URL you expect to change.
+3. Ask Banana before merging or pushing to `main`, `staging`, or `r50-overhaul`.
