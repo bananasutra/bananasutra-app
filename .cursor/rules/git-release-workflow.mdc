@@ -1,5 +1,5 @@
 ---
-description: Branch naming, merge subjects, and staging→main promotion for numbered releases
+description: Branch naming, merge subjects, and staging→main promotion for numbered releases. Includes R50 dual-track overhaul model.
 alwaysApply: true
 ---
 
@@ -7,18 +7,87 @@ alwaysApply: true
 
 Tracked companion: root `README.md` (pointer). Full human runbook: `_docs/runbooks/LAUNCH-AND-CHANGE-HANDBOOK.md` §1b and §4 (local only, never commit `_docs/`).
 
+**Agents — read first:** `.cursor/rules/r50-git-guardrails.mdc` (always on). Classify Track 1 vs Track 2 before any merge/push; never mix redesign branches into `main` by accident.
+
+## Agent quick map (R50 dual-track)
+
+| Work type | Feat branch | Merge target | Public URL |
+|-----------|-------------|--------------|------------|
+| Redesign slice | `feat/r50-ui-overhaul-<slice>` | **`r50-overhaul`** | stage.bananasutra.com |
+| Hotfix / data / prod fix | `feat/r##-<scope>` | **`staging`** → `main` (ask first) | bananasutra.com |
+
+**Never:** `feat/r50-ui-overhaul-*` → `staging`/`main`. **Never:** `r50-overhaul` → `main` until final R50 approval.
+
 ## Branches
 
 - **Integration:** `staging`. **Production:** `main`. **Work:** `feat/r<number>-<short-scope>` (e.g. `feat/r25-seo-followup`).
 - Never force-push `main` or `staging` unless Banana explicitly asks with eyes open.
 - Numbered releases: always **feat → staging → (stop) → main** after explicit approval. Never promote to `main` without permission.
 
+## R50 dual-track model (active during the redesign overhaul)
+
+During the R50 redesign overhaul (~6 weeks, June 1 to July 19 2026), a separate long-lived integration branch is used so the overhaul doesn't block parallel hotfixes and data updates on `main`.
+
+### Two parallel tracks
+
+**Track 1: Normal release / hotfix flow (unchanged)**
+- Work branches: `feat/r##-<scope>` (R48, R49, R51, R52, …)
+- Flow: `feat/r##-<scope>` → `staging` → `main`
+- Use for: data updates, hotfixes, minor enhancements, anything that needs to ship to bananasutra.com while the overhaul is in progress
+- Production merge subject: `release: merge staging (R## <one-line summary>)`
+
+**Track 2: R50 overhaul flow**
+- Long-lived integration branch: `r50-overhaul` (no `feat/` prefix; lives alongside `main` and `staging`)
+- Slice work branches: `feat/r50-ui-overhaul-<slice>` (e.g. `feat/r50-ui-overhaul-mode-toggle`, `feat/r50-ui-overhaul-persistent-player`)
+- Flow during overhaul: `feat/r50-ui-overhaul-<slice>` → `r50-overhaul` (auto-deploys to stage.bananasutra.com via Cloudflare Pages)
+- Final flow at end of overhaul: `r50-overhaul` → `staging` → `main`
+- Production merge subject for final R50 ship: `release: merge staging (R50 redesign overhaul)`
+
+### Periodic main → r50-overhaul absorption
+
+After hotfixes or data updates land on `main`, merge `main` into `r50-overhaul` to keep the overhaul branch current:
+
+```bash
+git checkout r50-overhaul
+git pull origin r50-overhaul
+git merge origin/main
+# Resolve any conflicts
+git push origin r50-overhaul
+```
+
+Recommended cadence: at least weekly, immediately after any data refresh on `main`.
+
+### Slice merges into r50-overhaul
+
+```bash
+git checkout r50-overhaul && git pull origin r50-overhaul
+git merge --no-ff feat/r50-ui-overhaul-<slice> -m "merge feat/r50-ui-overhaul-<slice> (R50 <one-line what shipped>)"
+git push origin r50-overhaul
+```
+
+This triggers an automatic Cloudflare Pages build that deploys to `stage.bananasutra.com`.
+
+### Final R50 promotion (at end of overhaul, only after explicit Banana approval)
+
+```bash
+# Step 1: r50-overhaul → staging
+git checkout staging && git pull origin staging
+git merge --no-ff r50-overhaul -m "merge r50-overhaul (R50 redesign overhaul integration)"
+git push origin staging
+
+# Step 2: staging → main (THE production ship)
+git checkout main && git pull origin main
+git merge --no-ff staging -m "release: merge staging (R50 redesign overhaul)"
+git push origin main
+git checkout staging && git pull origin staging
+```
+
 ## Feature commits
 
 - Imperative subjects: `feat(scope): …`, `fix(scope): …`, `chore(scope): …`.
 - Never commit `_docs/`, `.env`, or secrets.
 
-## Merge into `staging` (from feat)
+## Merge into `staging` (from feat) — normal Track 1 flow
 
 ```bash
 git checkout staging && git pull origin staging
@@ -50,8 +119,22 @@ GitHub Actions and the commit list show **only the first line** of the merge com
 Good production subject examples:
 
 - `release: merge staging (R25 SEO: JSON-LD, trailing slashes, latest drops)`
+- `release: merge staging (R47 About page copy refresh)`
+- `release: merge staging (R50 redesign overhaul)` ← final overhaul ship
 - `release: merge staging (YouTube outbound footer under embeds)`
 
 ## After staging-side work
 
 End on **`staging`** (pulled) so local preview matches integration unless Banana asks otherwise.
+
+## After r50-overhaul slice merges
+
+End on **`r50-overhaul`** (pulled) so local preview matches the staging deploy at stage.bananasutra.com unless Banana asks otherwise.
+
+## Deployment targets
+
+- `main` → bananasutra.com (production, via GitHub Actions + GitHub Pages + Cloudflare seo-worker)
+- `staging` → no direct URL (intermediate branch only)
+- `r50-overhaul` → stage.bananasutra.com (Cloudflare Pages auto-deploy)
+- `feat/r50-ui-overhaul-<slice>` → preview URL like `<commit>.bananasutra-redesign.pages.dev` (Cloudflare Pages auto-build)
+- `feat/r##-<scope>` (non-R50) → no direct URL; tested locally before merge to staging
