@@ -136,7 +136,11 @@
           function gtag(){dataLayer.push(arguments);}
           window.gtag = gtag;
           gtag('js', new Date());
-          gtag('config', 'G-MJLGTXTE5W', { send_page_view: false });
+          var gaConfig = { send_page_view: false };
+          if (/(?:^|[?&])debug_mode=1(?:&|$)/.test(location.search)) {
+            gaConfig.debug_mode = true;
+          }
+          gtag('config', 'G-MJLGTXTE5W', gaConfig);
         };
         var scheduleInit = function () {
           if ('requestIdleCallback' in window) {

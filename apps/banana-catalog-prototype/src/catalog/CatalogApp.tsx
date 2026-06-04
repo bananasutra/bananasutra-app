@@ -15,6 +15,7 @@ import {
   type SongCatalogItem,
   type SortMode,
 } from './types'
+import { reportSongsFilterPatch } from './catalogAnalytics'
 import { songMatchesFilters, songMatchesMediaCombo, sortSongs } from './filterSongs'
 import { filterSongsByFindAnyQuery } from './searchMatch'
 import { buildContextualSongFacetEntries } from './facetCountsContextual'
@@ -259,6 +260,7 @@ export function CatalogApp() {
   }
 
   const patchFilters = (next: FilterState) => {
+    reportSongsFilterPatch(filters, next)
     setFilters(next)
     syncUrl(sort, next, undefined, media, 1)
   }
@@ -307,6 +309,7 @@ export function CatalogApp() {
 
   const clearAllFilters = () => {
     const cleared = emptyFilterState()
+    reportSongsFilterPatch(filters, cleared)
     setFilters(cleared)
     setMedia('all')
     setFindDraft('')
