@@ -24,27 +24,30 @@ function normalizeRemoteImageSource(source: string): string {
   return source
 }
 
-/**
- * SoundCloud artwork URLs already include `-t500x500` (etc.). Re-wrapping them in
- * `/cdn-cgi/image/` adds multi-second cold-cache latency without quality gain.
- */
-function shouldBypassCfTransform(source: string, width: number): boolean {
+/** Native pixel width for hosts that ship display-ready assets (no CF resize needed). */
+export function nativeImageMaxWidth(source: string): number | null {
+  const normalized = normalizeRemoteImageSource(source.trim())
   try {
-    const u = new URL(source)
+    const u = new URL(normalized)
     if (/\.sndcdn\.com$/i.test(u.hostname)) {
       const m = u.pathname.match(/-t(\d+)x(\d+)\./i)
-      if (m) {
-        const maxDim = Math.max(Number(m[1]), Number(m[2]))
-        if (width <= maxDim) return true
-      }
+      if (m) return Math.max(Number(m[1]), Number(m[2]))
     }
-    if (u.hostname === 'i.ytimg.com' && /\/hqdefault\.jpg$/i.test(u.pathname) && width <= 480) {
-      return true
+    if (u.hostname === 'i.ytimg.com' && /\/hqdefault\.jpg$/i.test(u.pathname)) {
+      return 480
     }
   } catch {
-    return false
+    return null
   }
-  return false
+  return null
+}
+
+/**
+ * SoundCloud / YouTube thumbs are already sized for the UI. CF re-wrap adds cold-cache
+ * latency (seconds) without quality gain — serve the origin URL and let the browser scale.
+ */
+function shouldBypassCfTransform(source: string): boolean {
+  return nativeImageMaxWidth(source) != null
 }
 
 /** Wrap remote cover URLs with Cloudflare Image Transformations. */
@@ -55,9 +58,9 @@ export function coverImageUrl(source: string | null | undefined, opts: CoverImag
   if (!isHttpUrl(trimmed)) return trimmed
 
   const normalized = normalizeRemoteImageSource(trimmed)
-  const width = opts.width ?? 400
-  if (shouldBypassCfTransform(normalized, width)) return normalized
+  if (shouldBypassCfTransform(normalized)) return normalized
 
+  const width = opts.width ?? 400
   const format = opts.format ?? 'auto'
   const quality = opts.quality ?? 80
   const params = `width=${width},format=${format},quality=${quality}`
@@ -69,5 +72,15 @@ export function buildSrcset(
   widths: readonly number[] = [200, 400, 640],
   opts: Omit<CoverImageOptions, 'width'> = {},
 ): string {
-  return widths.map((w) => `${coverImageUrl(source, { ...opts, width: w })} ${w}w`).join(', ')
+  const trimmed = (source ?? '').trim()
+  if (!trimmed) return ''
+
+  const nativeMax = nativeImageMaxWidth(trimmed)
+  let effectiveWidths = [...widths]
+  if (nativeMax != null) {
+    effectiveWidths = effectiveWidths.filter((w) => w <= nativeMax)
+    if (effectiveWidths.length === 0) effectiveWidths = [nativeMax]
+  }
+
+  return effectiveWidths.map((w) => `${coverImageUrl(source, { ...opts, width: w })} ${w}w`).join(', ')
 }
