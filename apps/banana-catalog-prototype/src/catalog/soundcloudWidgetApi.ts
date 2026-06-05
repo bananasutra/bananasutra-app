@@ -6,11 +6,17 @@
  * who never trigger Play All don't pay for it.
  */
 
+export type SoundCloudWidgetLoadOptions = {
+  auto_play?: boolean
+}
+
 export type SoundCloudWidget = {
   bind(event: string, cb: () => void): void
   unbind(event: string): void
   play(): void
   pause(): void
+  /** Swap track on the same iframe without remounting (preserves mobile gesture chain). */
+  load(scUrl: string, options?: SoundCloudWidgetLoadOptions): void
 }
 
 export type SoundCloudWidgetEvents = {

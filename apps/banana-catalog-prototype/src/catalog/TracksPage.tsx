@@ -21,7 +21,10 @@ import type { QueueSource } from '../lib/analytics'
 import { filterTracksByFindQuery, sortTrackCatalog, trackMatchesFilters } from './filterTracks'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
+import {
+  PersistentSoundCloudIframe,
+  type PersistentSoundCloudHandle,
+} from './PersistentSoundCloudIframe'
 import { songCatalogPath } from './songPaths'
 import type { FacetEntry, TrackCatalogItem, TrackSortMode, TracksFacetFilterKey, TracksFilterState } from './types'
 import { emptyTracksFilterState } from './types'
@@ -264,16 +267,16 @@ export function TracksPage() {
   }, [urlPage, safePage, filters, urlFind, urlSort, location.search, navigate])
 
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [embedReloadKey, setEmbedReloadKey] = useState(0)
-  /** SoundCloud `auto_play` only after an explicit row action — not on first paint / URL-driven page slice. */
-  const [scAutoplay, setScAutoplay] = useState(false)
-  const skipScAutoplayOffOnNextSelectionChange = useRef(false)
+  /** True after SC widget fires PLAY (honest "now playing" UI, W-001 spike). */
+  const [scIsPlaying, setScIsPlaying] = useState(false)
 
-  /** "Play All" queue mode: keep auto-advancing through `filtered` until the user stops or runs out of tracks. */
-  const [playAllActive, setPlayAllActive] = useState(false)
-  const playAllActiveRef = useRef(false)
-  const playerWrapRef = useRef<HTMLDivElement>(null)
-  const scWidgetRef = useRef<SoundCloudWidget | null>(null)
+  /** Play All queue session (FINISH advances) — separate from UI "playing all" until PLAY fires. */
+  const [playAllSession, setPlayAllSession] = useState(false)
+  const playAllSessionRef = useRef(false)
+  /** UI: Stop playing all / wave — only after SC PLAY while a Play All session is active. */
+  const [playAllUiActive, setPlayAllUiActive] = useState(false)
+  const playAllUiActiveRef = useRef(false)
+  const persistentPlayerRef = useRef<PersistentSoundCloudHandle | null>(null)
   const filteredRef = useRef<TrackCatalogItem[]>([])
   const selectedIdRef = useRef<string | null>(null)
   const safePageRef = useRef(1)
@@ -290,8 +293,11 @@ export function TracksPage() {
     safePageRef.current = safePage
   }, [safePage])
   useEffect(() => {
-    playAllActiveRef.current = playAllActive
-  }, [playAllActive])
+    playAllSessionRef.current = playAllSession
+  }, [playAllSession])
+  useEffect(() => {
+    playAllUiActiveRef.current = playAllUiActive
+  }, [playAllUiActive])
   useEffect(() => {
     selectedIdRef.current = selectedId
   }, [selectedId])
@@ -312,8 +318,9 @@ export function TracksPage() {
     if (!pageRows.length) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- clear player when page slice is empty
       setSelectedId(null)
-      setScAutoplay(false)
-      setPlayAllActive(false)
+      setScIsPlaying(false)
+      setPlayAllSession(false)
+      setPlayAllUiActive(false)
       return
     }
     setSelectedId((prev) => {
@@ -321,14 +328,6 @@ export function TracksPage() {
       return pageRows[0]?.track_id ?? null
     })
   }, [pageRows])
-
-  useEffect(() => {
-    if (skipScAutoplayOffOnNextSelectionChange.current) {
-      skipScAutoplayOffOnNextSelectionChange.current = false
-      return
-    }
-    setScAutoplay(false)
-  }, [selectedId])
 
   const pageMeta = renderPageMeta({
     title: 'Top Tracks on SoundCloud',
@@ -385,27 +384,28 @@ export function TracksPage() {
     navigate(buildTracksBrowsePathFull(filters, urlFind, 1, preserve, next), { replace: true })
   }
 
+  const loadTrackOnWidget = useCallback((t: TrackCatalogItem, autoPlay: boolean) => {
+    setScIsPlaying(false)
+    if (!autoPlay) setPlayAllUiActive(false)
+    persistentPlayerRef.current?.loadTrack(t.sc_url, { autoPlay })
+  }, [])
+
   const pickTrack = useCallback(
     (t: TrackCatalogItem, { keepPlayAll = false }: { keepPlayAll?: boolean } = {}) => {
-      if (!keepPlayAll && playAllActiveRef.current) {
+      if (!keepPlayAll && playAllSessionRef.current) {
         const queue = filteredRef.current
         const idx = queue.findIndex((row) => row.track_id === selectedIdRef.current)
         trackCatalogPlayAllStopped('tracks_filter', idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
-        setPlayAllActive(false)
+        setPlayAllSession(false)
+        setPlayAllUiActive(false)
       }
-      const source: QueueSource = playAllActiveRef.current ? 'tracks_filter' : 'single'
+      const source: QueueSource = playAllSessionRef.current ? 'tracks_filter' : 'single'
       trackCatalogPlayStarted(t, source, playbackIntentRef.current)
       playbackIntentRef.current = 'user_pick'
-      skipScAutoplayOffOnNextSelectionChange.current = true
-      setScAutoplay(true)
-      if (t.track_id === selectedIdRef.current) {
-        setEmbedReloadKey((k) => k + 1)
-        return
-      }
       setSelectedId(t.track_id)
-      setEmbedReloadKey((k) => k + 1)
+      loadTrackOnWidget(t, true)
     },
-    [],
+    [loadTrackOnWidget],
   )
 
   const rowActivate = (e: MouseEvent | KeyboardEvent, t: TrackCatalogItem) => {
@@ -426,18 +426,21 @@ export function TracksPage() {
     const queue = filteredRef.current
     const currentId = selectedIdRef.current
     if (!queue.length || !currentId) {
-      setPlayAllActive(false)
+      setPlayAllSession(false)
+      setPlayAllUiActive(false)
       return
     }
     const idx = queue.findIndex((t) => t.track_id === currentId)
     if (idx < 0) {
-      setPlayAllActive(false)
+      setPlayAllSession(false)
+      setPlayAllUiActive(false)
       return
     }
     const next = queue[idx + 1]
     if (!next) {
       trackCatalogPlayAllStopped('tracks_filter', queue.length, queue.length, 'queue_exhausted')
-      setPlayAllActive(false)
+      setPlayAllSession(false)
+      setPlayAllUiActive(false)
       return
     }
     const current = queue[idx]
@@ -465,8 +468,9 @@ export function TracksPage() {
         { replace: true },
       )
     }
-    pickTrack(next, { keepPlayAll: true })
-  }, [navigate, pickTrack])
+    setSelectedId(next.track_id)
+    loadTrackOnWidget(next, true)
+  }, [navigate, loadTrackOnWidget])
 
   const advanceToNextInQueueRef = useRef(advanceToNextInQueue)
   useEffect(() => {
@@ -478,7 +482,8 @@ export function TracksPage() {
     if (!queue.length) return
     trackCatalogPlayAllStarted('tracks_filter', queue.length, tracksFilterContext(filtersRefForAdvance.current))
     playbackIntentRef.current = 'play_all_start'
-    setPlayAllActive(true)
+    setPlayAllSession(true)
+    setPlayAllUiActive(false)
     if (safePageRef.current !== 1) {
       const preserve = new URLSearchParams(locationSearchRef.current)
       navigate(
@@ -496,18 +501,17 @@ export function TracksPage() {
   }, [navigate, pickTrack])
 
   const stopCurrentPlayback = useCallback(() => {
-    try {
-      scWidgetRef.current?.pause()
-    } catch {
-      // Ignore widget pause failures and keep UI state responsive.
-    }
+    persistentPlayerRef.current?.pause()
+    setScIsPlaying(false)
+    setPlayAllUiActive(false)
   }, [])
 
   const stopPlayAll = useCallback(() => {
     const queue = filteredRef.current
     const idx = queue.findIndex((row) => row.track_id === selectedIdRef.current)
     trackCatalogPlayAllStopped('tracks_filter', idx >= 0 ? idx + 1 : 0, queue.length, 'user_stop')
-    setPlayAllActive(false)
+    setPlayAllSession(false)
+    setPlayAllUiActive(false)
     stopCurrentPlayback()
   }, [stopCurrentPlayback])
 
@@ -527,7 +531,7 @@ export function TracksPage() {
           from: current,
           to: next,
           direction: delta === 1 ? 'next' : 'previous',
-          source: playAllActiveRef.current ? 'tracks_filter' : 'single',
+          source: playAllSessionRef.current ? 'tracks_filter' : 'single',
         })
       }
       playbackIntentRef.current = 'queue_skip'
@@ -545,33 +549,31 @@ export function TracksPage() {
           { replace: true },
         )
       }
-      pickTrack(next, { keepPlayAll: playAllActiveRef.current })
+      pickTrack(next, { keepPlayAll: playAllSessionRef.current })
     },
     [navigate, pickTrack],
   )
 
-  /** Bind FINISH on the SoundCloud widget after each iframe (re)load — each remount creates a fresh widget. */
-  const handlePlayerLoad = useCallback(() => {
-    const wrap = playerWrapRef.current
-    if (!wrap) return
-    const iframe = wrap.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
-    if (!iframe) return
-    void import('./soundcloudWidgetApi')
-      .then(({ loadSoundCloudWidgetApi }) => loadSoundCloudWidgetApi())
-      .then((SC) => {
-        if (!document.body.contains(iframe)) return
-        const widget = SC.Widget(iframe)
-        scWidgetRef.current = widget
-        widget.unbind(SC.Widget.Events.FINISH)
-        widget.bind(SC.Widget.Events.FINISH, () => {
-          if (!playAllActiveRef.current) return
-          advanceToNextInQueueRef.current()
-        })
+  /** Bind widget events once on the persistent iframe (W-001 spike). */
+  const handleWidgetReady = useCallback(
+    (widget: SoundCloudWidget, events: { READY: string; FINISH: string; PLAY: string; PAUSE: string }) => {
+      widget.unbind(events.FINISH)
+      widget.unbind(events.PLAY)
+      widget.unbind(events.PAUSE)
+      widget.bind(events.PLAY, () => {
+        setScIsPlaying(true)
+        if (playAllSessionRef.current) setPlayAllUiActive(true)
       })
-      .catch(() => {
-        // Widget API failed to load; Play All becomes effectively manual.
+      widget.bind(events.PAUSE, () => {
+        setScIsPlaying(false)
       })
-  }, [])
+      widget.bind(events.FINISH, () => {
+        if (!playAllSessionRef.current) return
+        advanceToNextInQueueRef.current()
+      })
+    },
+    [],
+  )
 
   const facetSelections = countTracksSelections(filters)
   const hasActiveContext = facetSelections > 0 || Boolean(urlFind.trim())
@@ -646,6 +648,10 @@ export function TracksPage() {
             Tracks
           </span>
         </nav>
+
+        <p className="tracks-page__w001-spike-banner" role="status">
+          W-001 spike: one SoundCloud iframe, queue advances via widget.load() (not for production merge).
+        </p>
 
         <div className="catalog-page-intro catalog-page-intro--song-catalog">
           <h1 className="catalog-page-h1">Top Tracks</h1>
@@ -764,15 +770,14 @@ export function TracksPage() {
                 {selected?.sc_url ? (
                   <section className="tracks-page__player" aria-label="Now playing">
                     <h2 className="tracks-page__player-h catalog-section-title">Now playing</h2>
-                    <div className="tracks-page__player-frame" ref={playerWrapRef}>
-                      <LazySoundCloudEmbed
-                        scUrl={selected.sc_url}
+                    <div className="tracks-page__player-frame">
+                      <PersistentSoundCloudIframe
+                        ref={persistentPlayerRef}
+                        initialScUrl={selected.sc_url}
                         title={selected.track_title || 'SoundCloud track'}
                         height={embedHeight}
                         mode="visual"
-                        autoPlay={scAutoplay}
-                        reloadKey={embedReloadKey}
-                        onLoad={handlePlayerLoad}
+                        onWidgetReady={handleWidgetReady}
                       />
                     </div>
                     <p className="tracks-page__sc-link-wrap">
@@ -826,7 +831,7 @@ export function TracksPage() {
                 {filtered.length > 0 ? (
                   <div className="tracks-page__play-all" role="group" aria-label="Play all top tracks">
                     <div className="tracks-page__play-all-row">
-                      {playAllActive ? (
+                      {playAllUiActive ? (
                         <>
                           <button
                             type="button"
@@ -839,6 +844,10 @@ export function TracksPage() {
                             Stop playing all
                           </button>
                         </>
+                      ) : playAllSession ? (
+                        <span className="tracks-page__play-all-btn tracks-page__play-all-btn--arming" aria-live="polite">
+                          Starting play all…
+                        </span>
                       ) : (
                         filtered.length > 1 ? (
                           <button
@@ -878,7 +887,7 @@ export function TracksPage() {
                       </span>
                     </div>
                     <p className="tracks-page__play-all-note">
-                      Autoplay is best on desktop. On mobile, tap Next if the queue pauses.
+                      W-001: persistent iframe + widget.load(). Stop appears only after SoundCloud starts playing.
                     </p>
                   </div>
                 ) : null}
@@ -898,7 +907,7 @@ export function TracksPage() {
                   {pageRows.map((t) => {
                     const active = t.track_id === selected?.track_id
                     /** Wave overlay reads as “now playing”; only show when this row triggered embed autoplay. */
-                    const showPlayingWave = active && scAutoplay
+                    const showPlayingWave = active && scIsPlaying
                     const href = songCatalogPath(t.lyrics_title, t.url_slug)
                     const cover = coverImageUrl(thumbSrc(t.list_cover_url), { width: 200 })
                     const g = genreLine(t)

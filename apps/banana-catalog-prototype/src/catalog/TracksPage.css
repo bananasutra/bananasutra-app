@@ -506,6 +506,26 @@
   font-variant-numeric: tabular-nums;
 }
 
+.tracks-page__w001-spike-banner {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--color-accent, #c4a035) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent, #c4a035) 40%, transparent);
+}
+
+.tracks-page__play-all-btn--arming {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  font-size: 0.9375rem;
+  opacity: 0.85;
+  cursor: wait;
+}
+
 @media (max-width: 640px) {
   .tracks-page__play-all {
     margin-bottom: 0.42rem;
