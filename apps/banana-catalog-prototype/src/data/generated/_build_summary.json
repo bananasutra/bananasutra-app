@@ -24,6 +24,8 @@
   "youtube_lyrics_ids": 201,
   "youtube_video_rows": 470,
   "youtube_rows_missing_lyrics_id": 17,
+  "youtube_playlists_catalog": 37,
+  "youtube_playlists_featured": 0,
   "sutra_context_rows": 8,
   "home_quotes": 136,
   "muses_catalog": 181,
@@ -89,6 +91,11 @@
       "path": "AIRTABLE/snapshots/2026-06-05/clean/yt_videos-2026-06-05.csv",
       "sha256": "8bc962198e7a779ba9c992bd4ebd9fbbcd492268d3261d9ab9b310b9aaf3603a",
       "rows": 474
+    },
+    "yt_playlists": {
+      "path": "AIRTABLE/snapshots/2026-06-05/clean/yt_playlists-2026-06-05.csv",
+      "sha256": "92edaa195cb75eac32e4c663f5657f811afee0fbfafc7ec1de0afcbc627066c2",
+      "rows": 48
     }
   }
 }
