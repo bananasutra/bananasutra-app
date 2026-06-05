@@ -3,7 +3,7 @@
 Build app artifacts for the BANANASUTRA song-first prototype.
 
 Inputs:
-  AIRTABLE/snapshots/<date>/clean/{lyrics,sc_tracks,sc_eps,songbooks,sc_playlists,sutras,muses,quotes,yt_videos}-<date>.csv
+  AIRTABLE/snapshots/<date>/clean/{lyrics,sc_tracks,sc_eps,songbooks,sc_playlists,sutras,muses,quotes,yt_videos,yt_playlists}-<date>.csv
 
 Outputs:
   src/data/generated/  song_catalog.json — one row per lyrics row with **song_in_app** (featured set);
@@ -29,6 +29,9 @@ Outputs:
     SoundCloud: Airtable snapshot is source of truth for the catalog). Grouped by lyrics_id (plus a "" bucket when
     lyrics_id is blank). ``pipelines/yt/build_yt_final.py`` / ``AT-VIDEOS-final.csv`` remain for scrape metrics,
     drift QA, and Airtable import — not part of this build.
+  src/data/generated/youtube_playlists_catalog.json — in-app YT playlists from **clean ``yt_playlists-<date>.csv``**
+    (``ytplaylist_in_app`` gate); for future ``/watch`` LP playlist cards. Per-video ``playlist_names`` stay in
+    ``youtube_by_lyrics_id.json``.
   src/data/generated/catalog_chrome_stats.json — tiny header strip counts (sutras/songbooks/songs/top tracks)
     to avoid loading full catalogs in GlobalHeader.
   src/data/generated/song_slug_index.json — slug → lyrics_id map for `/songs/:slug` routing (avoids loading full song_detail.json in songPaths).
@@ -657,6 +660,7 @@ def build_paths(snapshot_date: str) -> dict[str, Path]:
         "muses": clean / f"muses-{snapshot_date}.csv",
         "quotes": clean / f"quotes-{snapshot_date}.csv",
         "yt_videos": clean / f"yt_videos-{snapshot_date}.csv",
+        "yt_playlists": clean / f"yt_playlists-{snapshot_date}.csv",
     }
 
 
@@ -1856,6 +1860,64 @@ def youtube_row_in_app(row: dict[str, str]) -> bool:
     return parse_bool(raw)
 
 
+def yt_playlist_row_in_app(row: dict[str, str]) -> bool:
+    raw = row.get("ytplaylist_in_app")
+    if raw is None or str(raw).strip() == "":
+        return False
+    normalized = str(raw).strip().lower()
+    if normalized in {"false", "unchecked", "0"}:
+        return False
+    return parse_bool(raw)
+
+
+def build_youtube_playlists_catalog(yt_playlist_rows: list[dict[str, str]]) -> list[dict[str, Any]]:
+    """Build in-app YouTube playlist cards from clean ``yt_playlists-*.csv`` (``ytplaylist_in_app`` gate)."""
+    sutra_sort_rank: dict[str, int] = {
+        "KNOW": 0,
+        "BLOW": 1,
+        "QUACK": 2,
+        "SHOW": 3,
+        "GROW": 4,
+        "FLOW": 5,
+        "GLOW": 6,
+        "BOW": 7,
+    }
+
+    out: list[dict[str, Any]] = []
+    for row in yt_playlist_rows:
+        if not yt_playlist_row_in_app(row):
+            continue
+        name = str(row.get("playlist_name") or "").strip()
+        url = str(row.get("playlist_url") or "").strip()
+        if not name or not url:
+            continue
+        out.append(
+            {
+                "playlist_name": name,
+                "playlist_type": str(row.get("playlist_type") or "").strip(),
+                "playlist_id": str(row.get("playlist_id") or "").strip(),
+                "playlist_url": url,
+                "thumbnail_url": str(row.get("thumbnail_url") or "").strip(),
+                "video_count": parse_int(row.get("video_count")),
+                "sutra": str(row.get("sutra") or "").strip(),
+                "description": str(row.get("description") or "").strip(),
+                "featured": parse_bool(row.get("ytplaylist_featured")),
+                "featured_description": str(row.get("ytplaylist_featured_description") or "").strip(),
+            }
+        )
+
+    def sort_key(item: dict[str, Any]) -> tuple[int, int, str]:
+        fam = sutra_family_key_from_field(str(item.get("sutra") or ""))
+        return (
+            0 if item.get("featured") else 1,
+            sutra_sort_rank.get(fam, 99),
+            str(item.get("playlist_name") or "").lower(),
+        )
+
+    out.sort(key=sort_key)
+    return out
+
+
 def build_youtube_by_lyrics_index_from_snapshot_rows(rows: list[dict[str, str]]) -> dict[str, list[dict[str, Any]]]:
     """Build ``youtube_by_lyrics_id`` from canonical ``clean/yt_videos-*.csv`` (Airtable = catalog source of truth).
 
@@ -1994,6 +2056,7 @@ def main() -> None:
     muse_rows = read_csv(paths["muses"])
     quotes_rows = read_csv(paths["quotes"])
     yt_videos_rows = read_csv(paths["yt_videos"])
+    yt_playlist_rows = read_csv(paths["yt_playlists"])
     muse_visibility = build_muse_visibility_index(muse_rows)
     sutra_context = build_sutra_context(sutra_rows)
     merge_featured_eps_into_sutra_context(sutra_context, sc_eps_rows)
@@ -2320,6 +2383,7 @@ def main() -> None:
     song_catalog.sort(key=lambda row: str(row.get("published_at", "")), reverse=True)
 
     youtube_by_lyrics_id = build_youtube_by_lyrics_index_from_snapshot_rows(yt_videos_rows)
+    youtube_playlists_catalog = build_youtube_playlists_catalog(yt_playlist_rows)
     merge_youtube_flags_into_catalog(song_catalog, youtube_by_lyrics_id)
     # SoundCloud fallbacks must run before YouTube: YT used to win whenever it ran first and blocked
     # later SC fills (songs that later gained in-app tracks + sndcdn artwork).
@@ -2489,6 +2553,7 @@ def main() -> None:
         "muses_catalog.json": muses_catalog,
         "quotes_wall.json": quotes_wall,
         "youtube_by_lyrics_id.json": youtube_by_lyrics_id,
+        "youtube_playlists_catalog.json": youtube_playlists_catalog,
     }
     for filename, payload in outputs.items():
         out_path = OUTPUT_DIR / filename
@@ -2512,6 +2577,8 @@ def main() -> None:
         "youtube_lyrics_ids": len(youtube_by_lyrics_id),
         "youtube_video_rows": sum(len(v) for v in youtube_by_lyrics_id.values()),
         "youtube_rows_missing_lyrics_id": len(youtube_by_lyrics_id.get("", [])),
+        "youtube_playlists_catalog": len(youtube_playlists_catalog),
+        "youtube_playlists_featured": sum(1 for p in youtube_playlists_catalog if p.get("featured")),
         "sutra_context_rows": len(sutra_context),
         "home_quotes": len(home_quotes),
         "muses_catalog": len(muses_catalog),
@@ -2548,6 +2615,7 @@ def main() -> None:
                         "muses": muse_rows,
                         "quotes": quotes_rows,
                         "yt_videos": yt_videos_rows,
+                        "yt_playlists": yt_playlist_rows,
                     }[name]
                 ),
             }
@@ -2580,6 +2648,11 @@ def main() -> None:
     print(
         f"YouTube (clean yt_videos snapshot): {yt_ids} bucket keys, {yt_rows} video rows"
         f" ({yt_unlinked} with no lyrics_id) → youtube_by_lyrics_id.json"
+    )
+    yt_pl_feat = sum(1 for p in youtube_playlists_catalog if p.get("featured"))
+    print(
+        f"YouTube playlists (clean yt_playlists snapshot): {len(youtube_playlists_catalog)} in-app rows"
+        f" ({yt_pl_feat} featured) → youtube_playlists_catalog.json"
     )
     if deprecated_songbook_hits:
         print("Deprecated songbook labels detected in lyrics rows (auto-aliased):")
