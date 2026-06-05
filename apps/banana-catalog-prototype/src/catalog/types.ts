@@ -305,6 +305,20 @@ export type SongbookMemberSong = {
   aggregate_like_count: number
 }
 
+/** One in-app YouTube playlist (from clean `yt_playlists` snapshot via `youtube_playlists_catalog.json`). */
+export type YouTubePlaylistCatalogItem = {
+  playlist_name: string
+  playlist_type: string
+  playlist_id: string
+  playlist_url: string
+  thumbnail_url: string
+  video_count: number
+  sutra: string
+  description: string
+  featured: boolean
+  featured_description: string
+}
+
 /** One YouTube row (from clean `yt_videos` snapshot via `youtube_by_lyrics_id.json`). */
 export type YouTubeCatalogVideo = {
   video_id: string
