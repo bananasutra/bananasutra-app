@@ -52,6 +52,13 @@ REPO = SCRIPT_DIR.parent.parent
 SNAPSHOTS = REPO / "AIRTABLE" / "snapshots"
 RAW_FILE = SCRIPT_DIR / "raw" / "yt_videos_raw.csv"
 NAME_MAP_FILE = SCRIPT_DIR / "name_mapping.csv"
+NAME_ALIASES_FILE = SCRIPT_DIR / "playlist_name_aliases.csv"
+
+from playlist_name_utils import (
+    clean_playlist_names_cell,
+    load_name_aliases,
+    load_raw_to_clean,
+)
 
 OUT_DIR = SCRIPT_DIR / "outputs"
 ARCHIVE_DIR = OUT_DIR / "archive"
@@ -140,7 +147,12 @@ def pick_latest_snapshot():
 
 
 def pick_file(folder, prefix, in_clean=False):
-    """Pick the first CSV in `folder` (or `folder/clean/`) matching `{prefix}*.csv`.
+    """Pick the best CSV in `folder` (or `folder/clean/`) matching `{prefix}*.csv`.
+
+    Prefers the file whose date suffix matches the snapshot folder name (e.g.
+    `2026-06-06/clean/yt_videos-2026-06-06.csv`). When older exports linger in
+    the same folder (e.g. `yt_videos-2026-06-05.csv`), sorted-first would pick
+    the stale file — so we match folder date, then fall back to latest suffix.
 
     `in_clean=True` looks in the canonicalized `clean/` subfolder produced by
     tools/clean_airtable_snapshot.py. Use this for Airtable-native tables
@@ -152,7 +164,16 @@ def pick_file(folder, prefix, in_clean=False):
     if not hits:
         where = f"{folder}/clean" if in_clean else str(folder)
         sys.exit(f"ERROR: missing {prefix}*.csv in {where}")
-    return hits[0]
+
+    preferred = search_dir / f"{prefix}{folder.name}.csv"
+    if preferred.exists():
+        return preferred
+
+    def _date_suffix(path: Path) -> str:
+        m = re.search(r"(\d{4}-\d{2}-\d{2})", path.stem)
+        return m.group(1) if m else ""
+
+    return max(hits, key=_date_suffix)
 
 
 def confidence_bucket(score):
@@ -198,14 +219,7 @@ def dated_copy(path):
 
 def load_playlist_name_map():
     """Return {raw_title: cleaned_name} for playlist-name cleanup."""
-    if not NAME_MAP_FILE.exists():
-        return {}
-    with open(NAME_MAP_FILE, encoding="utf-8-sig") as f:
-        return {
-            r["raw_yt_title"]: r["cleaned_name"]
-            for r in csv.DictReader(f)
-            if r.get("raw_yt_title") and r.get("cleaned_name")
-        }
+    return load_raw_to_clean(NAME_MAP_FILE)
 
 
 def load_new_video_qa_overrides():
@@ -247,18 +261,9 @@ def normalize_ytvideo_in_app_cell(raw: str) -> str:
     return (raw or "").strip() or "unchecked"
 
 
-def clean_playlist_names(raw_value, name_map):
-    """Replace raw playlist titles inside a concatenated playlist_names string
-    with their cleaned equivalents. Uses longest-first substring replacement so
-    raw titles that contain commas don't get split.
-    """
-    if not raw_value or not name_map:
-        return raw_value
-    cleaned = raw_value
-    for raw in sorted(name_map.keys(), key=len, reverse=True):
-        if raw and raw in cleaned:
-            cleaned = cleaned.replace(raw, name_map[raw])
-    return cleaned
+def clean_playlist_names(raw_value, name_map, aliases=None):
+    """Replace raw/legacy playlist titles inside a concatenated playlist_names string."""
+    return clean_playlist_names_cell(raw_value, name_map, aliases or {})
 
 
 # ── 1. LOAD INPUTS ───────────────────────────────────────────────────────────
@@ -279,13 +284,16 @@ raw = load_csv(RAW_FILE)
 snap_videos = load_csv(VIDEOS_FILE)
 lyrics = load_csv(LYRICS_FILE)
 playlist_name_map = load_playlist_name_map()
+playlist_name_aliases = load_name_aliases(NAME_ALIASES_FILE)
 new_video_qa = load_new_video_qa_overrides()
 
+print(f"    name_mapping.csv : {len(playlist_name_map)} entries "
+      f"(raw → cleaned playlist names)")
+if playlist_name_aliases:
+    print(f"    playlist_name_aliases.csv : {len(playlist_name_aliases)} legacy alias(es)")
 print(f"    raw videos       : {len(raw)}")
 print(f"    snapshot videos  : {len(snap_videos)}")
 print(f"    lyrics entries   : {len(lyrics)}")
-print(f"    name_mapping.csv : {len(playlist_name_map)} entries "
-      f"(raw → cleaned playlist names)")
 print(f"    QA overrides      : {len(new_video_qa)} video(s) with prior "
       f"{OUT_NEW_QA.name} edits")
 
@@ -293,10 +301,10 @@ print(f"    QA overrides      : {len(new_video_qa)} video(s) with prior "
 # the canonical (cleaned) form. No-op if the value is already cleaned.
 for r in raw:
     r["playlist_names"] = clean_playlist_names(
-        r.get("playlist_names", ""), playlist_name_map)
+        r.get("playlist_names", ""), playlist_name_map, playlist_name_aliases)
 for r in snap_videos:
     r["playlist_names"] = clean_playlist_names(
-        r.get("playlist_names", ""), playlist_name_map)
+        r.get("playlist_names", ""), playlist_name_map, playlist_name_aliases)
 
 # ── 2. INDEX ─────────────────────────────────────────────────────────────────
 print("\n[Step 2] Building indexes...")
