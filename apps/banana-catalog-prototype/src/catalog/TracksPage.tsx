@@ -32,6 +32,7 @@ import {
 } from './urlState'
 import { coverImageUrl } from '../seo/imageUrl'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
+import { PLAY_ALL_HONEST_MOBILE_COPY, PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { sutraClassName } from './sutraTheme'
@@ -96,6 +97,7 @@ export function TracksPage() {
   const headerRef = useRef<HTMLElement>(null)
   const location = useLocation()
   const navigate = useNavigate()
+  const playAllDesktopAvailable = usePlayAllDesktopAvailable()
   const [trackCatalog, setTrackCatalog] = useState<TrackCatalogItem[] | null>(null)
   const [catalogLoadError, setCatalogLoadError] = useState<string | null>(null)
 
@@ -474,6 +476,7 @@ export function TracksPage() {
   }, [advanceToNextInQueue])
 
   const startPlayAll = useCallback(() => {
+    if (!window.matchMedia(PLAY_ALL_DESKTOP_MEDIA_QUERY).matches) return
     const queue = filteredRef.current
     if (!queue.length) return
     trackCatalogPlayAllStarted('tracks_filter', queue.length, tracksFilterContext(filtersRefForAdvance.current))
@@ -824,23 +827,27 @@ export function TracksPage() {
                 ) : null}
 
                 {filtered.length > 0 ? (
-                  <div className="tracks-page__play-all" role="group" aria-label="Play all top tracks">
-                    <div className="tracks-page__play-all-row">
-                      {playAllActive ? (
-                        <>
-                          <button
-                            type="button"
-                            className="tracks-page__play-all-btn tracks-page__play-all-btn--stop"
-                            onClick={stopPlayAll}
-                          >
-                            <span className="tracks-page__play-all-glyph" aria-hidden>
-                              ■
-                            </span>
-                            Stop playing all
-                          </button>
-                        </>
-                      ) : (
-                        filtered.length > 1 ? (
+                  <div
+                    className="tracks-page__play-all"
+                    role={playAllDesktopAvailable ? 'group' : undefined}
+                    aria-label={playAllDesktopAvailable ? 'Play all top tracks' : undefined}
+                  >
+                    {playAllDesktopAvailable || playAllActive ? (
+                      <div className="tracks-page__play-all-row">
+                        {playAllActive ? (
+                          <>
+                            <button
+                              type="button"
+                              className="tracks-page__play-all-btn tracks-page__play-all-btn--stop"
+                              onClick={stopPlayAll}
+                            >
+                              <span className="tracks-page__play-all-glyph" aria-hidden>
+                                ■
+                              </span>
+                              Stop playing all
+                            </button>
+                          </>
+                        ) : playAllDesktopAvailable && filtered.length > 1 ? (
                           <button
                             type="button"
                             className="tracks-page__play-all-btn"
@@ -851,35 +858,41 @@ export function TracksPage() {
                             </span>
                             {`Play all ${filtered.length} top tracks`}
                           </button>
-                        ) : null
-                      )}
-                      <div className="tracks-page__queue-nav" role="group" aria-label="Track queue navigation">
-                        <button
-                          type="button"
-                          className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
-                          onClick={() => jumpInQueue(-1)}
-                          disabled={!canGoPrevious}
-                        >
-                          Previous
-                        </button>
-                        <button
-                          type="button"
-                          className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
-                          onClick={() => jumpInQueue(1)}
-                          disabled={!canGoNext}
-                        >
-                          Next
-                        </button>
+                        ) : null}
+                        {playAllDesktopAvailable || playAllActive ? (
+                          <>
+                            <div className="tracks-page__queue-nav" role="group" aria-label="Track queue navigation">
+                              <button
+                                type="button"
+                                className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
+                                onClick={() => jumpInQueue(-1)}
+                                disabled={!canGoPrevious}
+                              >
+                                Previous
+                              </button>
+                              <button
+                                type="button"
+                                className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
+                                onClick={() => jumpInQueue(1)}
+                                disabled={!canGoNext}
+                              >
+                                Next
+                              </button>
+                            </div>
+                            <span className="tracks-page__play-all-status" aria-live="polite">
+                              {queueIndex >= 0
+                                ? `Top track ${queueIndex + 1} of ${filtered.length}`
+                                : `Top track 0 of ${filtered.length}`}
+                            </span>
+                          </>
+                        ) : null}
                       </div>
-                      <span className="tracks-page__play-all-status" aria-live="polite">
-                        {queueIndex >= 0
-                          ? `Top track ${queueIndex + 1} of ${filtered.length}`
-                          : `Top track 0 of ${filtered.length}`}
-                      </span>
-                    </div>
-                    <p className="tracks-page__play-all-note">
-                      Autoplay is best on desktop. On mobile, tap Next if the queue pauses.
-                    </p>
+                    ) : null}
+                    {!playAllDesktopAvailable ? (
+                      <p className="tracks-page__play-all-note tracks-page__play-all-note--honest">
+                        {PLAY_ALL_HONEST_MOBILE_COPY}
+                      </p>
+                    ) : null}
                   </div>
                 ) : null}
 

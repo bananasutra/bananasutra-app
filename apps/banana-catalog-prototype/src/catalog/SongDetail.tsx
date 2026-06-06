@@ -14,6 +14,7 @@ import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { YouTubeEmbed } from './YouTubeEmbed'
+import { PLAY_ALL_HONEST_MOBILE_COPY, PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
 import {
   findTrackByScUrl,
   trackSongDetailPlayAllStarted,
@@ -475,6 +476,7 @@ function SongDetailLoaded({
     ''
   ).trim()
   const inAppPlayableTracks = orderedTracks.filter((t) => trackIsInApp(t) && t.sc_url.trim())
+  const playAllDesktopAvailable = usePlayAllDesktopAvailable()
 
   const [playAllTopTracksActive, setPlayAllTopTracksActive] = useState(false)
   const playAllTopTracksActiveRef = useRef(false)
@@ -586,6 +588,7 @@ function SongDetailLoaded({
   }, [stopCurrentPlayback])
 
   const startPlayAllTopTracks = useCallback(() => {
+    if (!window.matchMedia(PLAY_ALL_DESKTOP_MEDIA_QUERY).matches) return
     const queue = inAppPlayableTracksRef.current
     const firstUrl = queue[0]?.sc_url.trim()
     if (!firstUrl) return
@@ -1071,50 +1074,63 @@ function SongDetailLoaded({
                     {inAppPlayableTracks.length > 1 ? 'Top tracks' : 'Track picks'}
                   </h2>
                   {inAppPlayableTracks.length > 1 ? (
-                    <div className="song-detail-audio-playall" aria-label="Play all top tracks">
-                      <div className="song-detail-audio-playall-row">
-                        {playAllTopTracksActive ? (
-                          <button
-                            type="button"
-                            className="song-detail-audio-action-btn song-detail-audio-action-btn--stop"
-                            onClick={stopPlayAllTopTracks}
-                          >
-                            Stop playing all
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
-                            onClick={startPlayAllTopTracks}
-                          >
-                            {`Play all ${inAppPlayableTracks.length} top track${inAppPlayableTracks.length === 1 ? '' : 's'}`}
-                          </button>
-                        )}
-                        <div className="song-detail-audio-controls" role="group" aria-label="Track queue navigation">
-                          <button
-                            type="button"
-                            className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
-                            onClick={() => jumpInQueue(-1)}
-                            disabled={!canGoPrevious}
-                          >
-                            Previous
-                          </button>
-                          <button
-                            type="button"
-                            className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
-                            onClick={() => jumpInQueue(1)}
-                            disabled={!canGoNext}
-                          >
-                            Next
-                          </button>
+                    <div
+                      className="song-detail-audio-playall"
+                      aria-label={playAllDesktopAvailable ? 'Play all top tracks' : undefined}
+                    >
+                      {playAllDesktopAvailable || playAllTopTracksActive ? (
+                        <div className="song-detail-audio-playall-row">
+                          {playAllTopTracksActive ? (
+                            <button
+                              type="button"
+                              className="song-detail-audio-action-btn song-detail-audio-action-btn--stop"
+                              onClick={stopPlayAllTopTracks}
+                            >
+                              Stop playing all
+                            </button>
+                          ) : playAllDesktopAvailable ? (
+                            <button
+                              type="button"
+                              className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
+                              onClick={startPlayAllTopTracks}
+                            >
+                              {`Play all ${inAppPlayableTracks.length} top track${inAppPlayableTracks.length === 1 ? '' : 's'}`}
+                            </button>
+                          ) : null}
+                          {playAllDesktopAvailable || playAllTopTracksActive ? (
+                            <>
+                              <div className="song-detail-audio-controls" role="group" aria-label="Track queue navigation">
+                                <button
+                                  type="button"
+                                  className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
+                                  onClick={() => jumpInQueue(-1)}
+                                  disabled={!canGoPrevious}
+                                >
+                                  Previous
+                                </button>
+                                <button
+                                  type="button"
+                                  className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
+                                  onClick={() => jumpInQueue(1)}
+                                  disabled={!canGoNext}
+                                >
+                                  Next
+                                </button>
+                              </div>
+                              <span className="song-detail-audio-status" aria-live="polite">
+                                {queueIndex >= 0
+                                  ? `Track ${queueIndex + 1} of ${inAppPlayableTracks.length}`
+                                  : `Track 0 of ${inAppPlayableTracks.length}`}
+                              </span>
+                            </>
+                          ) : null}
                         </div>
-                        <span className="song-detail-audio-status" aria-live="polite">
-                          {queueIndex >= 0 ? `Track ${queueIndex + 1} of ${inAppPlayableTracks.length}` : `Track 0 of ${inAppPlayableTracks.length}`}
-                        </span>
-                      </div>
-                      <p className="song-detail-audio-hint">
-                        Autoplay is best on desktop. On mobile, tap Next if the queue pauses.
-                      </p>
+                      ) : null}
+                      {!playAllDesktopAvailable ? (
+                        <p className="song-detail-audio-hint song-detail-audio-hint--honest">
+                          {PLAY_ALL_HONEST_MOBILE_COPY}
+                        </p>
+                      ) : null}
                     </div>
                   ) : null}
                   {activeTrackGenre ? (

@@ -430,6 +430,14 @@
   color: var(--color-text-muted, #5c5c5c);
 }
 
+.tracks-page__play-all-note--honest {
+  margin-top: 0;
+  padding: 0.45rem 0.65rem;
+  background: var(--color-surface-muted, rgba(0, 0, 0, 0.03));
+  border-left: 3px solid var(--color-border-strong, #bbb);
+  border-radius: 0 var(--radius-sm, 8px) var(--radius-sm, 8px) 0;
+}
+
 .tracks-page__play-all-btn {
   display: inline-flex;
   align-items: center;
@@ -542,6 +550,10 @@
     font-size: 0.64rem;
     line-height: 1.3;
     text-align: center;
+  }
+
+  .tracks-page__play-all-note--honest {
+    text-align: left;
   }
 }
 
