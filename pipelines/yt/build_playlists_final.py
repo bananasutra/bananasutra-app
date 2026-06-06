@@ -37,6 +37,14 @@ RUN_DATE = date.today().isoformat()
 
 RAW_PLAYLISTS = SCRIPT_DIR / "raw" / "yt_playlists_raw.csv"
 NAME_MAP = SCRIPT_DIR / "name_mapping.csv"
+NAME_ALIASES = SCRIPT_DIR / "playlist_name_aliases.csv"
+
+from playlist_name_utils import (
+    canonical_playlist_name,
+    load_name_aliases,
+    load_raw_to_clean,
+    youtube_canonical_name_for_id,
+)
 
 # youtube.com/watch?v=...&list=PL...
 _LIST_PARAM_RE = re.compile(r"[?&]list=([a-zA-Z0-9_-]+)")
@@ -50,6 +58,22 @@ def latest_snapshot():
     if not dated:
         sys.exit(f"No dated snapshots in {SNAPSHOTS}")
     return dated[-1]
+
+
+def pick_playlists_snapshot(clean_dir: Path, snap: Path) -> Path:
+    """Prefer yt_playlists-<snapshot-date>.csv; else latest dated suffix in folder."""
+    hits = sorted(clean_dir.glob("yt_playlists-*.csv"))
+    if not hits:
+        return None
+    preferred = clean_dir / f"yt_playlists-{snap.name}.csv"
+    if preferred.exists():
+        return preferred
+
+    def _date_suffix(path: Path) -> str:
+        m = re.search(r"(\d{4}-\d{2}-\d{2})", path.stem)
+        return m.group(1) if m else ""
+
+    return max(hits, key=_date_suffix)
 
 
 def extract_playlist_id_from_url(url: str) -> str:
@@ -113,6 +137,70 @@ def scrape_meta_for_playlist_name(
     return None
 
 
+def merge_playlist_rows(group: list, yt_name: str) -> Dict[str, str]:
+    """Merge duplicate Airtable rows that share one YouTube playlist_id."""
+    merged = {k: "" for k in group[0].keys()}
+    checked = {"1", "true", "yes", "y", "on", "checked"}
+
+    def score(row: Dict[str, str]) -> tuple:
+        in_app = (row.get("ytplaylist_in_app") or "").strip().lower() in checked
+        return (
+            int(in_app),
+            len((row.get("description") or "").strip()),
+            len((row.get("ytvideos") or "").strip()),
+        )
+
+    ordered = sorted(group, key=score, reverse=True)
+    for row in ordered:
+        for key, val in row.items():
+            if val is None:
+                continue
+            sval = str(val).strip()
+            if sval and not (merged.get(key) or "").strip():
+                merged[key] = val
+
+    if yt_name:
+        merged["playlist_name"] = yt_name
+    elif len(ordered) == 1:
+        merged["playlist_name"] = ordered[0].get("playlist_name", "")
+    else:
+        merged["playlist_name"] = ordered[0].get("playlist_name", "")
+
+    return merged
+
+
+def dedupe_rows_by_playlist_id(
+    rows: list,
+    raw_by_title: Dict[str, Dict[str, str]],
+    raw_to_clean: Dict[str, str],
+    stats: Dict[str, int],
+) -> list:
+    """One output row per playlist_id; merge duplicate Airtable rows."""
+    no_id: list = []
+    by_id: Dict[str, list] = defaultdict(list)
+    for row in rows:
+        pid = (row.get("playlist_id") or "").strip()
+        if not pid:
+            pid = extract_playlist_id_from_url((row.get("playlist_url") or "").strip())
+            if pid:
+                row["playlist_id"] = pid
+        if pid:
+            by_id[pid].append(row)
+        else:
+            no_id.append(row)
+
+    out = list(no_id)
+    for pid, group in by_id.items():
+        if len(group) == 1:
+            out.append(group[0])
+            continue
+        stats["deduped_groups"] += 1
+        stats["deduped_rows_removed"] += len(group) - 1
+        yt_name = youtube_canonical_name_for_id(pid, raw_by_title, raw_to_clean)
+        out.append(merge_playlist_rows(group, yt_name))
+    return out
+
+
 def enrich_row_from_scrape(row: Dict[str, str], meta: Dict[str, str], stats: Dict[str, int]) -> None:
     """Fill blank playlist_id / playlist_url / thumbnail_url / video_count from API scrape."""
     sid = (meta.get("playlist_id") or "").strip()
@@ -160,7 +248,7 @@ def enrich_row_from_scrape(row: Dict[str, str], meta: Dict[str, str], stats: Dic
 def main():
     snap = latest_snapshot()
     clean_dir = snap / "clean"
-    src = next(clean_dir.glob("yt_playlists-*.csv"), None) if clean_dir.exists() else None
+    src = pick_playlists_snapshot(clean_dir, snap) if clean_dir.exists() else None
     if not src:
         sys.exit(
             f"No yt_playlists-*.csv in {clean_dir}\n"
@@ -179,8 +267,18 @@ def main():
             r["sutra"] = r.pop("linked_sutra")
 
     raw_by_title = load_raw_playlists_by_title(RAW_PLAYLISTS)
+    raw_to_clean = load_raw_to_clean(NAME_MAP)
+    name_aliases = load_name_aliases(NAME_ALIASES)
     cleaned_to_raw = load_cleaned_to_raw_titles(NAME_MAP)
     stats = defaultdict(int)
+
+    for r in rows:
+        old = (r.get("playlist_name") or "").strip()
+        new = canonical_playlist_name(old, raw_to_clean, name_aliases)
+        if new and new != old:
+            r["playlist_name"] = new
+            stats["names_normalized"] += 1
+
     if raw_by_title:
         for r in rows:
             pname = (r.get("playlist_name") or "").strip()
@@ -211,6 +309,15 @@ def main():
               f"filled_thumb={stats['filled_thumb']}, filled_count={stats['filled_count']})")
     else:
         print(f"  No {RAW_PLAYLISTS.name} — skipping API enrichment (run 1_extract.py)")
+
+    if stats["names_normalized"]:
+        print(f"  Normalized playlist_name via name map/aliases: "
+              f"{stats['names_normalized']} row(s)")
+
+    rows = dedupe_rows_by_playlist_id(rows, raw_by_title, raw_to_clean, stats)
+    if stats["deduped_groups"]:
+        print(f"  Deduped by playlist_id: {stats['deduped_groups']} group(s), "
+              f"{stats['deduped_rows_removed']} duplicate row(s) removed")
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     with open(OUT, "w", encoding="utf-8", newline="") as f:

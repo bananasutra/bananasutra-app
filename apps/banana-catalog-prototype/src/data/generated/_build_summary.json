@@ -1,5 +1,5 @@
 {
-  "snapshot_date": "2026-06-05",
+  "snapshot_date": "2026-06-06",
   "songs": 394,
   "details": 394,
   "featured_with_in_app_playback": 189,
@@ -22,15 +22,15 @@
   "top_tracks_per_song": 4,
   "like_weight": 40,
   "youtube_lyrics_ids": 201,
-  "youtube_video_rows": 470,
+  "youtube_video_rows": 469,
   "youtube_rows_missing_lyrics_id": 17,
-  "youtube_playlists_catalog": 37,
+  "youtube_playlists_catalog": 40,
   "youtube_playlists_featured": 0,
   "sutra_context_rows": 8,
   "home_quotes": 136,
   "muses_catalog": 181,
   "quotes_wall": 136,
-  "track_catalog_rows": 677,
+  "track_catalog_rows": 678,
   "related_song_links_written": 664,
   "edition_rows_missing_links_count": 0,
   "edition_rows_missing_links": [],
@@ -48,54 +48,54 @@
   },
   "inputs": {
     "lyrics": {
-      "path": "AIRTABLE/snapshots/2026-06-05/clean/lyrics-2026-06-05.csv",
-      "sha256": "d7376df74220144ae3f1216f789911c1e09d6f8d909a024c5199b87c7989f20c",
+      "path": "AIRTABLE/snapshots/2026-06-06/clean/lyrics-2026-06-06.csv",
+      "sha256": "f3859f83a76e662e9e6927155733d89b104833574ef11709cbf46b2a148eec43",
       "rows": 401
     },
     "sc_tracks": {
-      "path": "AIRTABLE/snapshots/2026-06-05/clean/sc_tracks-2026-06-05.csv",
-      "sha256": "d04ad042d76529ceb48b2797cbc23a42d012be90a8540a07127f69694186c4f4",
-      "rows": 679
+      "path": "AIRTABLE/snapshots/2026-06-06/clean/sc_tracks-2026-06-06.csv",
+      "sha256": "dfc98dcc82f9db4e3570c7fe4a56b2036db924ef81815af7d1e1121b74f2784b",
+      "rows": 680
     },
     "sc_eps": {
-      "path": "AIRTABLE/snapshots/2026-06-05/clean/sc_eps-2026-06-05.csv",
-      "sha256": "b55ab9ee8ea4a0f71a9282f3e00ab30da649164c0770e2d838e4fb9d560efa26",
+      "path": "AIRTABLE/snapshots/2026-06-06/clean/sc_eps-2026-06-06.csv",
+      "sha256": "33b52275b60c8e85a39f2d85a1eb9de5df06fc909d6b44b4b66317951fd51b02",
       "rows": 239
     },
     "songbooks": {
-      "path": "AIRTABLE/snapshots/2026-06-05/clean/songbooks-2026-06-05.csv",
+      "path": "AIRTABLE/snapshots/2026-06-06/clean/songbooks-2026-06-06.csv",
       "sha256": "cf73f6a86a37efcb2d50dc5d53a6174242cf4244d79175d98a764a56b3dd19af",
       "rows": 44
     },
     "sc_playlists": {
-      "path": "AIRTABLE/snapshots/2026-06-05/clean/sc_playlists-2026-06-05.csv",
-      "sha256": "55cc78dcc28c1982f498fac6b59a839c893a731b35e086e65a691ca897edb672",
+      "path": "AIRTABLE/snapshots/2026-06-06/clean/sc_playlists-2026-06-06.csv",
+      "sha256": "5c4f0c3c143622c5f4bcddb1079315624f633e06368a847c5e2113dc3f743505",
       "rows": 60
     },
     "sutras": {
-      "path": "AIRTABLE/snapshots/2026-06-05/clean/sutras-2026-06-05.csv",
+      "path": "AIRTABLE/snapshots/2026-06-06/clean/sutras-2026-06-06.csv",
       "sha256": "5c1f7f99194a58b4b7cdee1ad63875925b216965c8849273d162b0943bfb97d0",
       "rows": 8
     },
     "muses": {
-      "path": "AIRTABLE/snapshots/2026-06-05/clean/muses-2026-06-05.csv",
+      "path": "AIRTABLE/snapshots/2026-06-06/clean/muses-2026-06-06.csv",
       "sha256": "0abc6beefc224087458b233ef7b1f4214967a43d4d4c9f83b9f724ebc7e2276a",
       "rows": 184
     },
     "quotes": {
-      "path": "AIRTABLE/snapshots/2026-06-05/clean/quotes-2026-06-05.csv",
+      "path": "AIRTABLE/snapshots/2026-06-06/clean/quotes-2026-06-06.csv",
       "sha256": "414e1519c17ebf9020017895edc9b78a5c2327cd3e3420c5b0d193d330968015",
       "rows": 154
     },
     "yt_videos": {
-      "path": "AIRTABLE/snapshots/2026-06-05/clean/yt_videos-2026-06-05.csv",
-      "sha256": "8bc962198e7a779ba9c992bd4ebd9fbbcd492268d3261d9ab9b310b9aaf3603a",
+      "path": "AIRTABLE/snapshots/2026-06-06/clean/yt_videos-2026-06-06.csv",
+      "sha256": "c5c6f246e2d43aee581974929a570f19bd105b2598bb5f568845987195b83ca5",
       "rows": 474
     },
     "yt_playlists": {
-      "path": "AIRTABLE/snapshots/2026-06-05/clean/yt_playlists-2026-06-05.csv",
-      "sha256": "92edaa195cb75eac32e4c663f5657f811afee0fbfafc7ec1de0afcbc627066c2",
-      "rows": 48
+      "path": "AIRTABLE/snapshots/2026-06-06/clean/yt_playlists-2026-06-06.csv",
+      "sha256": "6005c2d2f7d9d1a29d5d77551e8d3a5119d634d2ee08e30d6692f31334b3fb1d",
+      "rows": 50
     }
   }
 }
