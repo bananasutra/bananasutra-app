@@ -683,6 +683,15 @@
   line-height: 1.35;
 }
 
+.song-detail-audio-hint--honest {
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  background: var(--color-bg-inset, #f4f1ea);
+  border-left: 3px solid var(--color-border-strong, #bbb);
+  border-radius: 0 var(--radius-sm, 8px) var(--radius-sm, 8px) 0;
+  text-align: left;
+}
+
 .song-detail-audio-playall {
   margin: 0 0 0.7rem;
   display: flex;
