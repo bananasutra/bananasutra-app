@@ -6,8 +6,8 @@
   --font-body: "Sora", "Sora Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-ui: "Sora", "Sora Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Content column cap — header, footer, `.catalog-layout-shell` (see desktop override below). */
-  --catalog-layout-max-width: 1400px;
+  /* Content column cap — header, footer, `.catalog-layout-shell` (D-035: ~48rem / v3-lp --lp-column). */
+  --catalog-layout-max-width: 48rem;
 
   /* Breadcrumbs — typography + rhythm (CatalogBreadcrumbs.css consumes these only). */
   --catalog-breadcrumb-font-weight: 600;
@@ -267,12 +267,3 @@
   --sutra-quack: #d79a7e;
 }
 
-/*
- * Below ~1200px the 1400px token almost never binds, so line length stays as on tablet/phone.
- * From laptop/desktop widths up, use a slightly narrower column for readability.
- */
-@media (min-width: 1200px) {
-  :root {
-    --catalog-layout-max-width: 1180px;
-  }
-}
