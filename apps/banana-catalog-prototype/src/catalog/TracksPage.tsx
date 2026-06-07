@@ -35,6 +35,8 @@ import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { PLAY_ALL_HONEST_MOBILE_COPY, PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
+import { formatDurationDisplay } from './durationFormat'
+import { bindSoundCloudWidgetPlayback } from './soundCloudWidgetPlayback'
 import { sutraClassName } from './sutraTheme'
 import { type SoundCloudWidget } from './soundcloudWidgetApi'
 import './CatalogApp.css'
@@ -269,11 +271,13 @@ export function TracksPage() {
   const [embedReloadKey, setEmbedReloadKey] = useState(0)
   /** SoundCloud `auto_play` only after an explicit row action — not on first paint / URL-driven page slice. */
   const [scAutoplay, setScAutoplay] = useState(false)
+  const [isScPlaying, setIsScPlaying] = useState(false)
   const skipScAutoplayOffOnNextSelectionChange = useRef(false)
 
   /** "Play All" queue mode: keep auto-advancing through `filtered` until the user stops or runs out of tracks. */
   const [playAllActive, setPlayAllActive] = useState(false)
   const playAllActiveRef = useRef(false)
+  const isScPlayingRef = useRef(false)
   const playerWrapRef = useRef<HTMLDivElement>(null)
   const scWidgetRef = useRef<SoundCloudWidget | null>(null)
   const filteredRef = useRef<TrackCatalogItem[]>([])
@@ -295,6 +299,9 @@ export function TracksPage() {
     playAllActiveRef.current = playAllActive
   }, [playAllActive])
   useEffect(() => {
+    isScPlayingRef.current = isScPlaying
+  }, [isScPlaying])
+  useEffect(() => {
     selectedIdRef.current = selectedId
   }, [selectedId])
   useEffect(() => {
@@ -315,6 +322,7 @@ export function TracksPage() {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- clear player when page slice is empty
       setSelectedId(null)
       setScAutoplay(false)
+      setIsScPlaying(false)
       setPlayAllActive(false)
       return
     }
@@ -330,6 +338,7 @@ export function TracksPage() {
       return
     }
     setScAutoplay(false)
+    setIsScPlaying(false)
   }, [selectedId])
 
   const pageMeta = renderPageMeta({
@@ -387,8 +396,35 @@ export function TracksPage() {
     navigate(buildTracksBrowsePathFull(filters, urlFind, 1, preserve, next), { replace: true })
   }
 
+  const pausePlayback = useCallback(() => {
+    try {
+      scWidgetRef.current?.pause()
+    } catch {
+      // Ignore widget pause failures and keep UI state responsive.
+    }
+    setIsScPlaying(false)
+  }, [])
+
+  const resumePlayback = useCallback(() => {
+    try {
+      scWidgetRef.current?.play()
+      setScAutoplay(true)
+    } catch {
+      // Ignore widget play failures.
+    }
+  }, [])
+
   const pickTrack = useCallback(
     (t: TrackCatalogItem, { keepPlayAll = false }: { keepPlayAll?: boolean } = {}) => {
+      if (t.track_id === selectedIdRef.current && scWidgetRef.current) {
+        if (isScPlayingRef.current) {
+          pausePlayback()
+          return
+        }
+        resumePlayback()
+        return
+      }
+
       if (!keepPlayAll && playAllActiveRef.current) {
         const queue = filteredRef.current
         const idx = queue.findIndex((row) => row.track_id === selectedIdRef.current)
@@ -407,7 +443,7 @@ export function TracksPage() {
       setSelectedId(t.track_id)
       setEmbedReloadKey((k) => k + 1)
     },
-    [],
+    [pausePlayback, resumePlayback],
   )
 
   const rowActivate = (e: MouseEvent | KeyboardEvent, t: TrackCatalogItem) => {
@@ -499,12 +535,16 @@ export function TracksPage() {
   }, [navigate, pickTrack])
 
   const stopCurrentPlayback = useCallback(() => {
-    try {
-      scWidgetRef.current?.pause()
-    } catch {
-      // Ignore widget pause failures and keep UI state responsive.
-    }
-  }, [])
+    pausePlayback()
+  }, [pausePlayback])
+
+  const pausePlayAll = useCallback(() => {
+    pausePlayback()
+  }, [pausePlayback])
+
+  const resumePlayAll = useCallback(() => {
+    resumePlayback()
+  }, [resumePlayback])
 
   const stopPlayAll = useCallback(() => {
     const queue = filteredRef.current
@@ -565,10 +605,12 @@ export function TracksPage() {
         if (!document.body.contains(iframe)) return
         const widget = SC.Widget(iframe)
         scWidgetRef.current = widget
-        widget.unbind(SC.Widget.Events.FINISH)
-        widget.bind(SC.Widget.Events.FINISH, () => {
-          if (!playAllActiveRef.current) return
-          advanceToNextInQueueRef.current()
+        bindSoundCloudWidgetPlayback(widget, SC, {
+          onPlayingChange: setIsScPlaying,
+          onFinish: () => {
+            if (!playAllActiveRef.current) return
+            advanceToNextInQueueRef.current()
+          },
         })
       })
       .catch(() => {
@@ -836,6 +878,29 @@ export function TracksPage() {
                       <div className="tracks-page__play-all-row">
                         {playAllActive ? (
                           <>
+                            {isScPlaying ? (
+                              <button
+                                type="button"
+                                className="tracks-page__play-all-btn"
+                                onClick={pausePlayAll}
+                              >
+                                <span className="tracks-page__play-all-glyph" aria-hidden>
+                                  ❚❚
+                                </span>
+                                Pause
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                className="tracks-page__play-all-btn"
+                                onClick={resumePlayAll}
+                              >
+                                <span className="tracks-page__play-all-glyph" aria-hidden>
+                                  ▶
+                                </span>
+                                Resume
+                              </button>
+                            )}
                             <button
                               type="button"
                               className="tracks-page__play-all-btn tracks-page__play-all-btn--stop"
@@ -911,7 +976,7 @@ export function TracksPage() {
                   {pageRows.map((t) => {
                     const active = t.track_id === selected?.track_id
                     /** Wave overlay reads as “now playing”; only show when this row triggered embed autoplay. */
-                    const showPlayingWave = active && scAutoplay
+                    const showPlayingWave = active && isScPlaying
                     const href = songCatalogPath(t.lyrics_title, t.url_slug)
                     const cover = coverImageUrl(thumbSrc(t.list_cover_url), { width: 200 })
                     const g = genreLine(t)
@@ -919,10 +984,10 @@ export function TracksPage() {
                     const sutraText = (t.sutra || '').trim()
                     const metaTail = genreSecondary
                     const showRailMeta = Boolean(sutraText) || Boolean(metaTail)
-                    const durationRaw = (t.duration_raw || '').trim()
+                    const durationLabel = formatDurationDisplay(t.duration_raw)
                     const railMetaAria = [sutraText, metaTail].filter(Boolean).join('; ') || 'Track details'
                     const statLine = [
-                      durationRaw,
+                      durationLabel,
                       `${formatCount(t.play_count)} plays`,
                       `${formatCount(t.like_count)} likes`,
                     ]

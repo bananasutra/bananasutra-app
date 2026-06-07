@@ -24,6 +24,8 @@ import {
   trackSongDetailQueueSkipped,
   type PlaybackIntent,
 } from './catalogAnalytics'
+import { formatDurationDisplay, formatDurationFromSeconds, parseDurationClock } from './durationFormat'
+import { bindSoundCloudWidgetPlayback } from './soundCloudWidgetPlayback'
 import { loadSoundCloudWidgetApi } from './soundcloudWidgetApi'
 import type { SoundCloudWidget } from './soundcloudWidgetApi'
 import {
@@ -77,22 +79,6 @@ function searchCatalogHref(query: string): string {
   return `${CATALOG_BROWSE_PATH}?find=${encodeURIComponent(trimmed)}`
 }
 
-function formatEpDuration(totalSeconds: number): string {
-  if (totalSeconds <= 0) return ''
-  const h = Math.floor(totalSeconds / 3600)
-  const m = Math.round((totalSeconds % 3600) / 60)
-  if (h > 0) return `~${h}h ${m}m`
-  return `~${m}m`
-}
-
-function parseDurationFormatted(fmt: string): number {
-  const parts = fmt.split(':').map(Number)
-  if (parts.some((n) => Number.isNaN(n))) return 0
-  if (parts.length === 2) return parts[0] * 60 + parts[1]
-  if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2]
-  return 0
-}
-
 /** Matches `_norm_soundcloud_url` in build_artifacts.py — stable lookup for EP duration metadata. */
 function normSoundcloudUrl(url: string): string {
   let u = url.trim().replace(/\/+$/, '').toLowerCase()
@@ -105,7 +91,7 @@ function normSoundcloudUrl(url: string): string {
 function trackDurationSeconds(track: SongDetailTrack): number {
   const sec = Number(track.duration_sec)
   if (Number.isFinite(sec) && sec > 0) return sec
-  return parseDurationFormatted((track.duration_raw ?? '').trim())
+  return parseDurationClock((track.duration_raw ?? '').trim())
 }
 
 /** Single-track list-mode chrome (R9); `/sets/` URLs need enough height for multi-track rows in the SC widget. */
@@ -479,7 +465,9 @@ function SongDetailLoaded({
   const playAllDesktopAvailable = usePlayAllDesktopAvailable()
 
   const [playAllTopTracksActive, setPlayAllTopTracksActive] = useState(false)
+  const [isScPlaying, setIsScPlaying] = useState(false)
   const playAllTopTracksActiveRef = useRef(false)
+  const isScPlayingRef = useRef(false)
   const playerWrapRef = useRef<HTMLDivElement | null>(null)
   const scWidgetRef = useRef<SoundCloudWidget | null>(null)
   const inAppPlayableTracksRef = useRef<SongDetailTrack[]>(inAppPlayableTracks)
@@ -498,11 +486,20 @@ function SongDetailLoaded({
   }, [playAllTopTracksActive])
 
   useEffect(() => {
+    isScPlayingRef.current = isScPlaying
+  }, [isScPlaying])
+
+  useEffect(() => {
     inAppPlayableTracksRef.current = inAppPlayableTracks
   }, [inAppPlayableTracks])
 
   useEffect(() => {
     playingUrlRef.current = playingUrl
+  }, [playingUrl])
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset playing indicator when embed track changes
+    setIsScPlaying(false)
   }, [playingUrl])
 
   /** All curated picks reference one EP → use it; otherwise fall back to primary SC EP set when tracks span multiple releases. */
@@ -535,12 +532,11 @@ function SongDetailLoaded({
     const nk = normSoundcloudUrl(playFullEpSetUrl)
     const fromEpRow = nk ? detail.sc_ep_set_duration_totals?.[nk]?.trim() : ''
     if (fromEpRow) {
-      const secs = parseDurationFormatted(fromEpRow)
-      return formatEpDuration(secs)
+      return formatDurationDisplay(fromEpRow)
     }
     const matchingApp = inAppPlayableTracks.filter((t) => normSoundcloudUrl((t.ep_url || '').trim()) === nk)
     const totalSeconds = matchingApp.reduce((acc, t) => acc + trackDurationSeconds(t), 0)
-    return formatEpDuration(totalSeconds)
+    return formatDurationFromSeconds(totalSeconds)
   }, [detail.sc_ep_set_duration_totals, inAppPlayableTracks, playFullEpSetUrl])
 
   const soundcloudMainEmbedHeight =
@@ -551,8 +547,35 @@ function SongDetailLoaded({
     setSoundcloudReloadKey((k) => k + 1)
   }, [])
 
+  const pausePlayback = useCallback(() => {
+    try {
+      scWidgetRef.current?.pause()
+    } catch {
+      // Keep controls responsive even if widget API is unavailable.
+    }
+    setIsScPlaying(false)
+  }, [])
+
+  const resumePlayback = useCallback(() => {
+    try {
+      scWidgetRef.current?.play()
+    } catch {
+      // Ignore widget play failures.
+    }
+  }, [])
+
   const pickTopTrack = useCallback(
     (url: string, { keepPlayAll = false }: { keepPlayAll?: boolean } = {}) => {
+      const trimmedUrl = url.trim()
+      if (trimmedUrl && trimmedUrl === playingUrlRef.current.trim() && scWidgetRef.current) {
+        if (isScPlayingRef.current) {
+          pausePlayback()
+          return
+        }
+        resumePlayback()
+        return
+      }
+
       const queue = inAppPlayableTracksRef.current
       const track = findTrackByScUrl(queue, url)
       if (!keepPlayAll && playAllTopTracksActiveRef.current) {
@@ -567,16 +590,12 @@ function SongDetailLoaded({
       playbackIntentRef.current = 'user_pick'
       requestSoundcloudPlayback(url)
     },
-    [requestSoundcloudPlayback],
+    [pausePlayback, requestSoundcloudPlayback, resumePlayback],
   )
 
   const stopCurrentPlayback = useCallback(() => {
-    try {
-      scWidgetRef.current?.pause()
-    } catch {
-      // Keep controls responsive even if widget API is unavailable.
-    }
-  }, [])
+    pausePlayback()
+  }, [pausePlayback])
 
   const stopPlayAllTopTracks = useCallback(() => {
     const queue = inAppPlayableTracksRef.current
@@ -586,6 +605,14 @@ function SongDetailLoaded({
     setPlayAllTopTracksActive(false)
     stopCurrentPlayback()
   }, [stopCurrentPlayback])
+
+  const pausePlayAllTopTracks = useCallback(() => {
+    pausePlayback()
+  }, [pausePlayback])
+
+  const resumePlayAllTopTracks = useCallback(() => {
+    resumePlayback()
+  }, [resumePlayback])
 
   const startPlayAllTopTracks = useCallback(() => {
     if (!window.matchMedia(PLAY_ALL_DESKTOP_MEDIA_QUERY).matches) return
@@ -680,10 +707,12 @@ function SongDetailLoaded({
       .then((SC) => {
         const widget = SC.Widget(iframe)
         scWidgetRef.current = widget
-        widget.unbind(SC.Widget.Events.FINISH)
-        widget.bind(SC.Widget.Events.FINISH, () => {
-          if (!playAllTopTracksActiveRef.current) return
-          advanceToNextInQueueRef.current()
+        bindSoundCloudWidgetPlayback(widget, SC, {
+          onPlayingChange: setIsScPlaying,
+          onFinish: () => {
+            if (!playAllTopTracksActiveRef.current) return
+            advanceToNextInQueueRef.current()
+          },
         })
       })
       .catch(() => {
@@ -1081,13 +1110,32 @@ function SongDetailLoaded({
                       {playAllDesktopAvailable || playAllTopTracksActive ? (
                         <div className="song-detail-audio-playall-row">
                           {playAllTopTracksActive ? (
-                            <button
-                              type="button"
-                              className="song-detail-audio-action-btn song-detail-audio-action-btn--stop"
-                              onClick={stopPlayAllTopTracks}
-                            >
-                              Stop playing all
-                            </button>
+                            <>
+                              {isScPlaying ? (
+                                <button
+                                  type="button"
+                                  className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
+                                  onClick={pausePlayAllTopTracks}
+                                >
+                                  Pause
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
+                                  onClick={resumePlayAllTopTracks}
+                                >
+                                  Resume
+                                </button>
+                              )}
+                              <button
+                                type="button"
+                                className="song-detail-audio-action-btn song-detail-audio-action-btn--stop"
+                                onClick={stopPlayAllTopTracks}
+                              >
+                                Stop playing all
+                              </button>
+                            </>
                           ) : playAllDesktopAvailable ? (
                             <button
                               type="button"
@@ -1160,7 +1208,7 @@ function SongDetailLoaded({
                               {hidden ? <span className="song-detail-off">out of app</span> : null}
                             </span>
                             <span className="song-detail-track-meta">
-                              <span>{t.duration_raw || '—'}</span>
+                              <span>{formatDurationDisplay(t.duration_raw) || '—'}</span>
                               <span>{t.play_count.toLocaleString()} plays</span>
                               <span>{t.like_count.toLocaleString()} likes</span>
                             </span>

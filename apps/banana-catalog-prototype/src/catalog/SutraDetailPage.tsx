@@ -37,6 +37,7 @@ import {
   pickRandomSongbookFromPool,
   songbookHrefFromCatalogItem,
 } from './homePortalUtils'
+import { formatDurationDisplay } from './durationFormat'
 import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
@@ -132,22 +133,6 @@ function pickRandomVideo(videos: YouTubeCatalogVideo[]): YouTubeCatalogVideo | n
   if (videos.length === 0) return null
   const index = Math.floor(Math.random() * videos.length)
   return videos[index] ?? null
-}
-
-function formatDurationTotal(raw: string | number | null | undefined): string {
-  if (raw === null || raw === undefined) return ''
-  const text = String(raw).trim()
-  if (!text) return ''
-  // If already formatted in clock style, pass through.
-  if (/^\d{1,2}:\d{2}(:\d{2})?$/.test(text)) return text
-  const secs = Number(text)
-  if (!Number.isFinite(secs) || secs <= 0) return ''
-  const rounded = Math.round(secs)
-  const h = Math.floor(rounded / 3600)
-  const m = Math.floor((rounded % 3600) / 60)
-  const s = rounded % 60
-  if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-  return `${m}:${String(s).padStart(2, '0')}`
 }
 
 export function SutraDetailPage() {
@@ -363,7 +348,7 @@ export function SutraDetailPage() {
         .filter((song) => (song.primary_ep_url || '').trim() === featuredEpUrl)
         .reduce((sum, song) => sum + (Number.isFinite(song.aggregate_duration_sec) ? song.aggregate_duration_sec : 0), 0)
     : 0
-  const featuredEpDuration = formatDurationTotal(featuredEp?.duration_total ?? featuredEpDurationSeconds)
+  const featuredEpDuration = formatDurationDisplay(featuredEp?.duration_total ?? featuredEpDurationSeconds)
   const featuredEpSongbookTitle = (featuredEp?.ep_songbook_title || '').trim()
   const featuredEpPlaylistMetaLine =
     featuredEp?.ep_url && featuredEp.ep_url.includes('soundcloud.com')
