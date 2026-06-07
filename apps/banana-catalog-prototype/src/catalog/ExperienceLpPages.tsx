@@ -1,6 +1,6 @@
 /**
- * W-051 — prerender gate stubs for /learn, /listen, /watch.
- * Full LP implementation lands in W-052–W-054; copy here matches approved prototypes.
+ * W-051 — prerender gate stub for /watch only.
+ * /learn → LearnLpPage.tsx (W-053). /listen → ListenLpPage.tsx (W-052).
  */
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
@@ -20,27 +20,6 @@ type ExperienceLpConfig = {
   metaDescription: string
   lead: string
   sub: string
-}
-
-const LEARN_LP: ExperienceLpConfig = {
-  path: '/learn',
-  navLabel: 'Learn',
-  metaTitle: 'Learn',
-  metaDescription:
-    'What is bananasutra? Start here. The songs make more sense once you know the sutras. Orientation hub for sutras, muses, quotes, and words.',
-  lead: 'What is bananasutra? Start here. The songs make more sense once you know the sutras.',
-  sub:
-    'An audio testament. True stories organized by the seven questions I navigate by. Open a door; see what\'s inside before you commit.',
-}
-
-const LISTEN_LP: ExperienceLpConfig = {
-  path: '/listen',
-  navLabel: 'Listen',
-  metaTitle: 'Listen',
-  metaDescription:
-    'Press play. The catalog is already sorted into stories. Top tracks for a quick hit. Songbooks when you want a longer ride. Full lyrics on song pages.',
-  lead: 'Press play. The catalog is already sorted into stories.',
-  sub: 'Top tracks for a quick hit. Songbooks when you want a longer ride. Full lyrics on song pages.',
 }
 
 const WATCH_LP: ExperienceLpConfig = {
@@ -95,13 +74,8 @@ function ExperienceLpPage({ config }: { config: ExperienceLpConfig }) {
   )
 }
 
-export function LearnLpPage() {
-  return <ExperienceLpPage config={LEARN_LP} />
-}
-
-export function ListenLpPage() {
-  return <ExperienceLpPage config={LISTEN_LP} />
-}
+export { LearnLpPage } from './LearnLpPage'
+export { ListenLpPage } from './ListenLpPage'
 
 export function WatchLpPage() {
   return <ExperienceLpPage config={WATCH_LP} />

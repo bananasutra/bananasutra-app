@@ -34,12 +34,14 @@ export type AnalyticsMode = 'read' | 'listen' | 'watch'
 /** Until mode-toggle ships (P1), send this on all P0 events. */
 export const ANALYTICS_MODE_PRE_TOGGLE: AnalyticsMode = 'read'
 
-export type QueueSource = 'tracks_filter' | 'songbook' | 'song_variants' | 'single'
+export type QueueSource = 'tracks_filter' | 'songbook' | 'song_variants' | 'single' | 'listen_lp'
 
 export type PlayAllQueueSource = Exclude<QueueSource, 'single'>
 
 export type BertrandSurface =
   | 'home_hero'
+  | 'learn_lp_tail'
+  | 'listen_lp_tail'
   | 'songs_browse_inline'
   | 'songs_detail_below_lyrics'
   | 'tracks_empty_state'
