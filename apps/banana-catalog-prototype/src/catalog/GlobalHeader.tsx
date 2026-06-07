@@ -143,59 +143,59 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
   return (
     <header ref={setHeaderRef} className="catalog-header catalog-header--fixed global-header global-header--v3">
       <div className="catalog-header-inner global-header-inner global-header__bar">
-        <div className="global-header__row">
-          <div className="global-header-brand global-header__brand">
-            <Link to="/" className="global-header-brand-link bananasutra-wordmark">
-              BANANASUTRA
-            </Link>
-            <p className="global-header-tagline global-header-tagline--compact bananasutra-tagline">
-              Songs for a world gone bananas.
-            </p>
-          </div>
-
-          <nav className="global-header-experience" aria-label="Experience">
-            <ul className="global-header-experience__list">
-              {SITE_NAV_EXPERIENCE.map((item) => {
-                const active = activeLp === item.id
-                return (
-                  <li key={item.id}>
-                    <Link
-                      to={item.to}
-                      className={experienceLinkClass(active)}
-                      aria-current={active ? 'page' : undefined}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </nav>
-
-          <div className="global-header__actions">
-            <DiscoverySearchLazy variant="header" />
-            <button
-              type="button"
-              className="global-header-menu-toggle"
-              aria-expanded={menuOpen}
-              aria-controls={drawerId}
-              aria-label={menuLabel}
-              title={menuLabel}
-              onClick={() => setMenuOpen((open) => !open)}
-            >
-              <span className="global-header-menu-toggle__icon" aria-hidden="true" />
-              <span className="visually-hidden">{menuLabel}</span>
-            </button>
-            <div className="global-header__theme-desktop">
-              <ThemeToggle />
-            </div>
-            {right ? <div className="global-header__slot">{right}</div> : null}
-          </div>
+        <div className="global-header__brand-block">
+          <Link to="/" className="global-header-brand-link bananasutra-wordmark">
+            BANANASUTRA
+          </Link>
+          <p className="global-header-tagline global-header-tagline--compact bananasutra-tagline">
+            Songs for a world gone bananas.
+          </p>
         </div>
 
-        <p className="global-header-stats" aria-label="Catalog scale: sutras, songbooks, songs, and top tracks">
+        <p
+          className="global-header-stats"
+          aria-label="Catalog scale: sutras, songbooks, songs, and top tracks"
+        >
           {`${sutraCount} SUTRAS · ${songbookCount} SONGBOOKS · ${songCount} SONGS · ${topTrackCount} TOP TRACKS`}
         </p>
+
+        <nav className="global-header-experience" aria-label="Experience">
+          <ul className="global-header-experience__list">
+            {SITE_NAV_EXPERIENCE.map((item) => {
+              const active = activeLp === item.id
+              return (
+                <li key={item.id}>
+                  <Link
+                    to={item.to}
+                    className={experienceLinkClass(active)}
+                    aria-current={active ? 'page' : undefined}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
+
+        <div className="global-header__actions">
+          <div className="global-header__search-slot">
+            <DiscoverySearchLazy variant="header" />
+          </div>
+          <button
+            type="button"
+            className="global-header-menu-toggle"
+            aria-expanded={menuOpen}
+            aria-controls={drawerId}
+            aria-label={menuLabel}
+            title={menuLabel}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span className="global-header-menu-toggle__icon" aria-hidden="true" />
+            <span className="visually-hidden">{menuLabel}</span>
+          </button>
+          {right ? <div className="global-header__slot">{right}</div> : null}
+        </div>
       </div>
 
       <button
@@ -224,14 +224,16 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
           </button>
         </div>
 
-        <div className="global-header-drawer__theme">
-          <span className="global-header-drawer__theme-label">Theme</span>
-          <ThemeToggle />
-        </div>
+        <div className="global-header-drawer__body">
+          {SITE_NAV_DRAWER.map((item, index) => (
+            <DrawerNavEntry key={`drawer-${index}`} item={item} pathname={pathname} onNavigate={closeMenu} />
+          ))}
 
-        {SITE_NAV_DRAWER.map((item, index) => (
-          <DrawerNavEntry key={`drawer-${index}`} item={item} pathname={pathname} onNavigate={closeMenu} />
-        ))}
+          <div className="global-header-drawer__theme">
+            <span className="global-header-drawer__theme-label">Theme</span>
+            <ThemeToggle />
+          </div>
+        </div>
       </nav>
     </header>
   )

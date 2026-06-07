@@ -67,6 +67,8 @@ export type DiscoverySearchProps = {
   variant: DiscoverySearchVariant
   initialQuery?: string
   syncQueryToUrl?: boolean
+  /** Header icon click: open panel and focus input on first mount. */
+  openOnMount?: boolean
 }
 
 type DiscoveryTab = 'songbooks' | 'songs' | 'tracks' | 'videos'
@@ -190,7 +192,12 @@ function browseChipHref(group: FacetGroupKey, value: string): string {
   return buildBrowsePathForFacet(group as FilterFacetKey, value)
 }
 
-export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = false }: DiscoverySearchProps) {
+export function DiscoverySearch({
+  variant,
+  initialQuery = '',
+  syncQueryToUrl = false,
+  openOnMount = false,
+}: DiscoverySearchProps) {
   const navigate = useNavigate()
   const { data: songCatalogRows } = useSongCatalogBrowse()
   const songCatalog = useMemo(() => songCatalogRows ?? [], [songCatalogRows])
@@ -284,6 +291,19 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
     onMq()
     mq.addEventListener('change', onMq)
     return () => mq.removeEventListener('change', onMq)
+  }, [])
+
+  useEffect(() => {
+    if (!openOnMount || variant !== 'header') return
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- icon-triggered open on mount
+    setOpen(true)
+    const t = window.setTimeout(() => inputRef.current?.focus(), 0)
+    return () => window.clearTimeout(t)
+  }, [openOnMount, variant])
+
+  const openHeaderSearch = useCallback(() => {
+    setOpen(true)
+    window.setTimeout(() => inputRef.current?.focus(), 0)
   }, [])
 
   useEffect(() => {
@@ -670,7 +690,23 @@ export function DiscoverySearch({ variant, initialQuery = '', syncQueryToUrl = f
         aria-label={headerMobileOpen ? 'Catalog search and browse' : undefined}
       >
       <form className="discovery-search__form" role="search" aria-label="Catalog discovery" onSubmit={onSubmit}>
-        <div className="discovery-search__field">
+        <div
+          className="discovery-search__field"
+          onClick={variant === 'header' && !open ? openHeaderSearch : undefined}
+          onKeyDown={
+            variant === 'header' && !open
+              ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    openHeaderSearch()
+                  }
+                }
+              : undefined
+          }
+          role={variant === 'header' && !open ? 'button' : undefined}
+          tabIndex={variant === 'header' && !open ? 0 : undefined}
+          aria-label={variant === 'header' && !open ? 'Open catalog search' : undefined}
+        >
           <span className="discovery-search__icon" aria-hidden>
             ⌕
           </span>
