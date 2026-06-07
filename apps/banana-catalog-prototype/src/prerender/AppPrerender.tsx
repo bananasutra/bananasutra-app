@@ -4,6 +4,7 @@
 import { StrictMode } from 'react'
 import { Route, Routes, StaticRouter } from 'react-router-dom'
 import { ThemeProvider } from '../catalog/theme'
+import { LearnLpPage, ListenLpPage, WatchLpPage } from '../catalog/ExperienceLpPages'
 import { HomePortal } from '../catalog/HomePortal'
 import { AboutPage, AboutMusesPage, AboutQuotesPage, AboutSutrasPage } from '../catalog/AboutPage'
 import { CatalogApp } from '../catalog/CatalogApp'
@@ -33,6 +34,9 @@ export function AppPrerender({ location }: { location: string }) {
             </a>
             <Routes>
               <Route path="/" element={<HomePortal />} />
+              <Route path="/learn" element={<LearnLpPage />} />
+              <Route path="/listen" element={<ListenLpPage />} />
+              <Route path="/watch" element={<WatchLpPage />} />
               <Route path="/songs" element={<CatalogBrowseRoute />} />
               <Route path="/words" element={<WordsPage />} />
               <Route path="/search" element={<SearchRedirect />} />

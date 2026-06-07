@@ -167,6 +167,30 @@ function main() {
     ),
   )
   addRoute(
+    '/learn',
+    routeEntry(
+      'Learn',
+      'What is bananasutra? Start here. The songs make more sense once you know the sutras. Orientation hub for sutras, muses, quotes, and words.',
+      '/learn',
+    ),
+  )
+  addRoute(
+    '/listen',
+    routeEntry(
+      'Listen',
+      'Press play. The catalog is already sorted into stories. Top tracks for a quick hit. Songbooks when you want a longer ride. Full lyrics on song pages.',
+      '/listen',
+    ),
+  )
+  addRoute(
+    '/watch',
+    routeEntry(
+      'Watch',
+      'Picture the songs. Same catalog, eyes open. Music videos and YouTube playlists organized by sutra and story.',
+      '/watch',
+    ),
+  )
+  addRoute(
     '/songs',
     routeEntry(
       'Songs Catalog',

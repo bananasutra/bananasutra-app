@@ -47,6 +47,9 @@ function songbookSlugFromRow(row) {
 export function listPrerenderRoutes() {
   const staticRoutes = [
     '/',
+    '/learn',
+    '/listen',
+    '/watch',
     '/songs',
     '/songbooks',
     '/tracks',
