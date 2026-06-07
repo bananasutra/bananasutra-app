@@ -26,6 +26,9 @@ const WordsPage = lazy(() => import('./catalog/WordsPage').then((m) => ({ defaul
 const SutraDetailPage = lazy(() => import('./catalog/SutraDetailPage').then((m) => ({ default: m.SutraDetailPage })))
 const StyleGuidePage = lazy(() => import('./catalog/StyleGuidePage').then((m) => ({ default: m.StyleGuidePage })))
 const SitemapPage = lazy(() => import('./catalog/SitemapPage').then((m) => ({ default: m.SitemapPage })))
+const LearnLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.LearnLpPage })))
+const ListenLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.ListenLpPage })))
+const WatchLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.WatchLpPage })))
 const GITHUB_PROJECT_BASENAME = '/bananasutra-app'
 const BBB_CHAT_ENABLED =
   (import.meta.env.VITE_BBB_CHAT_ENABLED?.trim().toLowerCase() ?? (import.meta.env.DEV ? 'true' : 'false')) === 'true'
@@ -157,6 +160,30 @@ export default function App() {
             element={
               <RouteBoundary>
                 <HomePortal />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/learn"
+            element={
+              <RouteBoundary>
+                <LearnLpPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/listen"
+            element={
+              <RouteBoundary>
+                <ListenLpPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/watch"
+            element={
+              <RouteBoundary>
+                <WatchLpPage />
               </RouteBoundary>
             }
           />

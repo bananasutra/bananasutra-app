@@ -7,6 +7,9 @@ const ABOUT_STATIC_HUBS = new Set(['/about/sutras', '/about/muses', '/about/quot
 
 /** Listing / hub routes emitted as `dist/<route>/index.html` (R26). */
 export const STATIC_SSG_INDEX_PATHS = new Set([
+  '/learn',
+  '/listen',
+  '/watch',
   '/songs',
   '/songbooks',
   '/tracks',

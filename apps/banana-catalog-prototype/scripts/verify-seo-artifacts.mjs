@@ -90,6 +90,9 @@ function warn(msg) {
 /** Paths that must exist in seo-metadata (includes `/style-guide`; sitemap omits it). */
 const REQUIRED_SEO_PATHS = [
   '/',
+  '/learn',
+  '/listen',
+  '/watch',
   '/songs',
   '/songbooks',
   '/tracks',

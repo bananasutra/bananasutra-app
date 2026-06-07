@@ -118,7 +118,7 @@ function main() {
   // Epic §2.1 static list (no /style-guide — internal shell page)
   push('/', { changefreq: 'weekly', priority: '1.0', lastmod: BUILD_LASTMOD })
 
-  for (const p of ['/songs', '/tracks', '/videos', '/words', '/songbooks']) {
+  for (const p of ['/learn', '/listen', '/watch', '/songs', '/tracks', '/videos', '/words', '/songbooks']) {
     push(p, { changefreq: 'weekly', priority: '0.9', lastmod: BUILD_LASTMOD })
   }
 

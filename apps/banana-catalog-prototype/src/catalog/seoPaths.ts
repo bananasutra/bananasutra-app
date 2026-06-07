@@ -5,8 +5,11 @@
 
 const ABOUT_STATIC_HUBS = new Set(['/about/sutras', '/about/muses', '/about/quotes'])
 
-/** Listing / hub routes emitted as `dist/<route>/index.html` (R26). */
+/** Listing / hub routes emitted as `dist/<route>/index.html` (R26). W-051: /learn, /listen, /watch (v3 experience LPs). */
 export const STATIC_SSG_INDEX_PATHS = [
+  '/learn',
+  '/listen',
+  '/watch',
   '/songs',
   '/songbooks',
   '/tracks',
