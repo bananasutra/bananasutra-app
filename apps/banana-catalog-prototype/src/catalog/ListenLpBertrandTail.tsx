@@ -20,7 +20,7 @@ export function ListenLpBertrandTail({ onOpenChat }: Props) {
     <footer className="listen-lp__page-tail" aria-label="Chat entry">
       <aside className="listen-lp__bertrand-tail" aria-labelledby="listen-lp-bertrand-heading">
         <p id="listen-lp-bertrand-heading" className="listen-lp__bertrand-headline">
-          Would like suggestions? Tell Bertrand how you&apos;re feeling… He knows.{' '}
+          Or, tell Bertrand how you&apos;re feeling. He understands…{' '}
           <a className="listen-lp__bertrand-cta" href="#bertrand" onClick={handleOpen}>
             Open chat →
           </a>

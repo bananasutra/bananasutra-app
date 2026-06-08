@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type RefObject } from 'react'
 import { coverImageUrl } from '../seo/imageUrl'
 import type { YouTubePlaylistCatalogItem } from './types'
 import { watchLpPlaylistMetaLine } from './watchLpData'
@@ -18,9 +18,19 @@ function useClientMounted(): boolean {
 
 type Props = {
   playlist: YouTubePlaylistCatalogItem | null
+  iframeRef?: RefObject<HTMLIFrameElement | null>
+  onBeforePlay?: () => void
 }
 
-function WatchLpPlaylistEmbedInner({ playlist }: { playlist: YouTubePlaylistCatalogItem }) {
+function WatchLpPlaylistEmbedInner({
+  playlist,
+  iframeRef,
+  onBeforePlay,
+}: {
+  playlist: YouTubePlaylistCatalogItem
+  iframeRef?: RefObject<HTMLIFrameElement | null>
+  onBeforePlay?: () => void
+}) {
   const clientMounted = useClientMounted()
   const [facadeReleased, setFacadeReleased] = useState(false)
   const playlistId = (playlist.playlist_id || '').trim()
@@ -47,7 +57,10 @@ function WatchLpPlaylistEmbedInner({ playlist }: { playlist: YouTubePlaylistCata
               type="button"
               className="watch-lp__playlist-embed-facade"
               aria-label={`Load playlist player: ${title}`}
-              onClick={() => setFacadeReleased(true)}
+              onClick={() => {
+                onBeforePlay?.()
+                setFacadeReleased(true)
+              }}
             >
               {poster ? (
                 <img src={poster} alt="" className="watch-lp__playlist-embed-poster" decoding="async" loading="lazy" />
@@ -63,6 +76,7 @@ function WatchLpPlaylistEmbedInner({ playlist }: { playlist: YouTubePlaylistCata
           ) : (
             <iframe
               key={playlistId}
+              ref={iframeRef}
               className="watch-lp__playlist-embed-iframe yt-embed-frame"
               title={title}
               src={iframeSrc}
@@ -84,11 +98,18 @@ function WatchLpPlaylistEmbedInner({ playlist }: { playlist: YouTubePlaylistCata
   )
 }
 
-export function WatchLpPlaylistEmbed({ playlist }: Props) {
+export function WatchLpPlaylistEmbed({ playlist, iframeRef, onBeforePlay }: Props) {
   if (!playlist) {
     return <p className="watch-lp__playlist-embed-empty">No playlists match this filter.</p>
   }
 
   const playlistId = (playlist.playlist_id || '').trim()
-  return <WatchLpPlaylistEmbedInner key={playlistId} playlist={playlist} />
+  return (
+    <WatchLpPlaylistEmbedInner
+      key={playlistId}
+      playlist={playlist}
+      iframeRef={iframeRef}
+      onBeforePlay={onBeforePlay}
+    />
+  )
 }

@@ -1,5 +1,6 @@
 import { LISTEN_LP_SUTRA_FILTER_OPTIONS, type ListenLpSutraFilter } from './listenLpData'
 import type { YouTubeCatalogVideo, YouTubePlaylistCatalogItem } from './types'
+import { formatDurationDisplay } from './durationFormat'
 import { sortYoutubeVideosHubOrder } from './youtubeCatalogFlat'
 
 export const WATCH_LP_META = {
@@ -48,9 +49,8 @@ export function watchLpPlaylistMetaLine(pl: YouTubePlaylistCatalogItem): string 
 }
 
 export function watchLpVideoMetaLine(video: YouTubeCatalogVideo, inApp: boolean): string {
-  const parts = [(video.sutra || '').trim(), (video.duration || '').trim(), (video.content_type || '').trim()].filter(
-    Boolean,
-  )
+  const duration = formatDurationDisplay(video.duration)
+  const parts = [(video.sutra || '').trim(), duration, (video.content_type || '').trim()].filter(Boolean)
   if (!inApp) parts.push('YouTube-only')
   return parts.join(' · ')
 }
@@ -151,7 +151,10 @@ export function watchLpFacetStatusText(p: {
   totalCount: number
 }): string {
   const parts: string[] = []
-  if (p.activeSutra !== 'ALL') parts.push(p.activeSutra)
+  if (p.activeSutra !== 'ALL') {
+    const opt = LISTEN_LP_SUTRA_FILTER_OPTIONS.find((o) => o.value === p.activeSutra)
+    parts.push(opt?.label ?? p.activeSutra)
+  }
   if (p.activeGenre !== 'ALL') parts.push(p.activeGenre)
   const countLabel =
     p.totalCount > p.shownCount

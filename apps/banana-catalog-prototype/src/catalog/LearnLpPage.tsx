@@ -6,6 +6,7 @@ import { LearnLpBertrandTail } from './LearnLpBertrandTail'
 import { LearnLpFaq } from './LearnLpFaq'
 import { LearnLpHub } from './LearnLpHub'
 import { LearnLpMoodEntry } from './LearnLpMoodEntry'
+import { LearnLpWaysToExplore } from './LearnLpWaysToExplore'
 import { LEARN_LP_META } from './learnLpData'
 import { useSongCatalogBrowse } from './generatedData'
 import { canonicalPathForRoute } from './seoPaths'
@@ -14,6 +15,8 @@ import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import './CatalogApp.css'
 import './catalog-page-shell.css'
 import './LearnLpPage.css'
+import './LearnLpWaysToExplore.css'
+import './WordsPage.css'
 
 export function LearnLpPage() {
   const pageRef = useRef<HTMLDivElement>(null)
@@ -52,6 +55,7 @@ export function LearnLpPage() {
           </header>
 
           <LearnLpHub songCatalog={songCatalogRows} />
+          <LearnLpWaysToExplore />
           <LearnLpFaq />
           <LearnLpMoodEntry songCatalog={songCatalogRows} />
           <LearnLpBertrandTail />

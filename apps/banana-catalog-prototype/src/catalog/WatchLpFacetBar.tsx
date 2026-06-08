@@ -5,6 +5,8 @@ import {
   type WatchLpPlaylistPick,
   type WatchLpSutraFilter,
 } from './watchLpData'
+import { LISTEN_LP_SUTRA_FILTER_OPTIONS } from './listenLpData'
+import './lp-facet-bar.css'
 
 type Props = {
   playlists: WatchLpPlaylistPick[]
@@ -17,6 +19,11 @@ type Props = {
   onClearSutra: () => void
   onClearGenre: () => void
   onClearAll: () => void
+}
+
+function sutraChipLabel(value: WatchLpSutraFilter): string {
+  if (value === 'ALL') return 'All questions'
+  return LISTEN_LP_SUTRA_FILTER_OPTIONS.find((o) => o.value === value)?.label ?? value
 }
 
 export function WatchLpFacetBar({
@@ -41,79 +48,84 @@ export function WatchLpFacetBar({
   const hasActive = activeSutra !== 'ALL' || activeGenre !== 'ALL'
 
   return (
-    <div className="watch-lp__facet-bar" aria-label="Filter playlists">
+    <div className="lp-facet-bar watch-lp__facet-bar" aria-label="Filter playlists">
       {hasActive ? (
-        <div className="watch-lp__facet-active">
-          <span className="watch-lp__facet-count">Filtered</span>
+        <div className="lp-facet-bar__active">
+          <span className="lp-facet-bar__count">Filtered</span>
           {activeSutra !== 'ALL' ? (
-            <button type="button" className="watch-lp__facet-pill" onClick={onClearSutra}>
-              {activeSutra}
-              <span className="watch-lp__facet-pill-x" aria-hidden>
+            <button type="button" className="lp-facet-bar__pill" onClick={onClearSutra}>
+              {sutraChipLabel(activeSutra)}
+              <span className="lp-facet-bar__pill-x" aria-hidden>
                 ×
               </span>
             </button>
           ) : null}
           {activeGenre !== 'ALL' ? (
-            <button type="button" className="watch-lp__facet-pill" onClick={onClearGenre}>
+            <button type="button" className="lp-facet-bar__pill" onClick={onClearGenre}>
               {activeGenre}
-              <span className="watch-lp__facet-pill-x" aria-hidden>
+              <span className="lp-facet-bar__pill-x" aria-hidden>
                 ×
               </span>
             </button>
           ) : null}
-          <button type="button" className="watch-lp__facet-clear" onClick={onClearAll}>
+          <button type="button" className="lp-facet-bar__clear" onClick={onClearAll}>
             Clear all
           </button>
         </div>
       ) : null}
 
-      <div className="watch-lp__facet-panel">
-        <div className="watch-lp__facet-row">
-          <div className="watch-lp__facet-label">Guiding question</div>
-          <div className="watch-lp__facet-chips" role="group" aria-label="Guiding question">
-            {WATCH_LP_SUTRA_FILTER_OPTIONS.map((opt) => {
-              const on = opt.value === activeSutra
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  className={`watch-lp__facet-chip${on ? ' is-active' : ''}`}
-                  aria-pressed={on}
-                  onClick={() => {
-                    onSutraChange(opt.value)
-                    if (opt.value !== 'ALL') onGenreChange('ALL')
-                  }}
-                >
-                  {opt.label}
-                </button>
-              )
-            })}
+      <div className="lp-facet-bar__panel">
+        <div className="lp-facet-bar__row">
+          <div className="lp-facet-bar__label">Choose a question</div>
+          <div className="lp-facet-bar__scroll">
+            <div className="lp-facet-bar__chips" role="group" aria-label="Choose a question">
+              {WATCH_LP_SUTRA_FILTER_OPTIONS.map((opt) => {
+                const on = opt.value === activeSutra
+                const isQuestion = opt.value !== 'ALL'
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`lp-facet-bar__chip${isQuestion ? ' lp-facet-bar__chip--question' : ''}${on ? ' is-active' : ''}`}
+                    aria-pressed={on}
+                    onClick={() => {
+                      onSutraChange(opt.value)
+                      if (opt.value !== 'ALL') onGenreChange('ALL')
+                    }}
+                  >
+                    {opt.label === 'All' ? 'All questions' : opt.label}
+                  </button>
+                )
+              })}
+            </div>
           </div>
         </div>
-        <div className="watch-lp__facet-row">
-          <div className="watch-lp__facet-label">Genre</div>
-          <div className="watch-lp__facet-chips" role="group" aria-label="Genre">
-            {genreOptions.map((opt) => {
-              const on = opt.value === activeGenre
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  className={`watch-lp__facet-chip${on ? ' is-active' : ''}`}
-                  aria-pressed={on}
-                  onClick={() => {
-                    onGenreChange(opt.value)
-                    if (opt.value !== 'ALL') onSutraChange('ALL')
-                  }}
-                >
-                  {opt.label}
-                </button>
-              )
-            })}
+        <div className="lp-facet-bar__row">
+          <div className="lp-facet-bar__label">Choose a genre</div>
+          <div className="lp-facet-bar__scroll">
+            <div className="lp-facet-bar__chips" role="group" aria-label="Choose a genre">
+              {genreOptions.map((opt) => {
+                const on = opt.value === activeGenre
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`lp-facet-bar__chip${on ? ' is-active' : ''}`}
+                    aria-pressed={on}
+                    onClick={() => {
+                      onGenreChange(opt.value)
+                      if (opt.value !== 'ALL') onSutraChange('ALL')
+                    }}
+                  >
+                    {opt.label === 'All' ? 'All genres' : opt.label}
+                  </button>
+                )
+              })}
+            </div>
           </div>
         </div>
       </div>
-      <p className="watch-lp__facet-status" aria-live="polite">
+      <p className="lp-facet-bar__status" aria-live="polite">
         {statusText}
       </p>
     </div>

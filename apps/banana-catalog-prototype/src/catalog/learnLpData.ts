@@ -13,12 +13,12 @@ export const LEARN_LP_META = {
   title: 'Learn',
   description:
     'What is bananasutra? Start here. The songs make more sense once you know the sutras. Orientation hub for sutras, muses, quotes, and words.',
-  lead: 'What is bananasutra? Start here. The songs make more sense once you know the sutras.',
+  lead: 'Start here. The songs make more sense once you know the sutras.',
   sub:
-    'An audio testament. True stories organized by the seven questions I navigate by. Open a door; see what\'s inside before you commit.',
+    'What is bananasutra? An audio testament. True stories organized by the seven questions I navigate by. Open a door; see what\'s inside before you commit.',
 } as const
 
-export type LearnHubTileKey = 'about' | 'sutras' | 'muses' | 'quotes' | 'words' | 'manifesto'
+export type LearnHubTileKey = 'about' | 'sutras' | 'muses-quotes' | 'words' | 'manifesto'
 
 export type LearnHubTileConfig = {
   key: LearnHubTileKey
@@ -41,19 +41,14 @@ export const LEARN_HUB_TILES: LearnHubTileConfig[] = [
     tileClassName: 'learn-lp__tile--sutras',
   },
   {
-    key: 'muses',
-    label: 'Muses',
-    description: 'Thinkers, fools, and troublemakers who sparked a song or a line.',
-  },
-  {
-    key: 'quotes',
-    label: 'Quotes',
-    description: 'Lines that became songs. Tagged by which question they answer.',
+    key: 'muses-quotes',
+    label: 'Muses & quotes',
+    description: 'Thinkers who sparked a line, and the lines that became songs.',
   },
   {
     key: 'words',
     label: 'Words',
-    description: 'Lyrics-first pieces with no in-app audio yet. Read anyway.',
+    description: 'Lyrics-first pieces. Read anyway.',
   },
   {
     key: 'manifesto',
@@ -257,11 +252,11 @@ export function pickQuoteAtIndex(quotes: QuoteWallItem[], index: number): QuoteW
   return quotes[idx] ?? null
 }
 
-export function pickWordsSample(catalog: SongCatalogItem[] | null, limit = 3): SongCatalogItem[] {
+export function pickWordsSample(catalog: SongCatalogItem[] | null, limit = 5): SongCatalogItem[] {
   if (!catalog?.length) return []
   return catalog
     .filter((s) => (s.url_slug || '').trim() && wordsLyricsOnly(s))
-    .filter((s) => (s.lyrics_extract || s.summary_short || '').trim())
+    .sort((a, b) => parsePublishedAt(b.published_at) - parsePublishedAt(a.published_at))
     .slice(0, limit)
 }
 

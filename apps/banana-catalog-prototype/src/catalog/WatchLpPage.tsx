@@ -1,41 +1,67 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
-import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
+import {
+  CatalogVideoSpotlight,
+  type CatalogVideoSpotlightItem,
+} from './CatalogVideoSpotlight'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { useSongCatalogBrowse } from './generatedData'
-import { ScrollRail } from './ScrollRail'
 import { canonicalPathForRoute } from './seoPaths'
 import { songCatalogLinkTo } from './songPaths'
 import type { YouTubeCatalogVideo, YouTubePlaylistCatalogItem } from './types'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
+import { useExclusiveYoutubeEmbedsPlayback } from './useExclusiveYoutubeEmbedsPlayback'
 import { WatchLpBertrandTail } from './WatchLpBertrandTail'
 import { WatchLpFacetBar } from './WatchLpFacetBar'
 import { WatchLpPlaylistEmbed } from './WatchLpPlaylistEmbed'
 import { WatchLpPlaylistThumb } from './WatchLpPlaylistThumb'
 import { WatchLpVideoPickThumb } from './WatchLpVideoPickThumb'
+import { pauseYoutubeEmbed } from './youtubeEmbedControl'
 import {
   dedupeWatchPlaylists,
   pickFilteredWatchPlaylists,
   pickRecentClipsRail,
   pickSpotlightHero,
-  pickVisibleWatchPlaylists,
   WATCH_LP_META,
+  WATCH_LP_PLAYLIST_GRID_LIMIT,
   watchLpRecentClipsNote,
   type WatchLpSutraFilter,
 } from './watchLpData'
+import { formatDurationDisplay } from './durationFormat'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
-import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
-import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import './CatalogApp.css'
 import './catalog-page-shell.css'
+import './CatalogVideoSpotlight.css'
+import './lp-facet-bar.css'
 import './WatchLpPage.css'
+
+function toSpotlightItem(
+  video: YouTubeCatalogVideo,
+  inApp: boolean,
+): CatalogVideoSpotlightItem {
+  const title = (video.lyrics_title || video.title || '').trim()
+  return {
+    videoId: video.video_id,
+    title,
+    summary: (video.lyrics_summary || '').trim() || undefined,
+    sutra: (video.sutra || '').trim() || undefined,
+    duration: formatDurationDisplay(video.duration) || undefined,
+    inApp,
+    songHref: inApp
+      ? songCatalogLinkTo(title, video.url_slug, { section: 'video' })
+      : null,
+    externalHref: inApp ? null : (video.yt_url || '').trim() || null,
+  }
+}
 
 export function WatchLpPage() {
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
+  const spotlightYtRef = useRef<HTMLIFrameElement>(null)
+  const playlistYtRef = useRef<HTMLIFrameElement>(null)
   const { data: songCatalogRows } = useSongCatalogBrowse()
   const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[] | null>(null)
   const [playlists, setPlaylists] = useState<YouTubePlaylistCatalogItem[] | null>(null)
@@ -44,6 +70,9 @@ export function WatchLpPage() {
   const [activeGenre, setActiveGenre] = useState('ALL')
   const [pickedFeaturedId, setPickedFeaturedId] = useState<string | null>(null)
   const [pickedPlaylistId, setPickedPlaylistId] = useState<string | null>(null)
+  const [showAllPlaylists, setShowAllPlaylists] = useState(false)
+
+  useExclusiveYoutubeEmbedsPlayback(Boolean(youtubeVideos?.length && playlists?.length))
 
   useEffect(() => {
     let cancelled = false
@@ -101,23 +130,38 @@ export function WatchLpPage() {
     () => pickFilteredWatchPlaylists(allPlaylists, activeSutra, activeGenre),
     [allPlaylists, activeSutra, activeGenre],
   )
-  const visiblePlaylists = useMemo(() => pickVisibleWatchPlaylists(filteredPlaylists), [filteredPlaylists])
+  const sortedPlaylists = useMemo(
+    () => [...filteredPlaylists].sort((a, b) => (b.video_count || 0) - (a.video_count || 0)),
+    [filteredPlaylists],
+  )
+  const visiblePlaylists = useMemo(() => {
+    if (showAllPlaylists) return sortedPlaylists
+    return sortedPlaylists.slice(0, WATCH_LP_PLAYLIST_GRID_LIMIT)
+  }, [sortedPlaylists, showAllPlaylists])
+
+  useEffect(() => {
+    setShowAllPlaylists(false)
+  }, [activeSutra, activeGenre])
 
   const activePlaylist = useMemo(() => {
-    if (!visiblePlaylists.shown.length) return null
-    if (pickedPlaylistId && visiblePlaylists.shown.some((pl) => pl.playlist_id === pickedPlaylistId)) {
-      return allPlaylists.find((pl) => pl.playlist_id === pickedPlaylistId) ?? visiblePlaylists.shown[0]
+    if (!visiblePlaylists.length) return null
+    if (pickedPlaylistId && visiblePlaylists.some((pl) => pl.playlist_id === pickedPlaylistId)) {
+      return allPlaylists.find((pl) => pl.playlist_id === pickedPlaylistId) ?? visiblePlaylists[0]
     }
-    return visiblePlaylists.shown[0]
-  }, [pickedPlaylistId, visiblePlaylists.shown, allPlaylists])
+    if (pickedPlaylistId && sortedPlaylists.some((pl) => pl.playlist_id === pickedPlaylistId)) {
+      return allPlaylists.find((pl) => pl.playlist_id === pickedPlaylistId) ?? sortedPlaylists[0]
+    }
+    return visiblePlaylists[0] ?? sortedPlaylists[0] ?? null
+  }, [pickedPlaylistId, visiblePlaylists, sortedPlaylists, allPlaylists])
 
   const activePlaylistId = activePlaylist?.playlist_id ?? null
 
   const featuredInApp = featuredVideo ? inAppIds.has((featuredVideo.lyrics_id || '').trim()) : false
-  const featuredSongHref = featuredVideo
-    ? featuredYoutubeSongPageHref(featuredVideo, featuredInApp)
-    : null
-  const featuredTitle = (featuredVideo?.lyrics_title || featuredVideo?.title || '').trim()
+  const featuredSpotlight = featuredVideo ? toSpotlightItem(featuredVideo, featuredInApp) : null
+  const railSpotlight = recentRail.shown.map((video) => {
+    const lid = (video.lyrics_id || '').trim()
+    return toSpotlightItem(video, Boolean(lid && inAppIds.has(lid)))
+  })
 
   const pageMeta = renderPageMeta({
     title: WATCH_LP_META.title,
@@ -130,6 +174,7 @@ export function WatchLpPage() {
     activeGenre,
     pickedFeaturedId,
     activePlaylistId,
+    showAllPlaylists,
     allVideos.length,
     allPlaylists.length,
     youtubeVideos === null ? -1 : allVideos.length,
@@ -152,6 +197,9 @@ export function WatchLpPage() {
     if (value !== 'ALL') setActiveSutra('ALL')
     setPickedPlaylistId(null)
   }
+
+  const pausePlaylistEmbed = () => pauseYoutubeEmbed(playlistYtRef.current)
+  const pauseSpotlightEmbed = () => pauseYoutubeEmbed(spotlightYtRef.current)
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell watch-lp">
@@ -188,92 +236,45 @@ export function WatchLpPage() {
               aria-labelledby="watch-lp-spotlight-heading"
             >
               <h2 id="watch-lp-spotlight-heading" className="catalog-section-title">
-                What&apos;s new
+                What&apos;s new?
               </h2>
+              <p className="watch-lp__section-intro">Most recent clips first. Tap a thumbnail to swap the player.</p>
 
-              <div className="watch-lp__spotlight-unit">
-                <div className="watch-lp__spotlight-stage">
-                  {featuredVideo ? (
-                    <article className="watch-lp__now-playing">
-                      <YoutubeEmbeddedPlayer
-                        key={featuredVideo.video_id}
-                        videoId={featuredVideo.video_id}
-                        title={featuredTitle || 'Featured video'}
-                        embedWrapperClassName="watch-lp__featured-embed"
-                        embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredVideo.format) }}
-                        iframeClassName="watch-lp__featured-iframe"
-                        facadeUntilClick
-                        facadePosterEager
-                        posterWidth={640}
-                        outboundFooterClassName="watch-lp__featured-yt-outbound"
-                      />
-                      <div className="watch-lp__spotlight-detail">
-                        <h3 className="watch-lp__spotlight-title">
-                          {featuredInApp ? (
-                            <Link
-                              className="watch-lp__spotlight-title-link"
-                              to={songCatalogLinkTo(featuredTitle, featuredVideo.url_slug, { section: 'video' })}
-                            >
-                              {featuredTitle}
-                            </Link>
-                          ) : (
-                            <a
-                              className="watch-lp__spotlight-title-link"
-                              href={featuredVideo.yt_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {featuredTitle}
-                            </a>
-                          )}
-                        </h3>
-                        {(featuredVideo.lyrics_summary || '').trim() ? (
-                          <p className="watch-lp__spotlight-summary">{featuredVideo.lyrics_summary?.trim()}</p>
-                        ) : null}
-                        {featuredSongHref ? (
-                          <Link className="catalog-section-cta catalog-section-cta--inline" to={featuredSongHref}>
-                            Song page →
-                          </Link>
-                        ) : null}
-                      </div>
-                    </article>
-                  ) : (
-                    <p className="watch-lp__empty">No recent clips in the catalog.</p>
-                  )}
-                </div>
-
-                {recentRail.shown.length ? (
-                  <div className="watch-lp__spotlight-rail">
-                    <p className="watch-lp__spotlight-rail-eyebrow">More recent clips</p>
-                    <ScrollRail className="watch-lp__scroll-rail" variant="fade">
-                      <ul className="watch-lp__picks-rail" aria-label="Recent video picks">
-                        {recentRail.shown.map((video) => {
-                          const lid = (video.lyrics_id || '').trim()
-                          return (
-                            <li key={video.video_id} className="watch-lp__picks-rail-cell">
-                              <WatchLpVideoPickThumb
-                                video={video}
-                                inApp={Boolean(lid && inAppIds.has(lid))}
-                                isActive={video.video_id === featuredVideo?.video_id}
-                                onSelect={() => setPickedFeaturedId(video.video_id)}
-                              />
-                            </li>
-                          )
-                        })}
-                      </ul>
-                    </ScrollRail>
-                  </div>
-                ) : null}
-              </div>
-
-              <p className="watch-lp__spotlight-footer">
-                {recentRail.total ? (
-                  <span className="watch-lp__grid-note">{watchLpRecentClipsNote(recentRail.total, recentRail.shown.length)}</span>
-                ) : null}
-                <Link className="catalog-section-cta watch-lp__spotlight-browse" to="/videos/">
-                  Browse all videos →
-                </Link>
-              </p>
+              <CatalogVideoSpotlight
+                className="watch-lp__spotlight-player"
+                featured={featuredSpotlight}
+                rail={railSpotlight}
+                activeVideoId={featuredVideo?.video_id ?? null}
+                onSelectVideo={setPickedFeaturedId}
+                iframeRef={spotlightYtRef}
+                onBeforePlay={pausePlaylistEmbed}
+                railEyebrow="More recent clips"
+                renderRailCell={(video, isActive, onSelect) => {
+                  const source = recentRail.shown.find((v) => v.video_id === video.videoId)
+                  if (!source) return null
+                  const lid = (source.lyrics_id || '').trim()
+                  return (
+                    <WatchLpVideoPickThumb
+                      video={source}
+                      inApp={Boolean(lid && inAppIds.has(lid))}
+                      isActive={isActive}
+                      onSelect={onSelect}
+                    />
+                  )
+                }}
+                footer={
+                  <>
+                    {recentRail.total ? (
+                      <span className="watch-lp__grid-note">
+                        {watchLpRecentClipsNote(recentRail.total, recentRail.shown.length)}
+                      </span>
+                    ) : null}
+                    <Link className="catalog-section-cta watch-lp__spotlight-browse" to="/videos/">
+                      Browse all videos →
+                    </Link>
+                  </>
+                }
+              />
             </section>
           )}
 
@@ -287,18 +288,26 @@ export function WatchLpPage() {
               aria-labelledby="watch-lp-playlists-heading"
             >
               <h2 id="watch-lp-playlists-heading" className="catalog-section-title">
-                Keep watching
+                BANANASUTRA cinema
               </h2>
               <p className="watch-lp__section-intro">
                 The longer form. Playlists organized by story or by sound. Pick one and stay a while.
               </p>
 
+              <div className="watch-lp__playlists-player">
+                <WatchLpPlaylistEmbed
+                  playlist={activePlaylist}
+                  iframeRef={playlistYtRef}
+                  onBeforePlay={pauseSpotlightEmbed}
+                />
+              </div>
+
               <WatchLpFacetBar
                 playlists={allPlaylists}
                 activeSutra={activeSutra}
                 activeGenre={activeGenre}
-                shownCount={visiblePlaylists.shown.length}
-                totalCount={visiblePlaylists.total}
+                shownCount={visiblePlaylists.length}
+                totalCount={sortedPlaylists.length}
                 onSutraChange={handleSutraChange}
                 onGenreChange={handleGenreChange}
                 onClearSutra={() => {
@@ -312,13 +321,9 @@ export function WatchLpPage() {
                 onClearAll={clearPlaylistFilters}
               />
 
-              <div className="watch-lp__playlists-player">
-                <WatchLpPlaylistEmbed playlist={activePlaylist} />
-              </div>
-
-              {visiblePlaylists.shown.length ? (
+              {visiblePlaylists.length ? (
                 <ul className="watch-lp__playlist-grid" aria-live="polite">
-                  {visiblePlaylists.shown.map((pl) => (
+                  {visiblePlaylists.map((pl) => (
                     <WatchLpPlaylistThumb
                       key={pl.playlist_id}
                       playlist={pl}
@@ -330,6 +335,16 @@ export function WatchLpPage() {
               ) : (
                 <p className="watch-lp__empty">No playlists match this filter.</p>
               )}
+
+              {sortedPlaylists.length > WATCH_LP_PLAYLIST_GRID_LIMIT && !showAllPlaylists ? (
+                <button
+                  type="button"
+                  className="catalog-section-cta watch-lp__load-more"
+                  onClick={() => setShowAllPlaylists(true)}
+                >
+                  Load all {sortedPlaylists.length} playlists
+                </button>
+              ) : null}
             </section>
           )}
 

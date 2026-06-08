@@ -7,9 +7,9 @@ import songbookCatalogJson from '../data/generated/songbook_catalog.json'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
+import { FeaturedSongbookSpotlight } from './FeaturedSongbookSpotlight'
 import {
   resolveHiddenPeelsSongbook,
-  songbookFeaturedKickerLabel,
   songbookHrefFromCatalogItem,
 } from './homePortalUtils'
 import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
@@ -22,10 +22,8 @@ import { SUTRA_CONTEXT, sutraHrefForFamily } from './sutraContext'
 import { PageMeta } from './PageMeta'
 import { websiteJsonLd } from '../seo/jsonLd'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
-import { hasListenerCatalogMedia } from './listenerCatalog'
-import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
-import { songOnWordsSurface } from './wordsStory'
 import './CatalogApp.css'
+import './FeaturedSongbookSpotlight.css'
 import './HomePortal.css'
 
 type HomeQuote = {
@@ -61,11 +59,6 @@ const BUILD_SUMMARY = buildSummaryJson as ChromeBuildSummary
 const HOME_BROWSE_CATALOG = songCatalogBrowseJson as SongCatalogItem[]
 /** Matches `.song-thumb-grid--home`: 6 cols desktop, 3 cols tablet/mobile */
 const LATEST_DROPS_LIMIT = 6
-
-function buildSummaryCount(key: string): number {
-  const v = (buildSummaryJson as Record<string, unknown>)[key]
-  return typeof v === 'number' ? v : 0
-}
 
 const SUTRA_GRID_KEYS = ['KNOW', 'BLOW', 'SHOW', 'GROW', 'FLOW', 'GLOW', 'BOW', 'QUACK'] as const
 
@@ -150,20 +143,6 @@ export function HomePortal() {
         .slice(0, LATEST_DROPS_LIMIT),
     [],
   )
-
-  const wordsSurfaceCount = useMemo(
-    () => HOME_BROWSE_CATALOG.filter(songOnWordsSurface).length,
-    [],
-  )
-
-  /** Same inclusion rule as `/songs` browse grid (`CatalogApp` → `hasListenerCatalogMedia`). */
-  const songsBrowseGridCount = useMemo(
-    () => HOME_BROWSE_CATALOG.filter(hasListenerCatalogMedia).length,
-    [],
-  )
-
-  /** Matches searchable catalog rows (same pool as `/words` + rest of catalog). */
-  const searchDiscoverRowCount = HOME_BROWSE_CATALOG.length
 
   const songbooksCount = BUILD_SUMMARY.songbooks ?? 0
 
@@ -336,27 +315,21 @@ export function HomePortal() {
               <h2 id="home-hidden-peels-heading" className="catalog-section-title">
                 Hidden Peels
               </h2>
-              <div className="home-portal__featured">
-                <LazySoundCloudEmbed scUrl={homePlaylistSongbook.playlist_url} title={homePlaylistSongbook.songbook} />
-                <div className="home-portal__featured-copy">
-                  <p className="home-portal__featured-kicker">{songbookFeaturedKickerLabel(homePlaylistSongbook)}</p>
-                  <h3 className="home-portal__featured-title">{homePlaylistSongbook.songbook}</h3>
-                  {homePlaylistSongbook.description ? (
-                    <p className="home-portal__featured-desc">{homePlaylistSongbook.description}</p>
-                  ) : null}
-                  <SongbookPlaylistMetaLine book={homePlaylistSongbook} />
-                  <Link className="home-portal__featured-cta" to={songbookHrefFromCatalogItem(homePlaylistSongbook)}>
-                    Open songbook →
-                  </Link>
-                </div>
-              </div>
+              <FeaturedSongbookSpotlight
+                book={homePlaylistSongbook}
+                className="home-portal__featured-spotlight"
+                ctaTo={songbookHrefFromCatalogItem(homePlaylistSongbook)}
+                embed={
+                  <LazySoundCloudEmbed scUrl={homePlaylistSongbook.playlist_url} title={homePlaylistSongbook.songbook} />
+                }
+              />
               <Link className="catalog-section-cta" to={canonicalPathForRoute('/songbooks')}>
                 All {formatCount(songbooksCount)} songbooks →
               </Link>
             </section>
           ) : null}
 
-          <section className="home-portal__section" aria-labelledby="home-drops-heading">
+          <section className="home-portal__section home-portal__section--last" aria-labelledby="home-drops-heading">
             <h2 id="home-drops-heading" className="catalog-section-title">
               Latest drops
             </h2>
@@ -377,81 +350,6 @@ export function HomePortal() {
             </ul>
             <Link className="catalog-section-cta" to={browsePathWithQuery('/songs', 'sort=newest')}>
               Browse newest →
-            </Link>
-          </section>
-
-          <section className="home-portal__section home-portal__section--last" aria-labelledby="home-explore-heading">
-            <h2 id="home-explore-heading" className="catalog-section-title">
-              Ways to Explore
-            </h2>
-            <ul className="about-page__how-grid">
-              <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to={`${CATALOG_BROWSE_PATH}#catalog-songs-find-input`}>
-                  <span className="about-page__how-label">Search &amp; Discover →</span>
-                  <span className="about-page__how-stat">
-                    {`${formatCount(searchDiscoverRowCount)} songs & lyrics · find + filters`}
-                  </span>
-                  <span className="about-page__how-desc">
-                    Find any song by title, sutra, muse, topic, or vibe. Start typing, start finding.
-                  </span>
-                </Link>
-              </li>
-              <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to={canonicalPathForRoute('/songbooks')}>
-                  <span className="about-page__how-label">Browse Songbooks →</span>
-                  <span className="about-page__how-stat">{formatCount(buildSummaryCount('songbooks'))} curated collections</span>
-                  <span className="about-page__how-desc">
-                    Best-of SoundCloud playlists that tell a story. By topic, by genres, and by language.
-                  </span>
-                </Link>
-              </li>
-              <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to={CATALOG_BROWSE_PATH}>
-                  <span className="about-page__how-label">Explore the fool catalog →</span>
-                  <span className="about-page__how-stat">
-                    {`${formatCount(songsBrowseGridCount)} songs · meaning-first`}
-                  </span>
-                  <span className="about-page__how-desc">
-                    Every song in one place—filter, wander, or let something find you.
-                  </span>
-                </Link>
-              </li>
-              <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to={canonicalPathForRoute('/tracks')}>
-                  <span className="about-page__how-label">Listen to Top Tracks →</span>
-                  <span className="about-page__how-stat">
-                    {formatCount(buildSummaryCount('track_catalog_rows'))} tracks · sound-first
-                  </span>
-                  <span className="about-page__how-desc">
-                    The best tracks, ranked and filterable by tempo, genres, instruments, and moods.
-                  </span>
-                </Link>
-              </li>
-              <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to={canonicalPathForRoute('/videos')}>
-                  <span className="about-page__how-label">Watch Music Videos →</span>
-                  <span className="about-page__how-stat">
-                    {formatCount(buildSummaryCount('youtube_video_rows'))} videos · eyes first
-                  </span>
-                  <span className="about-page__how-desc">
-                    The visual YouTube wall. Same songs, eye candy style.
-                  </span>
-                </Link>
-              </li>
-              <li className="about-page__how-cell">
-                <Link className="about-page__how-card" to={canonicalPathForRoute('/words')}>
-                  <span className="about-page__how-label">Read the Words →</span>
-                  <span className="about-page__how-stat">
-                    {formatCount(wordsSurfaceCount)} lyrics-first songs
-                  </span>
-                  <span className="about-page__how-desc">
-                    Lyrics without music. Pieces still brewing, or that live as text alone.
-                  </span>
-                </Link>
-              </li>
-            </ul>
-            <Link className="catalog-section-cta" to={canonicalPathForRoute('/about')}>
-              About Bananasutra →
             </Link>
           </section>
         </main>

@@ -16,6 +16,7 @@ import { coverImageUrl } from '../seo/imageUrl'
 import { bindSoundCloudWidgetPlayback } from './soundCloudWidgetPlayback'
 import { formatDurationDisplay } from './durationFormat'
 import { sutraClassName } from './sutraTheme'
+import type { ListenLpEpPick } from './listenLpData'
 import type { TrackCatalogItem } from './types'
 import { type SoundCloudWidget } from './soundcloudWidgetApi'
 import './TracksPage.css'
@@ -23,24 +24,24 @@ import './TracksPage.css'
 const LISTEN_MODE: AnalyticsMode = 'listen'
 const QUEUE_SOURCE = 'listen_lp' as const
 
+type PlayerTab = 'tracks' | 'eps'
+
 function thumbSrc(url: string): string {
   const u = url.trim()
   if (!u) return ''
   return u.replace(/-t\d+x\d+\./i, '-t200x200.').replace(/-toriginal\./i, '-t200x200.')
 }
 
-function genreLine(t: TrackCatalogItem): string {
-  const parts = [t.primary_genre, ...(t.secondary_genres ?? [])].map((s) => s.trim()).filter(Boolean)
-  return [...new Set(parts)].slice(0, 4).join(' · ')
-}
-
 type Props = {
   tracks: TrackCatalogItem[]
+  eps: ListenLpEpPick[]
 }
 
-export function ListenLpTopTracks({ tracks }: Props) {
+export function ListenLpTopTracks({ tracks, eps }: Props) {
   const playAllDesktopAvailable = usePlayAllDesktopAvailable()
-  const [selectedId, setSelectedId] = useState<string | null>(() => tracks[0]?.track_id ?? null)
+  const [playerTab, setPlayerTab] = useState<PlayerTab>('tracks')
+  const [selectedTrackId, setSelectedTrackId] = useState<string | null>(() => tracks[0]?.track_id ?? null)
+  const [selectedEpUrl, setSelectedEpUrl] = useState<string | null>(() => eps[0]?.ep_url ?? null)
   const [embedReloadKey, setEmbedReloadKey] = useState(0)
   const [scAutoplay, setScAutoplay] = useState(false)
   const [isScPlaying, setIsScPlaying] = useState(false)
@@ -52,7 +53,7 @@ export function ListenLpTopTracks({ tracks }: Props) {
   const playerWrapRef = useRef<HTMLDivElement>(null)
   const scWidgetRef = useRef<SoundCloudWidget | null>(null)
   const tracksRef = useRef(tracks)
-  const selectedIdRef = useRef<string | null>(selectedId)
+  const selectedTrackIdRef = useRef<string | null>(selectedTrackId)
   const playbackIntentRef = useRef<PlaybackIntent>('user_pick')
   const skipScAutoplayOffOnNextSelectionChange = useRef(false)
 
@@ -66,12 +67,12 @@ export function ListenLpTopTracks({ tracks }: Props) {
     isScPlayingRef.current = isScPlaying
   }, [isScPlaying])
   useEffect(() => {
-    selectedIdRef.current = selectedId
-  }, [selectedId])
+    selectedTrackIdRef.current = selectedTrackId
+  }, [selectedTrackId])
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)')
-    const apply = () => setEmbedHeight(mq.matches ? 140 : 180)
+    const apply = () => setEmbedHeight(mq.matches ? 120 : 160)
     apply()
     mq.addEventListener('change', apply)
     return () => mq.removeEventListener('change', apply)
@@ -79,18 +80,37 @@ export function ListenLpTopTracks({ tracks }: Props) {
 
   useEffect(() => {
     if (!tracks.length) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- clear player when track list empties
-      setSelectedId(null)
-      setScAutoplay(false)
-      setIsScPlaying(false)
-      setPlayAllActive(false)
+      setSelectedTrackId(null)
       return
     }
-    setSelectedId((prev) => {
+    setSelectedTrackId((prev) => {
       if (prev && tracks.some((t) => t.track_id === prev)) return prev
       return tracks[0]?.track_id ?? null
     })
   }, [tracks])
+
+  useEffect(() => {
+    if (!eps.length) return
+    setSelectedEpUrl((prev) => {
+      if (prev && eps.some((e) => e.ep_url === prev)) return prev
+      return eps[0]?.ep_url ?? null
+    })
+  }, [eps])
+
+  const selectedTrack = useMemo(
+    () => tracks.find((t) => t.track_id === selectedTrackId) ?? tracks[0],
+    [tracks, selectedTrackId],
+  )
+  const selectedEp = useMemo(
+    () => eps.find((e) => e.ep_url === selectedEpUrl) ?? eps[0],
+    [eps, selectedEpUrl],
+  )
+
+  const activeScUrl = playerTab === 'tracks' ? selectedTrack?.sc_url : selectedEp?.ep_url
+  const activeTitle =
+    playerTab === 'tracks'
+      ? selectedTrack?.lyrics_title || selectedTrack?.track_title || 'SoundCloud track'
+      : selectedEp?.ep_title || 'SoundCloud EP'
 
   useEffect(() => {
     if (skipScAutoplayOffOnNextSelectionChange.current) {
@@ -99,13 +119,12 @@ export function ListenLpTopTracks({ tracks }: Props) {
     }
     setScAutoplay(false)
     setIsScPlaying(false)
-  }, [selectedId])
+  }, [selectedTrackId, selectedEpUrl, playerTab])
 
-  const selected = useMemo(
-    () => tracks.find((t) => t.track_id === selectedId) ?? tracks[0],
-    [tracks, selectedId],
-  )
-  const queueIndex = selected?.track_id ? tracks.findIndex((t) => t.track_id === selected.track_id) : -1
+  const queueIndex =
+    playerTab === 'tracks' && selectedTrack?.track_id
+      ? tracks.findIndex((t) => t.track_id === selectedTrack.track_id)
+      : -1
 
   const pausePlayback = useCallback(() => {
     try {
@@ -127,7 +146,7 @@ export function ListenLpTopTracks({ tracks }: Props) {
 
   const pickTrack = useCallback(
     (t: TrackCatalogItem, { keepPlayAll = false }: { keepPlayAll?: boolean } = {}) => {
-      if (t.track_id === selectedIdRef.current && scWidgetRef.current) {
+      if (t.track_id === selectedTrackIdRef.current && scWidgetRef.current) {
         if (isScPlayingRef.current) {
           pausePlayback()
           return
@@ -138,7 +157,7 @@ export function ListenLpTopTracks({ tracks }: Props) {
 
       if (!keepPlayAll && playAllActiveRef.current) {
         const queue = tracksRef.current
-        const idx = queue.findIndex((row) => row.track_id === selectedIdRef.current)
+        const idx = queue.findIndex((row) => row.track_id === selectedTrackIdRef.current)
         trackCatalogPlayAllStopped(QUEUE_SOURCE, idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
         setPlayAllActive(false)
       }
@@ -147,19 +166,42 @@ export function ListenLpTopTracks({ tracks }: Props) {
       playbackIntentRef.current = 'user_pick'
       skipScAutoplayOffOnNextSelectionChange.current = true
       setScAutoplay(true)
-      if (t.track_id === selectedIdRef.current) {
+      if (t.track_id === selectedTrackIdRef.current) {
         setEmbedReloadKey((k) => k + 1)
         return
       }
-      setSelectedId(t.track_id)
+      setSelectedTrackId(t.track_id)
       setEmbedReloadKey((k) => k + 1)
     },
     [pausePlayback, resumePlayback],
   )
 
+  const pickEp = useCallback(
+    (ep: ListenLpEpPick) => {
+      if (ep.ep_url === selectedEpUrl && scWidgetRef.current) {
+        if (isScPlayingRef.current) {
+          pausePlayback()
+          return
+        }
+        resumePlayback()
+        return
+      }
+      setPlayAllActive(false)
+      skipScAutoplayOffOnNextSelectionChange.current = true
+      setScAutoplay(true)
+      if (ep.ep_url === selectedEpUrl) {
+        setEmbedReloadKey((k) => k + 1)
+        return
+      }
+      setSelectedEpUrl(ep.ep_url)
+      setEmbedReloadKey((k) => k + 1)
+    },
+    [pausePlayback, resumePlayback, selectedEpUrl],
+  )
+
   const advanceToNextInQueue = useCallback(() => {
     const queue = tracksRef.current
-    const currentId = selectedIdRef.current
+    const currentId = selectedTrackIdRef.current
     if (!queue.length || !currentId) {
       setPlayAllActive(false)
       return
@@ -215,7 +257,7 @@ export function ListenLpTopTracks({ tracks }: Props) {
 
   const stopPlayAll = useCallback(() => {
     const queue = tracksRef.current
-    const idx = queue.findIndex((row) => row.track_id === selectedIdRef.current)
+    const idx = queue.findIndex((row) => row.track_id === selectedTrackIdRef.current)
     trackCatalogPlayAllStopped(QUEUE_SOURCE, idx >= 0 ? idx + 1 : 0, queue.length, 'user_stop')
     setPlayAllActive(false)
     pausePlayback()
@@ -235,7 +277,7 @@ export function ListenLpTopTracks({ tracks }: Props) {
         bindSoundCloudWidgetPlayback(widget, SC, {
           onPlayingChange: setIsScPlaying,
           onFinish: () => {
-            if (!playAllActiveRef.current) return
+            if (!playAllActiveRef.current || playerTab !== 'tracks') return
             advanceToNextInQueueRef.current()
           },
         })
@@ -243,7 +285,13 @@ export function ListenLpTopTracks({ tracks }: Props) {
       .catch(() => {
         // Widget API failed to load; Play All becomes manual.
       })
-  }, [])
+  }, [playerTab])
+
+  const switchTab = (tab: PlayerTab) => {
+    setPlayAllActive(false)
+    setPlayerTab(tab)
+    setEmbedReloadKey((k) => k + 1)
+  }
 
   const rowActivate = (e: MouseEvent | KeyboardEvent, t: TrackCatalogItem) => {
     if ((e.target as HTMLElement).closest('a')) return
@@ -258,14 +306,29 @@ export function ListenLpTopTracks({ tracks }: Props) {
     }
   }
 
-  if (!tracks.length) {
+  const epRowActivate = (e: MouseEvent | KeyboardEvent, ep: ListenLpEpPick) => {
+    if ((e.target as HTMLElement).closest('a')) return
+    pickEp(ep)
+  }
+
+  const epRowKeyDown = (e: KeyboardEvent<HTMLDivElement>, ep: ListenLpEpPick) => {
+    if ((e.target as HTMLElement).closest('a')) return
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      pickEp(ep)
+    }
+  }
+
+  const hasTracks = tracks.length > 0
+  const hasEps = eps.length > 0
+
+  if (!hasTracks && !hasEps) {
     return (
       <section className="catalog-page-shell__section listen-lp__section" aria-labelledby="listen-lp-tracks-heading">
         <h2 id="listen-lp-tracks-heading" className="catalog-section-title">
-          Top 10 tracks
+          What&apos;s popular?
         </h2>
-        <p className="listen-lp__section-intro">Quick entry point: ten tracks that people actually returned to.</p>
-        <p className="listen-lp__empty">No top tracks in the catalog right now.</p>
+        <p className="listen-lp__empty">No popular tracks in the catalog right now.</p>
         <Link className="catalog-section-cta" to="/tracks/">
           Browse all tracks →
         </Link>
@@ -276,130 +339,234 @@ export function ListenLpTopTracks({ tracks }: Props) {
   return (
     <section className="catalog-page-shell__section listen-lp__section" aria-labelledby="listen-lp-tracks-heading">
       <h2 id="listen-lp-tracks-heading" className="catalog-section-title">
-        Top 10 tracks
+        What&apos;s popular?
       </h2>
-      <p className="listen-lp__section-intro">Quick entry point: ten tracks that people actually returned to.</p>
 
-      {selected?.sc_url ? (
-        <div className="listen-lp__player-frame" ref={playerWrapRef}>
-          <LazySoundCloudEmbed
-            scUrl={selected.sc_url}
-            title={selected.track_title || 'SoundCloud track'}
-            height={embedHeight}
-            mode="visual"
-            autoPlay={scAutoplay}
-            reloadKey={embedReloadKey}
-            onLoad={handlePlayerLoad}
-          />
+      <div className="listen-lp__popular-player">
+        <div className="listen-lp__popular-tabs" role="tablist" aria-label="Popular listening">
+          <button
+            type="button"
+            role="tab"
+            id="listen-lp-tab-tracks"
+            aria-selected={playerTab === 'tracks'}
+            aria-controls="listen-lp-panel-tracks"
+            className={`listen-lp__popular-tab${playerTab === 'tracks' ? ' is-active' : ''}`}
+            disabled={!hasTracks}
+            onClick={() => switchTab('tracks')}
+          >
+            Top 10 tracks
+          </button>
+          <button
+            type="button"
+            role="tab"
+            id="listen-lp-tab-eps"
+            aria-selected={playerTab === 'eps'}
+            aria-controls="listen-lp-panel-eps"
+            className={`listen-lp__popular-tab${playerTab === 'eps' ? ' is-active' : ''}`}
+            disabled={!hasEps}
+            onClick={() => switchTab('eps')}
+          >
+            Top 10 EPs
+          </button>
         </div>
-      ) : null}
 
-      <div className="listen-lp__track-miniplayer">
-        <div className="listen-lp__track-miniplayer-header">
-          {playAllDesktopAvailable || playAllActive ? (
-            playAllActive ? (
-              <div className="listen-lp__play-all-controls">
-                {isScPlaying ? (
-                  <button type="button" className="tracks-page__play-all-btn listen-lp__play-all-btn" onClick={pausePlayAll}>
-                    <span className="tracks-page__play-all-glyph" aria-hidden>
-                      ❚❚
-                    </span>
-                    Pause
-                  </button>
-                ) : (
-                  <button type="button" className="tracks-page__play-all-btn listen-lp__play-all-btn" onClick={resumePlayAll}>
-                    <span className="tracks-page__play-all-glyph" aria-hidden>
-                      ▶
-                    </span>
-                    Resume
-                  </button>
-                )}
-                <button type="button" className="tracks-page__play-all-btn tracks-page__play-all-btn--stop" onClick={stopPlayAll}>
-                  <span className="tracks-page__play-all-glyph" aria-hidden>
-                    ■
-                  </span>
-                  Stop playing all
-                </button>
-              </div>
-            ) : playAllDesktopAvailable && tracks.length > 1 ? (
-              <button type="button" className="tracks-page__play-all-btn listen-lp__play-all-btn" onClick={startPlayAll}>
-                <span className="tracks-page__play-all-glyph" aria-hidden>
-                  ▶
-                </span>
-                {`Play all ${tracks.length} tracks`}
-              </button>
-            ) : null
-          ) : null}
-          {!playAllDesktopAvailable ? (
-            <p className="listen-lp__track-miniplayer-honest">
-              Play All is desktop-only. Tap a track below, or open a songbook for uninterrupted listening on mobile.
-            </p>
-          ) : null}
-          {playAllDesktopAvailable || playAllActive ? (
-            <span className="listen-lp__play-all-status" aria-live="polite">
-              {queueIndex >= 0 ? `Top track ${queueIndex + 1} of ${tracks.length}` : `Top track 0 of ${tracks.length}`}
-            </span>
-          ) : null}
-        </div>
-        <ol className="listen-lp__track-list" aria-live="polite">
-          {tracks.map((t, index) => {
-            const active = t.track_id === selected?.track_id
-            const showPlayingWave = active && isScPlaying
-            const href = songCatalogPath(t.lyrics_title, t.url_slug)
-            const cover = coverImageUrl(thumbSrc(t.list_cover_url), { width: 200 })
-            const sutraText = (t.sutra || '').trim()
-            const metaTail = genreLine(t)
-            const metaParts = [metaTail, sutraText].filter(Boolean)
-            const durationLabel = formatDurationDisplay(t.duration_raw)
-            return (
-              <li key={t.track_id} className="listen-lp__track-item">
-                <div
-                  role="button"
-                  tabIndex={0}
-                  className={`listen-lp__track-row${active ? ' listen-lp__track-row--active' : ''}`}
-                  onClick={(e) => rowActivate(e, t)}
-                  onKeyDown={(e) => rowKeyDown(e, t)}
-                  aria-current={active ? 'true' : undefined}
-                >
-                  <span className="listen-lp__track-rank">{index + 1}</span>
-                  {cover ? (
-                    <span className="listen-lp__track-art-wrap">
-                      <img className="listen-lp__track-art" src={cover} alt="" loading="lazy" />
-                      {showPlayingWave ? (
-                        <span className="listen-lp__track-wave" aria-hidden>
-                          <span className="listen-lp__track-wave-bar" />
-                          <span className="listen-lp__track-wave-bar" />
-                          <span className="listen-lp__track-wave-bar" />
-                          <span className="listen-lp__track-wave-bar" />
-                        </span>
-                      ) : null}
-                    </span>
+        {activeScUrl ? (
+          <div className="listen-lp__player-frame listen-lp__player-frame--compact" ref={playerWrapRef}>
+            <LazySoundCloudEmbed
+              scUrl={activeScUrl}
+              title={activeTitle}
+              height={embedHeight}
+              mode="visual"
+              autoPlay={scAutoplay}
+              reloadKey={embedReloadKey}
+              onLoad={handlePlayerLoad}
+            />
+          </div>
+        ) : null}
+
+        <div className="listen-lp__track-miniplayer">
+          <div className="listen-lp__track-miniplayer-header">
+            {playerTab === 'tracks' && (playAllDesktopAvailable || playAllActive) ? (
+              playAllActive ? (
+                <div className="listen-lp__play-all-controls">
+                  {isScPlaying ? (
+                    <button type="button" className="tracks-page__play-all-btn listen-lp__play-all-btn" onClick={pausePlayAll}>
+                      <span className="tracks-page__play-all-glyph" aria-hidden>
+                        ❚❚
+                      </span>
+                      Pause
+                    </button>
                   ) : (
-                    <span className="listen-lp__track-art listen-lp__track-art--empty" aria-hidden />
+                    <button type="button" className="tracks-page__play-all-btn listen-lp__play-all-btn" onClick={resumePlayAll}>
+                      <span className="tracks-page__play-all-glyph" aria-hidden>
+                        ▶
+                      </span>
+                      Resume
+                    </button>
                   )}
-                  <div className="listen-lp__track-body">
-                    <p className="listen-lp__track-title">{t.track_title}</p>
-                    {metaParts.length ? (
-                      <p className="listen-lp__track-meta">
-                        {sutraText ? (
-                          <span className={`catalog-sutra-word ${sutraClassName(sutraText)}`}>{sutraText}</span>
-                        ) : null}
-                        {metaTail ? <span>{sutraText ? ` · ${metaTail}` : metaTail}</span> : null}
-                      </p>
-                    ) : null}
-                  </div>
-                  <span className="listen-lp__track-play" aria-hidden>
-                    {active && isScPlaying ? '❚❚' : '▶'}
-                  </span>
-                  {durationLabel ? <span className="listen-lp__track-duration">{durationLabel}</span> : null}
-                  <Link className="listen-lp__track-song-link catalog-song-page-cta" to={href} onClick={(e) => e.stopPropagation()}>
-                    Song page
-                  </Link>
+                  <button type="button" className="tracks-page__play-all-btn tracks-page__play-all-btn--stop" onClick={stopPlayAll}>
+                    <span className="tracks-page__play-all-glyph" aria-hidden>
+                      ■
+                    </span>
+                    Stop playing all
+                  </button>
                 </div>
-              </li>
-            )
-          })}
-        </ol>
+              ) : playAllDesktopAvailable && tracks.length > 1 ? (
+                <button type="button" className="tracks-page__play-all-btn listen-lp__play-all-btn" onClick={startPlayAll}>
+                  <span className="tracks-page__play-all-glyph" aria-hidden>
+                    ▶
+                  </span>
+                  {`Play all ${tracks.length} tracks`}
+                </button>
+              ) : null
+            ) : null}
+            {!playAllDesktopAvailable && playerTab === 'tracks' ? (
+              <p className="listen-lp__track-miniplayer-honest">
+                Play All is desktop-only. Tap a track below, or open a songbook for uninterrupted listening on mobile.
+              </p>
+            ) : null}
+            {playerTab === 'tracks' && (playAllDesktopAvailable || playAllActive) ? (
+              <span className="listen-lp__play-all-status" aria-live="polite">
+                {queueIndex >= 0 ? `Track ${queueIndex + 1} of ${tracks.length}` : `Track 0 of ${tracks.length}`}
+              </span>
+            ) : null}
+          </div>
+
+          {playerTab === 'tracks' && hasTracks ? (
+            <ol
+              id="listen-lp-panel-tracks"
+              role="tabpanel"
+              aria-labelledby="listen-lp-tab-tracks"
+              className="listen-lp__track-list"
+              aria-live="polite"
+            >
+              {tracks.map((t, index) => {
+                const active = t.track_id === selectedTrack?.track_id
+                const showPlayingWave = active && isScPlaying
+                const href = songCatalogPath(t.lyrics_title, t.url_slug)
+                const cover = coverImageUrl(thumbSrc(t.list_cover_url), { width: 200 })
+                const songTitle = (t.lyrics_title || t.track_title || '').trim()
+                const sutraText = (t.sutra || '').trim()
+                const genreText = (t.primary_genre || '').trim()
+                const durationLabel = formatDurationDisplay(t.duration_raw)
+                return (
+                  <li key={t.track_id} className="listen-lp__track-item">
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      className={`listen-lp__track-row listen-lp__track-row--compact${active ? ' listen-lp__track-row--active' : ''}`}
+                      onClick={(e) => rowActivate(e, t)}
+                      onKeyDown={(e) => rowKeyDown(e, t)}
+                      aria-current={active ? 'true' : undefined}
+                    >
+                      <span className="listen-lp__track-rank">{index + 1}</span>
+                      {cover ? (
+                        <span className="listen-lp__track-art-wrap listen-lp__track-art-wrap--sm">
+                          <img className="listen-lp__track-art" src={cover} alt="" loading="lazy" />
+                          {showPlayingWave ? (
+                            <span className="listen-lp__track-wave" aria-hidden>
+                              <span className="listen-lp__track-wave-bar" />
+                              <span className="listen-lp__track-wave-bar" />
+                              <span className="listen-lp__track-wave-bar" />
+                              <span className="listen-lp__track-wave-bar" />
+                            </span>
+                          ) : null}
+                        </span>
+                      ) : (
+                        <span className="listen-lp__track-art listen-lp__track-art--empty listen-lp__track-art--sm" aria-hidden />
+                      )}
+                      <div className="listen-lp__track-body">
+                        <p className="listen-lp__track-title">{songTitle}</p>
+                        {sutraText || genreText ? (
+                          <p className="listen-lp__track-meta">
+                            {sutraText ? (
+                              <span className={`catalog-sutra-word ${sutraClassName(sutraText)}`}>{sutraText}</span>
+                            ) : null}
+                            {genreText ? <span>{sutraText ? ` · ${genreText}` : genreText}</span> : null}
+                          </p>
+                        ) : null}
+                      </div>
+                      <span className="listen-lp__track-play" aria-hidden>
+                        {active && isScPlaying ? '❚❚' : '▶'}
+                      </span>
+                      {durationLabel ? <span className="listen-lp__track-duration">{durationLabel}</span> : null}
+                      <Link className="listen-lp__track-song-link catalog-song-page-cta" to={href} onClick={(e) => e.stopPropagation()}>
+                        Song page
+                      </Link>
+                    </div>
+                  </li>
+                )
+              })}
+            </ol>
+          ) : null}
+
+          {playerTab === 'eps' && hasEps ? (
+            <ol
+              id="listen-lp-panel-eps"
+              role="tabpanel"
+              aria-labelledby="listen-lp-tab-eps"
+              className="listen-lp__track-list"
+              aria-live="polite"
+            >
+              {eps.map((ep, index) => {
+                const active = ep.ep_url === selectedEp?.ep_url
+                const showPlayingWave = active && isScPlaying
+                const href = songCatalogPath(ep.lyrics_title, ep.url_slug)
+                const cover = coverImageUrl(thumbSrc(ep.cover_url), { width: 200 })
+                return (
+                  <li key={ep.ep_url} className="listen-lp__track-item">
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      className={`listen-lp__track-row listen-lp__track-row--compact${active ? ' listen-lp__track-row--active' : ''}`}
+                      onClick={(e) => epRowActivate(e, ep)}
+                      onKeyDown={(e) => epRowKeyDown(e, ep)}
+                      aria-current={active ? 'true' : undefined}
+                    >
+                      <span className="listen-lp__track-rank">{index + 1}</span>
+                      {cover ? (
+                        <span className="listen-lp__track-art-wrap listen-lp__track-art-wrap--sm">
+                          <img className="listen-lp__track-art" src={cover} alt="" loading="lazy" />
+                          {showPlayingWave ? (
+                            <span className="listen-lp__track-wave" aria-hidden>
+                              <span className="listen-lp__track-wave-bar" />
+                              <span className="listen-lp__track-wave-bar" />
+                              <span className="listen-lp__track-wave-bar" />
+                              <span className="listen-lp__track-wave-bar" />
+                            </span>
+                          ) : null}
+                        </span>
+                      ) : (
+                        <span className="listen-lp__track-art listen-lp__track-art--empty listen-lp__track-art--sm" aria-hidden />
+                      )}
+                      <div className="listen-lp__track-body">
+                        <p className="listen-lp__track-title">{ep.ep_title}</p>
+                        {ep.sutra || ep.primary_genre ? (
+                          <p className="listen-lp__track-meta">
+                            {ep.sutra ? (
+                              <span className={`catalog-sutra-word ${sutraClassName(ep.sutra)}`}>{ep.sutra}</span>
+                            ) : null}
+                            {ep.primary_genre ? <span>{ep.sutra ? ` · ${ep.primary_genre}` : ep.primary_genre}</span> : null}
+                          </p>
+                        ) : null}
+                      </div>
+                      <span className="listen-lp__track-play" aria-hidden>
+                        {active && isScPlaying ? '❚❚' : '▶'}
+                      </span>
+                      <Link className="listen-lp__track-song-link catalog-song-page-cta" to={href} onClick={(e) => e.stopPropagation()}>
+                        Song page
+                      </Link>
+                    </div>
+                  </li>
+                )
+              })}
+            </ol>
+          ) : null}
+
+          {playerTab === 'eps' && !hasEps ? (
+            <p className="listen-lp__empty listen-lp__empty--inset">No EP playlists ranked yet.</p>
+          ) : null}
+        </div>
       </div>
 
       <Link className="catalog-section-cta" to="/tracks/">

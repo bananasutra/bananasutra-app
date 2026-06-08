@@ -7,8 +7,6 @@ import {
   LEARN_HUB_TILES,
   LEARN_QUOTES,
   coreSutraRowsForHub,
-  countWordsCatalog,
-  pickMuseSample,
   pickQuoteAtIndex,
   pickQuoteSample,
   pickStageCurtainSongs,
@@ -29,7 +27,7 @@ type Props = {
 
 function LearnHubAboutPanel() {
   return (
-    <div className="learn-lp__panel learn-lp__panel--about">
+    <div className="learn-lp__panel learn-lp__panel--about learn-lp__panel--about-rich">
       <p className="learn-lp__panel-lead">{LEARN_ABOUT_PREVIEW.lead}</p>
       <p className="learn-lp__panel-text">{LEARN_ABOUT_PREVIEW.zappa}</p>
       <p className="learn-lp__panel-text">{LEARN_ABOUT_PREVIEW.compass}</p>
@@ -40,7 +38,7 @@ function LearnHubAboutPanel() {
       <p className="learn-lp__panel-text">
         Every song belongs to a sutra. Together they form a compass for a world gone bananas.
       </p>
-      <Link className="catalog-section-cta learn-lp__panel-cta" to={LEARN_ABOUT_PREVIEW.href}>
+      <Link className="catalog-section-cta learn-lp__panel-cta learn-lp__panel-cta--prominent" to={LEARN_ABOUT_PREVIEW.href}>
         Read the full story →
       </Link>
     </div>
@@ -94,98 +92,107 @@ function LearnHubSutrasPanel() {
   )
 }
 
-function LearnHubMusesPanel({ muses, total }: { muses: MuseCatalogItem[]; total: number }) {
-  return (
-    <div className="learn-lp__panel">
-      <p className="learn-lp__panel-intro">
-        Thinkers, writers, and fools behind the quotes and songs. {total} muses in the catalog.
-      </p>
-      <div className="learn-lp__muse-grid">
-        {muses.map((m) => (
-          <Link key={m.muse_id || m.muse} className="learn-lp__muse-chip" to={LEARN_HUB_LINKS.muses}>
-            <span className="learn-lp__muse-chip-name">{m.muse}</span>
-            <span className="learn-lp__muse-chip-meta">
-              {m.core_sutra} · {m.song_count || 0} song{(m.song_count || 0) === 1 ? '' : 's'}
-            </span>
-          </Link>
-        ))}
-      </div>
-      <Link className="catalog-section-cta learn-lp__panel-cta" to={LEARN_HUB_LINKS.muses}>
-        Browse all muses →
-      </Link>
-    </div>
-  )
-}
-
-function LearnQuoteSpotlight({
+function LearnHubMusesQuotesPanel({
   quotes,
-  index,
-  onRefresh,
+  muses,
 }: {
   quotes: QuoteWallItem[]
-  index: number
-  onRefresh: () => void
+  muses: MuseCatalogItem[] | null
 }) {
-  const quote = pickQuoteAtIndex(quotes, index)
-  if (!quote) return <p className="learn-lp__panel-intro">No quotes in catalog.</p>
-  return (
-    <div className="learn-lp__quote-spotlight">
-      <blockquote className="learn-lp__quote-spotlight-text">&ldquo;{quote.quote}&rdquo;</blockquote>
-      <p className="learn-lp__quote-spotlight-attr">
-        {quote.muse} · {quote.primary_sutra}
-      </p>
-      <button type="button" className="learn-lp__quote-spotlight-refresh" onClick={onRefresh}>
-        Another quote
-      </button>
-    </div>
-  )
-}
-
-function LearnHubQuotesPanel({ quotes }: { quotes: QuoteWallItem[] }) {
   const [quoteIndex, setQuoteIndex] = useState(0)
-  const sample = useMemo(() => pickQuoteSample(quotes, 12), [quotes])
+  const sample = useMemo(() => pickQuoteSample(quotes, 24), [quotes])
+  const pool = sample.length ? sample : quotes
+  const quote = pickQuoteAtIndex(pool, quoteIndex)
+
+  const museEntry = useMemo(() => {
+    if (!quote?.muse || !muses?.length) return null
+    const name = quote.muse.trim().toLowerCase()
+    return muses.find((m) => (m.muse || '').trim().toLowerCase() === name) ?? null
+  }, [muses, quote?.muse])
+
+  if (!quote) return <p className="learn-lp__panel-intro">No quotes in catalog.</p>
+
+  const museSummary =
+    (museEntry?.notes || museEntry?.quote_excerpt || museEntry?.famous_works || '').trim() ||
+    'Thinkers, writers, and fools behind the lines that became songs.'
 
   return (
-    <div className="learn-lp__panel">
-      <p className="learn-lp__panel-intro">Lines that sparked songs. Tagged by sutra and topic.</p>
-      <LearnQuoteSpotlight
-        quotes={sample.length ? sample : quotes}
-        index={quoteIndex}
-        onRefresh={() => setQuoteIndex((i) => i + 1)}
-      />
-      <Link className="catalog-section-cta learn-lp__panel-cta" to={LEARN_HUB_LINKS.quotes}>
-        Browse all quotes →
-      </Link>
+    <div className="learn-lp__panel learn-lp__panel--muses-quotes">
+      <div className="learn-lp__quote-feature">
+        <blockquote className="learn-lp__quote-feature-text">&ldquo;{quote.quote}&rdquo;</blockquote>
+        <p className="learn-lp__quote-feature-meta">
+          <span className="learn-lp__quote-feature-muse">{quote.muse}</span>
+          {quote.primary_sutra ? (
+            <>
+              <span aria-hidden> · </span>
+              <span className={`catalog-sutra-word ${sutraClassName(quote.primary_sutra)}`}>{quote.primary_sutra}</span>
+            </>
+          ) : null}
+        </p>
+      </div>
+      <div className="learn-lp__muse-summary">
+        <p className="learn-lp__muse-summary-label">About {quote.muse}</p>
+        <p className="learn-lp__muse-summary-text">{museSummary}</p>
+      </div>
+      <div className="learn-lp__quote-actions">
+        <button
+          type="button"
+          className="learn-lp__quote-refresh"
+          aria-label="Show another quote"
+          onClick={() => setQuoteIndex((i) => i + 1)}
+        >
+          <span className="learn-lp__quote-refresh-icon" aria-hidden>
+            ↻
+          </span>
+          Another quote
+        </button>
+        <Link className="catalog-section-cta learn-lp__panel-cta" to={LEARN_HUB_LINKS.quotes}>
+          Browse all quotes →
+        </Link>
+      </div>
     </div>
   )
 }
 
-function trimExtract(raw: string, max = 120): string {
-  const flat = raw.replace(/\n/g, ' / ').trim()
-  if (flat.length <= max) return flat
-  return `${flat.slice(0, max - 1)}…`
-}
-
-function LearnHubWordsPanel({ words, total }: { words: SongCatalogItem[]; total: number }) {
+function LearnHubWordsPanel({ words }: { words: SongCatalogItem[] }) {
   return (
-    <div className="learn-lp__panel">
-      <p className="learn-lp__panel-intro">
-        Lyrics-first songs with no in-app audio yet. {total} in the words catalog.
-      </p>
-      <ul className="learn-lp__word-list">
-        {words.map((w) => (
-          <li key={w.lyrics_id}>
-            <Link className="learn-lp__word-row" to={songCatalogLinkTo(w.lyrics_title, w.url_slug)}>
-              <span className="learn-lp__word-row-title">{w.lyrics_title}</span>
-              <span className="learn-lp__word-row-meta">{w.sutra}</span>
-              <span className="learn-lp__word-row-extract">
-                &ldquo;{trimExtract(w.lyrics_extract || w.summary_short)}&rdquo;
-              </span>
+    <div className="learn-lp__panel learn-lp__panel--words">
+      <h3 className="learn-lp__words-panel-title">What&apos;s new in the library?</h3>
+      <div className="learn-lp__words-grid">
+        {words.map((song) => {
+          const secondaryMeta = [song.topic, song.intention, song.light_shadow]
+            .map((value) => value.trim())
+            .filter(Boolean)
+          const secondaryLine = secondaryMeta.join(' · ')
+          return (
+            <Link
+              key={song.lyrics_id}
+              className="words-card words-card-link learn-lp__words-card"
+              to={songCatalogLinkTo(song.lyrics_title, song.url_slug)}
+            >
+              <div className="words-card__text">
+                <h4 className="words-card__title song-title">{song.lyrics_title}</h4>
+                {song.summary_short ? <p className="words-card__summary">{song.summary_short}</p> : null}
+                <div className="words-card__meta catalog-card-meta">
+                  {song.sutra.trim() ? (
+                    <span className={`catalog-sutra-word ${sutraClassName(song.sutra.trim())}`}>{song.sutra.trim()}</span>
+                  ) : null}
+                  {secondaryLine ? (
+                    <span className="catalog-card-meta-secondary" title={secondaryLine}>
+                      {secondaryLine}
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+              {song.cover_image_url ? (
+                <div className="words-card__thumb" aria-hidden>
+                  <img src={coverImageUrl(song.cover_image_url, { width: 200 })} alt="" loading="lazy" width={120} height={120} />
+                </div>
+              ) : null}
             </Link>
-          </li>
-        ))}
-      </ul>
-      <p className="learn-lp__panel-note">Words also lives under About in the menu (D-028).</p>
+          )
+        })}
+      </div>
       <Link className="catalog-section-cta learn-lp__panel-cta" to={LEARN_HUB_LINKS.words}>
         Read the words →
       </Link>
@@ -195,15 +202,12 @@ function LearnHubWordsPanel({ words, total }: { words: SongCatalogItem[]; total:
 
 function LearnHubManifestoPanel() {
   return (
-    <div className="learn-lp__panel">
+    <div className="learn-lp__panel learn-lp__panel--manifesto">
+      <p className="learn-lp__manifesto-note">Coming soon: the full AI fair use manifesto, written for skeptics and sharers.</p>
       <p className="learn-lp__manifesto-lead">Human words. AI as instrument. Creative lineage, not creative theft.</p>
       <p className="learn-lp__manifesto-text">
         Every lyric on this site is written by a human. Suno (and other tools) generate sonic canvas the way a sampler
-        generates groove: the philosophy, the questions, and the naked truth in the words are the art. Dylan did not
-        invent folk structures. Hip hop did not invent breakbeats. The instrument does not invalidate the authorship.
-      </p>
-      <p className="learn-lp__manifesto-text">
-        Homemade, end to end. If that offends purists on either side, well... it&apos;s bananas.
+        generates groove: the philosophy, the questions, and the naked truth in the words are the art.
       </p>
       <Link className="catalog-section-cta learn-lp__panel-cta" to={LEARN_HUB_LINKS.manifestoSong}>
         Read the manifesto song →
@@ -233,31 +237,25 @@ function LearnStageCurtain({ songs }: { songs: SongCatalogItem[] }) {
 function LearnHubPanelContent({
   tileKey,
   songCatalog,
-  museSample,
+  musesCatalog,
   quotePool,
   wordsSample,
-  wordsTotal,
-  museTotal,
 }: {
   tileKey: LearnHubTileKey
   songCatalog: SongCatalogItem[] | null
-  museSample: MuseCatalogItem[]
+  musesCatalog: MuseCatalogItem[] | null
   quotePool: QuoteWallItem[]
   wordsSample: SongCatalogItem[]
-  wordsTotal: number
-  museTotal: number
 }) {
   switch (tileKey) {
     case 'about':
       return <LearnHubAboutPanel />
     case 'sutras':
       return <LearnHubSutrasPanel />
-    case 'muses':
-      return <LearnHubMusesPanel muses={museSample} total={museTotal} />
-    case 'quotes':
-      return <LearnHubQuotesPanel quotes={quotePool} />
+    case 'muses-quotes':
+      return <LearnHubMusesQuotesPanel quotes={quotePool} muses={musesCatalog} />
     case 'words':
-      return <LearnHubWordsPanel words={wordsSample} total={wordsTotal} />
+      return <LearnHubWordsPanel words={wordsSample} />
     case 'manifesto':
       return <LearnHubManifestoPanel />
     default:
@@ -274,11 +272,8 @@ export function LearnLpHub({ songCatalog }: Props) {
   )
 
   const { data: musesCatalog } = useMusesCatalog()
-  const museSample = useMemo(() => pickMuseSample(musesCatalog, 6), [musesCatalog])
   const quotePool = LEARN_QUOTES
-  const wordsSample = useMemo(() => pickWordsSample(songCatalog, 3), [songCatalog])
-  const wordsTotal = useMemo(() => countWordsCatalog(songCatalog), [songCatalog])
-  const museTotal = musesCatalog?.length ?? 0
+  const wordsSample = useMemo(() => pickWordsSample(songCatalog, 5), [songCatalog])
   const curtainSongs = useMemo(() => pickStageCurtainSongs(songCatalog, 30), [songCatalog])
 
   useEffect(() => {
@@ -302,14 +297,12 @@ export function LearnLpHub({ songCatalog }: Props) {
       <LearnHubPanelContent
         tileKey={key}
         songCatalog={songCatalog}
-        museSample={museSample}
+        musesCatalog={musesCatalog}
         quotePool={quotePool}
         wordsSample={wordsSample}
-        wordsTotal={wordsTotal}
-        museTotal={museTotal}
       />
     ),
-    [museSample, museTotal, quotePool, songCatalog, wordsSample, wordsTotal],
+    [musesCatalog, quotePool, songCatalog, wordsSample],
   )
 
   const selectTile = (key: LearnHubTileKey) => {
@@ -336,7 +329,7 @@ export function LearnLpHub({ songCatalog }: Props) {
   return (
     <section className="catalog-page-shell__section learn-lp__hub-section" aria-labelledby="learn-lp-hub-heading">
       <h2 id="learn-lp-hub-heading" className="catalog-section-title">
-        Start with the why
+        The seeds
       </h2>
       <p className="learn-lp__section-intro">
         Orientation, not index. Tap a door to see what&apos;s inside before you commit.

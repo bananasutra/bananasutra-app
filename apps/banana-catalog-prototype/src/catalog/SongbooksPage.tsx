@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
-import { songbookFeaturedKickerLabel } from './homePortalUtils'
+import { FeaturedSongbookSpotlight } from './FeaturedSongbookSpotlight'
 import { allSongbooks, songbookHref } from './songbooks'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
@@ -14,6 +14,7 @@ import { useSongCatalogBrowse } from './generatedData'
 import { filterSongsByAlbumSearchQuery, searchTokens } from './searchMatch'
 import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import './CatalogApp.css'
+import './FeaturedSongbookSpotlight.css'
 import './SongbooksPage.css'
 
 function byPopularityScore(songbook: {
@@ -651,20 +652,14 @@ export function SongbooksPage() {
                 <h2 id="songbooks-featured-songbook-heading" className="catalog-section-title">
                   Featured songbook
                 </h2>
-                <div className="songbooks-page__featured-rotator-grid">
-                  <LazySoundCloudEmbed scUrl={featuredSongbook.playlist_url} title={featuredSongbook.songbook} />
-                  <div className="songbooks-page__featured-rotator-copy">
-                    <p className="songbooks-page__featured-rotator-kicker">{songbookFeaturedKickerLabel(featuredSongbook)}</p>
-                    <h3 className="songbooks-page__featured-rotator-title">{featuredSongbook.songbook}</h3>
-                    {featuredSongbook.description ? (
-                      <p className="songbooks-page__featured-rotator-desc">{featuredSongbook.description}</p>
-                    ) : null}
-                    <SongbookPlaylistMetaLine book={featuredSongbook} />
-                    <Link className="songbooks-page__featured-rotator-cta" to={songbookHref(featuredSongbook.songbook)}>
-                      Open songbook →
-                    </Link>
-                  </div>
-                </div>
+                <FeaturedSongbookSpotlight
+                  book={featuredSongbook}
+                  className="songbooks-page__featured-spotlight"
+                  ctaTo={songbookHref(featuredSongbook.songbook)}
+                  embed={
+                    <LazySoundCloudEmbed scUrl={featuredSongbook.playlist_url} title={featuredSongbook.songbook} />
+                  }
+                />
               </section>
             ) : null}
 

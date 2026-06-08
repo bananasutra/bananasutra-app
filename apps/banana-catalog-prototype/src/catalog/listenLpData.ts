@@ -1,23 +1,44 @@
 import type { SongCatalogItem, SongbookCatalogItem, TrackCatalogItem } from './types'
 import { pickRandomSongbookFromPool, songbookPopularity } from './homePortalUtils'
+import { SUTRA_CONTEXT, type SutraFamilyKey } from './sutraContext'
 
 export const LISTEN_LP_TOP_TRACKS_LIMIT = 10
+export const LISTEN_LP_TOP_EPS_LIMIT = 10
 export const LISTEN_LP_LATEST_SONGS_LIMIT = 10
+export const LISTEN_LP_SONGBOOK_GRID_INITIAL = 12
 
 export type ListenLpSutraFilter = 'ALL' | string
 
 export type ListenLpSongbookPick = SongbookCatalogItem & { slug: string }
 
+export type ListenLpEpPick = {
+  ep_url: string
+  ep_title: string
+  sutra: string
+  primary_genre: string
+  like_count: number
+  cover_url: string
+  url_slug: string
+  lyrics_title: string
+}
+
+const SUTRA_FILTER_KEYS: { value: ListenLpSutraFilter; family: SutraFamilyKey }[] = [
+  { value: 'KNOWsutra', family: 'KNOW' },
+  { value: 'BLOWsutra', family: 'BLOW' },
+  { value: 'SHOWsutra', family: 'SHOW' },
+  { value: 'GROWsutra', family: 'GROW' },
+  { value: 'FLOWsutra', family: 'FLOW' },
+  { value: 'GLOWsutra', family: 'GLOW' },
+  { value: 'BOWsutra', family: 'BOW' },
+  { value: 'QUACKsutra', family: 'QUACK' },
+]
+
 export const LISTEN_LP_SUTRA_FILTER_OPTIONS: { value: ListenLpSutraFilter; label: string }[] = [
-  { value: 'ALL', label: 'All' },
-  { value: 'KNOWsutra', label: 'KNOWsutra' },
-  { value: 'BLOWsutra', label: 'BLOWsutra' },
-  { value: 'SHOWsutra', label: 'SHOWsutra' },
-  { value: 'GROWsutra', label: 'GROWsutra' },
-  { value: 'FLOWsutra', label: 'FLOWsutra' },
-  { value: 'GLOWsutra', label: 'GLOWsutra' },
-  { value: 'BOWsutra', label: 'BOWsutra' },
-  { value: 'QUACKsutra', label: 'QUACKsutra' },
+  { value: 'ALL', label: 'All questions' },
+  ...SUTRA_FILTER_KEYS.map(({ value, family }) => ({
+    value,
+    label: SUTRA_CONTEXT[family].question,
+  })),
 ]
 
 function parsePublishedAt(raw: string): number {
@@ -115,6 +136,44 @@ export function pickGenreSongbooksForListenLp(
   return sortSongbooksByPopularity(pool)
 }
 
+/** Unified songbook list for explore grid (sutra OR genre filter, not both). */
+export function pickExploreSongbooksForListenLp(
+  books: ListenLpSongbookPick[],
+  activeSutra: ListenLpSutraFilter,
+  activeGenre: string,
+): ListenLpSongbookPick[] {
+  if (activeGenre !== 'ALL') return pickGenreSongbooksForListenLp(books, activeGenre)
+  return pickSutraSongbooksForListenLp(books, activeSutra)
+}
+
+export function pickTopEpsForListenLp(catalog: SongCatalogItem[] | null): ListenLpEpPick[] {
+  if (!catalog?.length) return []
+  const byUrl = new Map<string, ListenLpEpPick>()
+  for (const row of catalog) {
+    const epUrl = (row.primary_ep_url || '').trim()
+    if (!epUrl.includes('/sets/')) continue
+    const slug = (row.url_slug || '').trim()
+    if (!slug) continue
+    const likes = row.aggregate_like_count || 0
+    const existing = byUrl.get(epUrl)
+    if (!existing || likes > existing.like_count) {
+      byUrl.set(epUrl, {
+        ep_url: epUrl,
+        ep_title: (row.primary_ep_title || row.lyrics_title || 'EP').trim(),
+        sutra: (row.sutra || '').trim(),
+        primary_genre: (row.track_genres?.[0] || row.discovery_top_track_genres || '').trim(),
+        like_count: likes,
+        cover_url: (row.cover_image_url || '').trim(),
+        url_slug: slug,
+        lyrics_title: (row.lyrics_title || '').trim(),
+      })
+    }
+  }
+  return [...byUrl.values()]
+    .sort((a, b) => b.like_count - a.like_count)
+    .slice(0, LISTEN_LP_TOP_EPS_LIMIT)
+}
+
 export function listenLpGenreFilterOptions(books: ListenLpSongbookPick[]): { value: string; label: string }[] {
   const seen = new Set<string>()
   const options: { value: string; label: string }[] = [{ value: 'ALL', label: 'All' }]
@@ -135,14 +194,19 @@ export function listenLpGenreFilterOptions(books: ListenLpSongbookPick[]): { val
 export function listenLpFacetStatusText(p: {
   activeSutra: ListenLpSutraFilter
   activeGenre: string
-  sutraCount: number
-  genreCount: number
+  shownCount: number
+  totalCount: number
 }): string {
   const parts: string[] = []
-  if (p.activeSutra !== 'ALL') parts.push(p.activeSutra)
-  if (p.activeGenre !== 'ALL') parts.push(p.activeGenre)
-  if (parts.length) {
-    return `${parts.join(' · ')} · ${p.sutraCount} in sutra list · ${p.genreCount} in genre list`
+  if (p.activeSutra !== 'ALL') {
+    const opt = LISTEN_LP_SUTRA_FILTER_OPTIONS.find((o) => o.value === p.activeSutra)
+    parts.push(opt?.label ?? p.activeSutra)
   }
-  return `${p.sutraCount} story songbooks · ${p.genreCount} genre songbooks in the lists below`
+  if (p.activeGenre !== 'ALL') parts.push(p.activeGenre)
+  const countLabel =
+    p.totalCount > p.shownCount
+      ? `${p.shownCount} songbooks shown of ${p.totalCount}`
+      : `${p.shownCount} songbooks`
+  if (parts.length) return `${parts.join(' · ')} · ${countLabel}`
+  return countLabel
 }

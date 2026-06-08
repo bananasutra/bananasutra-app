@@ -14,6 +14,7 @@ import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { YouTubeEmbed } from './YouTubeEmbed'
+import { CatalogVideoSpotlight, type CatalogVideoSpotlightItem } from './CatalogVideoSpotlight'
 import { PLAY_ALL_HONEST_MOBILE_COPY, PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
 import {
   findTrackByScUrl,
@@ -48,6 +49,7 @@ import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { SongThumbCard } from './SongThumbCard'
 import { useSongCatalogAndDetail, loadYoutubeByLyricsId } from './generatedData'
 import './CatalogApp.css'
+import './CatalogVideoSpotlight.css'
 import './SongDetail.css'
 
 function sameGenreToken(a: string, b: string): boolean {
@@ -442,6 +444,32 @@ function SongDetailLoaded({
     () => youtubeVideos.find((v) => v.video_id === effectiveYoutubeVideoId),
     [youtubeVideos, effectiveYoutubeVideoId],
   )
+
+  const useSongVideoSpotlight = youtubeVideos.length > 1 && youtubeVideos.some((v) => v.can_embed)
+
+  const songVideoSpotlightFeatured = useMemo((): CatalogVideoSpotlightItem | null => {
+    if (!focusedYoutubeVideo?.can_embed) return null
+    const title = (focusedYoutubeVideo.title || focusedYoutubeVideo.lyrics_title || detail.lyrics_title).trim()
+    return {
+      videoId: focusedYoutubeVideo.video_id,
+      title,
+      sutra: (detail.sutra || focusedYoutubeVideo.sutra || '').trim() || undefined,
+      duration: formatDurationDisplay(focusedYoutubeVideo.duration) || undefined,
+      inApp: true,
+    }
+  }, [focusedYoutubeVideo, detail.lyrics_title, detail.sutra])
+
+  const songVideoSpotlightRail = useMemo((): CatalogVideoSpotlightItem[] => {
+    return youtubeVideos
+      .filter((v) => v.can_embed && v.video_id !== effectiveYoutubeVideoId)
+      .map((v) => ({
+        videoId: v.video_id,
+        title: (v.title || v.lyrics_title || detail.lyrics_title).trim(),
+        sutra: (detail.sutra || v.sutra || '').trim() || undefined,
+        duration: formatDurationDisplay(v.duration) || undefined,
+        inApp: true,
+      }))
+  }, [youtubeVideos, effectiveYoutubeVideoId, detail.lyrics_title, detail.sutra])
 
   const [selectedUrl, setSelectedUrl] = useState<string | null>(null)
   const [soundcloudReloadKey, setSoundcloudReloadKey] = useState(0)
@@ -1246,7 +1274,44 @@ function SongDetailLoaded({
             >
               {!hasTabNav ? <h2 className="catalog-section-title">Video</h2> : null}
               <section className="song-detail-youtube" aria-label="YouTube player">
-                {focusedYoutubeVideo?.can_embed ? (
+                {useSongVideoSpotlight && songVideoSpotlightFeatured ? (
+                  <CatalogVideoSpotlight
+                    className="song-detail-youtube-spotlight"
+                    featured={songVideoSpotlightFeatured}
+                    rail={songVideoSpotlightRail}
+                    activeVideoId={effectiveYoutubeVideoId}
+                    onSelectVideo={setSelectedYoutubeVideoId}
+                    railEyebrow="Videos for this song"
+                    renderRailCell={(video, isActive, onSelect) => {
+                      const source = youtubeVideos.find((v) => v.video_id === video.videoId)
+                      return (
+                        <button
+                          type="button"
+                          className={`song-detail-youtube-vid${isActive ? ' is-active' : ''}`}
+                          aria-pressed={isActive}
+                          onClick={onSelect}
+                        >
+                          {source?.thumbnail_url ? (
+                            <span className="song-detail-youtube-vid-thumb">
+                              <img src={coverImageUrl(source.thumbnail_url, { width: 200 })} alt="" width={88} height={50} loading="lazy" />
+                            </span>
+                          ) : (
+                            <span className="song-detail-youtube-vid-thumb song-detail-youtube-vid-thumb--fallback" aria-hidden>
+                              ▶
+                            </span>
+                          )}
+                          <span className="song-detail-youtube-vid-copy">
+                            <span className="song-detail-youtube-vid-title">{video.title}</span>
+                            <span className="song-detail-youtube-vid-meta">
+                              {video.duration ? <span>{video.duration}</span> : null}
+                              {source?.publish_date ? <span>{source.publish_date.slice(0, 10)}</span> : null}
+                            </span>
+                          </span>
+                        </button>
+                      )
+                    }}
+                  />
+                ) : focusedYoutubeVideo?.can_embed ? (
                   <YouTubeEmbed
                     videoId={focusedYoutubeVideo.video_id}
                     title={`YouTube: ${focusedYoutubeVideo.title || detail.lyrics_title}`}
@@ -1266,52 +1331,6 @@ function SongDetailLoaded({
                 ) : (
                   <p className="song-detail-youtube-no-embed">No embeddable public video is available for in-app playback.</p>
                 )}
-                {youtubeVideos.length > 1 ? (
-                  <>
-                    {hasTabNav ? (
-                      <h2 className="song-detail-youtube-subheading">Videos for this song</h2>
-                    ) : (
-                      <h3 className="song-detail-youtube-subheading">Videos for this song</h3>
-                    )}
-                    <ul className="song-detail-youtube-list" aria-label="YouTube uploads for this song">
-                      {youtubeVideos.map((v) => {
-                        const active = v.video_id === effectiveYoutubeVideoId
-                        return (
-                          <li key={v.video_id} className="song-detail-youtube-row">
-                            <button
-                              type="button"
-                              className={`song-detail-youtube-vid${active ? ' is-active' : ''}`}
-                              onClick={() => setSelectedYoutubeVideoId(v.video_id)}
-                            >
-                              {v.thumbnail_url ? (
-                                <span className="song-detail-youtube-vid-thumb">
-                                  <img src={coverImageUrl(v.thumbnail_url, { width: 200 })} alt="" width={88} height={50} loading="lazy" />
-                                </span>
-                              ) : (
-                                <span
-                                  className="song-detail-youtube-vid-thumb song-detail-youtube-vid-thumb--fallback"
-                                  aria-hidden
-                                >
-                                  ▶
-                                </span>
-                              )}
-                              <span className="song-detail-youtube-vid-copy">
-                                <span className="song-detail-youtube-vid-title">
-                                  {v.title || v.lyrics_title || 'YouTube video'}
-                                </span>
-                                <span className="song-detail-youtube-vid-meta">
-                                  {v.duration ? <span>{v.duration}</span> : null}
-                                  {v.publish_date ? <span>{v.publish_date.slice(0, 10)}</span> : null}
-                                  {!v.can_embed ? <span className="song-detail-youtube-vid-flag">in-app embed off</span> : null}
-                                </span>
-                              </span>
-                            </button>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                  </>
-                ) : null}
               </section>
             </section>
           ) : null}
