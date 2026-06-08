@@ -42,6 +42,7 @@ export type BertrandSurface =
   | 'home_hero'
   | 'learn_lp_tail'
   | 'listen_lp_tail'
+  | 'watch_lp_tail'
   | 'songs_browse_inline'
   | 'songs_detail_below_lyrics'
   | 'tracks_empty_state'
