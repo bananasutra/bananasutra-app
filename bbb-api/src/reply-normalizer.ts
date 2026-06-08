@@ -25,8 +25,8 @@ const MAP_INTROS = [
 ] as const;
 
 const SUTRA_LINES = [
-  "- **[Sutras](/about/sutras):** Seven lenses for truth, justice, growth, flow, beauty, wonder, and humility.",
-  "- **[Sutras](/about/sutras):** The philosophical compass for reading a world gone bananas.",
+  "- **[Sutras](/sutras):** Seven lenses for truth, justice, growth, flow, beauty, wonder, and humility.",
+  "- **[Sutras](/sutras):** The philosophical compass for reading a world gone bananas.",
 ] as const;
 
 const SONGBOOK_LINES = [

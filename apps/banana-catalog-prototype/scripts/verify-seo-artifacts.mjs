@@ -99,9 +99,9 @@ const REQUIRED_SEO_PATHS = [
   '/videos',
   '/words',
   '/about',
-  '/about/sutras',
-  '/about/muses',
-  '/about/quotes',
+  '/sutras',
+  '/muses',
+  '/quotes',
   '/sitemap',
   '/style-guide',
 ]
@@ -353,6 +353,26 @@ function main() {
     const head = fs.readFileSync(sutraPrerender, 'utf8').match(/<head>([\s\S]*?)<\/head>/)?.[1] ?? ''
     if (!head.includes('CreativeWork')) {
       fail('prerender sutra sample: <head> JSON-LD missing CreativeWork')
+    }
+  }
+
+  // W-074 — legacy About hub paths emit static redirect HTML (GitHub Pages)
+  for (const legacy of ['/about/sutras', '/about/muses', '/about/quotes']) {
+    const redirectPath = path.join(distDir, legacy.replace(/^\//, ''), 'index.html')
+    if (!fs.existsSync(redirectPath)) {
+      fail(`missing legacy redirect HTML at dist/${legacy.replace(/^\//, '')}/index.html — run generate-route-redirects.mjs`)
+    }
+    const html = fs.readFileSync(redirectPath, 'utf8')
+    if (!html.includes('rel="canonical"') || !html.includes('window.location.replace')) {
+      fail(`legacy redirect HTML at ${legacy} missing canonical or JS redirect`)
+    }
+  }
+
+  const flatHubPrerender = path.join(distDir, 'sutras/index.html')
+  if (fs.existsSync(flatHubPrerender)) {
+    const head = fs.readFileSync(flatHubPrerender, 'utf8').match(/<head>([\s\S]*?)<\/head>/)?.[1] ?? ''
+    if (!head.includes('rel="canonical"') || !head.includes('https://bananasutra.com/sutras/')) {
+      fail('prerender /sutras: missing canonical https://bananasutra.com/sutras/')
     }
   }
 

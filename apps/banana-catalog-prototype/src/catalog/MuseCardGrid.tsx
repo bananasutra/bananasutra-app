@@ -210,7 +210,7 @@ export function MuseCardGrid() {
   const pageMeta = renderPageMeta({
     title: 'The Muses',
     description: 'Explore the thinkers, fools, poets, and troublemakers who inspired BANANASUTRA songs.',
-    path: canonicalPathForRoute('/about/muses'),
+    path: canonicalPathForRoute('/muses'),
   })
 
   useEffect(() => {

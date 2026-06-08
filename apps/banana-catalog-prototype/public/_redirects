@@ -1,0 +1,4 @@
+# W-074 — flat About hub routes (301). Staging + production at R50 launch.
+/about/sutras   /sutras/   301
+/about/muses    /muses/    301
+/about/quotes   /quotes/   301

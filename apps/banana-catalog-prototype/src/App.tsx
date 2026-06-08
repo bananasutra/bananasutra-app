@@ -1,6 +1,6 @@
 import { Component, lazy, Suspense, type ReactNode, useEffect, useLayoutEffect, useState } from 'react'
 import { HelmetProvider } from 'react-helmet-async'
-import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
+import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { NavigationLoadingBridge } from './NavigationLoadingBridge'
 import { prefetchCatalogRoutesIdle } from './routePrefetch'
 import { SearchRedirect } from './catalog/SearchRedirect'
@@ -213,7 +213,7 @@ export default function App() {
             }
           />
           <Route
-            path="/about/sutras"
+            path="/sutras"
             element={
               <RouteBoundary>
                 <AboutSutrasPage />
@@ -221,7 +221,7 @@ export default function App() {
             }
           />
           <Route
-            path="/about/muses"
+            path="/muses"
             element={
               <RouteBoundary>
                 <AboutMusesPage />
@@ -229,13 +229,16 @@ export default function App() {
             }
           />
           <Route
-            path="/about/quotes"
+            path="/quotes"
             element={
               <RouteBoundary>
                 <AboutQuotesPage />
               </RouteBoundary>
             }
           />
+          <Route path="/about/sutras" element={<Navigate to="/sutras/" replace />} />
+          <Route path="/about/muses" element={<Navigate to="/muses/" replace />} />
+          <Route path="/about/quotes" element={<Navigate to="/quotes/" replace />} />
           <Route
             path="/about/:slug"
             element={

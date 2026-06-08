@@ -400,6 +400,7 @@ test('getOrCreateActorId persists actor id in localStorage', () => {
 test('toBbbPageContextPathname maps unknown routes to /oops', () => {
   assert.equal(toBbbPageContextPathname('/tracks'), '/tracks')
   assert.equal(toBbbPageContextPathname('/banana-republic'), '/oops')
+  assert.equal(isKnownCatalogPath('/sutras'), true)
   assert.equal(isKnownCatalogPath('/about/sutras'), true)
   assert.equal(isKnownCatalogPath('/banana-republic'), false)
 })

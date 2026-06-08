@@ -2,7 +2,7 @@
  * R24 — SSR tree for static pre-render (eager imports, StaticRouter, no analytics/boot prefetch).
  */
 import { StrictMode } from 'react'
-import { Route, Routes, StaticRouter } from 'react-router-dom'
+import { Route, Routes, StaticRouter, Navigate } from 'react-router-dom'
 import { ThemeProvider } from '../catalog/theme'
 import { LearnLpPage, ListenLpPage, WatchLpPage } from '../catalog/ExperienceLpPages'
 import { HomePortal } from '../catalog/HomePortal'
@@ -41,9 +41,12 @@ export function AppPrerender({ location }: { location: string }) {
               <Route path="/words" element={<WordsPage />} />
               <Route path="/search" element={<SearchRedirect />} />
               <Route path="/about" element={<AboutPage />} />
-              <Route path="/about/sutras" element={<AboutSutrasPage />} />
-              <Route path="/about/muses" element={<AboutMusesPage />} />
-              <Route path="/about/quotes" element={<AboutQuotesPage />} />
+              <Route path="/sutras" element={<AboutSutrasPage />} />
+              <Route path="/muses" element={<AboutMusesPage />} />
+              <Route path="/quotes" element={<AboutQuotesPage />} />
+              <Route path="/about/sutras" element={<Navigate to="/sutras/" replace />} />
+              <Route path="/about/muses" element={<Navigate to="/muses/" replace />} />
+              <Route path="/about/quotes" element={<Navigate to="/quotes/" replace />} />
               <Route path="/about/:slug" element={<SutraDetailPage />} />
               <Route path="/songbooks" element={<SongbooksPage />} />
               <Route path="/songbooks/:slug" element={<SongbookPage />} />

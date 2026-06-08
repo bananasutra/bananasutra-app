@@ -56,9 +56,9 @@ export function listPrerenderRoutes() {
     '/videos',
     '/words',
     '/about',
-    '/about/sutras',
-    '/about/muses',
-    '/about/quotes',
+    '/sutras',
+    '/muses',
+    '/quotes',
     '/sitemap',
     '/style-guide',
   ]

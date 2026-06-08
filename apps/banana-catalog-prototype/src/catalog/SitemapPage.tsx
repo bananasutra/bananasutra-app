@@ -72,21 +72,21 @@ const CORE_LINKS: { to: string; label: string; pathLabel: string; description: s
 
 const ABOUT_HUB_LINKS: { to: string; label: string; pathLabel: string; description: string }[] = [
   {
-    to: canonicalPathForRoute('/about/sutras'),
-    label: 'About / Sutras',
-    pathLabel: canonicalPathForRoute('/about/sutras'),
+    to: canonicalPathForRoute('/sutras'),
+    label: 'Sutras',
+    pathLabel: canonicalPathForRoute('/sutras'),
     description: 'Overview of the seven sutras and how they frame the catalog.',
   },
   {
-    to: canonicalPathForRoute('/about/muses'),
-    label: 'About / Muses',
-    pathLabel: canonicalPathForRoute('/about/muses'),
+    to: canonicalPathForRoute('/muses'),
+    label: 'Muses',
+    pathLabel: canonicalPathForRoute('/muses'),
     description: 'The people, references, and influences behind the songs.',
   },
   {
-    to: canonicalPathForRoute('/about/quotes'),
-    label: 'About / Quotes',
-    pathLabel: canonicalPathForRoute('/about/quotes'),
+    to: canonicalPathForRoute('/quotes'),
+    label: 'Quotes',
+    pathLabel: canonicalPathForRoute('/quotes'),
     description: 'Quote wall with links into related songs and themes.',
   },
 ]

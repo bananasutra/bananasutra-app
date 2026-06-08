@@ -236,27 +236,27 @@ function main() {
     ),
   )
   addRoute(
-    '/about/sutras',
+    '/sutras',
     routeEntry(
       'The Seven Sutras',
       'Explore the seven BANANASUTRA sutras, the questions behind them, and the songs they organize.',
-      '/about/sutras',
+      '/sutras',
     ),
   )
   addRoute(
-    '/about/muses',
+    '/muses',
     routeEntry(
       'The Muses',
       'Explore the thinkers, fools, poets, and troublemakers who inspired BANANASUTRA songs.',
-      '/about/muses',
+      '/muses',
     ),
   )
   addRoute(
-    '/about/quotes',
+    '/quotes',
     routeEntry(
       'The Quotes',
       'Explore the quotes and ideas behind BANANASUTRA songs, grouped by theme.',
-      '/about/quotes',
+      '/quotes',
     ),
   )
   addRoute(

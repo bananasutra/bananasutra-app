@@ -40,9 +40,9 @@ export const SITE_NAV_DRAWER: readonly DrawerNavItem[] = [
     label: 'About',
     match: 'aboutHub',
     children: [
-      { to: canonicalPathForRoute('/about/sutras'), label: 'Sutras', match: 'prefix' },
-      { to: canonicalPathForRoute('/about/muses'), label: 'Muses', match: 'prefix' },
-      { to: canonicalPathForRoute('/about/quotes'), label: 'Quotes', match: 'prefix' },
+      { to: canonicalPathForRoute('/sutras'), label: 'Sutras', match: 'prefix' },
+      { to: canonicalPathForRoute('/muses'), label: 'Muses', match: 'prefix' },
+      { to: canonicalPathForRoute('/quotes'), label: 'Quotes', match: 'prefix' },
       { to: canonicalPathForRoute('/words'), label: 'Words', match: 'exact' },
     ],
   },
@@ -72,7 +72,19 @@ export function siteNavItemActive(pathname: string, item: SiteNavItem): boolean 
   const norm = normalizeNavPathname(pathname)
   const base = normalizeNavPathname(item.to.split('#')[0] ?? item.to)
   if (item.match === 'exact') return norm === base
-  if (item.match === 'aboutHub') return norm === '/about' || norm.startsWith('/about/')
+  if (item.match === 'aboutHub') {
+    return (
+      norm === '/about' ||
+      norm.startsWith('/about/') ||
+      norm === '/sutras' ||
+      norm.startsWith('/sutras/') ||
+      norm === '/muses' ||
+      norm.startsWith('/muses/') ||
+      norm === '/quotes' ||
+      norm.startsWith('/quotes/') ||
+      norm === '/words'
+    )
+  }
   return norm === base || norm.startsWith(`${base}/`)
 }
 

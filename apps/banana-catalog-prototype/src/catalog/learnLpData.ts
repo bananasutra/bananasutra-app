@@ -307,9 +307,9 @@ export function coreSutraRowsForHub(): SutraFamilyKey[] {
 }
 
 export const LEARN_HUB_LINKS = {
-  sutras: canonicalPathForRoute('/about/sutras'),
-  muses: canonicalPathForRoute('/about/muses'),
-  quotes: canonicalPathForRoute('/about/quotes'),
+  sutras: canonicalPathForRoute('/sutras'),
+  muses: canonicalPathForRoute('/muses'),
+  quotes: canonicalPathForRoute('/quotes'),
   words: canonicalPathForRoute('/words'),
   manifestoSong: songCatalogPath('AI Fair Use Manifesto', 'ai-fair-use-manifesto'),
   listen: canonicalPathForRoute('/listen'),

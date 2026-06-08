@@ -53,7 +53,7 @@ export function QuoteWall() {
   const pageMeta = renderPageMeta({
     title: 'The Quotes',
     description: 'Explore the quotes and ideas behind BANANASUTRA songs, grouped by theme.',
-    path: canonicalPathForRoute('/about/quotes'),
+    path: canonicalPathForRoute('/quotes'),
   })
 
   const topicOptions = useMemo(() => {
@@ -180,7 +180,7 @@ export function QuoteWall() {
                   <blockquote className="quote-item__text">{item.quote}</blockquote>
                   <figcaption className="quote-item__meta">
                     <span className="quote-item__topic">{topic}</span>
-                    <Link to={`/about/muses?muse=${encodeURIComponent(item.muse)}`}>{item.muse}</Link>
+                    <Link to={`/muses?muse=${encodeURIComponent(item.muse)}`}>{item.muse}</Link>
                     {quoteSutras(item).map((sutra) => {
                       const family = sutraFamilyFromDisplay(sutra)
                       if (!family) return null

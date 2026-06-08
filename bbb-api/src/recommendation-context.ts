@@ -414,10 +414,10 @@ export const inferPageType = (pageContext?: BbbPageContext): PageType => {
   if (pathname.startsWith("/songbooks")) return "songbook";
   if (pathname.startsWith("/songs/")) return "song-detail";
   if (normalized === "/oops" || normalized === "/oops/") return "not-found";
-  if (normalized === "/about/sutras" || normalized === "/about/sutras/") return "sutras-overview";
+  if (normalized === "/sutras" || normalized === "/sutras/" || normalized === "/about/sutras" || normalized === "/about/sutras/") return "sutras-overview";
   if (SUTRA_PAGE_PATH_PATTERN.test(normalized)) return "sutra-page";
-  if (normalized.startsWith("/about/muses")) return "muses";
-  if (normalized.startsWith("/about/quotes")) return "quotes";
+  if (normalized.startsWith("/muses") || normalized.startsWith("/about/muses")) return "muses";
+  if (normalized.startsWith("/quotes") || normalized.startsWith("/about/quotes")) return "quotes";
   if (normalized.startsWith("/about")) return "about";
   return "other";
 };
@@ -1010,13 +1010,13 @@ export const buildRecommendationContext = (
           : pageType === "not-found"
             ? "- User is on /oops (not-found recovery context). Open with brief empathy, ask what they were trying to find, suggest [Sitemap](/sitemap), and if route hints exist offer one closest match plus 1-2 adjacent options."
           : pageType === "sutras-overview"
-            ? "- User is on /about/sutras (the compass page). Acknowledge that once in your first sentence, then continue directly with their intent."
+            ? "- User is on /sutras (the compass page). Acknowledge that once in your first sentence, then continue directly with their intent."
             : pageType === "sutra-page"
               ? `- User is on a specific sutra page (${sutraPageSlug ? `/about/${sutraPageSlug}` : "/about/<sutra>sutra"}). Acknowledge that once in your first sentence and ground guidance in this sutra before expanding.`
               : pageType === "muses"
-                ? "- User is on /about/muses. Acknowledge that once in your first sentence, then continue with the user's ask."
+                ? "- User is on /muses. Acknowledge that once in your first sentence, then continue with the user's ask."
                 : pageType === "quotes"
-                  ? "- User is on /about/quotes. Acknowledge that once in your first sentence, then continue with the user's ask."
+                  ? "- User is on /quotes. Acknowledge that once in your first sentence, then continue with the user's ask."
                   : pageType === "about"
                     ? "- User is on an /about page. Acknowledge that once in your first sentence, then continue with the user's intent."
                     : "- User page context is high-signal when present. Acknowledge it once in your first sentence, then follow user intent.";
@@ -1200,7 +1200,7 @@ export const buildRecommendationContext = (
       ? "- Orientation opening anti-brochure rule (MUST): do not open with a provenance/attribution paragraph. Start with a warm welcome line, then quick-map actions."
       : null,
     orientationAsk
-      ? "- Orientation link pack (MUST): include [Sutras](/about/sutras), [Songs](/songs), [Tracks](/tracks), and [About](/about)."
+      ? "- Orientation link pack (MUST): include [Sutras](/sutras), [Songs](/songs), [Tracks](/tracks), and [About](/about)."
       : null,
     orientationAsk
       ? "- Orientation ordering (MUST): present the quick map in this order: Sutras, Songbooks, Songs, then Tracks."
@@ -1221,7 +1221,7 @@ export const buildRecommendationContext = (
       ? '- Orientation markdown safe-style (MUST): if using emphasis, only use label-form bold at bullet starts with open+close markers on the same line (for example "**Sutras:** ...").'
       : null,
     orientationAsk
-      ? '- Orientation quick-map bullets (MUST): use concise bullets in order Sutras, Songbooks, Songs, Tracks, with label+link pattern (for example "**Sutras:** [Sutras](/about/sutras) ...").'
+      ? '- Orientation quick-map bullets (MUST): use concise bullets in order Sutras, Songbooks, Songs, Tracks, with label+link pattern (for example "**Sutras:** [Sutras](/sutras) ...").'
       : null,
     orientationAsk && !hasPriorAssistantTurn
       ? "- First-contact tone floor (MUST): keep one light butler flourish (curious/polite/cheeky) so the reply feels warm and characterful, not sterile."

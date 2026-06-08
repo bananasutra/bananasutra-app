@@ -8,9 +8,9 @@ import { useRef } from 'react'
 
 const ABOUT_TABS = [
   { to: canonicalPathForRoute('/about'), label: 'About', end: true },
-  { to: canonicalPathForRoute('/about/sutras'), label: 'Sutras', end: false },
-  { to: canonicalPathForRoute('/about/muses'), label: 'Muses', end: false },
-  { to: canonicalPathForRoute('/about/quotes'), label: 'Quotes', end: false },
+  { to: canonicalPathForRoute('/sutras'), label: 'Sutras', end: false },
+  { to: canonicalPathForRoute('/muses'), label: 'Muses', end: false },
+  { to: canonicalPathForRoute('/quotes'), label: 'Quotes', end: false },
 ] as const
 
 function activeAboutLabel(pathname: string): string {

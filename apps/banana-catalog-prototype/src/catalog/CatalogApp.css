@@ -467,7 +467,7 @@ html {
     width: 100%;
   }
 
-  /* /about/muses: result count + load-more share the results band (display:contents on main). */
+  /* /muses: result count + load-more share the results band (display:contents on main). */
   .catalog-layout:not(.catalog-layout--filters-collapsed) .about-muses-main .about-result-count {
     order: 3;
     width: 100%;

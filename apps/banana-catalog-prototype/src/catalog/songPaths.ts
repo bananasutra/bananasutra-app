@@ -25,10 +25,10 @@ export function songbookCatalogPath(slug: string): string {
   return s ? `/songbooks/${s}/` : canonicalPathForRoute('/songbooks')
 }
 
-/** `/about/:slug/` sutra detail path (not `/about/sutras`, etc.). */
+/** `/about/:slug/` sutra detail path (not flat `/sutras`, `/muses`, `/quotes` hubs). */
 export function sutraDetailPath(slug: string): string {
   const s = slug.trim().toLowerCase()
-  return s ? `/about/${s}/` : canonicalPathForRoute('/about/sutras')
+  return s ? `/about/${s}/` : canonicalPathForRoute('/sutras')
 }
 
 /** Fresh song detail link — never inherits listing query params. */
