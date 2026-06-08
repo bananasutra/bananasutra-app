@@ -1,7 +1,7 @@
 /* Page shell: fixed header + in-flow layout below (document scroll). */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--catalog-header-h, 220px) + 8px);
+  scroll-padding-top: calc(var(--catalog-header-h, 108px) + 8px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -15,7 +15,7 @@ html {
   margin: 0 auto;
   padding: 0 1rem 2.5rem;
   /* Space for fixed header; exact height set by JS as --catalog-header-h (fallback ≈ discovery header) */
-  padding-top: calc(var(--catalog-header-h, 220px) + 10px);
+  padding-top: calc(var(--catalog-header-h, 108px) + 10px);
   overflow-anchor: none;
   color: var(--color-text-primary);
   /* Vertical rhythm after page intros (title + subcopy) before grids / filters / chips */
@@ -482,6 +482,13 @@ html {
     order: 5;
     width: 100%;
   }
+
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .songbooks-page__featured-rotator,
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .songbooks-page__sections {
+    order: 4;
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 /* Short viewport (landscape phones / small laptops): reduce fixed header chrome while preserving page breathing room. */
@@ -492,7 +499,7 @@ html {
   }
 
   .catalog.catalog-page {
-    padding-top: calc(var(--catalog-header-h, 220px) + 8px);
+    padding-top: calc(var(--catalog-header-h, 108px) + 8px);
     --catalog-after-intro-gap: clamp(0.88rem, 2.2vw, 1.45rem);
   }
 

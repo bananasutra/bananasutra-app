@@ -12,7 +12,8 @@
 
 .catalog-footer__inner {
   width: 100%;
-  margin: 0;
+  max-width: var(--catalog-layout-max-width);
+  margin: 0 auto;
   padding: 0 1rem 0.1rem;
   box-sizing: border-box;
   text-align: center;
@@ -21,6 +22,10 @@
 /* ================================================================== */
 /*  Collapsible contact form                                           */
 /* ================================================================== */
+
+#footer-contact-panel {
+  scroll-margin-bottom: 1.5rem;
+}
 
 .footer-contact {
   padding: 0;

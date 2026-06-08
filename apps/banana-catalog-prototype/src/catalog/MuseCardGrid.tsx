@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type MouseEvent } from 'react'
+import { trackBertrandOpen } from '../lib/analytics'
+import { fieldsMatchSearchQuery, normalizeSearchText } from './textSearchMatch'
 import { Link, useLocation } from 'react-router-dom'
 import { useMusesCatalog } from './generatedData'
 import type { MuseCatalogItem } from './types'
@@ -60,12 +62,8 @@ function formatCommaList(value: string): string {
   return splitList(value).join(', ')
 }
 
-function normalizeSearch(value: string): string {
-  return value.trim().toLowerCase()
-}
-
 function eraSortRank(era: string): number {
-  const normalized = normalizeSearch(era)
+  const normalized = normalizeSearchText(era)
   if (normalized === 'ancient') return 0
   if (normalized === 'medieval') return 1
   if (normalized === 'early modern') return 2
@@ -98,18 +96,20 @@ function museMatchesFilters(row: MuseCatalogItem, f: MuseFilters): boolean {
   const genderOk = f.gender === 'all' || row.gender_pronoun === f.gender
   const typeOk = f.type === 'all' || splitList(row.type_category).includes(f.type)
   const countryOk = f.country === 'all' || row.country.trim() === f.country
-  const searchOk =
-    !f.query ||
+  const searchOk = fieldsMatchSearchQuery(
     [
       row.muse,
+      row.first_name,
+      row.last_name,
       row.type_category,
       row.country,
       row.era,
       row.themes,
       row.famous_works,
-      row.notes,
       row.quote_excerpt,
-    ].some((value) => normalizeSearch(value).includes(f.query))
+    ],
+    f.query,
+  )
   return eraOk && genderOk && typeOk && countryOk && searchOk
 }
 
@@ -269,7 +269,7 @@ export function MuseCardGrid() {
     return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]))
   }, [rows])
 
-  const normalizedFindQuery = useMemo(() => normalizeSearch(findMuse), [findMuse])
+  const normalizedFindQuery = useMemo(() => normalizeSearchText(findMuse), [findMuse])
   const contextualEraRows = useMemo(
     () =>
       rows.filter((row) =>
@@ -437,6 +437,22 @@ export function MuseCardGrid() {
         <p className="about-page__prose">
           {formatCount(rows.length)} thinkers, fools, poets, and troublemakers who inspired the songs.
         </p>
+
+        <label className="about-page-search">
+          <span>Search muses</span>
+          <input
+            id="muses-find-input-prominent"
+            type="search"
+            name="muses_find_prominent"
+            inputMode="search"
+            autoComplete="off"
+            spellCheck={false}
+            enterKeyHint="search"
+            value={findMuse}
+            onChange={(event) => setFindMuse(event.target.value)}
+            placeholder="Find a muse, theme, work, or quote..."
+          />
+        </label>
 
         <div className={`catalog-layout about-muses-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
           <aside
@@ -642,14 +658,34 @@ export function MuseCardGrid() {
             ) : null}
 
             <p className="about-result-count" aria-live="polite">
-              Showing {formatCount(visible.length)} of {formatCount(filtered.length)} muses.
+              {filtered.length === 0
+                ? `No muses match${findQuery ? ` "${findQuery}"` : ''}.`
+                : `Showing ${formatCount(visible.length)} of ${formatCount(filtered.length)} muses.`}
             </p>
 
-            <div className="muse-grid">
-              {visible.map((item) => (
-                <MuseCard key={item.muse_id || item.muse} item={item} highlighted={item.muse === highlightedMuse} />
-              ))}
-            </div>
+            {filtered.length === 0 ? (
+              <p className="about-page__prose about-muses-empty">
+                Nothing here yet.{' '}
+                <a
+                  className="about-page__text-link"
+                  href="#bertrand"
+                  onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+                    event.preventDefault()
+                    trackBertrandOpen({ surface: 'muses_search_empty', mode: 'read' })
+                    window.dispatchEvent(new CustomEvent('bbb:open', { detail: { reason: 'muses_search_empty' } }))
+                  }}
+                >
+                  Ring Bertrand
+                </a>{' '}
+                and tell him who you were looking for.
+              </p>
+            ) : (
+              <div className="muse-grid">
+                {visible.map((item) => (
+                  <MuseCard key={item.muse_id || item.muse} item={item} highlighted={item.muse === highlightedMuse} />
+                ))}
+              </div>
+            )}
 
             {!showAll && filtered.length > INITIAL_MUSE_COUNT ? (
               <button type="button" className="about-show-all" onClick={() => setShowAll(true)}>

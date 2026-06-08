@@ -10,6 +10,7 @@ import {
   trackPlayStarted,
   trackTrackAdvanced,
   trackTrackSkipped,
+  type AnalyticsMode,
   type FilterRoute,
   type PlayAllQueueSource,
   type PlayAllStopReason,
@@ -132,6 +133,7 @@ export function trackCatalogPlayStarted(
   track: TrackCatalogItem,
   source: QueueSource,
   intent: PlaybackIntent,
+  mode?: AnalyticsMode,
 ): void {
   if (intent === 'queue_advance' || intent === 'queue_skip') return
   trackPlayStarted({
@@ -140,6 +142,7 @@ export function trackCatalogPlayStarted(
     sutra: track.sutra?.trim() || '',
     primary_genre: track.primary_genre?.trim() || '',
     source,
+    mode,
   })
 }
 
@@ -147,10 +150,12 @@ export function trackCatalogPlayAllStarted(
   source: PlayAllQueueSource,
   total: number,
   ctx?: { filter_sutra?: string; filter_genre?: string },
+  mode?: AnalyticsMode,
 ): void {
   trackPlayAllStarted({
     source,
     total,
+    mode,
     ...ctx,
   })
 }
@@ -160,12 +165,14 @@ export function trackCatalogPlayAllStopped(
   tracksPlayed: number,
   total: number,
   reason: PlayAllStopReason,
+  mode?: AnalyticsMode,
 ): void {
   trackPlayAllStopped({
     source,
     tracks_played: Math.max(0, tracksPlayed),
     total,
     reason,
+    mode,
   })
 }
 
@@ -175,6 +182,7 @@ export function trackCatalogQueueAdvanced(p: {
   position: number
   total: number
   source: QueueSource
+  mode?: AnalyticsMode
 }): void {
   trackTrackAdvanced({
     from_track_id: p.from.track_id,
@@ -182,6 +190,7 @@ export function trackCatalogQueueAdvanced(p: {
     position: p.position,
     total: p.total,
     source: p.source,
+    mode: p.mode,
   })
 }
 

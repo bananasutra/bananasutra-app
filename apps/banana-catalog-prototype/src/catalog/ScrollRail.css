@@ -82,3 +82,36 @@
     display: none;
   }
 }
+
+/* Fade-mask variant (Listen LP rails — prototype lp-scroll-rail-wrap) */
+.scroll-rail--fade-mode {
+  display: block;
+}
+
+.scroll-rail--fade-mode .scroll-rail__inner--fade {
+  scroll-snap-type: x proximity;
+}
+
+.scroll-rail--fade-right .scroll-rail__inner--fade {
+  -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 2.75rem), transparent 100%);
+  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 2.75rem), transparent 100%);
+}
+
+.scroll-rail--fade-left.scroll-rail--fade-right .scroll-rail__inner--fade {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 2.75rem,
+    #000 calc(100% - 2.75rem),
+    transparent 100%
+  );
+  mask-image: linear-gradient(to right, transparent 0, #000 2.75rem, #000 calc(100% - 2.75rem), transparent 100%);
+}
+
+@media (max-width: 640px) {
+  .scroll-rail--fade-left.scroll-rail--fade-right .scroll-rail__inner--fade,
+  .scroll-rail--fade-right .scroll-rail__inner--fade {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

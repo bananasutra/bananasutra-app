@@ -9,6 +9,12 @@ const DiscoverySearchRoot = lazy(() =>
 export function DiscoverySearchLazy(props: DiscoverySearchProps) {
   const shouldDefer = props.variant === 'header'
   const [mountSearch, setMountSearch] = useState(!shouldDefer)
+  const [openOnMount, setOpenOnMount] = useState(false)
+
+  const mountFromIcon = () => {
+    setOpenOnMount(true)
+    setMountSearch(true)
+  }
 
   if (!mountSearch) {
     return (
@@ -18,7 +24,7 @@ export function DiscoverySearchLazy(props: DiscoverySearchProps) {
         aria-label="Open catalog search"
         onMouseEnter={() => setMountSearch(true)}
         onFocus={() => setMountSearch(true)}
-        onClick={() => setMountSearch(true)}
+        onClick={mountFromIcon}
       >
         <span className="global-header-discovery-fallback__icon" aria-hidden>
           ⌕
@@ -43,7 +49,7 @@ export function DiscoverySearchLazy(props: DiscoverySearchProps) {
         </div>
       }
     >
-      <DiscoverySearchRoot {...props} />
+      <DiscoverySearchRoot {...props} openOnMount={openOnMount} />
     </Suspense>
   )
 }

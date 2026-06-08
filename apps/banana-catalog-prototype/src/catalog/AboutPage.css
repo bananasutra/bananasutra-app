@@ -820,10 +820,10 @@
 .quote-item {
   position: relative;
   margin: 0;
-  padding: 0.25rem 0 0.95rem 1.65rem;
+  padding: 0.35rem 0 1.15rem 2rem;
   border-bottom: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
   background: transparent !important;
-  min-height: 5.5rem;
+  min-height: 6.5rem;
 }
 
 .quote-item__mark {
@@ -841,9 +841,9 @@
   min-height: 2.75em;
   color: var(--color-text-strong);
   font-family: var(--font-display);
-  font-size: clamp(0.98rem, 2.8vw, 1.15rem);
+  font-size: clamp(1.08rem, 3.2vw, 1.35rem);
   font-style: italic;
-  line-height: 1.38;
+  line-height: 1.42;
 }
 
 .quote-item__meta {
@@ -874,6 +874,12 @@
   border-color: currentColor;
 }
 
+.quote-item__topic {
+  border: 1px solid color-mix(in srgb, var(--color-border) 80%, transparent);
+  border-radius: 999px;
+  padding: 0.16rem 0.4rem;
+}
+
 .quote-item__song {
   text-transform: none;
 }
@@ -884,8 +890,8 @@
   }
 
   .quote-cluster__items {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.15rem 1.75rem;
+    grid-template-columns: 1fr;
+    gap: 1.15rem;
   }
 }
 

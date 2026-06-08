@@ -7,6 +7,8 @@ interface ScrollRailProps {
   className?: string
   /** How many pixels to scroll per button press. Defaults to 320. */
   scrollStep?: number
+  /** `buttons` (default): side arrows. `fade`: horizontal scroll with edge fade mask (LP rails). */
+  variant?: 'buttons' | 'fade'
 }
 
 /**
@@ -14,10 +16,11 @@ interface ScrollRailProps {
  * Buttons appear only when there is content to scroll toward.
  * Touch / trackpad swipe still work naturally on the inner strip.
  */
-export function ScrollRail({ children, className, scrollStep = 320 }: ScrollRailProps) {
+export function ScrollRail({ children, className, scrollStep = 320, variant = 'buttons' }: ScrollRailProps) {
   const innerRef = useRef<HTMLDivElement>(null)
   const [canLeft, setCanLeft] = useState(false)
   const [canRight, setCanRight] = useState(false)
+  const useFade = variant === 'fade'
 
   const sync = useCallback(() => {
     const el = innerRef.current
@@ -46,30 +49,40 @@ export function ScrollRail({ children, className, scrollStep = 320 }: ScrollRail
     })
   }
 
-  return (
-    <div className={`scroll-rail${className ? ` ${className}` : ''}`}>
-      {/* disabled removes from tab order and AT automatically; CSS handles visual hiding. */}
-      <button
-        className="scroll-rail__btn scroll-rail__btn--left"
-        onClick={() => scroll('left')}
-        aria-label="Scroll left"
-        disabled={!canLeft}
-      >
-        ‹
-      </button>
+  const fadeClass =
+    useFade && (canLeft || canRight)
+      ? ` scroll-rail--fade${canLeft ? ' scroll-rail--fade-left' : ''}${canRight ? ' scroll-rail--fade-right' : ''}`
+      : useFade
+        ? ' scroll-rail--fade'
+        : ''
 
-      <div ref={innerRef} className="scroll-rail__inner">
+  return (
+    <div className={`scroll-rail${useFade ? ' scroll-rail--fade-mode' : ''}${fadeClass}${className ? ` ${className}` : ''}`}>
+      {!useFade ? (
+        <button
+          className="scroll-rail__btn scroll-rail__btn--left"
+          onClick={() => scroll('left')}
+          aria-label="Scroll left"
+          disabled={!canLeft}
+        >
+          ‹
+        </button>
+      ) : null}
+
+      <div ref={innerRef} className={`scroll-rail__inner${useFade ? ' scroll-rail__inner--fade' : ''}`}>
         {children}
       </div>
 
-      <button
-        className="scroll-rail__btn scroll-rail__btn--right"
-        onClick={() => scroll('right')}
-        aria-label="Scroll right"
-        disabled={!canRight}
-      >
-        ›
-      </button>
+      {!useFade ? (
+        <button
+          className="scroll-rail__btn scroll-rail__btn--right"
+          onClick={() => scroll('right')}
+          aria-label="Scroll right"
+          disabled={!canRight}
+        >
+          ›
+        </button>
+      ) : null}
     </div>
   )
 }
