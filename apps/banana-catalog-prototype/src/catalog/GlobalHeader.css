@@ -636,3 +636,25 @@ body.global-header-menu-open {
     padding-bottom: 0.46rem;
   }
 }
+
+/* Small mobile (≤479px): brand+actions on row 1, LP doors full-width on row 2.
+   Prevents wordmark from overflowing into the experience chips at narrow widths. */
+@media (max-width: 479px) {
+  .catalog-header-inner.global-header__bar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'brand actions'
+      'doors  doors';
+    row-gap: 0.35rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .global-header-experience {
+    justify-self: start;
+  }
+
+  .global-header-experience__list {
+    justify-content: flex-start;
+    gap: 0.35rem;
+  }
+}
