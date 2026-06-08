@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { coverImageUrl } from '../seo/imageUrl'
 import {
@@ -25,9 +25,30 @@ type Props = {
   songCatalog: SongCatalogItem[] | null
 }
 
+function LearnHubStagePanel({
+  children,
+  footer,
+}: {
+  children: ReactNode
+  footer: ReactNode
+}) {
+  return (
+    <div className="learn-lp__panel learn-lp__panel--stage">
+      <div className="learn-lp__panel-stage-body">{children}</div>
+      <div className="learn-lp__panel-stage-footer">{footer}</div>
+    </div>
+  )
+}
+
 function LearnHubAboutPanel() {
   return (
-    <div className="learn-lp__panel learn-lp__panel--about learn-lp__panel--about-rich">
+    <LearnHubStagePanel
+      footer={
+        <Link className="learn-lp__panel-cta-btn" to={LEARN_ABOUT_PREVIEW.href}>
+          Read the full story →
+        </Link>
+      }
+    >
       <p className="learn-lp__panel-lead">{LEARN_ABOUT_PREVIEW.lead}</p>
       <p className="learn-lp__panel-text">{LEARN_ABOUT_PREVIEW.zappa}</p>
       <p className="learn-lp__panel-text">{LEARN_ABOUT_PREVIEW.compass}</p>
@@ -38,10 +59,7 @@ function LearnHubAboutPanel() {
       <p className="learn-lp__panel-text">
         Every song belongs to a sutra. Together they form a compass for a world gone bananas.
       </p>
-      <Link className="catalog-section-cta learn-lp__panel-cta learn-lp__panel-cta--prominent" to={LEARN_ABOUT_PREVIEW.href}>
-        Read the full story →
-      </Link>
-    </div>
+    </LearnHubStagePanel>
   )
 }
 
@@ -75,7 +93,13 @@ function LearnSutraCompact({
 
 function LearnHubSutrasPanel() {
   return (
-    <div className="learn-lp__panel learn-lp__panel--compact">
+    <LearnHubStagePanel
+      footer={
+        <Link className="learn-lp__panel-cta-btn" to={LEARN_HUB_LINKS.sutras}>
+          Browse all sutras →
+        </Link>
+      }
+    >
       <p className="learn-lp__panel-intro">
         Seven compass questions, KNOW through BOW. Tap a card for the full sutra page.
       </p>
@@ -85,10 +109,7 @@ function LearnHubSutrasPanel() {
         ))}
         <LearnSutraCompact familyKey="QUACK" quack />
       </div>
-      <Link className="catalog-section-cta learn-lp__panel-cta" to={LEARN_HUB_LINKS.sutras}>
-        Browse all sutras →
-      </Link>
-    </div>
+    </LearnHubStagePanel>
   )
 }
 
@@ -113,11 +134,30 @@ function LearnHubMusesQuotesPanel({
   if (!quote) return <p className="learn-lp__panel-intro">No quotes in catalog.</p>
 
   const museSummary =
-    (museEntry?.notes || museEntry?.quote_excerpt || museEntry?.famous_works || '').trim() ||
+    (museEntry?.notes || museEntry?.famous_works || '').trim() ||
     'Thinkers, writers, and fools behind the lines that became songs.'
 
   return (
-    <div className="learn-lp__panel learn-lp__panel--muses-quotes">
+    <LearnHubStagePanel
+      footer={
+        <>
+          <button
+            type="button"
+            className="learn-lp__panel-secondary-btn"
+            aria-label="Show another quote"
+            onClick={() => setQuoteIndex((i) => i + 1)}
+          >
+            <span className="learn-lp__quote-refresh-icon" aria-hidden>
+              ↻
+            </span>
+            Another quote
+          </button>
+          <Link className="learn-lp__panel-cta-btn" to={LEARN_HUB_LINKS.quotes}>
+            Browse all quotes →
+          </Link>
+        </>
+      }
+    >
       <div className="learn-lp__quote-feature">
         <blockquote className="learn-lp__quote-feature-text">&ldquo;{quote.quote}&rdquo;</blockquote>
         <p className="learn-lp__quote-feature-meta">
@@ -134,29 +174,19 @@ function LearnHubMusesQuotesPanel({
         <p className="learn-lp__muse-summary-label">About {quote.muse}</p>
         <p className="learn-lp__muse-summary-text">{museSummary}</p>
       </div>
-      <div className="learn-lp__quote-actions">
-        <button
-          type="button"
-          className="learn-lp__quote-refresh"
-          aria-label="Show another quote"
-          onClick={() => setQuoteIndex((i) => i + 1)}
-        >
-          <span className="learn-lp__quote-refresh-icon" aria-hidden>
-            ↻
-          </span>
-          Another quote
-        </button>
-        <Link className="catalog-section-cta learn-lp__panel-cta" to={LEARN_HUB_LINKS.quotes}>
-          Browse all quotes →
-        </Link>
-      </div>
-    </div>
+    </LearnHubStagePanel>
   )
 }
 
 function LearnHubWordsPanel({ words }: { words: SongCatalogItem[] }) {
   return (
-    <div className="learn-lp__panel learn-lp__panel--words">
+    <LearnHubStagePanel
+      footer={
+        <Link className="learn-lp__panel-cta-btn" to={LEARN_HUB_LINKS.words}>
+          Read the words →
+        </Link>
+      }
+    >
       <h3 className="learn-lp__words-panel-title">What&apos;s new in the library?</h3>
       <div className="learn-lp__words-grid">
         {words.map((song) => {
@@ -193,26 +223,26 @@ function LearnHubWordsPanel({ words }: { words: SongCatalogItem[] }) {
           )
         })}
       </div>
-      <Link className="catalog-section-cta learn-lp__panel-cta" to={LEARN_HUB_LINKS.words}>
-        Read the words →
-      </Link>
-    </div>
+    </LearnHubStagePanel>
   )
 }
 
 function LearnHubManifestoPanel() {
   return (
-    <div className="learn-lp__panel learn-lp__panel--manifesto">
+    <LearnHubStagePanel
+      footer={
+        <Link className="learn-lp__panel-cta-btn" to={LEARN_HUB_LINKS.manifestoSong}>
+          Read the manifesto song →
+        </Link>
+      }
+    >
       <p className="learn-lp__manifesto-note">Coming soon: the full AI fair use manifesto, written for skeptics and sharers.</p>
-      <p className="learn-lp__manifesto-lead">Human words. AI as instrument. Creative lineage, not creative theft.</p>
-      <p className="learn-lp__manifesto-text">
+      <p className="learn-lp__panel-lead">Human words. AI as instrument. Creative lineage, not creative theft.</p>
+      <p className="learn-lp__panel-text">
         Every lyric on this site is written by a human. Suno (and other tools) generate sonic canvas the way a sampler
         generates groove: the philosophy, the questions, and the naked truth in the words are the art.
       </p>
-      <Link className="catalog-section-cta learn-lp__panel-cta" to={LEARN_HUB_LINKS.manifestoSong}>
-        Read the manifesto song →
-      </Link>
-    </div>
+    </LearnHubStagePanel>
   )
 }
 

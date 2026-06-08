@@ -23,6 +23,10 @@
 /*  Collapsible contact form                                           */
 /* ================================================================== */
 
+#footer-contact-panel {
+  scroll-margin-bottom: 1.5rem;
+}
+
 .footer-contact {
   padding: 0;
   border-bottom: 1px solid var(--color-border);

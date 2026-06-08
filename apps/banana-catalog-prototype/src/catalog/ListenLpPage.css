@@ -295,6 +295,17 @@
   width: 100%;
 }
 
+.listen-lp__player-playlist-meta {
+  margin: 0;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted, #666);
+  border-bottom: 1px solid var(--color-border, #ddd);
+  background: var(--color-bg-inset, #f4f1ea);
+}
+
 .listen-lp__player-frame--compact {
   margin: 0;
   border-bottom: 1px solid var(--color-border, #ddd);
@@ -305,10 +316,20 @@
   min-height: 120px;
 }
 
+.listen-lp__player-frame--playlist .catalog-lazy-sc-embed,
+.listen-lp__player-frame--playlist .sc-embed-frame {
+  min-height: 280px;
+}
+
 @media (min-width: 641px) {
   .listen-lp__player-frame--compact .catalog-lazy-sc-embed,
   .listen-lp__player-frame--compact .sc-embed-frame {
     min-height: 160px;
+  }
+
+  .listen-lp__player-frame--playlist .catalog-lazy-sc-embed,
+  .listen-lp__player-frame--playlist .sc-embed-frame {
+    min-height: 380px;
   }
 }
 

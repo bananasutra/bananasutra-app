@@ -49,6 +49,7 @@ export type BertrandSurface =
   | 'videos_empty_state'
   | 'words_inline'
   | 'about_footer'
+  | 'muses_search_empty'
   | 'mini_bar_icon'
   | 'videos_queue_inline'
   | 'floating_button'

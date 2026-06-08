@@ -18,6 +18,9 @@ import {
   pickExploreSongbooksForListenLp,
   pickFeaturedListenSongbook,
   pickLatestSongsForListenLp,
+  buildEpDurationByUrl,
+  buildEpGenresByUrl,
+  buildEpTrackCountByUrl,
   pickTopEpsForListenLp,
   pickTopTracksForListenLp,
   type ListenLpSutraFilter,
@@ -81,6 +84,9 @@ export function ListenLpPage() {
   const [featuredSongbook] = useState(() => pickFeaturedListenSongbook([...allSongbooks()]))
   const topTracks = useMemo(() => pickTopTracksForListenLp(trackCatalog), [trackCatalog])
   const topEps = useMemo(() => pickTopEpsForListenLp(songCatalogRows), [songCatalogRows])
+  const epDurationByUrl = useMemo(() => buildEpDurationByUrl(trackCatalog), [trackCatalog])
+  const epGenresByUrl = useMemo(() => buildEpGenresByUrl(trackCatalog), [trackCatalog])
+  const epTrackCountByUrl = useMemo(() => buildEpTrackCountByUrl(trackCatalog), [trackCatalog])
   const latestSongs = useMemo(() => pickLatestSongsForListenLp(songCatalogRows), [songCatalogRows])
   const exploreSongbooksAll = useMemo(
     () => pickExploreSongbooksForListenLp(songbooks, activeSutra, activeGenre),
@@ -175,7 +181,13 @@ export function ListenLpPage() {
               Loading popular tracks…
             </p>
           ) : (
-            <ListenLpTopTracks tracks={topTracks} eps={topEps} />
+            <ListenLpTopTracks
+              tracks={topTracks}
+              eps={topEps}
+              epDurationByUrl={epDurationByUrl}
+              epGenresByUrl={epGenresByUrl}
+              epTrackCountByUrl={epTrackCountByUrl}
+            />
           )}
 
           {featuredSongbook ? (

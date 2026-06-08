@@ -9,6 +9,7 @@ import {
   siteNavItemActive,
   type DrawerNavItem,
 } from './siteNav'
+import { isFooterContactHref, openFooterContactPanel } from './footerContactConstants'
 import { ThemeToggle } from './ThemeToggle'
 import './DiscoverySearch.css'
 import './GlobalHeader.css'
@@ -85,12 +86,21 @@ function DrawerNavEntry({
   }
 
   const active = siteNavItemActive(pathname, item)
+  const isContact = isFooterContactHref(item.to)
   return (
     <Link
-      to={item.to}
+      to={isContact ? '#' : item.to}
       className={drawerLinkClass(active, item.muted)}
       aria-current={active ? 'page' : undefined}
-      onClick={onNavigate}
+      onClick={(event) => {
+        if (isContact) {
+          event.preventDefault()
+          onNavigate()
+          openFooterContactPanel()
+          return
+        }
+        onNavigate()
+      }}
     >
       {item.label}
     </Link>

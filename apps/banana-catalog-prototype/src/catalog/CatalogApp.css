@@ -482,6 +482,13 @@ html {
     order: 5;
     width: 100%;
   }
+
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .songbooks-page__featured-rotator,
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .songbooks-page__sections {
+    order: 4;
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 /* Short viewport (landscape phones / small laptops): reduce fixed header chrome while preserving page breathing room. */

@@ -4,11 +4,12 @@ import { watchLpPlaylistMetaLine, watchLpPlaylistThumbLabel } from './watchLpDat
 
 type Props = {
   playlist: YouTubePlaylistCatalogItem
+  durationByName?: Map<string, number>
   isActive: boolean
   onSelect: () => void
 }
 
-export function WatchLpPlaylistThumb({ playlist, isActive, onSelect }: Props) {
+export function WatchLpPlaylistThumb({ playlist, durationByName, isActive, onSelect }: Props) {
   const label = watchLpPlaylistThumbLabel(playlist)
   const poster = playlist.thumbnail_url
     ? coverImageUrl(playlist.thumbnail_url, { width: 480 })
@@ -32,7 +33,7 @@ export function WatchLpPlaylistThumb({ playlist, isActive, onSelect }: Props) {
           </span>
         )}
         <span className="watch-lp__playlist-thumb-title">{label}</span>
-        <span className="watch-lp__playlist-thumb-meta">{watchLpPlaylistMetaLine(playlist)}</span>
+        <span className="watch-lp__playlist-thumb-meta">{watchLpPlaylistMetaLine(playlist, durationByName)}</span>
       </button>
     </li>
   )

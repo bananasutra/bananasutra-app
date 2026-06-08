@@ -1,4 +1,5 @@
 import type { SongCatalogItem, SongbookCatalogItem, TrackCatalogItem } from './types'
+import { formatDurationFromSeconds } from './durationFormat'
 import { pickRandomSongbookFromPool, songbookPopularity } from './homePortalUtils'
 import { SUTRA_CONTEXT, type SutraFamilyKey } from './sutraContext'
 
@@ -209,4 +210,90 @@ export function listenLpFacetStatusText(p: {
       : `${p.shownCount} songbooks`
   if (parts.length) return `${parts.join(' · ')} · ${countLabel}`
   return countLabel
+}
+
+/** Prefer full-song EP set URL for listen LP playback (falls back to single track). */
+export function listenLpTrackPlaybackUrl(track: Pick<TrackCatalogItem, 'ep_url' | 'sc_url'>): string {
+  const ep = (track.ep_url || '').trim()
+  if (ep.includes('/sets/')) return ep
+  return (track.sc_url || '').trim()
+}
+
+export function listenLpTrackIsEpPlaylist(track: Pick<TrackCatalogItem, 'ep_url' | 'sc_url'>): boolean {
+  return listenLpTrackPlaybackUrl(track).includes('/sets/')
+}
+
+function trackGenreTokens(track: Pick<TrackCatalogItem, 'genres' | 'primary_genre' | 'secondary_genre'>): string[] {
+  const fromArray = (track.genres ?? []).map((g) => g.trim()).filter(Boolean)
+  if (fromArray.length) return fromArray
+  return [(track.primary_genre || '').trim(), (track.secondary_genre || '').trim()].filter(Boolean)
+}
+
+/** Genres on one track row (fallback when no EP set is linked). */
+export function listenLpTrackGenreLine(track: Pick<TrackCatalogItem, 'genres' | 'primary_genre' | 'secondary_genre'>): string {
+  return [...new Set(trackGenreTokens(track))].join(' · ')
+}
+
+/** Union of genres across every in-app track in each EP set. */
+export function buildEpGenresByUrl(catalog: TrackCatalogItem[] | null): Map<string, string> {
+  const tokensByUrl = new Map<string, Set<string>>()
+  if (!catalog?.length) return new Map()
+  for (const row of catalog) {
+    const ep = (row.ep_url || '').trim()
+    if (!ep.includes('/sets/')) continue
+    const tokens = trackGenreTokens(row)
+    if (!tokens.length) continue
+    const bucket = tokensByUrl.get(ep) ?? new Set<string>()
+    for (const token of tokens) bucket.add(token)
+    tokensByUrl.set(ep, bucket)
+  }
+  const out = new Map<string, string>()
+  for (const [url, tokens] of tokensByUrl) {
+    out.set(url, [...tokens].sort((a, b) => a.localeCompare(b)).join(' · '))
+  }
+  return out
+}
+
+/** Genre line for listen LP row: all EP track genres when a set exists, else this track only. */
+export function listenLpRowGenreLine(
+  track: Pick<TrackCatalogItem, 'ep_url' | 'sc_url' | 'genres' | 'primary_genre' | 'secondary_genre'>,
+  epGenresByUrl?: Map<string, string>,
+): string {
+  const playbackUrl = listenLpTrackPlaybackUrl(track)
+  if (playbackUrl.includes('/sets/') && epGenresByUrl) {
+    const fromEp = (epGenresByUrl.get(playbackUrl) || '').trim()
+    if (fromEp) return fromEp
+  }
+  return listenLpTrackGenreLine(track)
+}
+
+/** In-app track count per EP set URL. */
+export function buildEpTrackCountByUrl(catalog: TrackCatalogItem[] | null): Map<string, number> {
+  const counts = new Map<string, number>()
+  if (!catalog?.length) return counts
+  for (const row of catalog) {
+    const ep = (row.ep_url || '').trim()
+    if (!ep.includes('/sets/')) continue
+    counts.set(ep, (counts.get(ep) ?? 0) + 1)
+  }
+  return counts
+}
+
+/** Sum track durations per EP set URL across the full track catalog. */
+export function buildEpDurationByUrl(catalog: TrackCatalogItem[] | null): Map<string, string> {
+  const secondsByUrl = new Map<string, number>()
+  if (!catalog?.length) return new Map()
+  for (const row of catalog) {
+    const ep = (row.ep_url || '').trim()
+    if (!ep.includes('/sets/')) continue
+    const sec = Number(row.duration_sec) || 0
+    if (sec <= 0) continue
+    secondsByUrl.set(ep, (secondsByUrl.get(ep) ?? 0) + sec)
+  }
+  const out = new Map<string, string>()
+  for (const [url, sec] of secondsByUrl) {
+    const label = formatDurationFromSeconds(sec)
+    if (label) out.set(url, label)
+  }
+  return out
 }

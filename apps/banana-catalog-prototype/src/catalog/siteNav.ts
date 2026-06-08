@@ -54,9 +54,9 @@ export const SITE_NAV_DRAWER: readonly DrawerNavItem[] = [
   { kind: 'link', to: canonicalPathForRoute('/sitemap'), label: 'Sitemap', match: 'exact', muted: true },
   {
     kind: 'link',
-    to: `${canonicalPathForRoute('/about')}#contact`,
+    to: '/#footer-contact-panel',
     label: 'Contact',
-    match: 'aboutHub',
+    match: 'exact',
     muted: true,
   },
 ]

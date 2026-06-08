@@ -6,15 +6,15 @@ import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { FeaturedSongbookSpotlight } from './FeaturedSongbookSpotlight'
 import { allSongbooks, songbookHref } from './songbooks'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
-import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
+import { ListenLpSongbookThumb } from './ListenLpSongbookThumb'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalogBrowse } from './generatedData'
 import { filterSongsByAlbumSearchQuery, searchTokens } from './searchMatch'
-import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import './CatalogApp.css'
 import './FeaturedSongbookSpotlight.css'
+import './ListenLpPage.css'
 import './SongbooksPage.css'
 
 function byPopularityScore(songbook: {
@@ -86,8 +86,6 @@ const SECTION_COPY: Record<
   },
 }
 
-const SONGBOOK_CARD_ART_REQUEST_WIDTH = 480
-const SONGBOOK_CARD_ART_SIZES = '(max-width: 640px) 48vw, (max-width: 1024px) 31vw, 260px'
 type SongbooksUrlFilters = {
   find: string
   type: SongbookSectionKey | ''
@@ -209,13 +207,6 @@ function songbookMatchesFindFallback(book: ListedSongbook, tokens: string[]): bo
   return tokens.every((token) => haystack.includes(token))
 }
 
-function gridClassForSection(sectionKey: SongbookSectionKey): string {
-  const base = 'songbooks-page__grid'
-  if (sectionKey === 'sutra') return `${base} ${base}--sutra`
-  if (sectionKey === 'collection') return `${base} ${base}--pairs`
-  return `${base} ${base}--triple`
-}
-
 /** Short intro blurbs under each sutra lane heading on the songbooks page. */
 const SUTRA_INTROS: Record<string, string> = {
   KNOW:
@@ -240,34 +231,15 @@ function sutraIntroForKey(key: string): string | null {
   return SUTRA_INTROS[key] ?? null
 }
 
-function SongbookCard({ book }: { book: ListedSongbook }) {
+function SongbookThumbGrid({ books, label }: { books: ListedSongbook[]; label: string }) {
   return (
-    <Link className="songbooks-page__card" to={songbookHref(book.songbook)}>
-      <div className="songbooks-page__media">
-        {book.playlist_artwork_url ? (
-          <img
-            className="songbooks-page__art"
-            srcSet={buildSrcset(book.playlist_artwork_url, [240, 360, SONGBOOK_CARD_ART_REQUEST_WIDTH, 640])}
-            sizes={SONGBOOK_CARD_ART_SIZES}
-            src={coverImageUrl(book.playlist_artwork_url, { width: SONGBOOK_CARD_ART_REQUEST_WIDTH })}
-            alt=""
-            width={280}
-            height={280}
-            loading="lazy"
-            decoding="async"
-          />
-        ) : (
-          <div className="songbooks-page__art songbooks-page__art--fallback" aria-hidden>
-            🍌
-          </div>
-        )}
-      </div>
-      <div className="songbooks-page__body">
-        <h3 className="songbooks-page__title">{book.songbook}</h3>
-        {book.description ? <p className="songbooks-page__desc">{book.description}</p> : null}
-        <SongbookPlaylistMetaLine book={book} />
-      </div>
-    </Link>
+    <ul className="listen-lp__songbook-grid" aria-label={label}>
+      {books.map((book) => (
+        <li key={book.slug} className="listen-lp__songbook-grid-cell">
+          <ListenLpSongbookThumb book={book} />
+        </li>
+      ))}
+    </ul>
   )
 }
 
@@ -279,7 +251,6 @@ export function SongbooksPage() {
   const filters = useMemo(() => readSongbooksFiltersFromParams(searchParams), [searchParams])
   const [findDraft, setFindDraft] = useState(filters.find)
   const filtersRef = useRef(filters)
-  const [filtersOpen, setFiltersOpen] = useState(() => (typeof window === 'undefined' ? true : window.innerWidth >= 900))
   const [visitSeed] = useState(() => Math.floor(Math.random() * 1_000_000_000))
   const { data: songCatalogRows } = useSongCatalogBrowse()
 
@@ -300,22 +271,12 @@ export function SongbooksPage() {
     return () => window.clearTimeout(tid)
   }, [findDraft, filters.find, navigate])
 
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 899px)')
-    const sync = () => {
-      if (mq.matches) setFiltersOpen(false)
-    }
-    sync()
-    mq.addEventListener('change', sync)
-    return () => mq.removeEventListener('change', sync)
-  }, [])
-
   const pageMeta = renderPageMeta({
     title: 'Songbooks & Playlists',
     description: 'Curated SoundCloud playlists that tell a story. By topic, by genre, and by language.',
     path: canonicalPathForRoute('/songbooks'),
   })
-  useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString(), filtersOpen])
+  useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString()])
 
   const songCatalog = useMemo(() => songCatalogRows ?? [], [songCatalogRows])
   const songbooks = useMemo(() => [...allSongbooks()].sort(sortBooks), [])
@@ -507,23 +468,12 @@ export function SongbooksPage() {
           </p>
         </div>
 
-        <div className={`catalog-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
-          <aside className={`catalog-filters${filtersOpen ? ' is-open' : ''}`} aria-labelledby="songbooks-filters-heading">
-            <div className="catalog-filters-head">
-              <h2 id="songbooks-filters-heading" className="catalog-section-title">
-                Filters
-              </h2>
-              <button
-                type="button"
-                className="catalog-icon-btn"
-                onClick={() => setFiltersOpen(false)}
-                aria-expanded={filtersOpen}
-                aria-controls="songbooks-filter-panel"
-              >
-                Hide
-              </button>
-            </div>
-            {filtersOpen ? songbookActiveFilterContext : null}
+        <main id="main-content" className="songbooks-page songbooks-page__stacked">
+          <section className="songbooks-page__filters-stacked" aria-labelledby="songbooks-filters-heading">
+            <h2 id="songbooks-filters-heading" className="catalog-section-title">
+              Filters
+            </h2>
+            {songbookActiveFilterContext}
             <div id="songbooks-filter-panel" className="catalog-facet-stack">
               <section className="catalog-facet" aria-labelledby="songbooks-search-heading">
                 <h3 id="songbooks-search-heading">Search</h3>
@@ -629,25 +579,9 @@ export function SongbooksPage() {
                 </div>
               </section>
             </div>
-          </aside>
+          </section>
 
-          <main id="main-content" className="catalog-main songbooks-page__main">
-            {!filtersOpen ? (
-              <>
-                {songbookActiveFilterContext}
-                <button
-                  type="button"
-                  className="catalog-filter-reopen"
-                  onClick={() => setFiltersOpen(true)}
-                  aria-expanded={false}
-                  aria-controls="songbooks-filter-panel"
-                >
-                  Show filters
-                </button>
-              </>
-            ) : null}
-
-            {featuredSongbook ? (
+          {featuredSongbook ? (
               <section className="songbooks-page__featured-rotator" aria-labelledby="songbooks-featured-songbook-heading">
                 <h2 id="songbooks-featured-songbook-heading" className="catalog-section-title">
                   Featured songbook
@@ -695,11 +629,7 @@ export function SongbooksPage() {
                             {sub.label}
                           </h3>
                           {laneIntro ? <p className="songbooks-page__subsection-intro">{laneIntro}</p> : null}
-                          <div className={gridClassForSection(section.sectionKey)} aria-label={`${sub.label} songbooks`}>
-                            {sub.books.map((book) => (
-                              <SongbookCard key={book.slug} book={book} />
-                            ))}
-                          </div>
+                          <SongbookThumbGrid books={sub.books} label={`${sub.label} songbooks`} />
                         </div>
                       )
                     })}
@@ -712,17 +642,12 @@ export function SongbooksPage() {
                       </h2>
                       <p className="songbooks-page__section-intro">{section.intro}</p>
                     </header>
-                    <div className={gridClassForSection(section.sectionKey)} aria-label={`${section.title} songbooks`}>
-                      {section.books.map((book) => (
-                        <SongbookCard key={book.slug} book={book} />
-                      ))}
-                    </div>
+                    <SongbookThumbGrid books={section.books} label={`${section.title} songbooks`} />
                   </section>
                 ),
               )}
             </div>
-          </main>
-        </div>
+        </main>
       </div>
       <GlobalFooter />
     </div>

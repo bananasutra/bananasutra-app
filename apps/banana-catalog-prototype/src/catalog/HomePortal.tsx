@@ -12,6 +12,7 @@ import {
   resolveHiddenPeelsSongbook,
   songbookHrefFromCatalogItem,
 } from './homePortalUtils'
+import { coverImageUrl } from '../seo/imageUrl'
 import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
 import { SongThumbCard } from './SongThumbCard'
 import type { SongCatalogItem, SongbookCatalogItem } from './types'
@@ -61,6 +62,15 @@ const HOME_BROWSE_CATALOG = songCatalogBrowseJson as SongCatalogItem[]
 const LATEST_DROPS_LIMIT = 6
 
 const SUTRA_GRID_KEYS = ['KNOW', 'BLOW', 'SHOW', 'GROW', 'FLOW', 'GLOW', 'BOW', 'QUACK'] as const
+
+function hashString(input: string): number {
+  let hash = 0
+  for (let idx = 0; idx < input.length; idx += 1) {
+    hash = (hash << 5) - hash + input.charCodeAt(idx)
+    hash |= 0
+  }
+  return Math.abs(hash)
+}
 
 function formatCount(n: number): string {
   return new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(n)
@@ -143,6 +153,35 @@ export function HomePortal() {
         .slice(0, LATEST_DROPS_LIMIT),
     [],
   )
+
+  const coverWallSeed = useMemo(
+    () => hashString(`${location.key}|${Math.random()}`),
+    [location.key],
+  )
+  const [coverWallColumns, setCoverWallColumns] = useState(8)
+
+  useEffect(() => {
+    const measure = () => {
+      const width = window.innerWidth
+      const cell = width < 480 ? 52 : width < 720 ? 64 : 72
+      setCoverWallColumns(Math.max(4, Math.floor(width / cell)))
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  const coverWallSongs = useMemo(() => {
+    const withCovers = HOME_BROWSE_CATALOG.filter((s) => (s.cover_image_url || '').trim())
+    const shuffled = [...withCovers].sort(
+      (a, b) =>
+        hashString(`${coverWallSeed}|${a.lyrics_id}`) - hashString(`${coverWallSeed}|${b.lyrics_id}`) ||
+        a.lyrics_title.localeCompare(b.lyrics_title),
+    )
+    const remainder = shuffled.length % coverWallColumns
+    if (remainder === 0 || shuffled.length <= coverWallColumns) return shuffled
+    return shuffled.slice(0, shuffled.length - remainder)
+  }, [coverWallColumns, coverWallSeed])
 
   const songbooksCount = BUILD_SUMMARY.songbooks ?? 0
 
@@ -309,6 +348,48 @@ export function HomePortal() {
               Learn more about the sutras →
             </Link>
           </section>
+
+          {coverWallSongs.length > 0 ? (
+            <section
+              className="home-portal__section home-portal__section--cover-wall"
+              aria-labelledby="home-cover-wall-heading"
+            >
+              <h2 id="home-cover-wall-heading" className="catalog-section-title">
+                Pick a cover
+              </h2>
+              <p className="home-portal__cover-wall-intro">
+                Think of it as a matrix or a bingo game, whatever stirs your soul, and see where the tile takes you.
+              </p>
+              <div className="home-portal__cover-wall-bleed">
+                <ul className="home-portal__cover-wall" aria-label="Song covers">
+                  {coverWallSongs.map((song) => {
+                    const cover = (song.cover_image_url || '').trim()
+                    const title = song.lyrics_title
+                    return (
+                      <li key={song.lyrics_id} className="home-portal__cover-wall-cell">
+                        <Link
+                          className="home-portal__cover-wall-tile"
+                          to={songCatalogLinkTo(song.lyrics_title, song.url_slug)}
+                          aria-label={title}
+                          title={title}
+                        >
+                          <img
+                            className="home-portal__cover-wall-art"
+                            src={coverImageUrl(cover, { width: 120 })}
+                            alt=""
+                            width={120}
+                            height={120}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            </section>
+          ) : null}
 
           {homePlaylistSongbook ? (
             <section className="home-portal__section" aria-labelledby="home-hidden-peels-heading">

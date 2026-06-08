@@ -16,6 +16,8 @@ import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useExclusiveYoutubeEmbedsPlayback } from './useExclusiveYoutubeEmbedsPlayback'
 import { WatchLpBertrandTail } from './WatchLpBertrandTail'
 import { WatchLpFacetBar } from './WatchLpFacetBar'
+import { allSongbooks } from './songbooks'
+import { songbookSlugForYoutubePlaylist } from './songbookYoutubeMatch'
 import { WatchLpPlaylistEmbed } from './WatchLpPlaylistEmbed'
 import { WatchLpPlaylistThumb } from './WatchLpPlaylistThumb'
 import { WatchLpVideoPickThumb } from './WatchLpVideoPickThumb'
@@ -31,7 +33,11 @@ import {
   type WatchLpSutraFilter,
 } from './watchLpData'
 import { formatDurationDisplay } from './durationFormat'
-import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
+import {
+  buildYoutubePlaylistDurationByName,
+  dedupeYoutubeVideosByVideoId,
+  flattenYoutubeCatalogVideos,
+} from './youtubeCatalogFlat'
 import './CatalogApp.css'
 import './catalog-page-shell.css'
 import './CatalogVideoSpotlight.css'
@@ -111,6 +117,10 @@ export function WatchLpPage() {
   }, [songCatalogRows])
 
   const allVideos = useMemo(() => youtubeVideos ?? [], [youtubeVideos])
+  const playlistDurationByName = useMemo(
+    () => buildYoutubePlaylistDurationByName(allVideos),
+    [allVideos],
+  )
   const defaultHero = useMemo(() => pickSpotlightHero(allVideos), [allVideos])
 
   const featuredVideo = useMemo(() => {
@@ -155,6 +165,11 @@ export function WatchLpPage() {
   }, [pickedPlaylistId, visiblePlaylists, sortedPlaylists, allPlaylists])
 
   const activePlaylistId = activePlaylist?.playlist_id ?? null
+  const genreSongbooks = useMemo(() => allSongbooks(), [])
+  const activePlaylistSongbookSlug = useMemo(
+    () => (activePlaylist ? songbookSlugForYoutubePlaylist(activePlaylist, genreSongbooks) : null),
+    [activePlaylist, genreSongbooks],
+  )
 
   const featuredInApp = featuredVideo ? inAppIds.has((featuredVideo.lyrics_id || '').trim()) : false
   const featuredSpotlight = featuredVideo ? toSpotlightItem(featuredVideo, featuredInApp) : null
@@ -297,8 +312,10 @@ export function WatchLpPage() {
               <div className="watch-lp__playlists-player">
                 <WatchLpPlaylistEmbed
                   playlist={activePlaylist}
+                  durationByName={playlistDurationByName}
                   iframeRef={playlistYtRef}
                   onBeforePlay={pauseSpotlightEmbed}
+                  songbookSlug={activePlaylistSongbookSlug}
                 />
               </div>
 
@@ -327,6 +344,7 @@ export function WatchLpPage() {
                     <WatchLpPlaylistThumb
                       key={pl.playlist_id}
                       playlist={pl}
+                      durationByName={playlistDurationByName}
                       isActive={pl.playlist_id === activePlaylistId}
                       onSelect={() => setPickedPlaylistId(pl.playlist_id)}
                     />

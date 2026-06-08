@@ -23,6 +23,7 @@ import './TracksPage.css'
 
 const LISTEN_MODE: AnalyticsMode = 'listen'
 const QUEUE_SOURCE = 'listen_lp' as const
+const SC_EMBED_HEIGHT_EP_PLAYLIST = 420
 
 type PlayerTab = 'tracks' | 'eps'
 
@@ -35,9 +36,18 @@ function thumbSrc(url: string): string {
 type Props = {
   tracks: TrackCatalogItem[]
   eps: ListenLpEpPick[]
+  epDurationByUrl?: Map<string, string>
+  epGenresByUrl?: Map<string, string>
+  epTrackCountByUrl?: Map<string, number>
 }
 
-export function ListenLpTopTracks({ tracks, eps }: Props) {
+export function ListenLpTopTracks({
+  tracks,
+  eps,
+  epDurationByUrl,
+  epGenresByUrl,
+  epTrackCountByUrl,
+}: Props) {
   const playAllDesktopAvailable = usePlayAllDesktopAvailable()
   const [playerTab, setPlayerTab] = useState<PlayerTab>('tracks')
   const [selectedTrackId, setSelectedTrackId] = useState<string | null>(() => tracks[0]?.track_id ?? null)
@@ -106,11 +116,19 @@ export function ListenLpTopTracks({ tracks, eps }: Props) {
     [eps, selectedEpUrl],
   )
 
-  const activeScUrl = playerTab === 'tracks' ? selectedTrack?.sc_url : selectedEp?.ep_url
+  const activeScUrl =
+    playerTab === 'tracks' ? (selectedTrack?.sc_url || '').trim() : (selectedEp?.ep_url || '').trim()
   const activeTitle =
     playerTab === 'tracks'
       ? selectedTrack?.lyrics_title || selectedTrack?.track_title || 'SoundCloud track'
       : selectedEp?.ep_title || 'SoundCloud EP'
+  const activeIsSongPlaylist = playerTab === 'eps' && activeScUrl.includes('/sets/')
+  const activeEpDuration =
+    playerTab === 'eps' && activeScUrl && epDurationByUrl ? epDurationByUrl.get(activeScUrl) ?? '' : ''
+  const activeEpTrackCount =
+    playerTab === 'eps' && activeScUrl && epTrackCountByUrl ? epTrackCountByUrl.get(activeScUrl) ?? 0 : 0
+  const embedMode = activeIsSongPlaylist ? 'list' : 'visual'
+  const resolvedEmbedHeight = activeIsSongPlaylist ? SC_EMBED_HEIGHT_EP_PLAYLIST : embedHeight
 
   useEffect(() => {
     if (skipScAutoplayOffOnNextSelectionChange.current) {
@@ -366,22 +384,34 @@ export function ListenLpTopTracks({ tracks, eps }: Props) {
             disabled={!hasEps}
             onClick={() => switchTab('eps')}
           >
-            Top 10 EPs
+            Top 10 songs
           </button>
         </div>
 
         {activeScUrl ? (
-          <div className="listen-lp__player-frame listen-lp__player-frame--compact" ref={playerWrapRef}>
-            <LazySoundCloudEmbed
-              scUrl={activeScUrl}
-              title={activeTitle}
-              height={embedHeight}
-              mode="visual"
-              autoPlay={scAutoplay}
-              reloadKey={embedReloadKey}
-              onLoad={handlePlayerLoad}
-            />
-          </div>
+          <>
+            {activeIsSongPlaylist ? (
+              <p className="listen-lp__player-playlist-meta">
+                Full song EP
+                {activeEpDuration ? ` · ${activeEpDuration}` : ''}
+                {activeEpTrackCount > 0 ? ` · ${activeEpTrackCount} tracks` : ''}
+              </p>
+            ) : null}
+            <div
+              className={`listen-lp__player-frame listen-lp__player-frame--compact${activeIsSongPlaylist ? ' listen-lp__player-frame--playlist' : ''}`}
+              ref={playerWrapRef}
+            >
+              <LazySoundCloudEmbed
+                scUrl={activeScUrl}
+                title={activeTitle}
+                height={resolvedEmbedHeight}
+                mode={embedMode}
+                autoPlay={scAutoplay}
+                reloadKey={embedReloadKey}
+                onLoad={handlePlayerLoad}
+              />
+            </div>
+          </>
         ) : null}
 
         <div className="listen-lp__track-miniplayer">
@@ -513,6 +543,10 @@ export function ListenLpTopTracks({ tracks, eps }: Props) {
                 const showPlayingWave = active && isScPlaying
                 const href = songCatalogPath(ep.lyrics_title, ep.url_slug)
                 const cover = coverImageUrl(thumbSrc(ep.cover_url), { width: 200 })
+                const epUrl = (ep.ep_url || '').trim()
+                const sutraText = (ep.sutra || '').trim()
+                const genreText = epGenresByUrl?.get(epUrl) ?? ''
+                const durationLabel = epDurationByUrl?.get(epUrl) ?? ''
                 return (
                   <li key={ep.ep_url} className="listen-lp__track-item">
                     <div
@@ -541,18 +575,19 @@ export function ListenLpTopTracks({ tracks, eps }: Props) {
                       )}
                       <div className="listen-lp__track-body">
                         <p className="listen-lp__track-title">{ep.ep_title}</p>
-                        {ep.sutra || ep.primary_genre ? (
+                        {sutraText || genreText ? (
                           <p className="listen-lp__track-meta">
-                            {ep.sutra ? (
-                              <span className={`catalog-sutra-word ${sutraClassName(ep.sutra)}`}>{ep.sutra}</span>
+                            {sutraText ? (
+                              <span className={`catalog-sutra-word ${sutraClassName(sutraText)}`}>{sutraText}</span>
                             ) : null}
-                            {ep.primary_genre ? <span>{ep.sutra ? ` · ${ep.primary_genre}` : ep.primary_genre}</span> : null}
+                            {genreText ? <span>{sutraText ? ` · ${genreText}` : genreText}</span> : null}
                           </p>
                         ) : null}
                       </div>
                       <span className="listen-lp__track-play" aria-hidden>
                         {active && isScPlaying ? '❚❚' : '▶'}
                       </span>
+                      {durationLabel ? <span className="listen-lp__track-duration">{durationLabel}</span> : null}
                       <Link className="listen-lp__track-song-link catalog-song-page-cta" to={href} onClick={(e) => e.stopPropagation()}>
                         Song page
                       </Link>

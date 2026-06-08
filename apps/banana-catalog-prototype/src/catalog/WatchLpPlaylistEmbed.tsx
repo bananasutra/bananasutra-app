@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState, type RefObject } from 'react'
+import { Link } from 'react-router-dom'
 import { coverImageUrl } from '../seo/imageUrl'
 import type { YouTubePlaylistCatalogItem } from './types'
+import { songbookCatalogPath } from './songPaths'
 import { watchLpPlaylistMetaLine } from './watchLpData'
 import { youtubePlaylistEmbedSrc } from './youtubeEmbedUrl'
 
@@ -18,18 +20,25 @@ function useClientMounted(): boolean {
 
 type Props = {
   playlist: YouTubePlaylistCatalogItem | null
+  durationByName?: Map<string, number>
   iframeRef?: RefObject<HTMLIFrameElement | null>
   onBeforePlay?: () => void
+  /** When set, genre playlists can deep-link to the matching `/songbooks/:slug` page. */
+  songbookSlug?: string | null
 }
 
 function WatchLpPlaylistEmbedInner({
   playlist,
+  durationByName,
   iframeRef,
   onBeforePlay,
+  songbookSlug,
 }: {
   playlist: YouTubePlaylistCatalogItem
+  durationByName?: Map<string, number>
   iframeRef?: RefObject<HTMLIFrameElement | null>
   onBeforePlay?: () => void
+  songbookSlug?: string | null
 }) {
   const clientMounted = useClientMounted()
   const [facadeReleased, setFacadeReleased] = useState(false)
@@ -70,7 +79,9 @@ function WatchLpPlaylistEmbedInner({
               </span>
               <span className="watch-lp__playlist-embed-overlay">
                 <span className="watch-lp__playlist-embed-overlay-title">{title}</span>
-                <span className="watch-lp__playlist-embed-overlay-meta">{watchLpPlaylistMetaLine(playlist)}</span>
+                <span className="watch-lp__playlist-embed-overlay-meta">
+                  {watchLpPlaylistMetaLine(playlist, durationByName)}
+                </span>
               </span>
             </button>
           ) : (
@@ -86,11 +97,18 @@ function WatchLpPlaylistEmbedInner({
             />
           )}
         </div>
-        {ytHref ? (
+        {ytHref || songbookSlug ? (
           <p className="watch-lp__playlist-embed-actions">
-            <a className="watch-lp__playlist-embed-yt-link" href={ytHref} target="_blank" rel="noopener noreferrer">
-              Open on YouTube ↗
-            </a>
+            {songbookSlug ? (
+              <Link className="watch-lp__playlist-embed-songbook-link" to={songbookCatalogPath(songbookSlug)}>
+                View songbook →
+              </Link>
+            ) : null}
+            {ytHref ? (
+              <a className="watch-lp__playlist-embed-yt-link" href={ytHref} target="_blank" rel="noopener noreferrer">
+                Open on YouTube ↗
+              </a>
+            ) : null}
           </p>
         ) : null}
       </div>
@@ -98,7 +116,13 @@ function WatchLpPlaylistEmbedInner({
   )
 }
 
-export function WatchLpPlaylistEmbed({ playlist, iframeRef, onBeforePlay }: Props) {
+export function WatchLpPlaylistEmbed({
+  playlist,
+  durationByName,
+  iframeRef,
+  onBeforePlay,
+  songbookSlug,
+}: Props) {
   if (!playlist) {
     return <p className="watch-lp__playlist-embed-empty">No playlists match this filter.</p>
   }
@@ -108,8 +132,10 @@ export function WatchLpPlaylistEmbed({ playlist, iframeRef, onBeforePlay }: Prop
     <WatchLpPlaylistEmbedInner
       key={playlistId}
       playlist={playlist}
+      durationByName={durationByName}
       iframeRef={iframeRef}
       onBeforePlay={onBeforePlay}
+      songbookSlug={songbookSlug}
     />
   )
 }

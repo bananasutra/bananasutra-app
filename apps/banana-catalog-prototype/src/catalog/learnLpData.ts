@@ -48,12 +48,12 @@ export const LEARN_HUB_TILES: LearnHubTileConfig[] = [
   {
     key: 'words',
     label: 'Words',
-    description: 'Lyrics-first pieces. Read anyway.',
+    description: 'Lyrics-first pieces. Read the words on their own terms.',
   },
   {
     key: 'manifesto',
     label: 'AI fair use manifesto',
-    description: 'Human authorship, AI as instrument, creative lineage. For skeptics and sharers.',
+    description: 'Human authorship, AI as instrument. For skeptics and sharers.',
     anchorId: 'manifesto',
     tileClassName: 'learn-lp__tile--manifesto',
   },

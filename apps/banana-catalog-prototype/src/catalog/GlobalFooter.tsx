@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FOOTER_CONTACT_OPEN_EVENT, FOOTER_CONTACT_PANEL_HASH } from './footerContactConstants'
+import {
+  FOOTER_CONTACT_OPEN_EVENT,
+  FOOTER_CONTACT_PANEL_HASH,
+  scrollFooterContactPanelIntoView,
+} from './footerContactConstants'
 import { CATALOG_SNAPSHOT_DATE, formatCatalogSnapshotDate } from './catalogSnapshotMeta'
 import { canonicalPathForRoute } from './seoPaths'
 import { FooterSocialIcon, type FooterSocialId } from './FooterSocialIcons'
@@ -54,6 +58,11 @@ function FooterContactForm() {
   /* Reset timing on open so the 3-second guard starts from reveal, not page load. */
   useEffect(() => {
     if (open) loadedAt.current = Date.now()
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    scrollFooterContactPanelIntoView()
   }, [open])
 
   /* Deep links (#footer-contact-panel) and BBB fallback should expand, not just scroll. */
