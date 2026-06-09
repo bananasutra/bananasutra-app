@@ -48,6 +48,17 @@
   --catalog-page-lede-line-height: 1.65;
   --catalog-page-lede-color: var(--color-text-muted);
 
+  /* Section subcopy under h2 — smaller than page intro lede. */
+  --catalog-section-intro-font-size: 0.82rem;
+  --catalog-section-intro-line-height: 1.5;
+  --catalog-section-intro-color: var(--color-text-muted);
+  --catalog-section-intro-gap-after-title: 0.3rem;
+  --catalog-section-intro-gap-after: 0.55rem;
+
+  /* Outbound embed links (Open on YouTube ↗, Open on SoundCloud ↗) — one rhythm everywhere. */
+  --catalog-media-outbound-gap-before: 0.35rem;
+  --catalog-media-outbound-link-size: 0.68rem;
+
   /*
    * Shell pages (About, Songbooks, style guide): rules between intro ↔ jump nav, section rhythm,
    * and a stronger small-caps label than `.catalog-section-title` / homepage hero kicker.
@@ -74,7 +85,7 @@
   --catalog-section-cta-color: var(--color-text-muted);
   --catalog-section-cta-hover-color: var(--color-link-hover);
 
-  /* Optional lede / subhead line-length cap (use `.catalog-page-shell__measure` on the element). */
+  /* Legacy token — 48rem shell caps width; `.catalog-page-shell__measure` no longer narrows copy. */
   --catalog-shell-lede-measure: 62ch;
   /*
    * Jump nav band: distance from lede to top rule, from each rule to the link row — keep equal

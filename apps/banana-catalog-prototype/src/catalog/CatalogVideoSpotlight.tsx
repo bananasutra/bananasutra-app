@@ -95,7 +95,6 @@ export function CatalogVideoSpotlight({
           facadeUntilClick
           facadePosterEager
           posterWidth={640}
-          outboundFooterClassName="catalog-video-spotlight__yt-outbound"
           onBeforePlay={onBeforePlay}
         />
         <div className="catalog-video-spotlight__detail">

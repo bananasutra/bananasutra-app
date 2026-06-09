@@ -19,6 +19,7 @@ import { SongThumbCard } from './SongThumbCard'
 import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
 import { youtubePlaylistForSongbook } from './songbookYoutubeMatch'
+import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import { WatchLpPlaylistEmbed } from './WatchLpPlaylistEmbed'
 import {
   useExclusiveYoutubeSoundcloudPlayback,
@@ -26,6 +27,7 @@ import {
 } from './useExclusiveYoutubeSoundcloudPlayback'
 import type { YouTubePlaylistCatalogItem } from './types'
 import './CatalogApp.css'
+import './catalog-page-shell.css'
 import './ListenLpPage.css'
 import './SongbooksPage.css'
 
@@ -341,16 +343,7 @@ export function SongbookPage() {
                   height={playlistIsSet ? 760 : 680}
                   loading="eager"
                 />
-                <p className="songbooks-page__playlist-actions">
-                  <a
-                    className="songbooks-page__playlist-outbound"
-                    href={songbook.playlist_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Open on SoundCloud ↗
-                  </a>
-                </p>
+                <CatalogMediaOutbound href={songbook.playlist_url} label="Open on SoundCloud ↗" />
               </section>
             ) : null}
 

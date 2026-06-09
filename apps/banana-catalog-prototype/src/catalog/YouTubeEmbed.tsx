@@ -6,6 +6,7 @@ import {
   youtubePrivacyEmbedSrc,
   youtubeWatchPageUrl,
 } from './youtubeEmbedUrl'
+import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 
 type SongDetailProps = {
   videoId: string
@@ -23,8 +24,6 @@ export type YoutubeEmbeddedPlayerProps = {
   embedWrapperClassName?: string
   embedWrapperStyle?: CSSProperties
   loading?: 'lazy' | 'eager'
-  /** Optional layout hook for the outbound line below featured heroes (width alignment). */
-  outboundFooterClassName?: string
   /**
    * Poster + tap mounts the iframe (gesture‑gated). Used everywhere YouTube loads — reduces passive embed
    * probes (logged‑out / incognito) vs autoplaying an iframe as soon as the shell hydrates.
@@ -56,16 +55,10 @@ function useClientMounted(): boolean {
 /**
  * Fallback when YouTube&apos;s embed misbehaves — same upload on youtube.com.
  */
-export function YoutubeEmbedOutboundFooter({ videoId, className }: { videoId: string; className?: string }) {
+export function YoutubeEmbedOutboundFooter({ videoId }: { videoId: string }) {
   const href = youtubeWatchPageUrl(videoId)
   if (!href) return null
-  return (
-    <p className={['yt-embed-outbound', className].filter(Boolean).join(' ')}>
-      <a href={href} target="_blank" rel="noopener noreferrer" className="yt-embed-outbound__link">
-        Watch on YouTube
-      </a>
-    </p>
-  )
+  return <CatalogMediaOutbound href={href} />
 }
 
 export function YoutubeEmbeddedPlayer({
@@ -77,7 +70,6 @@ export function YoutubeEmbeddedPlayer({
   embedWrapperClassName = 'yt-embed-shell',
   embedWrapperStyle,
   loading = 'lazy',
-  outboundFooterClassName,
   facadeUntilClick = false,
   onBeforePlay,
   onIframeLoad,
@@ -101,7 +93,7 @@ export function YoutubeEmbeddedPlayer({
   const iframeClass = ['yt-embed-frame', iframeClassName].filter(Boolean).join(' ')
   const poster = coverImageUrl(youtubePosterThumbnailUrl(id), { width: posterWidth })
 
-  const outbound = <YoutubeEmbedOutboundFooter videoId={id} className={outboundFooterClassName} />
+  const outbound = <YoutubeEmbedOutboundFooter videoId={id} />
 
   if (!clientMounted) {
     return (

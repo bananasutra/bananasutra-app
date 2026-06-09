@@ -21,6 +21,8 @@ import {
   type ExclusiveYoutubeSoundcloudControls,
 } from './useExclusiveYoutubeSoundcloudPlayback'
 import { CatalogVideoSpotlight, type CatalogVideoSpotlightItem } from './CatalogVideoSpotlight'
+import { CatalogVideoSpotlightRailThumb } from './CatalogVideoSpotlightRailThumb'
+import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import { PLAY_ALL_HONEST_MOBILE_COPY, PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
 import {
   findTrackByScUrl,
@@ -490,30 +492,13 @@ function SongDetailLoaded({
       const genreLabel = formatVideoGenreLabel(source)
       const ariaLabel = genreLabel ? `Play video · ${genreLabel}` : `Play video ${video.videoId}`
       return (
-        <button
-          type="button"
-          className={`song-detail-youtube-vid song-detail-youtube-vid--pick${isActive ? ' is-active' : ''}`}
-          aria-pressed={isActive}
-          aria-label={ariaLabel}
-          onClick={onSelect}
-        >
-          {source?.thumbnail_url ? (
-            <span className="song-detail-youtube-vid-thumb">
-              <img
-                src={coverImageUrl(source.thumbnail_url, { width: 320 })}
-                alt=""
-                width={160}
-                height={90}
-                loading="lazy"
-              />
-            </span>
-          ) : (
-            <span className="song-detail-youtube-vid-thumb song-detail-youtube-vid-thumb--fallback" aria-hidden>
-              ▶
-            </span>
-          )}
-          {genreLabel ? <span className="song-detail-youtube-vid-genre">{genreLabel}</span> : null}
-        </button>
+        <CatalogVideoSpotlightRailThumb
+          thumbnailUrl={source?.thumbnail_url}
+          caption={genreLabel || null}
+          isActive={isActive}
+          onSelect={onSelect}
+          ariaLabel={ariaLabel}
+        />
       )
     },
     [youtubeVideos],
@@ -1299,7 +1284,7 @@ function SongDetailLoaded({
                         <section className="song-detail-youtube" aria-label="YouTube player">
                           {useSongVideoSpotlight && songVideoSpotlightFeatured && videoInView ? (
                             <CatalogVideoSpotlight
-                              className="song-detail-youtube-spotlight"
+                              className="song-detail-youtube-spotlight catalog-video-spotlight--compact-rail"
                               featured={songVideoSpotlightFeatured}
                               rail={songVideoSpotlightRail}
                               activeVideoId={effectiveYoutubeVideoId}
@@ -1325,14 +1310,7 @@ function SongDetailLoaded({
                                 bug on this site.
                               </p>
                               {focusedYoutubeVideo.yt_url ? (
-                                <a
-                                  className="song-detail-youtube-open"
-                                  href={focusedYoutubeVideo.yt_url}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  Watch on YouTube
-                                </a>
+                                <CatalogMediaOutbound href={focusedYoutubeVideo.yt_url} />
                               ) : null}
                             </div>
                           ) : (
@@ -1398,7 +1376,7 @@ function SongDetailLoaded({
               <section className="song-detail-youtube" aria-label="YouTube player">
                 {useSongVideoSpotlight && songVideoSpotlightFeatured && videoInView ? (
                   <CatalogVideoSpotlight
-                    className="song-detail-youtube-spotlight"
+                    className="song-detail-youtube-spotlight catalog-video-spotlight--compact-rail"
                     featured={songVideoSpotlightFeatured}
                     rail={songVideoSpotlightRail}
                     activeVideoId={effectiveYoutubeVideoId}
@@ -1424,14 +1402,7 @@ function SongDetailLoaded({
                       this site.
                     </p>
                     {focusedYoutubeVideo.yt_url ? (
-                      <a
-                        className="song-detail-youtube-open"
-                        href={focusedYoutubeVideo.yt_url}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Watch on YouTube
-                      </a>
+                      <CatalogMediaOutbound href={focusedYoutubeVideo.yt_url} />
                     ) : null}
                   </div>
                 ) : (

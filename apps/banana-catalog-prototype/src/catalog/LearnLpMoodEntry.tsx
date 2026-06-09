@@ -56,7 +56,7 @@ export function LearnLpMoodEntry({ songCatalog }: Props) {
       <h2 id="learn-lp-mood-heading" className="catalog-section-title">
         Feel it in a song
       </h2>
-      <p className="learn-lp__section-intro">Pick the mood. I&apos;ll point you at a sutra and a song.</p>
+      <p className="catalog-lp-section-intro">Pick the mood. I&apos;ll point you at a sutra and a song.</p>
 
       <div className="learn-lp__mood-panel">
         <div className="learn-lp__mood-buttons" role="group" aria-label="Mood options">

@@ -14,15 +14,6 @@
   font-weight: 700;
 }
 
-.listen-lp__section-intro {
-  margin: -0.55rem 0 0.85rem;
-  max-width: min(62ch, 100%);
-  font-family: var(--catalog-page-lede-font-family);
-  font-size: var(--catalog-page-lede-font-size);
-  line-height: var(--catalog-page-lede-line-height);
-  color: var(--catalog-page-lede-color);
-}
-
 .listen-lp__loading,
 .listen-lp__load-error,
 .listen-lp__empty {
@@ -474,7 +465,7 @@
 
 /* Browse songbooks block */
 .listen-lp__songbooks-block-intro {
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.45rem;
 }
 
 .listen-lp__songbooks-block .listen-lp__facet-bar {

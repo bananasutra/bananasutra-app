@@ -636,19 +636,7 @@
 }
 
 .songbooks-page__playlist-actions {
-  margin: 0.55rem 0 0;
-}
-
-.songbooks-page__playlist-outbound {
-  font: 600 0.68rem/1.35 var(--font-ui);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--color-link);
-  text-decoration: none;
-}
-
-.songbooks-page__playlist-outbound:hover {
-  color: var(--color-link-hover);
+  margin: 0;
 }
 
 .songbooks-page__yt-playlist {
@@ -656,6 +644,7 @@
   padding: 1.1rem 0 1.35rem;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
+  min-width: 0;
 }
 
 .songbooks-page__yt-playlist .catalog-section-title {
@@ -718,10 +707,6 @@
   width: 100%;
   height: 100%;
   border: none;
-}
-
-.songbooks-page__featured-video-yt-outbound {
-  max-width: none;
 }
 
 .songbooks-page__featured-video-copy {

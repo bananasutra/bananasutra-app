@@ -14,15 +14,6 @@
   font-weight: 700;
 }
 
-.learn-lp__section-intro {
-  margin: -0.55rem 0 0.85rem;
-  max-width: min(62ch, 100%);
-  font-family: var(--catalog-page-lede-font-family);
-  font-size: var(--catalog-page-lede-font-size);
-  line-height: var(--catalog-page-lede-line-height);
-  color: var(--catalog-page-lede-color);
-}
-
 /* Hub */
 .learn-lp__hub {
   display: flex;

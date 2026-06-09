@@ -363,7 +363,7 @@ export function LearnLpHub({ songCatalog }: Props) {
       <h2 id="learn-lp-hub-heading" className="catalog-section-title">
         The seeds
       </h2>
-      <p className="learn-lp__section-intro">
+      <p className="catalog-lp-section-intro">
         Orientation, not index. Tap a door to see what&apos;s inside before you commit.
       </p>
 

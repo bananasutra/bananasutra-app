@@ -38,7 +38,7 @@ export function LearnLpWaysToExplore() {
       <h2 id="learn-lp-explore-heading" className="catalog-section-title">
         Ways to explore
       </h2>
-      <p className="learn-lp__section-intro">
+      <p className="catalog-lp-section-intro">
         Same catalog, different doors. Search, browse, listen, watch, or read lyrics-only pieces.
       </p>
       <ul className="about-page__how-grid learn-lp__explore-grid">

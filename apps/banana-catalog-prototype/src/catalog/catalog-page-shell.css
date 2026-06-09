@@ -82,9 +82,22 @@
   }
 }
 
-/* Readability cap for intro / subcopy — does not replace full-width layout chrome. */
+/* Legacy hook — 48rem shell is the line-length cap; no inner max-width. */
 .catalog-page-shell__measure {
-  max-width: min(var(--catalog-shell-lede-measure, 62ch), 100%);
+  max-width: none;
+}
+
+/* LP section subcopy (learn / listen / watch): smaller than page lede, tight rhythm. */
+.catalog-lp-section-intro {
+  margin: 0 0 var(--catalog-section-intro-gap-after, 0.55rem);
+  font-family: var(--font-body);
+  font-size: var(--catalog-section-intro-font-size);
+  line-height: var(--catalog-section-intro-line-height);
+  color: var(--catalog-section-intro-color);
+}
+
+.catalog-section-title:has(+ .catalog-lp-section-intro) {
+  margin-bottom: var(--catalog-section-intro-gap-after-title, 0.3rem);
 }
 
 /* Stack sections like home / about body: symmetric vertical padding + one bottom rule. */
@@ -96,4 +109,24 @@
 
 .catalog-page-shell__section:last-child {
   border-bottom: none;
+}
+
+/* Right-aligned outbound media links (SoundCloud, YouTube) — shared across embed surfaces. */
+.catalog-media-outbound {
+  margin: var(--catalog-media-outbound-gap-before) 0 0;
+  padding: 0;
+  max-width: none;
+  text-align: right;
+}
+
+.catalog-media-outbound__link {
+  font: 600 var(--catalog-media-outbound-link-size) / 1.35 var(--font-ui);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+.catalog-media-outbound__link:hover {
+  color: var(--color-link-hover);
 }

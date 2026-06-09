@@ -755,7 +755,6 @@ export function VideosPage() {
                         facadeUntilClick
                         facadePosterEager
                         posterWidth={640}
-                        outboundFooterClassName="videos-page__featured-hero-yt-outbound"
                       />
                     </div>
                     <div className="videos-page__featured-hero-copy">
