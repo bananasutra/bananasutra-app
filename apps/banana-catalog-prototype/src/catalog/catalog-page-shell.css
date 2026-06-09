@@ -130,3 +130,67 @@
 .catalog-media-outbound__link:hover {
   color: var(--color-link-hover);
 }
+
+/* Featured embed copy — title, meta, description below any in-page player. */
+.catalog-featured-embed-copy {
+  margin: var(--catalog-featured-embed-copy-gap-top) 0 0;
+}
+
+.catalog-featured-embed-copy__title {
+  margin: 0 0 0.15rem;
+  font-family: var(--font-body);
+  font-weight: var(--catalog-featured-embed-title-weight);
+  font-size: var(--catalog-featured-embed-title-size);
+  line-height: var(--catalog-featured-embed-title-line-height);
+  color: var(--color-text-strong);
+}
+
+.catalog-featured-embed-copy__title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.catalog-featured-embed-copy__title-link:hover {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
+.catalog-featured-embed-copy__meta {
+  margin: 0 0 0.2rem;
+  font-size: var(--catalog-featured-embed-meta-size);
+  line-height: var(--catalog-featured-embed-meta-line-height);
+  color: var(--color-text-muted);
+}
+
+.catalog-featured-embed-copy__desc {
+  margin: 0 0 0.25rem;
+  font-size: var(--catalog-featured-embed-desc-size);
+  line-height: var(--catalog-featured-embed-desc-line-height);
+  color: var(--color-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Left-aligned inline exit (watch spotlight song page, songbook-style). */
+.catalog-featured-embed-copy__cta {
+  display: block;
+  margin-top: 0.55rem;
+  text-align: left;
+  font-size: var(--catalog-section-cta-size);
+  font-weight: var(--catalog-section-cta-weight);
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.catalog-featured-embed-copy__cta:hover {
+  color: var(--color-link-hover);
+}
+
+.catalog-featured-embed-copy .catalog-media-outbound {
+  margin-top: 0.35rem;
+}

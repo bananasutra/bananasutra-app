@@ -104,30 +104,6 @@
   min-height: 0;
 }
 
-.videos-page__featured-hero-title {
-  margin: 0 0 0.45rem;
-  font-family: var(--font-body);
-  font-weight: var(--catalog-featured-embed-title-weight);
-  font-size: var(--catalog-featured-embed-title-size);
-  line-height: var(--catalog-featured-embed-title-line-height);
-  color: var(--color-text-strong);
-}
-
-.videos-page__featured-hero-summary {
-  margin: 0 0 0.5rem;
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: var(--color-text-primary);
-}
-
-.videos-page__featured-hero-sutra {
-  margin: 0;
-  font: 700 0.68rem/1.35 var(--font-ui);
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-
 .videos-page__featured-hero-copy .catalog-featured-video-song-row {
   margin-top: 0.7rem;
 }

@@ -12,7 +12,7 @@ type Props = {
 export function WatchLpPlaylistThumb({ playlist, durationByName, isActive, onSelect }: Props) {
   const label = watchLpPlaylistThumbLabel(playlist)
   const poster = playlist.thumbnail_url
-    ? coverImageUrl(playlist.thumbnail_url, { width: 480 })
+    ? coverImageUrl(playlist.thumbnail_url, { width: 320 })
     : null
 
   return (
@@ -26,9 +26,11 @@ export function WatchLpPlaylistThumb({ playlist, durationByName, isActive, onSel
       >
         {isActive ? <span className="watch-lp__playlist-thumb-now">Playing</span> : null}
         {poster ? (
-          <img className="watch-lp__playlist-thumb-art" src={poster} alt="" loading="lazy" decoding="async" />
+          <span className="watch-lp__playlist-thumb-frame">
+            <img src={poster} alt="" width={160} height={90} loading="lazy" decoding="async" />
+          </span>
         ) : (
-          <span className="watch-lp__playlist-thumb-art watch-lp__playlist-thumb-art--fallback" aria-hidden>
+          <span className="watch-lp__playlist-thumb-frame watch-lp__playlist-thumb-frame--fallback" aria-hidden>
             ▶
           </span>
         )}

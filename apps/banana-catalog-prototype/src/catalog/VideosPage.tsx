@@ -757,15 +757,15 @@ export function VideosPage() {
                         posterWidth={640}
                       />
                     </div>
-                    <div className="videos-page__featured-hero-copy">
-                      <h3 className="videos-page__featured-hero-title">
+                    <div className="catalog-featured-embed-copy videos-page__featured-hero-copy">
+                      <h3 className="catalog-featured-embed-copy__title">
                         {featuredVideoHero.lyrics_title || featuredVideoHero.title}
                       </h3>
-                      {(featuredVideoHero.lyrics_summary || '').trim() ? (
-                        <p className="videos-page__featured-hero-summary">{featuredVideoHero.lyrics_summary?.trim()}</p>
-                      ) : null}
                       {(featuredVideoHero.sutra || '').trim() ? (
-                        <p className="videos-page__featured-hero-sutra">{featuredVideoHero.sutra.trim()}</p>
+                        <p className="catalog-featured-embed-copy__meta">{featuredVideoHero.sutra.trim()}</p>
+                      ) : null}
+                      {(featuredVideoHero.lyrics_summary || '').trim() ? (
+                        <p className="catalog-featured-embed-copy__desc">{featuredVideoHero.lyrics_summary?.trim()}</p>
                       ) : null}
                       {featuredHeroSongPageHref ? (
                         <div className="catalog-featured-video-song-row">

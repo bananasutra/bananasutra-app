@@ -561,12 +561,12 @@ export function SutraDetailPage() {
                     onIframeLoad={() => setYoutubeIframeGen((g) => g + 1)}
                   />
                 </div>
-                <div className="sutra-detail__media-block-copy">
-                  <p className="sutra-detail__media-block-item-title">
+                <div className="catalog-featured-embed-copy sutra-detail__media-block-copy">
+                  <p className="catalog-featured-embed-copy__title">
                     {featuredSutraVideo.lyrics_title || featuredSutraVideo.title}
                   </p>
                   {(featuredSutraVideo.lyrics_summary || '').trim() ? (
-                    <p className="sutra-detail__media-block-desc">{featuredSutraVideo.lyrics_summary?.trim()}</p>
+                    <p className="catalog-featured-embed-copy__desc">{featuredSutraVideo.lyrics_summary?.trim()}</p>
                   ) : null}
                   <Link className="sutra-detail__cta" to={videosHref}>
                     View {entry.sutra} videos →
@@ -593,10 +593,10 @@ export function SutraDetailPage() {
                     height={soundcloudListEmbedHeight(featuredEp.ep_url, 'ep')}
                   />
                 </div>
-                <div className="sutra-detail__media-block-copy">
-                  <p className="sutra-detail__media-block-item-title">{featuredEp.ep_title}</p>
+                <div className="catalog-featured-embed-copy sutra-detail__media-block-copy">
+                  <p className="catalog-featured-embed-copy__title">{featuredEp.ep_title}</p>
                   {featuredEp.ep_description ? (
-                    <p className="sutra-detail__media-block-desc">{featuredEp.ep_description}</p>
+                    <p className="catalog-featured-embed-copy__desc">{featuredEp.ep_description}</p>
                   ) : null}
                   {featuredEpPlaylistMetaLine ? (
                     <p className="catalog-songbook-playlist-meta sutra-detail__feat-sc-playlist-meta">{featuredEpPlaylistMetaLine}</p>
@@ -621,10 +621,10 @@ export function SutraDetailPage() {
                     />
                   ) : null}
                 </div>
-                <div className="sutra-detail__media-block-copy">
-                  <p className="sutra-detail__media-block-item-title">{featuredSongbookFallback.songbook}</p>
+                <div className="catalog-featured-embed-copy sutra-detail__media-block-copy">
+                  <p className="catalog-featured-embed-copy__title">{featuredSongbookFallback.songbook}</p>
                   {featuredSongbookFallback.description ? (
-                    <p className="sutra-detail__media-block-desc">{featuredSongbookFallback.description}</p>
+                    <p className="catalog-featured-embed-copy__desc">{featuredSongbookFallback.description}</p>
                   ) : null}
                   <SongbookPlaylistMetaLine book={featuredSongbookFallback} className="sutra-detail__feat-sc-playlist-meta" />
                   <Link className="sutra-detail__cta" to={songbookHref(featuredSongbookFallback.songbook)}>
@@ -656,10 +656,10 @@ export function SutraDetailPage() {
                   height={soundcloudListEmbedHeight(sutraSpotlightSongbook.playlist_url, 'songbook')}
                 />
               </div>
-              <div className="sutra-detail__media-block-copy">
-                <p className="sutra-detail__media-block-item-title">{sutraSpotlightSongbook.songbook}</p>
+              <div className="catalog-featured-embed-copy sutra-detail__media-block-copy">
+                <p className="catalog-featured-embed-copy__title">{sutraSpotlightSongbook.songbook}</p>
                 {sutraSpotlightSongbook.description ? (
-                  <p className="sutra-detail__media-block-desc">{sutraSpotlightSongbook.description}</p>
+                  <p className="catalog-featured-embed-copy__desc">{sutraSpotlightSongbook.description}</p>
                 ) : null}
                 <SongbookPlaylistMetaLine book={sutraSpotlightSongbook} className="sutra-detail__feat-sc-playlist-meta" />
                 <Link className="sutra-detail__cta" to={songbookHrefFromCatalogItem(sutraSpotlightSongbook)}>

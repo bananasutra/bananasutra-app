@@ -2,7 +2,11 @@ import { coverImageUrl } from '../seo/imageUrl'
 
 type Props = {
   thumbnailUrl?: string | null
+  /** Single-line fallback (e.g. song page genre label). */
   caption?: string | null
+  /** Two-line stack: sutra, then duration (watch LP rail). */
+  sutra?: string | null
+  duration?: string | null
   isActive: boolean
   onSelect: () => void
   ariaLabel: string
@@ -12,6 +16,8 @@ type Props = {
 export function CatalogVideoSpotlightRailThumb({
   thumbnailUrl,
   caption,
+  sutra,
+  duration,
   isActive,
   onSelect,
   ariaLabel,
@@ -35,7 +41,14 @@ export function CatalogVideoSpotlightRailThumb({
           ▶
         </span>
       )}
-      {caption ? <span className="catalog-video-spotlight__thumb-caption">{caption}</span> : null}
+      {sutra || duration ? (
+        <span className="catalog-video-spotlight__thumb-caption-stack">
+          {sutra ? <span className="catalog-video-spotlight__thumb-caption-sutra">{sutra}</span> : null}
+          {duration ? <span className="catalog-video-spotlight__thumb-caption-duration">{duration}</span> : null}
+        </span>
+      ) : caption ? (
+        <span className="catalog-video-spotlight__thumb-caption">{caption}</span>
+      ) : null}
     </button>
   )
 }

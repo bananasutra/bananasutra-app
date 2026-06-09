@@ -3,7 +3,10 @@ import { Link, type To } from 'react-router-dom'
 import { ScrollRail } from './ScrollRail'
 import { sutraClassName } from './sutraTheme'
 import { formatDurationDisplay } from './durationFormat'
+import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
+import { youtubeWatchPageUrl } from './youtubeEmbedUrl'
+import './catalog-page-shell.css'
 import './CatalogVideoSpotlight.css'
 
 /** Always 16:9 shell; vertical uploads letterbox like song page video tab. */
@@ -79,6 +82,8 @@ export function CatalogVideoSpotlight({
   const title = featured.title.trim() || 'Featured video'
   const durationLabel = formatDurationDisplay(featured.duration)
   const metaParts = [(featured.sutra || '').trim(), durationLabel].filter(Boolean)
+  const youtubeOutboundHref =
+    (featured.externalHref || '').trim() || youtubeWatchPageUrl(featured.videoId)
 
   return (
     <div className={['catalog-video-spotlight', className].filter(Boolean).join(' ')}>
@@ -96,16 +101,17 @@ export function CatalogVideoSpotlight({
           facadePosterEager
           posterWidth={640}
           onBeforePlay={onBeforePlay}
+          showOutboundFooter={false}
         />
-        <div className="catalog-video-spotlight__detail">
-          <h3 className="catalog-video-spotlight__title">
+        <div className="catalog-featured-embed-copy catalog-video-spotlight__detail">
+          <h3 className="catalog-featured-embed-copy__title">
             {featured.inApp && featured.songHref ? (
-              <Link className="catalog-video-spotlight__title-link" to={featured.songHref}>
+              <Link className="catalog-featured-embed-copy__title-link" to={featured.songHref}>
                 {title}
               </Link>
             ) : featured.externalHref ? (
               <a
-                className="catalog-video-spotlight__title-link"
+                className="catalog-featured-embed-copy__title-link"
                 href={featured.externalHref}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -117,7 +123,7 @@ export function CatalogVideoSpotlight({
             )}
           </h3>
           {metaParts.length ? (
-            <p className="catalog-video-spotlight__meta">
+            <p className="catalog-featured-embed-copy__meta">
               {featured.sutra ? (
                 <span className={`catalog-sutra-word ${sutraClassName(featured.sutra)}`}>{featured.sutra}</span>
               ) : null}
@@ -126,12 +132,13 @@ export function CatalogVideoSpotlight({
               ) : null}
             </p>
           ) : null}
-          {featured.summary ? <p className="catalog-video-spotlight__summary">{featured.summary}</p> : null}
+          {featured.summary ? <p className="catalog-featured-embed-copy__desc">{featured.summary}</p> : null}
           {featured.songHref ? (
-            <Link className="catalog-section-cta catalog-section-cta--inline" to={featured.songHref}>
-              Song page →
+            <Link className="catalog-featured-embed-copy__cta" to={featured.songHref}>
+              Open song page →
             </Link>
           ) : null}
+          {youtubeOutboundHref ? <CatalogMediaOutbound href={youtubeOutboundHref} /> : null}
         </div>
       </article>
 
