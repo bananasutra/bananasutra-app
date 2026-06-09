@@ -93,7 +93,7 @@ const LYRICS_ONLY_INTENT_PATTERN = /\b(lyrics[- ]only|words[- ]only|poem|just th
 const COVER_OR_PD_INTENT_PATTERN = /\b(cover|covers|public\s+domain|traditional)\b/i;
 const BROAD_SOUND_PATTERN = /\b(texture|textural|vibe|sonic|soundscape|layer(?:ed|ing)?)\b/i;
 const SURPRISE_PATTERN = /\b(surprise me|i dunno|i don't know|you choose|anything)\b/i;
-const SUTRA_PAGE_PATH_PATTERN = /^\/about\/([a-z]+sutra)\/?$/i;
+const SUTRA_PAGE_PATH_PATTERN = /^\/(?:about|sutras)\/([a-z]+sutra)\/?$/i;
 const SOUND_GENRE_TERMS = [
   "blues",
   "burlesque",
@@ -1012,7 +1012,7 @@ export const buildRecommendationContext = (
           : pageType === "sutras-overview"
             ? "- User is on /sutras (the compass page). Acknowledge that once in your first sentence, then continue directly with their intent."
             : pageType === "sutra-page"
-              ? `- User is on a specific sutra page (${sutraPageSlug ? `/about/${sutraPageSlug}` : "/about/<sutra>sutra"}). Acknowledge that once in your first sentence and ground guidance in this sutra before expanding.`
+              ? `- User is on a specific sutra page (${sutraPageSlug ? `/sutras/${sutraPageSlug}` : "/sutras/<sutra>sutra"}). Acknowledge that once in your first sentence and ground guidance in this sutra before expanding.`
               : pageType === "muses"
                 ? "- User is on /muses. Acknowledge that once in your first sentence, then continue with the user's ask."
                 : pageType === "quotes"
@@ -1042,7 +1042,7 @@ export const buildRecommendationContext = (
           sutraInQuery.toUpperCase(),
         )}&tsort=likes), [${sutraInQuery.toUpperCase()} Tracks](/tracks/?sutra=${encodeURIComponent(
           sutraInQuery.toUpperCase(),
-        )}&tsort=likes), and [${sutraInQuery}](/about/${sutraInQuery}).`
+        )}&tsort=likes), and [${sutraInQuery}](/sutras/${sutraInQuery}).`
       : null,
     breadthLedIntent && sutraInQuery === "blowsutra"
       ? "- For BLOWsutra breadth asks, explain distinction: BLOWsutra is the broad injustice frame; QUACKsutra is the political-foul-play sub-sutra."
@@ -1125,7 +1125,7 @@ export const buildRecommendationContext = (
       ? "- Sutras-overview behavior (MUST): start with one concrete sutra entry point and one concrete listening path before any optional follow-up question."
       : null,
     pageType === "sutras-overview" && routeAwareDeliveryAsk
-      ? "- Sutras-overview concrete anchor (MUST): include at least one direct sutra link (for example /about/knowsutra) and one listening route link in the initial answer."
+      ? "- Sutras-overview concrete anchor (MUST): include at least one direct sutra link (for example /sutras/knowsutra) and one listening route link in the initial answer."
       : null,
     pageType === "song-detail" && /\b(more like this|similar|like this)\b/i.test(queryLower)
       ? "- Song-detail 'more like this' behavior (MUST): name the current song, then provide one similar pick and one listening route before any optional axis question."
@@ -1159,12 +1159,12 @@ export const buildRecommendationContext = (
       ? "- Keep LIGHT-first support handling for this reply; do not escalate into heavier SHADOW material unless asked."
       : "- For non-support asks, do not force LIGHT over SHADOW. If calibration helps, use clickable options [LIGHT Songs](/songs/?ls=LIGHT) and [SHADOW Songs](/songs/?ls=SHADOW).",
     '- For each recommended song, include one concise "why this might help right now" reason.',
-    "- Begin with one short natural sentence that names the sutra angle and links the specific sutra page when known (for example [GLOWsutra](/about/glowsutra)).",
+    "- Begin with one short natural sentence that names the sutra angle and links the specific sutra page when known (for example [GLOWsutra](/sutras/glowsutra)).",
     support.supportIntent
-      ? "- For support/hope asks, prefer a stabilizing lens such as [FLOWsutra](/about/flowsutra) or [GROWsutra](/about/growsutra). Use [GLOWsutra](/about/glowsutra) when gratitude is explicitly relevant."
+      ? "- For support/hope asks, prefer a stabilizing lens such as [FLOWsutra](/sutras/flowsutra) or [GROWsutra](/sutras/growsutra). Use [GLOWsutra](/sutras/glowsutra) when gratitude is explicitly relevant."
       : "- Keep sutra framing emotionally precise to the ask.",
     intent.funIntent
-      ? "- This user asked for fun/absurd energy: anchor the lens on [SHOWsutra](/about/showsutra) and say that clearly."
+      ? "- This user asked for fun/absurd energy: anchor the lens on [SHOWsutra](/sutras/showsutra) and say that clearly."
       : "- Name the likely sutra lens clearly.",
     "- Do not repeat your identity intro if it already appeared earlier in this chat.",
     hasPriorAssistantTurn

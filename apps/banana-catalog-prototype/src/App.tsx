@@ -10,6 +10,7 @@ import { applyAnalyticsDebugFromSearch } from './lib/analytics'
 import { useAnalyticsPageView } from './useAnalyticsPageView'
 import { BbbChatWidget } from './bbb/BbbChatWidget'
 import { NotFoundRoute } from './catalog/NotFoundRoute'
+import { LegacyAboutSutraDetailRedirect } from './catalog/LegacyAboutSutraDetailRedirect'
 
 const HomePortal = lazy(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
 const AboutPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutPage })))
@@ -245,17 +246,18 @@ export default function App() {
               </RouteBoundary>
             }
           />
-          <Route path="/about/sutras" element={<Navigate to="/sutras/" replace />} />
-          <Route path="/about/muses" element={<Navigate to="/muses/" replace />} />
-          <Route path="/about/quotes" element={<Navigate to="/quotes/" replace />} />
           <Route
-            path="/about/:slug"
+            path="/sutras/:slug"
             element={
               <RouteBoundary>
                 <SutraDetailPage />
               </RouteBoundary>
             }
           />
+          <Route path="/about/sutras" element={<Navigate to="/sutras/" replace />} />
+          <Route path="/about/muses" element={<Navigate to="/muses/" replace />} />
+          <Route path="/about/quotes" element={<Navigate to="/quotes/" replace />} />
+          <Route path="/about/:slug" element={<LegacyAboutSutraDetailRedirect />} />
           <Route
             path="/songbooks"
             element={

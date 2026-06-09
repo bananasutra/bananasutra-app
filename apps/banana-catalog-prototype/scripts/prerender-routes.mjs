@@ -81,7 +81,7 @@ export function listPrerenderRoutes() {
 
   for (const key of Object.keys(sutraContext)) {
     const slug = (sutraContext[key].url_slug_sutra || '').trim().toLowerCase()
-    if (slug) routes.add(`/about/${slug}`)
+    if (slug) routes.add(`/sutras/${slug}`)
   }
 
   for (const row of songBrowse) {

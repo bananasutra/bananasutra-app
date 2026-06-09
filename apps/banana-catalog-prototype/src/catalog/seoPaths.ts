@@ -27,7 +27,7 @@ export function canonicalPathForRoute(pathname: string): string {
   if ((STATIC_SSG_INDEX_PATHS as readonly string[]).includes(pathname)) return `${pathname}/`
   if (/^\/songs\/[^/]+$/.test(pathname)) return `${pathname}/`
   if (/^\/songbooks\/[^/]+$/.test(pathname)) return `${pathname}/`
-  if (/^\/about\/[^/]+$/.test(pathname)) return `${pathname}/`
+  if (/^\/sutras\/[^/]+$/.test(pathname)) return `${pathname}/`
   return pathname
 }
 

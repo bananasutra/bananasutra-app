@@ -298,7 +298,7 @@ function main() {
     const entry = sutraContext[familyKey]
     const slug = (entry.url_slug_sutra || '').trim().toLowerCase()
     if (!slug) continue
-    const pathname = `/about/${slug}`
+    const pathname = `/sutras/${slug}`
     const shortTitle = `${familyKey} · Sutra`
     const desc = `Explore the ${familyKey} sutra — songs, featured video, and related songbooks.`
     addRoute(pathname, routeEntry(shortTitle, desc, pathname))

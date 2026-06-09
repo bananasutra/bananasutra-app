@@ -130,7 +130,7 @@ function main() {
     const entry = sutraContext[familyKey]
     const slug = (entry.url_slug_sutra || '').trim().toLowerCase()
     if (!slug) continue
-    push(`/about/${slug}`, { changefreq: 'monthly', priority: '0.8', lastmod: BUILD_LASTMOD })
+    push(`/sutras/${slug}`, { changefreq: 'monthly', priority: '0.8', lastmod: BUILD_LASTMOD })
   }
 
   const seenSongbookSlug = new Set()
