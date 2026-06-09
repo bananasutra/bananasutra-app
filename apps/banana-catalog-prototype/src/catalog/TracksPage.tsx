@@ -19,6 +19,12 @@ import {
 } from './catalogAnalytics'
 import type { QueueSource } from '../lib/analytics'
 import { filterTracksByFindQuery, sortTrackCatalog, trackMatchesFilters } from './filterTracks'
+import {
+  CatalogFilterBar,
+  type CatalogFilterBarActivePill,
+  type CatalogFilterBarFacetGroup,
+} from './CatalogFilterBar'
+import { facetEntriesToToggleChips } from './catalogFilterBarBuilders'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
@@ -37,6 +43,7 @@ import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { formatDurationDisplay } from './durationFormat'
 import { bindSoundCloudWidgetPlayback } from './soundCloudWidgetPlayback'
+import { sutraQuestionFromDisplay } from './sutraContext'
 import { sutraClassName } from './sutraTheme'
 import { type SoundCloudWidget } from './soundcloudWidgetApi'
 import './CatalogApp.css'
@@ -103,9 +110,7 @@ export function TracksPage() {
   const [trackCatalog, setTrackCatalog] = useState<TrackCatalogItem[] | null>(null)
   const [catalogLoadError, setCatalogLoadError] = useState<string | null>(null)
 
-  const [filtersOpen, setFiltersOpen] = useState(() =>
-    typeof window === 'undefined' ? true : window.innerWidth >= 900,
-  )
+  const [filterBarExpanded, setFilterBarExpanded] = useState(false)
 
   const { filters: urlFilters, find: urlFind, page: urlPage, sort: urlSort } = useMemo(
     () => readTracksBrowseFromSearch(location.search),
@@ -195,16 +200,6 @@ export function TracksPage() {
     setFilters(urlFilters)
     setFindDraft(urlFind)
   }, [urlFilters, urlFind])
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 899px)')
-    const sync = () => {
-      if (mq.matches) setFiltersOpen(false)
-    }
-    sync()
-    mq.addEventListener('change', sync)
-    return () => mq.removeEventListener('change', sync)
-  }, [])
 
   useEffect(() => {
     if (findDraft === urlFind) return
@@ -348,7 +343,7 @@ export function TracksPage() {
     path: canonicalPathForRoute('/tracks'),
   })
   useSyncCatalogHeaderHeight(pageRef, headerRef, [
-    filtersOpen,
+    filterBarExpanded,
     countTracksSelections(filters),
     urlFind,
     filtered.length,
@@ -624,46 +619,64 @@ export function TracksPage() {
     ? `${filtered.length} of ${catalogList.length} top tracks · ${facetSelections} filter${facetSelections === 1 ? '' : 's'}${urlFind.trim() ? ' · search' : ''}`
     : `${catalogList.length} top tracks`
 
-  const activeFilterContext = hasActiveContext ? (
-    <section className="catalog-active-context tracks-page__filter-summary" aria-label="Active filters and result count">
-      <div className="catalog-active-context__head">
-        <p className="catalog-active-context__summary">{contextSummary}</p>
-      </div>
-      <div className="catalog-chips">
-        {urlFind.trim() ? (
-          <button type="button" className="catalog-chip catalog-chip--find" onClick={clearFindChip}>
-            Search: {urlFind}
-            <span className="catalog-chip-x" aria-hidden>
-              ×
-            </span>
-          </button>
-        ) : null}
-        {(Object.keys(filters) as TracksFacetFilterKey[]).flatMap((key) =>
-          [...filters[key]].map((value) => (
-            <button
-              key={`${key}-${value}`}
-              type="button"
-              className="catalog-chip"
-              onClick={() =>
-                patchFilters({
-                  ...filters,
-                  [key]: toggleSetMember(filters[key], value),
-                })
-              }
-            >
-              {TRACKS_FACET_LABELS[key]}: {value}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
+  const trackActivePills: CatalogFilterBarActivePill[] = []
+  if (urlFind.trim()) {
+    trackActivePills.push({
+      id: 'find',
+      label: <>Search: {urlFind}</>,
+      onClick: clearFindChip,
+      title: 'Remove text filter',
+    })
+  }
+  for (const key of Object.keys(filters) as TracksFacetFilterKey[]) {
+    for (const value of filters[key]) {
+      trackActivePills.push({
+        id: `${key}-${value}`,
+        label: (
+          <>
+            {TRACKS_FACET_LABELS[key]}:{' '}
+            {key === 'sutra' ? (
+              <span className={`catalog-facet-sutra-name ${sutraClassName(value)}`} title={sutraQuestionFromDisplay(value)}>
+                {value}
               </span>
-            </button>
-          )),
-        )}
-        <button type="button" className="catalog-clear" onClick={clearAllFilters}>
-          Clear all
-        </button>
-      </div>
-    </section>
-  ) : null
+            ) : (
+              value
+            )}
+          </>
+        ),
+        onClick: () =>
+          patchFilters({
+            ...filters,
+            [key]: toggleSetMember(filters[key], value),
+          }),
+        title: key === 'sutra' ? sutraQuestionFromDisplay(value) : undefined,
+      })
+    }
+  }
+
+  const trackFacetGroups: CatalogFilterBarFacetGroup[] = TRACKS_BROWSER_FACET_ORDER.flatMap((group) => {
+    const entries = facetEntries[group] ?? []
+    if (!entries.length) return []
+    return [
+      {
+        id: group,
+        label: TRACKS_FACET_LABELS[group],
+        showAllChip: false,
+        options: facetEntriesToToggleChips({
+          groupId: group,
+          entries,
+          isSutra: group === 'sutra',
+          isActive: (value) => filters[group].has(value),
+          onToggle: (value) =>
+            patchFilters({
+              ...filters,
+              [group]: toggleSetMember(filters[group], value),
+            }),
+          countLabel: 'top tracks',
+        }),
+      },
+    ]
+  })
 
   const pagerPreserve = () => new URLSearchParams(location.search)
 
@@ -723,89 +736,47 @@ export function TracksPage() {
           </article>
         ) : (
           <>
-            <div className={`catalog-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
-              <aside
-                className={`catalog-filters${filtersOpen ? ' is-open' : ''}`}
-                aria-labelledby="tracks-filters-heading"
-              >
-                <div className="catalog-filters-head">
-                  <h2 id="tracks-filters-heading" className="catalog-section-title">
-                    Filters
-                  </h2>
-                  <button
-                    type="button"
-                    className="catalog-icon-btn"
-                    onClick={() => setFiltersOpen(false)}
-                    aria-expanded={filtersOpen}
-                    aria-controls="tracks-filter-panel"
-                  >
-                    Hide
-                  </button>
-                </div>
-
-                {filtersOpen ? activeFilterContext : null}
-
-                <div id="tracks-filter-panel" className="catalog-facet-stack">
-                  <p className="catalog-facet-help">
-                    Filters combine across groups (AND). Multiple picks inside one group combine as OR.
-                  </p>
-                  <section className="catalog-facet" aria-labelledby="tracks-find-heading">
-                    <h3 id="tracks-find-heading">Search</h3>
-                    <label className="catalog-facet-find-label" htmlFor="tracks-find-input">
-                      Search by title or tag
+            <div className="tracks-page__content">
+              <CatalogFilterBar
+                ariaLabel="Filter top tracks"
+                panelId="tracks-filter-panel"
+                resultSummary={contextSummary}
+                showResultSummary={false}
+                activePills={trackActivePills}
+                onClearAll={clearAllFilters}
+                facetGroups={trackFacetGroups}
+                search={{
+                  id: 'tracks-find-input',
+                  label: 'Search',
+                  ariaLabel: 'Search top tracks by title or tag',
+                  value: findDraft,
+                  onChange: setFindDraft,
+                  inputName: 'tracks_q',
+                }}
+                defaultExpanded={filterBarExpanded}
+                onExpandedChange={setFilterBarExpanded}
+                toolbarEnd={
+                  <div className="catalog-sort tracks-page__sort" aria-label="Sort top tracks">
+                    <label className="catalog-sort-label" htmlFor="tracks-sort-select">
+                      Sort
                     </label>
-                    <input
-                      id="tracks-find-input"
-                      className="catalog-facet-find-input"
-                      type="search"
-                      name="tracks_q"
-                      inputMode="search"
-                      autoComplete="off"
-                      spellCheck={false}
-                      enterKeyHint="search"
-                      value={findDraft}
-                      onChange={(e) => setFindDraft(e.target.value)}
-                    />
-                  </section>
+                    <select
+                      id="tracks-sort-select"
+                      className="catalog-sort-select"
+                      value={urlSort}
+                      onChange={(e) => setTrackSort(e.target.value as TrackSortMode)}
+                    >
+                      <option value="engagement">Most engagement</option>
+                      <option value="likes">Most likes</option>
+                      <option value="plays">Most plays</option>
+                      <option value="newest">Newest (publish date)</option>
+                      <option value="title_az">Track title (A–Z)</option>
+                    </select>
+                  </div>
+                }
+              />
 
-                  {TRACKS_BROWSER_FACET_ORDER.map((group) => {
-                    const entries = facetEntries[group] ?? []
-                    if (!entries.length) return null
-                    const headingId = `tracks-facet-${group}`
-                    return (
-                      <section key={group} className="catalog-facet" aria-labelledby={headingId}>
-                        <h3 id={headingId}>{TRACKS_FACET_LABELS[group]}</h3>
-                        <div className="catalog-facet-chips" role="group" aria-labelledby={headingId}>
-                          {entries.map(({ value, count }) => {
-                            const active = filters[group].has(value)
-                            const disabled = !active && count === 0
-                            return (
-                              <button
-                                key={value}
-                                type="button"
-                                className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
-                                disabled={disabled}
-                                onClick={() =>
-                                  patchFilters({
-                                    ...filters,
-                                    [group]: toggleSetMember(filters[group], value),
-                                  })
-                                }
-                                title={`${count} top tracks`}
-                              >
-                                <span>{value}</span>
-                                <span className="catalog-facet-count">{` (${count})`}</span>
-                              </button>
-                            )
-                          })}
-                        </div>
-                      </section>
-                    )
-                  })}
-                </div>
-              </aside>
-
-              <main id="main-content" className="catalog-main">
+              <main id="main-content" className="catalog-main tracks-page__main">
                 {selected?.sc_url ? (
                   <section className="tracks-page__player" aria-label="Now playing">
                     <h2 className="tracks-page__player-h catalog-section-title">Now playing</h2>
@@ -831,41 +802,6 @@ export function TracksPage() {
                       </a>
                     </p>
                   </section>
-                ) : null}
-
-                <div className="catalog-main__sort-row tracks-page__sort-row">
-                  <div className="catalog-sort tracks-page__sort" aria-label="Sort top tracks">
-                    <label className="catalog-sort-label" htmlFor="tracks-sort-select">
-                      Sort
-                    </label>
-                    <select
-                      id="tracks-sort-select"
-                      className="catalog-sort-select"
-                      value={urlSort}
-                      onChange={(e) => setTrackSort(e.target.value as TrackSortMode)}
-                    >
-                      <option value="engagement">Most engagement</option>
-                      <option value="likes">Most likes</option>
-                      <option value="plays">Most plays</option>
-                      <option value="newest">Newest (publish date)</option>
-                      <option value="title_az">Track title (A–Z)</option>
-                    </select>
-                  </div>
-                </div>
-
-                {!filtersOpen ? (
-                  <>
-                    {activeFilterContext}
-                    <button
-                      type="button"
-                      className="catalog-filter-reopen"
-                      onClick={() => setFiltersOpen(true)}
-                      aria-expanded={false}
-                      aria-controls="tracks-filter-panel"
-                    >
-                      Show filters
-                    </button>
-                  </>
                 ) : null}
 
                 {filtered.length > 0 ? (

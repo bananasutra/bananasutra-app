@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+  CatalogFilterBar,
+  type CatalogFilterBarActivePill,
+  type CatalogFilterBarFacetGroup,
+} from './CatalogFilterBar'
+import { linkFacetChip } from './catalogFilterBarBuilders'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
@@ -252,6 +258,7 @@ export function SongbooksPage() {
   const [findDraft, setFindDraft] = useState(filters.find)
   const filtersRef = useRef(filters)
   const [visitSeed] = useState(() => Math.floor(Math.random() * 1_000_000_000))
+  const [filterBarExpanded, setFilterBarExpanded] = useState(false)
   const { data: songCatalogRows } = useSongCatalogBrowse()
 
   useEffect(() => {
@@ -276,7 +283,7 @@ export function SongbooksPage() {
     description: 'Curated SoundCloud playlists that tell a story. By topic, by genre, and by language.',
     path: canonicalPathForRoute('/songbooks'),
   })
-  useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString()])
+  useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString(), filterBarExpanded])
 
   const songCatalog = useMemo(() => songCatalogRows ?? [], [songCatalogRows])
   const songbooks = useMemo(() => [...allSongbooks()].sort(sortBooks), [])
@@ -396,53 +403,102 @@ export function SongbooksPage() {
     ? `${filteredSongbooks.length} of ${songbooks.length} songbooks`
     : `${songbooks.length} songbooks`
 
-  const songbookActiveFilterContext = (
-    <section
-      className="catalog-active-context"
-      aria-label={hasActiveFilters ? 'Active songbook filters and result count' : 'Songbook result count'}
-    >
-      <p className="catalog-active-context__summary">{songbookContextSummary}</p>
-      {hasActiveFilters ? (
-        <div className="catalog-chips">
-          {filters.find ? (
-            <Link to={hrefSongbooks({ find: '' }, filters)} className="catalog-chip catalog-chip--find">
-              Discovery: {filters.find}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </Link>
-          ) : null}
-          {filters.type ? (
-            <Link to={hrefSongbooks({ type: '' }, filters)} className="catalog-chip">
-              Type: {SECTION_COPY[filters.type].title}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </Link>
-          ) : null}
-          {filters.sutra ? (
-            <Link to={hrefSongbooks({ sutra: '' }, filters)} className="catalog-chip">
-              Sutra: {filters.sutra}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </Link>
-          ) : null}
-          {filters.topic ? (
-            <Link to={hrefSongbooks({ topic: '' }, filters)} className="catalog-chip">
-              Topic: {filters.topic}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </Link>
-          ) : null}
-          <Link to={clearAllSongbookFiltersHref} className="catalog-clear">
-            Clear all
-          </Link>
-        </div>
-      ) : null}
-    </section>
-  )
+  const songbookActivePills: CatalogFilterBarActivePill[] = []
+  if (filters.find) {
+    songbookActivePills.push({
+      id: 'find',
+      label: <>Search: {filters.find}</>,
+      href: hrefSongbooks({ find: '' }, filters),
+      title: 'Remove text filter',
+    })
+  }
+  if (filters.type) {
+    songbookActivePills.push({
+      id: 'type',
+      label: <>Type: {SECTION_COPY[filters.type].title}</>,
+      href: hrefSongbooks({ type: '' }, filters),
+      title: 'Remove type filter',
+    })
+  }
+  if (filters.sutra) {
+    songbookActivePills.push({
+      id: 'sutra',
+      label: <>Sutra: {filters.sutra}</>,
+      href: hrefSongbooks({ sutra: '' }, filters),
+      title: 'Remove sutra filter',
+    })
+  }
+  if (filters.topic) {
+    songbookActivePills.push({
+      id: 'topic',
+      label: <>Topic: {filters.topic}</>,
+      href: hrefSongbooks({ topic: '' }, filters),
+      title: 'Remove topic filter',
+    })
+  }
+
+  const songbookFacetGroups: CatalogFilterBarFacetGroup[] = [
+    {
+      id: 'type',
+      label: 'Type',
+      allHref: hrefSongbooks({ type: '' }, filters),
+      allCount: contextualRowsWithoutType.length,
+      allTitle: `${contextualRowsWithoutType.length} songbooks`,
+      options: typeFacetOptions.map((option) => {
+        const active = filters.type === option.key
+        const disabled = !active && option.count === 0
+        return linkFacetChip({
+          id: `type-${option.key}`,
+          label: option.label,
+          href: hrefSongbooks({ type: active ? '' : option.key }, filters),
+          count: option.count,
+          active,
+          disabled,
+          title: `${option.count} songbooks`,
+        })
+      }),
+    },
+    {
+      id: 'sutra',
+      label: 'Sutra',
+      allHref: hrefSongbooks({ sutra: '' }, filters),
+      allCount: contextualRowsWithoutSutra.length,
+      allTitle: `${contextualRowsWithoutSutra.length} songbooks`,
+      options: sutraFacetOptions.map((option) => {
+        const active = filters.sutra === option.value
+        const disabled = !active && option.count === 0
+        return linkFacetChip({
+          id: `sutra-${option.value}`,
+          label: option.value,
+          href: hrefSongbooks({ sutra: active ? '' : option.value }, filters),
+          count: option.count,
+          active,
+          disabled,
+          title: `${option.count} songbooks`,
+        })
+      }),
+    },
+    {
+      id: 'topic',
+      label: 'Topic',
+      allHref: hrefSongbooks({ topic: '' }, filters),
+      allCount: contextualRowsWithoutTopic.length,
+      allTitle: `${contextualRowsWithoutTopic.length} songbooks`,
+      options: topicFacetOptions.map((option) => {
+        const active = filters.topic === option.value
+        const disabled = !active && option.count === 0
+        return linkFacetChip({
+          id: `topic-${option.value}`,
+          label: option.value,
+          href: hrefSongbooks({ topic: active ? '' : option.value }, filters),
+          count: option.count,
+          active,
+          disabled,
+          title: `${option.count} songbooks`,
+        })
+      }),
+    },
+  ]
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
@@ -469,117 +525,25 @@ export function SongbooksPage() {
         </div>
 
         <main id="main-content" className="songbooks-page songbooks-page__stacked">
-          <section className="songbooks-page__filters-stacked" aria-labelledby="songbooks-filters-heading">
-            <h2 id="songbooks-filters-heading" className="catalog-section-title">
-              Filters
-            </h2>
-            {songbookActiveFilterContext}
-            <div id="songbooks-filter-panel" className="catalog-facet-stack">
-              <section className="catalog-facet" aria-labelledby="songbooks-search-heading">
-                <h3 id="songbooks-search-heading">Search</h3>
-                <label className="catalog-facet-find-label" htmlFor="songbooks-find-input">
-                  Search by songbook title, member songs, or catalog summary
-                </label>
-                <input
-                  id="songbooks-find-input"
-                  className="catalog-facet-find-input"
-                  type="search"
-                  name="songbooks_find"
-                  inputMode="search"
-                  autoComplete="off"
-                  spellCheck={false}
-                  enterKeyHint="search"
-                  value={findDraft}
-                  onChange={(e) => setFindDraft(e.target.value)}
-                />
-              </section>
-              <p className="catalog-facet-help">Filters combine across groups (AND). One active value per group.</p>
-              <section className="catalog-facet" aria-labelledby="songbooks-type-heading">
-                <h3 id="songbooks-type-heading">Type</h3>
-                <div className="catalog-facet-chips" role="group" aria-labelledby="songbooks-type-heading">
-                  <Link className={`catalog-facet-chip${!filters.type ? ' is-active' : ''}`} to={hrefSongbooks({ type: '' }, filters)}>
-                    <span>All</span>
-                    <span className="catalog-facet-count">{` (${contextualRowsWithoutType.length})`}</span>
-                  </Link>
-                  {typeFacetOptions.map((option) => {
-                    const active = filters.type === option.key
-                    const disabled = !active && option.count === 0
-                    return (
-                      <Link
-                        key={option.key}
-                        className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
-                        to={hrefSongbooks({ type: active ? '' : option.key }, filters)}
-                        aria-disabled={disabled}
-                        tabIndex={disabled ? -1 : undefined}
-                        onClick={(event) => {
-                          if (disabled) event.preventDefault()
-                        }}
-                      >
-                        <span>{option.label}</span>
-                        <span className="catalog-facet-count">{` (${option.count})`}</span>
-                      </Link>
-                    )
-                  })}
-                </div>
-              </section>
-              <section className="catalog-facet" aria-labelledby="songbooks-sutra-heading">
-                <h3 id="songbooks-sutra-heading">Sutra (primary)</h3>
-                <div className="catalog-facet-chips" role="group" aria-labelledby="songbooks-sutra-heading">
-                  <Link className={`catalog-facet-chip${!filters.sutra ? ' is-active' : ''}`} to={hrefSongbooks({ sutra: '' }, filters)}>
-                    <span>All</span>
-                    <span className="catalog-facet-count">{` (${contextualRowsWithoutSutra.length})`}</span>
-                  </Link>
-                  {sutraFacetOptions.map((option) => {
-                    const active = filters.sutra === option.value
-                    const disabled = !active && option.count === 0
-                    return (
-                      <Link
-                        key={option.value}
-                        className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
-                        to={hrefSongbooks({ sutra: active ? '' : option.value }, filters)}
-                        aria-disabled={disabled}
-                        tabIndex={disabled ? -1 : undefined}
-                        onClick={(event) => {
-                          if (disabled) event.preventDefault()
-                        }}
-                      >
-                        <span>{option.value}</span>
-                        <span className="catalog-facet-count">{` (${option.count})`}</span>
-                      </Link>
-                    )
-                  })}
-                </div>
-              </section>
-              <section className="catalog-facet" aria-labelledby="songbooks-topic-heading">
-                <h3 id="songbooks-topic-heading">Topic</h3>
-                <div className="catalog-facet-chips" role="group" aria-labelledby="songbooks-topic-heading">
-                  <Link className={`catalog-facet-chip${!filters.topic ? ' is-active' : ''}`} to={hrefSongbooks({ topic: '' }, filters)}>
-                    <span>All</span>
-                    <span className="catalog-facet-count">{` (${contextualRowsWithoutTopic.length})`}</span>
-                  </Link>
-                  {topicFacetOptions.map((option) => {
-                    const active = filters.topic === option.value
-                    const disabled = !active && option.count === 0
-                    return (
-                      <Link
-                        key={option.value}
-                        className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
-                        to={hrefSongbooks({ topic: active ? '' : option.value }, filters)}
-                        aria-disabled={disabled}
-                        tabIndex={disabled ? -1 : undefined}
-                        onClick={(event) => {
-                          if (disabled) event.preventDefault()
-                        }}
-                      >
-                        <span>{option.value}</span>
-                        <span className="catalog-facet-count">{` (${option.count})`}</span>
-                      </Link>
-                    )
-                  })}
-                </div>
-              </section>
-            </div>
-          </section>
+          <CatalogFilterBar
+            ariaLabel="Filter songbooks"
+            panelId="songbooks-filter-panel"
+            resultSummary={songbookContextSummary}
+            activePills={songbookActivePills}
+            clearAllHref={clearAllSongbookFiltersHref}
+            facetGroups={songbookFacetGroups}
+            search={{
+              id: 'songbooks-find-input',
+              label: 'Search',
+              ariaLabel: 'Search songbooks by title, member songs, or catalog summary',
+              value: findDraft,
+              onChange: setFindDraft,
+              inputName: 'songbooks_find',
+            }}
+            combineHelpText="Filters combine across groups (AND). One active value per group."
+            defaultExpanded={filterBarExpanded}
+            onExpandedChange={setFilterBarExpanded}
+          />
 
           {featuredSongbook ? (
               <section className="songbooks-page__featured-rotator" aria-labelledby="songbooks-featured-songbook-heading">

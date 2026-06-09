@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
-  DISCOVERY_FACET_HELP as FACET_HELP,
   DISCOVERY_FACET_LABELS as FACET_LABELS,
   CATALOG_BROWSER_FACET_ORDER as FACET_GROUPS,
 } from './catalogFacetConfig'
@@ -24,6 +23,13 @@ import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
 import { buildBrowsePath, readBrowseStateFromSearchParams, readCatalogBrowsePage, readStateFromUrl } from './urlState'
 import { searchParamsFromSearchString } from './urlSearchParams'
+import {
+  CatalogFilterBar,
+  type CatalogFilterBarActivePill,
+  type CatalogFilterBarFacetGroup,
+  type CatalogFilterBarSecondaryGroup,
+} from './CatalogFilterBar'
+import { facetEntriesToToggleChips } from './catalogFilterBarBuilders'
 import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
 import { CatalogPager } from './CatalogPager'
@@ -115,25 +121,13 @@ export function CatalogApp() {
   const [sort, setSort] = useState<SortMode>(browseSeed.sort)
   const [filters, setFilters] = useState<FilterState>(browseSeed.filters)
   const [media, setMedia] = useState<MediaComboFilter>(browseSeed.media)
-  const [filtersOpen, setFiltersOpen] = useState(() =>
-    typeof window === 'undefined' ? true : window.innerWidth >= 900,
-  )
+  const [filterBarExpanded, setFilterBarExpanded] = useState(false)
 
   const pageMeta = renderPageMeta({
     title: 'Songs Catalog',
     description: 'Browse all BANANASUTRA songs. Filter by sutra, topic, intention, genre, and language.',
     path: canonicalPathForRoute('/songs'),
   })
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 899px)')
-    const syncFiltersToViewport = () => {
-      if (mq.matches) setFiltersOpen(false)
-    }
-    syncFiltersToViewport()
-    mq.addEventListener('change', syncFiltersToViewport)
-    return () => mq.removeEventListener('change', syncFiltersToViewport)
-  }, [])
 
   const findQuery = useMemo(() => searchParamsFromSearchString(location.search).get('find')?.trim() ?? '', [location.search])
 
@@ -318,7 +312,7 @@ export function CatalogApp() {
 
   useSyncCatalogHeaderHeight(pageRef, headerRef, [
     sort,
-    filtersOpen,
+    filterBarExpanded,
     facetSelections,
     media,
     filteredSorted.length,
@@ -327,51 +321,83 @@ export function CatalogApp() {
     safePage,
   ])
 
-  const activeFilterContext = (
-    <section
-      className="catalog-active-context"
-      aria-label={hasActiveContext ? 'Active filters and result count' : 'Catalog result count'}
-    >
-      <p className="catalog-active-context__summary">{contextSummary}</p>
-      {hasActiveContext ? (
-        <div className="catalog-chips">
-          {findQuery ? (
-            <button type="button" className="catalog-chip catalog-chip--find" onClick={() => syncUrl(sort, filters, '', media, 1)}>
-              Discovery: {findQuery}
-              <span className="catalog-chip-x" aria-hidden>×</span>
-            </button>
-          ) : null}
-          {media !== 'all' ? (
-            <button type="button" className="catalog-chip" onClick={() => setMediaAndSync('all')}>
-              Media: {MEDIA_FILTER_LABELS[media]}
-              <span className="catalog-chip-x" aria-hidden>×</span>
-            </button>
-          ) : null}
-          {(Object.keys(filters) as (keyof FilterState)[]).flatMap((key) =>
-            [...filters[key]].map((value) => (
-              <button
-                key={`${key}-${value}`}
-                type="button"
-                className="catalog-chip"
-                onClick={() => patchFilters({ ...filters, [key]: toggleSetMember(filters[key], value) })}
-              >
-                {FACET_LABELS[key as FacetGroupKey] ?? key}:{' '}
-                {key === 'sutra' ? (
-                  <span className={`catalog-facet-sutra-name ${sutraClassName(value)}`} title={sutraQuestionFromDisplay(value)}>{value}</span>
-                ) : (
-                  value
-                )}
-                <span className="catalog-chip-x" aria-hidden>×</span>
-              </button>
-            )),
-          )}
-          <button type="button" className="catalog-clear" onClick={clearAllFilters}>
-            Clear all
-          </button>
-        </div>
-      ) : null}
-    </section>
-  )
+  const songActivePills: CatalogFilterBarActivePill[] = []
+  if (findQuery) {
+    songActivePills.push({
+      id: 'find',
+      label: <>Search: {findQuery}</>,
+      onClick: () => syncUrl(sort, filters, '', media, 1),
+      title: 'Remove text filter',
+    })
+  }
+  if (media !== 'all') {
+    songActivePills.push({
+      id: 'media',
+      label: <>Media: {MEDIA_FILTER_LABELS[media]}</>,
+      onClick: () => setMediaAndSync('all'),
+      title: 'Clear media filter',
+    })
+  }
+  for (const key of Object.keys(filters) as (keyof FilterState)[]) {
+    for (const value of filters[key]) {
+      songActivePills.push({
+        id: `${key}-${value}`,
+        label: (
+          <>
+            {FACET_LABELS[key as FacetGroupKey] ?? key}:{' '}
+            {key === 'sutra' ? (
+              <span className={`catalog-facet-sutra-name ${sutraClassName(value)}`} title={sutraQuestionFromDisplay(value)}>
+                {value}
+              </span>
+            ) : (
+              value
+            )}
+          </>
+        ),
+        onClick: () => patchFilters({ ...filters, [key]: toggleSetMember(filters[key], value) }),
+        title: key === 'sutra' ? sutraQuestionFromDisplay(value) : undefined,
+      })
+    }
+  }
+
+  const songMediaGroup: CatalogFilterBarSecondaryGroup = {
+    id: 'media',
+    label: 'Media',
+    helpText: 'Filter by media paths for songs with listener media. Lyrics-only pieces are on Words.',
+    options: MEDIA_FILTER_OPTIONS.map(({ id, label }) => ({
+      id: `media-${id}`,
+      label,
+      count: mediaOptionCounts[id],
+      active: media === id,
+      onClick: () => setMediaAndSync(id),
+      title: `${mediaOptionCounts[id]} songs`,
+    })),
+  }
+
+  const songFacetGroups: CatalogFilterBarFacetGroup[] = FACET_GROUPS.flatMap((group) => {
+    const entries = contextualFacetEntries[group] ?? []
+    if (!entries.length) return []
+    const filterKey = group as keyof FilterState
+    return [
+      {
+        id: group,
+        label: FACET_LABELS[group],
+        showAllChip: false,
+        options: facetEntriesToToggleChips({
+          groupId: group,
+          entries,
+          isSutra: group === 'sutra',
+          isActive: (value) => filters[filterKey].has(value),
+          onToggle: (value) =>
+            patchFilters({
+              ...filters,
+              [filterKey]: toggleSetMember(filters[filterKey], value),
+            }),
+          countLabel: 'songs',
+        }),
+      },
+    ]
+  })
 
   if (catalogLoading) {
     return (
@@ -463,156 +489,54 @@ export function CatalogApp() {
           </p>
         </div>
 
-        <div className={`catalog-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
-          <aside
-            className={`catalog-filters${filtersOpen ? ' is-open' : ''}`}
-            aria-labelledby="catalog-filters-heading"
-          >
-            <div className="catalog-filters-head">
-              <h2 id="catalog-filters-heading" className="catalog-section-title">
-                Filters
-              </h2>
-              <button
-                type="button"
-                className="catalog-icon-btn"
-                onClick={() => setFiltersOpen(false)}
-                aria-expanded={filtersOpen}
-                aria-controls="catalog-filter-panel"
+        <div className="songs-page__content">
+          <CatalogFilterBar
+            ariaLabel="Filter songs"
+            panelId="catalog-filter-panel"
+            resultSummary={contextSummary}
+            showResultSummary={false}
+            activePills={songActivePills}
+            onClearAll={clearAllFilters}
+            secondaryGroup={songMediaGroup}
+            secondaryGroupPosition="after-facets"
+            facetGroups={songFacetGroups}
+            search={{
+              id: 'catalog-songs-find-input',
+              label: 'Search',
+              ariaLabel: 'Search songs by title, meaning summary, extract, or lyrics',
+              value: findDraft,
+              onChange: setFindDraft,
+              onFocus: () => setFindInputFocused(true),
+              onBlur: () => setFindInputFocused(false),
+              inputName: 'songs_find',
+            }}
+            defaultExpanded={filterBarExpanded}
+            onExpandedChange={setFilterBarExpanded}
+            toolbarEnd={
+              <div
+                className="catalog-sort songs-page__sort"
+                aria-label="Sort songs by engagement, likes, plays, publish date, or title"
               >
-                Hide
-              </button>
-            </div>
-
-            {filtersOpen ? activeFilterContext : null}
-
-            <div id="catalog-filter-panel" className="catalog-facet-stack">
-            <p className="catalog-facet-help">
-              Filters combine across groups (AND). Multiple picks inside one group combine as OR.
-            </p>
-            <section className="catalog-facet" aria-labelledby="catalog-songs-search-heading">
-              <h3 id="catalog-songs-search-heading">Search</h3>
-              <label className="catalog-facet-find-label" htmlFor="catalog-songs-find-input">
-                Search by title, meaning summary, extract, or lyrics
-              </label>
-              <input
-                id="catalog-songs-find-input"
-                className="catalog-facet-find-input"
-                type="search"
-                name="songs_find"
-                inputMode="search"
-                autoComplete="off"
-                spellCheck={false}
-                enterKeyHint="search"
-                value={findDraft}
-                onChange={(e) => setFindDraft(e.target.value)}
-                onFocus={() => setFindInputFocused(true)}
-                onBlur={() => setFindInputFocused(false)}
-              />
-            </section>
-            <section className="catalog-facet" aria-labelledby="catalog-media-heading">
-              <h3 id="catalog-media-heading">Media</h3>
-              <p className="catalog-facet-help" id="catalog-media-desc">
-                Filter by media paths for songs with listener media. Lyrics-only pieces are on{' '}
-                <Link to={canonicalPathForRoute('/words')}>Words</Link>.
-              </p>
-              <div className="catalog-facet-chips" role="group" aria-describedby="catalog-media-desc">
-                {MEDIA_FILTER_OPTIONS.map(({ id, label }) => {
-                  const active = media === id
-                  const count = mediaOptionCounts[id]
-                  return (
-                    <button
-                      key={id}
-                      type="button"
-                      className={`catalog-facet-chip${active ? ' is-active' : ''}`}
-                      onClick={() => setMediaAndSync(id)}
-                      title={`${count} songs`}
-                    >
-                      <span>{label}</span>
-                      <span className="catalog-facet-count">{` (${count})`}</span>
-                    </button>
-                  )
-                })}
+                <label className="catalog-sort-label" htmlFor="catalog-sort-select">
+                  Sort
+                </label>
+                <select
+                  id="catalog-sort-select"
+                  className="catalog-sort-select"
+                  value={sort}
+                  onChange={(e) => setSortAndSync(e.target.value as SortMode)}
+                >
+                  <option value="engagement_total">Most engagement</option>
+                  <option value="likes_total">Most likes</option>
+                  <option value="plays_total">Most plays</option>
+                  <option value="newest">Newest (publish date)</option>
+                  <option value="title_az">Song title (A–Z)</option>
+                </select>
               </div>
-            </section>
-            {FACET_GROUPS.map((group) => {
-              const entries = contextualFacetEntries[group] ?? []
-              if (!entries.length) return null
-              const filterKey = group as keyof FilterState
-              const headingId = `catalog-${group}-heading`
-              return (
-                <section key={group} className="catalog-facet" aria-labelledby={headingId}>
-                  <h3 id={headingId} title={FACET_HELP[group]}>{FACET_LABELS[group]}</h3>
-                  <div className="catalog-facet-chips" role="group" aria-labelledby={headingId}>
-                    {entries.map(({ value, count }) => {
-                      const active = filters[filterKey].has(value)
-                      const disabled = !active && count === 0
-                      return (
-                        <button
-                          key={value}
-                          type="button"
-                          className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
-                          disabled={disabled}
-                          onClick={() =>
-                            patchFilters({
-                              ...filters,
-                              [filterKey]: toggleSetMember(filters[filterKey], value),
-                            })
-                          }
-                          title={group === 'sutra' ? `${sutraQuestionFromDisplay(value)} (${count} songs)` : `${count} songs`}
-                        >
-                          {group === 'sutra' ? (
-                            <span className={`catalog-facet-sutra-name ${sutraClassName(value)}`}>{value}</span>
-                          ) : (
-                            <span>{value}</span>
-                          )}
-                          <span className="catalog-facet-count">{` (${count})`}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
-                </section>
-              )
-            })}
-            </div>
-          </aside>
+            }
+          />
 
-          <main id="main-content" className="catalog-main">
-          <div className="catalog-main__sort-row songs-page__sort-row">
-            <div
-              className="catalog-sort songs-page__sort"
-              aria-label="Sort songs by engagement, likes, plays, publish date, or title"
-            >
-              <label className="catalog-sort-label" htmlFor="catalog-sort-select">
-                Sort
-              </label>
-              <select
-                id="catalog-sort-select"
-                className="catalog-sort-select"
-                value={sort}
-                onChange={(e) => setSortAndSync(e.target.value as SortMode)}
-              >
-                <option value="engagement_total">Most engagement</option>
-                <option value="likes_total">Most likes</option>
-                <option value="plays_total">Most plays</option>
-                <option value="newest">Newest (publish date)</option>
-                <option value="title_az">Song title (A–Z)</option>
-              </select>
-            </div>
-          </div>
-          {!filtersOpen ? (
-            <>
-              {activeFilterContext}
-              <button
-                type="button"
-                className="catalog-filter-reopen"
-                onClick={() => setFiltersOpen(true)}
-                aria-expanded={false}
-                aria-controls="catalog-filter-panel"
-              >
-                Show filters
-              </button>
-            </>
-          ) : null}
+          <main id="main-content" className="catalog-main songs-page__main">
           {filteredSorted.length > 0 ? (
             <CatalogPager
               variant="top"

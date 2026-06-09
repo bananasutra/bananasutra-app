@@ -332,7 +332,7 @@
   align-items: center;
   justify-content: center;
   padding: 0.4rem;
-  border-radius: 6px;
+  border-radius: var(--radius-control, 2px);
   color: var(--color-text-faint);
   text-decoration: none;
   transition: color 0.22s ease;
@@ -392,7 +392,7 @@
 .catalog-footer__sitemap-link:focus-visible {
   outline: 2px solid var(--focus-ring-color);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: var(--radius-control, 2px);
 }
 
 .catalog-footer__meta-sep {

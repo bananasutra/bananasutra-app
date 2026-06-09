@@ -1,5 +1,13 @@
 /* Phase 3 /tracks — list + player + pagination + filters (URL-synced). */
 
+.tracks-page__content {
+  min-width: 0;
+}
+
+.tracks-page__main {
+  min-width: 0;
+}
+
 .tracks-page__intro {
   margin: 0 0 1rem;
   font-size: 0.88rem;
@@ -82,7 +90,7 @@
 .tracks-page__sc-link:focus-visible {
   outline: 2px solid var(--color-focus, #7f652d);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: var(--radius-control, 2px);
 }
 
 .tracks-page__player .sc-embed-frame {

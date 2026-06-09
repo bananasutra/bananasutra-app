@@ -48,7 +48,7 @@
   position: relative;
   aspect-ratio: 1;
   display: block;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-thumb, var(--radius-control, 2px));
   overflow: hidden;
   text-decoration: none;
   color: #fff;

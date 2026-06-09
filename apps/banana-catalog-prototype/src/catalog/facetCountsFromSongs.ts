@@ -1,4 +1,5 @@
 import { facetEntriesFromCountMap } from './facetCountsCore'
+import { sortSutraFacetEntries } from './sutraContext'
 import type { FacetsPayload, FilterFacetKey, SongCatalogItem } from './types'
 
 /** Recompute facet value counts for an arbitrary song subset (e.g. listener-only / words pool). */
@@ -41,7 +42,7 @@ export function facetCountsFromSongs(songs: SongCatalogItem[]): FacetsPayload {
   }
 
   const out: Partial<FacetsPayload> = {
-    sutra: facetEntriesFromCountMap(sutra),
+    sutra: sortSutraFacetEntries(facetEntriesFromCountMap(sutra)),
     light_shadow: facetEntriesFromCountMap(light_shadow),
     topic: facetEntriesFromCountMap(topic),
     intention: facetEntriesFromCountMap(intention),
