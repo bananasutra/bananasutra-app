@@ -107,9 +107,6 @@ export function LearnLpWaysToExplore() {
           </Link>
         </li>
       </ul>
-      <Link className="catalog-section-cta" to={canonicalPathForRoute('/about')}>
-        About BANANASUTRA →
-      </Link>
     </section>
   )
 }
