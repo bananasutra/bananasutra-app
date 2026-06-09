@@ -433,11 +433,21 @@
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);
   gap: 1rem;
-  margin-bottom: 1.1rem;
-  padding: 0 0 1.1rem;
+  margin-bottom: 0;
+  padding: 0 0 var(--catalog-shell-section-pad-y);
   scroll-margin-top: calc(var(--catalog-header-h, 168px) + 0.75rem);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: var(--catalog-shell-rule);
   align-items: start;
+}
+
+.songbooks-page__hero-art-wrap {
+  width: 100%;
+  min-width: 0;
+}
+
+.songbooks-page__hero-art-wrap picture {
+  display: block;
+  width: 100%;
 }
 
 .songbooks-page__hero-art {
@@ -454,6 +464,14 @@
   margin: 0 0 0.25rem;
   text-transform: none;
   letter-spacing: normal;
+}
+
+.songbooks-page__hero-text--detail .song-detail-secondary-meta {
+  margin-top: 0.42rem;
+}
+
+.songbooks-page__section-playlist-meta {
+  margin: 0 0 0.85rem;
 }
 
 .songbooks-page__kind-row {
@@ -594,7 +612,17 @@
 }
 
 .songbooks-page__playlist {
-  margin-bottom: 1.4rem;
+  min-width: 0;
+}
+
+.songbooks-page__playlist .catalog-section-title {
+  margin: 0 0 0.75rem;
+}
+
+.songbooks-page__playlist .sc-embed-frame {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm, 8px);
+  background: var(--color-bg-panel);
 }
 
 /* Reserve embed height for CLS — match SoundCloudPassthroughEmbed height props (680 / 760), not an oversized shell. */
@@ -625,25 +653,11 @@
   cursor: pointer;
 }
 
-.songbooks-page__playlist .catalog-section-title {
-  margin: 0 0 0.75rem;
-}
-
-.songbooks-page__playlist .sc-embed-frame {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm, 8px);
-  background: var(--color-bg-panel);
-}
-
 .songbooks-page__playlist-actions {
   margin: 0;
 }
 
 .songbooks-page__yt-playlist {
-  margin: 0 0 1.35rem;
-  padding: 1.1rem 0 1.35rem;
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
   min-width: 0;
 }
 
@@ -656,12 +670,6 @@
   padding: 1.35rem 0;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
-}
-
-.songbooks-page__playlist + .songbooks-page__featured-video--below-playlist {
-  margin-top: 0;
-  padding-top: 1.1rem;
-  border-top: 1px solid var(--color-border);
 }
 
 .songbooks-page__featured-video--below-playlist .songbooks-page__featured-video-embed {
@@ -721,17 +729,14 @@
   }
 }
 
-.songbooks-page__songs {
-  margin-bottom: 0.8rem;
-  padding-top: 0.45rem;
-  border-top: 1px solid var(--color-border);
-}
-
+.songbooks-page__songs,
 .songbooks-page__genre-tracks,
 .songbooks-page__genre-fallback {
-  margin-bottom: 0.8rem;
-  padding-top: 0.45rem;
-  border-top: 1px solid var(--color-border);
+  min-width: 0;
+}
+
+.songbooks-page__songs .catalog-section-title {
+  margin: 0 0 0.75rem;
 }
 
 .songbooks-page__genre-tracks-copy {
@@ -739,11 +744,6 @@
   font-size: 0.98rem;
   line-height: 1.55;
   color: var(--color-text-muted);
-}
-
-.songbooks-page__featured-video + .songbooks-page__songs {
-  padding-top: 0;
-  border-top: none;
 }
 
 .songbooks-page__songs .song-thumb-grid {
@@ -765,9 +765,17 @@
     min-height: 8220px;
   }
 
-  .songbooks-page__hero {
+  .songbooks-page__hero,
+  .songbooks-page__hero--detail {
     grid-template-columns: 1fr;
-    padding-bottom: 0.9rem;
+  }
+
+  .songbooks-page__hero--detail .songbooks-page__hero-art-wrap {
+    width: 100%;
+  }
+
+  .songbooks-page__hero--detail .songbooks-page__hero-title {
+    font-size: clamp(1.35rem, 6.2vw, 1.85rem);
   }
 
   .songbooks-page__playlist .catalog-lazy-sc-embed,
@@ -828,6 +836,11 @@
 
 .songbooks-page__hero {
   border-bottom-color: var(--color-border);
+}
+
+.songbooks-page--detail .catalog-page-shell__section:last-child {
+  border-bottom: none;
+  padding-bottom: 0.35rem;
 }
 
 .songbooks-page__card:hover {
