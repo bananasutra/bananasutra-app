@@ -398,19 +398,22 @@
   min-width: 0;
 }
 
-.listen-lp__load-more {
-  display: inline-block;
-  margin-bottom: 0.35rem;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  font: inherit;
-  padding: 0;
-}
-
-/* Featured songbook — uses catalog-featured-songbook token */
+/* Featured songbook — stacked list-mode SC embed + catalog-featured-embed-copy */
 .listen-lp__featured-spotlight {
   margin-top: 0.15rem;
+}
+
+.listen-lp__featured-spotlight .catalog-lazy-sc-embed,
+.listen-lp__featured-spotlight .sc-embed-frame {
+  width: 100%;
+  min-height: 450px;
+}
+
+@media (max-width: 640px) {
+  .listen-lp__featured-spotlight .catalog-lazy-sc-embed,
+  .listen-lp__featured-spotlight .sc-embed-frame {
+    min-height: 380px;
+  }
 }
 
 /* Songbook thumbs in rails */
