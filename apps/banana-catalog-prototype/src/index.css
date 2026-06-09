@@ -276,10 +276,7 @@ a:focus-visible {
   color: var(--color-text-muted);
   font-family: var(--font-ui);
   text-align: right;
-}
-
-.yt-embed-outbound__note {
-  font-weight: 400;
+  white-space: nowrap;
 }
 
 .yt-embed-outbound__link {

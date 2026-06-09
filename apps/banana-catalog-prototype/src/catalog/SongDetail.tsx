@@ -6,14 +6,17 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
-  type KeyboardEvent,
   type RefObject,
 } from 'react'
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
-import { YouTubeEmbed } from './YouTubeEmbed'
+import { SoundCloudPassthroughEmbed } from './SoundCloudPassthroughEmbed'
+import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
+import { SongDetailAlsoPartOfCard } from './SongDetailAlsoPartOfCard'
+import { SongDetailBertrandEntry } from './SongDetailBertrandEntry'
+import { useExclusiveYoutubeSoundcloudPlayback } from './useExclusiveYoutubeSoundcloudPlayback'
 import { CatalogVideoSpotlight, type CatalogVideoSpotlightItem } from './CatalogVideoSpotlight'
 import { PLAY_ALL_HONEST_MOBILE_COPY, PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
 import {
@@ -25,7 +28,7 @@ import {
   trackSongDetailQueueSkipped,
   type PlaybackIntent,
 } from './catalogAnalytics'
-import { formatDurationDisplay, formatDurationFromSeconds, parseDurationClock } from './durationFormat'
+import { formatDurationDisplay } from './durationFormat'
 import { bindSoundCloudWidgetPlayback } from './soundCloudWidgetPlayback'
 import { loadSoundCloudWidgetApi } from './soundcloudWidgetApi'
 import type { SoundCloudWidget } from './soundcloudWidgetApi'
@@ -36,7 +39,7 @@ import {
   songCatalogLinkTo,
   songCatalogPath,
 } from './songPaths'
-import { songbookHref } from './songbooks'
+import { songbookByName } from './songbooks'
 import { sutraClassName } from './sutraTheme'
 import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, YouTubeCatalogVideo } from './types'
 import { sutraHrefFromSongSutraField } from './sutraPageUtils'
@@ -50,7 +53,30 @@ import { SongThumbCard } from './SongThumbCard'
 import { useSongCatalogAndDetail, loadYoutubeByLyricsId } from './generatedData'
 import './CatalogApp.css'
 import './CatalogVideoSpotlight.css'
+import './SutrasPages.css'
 import './SongDetail.css'
+
+type AudioListenTab = 'tracks' | 'ep'
+
+const SONG_VIDEO_SECTION_TITLE = 'Picture the song'
+
+function formatVideoGenreLabel(video: YouTubeCatalogVideo | undefined): string {
+  if (!video) return ''
+  return [video.genre_primary, video.genre_secondary]
+    .map((g) => (g || '').trim())
+    .filter(Boolean)
+    .join(' · ')
+}
+
+function formatEpListenMeta(trackCount: number, durationTotal: string): string {
+  const parts: string[] = []
+  if (trackCount > 0) {
+    parts.push(`${trackCount} track${trackCount === 1 ? '' : 's'}`)
+  }
+  const duration = durationTotal.trim()
+  if (duration) parts.push(duration)
+  return parts.join(' · ')
+}
 
 function sameGenreToken(a: string, b: string): boolean {
   return a.trim().toLowerCase() === b.trim().toLowerCase()
@@ -90,12 +116,6 @@ function normSoundcloudUrl(url: string): string {
   return u
 }
 
-function trackDurationSeconds(track: SongDetailTrack): number {
-  const sec = Number(track.duration_sec)
-  if (Number.isFinite(sec) && sec > 0) return sec
-  return parseDurationClock((track.duration_raw ?? '').trim())
-}
-
 /** Single-track list-mode chrome (R9); `/sets/` URLs need enough height for multi-track rows in the SC widget. */
 const SC_EMBED_HEIGHT_TRACK_LIST = 166
 const SC_EMBED_HEIGHT_SET_PLAYLIST = 450
@@ -113,8 +133,6 @@ function useSongDetailLyricsClampViewport(): boolean {
   const getServerSnapshot = useCallback(() => false, [])
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 }
-
-type SongDetailSection = 'audio' | 'video'
 
 /** Mirrors `--song-detail-lyrics-collapsed-max` in SongDetail.css (sum of rem terms + min(..., 82vh)). */
 function lyricsCollapsedMaxPx(): number {
@@ -317,15 +335,7 @@ function SongDetailLoaded({
   songCatalogByLyricsId,
   detailByLyricsId,
 }: SongDetailLoadedProps) {
-  const navigate = useNavigate()
-  const location = useLocation()
   const [searchParams] = useSearchParams()
-  const fullSearch = searchParams.toString()
-  const catalogSearch = useMemo(() => {
-    const p = new URLSearchParams(fullSearch)
-    p.delete('section')
-    return p.toString()
-  }, [fullSearch])
   const activeTrackGenre = searchParams.get('tg')?.trim() ?? ''
   const requestedSection = (searchParams.get('section') ?? '').trim().toLowerCase()
 
@@ -471,17 +481,83 @@ function SongDetailLoaded({
       }))
   }, [youtubeVideos, effectiveYoutubeVideoId, detail.lyrics_title, detail.sutra])
 
+  const renderSongVideoRailCell = useCallback(
+    (video: CatalogVideoSpotlightItem, isActive: boolean, onSelect: () => void) => {
+      const source = youtubeVideos.find((v) => v.video_id === video.videoId)
+      const genreLabel = formatVideoGenreLabel(source)
+      const ariaLabel = genreLabel ? `Play video · ${genreLabel}` : `Play video ${video.videoId}`
+      return (
+        <button
+          type="button"
+          className={`song-detail-youtube-vid song-detail-youtube-vid--pick${isActive ? ' is-active' : ''}`}
+          aria-pressed={isActive}
+          aria-label={ariaLabel}
+          onClick={onSelect}
+        >
+          {source?.thumbnail_url ? (
+            <span className="song-detail-youtube-vid-thumb">
+              <img
+                src={coverImageUrl(source.thumbnail_url, { width: 320 })}
+                alt=""
+                width={160}
+                height={90}
+                loading="lazy"
+              />
+            </span>
+          ) : (
+            <span className="song-detail-youtube-vid-thumb song-detail-youtube-vid-thumb--fallback" aria-hidden>
+              ▶
+            </span>
+          )}
+          {genreLabel ? <span className="song-detail-youtube-vid-genre">{genreLabel}</span> : null}
+        </button>
+      )
+    },
+    [youtubeVideos],
+  )
+
   const [selectedUrl, setSelectedUrl] = useState<string | null>(null)
   const [soundcloudReloadKey, setSoundcloudReloadKey] = useState(0)
-  const [isEpExpanded, setIsEpExpanded] = useState(false)
   const [lyricsExpanded, setLyricsExpanded] = useState(false)
   const [lyricsTall, setLyricsTall] = useState(false)
+  const [videoInView, setVideoInView] = useState(false)
   const lyricsPreRef = useRef<HTMLPreElement>(null)
+  const epEmbedWrapRef = useRef<HTMLDivElement>(null)
+  const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
+  const videoSectionRef = useRef<HTMLElement>(null)
+
+  const songbookRecord = useMemo(
+    () => (detail.songbook ? songbookByName(detail.songbook) : undefined),
+    [detail.songbook],
+  )
 
   const fallbackScUrl = (detail.fallback_sc_url ?? '').trim()
   const catalogListenUrl = (detail.sc_catalog_listen_url ?? '').trim()
   const primaryEpUrl = (detail.primary_ep_url ?? '').trim()
   const primaryEpTitle = (detail.primary_ep_title ?? '').trim()
+  const epUrlNorm = normSoundcloudUrl(primaryEpUrl)
+  const songbookPlaylistUrl = (songbookRecord?.playlist_url ?? '').trim()
+  const songbookUrlNorm = normSoundcloudUrl(songbookPlaylistUrl)
+  const showEpEmbed = Boolean(primaryEpUrl.includes('/sets/') && epUrlNorm && epUrlNorm !== songbookUrlNorm)
+
+  const primaryEpListenMeta = useMemo(() => {
+    if (!showEpEmbed) return ''
+    const epTrack = detail.tracks.find((t) => normSoundcloudUrl(t.ep_url) === epUrlNorm)
+    const trackCount = epTrack?.ep_total_tracks ?? 0
+    const duration =
+      detail.sc_ep_set_duration_totals?.[primaryEpUrl] ??
+      detail.sc_ep_set_duration_totals?.[epUrlNorm] ??
+      ''
+    return formatEpListenMeta(trackCount, duration)
+  }, [detail, epUrlNorm, primaryEpUrl, showEpEmbed])
+
+  const lyricsExtractLine = useMemo(() => {
+    const raw = (detail.lyrics_extract || '').trim()
+    if (!raw) return ''
+    const first = raw.split(/\r?\n/).filter(Boolean)[0]
+    return first ?? raw
+  }, [detail.lyrics_extract])
+
   const playingUrl = (
     selectedUrl?.trim() ||
     defaultTrack?.sc_url?.trim() ||
@@ -492,6 +568,7 @@ function SongDetailLoaded({
   const inAppPlayableTracks = orderedTracks.filter((t) => trackIsInApp(t) && t.sc_url.trim())
   const playAllDesktopAvailable = usePlayAllDesktopAvailable()
 
+  const [audioListenTab, setAudioListenTab] = useState<AudioListenTab>('tracks')
   const [playAllTopTracksActive, setPlayAllTopTracksActive] = useState(false)
   const [isScPlaying, setIsScPlaying] = useState(false)
   const playAllTopTracksActiveRef = useRef(false)
@@ -529,43 +606,6 @@ function SongDetailLoaded({
     // eslint-disable-next-line react-hooks/set-state-in-effect -- reset playing indicator when embed track changes
     setIsScPlaying(false)
   }, [playingUrl])
-
-  /** All curated picks reference one EP → use it; otherwise fall back to primary SC EP set when tracks span multiple releases. */
-  const sharedPlayableEpUrl = useMemo(() => {
-    const set = new Set(
-      inAppPlayableTracks
-        .map((t) => (t.ep_url || '').trim())
-        .filter((u) => u.includes('/sets/')),
-    )
-    return set.size === 1 ? [...set][0] : ''
-  }, [inAppPlayableTracks])
-  const playFullEpSetUrl = useMemo(() => {
-    const primarySet = primaryEpUrl.includes('/sets/') ? primaryEpUrl : ''
-    return sharedPlayableEpUrl || primarySet
-  }, [sharedPlayableEpUrl, primaryEpUrl])
-  const playFullEpTrackCount = useMemo(() => {
-    if (!playFullEpSetUrl) return 0
-    const nk = normSoundcloudUrl(playFullEpSetUrl)
-    const matchingApp = inAppPlayableTracks.filter((t) => normSoundcloudUrl((t.ep_url || '').trim()) === nk)
-    const epTotal = Math.max(0, ...matchingApp.map((t) => Number(t.ep_total_tracks || 0)))
-    if (epTotal > 0) return epTotal
-    if (matchingApp.length > 0) return matchingApp.length
-    const catalogMatching = detail.tracks.filter((t) => normSoundcloudUrl((t.ep_url || '').trim()) === nk)
-    const ct = Math.max(0, ...catalogMatching.map((t) => Number(t.ep_total_tracks || 0)))
-    if (ct > 0) return ct
-    return catalogMatching.length
-  }, [playFullEpSetUrl, inAppPlayableTracks, detail.tracks])
-  const playFullEpDurationLabel = useMemo(() => {
-    if (!playFullEpSetUrl) return ''
-    const nk = normSoundcloudUrl(playFullEpSetUrl)
-    const fromEpRow = nk ? detail.sc_ep_set_duration_totals?.[nk]?.trim() : ''
-    if (fromEpRow) {
-      return formatDurationDisplay(fromEpRow)
-    }
-    const matchingApp = inAppPlayableTracks.filter((t) => normSoundcloudUrl((t.ep_url || '').trim()) === nk)
-    const totalSeconds = matchingApp.reduce((acc, t) => acc + trackDurationSeconds(t), 0)
-    return formatDurationFromSeconds(totalSeconds)
-  }, [detail.sc_ep_set_duration_totals, inAppPlayableTracks, playFullEpSetUrl])
 
   const soundcloudMainEmbedHeight =
     playingUrl.includes('/sets/') ? SC_EMBED_HEIGHT_SET_PLAYLIST : SC_EMBED_HEIGHT_TRACK_LIST
@@ -749,56 +789,50 @@ function SongDetailLoaded({
   }, [])
 
   const writtenYear = (detail.written_year ?? '').trim()
-  const hasHeroPrimaryTags = Boolean(detail.sutra) || Boolean(detail.songbook)
+  const museName = (detail.muse ?? '').trim()
   const hasHeroFacetMeta =
     Boolean(detail.topic) ||
     Boolean(detail.intention) ||
     Boolean(detail.light_shadow) ||
     Boolean(detail.lang) ||
-    Boolean(writtenYear) ||
-    Boolean((detail.muse ?? '').trim())
+    Boolean(writtenYear)
   const hasYoutubeVideos = youtubeVideos.length > 0
   const hasLyrics = Boolean((detail.lyrics_text || '').trim())
   const hasPlayableTrack = Boolean(playingUrl)
   const hasEpFallback = Boolean(primaryEpUrl)
   const hasAnyTrackUrls = detail.tracks.some((t) => t.sc_url.trim())
   const shouldShowTracksList = orderedTracks.length > 1 || Boolean(activeTrackGenre)
-  const hasCuratedInAppTracks = inAppPlayableTracks.length > 0
   const hasScCatalogListen = Boolean(catalogListenUrl)
-  const hasPreferredScSource = hasCuratedInAppTracks || hasScCatalogListen
   const defaultingToCatalogExport =
     hasScCatalogListen && !defaultTrack && !fallbackScUrl && !(selectedUrl?.trim())
   const hasAudioContent =
     hasPlayableTrack || hasEpFallback || hasAnyTrackUrls || shouldShowTracksList || hasScCatalogListen
+  const hasScAudio = hasAudioContent
+  const hasTopTracksPanel = Boolean(
+    hasPlayableTrack || hasScCatalogListen || shouldShowTracksList || (hasEpFallback && !showEpEmbed),
+  )
+  const hasAudioSourceTabs = Boolean(showEpEmbed && hasTopTracksPanel)
+  const showTracksPanel = hasTopTracksPanel && (!hasAudioSourceTabs || audioListenTab === 'tracks')
+  const showEpPanel = Boolean(showEpEmbed && (!hasTopTracksPanel || (hasAudioSourceTabs && audioListenTab === 'ep')))
+  const showVideoInColumn = hasYoutubeVideos && !hasScAudio
+  const showVideoBelow = hasYoutubeVideos && hasScAudio
+  const showAudioSection = hasAudioContent
+  const showVideoSection = showVideoInColumn
+  const hasMediaColumnForSplit = showAudioSection || showVideoInColumn
   /** No hero art / fallback column: lyrics-first rows with no listener media (e.g. pipeline-only songs). */
   const isLyricsOnlyNoCoverHero =
     !(detail.cover_image_url || '').trim() && !hasAudioContent && !hasYoutubeVideos
-  const tabDefs = useMemo(() => {
-    const out: Array<{ id: SongDetailSection; label: string }> = []
-    if (hasAudioContent) out.push({ id: 'audio', label: 'Audio' })
-    if (hasYoutubeVideos) out.push({ id: 'video', label: 'Video' })
-    return out
-  }, [hasAudioContent, hasYoutubeVideos])
-  const hasTabNav = hasAudioContent && hasYoutubeVideos
+  const useLyricsMediaSplit = hasLyrics && hasMediaColumnForSplit
+  const hasListenTabNav = hasAudioSourceTabs && useLyricsMediaSplit
+  const tracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Top tracks'
 
-  const tabIds = tabDefs.map((tab) => tab.id)
-  const hasSongsBrowseContext = Boolean(catalogSearch)
-  const activeSection = useMemo<null | SongDetailSection>(() => {
-    if (hasTabNav && (requestedSection === 'audio' || requestedSection === 'video') && tabIds.includes(requestedSection)) {
-      return requestedSection
-    }
-    if (hasPreferredScSource && hasSongsBrowseContext && tabIds.includes('audio')) {
-      return 'audio'
-    }
-    if (!hasPreferredScSource && tabIds.includes('video')) return 'video'
-    if (tabIds.includes('audio')) return 'audio'
-    if (tabIds.includes('video')) return 'video'
-    return null
-  }, [hasTabNav, requestedSection, tabIds, hasPreferredScSource, hasSongsBrowseContext])
-  const showAudioSection = hasAudioContent && (!hasTabNav || activeSection === 'audio')
-  const showVideoSection = hasYoutubeVideos && (!hasTabNav || activeSection === 'video')
-  const hasMediaColumn = hasTabNav || showAudioSection || showVideoSection
-  const useLyricsMediaSplit = hasLyrics && hasMediaColumn
+  useExclusiveYoutubeSoundcloudPlayback({
+    youtubeIframeRef: youtubeExclusiveRef,
+    soundcloudWrapRefs: [epEmbedWrapRef, playerWrapRef],
+    enabled: Boolean(showEpPanel || hasPlayableTrack || hasYoutubeVideos),
+    syncKey: `${lyricsId}|ep:${primaryEpUrl}|tr:${playingUrl}|tab:${audioListenTab}`,
+  })
+  const requestedMode = (searchParams.get('mode') ?? '').trim().toLowerCase()
   const isSongDetailTwoColDesktop = useSongDetailLyricsClampViewport()
   /** Collapse long lyrics only on desktop two-column layout — tablet/mobile and lyrics-only pages show full text. */
   const lyricsClampEnabled = useLyricsMediaSplit && isSongDetailTwoColDesktop
@@ -818,7 +852,10 @@ function SongDetailLoaded({
   }, [detail.lyrics_text, lyricsClampEnabled])
 
   useEffect(() => {
-    queueMicrotask(() => setLyricsExpanded(false))
+    queueMicrotask(() => {
+      setLyricsExpanded(false)
+      setAudioListenTab('tracks')
+    })
   }, [detail.lyrics_id])
 
   useEffect(() => {
@@ -837,68 +874,30 @@ function SongDetailLoaded({
   }, [lyricsClampEnabled, detail.lyrics_text])
 
   useEffect(() => {
-    // Depend on `location.search` (string), not `searchParams` — RR can churn the latter's identity
-    // every render; re-running this effect spams `navigate` and can freeze or blank the page in dev.
-    const qParams = new URLSearchParams(location.search)
-    if (!hasTabNav) {
-      if (!requestedSection) return
-      // Preserve deep-linked video tab until youtube-by-lyrics data has resolved.
-      if (requestedSection === 'video' && !youtubeVideosLoaded) return
-      const sectionExists =
-        (requestedSection === 'audio' && hasAudioContent) ||
-        (requestedSection === 'video' && hasYoutubeVideos)
-      if (sectionExists) return
-      qParams.delete('section')
-      const q = qParams.toString()
-      navigate(`${location.pathname}${q ? `?${q}` : ''}`, { replace: true, state: location.state })
-      return
-    }
-    const current = requestedSection
-    const next = activeSection
-    if (!next) return
-    if (current === next) return
-    qParams.set('section', next)
-    const q = qParams.toString()
-    navigate(`${location.pathname}${q ? `?${q}` : ''}`, { replace: true, state: location.state })
-  }, [
-    hasTabNav,
-    activeSection,
-    requestedSection,
-    location.search,
-    navigate,
-    location.pathname,
-    location.state,
-    hasAudioContent,
-    hasYoutubeVideos,
-    youtubeVideosLoaded,
-  ])
+    if (!youtubeVideosLoaded) return
+    const shouldScrollVideo =
+      (requestedSection === 'video' && hasYoutubeVideos) || (requestedMode === 'watch' && hasYoutubeVideos)
+    if (!shouldScrollVideo) return
+    const node = videoSectionRef.current
+    if (!node) return
+    const timer = window.setTimeout(() => {
+      node.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 120)
+    return () => window.clearTimeout(timer)
+  }, [requestedSection, requestedMode, hasYoutubeVideos, youtubeVideosLoaded, detail.lyrics_id])
 
-  const setActiveSection = (next: SongDetailSection) => {
-    if (!hasTabNav) return
-    const p = new URLSearchParams(location.search)
-    p.set('section', next)
-    const q = p.toString()
-    navigate(`${location.pathname}${q ? `?${q}` : ''}`, { replace: true, state: location.state })
-  }
-
-  const tabRefs = useRef<Record<SongDetailSection, HTMLButtonElement | null>>({
-    audio: null,
-    video: null,
-  })
-
-  const onTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, tab: SongDetailSection) => {
-    const idx = tabIds.indexOf(tab)
-    if (idx < 0) return
-    let nextIdx = idx
-    if (event.key === 'ArrowRight') nextIdx = (idx + 1) % tabIds.length
-    else if (event.key === 'ArrowLeft') nextIdx = (idx - 1 + tabIds.length) % tabIds.length
-    else if (event.key === 'Home') nextIdx = 0
-    else if (event.key === 'End') nextIdx = tabIds.length - 1
-    else return
-    event.preventDefault()
-    const nextTab = tabIds[nextIdx]
-    tabRefs.current[nextTab]?.focus()
-  }
+  useEffect(() => {
+    const node = videoSectionRef.current
+    if (!node || !hasYoutubeVideos) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) setVideoInView(true)
+      },
+      { rootMargin: '200px 0px', threshold: 0.01 },
+    )
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [hasYoutubeVideos, detail.lyrics_id])
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
@@ -934,8 +933,8 @@ function SongDetailLoaded({
                     <img
                       src={coverImageUrl(detail.cover_image_url, { width: 400 })}
                       alt=""
-                      width={320}
-                      height={320}
+                      width={280}
+                      height={280}
                       loading="eager"
                       fetchPriority="high"
                       decoding="sync"
@@ -951,32 +950,21 @@ function SongDetailLoaded({
             <div className="song-detail-hero-text">
               <h1 className="song-detail-title song-title">{detail.lyrics_title}</h1>
               {detail.lyrics_summary ? <p className="song-detail-summary">{detail.lyrics_summary}</p> : null}
-              {hasHeroPrimaryTags || hasHeroFacetMeta ? (
+              {detail.sutra ? (
+                <ul className="song-detail-secondary-meta song-detail-secondary-meta--sutra" aria-label="Sutra">
+                  <li className="song-detail-secondary-meta-item">
+                    <Link
+                      className="song-detail-secondary-link"
+                      to={sutraHrefFromSongSutraField(detail.sutra) ?? buildBrowsePathForFacet('sutra', detail.sutra)}
+                    >
+                      <span className={`catalog-facet-sutra-name ${sutraClassName(detail.sutra)}`}>{detail.sutra}</span>
+                    </Link>
+                  </li>
+                </ul>
+              ) : null}
+              {hasHeroFacetMeta ? (
                 <>
-                  {hasHeroPrimaryTags ? (
-                    <ul className="song-detail-secondary-meta" aria-label="Sutra and songbook">
-                      {detail.sutra ? (
-                        <li className="song-detail-secondary-meta-item">
-                          <Link
-                            className="song-detail-secondary-link"
-                            to={sutraHrefFromSongSutraField(detail.sutra) ?? buildBrowsePathForFacet('sutra', detail.sutra)}
-                          >
-                            sutra:{' '}
-                            <span className={`catalog-facet-sutra-name ${sutraClassName(detail.sutra)}`}>{detail.sutra}</span>
-                          </Link>
-                        </li>
-                      ) : null}
-                      {detail.songbook ? (
-                        <li className="song-detail-secondary-meta-item">
-                          <Link className="song-detail-secondary-link" to={songbookHref(detail.songbook)}>
-                            songbook: {detail.songbook}
-                          </Link>
-                        </li>
-                      ) : null}
-                    </ul>
-                  ) : null}
-                  {hasHeroFacetMeta ? (
-                    <ul className="song-detail-secondary-meta" aria-label="Song metadata">
+                  <ul className="song-detail-secondary-meta" aria-label="Song metadata">
                       {detail.topic ? (
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={buildBrowsePathForFacet('topic', detail.topic)}>
@@ -1012,64 +1000,113 @@ function SongDetailLoaded({
                           </Link>
                         </li>
                       ) : null}
-                      {detail.muse ? (
-                        <li className="song-detail-secondary-meta-item">
-                          <Link className="song-detail-secondary-link" to={searchCatalogHref(detail.muse)}>
-                            {detail.muse}
-                          </Link>
-                        </li>
-                      ) : null}
                     </ul>
-                  ) : null}
                 </>
+              ) : null}
+              {museName ? (
+                <ul className="song-detail-secondary-meta song-detail-secondary-meta--muse" aria-label="Muse">
+                  <li className="song-detail-secondary-meta-item">
+                    <Link className="song-detail-secondary-link" to={searchCatalogHref(museName)}>
+                      {museName}
+                    </Link>
+                  </li>
+                </ul>
               ) : null}
             </div>
           </header>
 
-          <div
-            className={
+          {lyricsExtractLine ? (
+            <section className="sutra-detail__section sutra-detail__pull song-detail-extract" aria-label="Lyric extract">
+              <blockquote className="sutra-detail__pull-quote">
+                <span className="sutra-detail__pull-quote-text">{lyricsExtractLine}</span>
+                <span className="sutra-detail__pull-quote-caret" aria-hidden />
+              </blockquote>
+            </section>
+          ) : null}
+
+          {(() => {
+            const splitClassName =
               'song-detail-split' +
               (useLyricsMediaSplit ? ' song-detail-split--two-col' : '') +
-              (useLyricsMediaSplit && hasTabNav ? ' song-detail-split--tabbed' : '') +
-              (!hasLyrics && hasMediaColumn ? ' song-detail-split--media-only' : '') +
-              (hasLyrics && !hasMediaColumn ? ' song-detail-split--lyrics-only' : '')
-            }
-          >
-            {hasMediaColumn ? (
-              <div className="song-detail-split__media">
-                {hasTabNav ? (
-                  <div className="song-detail-tabs" role="tablist" aria-label="Media sections">
-                    {tabDefs.map((tab) => (
-                      <button
-                        key={tab.id}
-                        ref={(node) => {
-                          tabRefs.current[tab.id] = node
-                        }}
-                        type="button"
-                        role="tab"
-                        id={`song-tab-${tab.id}`}
-                        aria-controls={`song-panel-${tab.id}`}
-                        aria-selected={activeSection === tab.id}
-                        className={`song-detail-tab${activeSection === tab.id ? ' is-active' : ''}`}
-                        onClick={() => setActiveSection(tab.id)}
-                        onKeyDown={(e) => onTabKeyDown(e, tab.id)}
+              (hasListenTabNav ? ' song-detail-split--tabbed' : '') +
+              (!hasLyrics && hasMediaColumnForSplit ? ' song-detail-split--media-only' : '') +
+              (hasLyrics && !hasMediaColumnForSplit ? ' song-detail-split--lyrics-only' : '')
+
+            const splitBody = (
+              <div className={splitClassName}>
+                {hasMediaColumnForSplit ? (
+                  <div className="song-detail-split__media">
+                    {hasListenTabNav ? (
+                      <div className="song-detail-tabs" role="tablist" aria-label="Listen options">
+                        <button
+                          type="button"
+                          role="tab"
+                          id="song-tab-tracks"
+                          aria-selected={audioListenTab === 'tracks'}
+                          aria-controls="song-panel-tracks"
+                          className={`song-detail-tab${audioListenTab === 'tracks' ? ' is-active' : ''}`}
+                          onClick={() => setAudioListenTab('tracks')}
+                        >
+                          {tracksTabLabel}
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          id="song-tab-ep"
+                          aria-selected={audioListenTab === 'ep'}
+                          aria-controls="song-panel-ep"
+                          className={`song-detail-tab${audioListenTab === 'ep' ? ' is-active' : ''}`}
+                          onClick={() => setAudioListenTab('ep')}
+                        >
+                          Full EP
+                        </button>
+                      </div>
+                    ) : null}
+
+                    {showEpPanel ? (
+                      <section
+                        className="song-detail-listen-block"
+                        aria-labelledby={hasListenTabNav ? 'song-tab-ep' : 'song-ep-heading'}
+                        role={hasListenTabNav ? 'tabpanel' : undefined}
+                        id={hasListenTabNav ? 'song-panel-ep' : undefined}
                       >
-                        {tab.label}
-                      </button>
-                    ))}
-                  </div>
-                ) : null}
+                        {!hasListenTabNav ? (
+                          <h2 id="song-ep-heading" className="catalog-section-title">
+                            Full EP
+                          </h2>
+                        ) : null}
+                        <SoundCloudPassthroughEmbed
+                          ref={epEmbedWrapRef}
+                          scUrl={primaryEpUrl}
+                          title={primaryEpTitle ? `SoundCloud: ${primaryEpTitle}` : `SoundCloud EP · ${detail.lyrics_title}`}
+                          mode="list"
+                          height={SC_EMBED_HEIGHT_SET_PLAYLIST}
+                          loading={hasListenTabNav ? 'lazy' : 'eager'}
+                        />
+                        {primaryEpListenMeta || primaryEpTitle ? (
+                          <div className="song-detail-listen-block__footer">
+                            {primaryEpListenMeta ? (
+                              <p className="song-detail-listen-block__meta song-detail-listen-block__meta--stats">
+                                {primaryEpListenMeta}
+                              </p>
+                            ) : null}
+                            {primaryEpTitle ? (
+                              <p className="song-detail-listen-block__title">{primaryEpTitle}</p>
+                            ) : null}
+                          </div>
+                        ) : null}
+                      </section>
+                    ) : null}
 
-                {showAudioSection ? (
-                  <section
-                    className="song-detail-media"
-                    role={hasTabNav ? 'tabpanel' : undefined}
-                    id={hasTabNav ? 'song-panel-audio' : undefined}
-                    aria-labelledby={hasTabNav ? 'song-tab-audio' : undefined}
-                  >
-                    {!hasTabNav ? <h2 className="catalog-section-title">Audio</h2> : null}
-
-                    <section className="song-detail-player" aria-label="SoundCloud player">
+                    {showAudioSection && showTracksPanel ? (
+                      <section
+                        className="song-detail-media"
+                        aria-label="Track playback"
+                        role={hasListenTabNav ? 'tabpanel' : undefined}
+                        id={hasListenTabNav ? 'song-panel-tracks' : undefined}
+                        aria-labelledby={hasListenTabNav ? 'song-tab-tracks' : undefined}
+                      >
+                        <section className="song-detail-player" aria-label="SoundCloud player">
                 {hasPlayableTrack ? (
                   <>
                     {defaultingToCatalogExport ? (
@@ -1089,32 +1126,14 @@ function SongDetailLoaded({
                       />
                     </div>
                   </>
-                ) : hasEpFallback ? (
+                ) : hasEpFallback && !showEpEmbed ? (
                   <>
                     <p className="song-detail-ep-only-intro">This one lives inside a full EP.</p>
-                    <details
-                      className="song-detail-ep-disclosure"
-                      open={isEpExpanded}
-                      onToggle={(e) => setIsEpExpanded((e.currentTarget as HTMLDetailsElement).open)}
-                    >
-                      <summary className="song-detail-ep-summary">Play full EP</summary>
-                      <div className="song-detail-ep-panel">
-                      {isEpExpanded ? (
-                        <LazySoundCloudEmbed
-                          scUrl={primaryEpUrl}
-                          title={primaryEpTitle ? `SoundCloud: ${primaryEpTitle}` : `SoundCloud EP · ${detail.lyrics_title}`}
-                          height={primaryEpUrl.includes('/sets/') ? SC_EMBED_HEIGHT_SET_PLAYLIST : 360}
-                          mode={primaryEpUrl.includes('/sets/') ? 'list' : 'visual'}
-                          autoPlay
-                        />
-                      ) : null}
-                      <p className="song-detail-ep-only-footer">
-                        <a className="song-detail-ep-link" href={primaryEpUrl} target="_blank" rel="noreferrer">
-                          Open EP on SoundCloud
-                        </a>
-                      </p>
-                      </div>
-                    </details>
+                    <p className="song-detail-ep-only-footer">
+                      <a className="song-detail-ep-link" href={primaryEpUrl} target="_blank" rel="noreferrer">
+                        Open EP on SoundCloud
+                      </a>
+                    </p>
                   </>
                 ) : hasAnyTrackUrls ? (
                   <p className="song-detail-no-audio">
@@ -1247,74 +1266,133 @@ function SongDetailLoaded({
                   </ul>
                 </section>
               ) : null}
-              {playFullEpSetUrl && hasCuratedInAppTracks ? (
-                <section className="song-detail-audio-playall" aria-label="Play full EP">
-                  <p className="song-detail-audio-hint">
-                    Like it? Listen to all {playFullEpTrackCount || 'the'} track{playFullEpTrackCount === 1 ? '' : 's'} as a
-                    playlist{playFullEpDurationLabel ? ` (${playFullEpDurationLabel})` : ''}.
-                  </p>
-                  <button
-                    type="button"
-                    className="song-detail-audio-action-btn"
-                    onClick={() => pickTopTrack(playFullEpSetUrl)}
-                  >
-                    Play full EP
-                  </button>
-                </section>
-              ) : null}
-            </section>
-          ) : null}
+                      </section>
+                    ) : null}
 
-          {showVideoSection ? (
+                    {showVideoSection ? (
+                      <section
+                        ref={videoSectionRef}
+                        className="song-detail-media song-detail-media--video"
+                        id="song-video-section"
+                        aria-labelledby="song-video-heading"
+                      >
+                        <h2 id="song-video-heading" className="catalog-section-title">
+                          {SONG_VIDEO_SECTION_TITLE}
+                        </h2>
+                        <section className="song-detail-youtube" aria-label="YouTube player">
+                          {useSongVideoSpotlight && songVideoSpotlightFeatured && videoInView ? (
+                            <CatalogVideoSpotlight
+                              className="song-detail-youtube-spotlight"
+                              featured={songVideoSpotlightFeatured}
+                              rail={songVideoSpotlightRail}
+                              activeVideoId={effectiveYoutubeVideoId}
+                              onSelectVideo={setSelectedYoutubeVideoId}
+                              railEyebrow="More for this song"
+                              renderRailCell={renderSongVideoRailCell}
+                            />
+                          ) : focusedYoutubeVideo?.can_embed && videoInView ? (
+                            <YoutubeEmbeddedPlayer
+                              videoId={focusedYoutubeVideo.video_id}
+                              title={`YouTube: ${focusedYoutubeVideo.title || detail.lyrics_title}`}
+                              iframeRef={youtubeExclusiveRef}
+                              loading="lazy"
+                              facadeUntilClick
+                            />
+                          ) : focusedYoutubeVideo ? (
+                            <div className="song-detail-youtube-no-embed" role="region" aria-label="Selected video not embeddable">
+                              <p className="song-detail-youtube-no-embed-lead">
+                                YouTube marks this upload as not embeddable on other sites—that&apos;s their rule, not a
+                                bug on this site.
+                              </p>
+                              {focusedYoutubeVideo.yt_url ? (
+                                <a
+                                  className="song-detail-youtube-open"
+                                  href={focusedYoutubeVideo.yt_url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  Watch on YouTube
+                                </a>
+                              ) : null}
+                            </div>
+                          ) : (
+                            <p className="song-detail-youtube-no-embed">
+                              No embeddable public video is available for in-app playback.
+                            </p>
+                          )}
+                        </section>
+                      </section>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                {hasLyrics ? (
+                  <section
+                    className="song-detail-split__lyrics-col song-detail-lyrics"
+                    aria-labelledby="song-lyrics-heading"
+                  >
+                    <h2 id="song-lyrics-heading" className="catalog-section-title">
+                      Lyrics
+                    </h2>
+                    <div
+                      className={
+                        'song-detail-lyrics-frame' +
+                        (lyricsClampEnabled && lyricsTall && !lyricsExpanded
+                          ? ' song-detail-lyrics-frame--collapsed'
+                          : '')
+                      }
+                    >
+                      <pre ref={lyricsPreRef} className="song-detail-lyrics-pre" id="song-lyrics-body">
+                        {detail.lyrics_text}
+                      </pre>
+                      {lyricsClampEnabled && lyricsTall ? (
+                        <button
+                          type="button"
+                          className="song-detail-lyrics-expand"
+                          aria-expanded={lyricsExpanded}
+                          aria-controls="song-lyrics-body"
+                          onClick={() => setLyricsExpanded((v) => !v)}
+                        >
+                          {lyricsExpanded ? 'Show less' : 'Show full lyrics'}
+                        </button>
+                      ) : null}
+                    </div>
+                  </section>
+                ) : null}
+              </div>
+            )
+
+            return useLyricsMediaSplit ? <div className="song-detail-breakout">{splitBody}</div> : splitBody
+          })()}
+
+          {showVideoBelow ? (
             <section
-              className="song-detail-media"
-              role={hasTabNav ? 'tabpanel' : undefined}
-              id={hasTabNav ? 'song-panel-video' : undefined}
-              aria-labelledby={hasTabNav ? 'song-tab-video' : undefined}
+              ref={videoSectionRef}
+              className="song-detail-media song-detail-media--video song-detail-video-below song-detail-shell-section"
+              id="song-video-section"
+              aria-labelledby="song-video-below-heading"
             >
-              {!hasTabNav ? <h2 className="catalog-section-title">Video</h2> : null}
+              <h2 id="song-video-below-heading" className="catalog-section-title">
+                {SONG_VIDEO_SECTION_TITLE}
+              </h2>
               <section className="song-detail-youtube" aria-label="YouTube player">
-                {useSongVideoSpotlight && songVideoSpotlightFeatured ? (
+                {useSongVideoSpotlight && songVideoSpotlightFeatured && videoInView ? (
                   <CatalogVideoSpotlight
                     className="song-detail-youtube-spotlight"
                     featured={songVideoSpotlightFeatured}
                     rail={songVideoSpotlightRail}
                     activeVideoId={effectiveYoutubeVideoId}
                     onSelectVideo={setSelectedYoutubeVideoId}
-                    railEyebrow="Videos for this song"
-                    renderRailCell={(video, isActive, onSelect) => {
-                      const source = youtubeVideos.find((v) => v.video_id === video.videoId)
-                      return (
-                        <button
-                          type="button"
-                          className={`song-detail-youtube-vid${isActive ? ' is-active' : ''}`}
-                          aria-pressed={isActive}
-                          onClick={onSelect}
-                        >
-                          {source?.thumbnail_url ? (
-                            <span className="song-detail-youtube-vid-thumb">
-                              <img src={coverImageUrl(source.thumbnail_url, { width: 200 })} alt="" width={88} height={50} loading="lazy" />
-                            </span>
-                          ) : (
-                            <span className="song-detail-youtube-vid-thumb song-detail-youtube-vid-thumb--fallback" aria-hidden>
-                              ▶
-                            </span>
-                          )}
-                          <span className="song-detail-youtube-vid-copy">
-                            <span className="song-detail-youtube-vid-title">{video.title}</span>
-                            <span className="song-detail-youtube-vid-meta">
-                              {video.duration ? <span>{video.duration}</span> : null}
-                              {source?.publish_date ? <span>{source.publish_date.slice(0, 10)}</span> : null}
-                            </span>
-                          </span>
-                        </button>
-                      )
-                    }}
+                    railEyebrow="More for this song"
+                    renderRailCell={renderSongVideoRailCell}
                   />
-                ) : focusedYoutubeVideo?.can_embed ? (
-                  <YouTubeEmbed
+                ) : focusedYoutubeVideo?.can_embed && videoInView ? (
+                  <YoutubeEmbeddedPlayer
                     videoId={focusedYoutubeVideo.video_id}
                     title={`YouTube: ${focusedYoutubeVideo.title || detail.lyrics_title}`}
+                    iframeRef={youtubeExclusiveRef}
+                    loading="lazy"
+                    facadeUntilClick
                   />
                 ) : focusedYoutubeVideo ? (
                   <div className="song-detail-youtube-no-embed" role="region" aria-label="Selected video not embeddable">
@@ -1323,79 +1401,58 @@ function SongDetailLoaded({
                       this site.
                     </p>
                     {focusedYoutubeVideo.yt_url ? (
-                      <a className="song-detail-youtube-open" href={focusedYoutubeVideo.yt_url} target="_blank" rel="noreferrer">
+                      <a
+                        className="song-detail-youtube-open"
+                        href={focusedYoutubeVideo.yt_url}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         Watch on YouTube
                       </a>
                     ) : null}
                   </div>
                 ) : (
-                  <p className="song-detail-youtube-no-embed">No embeddable public video is available for in-app playback.</p>
+                  <p className="song-detail-youtube-no-embed">
+                    No embeddable public video is available for in-app playback.
+                  </p>
                 )}
               </section>
             </section>
           ) : null}
-              </div>
-            ) : null}
 
-            {hasLyrics ? (
-              <section className="song-detail-split__lyrics song-detail-lyrics" aria-labelledby="song-lyrics-heading">
-                <h2 id="song-lyrics-heading" className="catalog-section-title">
-                  Lyrics
-                </h2>
-                <div
-                  className={
-                    'song-detail-lyrics-frame' +
-                    (lyricsClampEnabled && lyricsTall && !lyricsExpanded
-                      ? ' song-detail-lyrics-frame--collapsed'
-                      : '')
-                  }
-                >
-                  <pre ref={lyricsPreRef} className="song-detail-lyrics-pre" id="song-lyrics-body">
-                    {detail.lyrics_text}
-                  </pre>
-                  {lyricsClampEnabled && lyricsTall ? (
-                    <button
-                      type="button"
-                      className="song-detail-lyrics-expand"
-                      aria-expanded={lyricsExpanded}
-                      aria-controls="song-lyrics-body"
-                      onClick={() => setLyricsExpanded((v) => !v)}
-                    >
-                      {lyricsExpanded ? 'Show less' : 'Show full lyrics'}
-                    </button>
-                  ) : null}
-                </div>
-              </section>
-            ) : null}
-          </div>
-
-          {orderedRelatedSongs.length ? (
-            <section className="song-detail-related" aria-labelledby="song-related-heading">
-              <h2 id="song-related-heading" className="catalog-section-title">
-                Related songs
-              </h2>
-              <ul className="song-thumb-grid song-thumb-grid--section">
-                {orderedRelatedSongs.slice(0, 8).map((related) => {
-                  const sutra = songCatalogByLyricsId.get(related.lyrics_id)?.sutra?.trim() ?? ''
-                  return (
-                    <li key={related.lyrics_id} className="song-thumb-grid__cell">
-                      <SongThumbCard
-                        to={songCatalogLinkTo(related.lyrics_title, related.url_slug, {
-                          section: (() => {
-                            const row = songCatalogByLyricsId.get(related.lyrics_id)
-                            return row && browseRowHasAudioSection(row) ? 'audio' : undefined
-                          })(),
-                        })}
-                        coverUrl={related.cover_image_url}
-                        title={related.lyrics_title}
-                        metaLabel={sutra || undefined}
-                      />
-                    </li>
-                  )
-                })}
-              </ul>
+          {songbookRecord && detail.songbook ? (
+            <section className="song-detail-shell-section">
+              <SongDetailAlsoPartOfCard book={songbookRecord} />
             </section>
           ) : null}
+
+          {orderedRelatedSongs.length ? (
+            <section
+              className="song-detail-shell-section song-detail-related"
+              aria-labelledby="song-related-heading"
+            >
+                <h2 id="song-related-heading" className="catalog-section-title">
+                  Sister songs
+                </h2>
+                <ul className="song-thumb-grid song-thumb-grid--section song-detail-sister-grid">
+                  {orderedRelatedSongs.slice(0, 8).map((related) => {
+                    const sutra = songCatalogByLyricsId.get(related.lyrics_id)?.sutra?.trim() ?? ''
+                    return (
+                      <li key={related.lyrics_id} className="song-thumb-grid__cell">
+                        <SongThumbCard
+                          to={songCatalogLinkTo(related.lyrics_title, related.url_slug)}
+                          coverUrl={related.cover_image_url}
+                          title={related.lyrics_title}
+                          metaLabel={sutra || undefined}
+                        />
+                      </li>
+                    )
+                  })}
+                </ul>
+            </section>
+          ) : null}
+
+          <SongDetailBertrandEntry sutra={detail.sutra} />
         </main>
       </div>
 
