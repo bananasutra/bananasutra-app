@@ -61,9 +61,6 @@ export function YoutubeEmbedOutboundFooter({ videoId, className }: { videoId: st
   if (!href) return null
   return (
     <p className={['yt-embed-outbound', className].filter(Boolean).join(' ')}>
-      <span className="yt-embed-outbound__note">
-        YouTube blocking video playback? Sorry. Proof the world is bananas…{' '}
-      </span>
       <a href={href} target="_blank" rel="noopener noreferrer" className="yt-embed-outbound__link">
         Watch on YouTube
       </a>
