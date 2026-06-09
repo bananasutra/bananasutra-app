@@ -7,6 +7,28 @@ export const PLAY_ALL_DESKTOP_MEDIA_QUERY = '(min-width: 900px)'
 export const PLAY_ALL_HONEST_MOBILE_COPY =
   'Play All works best on desktop. On mobile, open a songbook for uninterrupted listening.'
 
+/** Song page mobile hint — EP tab/stack beats songbook when both exist (e.g. song-specific EP remix grid). */
+export function songDetailPlayAllHonestMobileCopy({
+  hasFullEpListen,
+  hasFullEpTab,
+  hasSongbookPlaylist,
+}: {
+  hasFullEpListen: boolean
+  hasFullEpTab: boolean
+  hasSongbookPlaylist: boolean
+}): string {
+  if (hasFullEpListen && hasFullEpTab) {
+    return 'Play All works best on desktop. On mobile, switch to Full EP for uninterrupted listening.'
+  }
+  if (hasFullEpListen) {
+    return 'Play All works best on desktop. On mobile, use Full EP for uninterrupted listening.'
+  }
+  if (hasSongbookPlaylist) {
+    return 'Play All works best on desktop. On mobile, open a songbook for uninterrupted listening.'
+  }
+  return PLAY_ALL_HONEST_MOBILE_COPY
+}
+
 export function usePlayAllDesktopAvailable(): boolean {
   const subscribe = useCallback((onStoreChange: () => void) => {
     const mq = window.matchMedia(PLAY_ALL_DESKTOP_MEDIA_QUERY)
