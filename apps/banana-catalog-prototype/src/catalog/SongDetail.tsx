@@ -23,7 +23,11 @@ import {
 import { CatalogVideoSpotlight, type CatalogVideoSpotlightItem } from './CatalogVideoSpotlight'
 import { CatalogVideoSpotlightRailThumb } from './CatalogVideoSpotlightRailThumb'
 import { CatalogMediaOutbound } from './CatalogMediaOutbound'
-import { PLAY_ALL_HONEST_MOBILE_COPY, PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
+import {
+  PLAY_ALL_DESKTOP_MEDIA_QUERY,
+  songDetailPlayAllHonestMobileCopy,
+  usePlayAllDesktopAvailable,
+} from './playAllPlatform'
 import {
   findTrackByScUrl,
   trackSongDetailPlayAllStarted,
@@ -128,6 +132,9 @@ const SC_EMBED_HEIGHT_SET_PLAYLIST = 450
 /** Matches `@media (min-width: 900px)` for `.song-detail-split--two-col` — lyrics clamp only there. */
 const SONG_DETAIL_TWO_COL_MQ = '(min-width: 900px)'
 
+/** W-055 wireframe §6: cap top-tracks list before expand (balance vs. lyrics column). */
+const SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT = 3
+
 function useSongDetailLyricsClampViewport(): boolean {
   const subscribe = useCallback((onStoreChange: () => void) => {
     const mq = window.matchMedia(SONG_DETAIL_TWO_COL_MQ)
@@ -139,12 +146,8 @@ function useSongDetailLyricsClampViewport(): boolean {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 }
 
-/** Mirrors `--song-detail-lyrics-collapsed-max` in SongDetail.css (sum of rem terms + min(..., 82vh)). */
-function lyricsCollapsedMaxPx(): number {
-  if (typeof window === 'undefined') return Math.round(59.5 * 16)
-  const remPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16
-  const sumRem = 2.5 + 0.85 + 11 + 0.85 + 3 * 2.9 + 2 * 0.8 + 34
-  return Math.min(sumRem * remPx, window.innerHeight * 0.82)
+function lyricsPreOverflowsClippedBox(pre: HTMLPreElement): boolean {
+  return pre.scrollHeight > pre.clientHeight + 2
 }
 
 export function SongDetail() {
@@ -508,12 +511,14 @@ function SongDetailLoaded({
   const [soundcloudReloadKey, setSoundcloudReloadKey] = useState(0)
   const [lyricsExpanded, setLyricsExpanded] = useState(false)
   const [lyricsTall, setLyricsTall] = useState(false)
+  const [mediaColumnHeightPx, setMediaColumnHeightPx] = useState<number | null>(null)
   const [videoInView, setVideoInView] = useState(false)
   const lyricsPreRef = useRef<HTMLPreElement>(null)
   const epEmbedWrapRef = useRef<HTMLDivElement>(null)
   const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
   const exclusivePlaybackRef = useRef<ExclusiveYoutubeSoundcloudControls | null>(null)
   const videoSectionRef = useRef<HTMLElement>(null)
+  const mediaColumnRef = useRef<HTMLDivElement>(null)
 
   const songbookRecord = useMemo(
     () => (detail.songbook ? songbookByName(detail.songbook) : undefined),
@@ -558,6 +563,7 @@ function SongDetailLoaded({
   const playAllDesktopAvailable = usePlayAllDesktopAvailable()
 
   const [audioListenTab, setAudioListenTab] = useState<AudioListenTab>('tracks')
+  const [topTracksExpanded, setTopTracksExpanded] = useState(false)
   const [playAllTopTracksActive, setPlayAllTopTracksActive] = useState(false)
   const [isScPlaying, setIsScPlaying] = useState(false)
   const playAllTopTracksActiveRef = useRef(false)
@@ -814,6 +820,16 @@ function SongDetailLoaded({
   const useLyricsMediaSplit = hasLyrics && hasMediaColumnForSplit
   const hasListenTabNav = hasAudioSourceTabs && useLyricsMediaSplit
   const tracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Top tracks'
+  const topTracksHasOverflow = orderedTracks.length > SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT
+  const topTracksListExpanded = topTracksExpanded || !topTracksHasOverflow
+  const displayedTopTracks = topTracksListExpanded
+    ? orderedTracks
+    : orderedTracks.slice(0, SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT)
+  const playAllHonestMobileCopy = songDetailPlayAllHonestMobileCopy({
+    hasFullEpListen: showEpEmbed,
+    hasFullEpTab: hasListenTabNav,
+    hasSongbookPlaylist: Boolean(songbookPlaylistUrl),
+  })
 
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
@@ -839,41 +855,85 @@ function SongDetailLoaded({
   /** Collapse long lyrics only on desktop two-column layout — tablet/mobile and lyrics-only pages show full text. */
   const lyricsClampEnabled = useLyricsMediaSplit && isSongDetailTwoColDesktop
 
-  useLayoutEffect(() => {
+  const measureLyricsClamp = useCallback(() => {
     const pre = lyricsPreRef.current
-    if (!lyricsClampEnabled || !pre) {
+    if (!lyricsClampEnabled || !pre || lyricsExpanded) return
+    setLyricsTall(lyricsPreOverflowsClippedBox(pre))
+  }, [lyricsClampEnabled, lyricsExpanded])
+
+  const scheduleLyricsClampMeasure = useCallback(() => {
+    measureLyricsClamp()
+    requestAnimationFrame(() => {
+      measureLyricsClamp()
+      requestAnimationFrame(measureLyricsClamp)
+    })
+  }, [measureLyricsClamp])
+
+  useLayoutEffect(() => {
+    if (!lyricsClampEnabled) {
       setLyricsTall(false)
       return
     }
-    const maxPx = lyricsCollapsedMaxPx()
-    const prev = pre.style.maxHeight
-    pre.style.maxHeight = 'none'
-    const full = pre.scrollHeight
-    pre.style.maxHeight = prev
-    setLyricsTall(full > maxPx + 6)
-  }, [detail.lyrics_text, lyricsClampEnabled])
+    scheduleLyricsClampMeasure()
+  }, [
+    detail.lyrics_text,
+    lyricsClampEnabled,
+    lyricsExpanded,
+    scheduleLyricsClampMeasure,
+    topTracksExpanded,
+    audioListenTab,
+    hasListenTabNav,
+    inAppPlayableTracks.length,
+    orderedTracks.length,
+  ])
 
   useEffect(() => {
     queueMicrotask(() => {
       setLyricsExpanded(false)
       setAudioListenTab('tracks')
+      setTopTracksExpanded(false)
     })
   }, [detail.lyrics_id])
 
   useEffect(() => {
-    const onResize = () => {
-      const pre = lyricsPreRef.current
-      if (!lyricsClampEnabled || !pre) return
-      const maxPx = lyricsCollapsedMaxPx()
-      const prev = pre.style.maxHeight
-      pre.style.maxHeight = 'none'
-      const full = pre.scrollHeight
-      pre.style.maxHeight = prev
-      setLyricsTall(full > maxPx + 6)
+    if (!topTracksHasOverflow || topTracksExpanded) return
+    const activeIdx = orderedTracks.findIndex((t) => t.sc_url.trim() === playingUrl.trim())
+    if (activeIdx >= SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT) {
+      setTopTracksExpanded(true)
     }
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [lyricsClampEnabled, detail.lyrics_text])
+  }, [orderedTracks, playingUrl, topTracksHasOverflow, topTracksExpanded])
+
+  useEffect(() => {
+    if (!lyricsClampEnabled) {
+      queueMicrotask(() => setMediaColumnHeightPx(null))
+      return
+    }
+    const mediaCol = mediaColumnRef.current
+    if (!mediaCol || typeof ResizeObserver === 'undefined') return
+
+    const syncMediaColumnHeight = () => {
+      setMediaColumnHeightPx(mediaCol.offsetHeight)
+      scheduleLyricsClampMeasure()
+    }
+
+    syncMediaColumnHeight()
+    const observer = new ResizeObserver(syncMediaColumnHeight)
+    observer.observe(mediaCol)
+    window.addEventListener('resize', syncMediaColumnHeight)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', syncMediaColumnHeight)
+    }
+  }, [
+    lyricsClampEnabled,
+    scheduleLyricsClampMeasure,
+    detail.lyrics_id,
+    topTracksExpanded,
+    audioListenTab,
+    hasListenTabNav,
+    inAppPlayableTracks.length,
+    orderedTracks.length,
+  ])
 
   useEffect(() => {
     if (!youtubeVideosLoaded) return
@@ -1037,7 +1097,7 @@ function SongDetailLoaded({
             const splitBody = (
               <div className={splitClassName}>
                 {hasMediaColumnForSplit ? (
-                  <div className="song-detail-split__media">
+                  <div ref={mediaColumnRef} className="song-detail-split__media">
                     {hasListenTabNav ? (
                       <div className="song-detail-tabs" role="tablist" aria-label="Listen options">
                         <button
@@ -1225,7 +1285,7 @@ function SongDetailLoaded({
                       ) : null}
                       {!playAllDesktopAvailable ? (
                         <p className="song-detail-audio-hint song-detail-audio-hint--honest">
-                          {PLAY_ALL_HONEST_MOBILE_COPY}
+                          {playAllHonestMobileCopy}
                         </p>
                       ) : null}
                     </div>
@@ -1235,8 +1295,8 @@ function SongDetailLoaded({
                       Browsing genre: <strong>{activeTrackGenre}</strong>
                     </p>
                   ) : null}
-                  <ul className="song-detail-track-list">
-                    {orderedTracks.map((t) => {
+                  <ul className="song-detail-track-list" id="song-top-tracks-list">
+                    {displayedTopTracks.map((t) => {
                       const url = t.sc_url.trim()
                       const active = Boolean(url && playingUrl && url === playingUrl)
                       const hidden = !trackIsInApp(t)
@@ -1266,6 +1326,19 @@ function SongDetailLoaded({
                       )
                     })}
                   </ul>
+                  {topTracksHasOverflow ? (
+                    <button
+                      type="button"
+                      className="song-detail-panel-expand"
+                      aria-expanded={topTracksExpanded}
+                      aria-controls="song-top-tracks-list"
+                      onClick={() => setTopTracksExpanded((v) => !v)}
+                    >
+                      {topTracksExpanded
+                        ? 'Show less'
+                        : `Show all ${orderedTracks.length} top tracks →`}
+                    </button>
+                  ) : null}
                 </section>
               ) : null}
                       </section>
@@ -1326,7 +1399,15 @@ function SongDetailLoaded({
 
                 {hasLyrics ? (
                   <section
-                    className="song-detail-split__lyrics-col song-detail-lyrics"
+                    className={
+                      'song-detail-split__lyrics-col song-detail-lyrics' +
+                      (lyricsClampEnabled && !lyricsExpanded ? ' song-detail-lyrics-col--clamped' : '')
+                    }
+                    style={
+                      lyricsClampEnabled && !lyricsExpanded && mediaColumnHeightPx != null
+                        ? { maxHeight: mediaColumnHeightPx }
+                        : undefined
+                    }
                     aria-labelledby="song-lyrics-heading"
                   >
                     <h2 id="song-lyrics-heading" className="catalog-section-title">
@@ -1335,18 +1416,19 @@ function SongDetailLoaded({
                     <div
                       className={
                         'song-detail-lyrics-frame' +
-                        (lyricsClampEnabled && lyricsTall && !lyricsExpanded
-                          ? ' song-detail-lyrics-frame--collapsed'
+                        (lyricsClampEnabled && !lyricsExpanded ? ' song-detail-lyrics-frame--collapsed' : '') +
+                        (lyricsClampEnabled && !lyricsExpanded && lyricsTall
+                          ? ' song-detail-lyrics-frame--clipped'
                           : '')
                       }
                     >
                       <pre ref={lyricsPreRef} className="song-detail-lyrics-pre" id="song-lyrics-body">
                         {detail.lyrics_text}
                       </pre>
-                      {lyricsClampEnabled && lyricsTall ? (
+                      {lyricsClampEnabled && (lyricsTall || lyricsExpanded) ? (
                         <button
                           type="button"
-                          className="song-detail-lyrics-expand"
+                          className="song-detail-panel-expand"
                           aria-expanded={lyricsExpanded}
                           aria-controls="song-lyrics-body"
                           onClick={() => setLyricsExpanded((v) => !v)}

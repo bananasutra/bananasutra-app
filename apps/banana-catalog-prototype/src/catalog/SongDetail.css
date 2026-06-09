@@ -3,16 +3,7 @@
   color: var(--color-text-primary);
   padding: 0 0 2.5rem;
   --song-detail-narrow-col: minmax(200px, min(28vw, 280px));
-  /*
-    Collapsed lyrics max height: tall default to reduce clipping. Roughly anchored to a typical
-    audio tab stack — tab strip + embed chrome + three track rows (.song-detail-track + list gaps).
-    Final cap uses min(..., 82vh) so long songs still expand for full text.
-  */
-  --song-detail-lyrics-collapsed-max: min(
-    calc((2.5rem + 0.85rem) + 11rem + 0.85rem + (3 * 2.9rem) + (2 * 0.8rem) + 34rem),
-    82vh
-  );
-  /* Reduce jumps when hero / iframes resolve height after first paint (browser scroll anchoring). */
+  /* Reduce jumps when hero / iframes embeds resolve height after first paint (browser scroll anchoring). */
   overflow-anchor: none;
 }
 
@@ -481,28 +472,34 @@
 
 .song-detail-lyrics-frame--collapsed .song-detail-lyrics-pre {
   position: relative;
-  max-height: var(--song-detail-lyrics-collapsed-max);
   overflow: hidden;
 }
 
-/* Fade + ellipsis hint when lyrics are clipped */
-.song-detail-lyrics-frame--collapsed .song-detail-lyrics-pre::after {
+/* Fade + ellipsis hint when lyrics overflow the flex-filled box */
+.song-detail-lyrics-frame--clipped .song-detail-lyrics-pre::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 4rem;
+  height: 5.5rem;
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent, var(--color-bg-inset));
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--color-bg-inset) 50%, transparent) 38%,
+    var(--color-bg-inset) 100%
+  );
 }
 
-.song-detail-lyrics-frame--collapsed .song-detail-lyrics-pre::before {
+.song-detail-lyrics-frame--clipped .song-detail-lyrics-pre::before {
   content: '…';
   position: absolute;
-  right: var(--space-5);
-  bottom: 0.55rem;
+  left: 50%;
+  right: auto;
+  bottom: 0.65rem;
   z-index: 1;
+  transform: translateX(-50%);
   font-size: 1.35rem;
   line-height: 1;
   letter-spacing: 0.08em;
@@ -510,10 +507,12 @@
   pointer-events: none;
 }
 
-.song-detail-lyrics-expand {
-  align-self: flex-end;
+.song-detail-panel-expand {
+  display: block;
+  width: 100%;
+  align-self: center;
   margin: 0;
-  margin-top: 0.1rem;
+  margin-top: 0.35rem;
   padding: 0.4rem 0;
   min-height: 2.25rem;
   border: none;
@@ -522,6 +521,7 @@
   color: var(--color-link);
   font: 500 0.8rem/1.45 var(--font-ui);
   letter-spacing: 0.03em;
+  text-align: center;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
@@ -529,12 +529,12 @@
   cursor: pointer;
 }
 
-.song-detail-lyrics-expand:hover {
+.song-detail-panel-expand:hover {
   color: var(--color-link-hover);
   text-decoration-color: color-mix(in srgb, var(--color-link-hover) 55%, transparent);
 }
 
-.song-detail-lyrics-expand:focus-visible {
+.song-detail-panel-expand:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
 }
@@ -758,6 +758,26 @@
     grid-row: 1;
     margin-bottom: 0;
     min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .song-detail-split--two-col .song-detail-split__lyrics-col.song-detail-lyrics-col--clamped {
+    overflow: hidden;
+  }
+
+  /* Match lyrics column height to media column (player + 3 tracks); flex-fill clips overflow. */
+  .song-detail-split--two-col .song-detail-split__lyrics-col > .song-detail-lyrics-frame--collapsed {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .song-detail-split--two-col .song-detail-lyrics-frame--collapsed .song-detail-lyrics-pre {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
   }
 
   .song-detail-hero:not(.song-detail-hero--lyrics-only) {
@@ -1338,7 +1358,7 @@ h3.song-detail-youtube-subheading,
   .song-detail-tracks,
   .song-detail-audio-playall,
   .song-detail-related,
-  .song-detail-lyrics-expand,
+  .song-detail-panel-expand,
   .song-detail-split__media {
     display: none !important;
   }
