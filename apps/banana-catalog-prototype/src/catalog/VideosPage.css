@@ -104,10 +104,6 @@
   min-height: 0;
 }
 
-.videos-page__featured-hero-copy .catalog-featured-video-song-row {
-  margin-top: 0.7rem;
-}
-
 .videos-page__featured-hero-iframe {
   position: absolute;
   inset: 0;
@@ -132,22 +128,39 @@
   min-width: 0;
 }
 
+.videos-page__result-count {
+  margin: 0 0 1rem;
+}
+
 .videos-page__rail-section {
   margin-bottom: 1.35rem;
 }
 
-.videos-page__rail-heading {
-  margin: 0 0 0.5rem;
+.videos-page__section-heading {
+  margin: 0 0 0.35rem;
 }
 
-.videos-page__rail-heading--spaced {
+.videos-page__section-heading--spaced {
   margin-top: 0.25rem;
 }
 
-/* Override ScrollRail inner padding/margin for the reels row. */
-.videos-page__rail-scroll .scroll-rail__inner {
-  margin: 0 -0.25rem;
-  padding: 0.1rem 0;
+.videos-page__section-count {
+  color: var(--color-text-faint);
+  font-weight: 650;
+}
+
+.videos-page__grid-section .catalog-lp-section-intro {
+  margin-bottom: 0.75rem;
+}
+
+.videos-page__watch-crosslink {
+  display: inline-block;
+  margin: 1.15rem 0 0.35rem;
+}
+
+/* Reels rail: fade-mask scroll (Listen LP / watch spotlight pattern). */
+.videos-page__rail-scroll.listen-lp__scroll-rail .scroll-rail__inner {
+  padding: 0.1rem 0.15rem 0.2rem;
 }
 
 .videos-page__rail {
@@ -166,6 +179,7 @@
   padding: 0;
   flex: 0 0 auto;
   width: 148px;
+  scroll-snap-align: start;
 }
 
 .videos-page__card {

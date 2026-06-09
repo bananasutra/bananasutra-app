@@ -154,6 +154,15 @@ export function WatchLpPage() {
     setShowAllPlaylists(false)
   }, [activeSutra, activeGenre])
 
+  useEffect(() => {
+    if (window.location.hash !== '#watch-lp-playlists-heading') return
+    if (playlists === null) return
+    const timer = window.setTimeout(() => {
+      document.getElementById('watch-lp-playlists-heading')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 120)
+    return () => window.clearTimeout(timer)
+  }, [playlists])
+
   const activePlaylist = useMemo(() => {
     if (!visiblePlaylists.length) return null
     if (pickedPlaylistId && visiblePlaylists.some((pl) => pl.playlist_id === pickedPlaylistId)) {
