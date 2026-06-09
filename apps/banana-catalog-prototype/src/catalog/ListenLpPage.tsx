@@ -37,6 +37,9 @@ import './FeaturedSongbookSpotlight.css'
 import './songThumbCard.css'
 import './ListenLpPage.css'
 
+/** List-mode SC height for featured songbook playlist (track list, not cover art). */
+const LISTEN_LP_FEATURED_SONGBOOK_SC_HEIGHT = 450
+
 const LISTEN_LP_META = {
   title: 'Listen',
   description:
@@ -204,11 +207,14 @@ export function ListenLpPage() {
               <FeaturedSongbookSpotlight
                 book={featuredSongbook}
                 className="listen-lp__featured-spotlight"
+                layout="stacked"
                 ctaTo={songbookHrefFromCatalogItem(featuredSongbook)}
                 embed={
                   <LazySoundCloudEmbed
                     scUrl={featuredSongbook.playlist_url}
                     title={featuredSongbook.songbook}
+                    mode="list"
+                    height={LISTEN_LP_FEATURED_SONGBOOK_SC_HEIGHT}
                   />
                 }
               />
@@ -257,7 +263,7 @@ export function ListenLpPage() {
             {exploreSongbooksAll.length > LISTEN_LP_SONGBOOK_GRID_INITIAL && !showAllSongbooks ? (
               <button
                 type="button"
-                className="catalog-section-cta listen-lp__load-more"
+                className="catalog-index-show-more"
                 onClick={() => setShowAllSongbooks(true)}
               >
                 Load all {exploreSongbooksAll.length} songbooks

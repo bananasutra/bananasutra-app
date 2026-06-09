@@ -194,3 +194,29 @@
 .catalog-featured-embed-copy .catalog-media-outbound {
   margin-top: 0.35rem;
 }
+
+/* Index pages: load-all / show-more before infinite scroll (D-034 phased). */
+.catalog-index-show-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.4rem;
+  margin: 0.65rem 0 0.35rem;
+  padding: 0.65rem 0.95rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control, 2px);
+  background: var(--color-bg-panel);
+  color: var(--color-text-strong);
+  font: 700 0.72rem/1.35 var(--font-ui);
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.catalog-index-show-more:hover,
+.catalog-index-show-more:focus-visible {
+  border-color: color-mix(in srgb, var(--color-text-strong) 35%, var(--color-border));
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
