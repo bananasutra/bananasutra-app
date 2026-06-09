@@ -20,7 +20,7 @@ import { allSongbooks } from './songbooks'
 import { songbookSlugForYoutubePlaylist } from './songbookYoutubeMatch'
 import { WatchLpPlaylistEmbed } from './WatchLpPlaylistEmbed'
 import { WatchLpPlaylistThumb } from './WatchLpPlaylistThumb'
-import { WatchLpVideoPickThumb } from './WatchLpVideoPickThumb'
+import { CatalogVideoSpotlightRailThumb } from './CatalogVideoSpotlightRailThumb'
 import { pauseYoutubeEmbed } from './youtubeEmbedControl'
 import {
   dedupeWatchPlaylists,
@@ -30,6 +30,7 @@ import {
   WATCH_LP_META,
   WATCH_LP_PLAYLIST_GRID_LIMIT,
   watchLpRecentClipsNote,
+  watchLpVideoMetaLine,
   type WatchLpSutraFilter,
 } from './watchLpData'
 import { formatDurationDisplay } from './durationFormat'
@@ -236,7 +237,7 @@ export function WatchLpPage() {
 
           <header className="catalog-page-intro watch-lp__intro">
             <h1 className="catalog-page-h1">{WATCH_LP_META.lead}</h1>
-            <p className="catalog-page-sub catalog-page-shell__measure">{WATCH_LP_META.sub}</p>
+            <p className="catalog-page-sub">{WATCH_LP_META.sub}</p>
           </header>
 
           {catalogLoadError ? <p className="watch-lp__load-error">{catalogLoadError}</p> : null}
@@ -253,10 +254,10 @@ export function WatchLpPage() {
               <h2 id="watch-lp-spotlight-heading" className="catalog-section-title">
                 What&apos;s new?
               </h2>
-              <p className="watch-lp__section-intro">Most recent clips first. Tap a thumbnail to swap the player.</p>
+              <p className="catalog-lp-section-intro">Most recent clips first. Tap a thumbnail to swap the player.</p>
 
               <CatalogVideoSpotlight
-                className="watch-lp__spotlight-player"
+                className="watch-lp__spotlight-player catalog-video-spotlight--compact-rail"
                 featured={featuredSpotlight}
                 rail={railSpotlight}
                 activeVideoId={featuredVideo?.video_id ?? null}
@@ -267,13 +268,16 @@ export function WatchLpPage() {
                 renderRailCell={(video, isActive, onSelect) => {
                   const source = recentRail.shown.find((v) => v.video_id === video.videoId)
                   if (!source) return null
+                  const title = (source.lyrics_title || source.title || 'Video').trim()
                   const lid = (source.lyrics_id || '').trim()
+                  const inApp = Boolean(lid && inAppIds.has(lid))
                   return (
-                    <WatchLpVideoPickThumb
-                      video={source}
-                      inApp={Boolean(lid && inAppIds.has(lid))}
+                    <CatalogVideoSpotlightRailThumb
+                      thumbnailUrl={source.thumbnail_url}
+                      caption={watchLpVideoMetaLine(source, inApp)}
                       isActive={isActive}
                       onSelect={onSelect}
+                      ariaLabel={`${title}${isActive ? ' (now showing)' : ''}`}
                     />
                   )
                 }}
@@ -305,7 +309,7 @@ export function WatchLpPage() {
               <h2 id="watch-lp-playlists-heading" className="catalog-section-title">
                 BANANASUTRA cinema
               </h2>
-              <p className="watch-lp__section-intro">
+              <p className="catalog-lp-section-intro">
                 The longer form. Playlists organized by story or by sound. Pick one and stay a while.
               </p>
 

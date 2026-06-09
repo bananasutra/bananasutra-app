@@ -535,7 +535,6 @@ export function SutraDetailPage() {
                     facadeUntilClick
                     onBeforePlay={() => exclusivePlaybackRef.current?.pauseAllSoundcloud()}
                     onIframeLoad={() => setYoutubeIframeGen((g) => g + 1)}
-                    outboundFooterClassName="sutra-detail__yt-outbound"
                   />
                 </div>
                 <div className="sutra-detail__feat-copy">

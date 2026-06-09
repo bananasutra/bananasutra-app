@@ -87,10 +87,6 @@
   margin-bottom: 0.75rem;
 }
 
-.videos-page__featured-hero-embed-wrap .videos-page__featured-hero-yt-outbound {
-  max-width: none;
-}
-
 .videos-page__featured-hero-embed {
   position: relative;
   width: 100%;

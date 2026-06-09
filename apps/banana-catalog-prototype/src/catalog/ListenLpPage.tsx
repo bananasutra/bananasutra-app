@@ -138,14 +138,14 @@ export function ListenLpPage() {
 
           <header className="catalog-page-intro listen-lp__intro">
             <h1 className="catalog-page-h1">{LISTEN_LP_META.lead}</h1>
-            <p className="catalog-page-sub catalog-page-shell__measure">{LISTEN_LP_META.sub}</p>
+            <p className="catalog-page-sub">{LISTEN_LP_META.sub}</p>
           </header>
 
           <section className="catalog-page-shell__section listen-lp__section" aria-labelledby="listen-lp-new-heading">
             <h2 id="listen-lp-new-heading" className="catalog-section-title">
               What&apos;s new?
             </h2>
-            <p className="listen-lp__section-intro">
+            <p className="catalog-lp-section-intro">
               Fresh in. Lyrics, meaning, and playback on each song page.
             </p>
             {latestSongs.length ? (
@@ -198,7 +198,7 @@ export function ListenLpPage() {
               <h2 id="listen-lp-featured-heading" className="catalog-section-title">
                 Discover a songbook
               </h2>
-              <p className="listen-lp__section-intro">
+              <p className="catalog-lp-section-intro">
                 A curated playlist, organized around a single theme. Full lyrics on the song page.
               </p>
               <FeaturedSongbookSpotlight
@@ -222,7 +222,7 @@ export function ListenLpPage() {
             <h2 id="listen-lp-songbooks-block-heading" className="catalog-section-title">
               Explore songbooks
             </h2>
-            <p className="listen-lp__section-intro listen-lp__songbooks-block-intro">
+            <p className="catalog-lp-section-intro listen-lp__songbooks-block-intro">
               Pick one guiding question or one genre. All matching songbooks show in the grid below.
             </p>
 

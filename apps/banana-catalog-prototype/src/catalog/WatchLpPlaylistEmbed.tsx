@@ -5,6 +5,8 @@ import type { YouTubePlaylistCatalogItem } from './types'
 import { songbookCatalogPath } from './songPaths'
 import { watchLpPlaylistMetaLine } from './watchLpData'
 import { youtubePlaylistEmbedSrc } from './youtubeEmbedUrl'
+import { CatalogMediaOutbound } from './CatalogMediaOutbound'
+import './WatchLpPlaylistEmbed.css'
 
 const YT_IFRAME_ALLOW =
   'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
@@ -98,18 +100,14 @@ function WatchLpPlaylistEmbedInner({
           )}
         </div>
         {ytHref || songbookSlug ? (
-          <p className="watch-lp__playlist-embed-actions">
+          <div className="watch-lp__playlist-embed-actions">
             {songbookSlug ? (
               <Link className="watch-lp__playlist-embed-songbook-link" to={songbookCatalogPath(songbookSlug)}>
                 View songbook →
               </Link>
             ) : null}
-            {ytHref ? (
-              <a className="watch-lp__playlist-embed-yt-link" href={ytHref} target="_blank" rel="noopener noreferrer">
-                Open on YouTube ↗
-              </a>
-            ) : null}
-          </p>
+            {ytHref ? <CatalogMediaOutbound href={ytHref} /> : null}
+          </div>
         ) : null}
       </div>
     </div>

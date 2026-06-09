@@ -51,7 +51,7 @@ export function LearnLpPage() {
 
           <header className="catalog-page-intro learn-lp__intro">
             <h1 className="catalog-page-h1">{LEARN_LP_META.lead}</h1>
-            <p className="catalog-page-sub catalog-page-shell__measure">{LEARN_LP_META.sub}</p>
+            <p className="catalog-page-sub">{LEARN_LP_META.sub}</p>
           </header>
 
           <LearnLpHub songCatalog={songCatalogRows} />
