@@ -13,6 +13,7 @@ import {
   pickWordsSample,
   type LearnHubTileKey,
 } from './learnLpData'
+import { MANIFESTO_LEARN_TEASER } from './manifestoContent'
 import { useMusesCatalog } from './generatedData'
 import { SUTRA_CONTEXT, type SutraFamilyKey, sutraHrefForFamily } from './sutraContext'
 import { sutraClassName } from './sutraTheme'
@@ -231,17 +232,18 @@ function LearnHubManifestoPanel() {
   return (
     <LearnHubStagePanel
       footer={
-        <Link className="learn-lp__panel-cta-btn" to={LEARN_HUB_LINKS.manifestoSong}>
-          Read the manifesto song →
-        </Link>
+        <>
+          <Link className="learn-lp__panel-cta-btn" to={LEARN_HUB_LINKS.manifesto}>
+            Read the full manifesto →
+          </Link>
+          <Link className="learn-lp__panel-secondary-btn learn-lp__manifesto-song-link" to={LEARN_HUB_LINKS.manifestoSong}>
+            Read the manifesto song →
+          </Link>
+        </>
       }
     >
-      <p className="learn-lp__manifesto-note">Coming soon: the full AI fair use manifesto, written for skeptics and sharers.</p>
-      <p className="learn-lp__panel-lead">Human words. AI as instrument. Creative lineage, not creative theft.</p>
-      <p className="learn-lp__panel-text">
-        Every lyric on this site is written by a human. Suno (and other tools) generate sonic canvas the way a sampler
-        generates groove: the philosophy, the questions, and the naked truth in the words are the art.
-      </p>
+      <blockquote className="learn-lp__manifesto-teaser-quote">{MANIFESTO_LEARN_TEASER.pullQuote}</blockquote>
+      <p className="learn-lp__manifesto-framework-labels">{MANIFESTO_LEARN_TEASER.frameworkLabels}</p>
     </LearnHubStagePanel>
   )
 }

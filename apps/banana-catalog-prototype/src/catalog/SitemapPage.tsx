@@ -89,6 +89,12 @@ const ABOUT_HUB_LINKS: { to: string; label: string; pathLabel: string; descripti
     pathLabel: canonicalPathForRoute('/quotes'),
     description: 'Quote wall with links into related songs and themes.',
   },
+  {
+    to: canonicalPathForRoute('/manifesto'),
+    label: 'Manifesto',
+    pathLabel: canonicalPathForRoute('/manifesto'),
+    description: 'AI art fair use manifesto: liberty, equality, fraternity for human authorship and AI as instrument.',
+  },
 ]
 
 const SITEMAP_SECTION_IDS = {

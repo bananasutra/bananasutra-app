@@ -59,6 +59,7 @@ export function listPrerenderRoutes() {
     '/sutras',
     '/muses',
     '/quotes',
+    '/manifesto',
     '/sitemap',
     '/style-guide',
   ]
