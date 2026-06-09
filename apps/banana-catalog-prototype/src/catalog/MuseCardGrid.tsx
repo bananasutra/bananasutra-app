@@ -12,6 +12,7 @@ import {
   type CatalogFilterBarFacetGroup,
 } from './CatalogFilterBar'
 import './CatalogApp.css'
+import './catalog-page-shell.css'
 
 const INITIAL_MUSE_COUNT = 30
 
@@ -474,7 +475,7 @@ export function MuseCardGrid() {
         <h2 id="muses-title" className="catalog-section-title about-page__anchor-target">
           The muses
         </h2>
-        <p className="about-page__prose">
+        <p className="catalog-lp-section-intro">
           {formatCount(rows.length)} thinkers, fools, poets, and troublemakers who inspired the songs.
         </p>
 
@@ -548,11 +549,15 @@ export function MuseCardGrid() {
           )}
 
           {!showAll && filtered.length > INITIAL_MUSE_COUNT ? (
-            <button type="button" className="about-show-all" onClick={() => setShowAll(true)}>
-              Show all {formatCount(filtered.length)} muses
+            <button type="button" className="catalog-index-show-more" onClick={() => setShowAll(true)}>
+              Load all {formatCount(filtered.length)} muses
             </button>
           ) : null}
         </div>
+
+        <Link className="catalog-section-cta about-muses-crosslink" to={canonicalPathForRoute('/quotes')}>
+          Read the quotes →
+        </Link>
       </section>
     </div>
   )

@@ -12,6 +12,7 @@ import {
   type CatalogFilterBarActivePill,
   type CatalogFilterBarFacetGroup,
 } from './CatalogFilterBar'
+import './catalog-page-shell.css'
 
 function formatCount(n: number): string {
   return new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(n)
@@ -46,6 +47,65 @@ function sortQuotes(rows: QuoteWallItem[]): QuoteWallItem[] {
       topicLabel(a.core_topic).localeCompare(topicLabel(b.core_topic)) ||
       a.muse.localeCompare(b.muse) ||
       a.quote.localeCompare(b.quote),
+  )
+}
+
+function museHref(muse: string): string {
+  return `${canonicalPathForRoute('/muses')}?muse=${encodeURIComponent(muse)}`
+}
+
+type QuoteTopicCluster = {
+  topic: string
+  quotes: QuoteWallItem[]
+}
+
+function buildTopicClusters(rows: QuoteWallItem[]): QuoteTopicCluster[] {
+  const byTopic = new Map<string, QuoteWallItem[]>()
+  for (const row of rows) {
+    const topic = topicLabel(row.core_topic)
+    const list = byTopic.get(topic) ?? []
+    list.push(row)
+    byTopic.set(topic, list)
+  }
+  return [...byTopic.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([topic, items]) => ({
+      topic,
+      quotes: sortQuotes(items),
+    }))
+}
+
+function QuoteItem({ item, showTopic = true }: { item: QuoteWallItem; showTopic?: boolean }) {
+  const topic = topicLabel(item.core_topic)
+  return (
+    <figure className="quote-item">
+      <span className="quote-item__mark" aria-hidden>
+        &ldquo;
+      </span>
+      <blockquote className="quote-item__text">{item.quote}</blockquote>
+      <figcaption className="quote-item__meta">
+        {showTopic ? <span className="quote-item__topic">{topic}</span> : null}
+        <Link to={museHref(item.muse)}>{item.muse}</Link>
+        {quoteSutras(item).map((sutra) => {
+          const family = sutraFamilyFromDisplay(sutra)
+          if (!family) return null
+          return (
+            <Link
+              key={sutra}
+              className={`quote-item__sutra-link catalog-facet-sutra-name ${sutraClassName(sutra)}`}
+              to={sutraHrefForFamily(family)}
+            >
+              {sutra}
+            </Link>
+          )
+        })}
+        {item.inspired_song ? (
+          <Link className="quote-item__song" to={songCatalogPath(item.inspired_song.title, item.inspired_song.slug)}>
+            inspired: {item.inspired_song.title}
+          </Link>
+        ) : null}
+      </figcaption>
+    </figure>
   )
 }
 
@@ -104,6 +164,8 @@ export function QuoteWall() {
     })
   }, [findQuote, rows, topicFilter])
   const sortedQuotes = useMemo(() => sortQuotes(filtered), [filtered])
+  const topicClusters = useMemo(() => buildTopicClusters(sortedQuotes), [sortedQuotes])
+  const showGrouped = !normalizeSearch(findQuote)
 
   const findQuery = findQuote.trim()
   const quoteActivePills: CatalogFilterBarActivePill[] = []
@@ -172,8 +234,9 @@ export function QuoteWall() {
         <h2 id="quotes-title" className="catalog-section-title about-page__anchor-target">
           The quotes
         </h2>
-        <p className="about-page__prose">
-          {formatCount(rows.length)} sparks that lit the songs. Filter by topic or search when you want a narrower lane.
+        <p className="catalog-lp-section-intro">
+          {formatCount(rows.length)} sparks that lit the songs. Grouped by what they&apos;re about. Filter by topic or
+          search when you want a narrower lane.
         </p>
 
         <CatalogFilterBar
@@ -197,42 +260,42 @@ export function QuoteWall() {
         />
 
         <div className="quote-wall">
-          <div className="quote-cluster__items">
-            {sortedQuotes.map((item) => {
-              const topic = topicLabel(item.core_topic)
-              return (
-                <figure key={item.quote_id || `${item.muse}-${item.quote}`} className="quote-item">
-                  <span className="quote-item__mark" aria-hidden>
-                    &ldquo;
-                  </span>
-                  <blockquote className="quote-item__text">{item.quote}</blockquote>
-                  <figcaption className="quote-item__meta">
-                    <span className="quote-item__topic">{topic}</span>
-                    <Link to={`/muses?muse=${encodeURIComponent(item.muse)}`}>{item.muse}</Link>
-                    {quoteSutras(item).map((sutra) => {
-                      const family = sutraFamilyFromDisplay(sutra)
-                      if (!family) return null
-                      return (
-                        <Link
-                          key={sutra}
-                          className={`quote-item__sutra-link catalog-facet-sutra-name ${sutraClassName(sutra)}`}
-                          to={sutraHrefForFamily(family)}
-                        >
-                          {sutra}
-                        </Link>
-                      )
-                    })}
-                    {item.inspired_song ? (
-                      <Link className="quote-item__song" to={songCatalogPath(item.inspired_song.title, item.inspired_song.slug)}>
-                        inspired: {item.inspired_song.title}
-                      </Link>
-                    ) : null}
-                  </figcaption>
-                </figure>
-              )
-            })}
-          </div>
+          {showGrouped ? (
+            topicClusters.map((cluster) => (
+              <section
+                key={cluster.topic}
+                className="quote-cluster"
+                aria-labelledby={`quotes-topic-${cluster.topic.replace(/\s+/g, '-').toLowerCase()}`}
+              >
+                <h3
+                  id={`quotes-topic-${cluster.topic.replace(/\s+/g, '-').toLowerCase()}`}
+                  className="quote-cluster__title"
+                >
+                  {cluster.topic} <span>({formatCount(cluster.quotes.length)})</span>
+                </h3>
+                <div className="quote-cluster__items">
+                  {cluster.quotes.map((item) => (
+                    <QuoteItem
+                      key={item.quote_id || `${item.muse}-${item.quote}`}
+                      item={item}
+                      showTopic={false}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))
+          ) : (
+            <div className="quote-cluster__items">
+              {sortedQuotes.map((item) => (
+                <QuoteItem key={item.quote_id || `${item.muse}-${item.quote}`} item={item} />
+              ))}
+            </div>
+          )}
         </div>
+
+        <Link className="catalog-section-cta about-quotes-crosslink" to={canonicalPathForRoute('/muses')}>
+          Meet the muses →
+        </Link>
       </section>
     </div>
   )

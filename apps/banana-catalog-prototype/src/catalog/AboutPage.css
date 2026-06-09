@@ -625,7 +625,7 @@
   margin-top: 0;
 }
 
-.about-muses-main .about-show-all {
+.about-muses-main .catalog-index-show-more {
   margin-top: 1rem;
 }
 
@@ -798,6 +798,16 @@
   margin-top: var(--about-rhythm);
 }
 
+.quote-cluster {
+  margin: 0;
+}
+
+.about-quotes-crosslink,
+.about-muses-crosslink {
+  display: block;
+  margin-top: 1.15rem;
+}
+
 .quote-cluster__title {
   margin: 0 0 0.85rem;
   padding-bottom: 0.45rem;
@@ -823,7 +833,6 @@
   padding: 0.35rem 0 1.15rem 2rem;
   border-bottom: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
   background: transparent !important;
-  min-height: 6.5rem;
 }
 
 .quote-item__mark {
@@ -838,7 +847,6 @@
 
 .quote-item__text {
   margin: 0;
-  min-height: 2.75em;
   color: var(--color-text-strong);
   font-family: var(--font-display);
   font-size: clamp(1.08rem, 3.2vw, 1.35rem);
