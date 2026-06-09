@@ -16,7 +16,10 @@ import { SoundCloudPassthroughEmbed } from './SoundCloudPassthroughEmbed'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import { SongDetailAlsoPartOfCard } from './SongDetailAlsoPartOfCard'
 import { SongDetailBertrandEntry } from './SongDetailBertrandEntry'
-import { useExclusiveYoutubeSoundcloudPlayback } from './useExclusiveYoutubeSoundcloudPlayback'
+import {
+  useExclusiveYoutubeSoundcloudPlayback,
+  type ExclusiveYoutubeSoundcloudControls,
+} from './useExclusiveYoutubeSoundcloudPlayback'
 import { CatalogVideoSpotlight, type CatalogVideoSpotlightItem } from './CatalogVideoSpotlight'
 import { PLAY_ALL_HONEST_MOBILE_COPY, PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
 import {
@@ -524,6 +527,7 @@ function SongDetailLoaded({
   const lyricsPreRef = useRef<HTMLPreElement>(null)
   const epEmbedWrapRef = useRef<HTMLDivElement>(null)
   const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
+  const exclusivePlaybackRef = useRef<ExclusiveYoutubeSoundcloudControls | null>(null)
   const videoSectionRef = useRef<HTMLElement>(null)
 
   const songbookRecord = useMemo(
@@ -830,8 +834,21 @@ function SongDetailLoaded({
     youtubeIframeRef: youtubeExclusiveRef,
     soundcloudWrapRefs: [epEmbedWrapRef, playerWrapRef],
     enabled: Boolean(showEpPanel || hasPlayableTrack || hasYoutubeVideos),
-    syncKey: `${lyricsId}|ep:${primaryEpUrl}|tr:${playingUrl}|tab:${audioListenTab}`,
+    controlsRef: exclusivePlaybackRef,
+    syncKey: `${lyricsId}|ep:${primaryEpUrl}|tr:${playingUrl}|tab:${audioListenTab}|yt:${effectiveYoutubeVideoId}`,
   })
+
+  const pauseSoundcloudForVideo = useCallback(() => {
+    exclusivePlaybackRef.current?.pauseAllSoundcloud()
+  }, [])
+
+  const selectYoutubeVideo = useCallback(
+    (videoId: string) => {
+      pauseSoundcloudForVideo()
+      setSelectedYoutubeVideoId(videoId)
+    },
+    [pauseSoundcloudForVideo],
+  )
   const requestedMode = (searchParams.get('mode') ?? '').trim().toLowerCase()
   const isSongDetailTwoColDesktop = useSongDetailLyricsClampViewport()
   /** Collapse long lyrics only on desktop two-column layout — tablet/mobile and lyrics-only pages show full text. */
@@ -1286,9 +1303,11 @@ function SongDetailLoaded({
                               featured={songVideoSpotlightFeatured}
                               rail={songVideoSpotlightRail}
                               activeVideoId={effectiveYoutubeVideoId}
-                              onSelectVideo={setSelectedYoutubeVideoId}
+                              onSelectVideo={selectYoutubeVideo}
                               railEyebrow="More for this song"
                               renderRailCell={renderSongVideoRailCell}
+                              iframeRef={youtubeExclusiveRef}
+                              onBeforePlay={pauseSoundcloudForVideo}
                             />
                           ) : focusedYoutubeVideo?.can_embed && videoInView ? (
                             <YoutubeEmbeddedPlayer
@@ -1297,6 +1316,7 @@ function SongDetailLoaded({
                               iframeRef={youtubeExclusiveRef}
                               loading="lazy"
                               facadeUntilClick
+                              onBeforePlay={pauseSoundcloudForVideo}
                             />
                           ) : focusedYoutubeVideo ? (
                             <div className="song-detail-youtube-no-embed" role="region" aria-label="Selected video not embeddable">
@@ -1382,9 +1402,11 @@ function SongDetailLoaded({
                     featured={songVideoSpotlightFeatured}
                     rail={songVideoSpotlightRail}
                     activeVideoId={effectiveYoutubeVideoId}
-                    onSelectVideo={setSelectedYoutubeVideoId}
+                    onSelectVideo={selectYoutubeVideo}
                     railEyebrow="More for this song"
                     renderRailCell={renderSongVideoRailCell}
+                    iframeRef={youtubeExclusiveRef}
+                    onBeforePlay={pauseSoundcloudForVideo}
                   />
                 ) : focusedYoutubeVideo?.can_embed && videoInView ? (
                   <YoutubeEmbeddedPlayer
@@ -1393,6 +1415,7 @@ function SongDetailLoaded({
                     iframeRef={youtubeExclusiveRef}
                     loading="lazy"
                     facadeUntilClick
+                    onBeforePlay={pauseSoundcloudForVideo}
                   />
                 ) : focusedYoutubeVideo ? (
                   <div className="song-detail-youtube-no-embed" role="region" aria-label="Selected video not embeddable">

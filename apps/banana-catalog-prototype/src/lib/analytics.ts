@@ -40,6 +40,7 @@ export type PlayAllQueueSource = Exclude<QueueSource, 'single'>
 
 export type BertrandSurface =
   | 'home_hero'
+  | 'home_discovery_nudge'
   | 'learn_lp_tail'
   | 'listen_lp_tail'
   | 'watch_lp_tail'

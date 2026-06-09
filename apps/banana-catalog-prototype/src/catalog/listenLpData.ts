@@ -104,12 +104,15 @@ export function pickTopTracksForListenLp(catalog: TrackCatalogItem[] | null): Tr
   return pool
 }
 
-export function pickLatestSongsForListenLp(catalog: SongCatalogItem[] | null): SongCatalogItem[] {
+export function pickLatestSongsForListenLp(
+  catalog: SongCatalogItem[] | null,
+  limit = LISTEN_LP_LATEST_SONGS_LIMIT,
+): SongCatalogItem[] {
   if (!catalog?.length) return []
   return [...catalog]
     .filter((s) => (s.url_slug || '').trim() && (s.cover_image_url || '').trim())
     .sort((a, b) => parsePublishedAt(b.published_at) - parsePublishedAt(a.published_at))
-    .slice(0, LISTEN_LP_LATEST_SONGS_LIMIT)
+    .slice(0, limit)
 }
 
 export function pickFeaturedListenSongbook(books: ListenLpSongbookPick[]): ListenLpSongbookPick | null {
