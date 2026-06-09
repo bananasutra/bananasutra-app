@@ -30,7 +30,7 @@ import {
   WATCH_LP_META,
   WATCH_LP_PLAYLIST_GRID_LIMIT,
   watchLpRecentClipsNote,
-  watchLpVideoMetaLine,
+  watchLpVideoRailThumbLines,
   type WatchLpSutraFilter,
 } from './watchLpData'
 import { formatDurationDisplay } from './durationFormat'
@@ -269,12 +269,12 @@ export function WatchLpPage() {
                   const source = recentRail.shown.find((v) => v.video_id === video.videoId)
                   if (!source) return null
                   const title = (source.lyrics_title || source.title || 'Video').trim()
-                  const lid = (source.lyrics_id || '').trim()
-                  const inApp = Boolean(lid && inAppIds.has(lid))
+                  const railLines = watchLpVideoRailThumbLines(source)
                   return (
                     <CatalogVideoSpotlightRailThumb
                       thumbnailUrl={source.thumbnail_url}
-                      caption={watchLpVideoMetaLine(source, inApp)}
+                      sutra={railLines.sutra}
+                      duration={railLines.duration}
                       isActive={isActive}
                       onSelect={onSelect}
                       ariaLabel={`${title}${isActive ? ' (now showing)' : ''}`}

@@ -70,10 +70,20 @@
   --catalog-shell-section-label-tracking: 0.08em;
   --catalog-shell-section-label-color: var(--color-text-primary);
 
-  /* Featured full-width video blocks — title must read below section `.catalog-section-title` (h2). */
-  --catalog-featured-embed-title-size: clamp(0.98rem, 2.1vw, 1.12rem);
-  --catalog-featured-embed-title-weight: 600;
+  /*
+   * Featured embed copy below player (watch LP cinema, spotlight hero, sutra detail, /videos).
+   * Smaller than section h2 — one rhythm sitewide.
+   */
+  --catalog-featured-embed-copy-gap-top: 0.55rem;
+  --catalog-featured-embed-title-size: 0.82rem;
+  --catalog-featured-embed-title-weight: 700;
   --catalog-featured-embed-title-line-height: 1.35;
+  --catalog-featured-embed-meta-size: 0.62rem;
+  --catalog-featured-embed-meta-line-height: 1.4;
+  --catalog-featured-embed-desc-size: 0.68rem;
+  --catalog-featured-embed-desc-line-height: 1.45;
+  --catalog-featured-embed-thumb-sutra-size: 0.58rem;
+  --catalog-featured-embed-thumb-duration-size: 0.56rem;
 
   /*
    * Section CTA — right-aligned, uppercase Sora, underline+arrow.

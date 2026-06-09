@@ -3,9 +3,14 @@ import { Link } from 'react-router-dom'
 import { coverImageUrl } from '../seo/imageUrl'
 import type { YouTubePlaylistCatalogItem } from './types'
 import { songbookCatalogPath } from './songPaths'
-import { watchLpPlaylistMetaLine } from './watchLpData'
+import {
+  watchLpPlaylistEmbedDescription,
+  watchLpPlaylistMetaLine,
+  watchLpPlaylistThumbLabel,
+} from './watchLpData'
 import { youtubePlaylistEmbedSrc } from './youtubeEmbedUrl'
 import { CatalogMediaOutbound } from './CatalogMediaOutbound'
+import './catalog-page-shell.css'
 import './WatchLpPlaylistEmbed.css'
 
 const YT_IFRAME_ALLOW =
@@ -52,6 +57,8 @@ function WatchLpPlaylistEmbedInner({
   }, [playlistId, facadeReleased])
 
   const title = playlist.playlist_name.trim() || 'YouTube playlist'
+  const displayTitle = watchLpPlaylistThumbLabel(playlist) || title
+  const description = watchLpPlaylistEmbedDescription(playlist)
   const poster = playlist.thumbnail_url ? coverImageUrl(playlist.thumbnail_url, { width: 640 }) : null
   const ytHref = (playlist.playlist_url || '').trim()
 
@@ -98,6 +105,13 @@ function WatchLpPlaylistEmbedInner({
               allowFullScreen
             />
           )}
+        </div>
+        <div className="catalog-featured-embed-copy">
+          <p className="catalog-featured-embed-copy__title">{displayTitle}</p>
+          <p className="catalog-featured-embed-copy__meta">
+            {watchLpPlaylistMetaLine(playlist, durationByName)}
+          </p>
+          {description ? <p className="catalog-featured-embed-copy__desc">{description}</p> : null}
         </div>
         {ytHref || songbookSlug ? (
           <div className="watch-lp__playlist-embed-actions">

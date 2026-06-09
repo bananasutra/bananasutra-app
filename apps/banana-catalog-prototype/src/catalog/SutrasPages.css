@@ -155,22 +155,6 @@
   width: 100%;
 }
 
-.sutra-detail__media-block-item-title {
-  margin: 0 0 0.45rem;
-  font-family: var(--font-body);
-  font-weight: var(--catalog-featured-embed-title-weight);
-  font-size: var(--catalog-featured-embed-title-size);
-  line-height: var(--catalog-featured-embed-title-line-height);
-  color: var(--color-text-strong);
-}
-
-.sutra-detail__media-block-desc {
-  margin: 0 0 0.65rem;
-  font-size: 0.88rem;
-  line-height: 1.55;
-  color: var(--color-text-muted);
-}
-
 .sutra-detail__media-block-copy .catalog-media-outbound {
   margin-top: 0.5rem;
 }

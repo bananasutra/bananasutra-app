@@ -71,10 +71,6 @@ export function watchLpPlaylistMetaLine(
     const sutra = resolveWatchLpPlaylistSutra(pl)
     if (sutra) parts.push(sutra)
   }
-  if (watchLpPlaylistKind(pl) === 'genre') {
-    const genre = playlistGenreLabel(pl.playlist_name)
-    if (genre) parts.push(genre)
-  }
   if (pl.video_count) parts.push(`${pl.video_count} videos`)
   if (durationByName) {
     const duration = watchLpPlaylistDurationTotal(pl, durationByName)
@@ -83,11 +79,25 @@ export function watchLpPlaylistMetaLine(
   return parts.filter(Boolean).join(' · ')
 }
 
+export function watchLpPlaylistEmbedDescription(pl: YouTubePlaylistCatalogItem): string {
+  return (pl.featured_description || pl.description || '').trim()
+}
+
 export function watchLpVideoMetaLine(video: YouTubeCatalogVideo, inApp: boolean): string {
   const duration = formatDurationDisplay(video.duration)
   const parts = [(video.sutra || '').trim(), duration, (video.content_type || '').trim()].filter(Boolean)
   if (!inApp) parts.push('YouTube-only')
   return parts.join(' · ')
+}
+
+/** Compact rail thumb: sutra on one line, duration on the next (no content type). */
+export function watchLpVideoRailThumbLines(video: YouTubeCatalogVideo): {
+  sutra: string | null
+  duration: string | null
+} {
+  const sutra = (video.sutra || '').trim() || null
+  const duration = formatDurationDisplay(video.duration) || null
+  return { sutra, duration }
 }
 
 function matchesSutraFilter(pl: YouTubePlaylistCatalogItem, sutra: WatchLpSutraFilter): boolean {
