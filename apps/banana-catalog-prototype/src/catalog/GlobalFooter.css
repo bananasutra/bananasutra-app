@@ -10,6 +10,15 @@
   min-height: 13rem;
 }
 
+@media (max-width: 767px) {
+  /* Bleed to viewport via catalog page padding — avoids 100vw scrollbar overflow in Chrome DevTools. */
+  .catalog-footer {
+    width: calc(100% + 2rem);
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+}
+
 .catalog-footer__inner {
   width: 100%;
   max-width: var(--catalog-layout-max-width);
@@ -33,6 +42,15 @@
   width: calc(100% + 2rem);
   margin-left: -1rem;
   margin-right: -1rem;
+}
+
+@media (min-width: 768px) {
+  /* Full-viewport divider — __inner is max-width centered; padding breakout alone stops at ~960px. */
+  .footer-contact {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
 }
 
 /* ---- Full-width toggle row ---- */

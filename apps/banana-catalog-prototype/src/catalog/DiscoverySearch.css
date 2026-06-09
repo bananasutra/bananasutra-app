@@ -24,23 +24,26 @@
 }
 
 @media (max-width: 767px) {
-  .discovery-search--header.discovery-search--header-mobile-open .discovery-search__mobile-sheet--fullscreen {
+  /* Top-anchored sheet — content height only; page below stays clickable to dismiss. */
+  .discovery-search--header.discovery-search--header-mobile-open .discovery-search__mobile-sheet--mobile-open {
     display: flex;
     flex-direction: column;
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 240;
     box-sizing: border-box;
     width: 100%;
-    max-width: 100vw;
+    max-width: 100%;
     padding:
       0.5rem
       max(1rem, env(safe-area-inset-right, 0px))
-      0.85rem
+      0
       max(1rem, env(safe-area-inset-left, 0px));
     gap: 0.4rem;
-    background: var(--color-bg-page);
-    overflow: hidden;
+    background: transparent;
+    overflow: visible;
   }
 
   .discovery-search--header.discovery-search--header-mobile-open .discovery-search__field {
@@ -55,7 +58,8 @@
   }
 
   .discovery-search--header.discovery-search--header-mobile-open .discovery-search__icon {
-    font-size: 0.95rem;
+    font-size: 1.15rem;
+    opacity: 0.85;
   }
 
   .discovery-search--header.discovery-search--header-mobile-open .discovery-search__panel {
@@ -73,23 +77,27 @@
     font-size: 0.68rem;
   }
 
-  .discovery-search--header.discovery-search--header-mobile-open .discovery-search__mobile-sheet--fullscreen .discovery-search__form {
+  .discovery-search--header.discovery-search--header-mobile-open .discovery-search__mobile-sheet--mobile-open .discovery-search__form {
     flex: 0 0 auto;
   }
 
-  .discovery-search--header.discovery-search--header-mobile-open .discovery-search__mobile-sheet--fullscreen .discovery-search__panel {
+  .discovery-search--header.discovery-search--header-mobile-open .discovery-search__mobile-sheet--mobile-open .discovery-search__field {
+    background: var(--color-bg-page);
+  }
+
+  .discovery-search--header.discovery-search--header-mobile-open .discovery-search__mobile-sheet--mobile-open .discovery-search__panel {
     position: relative;
     top: auto;
     left: auto;
     right: auto;
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     min-height: 0;
-    max-height: none;
+    max-height: min(65vh, 24rem);
     margin-top: 0;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
   }
 
-  :root[data-theme='dark'] .discovery-search--header.discovery-search--header-mobile-open .discovery-search__mobile-sheet--fullscreen .discovery-search__panel {
+  :root[data-theme='dark'] .discovery-search--header.discovery-search--header-mobile-open .discovery-search__mobile-sheet--mobile-open .discovery-search__panel {
     box-shadow: 0 4px 28px rgba(0, 0, 0, 0.45);
   }
 }

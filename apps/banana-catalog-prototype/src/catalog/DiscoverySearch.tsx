@@ -308,11 +308,12 @@ export function DiscoverySearch({
 
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {
+      if (!open) return
       if (!rootRef.current?.contains(e.target as Node)) setOpen(false)
     }
     document.addEventListener('mousedown', onDoc)
     return () => document.removeEventListener('mousedown', onDoc)
-  }, [])
+  }, [open])
 
   useEffect(() => {
     if (!open) return
@@ -322,15 +323,6 @@ export function DiscoverySearch({
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [open])
-
-  useEffect(() => {
-    if (!open || variant !== 'header' || !isNarrowViewport) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = prev
-    }
-  }, [open, variant, isNarrowViewport])
 
   const tokens = useMemo(() => searchTokens(debounced), [debounced])
   const hasQuery = tokens.length > 0
@@ -684,10 +676,7 @@ export function DiscoverySearch({
   return (
     <div ref={rootRef} className={shellClass}>
       <div
-        className={`discovery-search__mobile-sheet${headerMobileOpen ? ' discovery-search__mobile-sheet--fullscreen' : ''}`}
-        role={headerMobileOpen ? 'dialog' : undefined}
-        aria-modal={headerMobileOpen ? true : undefined}
-        aria-label={headerMobileOpen ? 'Catalog search and browse' : undefined}
+        className={`discovery-search__mobile-sheet${headerMobileOpen ? ' discovery-search__mobile-sheet--mobile-open' : ''}`}
       >
       <form className="discovery-search__form" role="search" aria-label="Catalog discovery" onSubmit={onSubmit}>
         <div

@@ -88,12 +88,43 @@ export function siteNavItemActive(pathname: string, item: SiteNavItem): boolean 
   return norm === base || norm.startsWith(`${base}/`)
 }
 
-/** Active LP tab for top bar; song pages count as listen (D-027 / NAV-CHROME-SPEC). */
+function pathMatchesPrefix(norm: string, base: string): boolean {
+  return norm === base || norm.startsWith(`${base}/`)
+}
+
+/** Context paths that map to LEARN (about hubs, sutras, muses, quotes, manifesto). */
+function isLearnContextPath(norm: string): boolean {
+  return (
+    pathMatchesPrefix(norm, '/learn') ||
+    pathMatchesPrefix(norm, '/about') ||
+    pathMatchesPrefix(norm, '/sutras') ||
+    pathMatchesPrefix(norm, '/muses') ||
+    pathMatchesPrefix(norm, '/quotes') ||
+    pathMatchesPrefix(norm, '/words') ||
+    pathMatchesPrefix(norm, '/manifesto')
+  )
+}
+
+/** Context paths that map to LISTEN (catalog browse + song detail). */
+function isListenContextPath(norm: string): boolean {
+  return (
+    pathMatchesPrefix(norm, '/listen') ||
+    pathMatchesPrefix(norm, '/songbooks') ||
+    pathMatchesPrefix(norm, '/songs') ||
+    pathMatchesPrefix(norm, '/tracks')
+  )
+}
+
+/** Context paths that map to WATCH (LP + videos hub). */
+function isWatchContextPath(norm: string): boolean {
+  return pathMatchesPrefix(norm, '/watch') || pathMatchesPrefix(norm, '/videos')
+}
+
+/** Active LP tab for top bar — LP routes plus contextual catalog/about paths (NAV-CHROME-SPEC). */
 export function experienceLpActive(pathname: string): ExperienceLp | null {
   const norm = normalizeNavPathname(pathname)
-  if (norm === '/learn' || norm.startsWith('/learn/')) return 'learn'
-  if (norm === '/listen' || norm.startsWith('/listen/')) return 'listen'
-  if (norm === '/watch' || norm.startsWith('/watch/')) return 'watch'
-  if (norm.startsWith('/songs/')) return 'listen'
+  if (isLearnContextPath(norm)) return 'learn'
+  if (isListenContextPath(norm)) return 'listen'
+  if (isWatchContextPath(norm)) return 'watch'
   return null
 }
