@@ -6,6 +6,7 @@ import {
   DISCOVERY_FACET_LABELS,
   HEADER_BROWSE_SONG_FACETS,
   HEADER_BROWSE_TRACK_FACETS,
+  HEADER_DISCOVERY_FACET_LABELS,
 } from './catalogFacetConfig'
 import { sutraClassName } from './sutraTheme'
 import {
@@ -117,18 +118,6 @@ function aggregateGenreLine(videos: YouTubeCatalogVideo[]): string {
   return out.join(' · ')
 }
 
-function summarizeYoutubeTitles(videos: YouTubeCatalogVideo[]): string {
-  if (videos.length === 0) return ''
-  if (videos.length === 1) return (videos[0]!.title || '').trim()
-  const max = 2
-  const parts = videos
-    .slice(0, max)
-    .map((v) => (v.title || '').trim())
-    .filter(Boolean)
-  const more = videos.length > max ? ` (+${videos.length - max} more videos)` : ''
-  return `${parts.join(' · ')}${more}`
-}
-
 function groupYoutubeVideosByLyricsId(videos: YouTubeCatalogVideo[]): YoutubeDiscoverySongGroup[] {
   const map = new Map<string, YouTubeCatalogVideo[]>()
   for (const v of videos) {
@@ -183,6 +172,17 @@ function thumbnailSrc(rawUrl: string, size = 't120x120'): string {
 
 const HEADER_OTHER_FACET_CHIP_CAP = 18
 
+function headerBrowseFacetLabel(group: FacetGroupKey): string {
+  return HEADER_DISCOVERY_FACET_LABELS[group] ?? DISCOVERY_FACET_LABELS[group]
+}
+
+const SEARCH_TAB_FOOTER_HINT: Record<DiscoveryTab, string> = {
+  songbooks: 'Albums and playlists that contain matching songs.',
+  songs: 'Song pages. Matches titles, lyrics, and what each song is about.',
+  tracks: 'SoundCloud mixes. Matches mix titles and audio tags (genre, mood, tempo), not lyrics.',
+  videos: 'YouTube clips tied to matching songs.',
+}
+
 function browseChipHref(group: FacetGroupKey, value: string): string {
   if (group === 'track_genre') return buildTracksBrowsePath('primary_genre', value)
   if (group === 'track_secondary_genre') return buildTracksBrowsePath('secondary_genre', value)
@@ -213,6 +213,7 @@ export function DiscoverySearch({
   const baseId = useId()
   const panelId = `${baseId}-panel`
   const browseGroupId = `${baseId}-browse`
+  const browseFiltersId = `${baseId}-browse-filters`
   const typedListboxId = `${baseId}-typed-listbox`
   const optionPrefix = `${baseId}-opt`
 
@@ -224,6 +225,8 @@ export function DiscoverySearch({
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
   )
   const [expandedFacet, setExpandedFacet] = useState<FacetGroupKey | null>(null)
+  /** D-038: facet accordion hidden until "Filter by…" or typing (typed panel replaces browse). */
+  const [filtersExpanded, setFiltersExpanded] = useState(false)
   /** Active option index within the current tab preview (combobox + listbox); -1 = none. */
   const [activeOptionIndex, setActiveOptionIndex] = useState(-1)
 
@@ -437,10 +440,20 @@ export function DiscoverySearch({
     if (!hasQuery) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- keyword tabs hidden in browse mode; reset for next query
       setTab('songbooks')
+      setFiltersExpanded(false)
+      setExpandedFacet(null)
       return
     }
     setTab(smartDefaultTab)
   }, [hasQuery, smartDefaultTab])
+
+  useEffect(() => {
+    if (!open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- pre-type affordances reset when panel closes
+      setFiltersExpanded(false)
+      setExpandedFacet(null)
+    }
+  }, [open])
 
   const tabPreview = useMemo((): SongCatalogItem[] => {
     if (!hasQuery || tab !== 'songs') return []
@@ -747,63 +760,11 @@ export function DiscoverySearch({
           {!hasQuery ? (
             <div
               id={browseGroupId}
-              className="discovery-search__browse discovery-search__browse--accordion"
+              className="discovery-search__browse discovery-search__browse--pretype"
               role="region"
               aria-label="Browse the catalog"
             >
-              <section className="discovery-search__browse-section" aria-label="Songs">
-                <ul className="discovery-search__browse-list">
-                  {HEADER_BROWSE_SONG_FACETS.map((group) => {
-                    const entries = facets[group] ?? []
-                    const expanded = expandedFacet === group
-                    const facetPanelId = `${baseId}-browse-facet-${group}`
-                    const chipCap = group === 'topic' ? entries.length : HEADER_OTHER_FACET_CHIP_CAP
-                    const chips = entries.slice(0, chipCap)
-                    const help = DISCOVERY_FACET_HELP[group]
-                    return (
-                      <li key={group} className="discovery-search__browse-row-wrap">
-                        <button
-                          type="button"
-                          className={`discovery-search__browse-row${expanded ? ' discovery-search__browse-row--open' : ''}`}
-                          aria-expanded={expanded}
-                          aria-controls={facetPanelId}
-                          id={`${baseId}-browse-facetbtn-${group}`}
-                          title={help}
-                          onClick={() => toggleBrowseFacet(group)}
-                        >
-                          <span className="discovery-search__browse-row-label">{DISCOVERY_FACET_LABELS[group]}</span>
-                          <span className="discovery-search__browse-row-chev" aria-hidden>
-                            ›
-                          </span>
-                        </button>
-                        {expanded ? (
-                          <div id={facetPanelId} className="discovery-search__browse-facet-panel">
-                            {chips.length ? (
-                              <ul className="discovery-search__browse-values">
-                                {chips.map(({ value, count }) => (
-                                  <li key={value} className="discovery-search__browse-value-item">
-                                    <Link
-                                      className={`discovery-search__browse-value-link${
-                                        group === 'sutra' ? ` ${sutraClassName(value)}` : ''
-                                      }`}
-                                      to={browseChipHref(group, value)}
-                                      onClick={() => setOpen(false)}
-                                    >
-                                      <span>{value}</span>
-                                      <span className="discovery-search__browse-value-count">{count}</span>
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <p className="discovery-search__browse-empty-facet">No tagged values in this slice yet.</p>
-                            )}
-                          </div>
-                        ) : null}
-                      </li>
-                    )
-                  })}
-                </ul>
+              <div className="discovery-search__browse-shortcuts" role="group" aria-label="Browse all">
                 <Link className="discovery-search__browse-all" to={CATALOG_BROWSE_PATH} onClick={() => setOpen(false)}>
                   <span className="discovery-search__browse-all-label">Browse all songs</span>
                   <span className="discovery-search__browse-all-count">{headerBrowseSongCount}</span>
@@ -811,63 +772,8 @@ export function DiscoverySearch({
                     →
                   </span>
                 </Link>
-              </section>
-
-              <section
-                className="discovery-search__browse-section discovery-search__browse-section--tracks"
-                aria-label="Tracks"
-              >
-                <ul className="discovery-search__browse-list">
-                  {HEADER_BROWSE_TRACK_FACETS.map((group) => {
-                    const entries = facets[group] ?? []
-                    const expanded = expandedFacet === group
-                    const facetPanelId = `${baseId}-browse-facet-${group}`
-                    const chips = entries.slice(0, HEADER_OTHER_FACET_CHIP_CAP)
-                    const help = DISCOVERY_FACET_HELP[group]
-                    return (
-                      <li key={group} className="discovery-search__browse-row-wrap">
-                        <button
-                          type="button"
-                          className={`discovery-search__browse-row${expanded ? ' discovery-search__browse-row--open' : ''}`}
-                          aria-expanded={expanded}
-                          aria-controls={facetPanelId}
-                          id={`${baseId}-browse-facetbtn-${group}`}
-                          title={help}
-                          onClick={() => toggleBrowseFacet(group)}
-                        >
-                          <span className="discovery-search__browse-row-label">{DISCOVERY_FACET_LABELS[group]}</span>
-                          <span className="discovery-search__browse-row-chev" aria-hidden>
-                            ›
-                          </span>
-                        </button>
-                        {expanded ? (
-                          <div id={facetPanelId} className="discovery-search__browse-facet-panel">
-                            {chips.length ? (
-                              <ul className="discovery-search__browse-values">
-                                {chips.map(({ value, count }) => (
-                                  <li key={value} className="discovery-search__browse-value-item">
-                                    <Link
-                                      className="discovery-search__browse-value-link"
-                                      to={browseChipHref(group, value)}
-                                      onClick={() => setOpen(false)}
-                                    >
-                                      <span>{value}</span>
-                                      <span className="discovery-search__browse-value-count">{count}</span>
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <p className="discovery-search__browse-empty-facet">No tagged values in this slice yet.</p>
-                            )}
-                          </div>
-                        ) : null}
-                      </li>
-                    )
-                  })}
-                </ul>
                 <Link
-                  className="discovery-search__browse-all"
+                  className="discovery-search__browse-all discovery-search__browse-all--tracks"
                   to={canonicalPathForRoute('/tracks')}
                   onClick={() => setOpen(false)}
                 >
@@ -877,7 +783,145 @@ export function DiscoverySearch({
                     →
                   </span>
                 </Link>
-              </section>
+              </div>
+              <button
+                type="button"
+                className="discovery-search__filter-expand"
+                aria-expanded={filtersExpanded}
+                aria-controls={browseFiltersId}
+                onClick={() => setFiltersExpanded((cur) => !cur)}
+              >
+                <span className="discovery-search__filter-expand-label">
+                  {filtersExpanded ? 'Hide filters' : 'Filter by…'}
+                </span>
+                <span className="discovery-search__browse-row-chev" aria-hidden>
+                  ›
+                </span>
+              </button>
+              {filtersExpanded ? (
+                <div
+                  id={browseFiltersId}
+                  className="discovery-search__browse-filters discovery-search__browse--accordion"
+                  role="group"
+                  aria-label="Filter by facet"
+                >
+                  <section className="discovery-search__browse-section" aria-labelledby={`${baseId}-browse-songs-heading`}>
+                    <h3 id={`${baseId}-browse-songs-heading`} className="discovery-search__browse-section-heading">
+                      Songs
+                    </h3>
+                    <ul className="discovery-search__browse-list">
+                      {HEADER_BROWSE_SONG_FACETS.map((group) => {
+                        const entries = facets[group] ?? []
+                        const expanded = expandedFacet === group
+                        const facetPanelId = `${baseId}-browse-facet-${group}`
+                        const chipCap = group === 'topic' ? entries.length : HEADER_OTHER_FACET_CHIP_CAP
+                        const chips = entries.slice(0, chipCap)
+                        const help = DISCOVERY_FACET_HELP[group]
+                        return (
+                          <li key={group} className="discovery-search__browse-row-wrap">
+                            <button
+                              type="button"
+                              className={`discovery-search__browse-row${expanded ? ' discovery-search__browse-row--open' : ''}`}
+                              aria-expanded={expanded}
+                              aria-controls={facetPanelId}
+                              id={`${baseId}-browse-facetbtn-${group}`}
+                              title={help}
+                              onClick={() => toggleBrowseFacet(group)}
+                            >
+                              <span className="discovery-search__browse-row-label">{headerBrowseFacetLabel(group)}</span>
+                              <span className="discovery-search__browse-row-chev" aria-hidden>
+                                ›
+                              </span>
+                            </button>
+                            {expanded ? (
+                              <div id={facetPanelId} className="discovery-search__browse-facet-panel">
+                                {chips.length ? (
+                                  <ul className="discovery-search__browse-values">
+                                    {chips.map(({ value, count }) => (
+                                      <li key={value} className="discovery-search__browse-value-item">
+                                        <Link
+                                          className={`discovery-search__browse-value-link${
+                                            group === 'sutra' ? ` ${sutraClassName(value)}` : ''
+                                          }`}
+                                          to={browseChipHref(group, value)}
+                                          onClick={() => setOpen(false)}
+                                        >
+                                          <span>{value}</span>
+                                          <span className="discovery-search__browse-value-count">{count}</span>
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p className="discovery-search__browse-empty-facet">No tagged values in this slice yet.</p>
+                                )}
+                              </div>
+                            ) : null}
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </section>
+
+                  <section
+                    className="discovery-search__browse-section discovery-search__browse-section--tracks"
+                    aria-labelledby={`${baseId}-browse-tracks-heading`}
+                  >
+                    <h3 id={`${baseId}-browse-tracks-heading`} className="discovery-search__browse-section-heading">
+                      Tracks
+                    </h3>
+                    <ul className="discovery-search__browse-list">
+                      {HEADER_BROWSE_TRACK_FACETS.map((group) => {
+                        const entries = facets[group] ?? []
+                        const expanded = expandedFacet === group
+                        const facetPanelId = `${baseId}-browse-facet-${group}`
+                        const chips = entries.slice(0, HEADER_OTHER_FACET_CHIP_CAP)
+                        const help = DISCOVERY_FACET_HELP[group]
+                        return (
+                          <li key={group} className="discovery-search__browse-row-wrap">
+                            <button
+                              type="button"
+                              className={`discovery-search__browse-row${expanded ? ' discovery-search__browse-row--open' : ''}`}
+                              aria-expanded={expanded}
+                              aria-controls={facetPanelId}
+                              id={`${baseId}-browse-facetbtn-${group}`}
+                              title={help}
+                              onClick={() => toggleBrowseFacet(group)}
+                            >
+                              <span className="discovery-search__browse-row-label">{headerBrowseFacetLabel(group)}</span>
+                              <span className="discovery-search__browse-row-chev" aria-hidden>
+                                ›
+                              </span>
+                            </button>
+                            {expanded ? (
+                              <div id={facetPanelId} className="discovery-search__browse-facet-panel">
+                                {chips.length ? (
+                                  <ul className="discovery-search__browse-values">
+                                    {chips.map(({ value, count }) => (
+                                      <li key={value} className="discovery-search__browse-value-item">
+                                        <Link
+                                          className="discovery-search__browse-value-link"
+                                          to={browseChipHref(group, value)}
+                                          onClick={() => setOpen(false)}
+                                        >
+                                          <span>{value}</span>
+                                          <span className="discovery-search__browse-value-count">{count}</span>
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p className="discovery-search__browse-empty-facet">No tagged values in this slice yet.</p>
+                                )}
+                              </div>
+                            ) : null}
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </section>
+                </div>
+              ) : null}
             </div>
           ) : (
             <div className="discovery-search__typed">
@@ -947,7 +991,7 @@ export function DiscoverySearch({
                       activeIndex={activeOptionIndex}
                       onHoverOption={setActiveOptionIndex}
                       onPick={goTrackCatalogRow}
-                      emptyHint="No SoundCloud tracks match this query in titles and track tags (same search as /tracks)."
+                      emptyHint="No SoundCloud mixes match this query."
                     />
                   ) : (
                     <TypedSongList
@@ -961,7 +1005,7 @@ export function DiscoverySearch({
                       subtitleKey="sc"
                       topTracksGenreRollup
                       listboxAriaLabel="Matching songs (loading track list)"
-                      emptyHint="No matches in song titles, summaries, or catalog track tags (genres, instruments, moods, tempo) for this query."
+                      emptyHint="No mixes match this query by title or audio tags."
                     />
                   )
                 ) : null}
@@ -975,8 +1019,8 @@ export function DiscoverySearch({
                     onPick={goYoutubeSongGroup}
                     emptyHint={
                       hasQuery
-                        ? 'No YouTube rows match this query (titles, linked lyrics, sutras, playlists).'
-                        : 'Type a search query to match the reconciled YouTube catalog.'
+                        ? 'No videos match this query.'
+                        : 'Type a search query to find videos.'
                     }
                   />
                 ) : null}
@@ -997,18 +1041,7 @@ export function DiscoverySearch({
                   </span>
                 </Link>
                 <p className="discovery-search__typed-meta discovery-search__typed-foot-meta" aria-live="polite">
-                  {tab === 'tracks' ? (
-                    <>
-                      Top Tracks uses the same SoundCloud track search as the Tracks page (titles, sutra, genres,
-                      instruments, moods, tempo — not lyric summaries). Other tabs use meaning-first search. Use tabs to
-                      jump between songbooks, songs, tracks, and videos.
-                    </>
-                  ) : (
-                    <>
-                      Search by meaning first: titles, summaries, lyrics extracts, and lyric text. Use tabs to jump
-                      between songbooks, songs, tracks, and videos.
-                    </>
-                  )}
+                  {SEARCH_TAB_FOOTER_HINT[tab]}
                 </p>
               </div>
             </div>
@@ -1088,10 +1121,7 @@ function TypedYoutubeSongGroupList({
               )}
             </div>
             <span className="discovery-search__result-copy">
-              <span className="discovery-search__result-title song-title">{(g.lyrics_title || '').trim() || 'Song'}</span>
-              <span className="discovery-search__result-sub discovery-search__result-sub--muted">
-                {summarizeYoutubeTitles(g.videos)}
-              </span>
+              <span className="discovery-search__result-title">{(g.lyrics_title || '').trim() || 'Song'}</span>
               {[g.sutra, g.genreLine].filter(Boolean).length ? (
                 <span className="discovery-search__result-meta discovery-search__result-meta--yt-group">
                   {[g.sutra, g.genreLine].filter(Boolean).join(' · ')}
@@ -1158,7 +1188,9 @@ function TypedTrackList({
             tabIndex={-1}
             aria-selected={activeIndex === i}
             aria-label={(t.track_title || '').trim() || 'Track'}
-            className={`discovery-search__result-row${activeIndex === i ? ' discovery-search__result-row--active' : ''}`}
+            className={`discovery-search__result-row discovery-search__result-row--track${
+              activeIndex === i ? ' discovery-search__result-row--active' : ''
+            }`}
             onMouseEnter={() => onHoverOption(i)}
             onClick={() => onPick(t)}
             onKeyDown={(e) => {
@@ -1177,7 +1209,9 @@ function TypedTrackList({
                 </span>
               )}
               <span className="discovery-search__result-copy">
-                <span className="discovery-search__result-title song-title">{(t.track_title || '').trim()}</span>
+                <span className="discovery-search__result-title discovery-search__result-title--truncate">
+                  {(t.track_title || '').trim()}
+                </span>
                 <span className="discovery-search__result-sub discovery-search__result-sub--muted">{sub}</span>
               </span>
             </div>
@@ -1279,18 +1313,13 @@ function TypedSongList({
                   <span className="discovery-search__result-title discovery-search__result-title--songbook">
                     {(song.songbook ?? '').trim() || 'Songbook not set'}
                   </span>
-                  <span className="discovery-search__result-sub discovery-search__result-sub--song-title song-title">
+                  <span className="discovery-search__result-sub discovery-search__result-sub--song-title">
                     {song.lyrics_title}
                   </span>
-                  {song.summary_short ? (
-                    <span className="discovery-search__result-sub discovery-search__result-sub--muted">
-                      {song.summary_short}
-                    </span>
-                  ) : null}
                 </>
               ) : (
                 <>
-                  <span className="discovery-search__result-title song-title">{song.lyrics_title}</span>
+                  <span className="discovery-search__result-title">{song.lyrics_title}</span>
                   {subtitleKey === 'songbook' && song.songbook ? (
                     <span className="discovery-search__result-sub">{song.songbook}</span>
                   ) : null}
@@ -1298,9 +1327,6 @@ function TypedSongList({
                     <span className="discovery-search__result-sub discovery-search__result-sub--muted">
                       {topTracksGenreRollup ? topTracksRowGenreLabel(song) : (song.discovery_top_track_genres ?? '').trim() || 'SoundCloud'}
                     </span>
-                  ) : null}
-                  {!subtitleKey && song.summary_short ? (
-                    <span className="discovery-search__result-sub">{song.summary_short}</span>
                   ) : null}
                   {!subtitleKey ? (
                     <span className="discovery-search__result-meta">
@@ -1381,10 +1407,12 @@ function TypedSongbookList({
               </span>
             )}
             <span className="discovery-search__result-copy">
-              <span className="discovery-search__result-title discovery-search__result-title--songbook">{group.songbook}</span>
-              <span className="discovery-search__result-sub">
-                {group.matchCount} match{group.matchCount === 1 ? '' : 'es'} · {group.totalSongs} songs total
-              </span>
+              <div className="discovery-search__result-title-row">
+                <span className="discovery-search__result-title discovery-search__result-title--songbook">{group.songbook}</span>
+                <span className="discovery-search__result-inline-stat">
+                  {group.matchCount} match{group.matchCount === 1 ? '' : 'es'} · {group.totalSongs} songs
+                </span>
+              </div>
               <span className="discovery-search__result-sub discovery-search__result-sub--muted">{group.sampleTitles.join(' · ')}</span>
             </span>
           </div>
