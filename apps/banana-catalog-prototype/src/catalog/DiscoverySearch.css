@@ -77,6 +77,11 @@
     font-size: 0.68rem;
   }
 
+  .discovery-search--header.discovery-search--header-mobile-open .discovery-search__filter-expand {
+    padding: 0.45rem 0.65rem;
+    font-size: 0.8rem;
+  }
+
   .discovery-search--header.discovery-search--header-mobile-open .discovery-search__mobile-sheet--mobile-open .discovery-search__form {
     flex: 0 0 auto;
   }
@@ -188,6 +193,56 @@
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
 }
 
+.discovery-search__browse--pretype {
+  display: flex;
+  flex-direction: column;
+}
+
+.discovery-search__browse-shortcuts {
+  display: flex;
+  flex-direction: column;
+}
+
+.discovery-search__browse-all--tracks {
+  border-top: 1px solid var(--color-border);
+}
+
+.discovery-search__filter-expand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.55rem 0.85rem;
+  border: none;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-panel);
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.discovery-search__filter-expand:hover {
+  background: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+}
+
+.discovery-search__filter-expand:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
+}
+
+.discovery-search__filter-expand-label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.discovery-search__browse-filters {
+  border-top: 1px solid var(--color-border);
+}
+
 .discovery-search__browse--accordion {
   display: flex;
   flex-direction: column;
@@ -196,6 +251,20 @@
 .discovery-search__browse-section {
   display: flex;
   flex-direction: column;
+}
+
+.discovery-search__browse-section-heading {
+  margin: 0;
+  padding: 0.45rem 0.85rem 0.3rem;
+  font-family: var(--type-ui-caps-family);
+  font-size: var(--type-ui-caps-size);
+  font-weight: var(--type-ui-caps-weight);
+  letter-spacing: var(--type-ui-caps-tracking);
+  line-height: var(--type-ui-caps-line-height);
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  background: var(--color-bg-inset);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .discovery-search__browse-section--tracks {
@@ -498,7 +567,7 @@
 .discovery-search__result-row {
   margin: 0;
   border-bottom: 1px solid var(--color-border);
-  padding: 0.5rem 0.25rem;
+  padding: 0.42rem 0.25rem;
   cursor: pointer;
   color: inherit;
   list-style: none;
@@ -512,9 +581,35 @@
 
 .discovery-search__result-copy {
   min-width: 0;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.1rem;
+}
+
+.discovery-search__result-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.discovery-search__result-title-row .discovery-search__result-title--songbook {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.discovery-search__result-inline-stat {
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--color-text-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .discovery-search__result-thumb--yt {
@@ -586,19 +681,21 @@
 
 .discovery-search__result-title {
   color: var(--color-text-primary);
-  font-family: var(--font-body);
+  font-family: var(--font-ui);
+  font-size: 0.86rem;
   font-weight: 600;
   font-style: normal;
+  line-height: 1.3;
 }
 
-.discovery-search__result-title.song-title {
-  font-size: 0.86rem;
-  font-weight: 700;
-  font-style: normal;
+.discovery-search__result-title--truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.discovery-search__result-sub--song-title.song-title {
-  font-family: var(--font-body);
+.discovery-search__result-sub--song-title {
+  font-family: var(--font-ui);
   font-style: normal;
   font-weight: 500;
   font-variation-settings: normal;
@@ -613,7 +710,6 @@
 
 .discovery-search__result-sub--song-title {
   font-size: 0.78rem;
-  font-weight: 500;
   color: var(--color-text-muted);
 }
 
@@ -633,8 +729,9 @@
   color: var(--color-text-faint);
 }
 
-.discovery-search__result-row--yt-group {
-  padding: 0.62rem 0.3rem;
+.discovery-search__result-row--yt-group,
+.discovery-search__result-row--track {
+  padding: 0.45rem 0.25rem;
 }
 
 .discovery-search__result-main--yt-group {

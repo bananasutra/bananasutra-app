@@ -357,7 +357,14 @@
     opacity: 0.78;
   }
 
-  .global-header__search-slot .discovery-search--header .discovery-search__browse-row {
+  .global-header__search-slot .discovery-search--header .discovery-search__browse-section-heading {
+    padding: 0.35rem 0.6rem 0.25rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+  }
+
+  .global-header__search-slot .discovery-search--header .discovery-search__browse-row,
+  .global-header__search-slot .discovery-search--header .discovery-search__filter-expand {
     padding: 0.4rem 0.6rem;
     font-size: 0.72rem;
     font-weight: 600;
