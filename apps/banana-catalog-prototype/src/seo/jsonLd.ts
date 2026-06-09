@@ -131,7 +131,7 @@ export function sutraCreativeWorkJsonLd(
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     name: `${familyKey} · Sutra`,
-    url: `${SITE_URL}/about/${slug}/`,
+    url: `${SITE_URL}/sutras/${slug}/`,
     description:
       description?.trim() ||
       `Explore the ${familyKey} sutra — songs, featured video, and related songbooks.`,

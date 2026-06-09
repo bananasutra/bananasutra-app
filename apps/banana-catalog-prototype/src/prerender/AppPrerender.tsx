@@ -19,6 +19,7 @@ import { StyleGuidePage } from '../catalog/StyleGuidePage'
 import { SitemapPage } from '../catalog/SitemapPage'
 import { ManifestoPage } from '../catalog/ManifestoPage'
 import { SearchRedirect } from '../catalog/SearchRedirect'
+import { LegacyAboutSutraDetailRedirect } from '../catalog/LegacyAboutSutraDetailRedirect'
 import { NotFoundRoute } from '../catalog/NotFoundRoute'
 
 function CatalogBrowseRoute() {
@@ -46,10 +47,11 @@ export function AppPrerender({ location }: { location: string }) {
               <Route path="/muses" element={<AboutMusesPage />} />
               <Route path="/quotes" element={<AboutQuotesPage />} />
               <Route path="/manifesto" element={<ManifestoPage />} />
+              <Route path="/sutras/:slug" element={<SutraDetailPage />} />
               <Route path="/about/sutras" element={<Navigate to="/sutras/" replace />} />
               <Route path="/about/muses" element={<Navigate to="/muses/" replace />} />
               <Route path="/about/quotes" element={<Navigate to="/quotes/" replace />} />
-              <Route path="/about/:slug" element={<SutraDetailPage />} />
+              <Route path="/about/:slug" element={<LegacyAboutSutraDetailRedirect />} />
               <Route path="/songbooks" element={<SongbooksPage />} />
               <Route path="/songbooks/:slug" element={<SongbookPage />} />
               <Route path="/tracks" element={<TracksPage />} />

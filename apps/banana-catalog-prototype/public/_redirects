@@ -2,3 +2,4 @@
 /about/sutras   /sutras/   301
 /about/muses    /muses/    301
 /about/quotes   /quotes/   301
+/about/:slug    /sutras/:slug/   301

@@ -16,6 +16,7 @@ const KNOWN_PATH_PATTERNS: RegExp[] = [
   /^\/about\/sutras\/?$/,
   /^\/about\/muses\/?$/,
   /^\/about\/quotes\/?$/,
+  /^\/sutras\/[^/]+\/?$/,
   /^\/about\/[^/]+\/?$/,
   /^\/style-guide\/?$/,
   /^\/sitemap\/?$/,
