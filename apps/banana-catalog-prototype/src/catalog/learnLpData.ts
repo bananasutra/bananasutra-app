@@ -32,28 +32,28 @@ export const LEARN_HUB_TILES: LearnHubTileConfig[] = [
   {
     key: 'about',
     label: 'About',
-    description: 'Homemade, end to end. What this is and why the seven questions exist.',
+    description: 'What the banana?',
   },
   {
     key: 'sutras',
     label: 'Sutras',
-    description: 'Is it true? Fair? Fun? The compass behind the catalog.',
+    description: 'The compass behind the songs.',
     tileClassName: 'learn-lp__tile--sutras',
   },
   {
     key: 'muses-quotes',
     label: 'Muses & quotes',
-    description: 'Thinkers who sparked a line, and the lines that became songs.',
+    description: 'Because sharing matters.',
   },
   {
     key: 'words',
     label: 'Words',
-    description: 'Lyrics-first pieces. Read the words on their own terms.',
+    description: 'Explore lyrics-only songs.',
   },
   {
     key: 'manifesto',
-    label: 'AI fair use manifesto',
-    description: 'Human authorship, AI as instrument. For skeptics and sharers.',
+    label: 'Manifesto',
+    description: 'Because ethics matter.',
     anchorId: 'manifesto',
     tileClassName: 'learn-lp__tile--manifesto',
   },
@@ -211,7 +211,29 @@ export const LEARN_ABOUT_PREVIEW = {
   zappa: 'Why music? Because I agree with Frank Zappa: music is the only religion that delivers the goods.',
   compass:
     "I invented the sutras to help me remember what matters. They aren't taxonomy. They're a tool for staying sane.",
+  homemade:
+    'Homemade, end to end. Songs sorted by seven guiding questions, not by algorithm or mood.',
   href: canonicalPathForRoute('/about'),
+} as const
+
+/** Stage preview copy — orientation, not a second copy of the deep pages. */
+export const LEARN_HUB_STAGE_INTRO = {
+  sutras: {
+    lead: 'Seven questions from KNOW to BOW. Each song belongs to one.',
+    support: 'Not taxonomy. A compass for staying sane in a world gone bananas.',
+  },
+  musesQuotes: {
+    lead: 'Thinkers who sparked a line. Lines that became songs.',
+    support: 'Every quote names its muse and sutra. The wall is long; this is one door in.',
+  },
+  words: {
+    lead: 'Lyrics without music. Pieces still brewing, or that live as text alone.',
+    support: 'Read the words on their own terms. No player required.',
+  },
+  manifesto: {
+    lead: 'Three principles. Nine commitments. One position.',
+    support: 'For skeptics, sharers, and anyone asked whether this counts as art.',
+  },
 } as const
 
 export const LEARN_QUOTES: QuoteWallItem[] = homeQuotesJson as QuoteWallItem[]

@@ -172,6 +172,9 @@
   --dur-base: 180ms;
   --dur-slow: 250ms;
 
+  /* LEARN LP chromatic accent — tracks KNOWsutra; used for hub tiles, FAQ, mood entry. */
+  --learn-accent: var(--sutra-know);
+
   --sutra-know: #2f4f66;
   --sutra-blow: #6b2f29;
   --sutra-show: #6f4050;

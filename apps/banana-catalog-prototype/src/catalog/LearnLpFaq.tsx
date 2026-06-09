@@ -6,7 +6,7 @@ export function LearnLpFaq() {
       <h2 id="learn-lp-faq-heading" className="catalog-section-title">
         Frequently flowering questions
       </h2>
-      <p className="catalog-lp-section-intro">Three commonly asked questions. Answered plain.</p>
+      <p className="catalog-lp-section-intro">Three questions every first visit asks. Answered plain.</p>
       <div className="learn-lp__faq-list">
         {LEARN_FAQ_ITEMS.map((item) => (
           <details key={item.question} className="learn-lp__faq-item">
