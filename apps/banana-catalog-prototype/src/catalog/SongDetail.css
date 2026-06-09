@@ -283,8 +283,9 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.song-detail-extract .sutra-detail__pull-quote {
+.song-detail-extract .sutra-detail__pull-quote-text {
   padding: 0.35rem 0.65rem 0.15rem 2.15rem;
+  white-space: pre-line;
 }
 
 .song-detail-extract + .song-detail-breakout,

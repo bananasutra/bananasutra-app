@@ -545,12 +545,7 @@ function SongDetailLoaded({
     return formatEpListenMeta(trackCount, duration)
   }, [detail, epUrlNorm, primaryEpUrl, showEpEmbed])
 
-  const lyricsExtractLine = useMemo(() => {
-    const raw = (detail.lyrics_extract || '').trim()
-    if (!raw) return ''
-    const first = raw.split(/\r?\n/).filter(Boolean)[0]
-    return first ?? raw
-  }, [detail.lyrics_extract])
+  const lyricsExtract = useMemo(() => (detail.lyrics_extract || '').trim(), [detail.lyrics_extract])
 
   const playingUrl = (
     selectedUrl?.trim() ||
@@ -1077,10 +1072,10 @@ function SongDetailLoaded({
             </div>
           </header>
 
-          {lyricsExtractLine ? (
+          {lyricsExtract ? (
             <section className="sutra-detail__section sutra-detail__pull song-detail-extract" aria-label="Lyric extract">
               <blockquote className="sutra-detail__pull-quote">
-                <span className="sutra-detail__pull-quote-text">{lyricsExtractLine}</span>
+                <span className="sutra-detail__pull-quote-text">{lyricsExtract}</span>
                 <span className="sutra-detail__pull-quote-caret" aria-hidden />
               </blockquote>
             </section>
