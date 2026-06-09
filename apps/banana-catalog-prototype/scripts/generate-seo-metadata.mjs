@@ -260,6 +260,14 @@ function main() {
     ),
   )
   addRoute(
+    '/manifesto',
+    routeEntry(
+      'AI Art Fair Use Manifesto',
+      "A framework for using AI without losing your soul, or someone else's work. Liberty, Equality, Fraternity. Human authorship, AI as instrument.",
+      '/manifesto',
+    ),
+  )
+  addRoute(
     '/sitemap',
     routeEntry('Sitemap', 'Full sitemap of BANANASUTRA — all pages, all sutras, all ways to explore.', '/sitemap'),
   )

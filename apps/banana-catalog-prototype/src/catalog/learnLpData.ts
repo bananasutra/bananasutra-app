@@ -311,6 +311,7 @@ export const LEARN_HUB_LINKS = {
   muses: canonicalPathForRoute('/muses'),
   quotes: canonicalPathForRoute('/quotes'),
   words: canonicalPathForRoute('/words'),
+  manifesto: canonicalPathForRoute('/manifesto'),
   manifestoSong: songCatalogPath('AI Fair Use Manifesto', 'ai-fair-use-manifesto'),
   listen: canonicalPathForRoute('/listen'),
 } as const

@@ -43,6 +43,7 @@ export const SITE_NAV_DRAWER: readonly DrawerNavItem[] = [
       { to: canonicalPathForRoute('/sutras'), label: 'Sutras', match: 'prefix' },
       { to: canonicalPathForRoute('/muses'), label: 'Muses', match: 'prefix' },
       { to: canonicalPathForRoute('/quotes'), label: 'Quotes', match: 'prefix' },
+      { to: canonicalPathForRoute('/manifesto'), label: 'Manifesto', match: 'prefix' },
       { to: canonicalPathForRoute('/words'), label: 'Words', match: 'exact' },
     ],
   },
@@ -82,6 +83,8 @@ export function siteNavItemActive(pathname: string, item: SiteNavItem): boolean 
       norm.startsWith('/muses/') ||
       norm === '/quotes' ||
       norm.startsWith('/quotes/') ||
+      norm === '/manifesto' ||
+      norm.startsWith('/manifesto/') ||
       norm === '/words'
     )
   }

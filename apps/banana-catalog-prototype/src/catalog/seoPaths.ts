@@ -17,6 +17,7 @@ export const STATIC_SSG_INDEX_PATHS = [
   '/sutras',
   '/muses',
   '/quotes',
+  '/manifesto',
   '/sitemap',
 ] as const
 

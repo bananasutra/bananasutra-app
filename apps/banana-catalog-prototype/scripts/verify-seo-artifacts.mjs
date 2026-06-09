@@ -102,6 +102,7 @@ const REQUIRED_SEO_PATHS = [
   '/sutras',
   '/muses',
   '/quotes',
+  '/manifesto',
   '/sitemap',
   '/style-guide',
 ]

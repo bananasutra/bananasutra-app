@@ -598,11 +598,28 @@
   cursor: pointer;
 }
 
-.learn-lp__panel--manifesto .learn-lp__manifesto-note {
-  margin: 0 0 0.65rem;
+.learn-lp__manifesto-teaser-quote {
+  margin: 0 0 0.75rem;
+  padding: 0;
+  border: none;
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: clamp(0.92rem, 2.2vw, 1.05rem);
+  line-height: 1.5;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.learn-lp__manifesto-framework-labels {
+  margin: 0;
   font-size: 0.68rem;
-  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--color-text-muted);
+}
+
+.learn-lp__manifesto-song-link {
+  text-decoration: none;
 }
 
 .learn-lp__quote-feature {
