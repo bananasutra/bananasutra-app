@@ -37,6 +37,8 @@ export type YoutubeEmbeddedPlayerProps = {
   facadePosterEager?: boolean
   /** Poster transformation width for the facade image. */
   posterWidth?: number
+  /** When false, omit the default outbound link (parent places it below copy). Default true. */
+  showOutboundFooter?: boolean
 }
 
 const YT_IFRAME_ALLOW =
@@ -75,6 +77,7 @@ export function YoutubeEmbeddedPlayer({
   onIframeLoad,
   facadePosterEager = false,
   posterWidth = 400,
+  showOutboundFooter = true,
 }: YoutubeEmbeddedPlayerProps) {
   const id = videoId.trim()
   const clientMounted = useClientMounted()
@@ -93,7 +96,7 @@ export function YoutubeEmbeddedPlayer({
   const iframeClass = ['yt-embed-frame', iframeClassName].filter(Boolean).join(' ')
   const poster = coverImageUrl(youtubePosterThumbnailUrl(id), { width: posterWidth })
 
-  const outbound = <YoutubeEmbedOutboundFooter videoId={id} />
+  const outbound = showOutboundFooter ? <YoutubeEmbedOutboundFooter videoId={id} /> : null
 
   if (!clientMounted) {
     return (
