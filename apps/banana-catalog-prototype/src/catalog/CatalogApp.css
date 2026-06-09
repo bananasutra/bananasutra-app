@@ -64,7 +64,7 @@ html {
   margin: 0;
   padding: 0.26rem 0.55rem;
   border: 1px solid var(--color-border-strong, #a8b0a2);
-  border-radius: 5px;
+  border-radius: var(--radius-control, 2px);
   background: var(--color-bg-inset, rgba(0, 0, 0, 0.03));
   font-family: inherit;
   font-size: inherit;
@@ -162,7 +162,7 @@ html {
   flex-shrink: 0;
   margin: 0;
   padding: 0.28rem 0.65rem;
-  border-radius: 6px;
+  border-radius: var(--radius-control, 2px);
   border: 1px solid var(--color-border);
   background: var(--color-bg-inset);
   color: var(--color-text-secondary);
@@ -237,7 +237,7 @@ html {
 .catalog-page-sub a:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: var(--radius-control, 2px);
 }
 
 /* SC playlist row: track_count + duration_total (joined at build from sc_playlists). */
@@ -283,7 +283,7 @@ html {
   font-size: 0.9rem;
   font-weight: 600;
   padding: 0.35rem 0.55rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm, 8px);
 }
 
 .catalog-header-search-link:hover {
@@ -326,7 +326,7 @@ html {
   background-position: right 0.72rem center;
   background-size: 12px;
   padding: 0.5rem 2.45rem 0.5rem 0.72rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm, 8px);
   /* Same 16px floor as discovery search — iOS WebKit avoids focus-zoom on selects too. */
   font-size: max(16px, 0.82rem);
   cursor: pointer;
@@ -336,6 +336,16 @@ html {
 .catalog-sort-select:focus-visible {
   border-color: var(--color-border-strong);
   outline: none;
+}
+
+.songs-page__content,
+.tracks-page__content {
+  min-width: 0;
+}
+
+.songs-page__main,
+.tracks-page__main {
+  min-width: 0;
 }
 
 .songs-page__sort-row,
@@ -380,7 +390,7 @@ html {
   width: 100%;
   margin-bottom: 0.75rem;
   padding: 0.55rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm, 8px);
   border: 1px solid var(--color-border);
   background: var(--color-bg-panel);
   color: var(--color-text-primary);
@@ -590,7 +600,7 @@ html {
   gap: 0.35rem;
   margin: 0;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-control, 2px);
   background: color-mix(in srgb, var(--color-text-faint) 8%, transparent);
   color: var(--color-text-primary);
   font-size: 0.74rem;
@@ -740,7 +750,7 @@ a.catalog-clear:hover {
 .catalog-facet-help a:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
-  border-radius: 3px;
+  border-radius: var(--radius-control, 2px);
 }
 
 .catalog-facet-chips {
@@ -757,8 +767,8 @@ a.catalog-clear:hover {
   margin: 0;
   padding: 0.38rem 0.72rem;
   border: none;
-  border-radius: 6px;
-  background: transparent;
+  border-radius: var(--radius-control, 2px);
+  background: color-mix(in srgb, var(--color-text-primary) 7%, var(--color-bg-panel));
   color: var(--color-text-primary);
   font-size: 0.68rem;
   font-family: var(--font-ui);
@@ -783,7 +793,7 @@ a.catalog-facet-chip:visited {
 }
 
 a.catalog-facet-chip.is-active:visited {
-  color: var(--color-accent);
+  color: #fff;
 }
 
 .catalog-facet-chip:focus-visible {
@@ -803,9 +813,9 @@ a.catalog-facet-chip.is-active:visited {
 }
 
 .catalog-facet-chip.is-active {
-  background: color-mix(in srgb, var(--color-accent) 14%, transparent);
-  color: var(--color-accent);
-  box-shadow: inset 0 -2px 0 0 var(--color-accent);
+  background: var(--color-link, #524a40);
+  color: #fff;
+  box-shadow: none;
 }
 
 .catalog-facet-chip.is-active .catalog-facet-count {
@@ -814,12 +824,12 @@ a.catalog-facet-chip.is-active:visited {
 
 @media (hover: hover) and (pointer: fine) {
   .catalog-facet-chip.is-active:hover {
-    background: color-mix(in srgb, var(--color-accent) 20%, transparent);
-    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-link, #524a40) 88%, #000);
+    color: #fff;
   }
 
   .catalog-facet-chip.is-active:hover .catalog-facet-count {
-    color: color-mix(in srgb, var(--color-accent) 50%, var(--color-text-muted));
+    color: color-mix(in srgb, #fff 70%, transparent);
   }
 }
 
@@ -994,7 +1004,7 @@ a.catalog-facet-chip.is-active:visited {
   height: 100%;
   min-height: 0;
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: var(--radius-thumb, var(--radius-control, 2px));
   overflow: hidden;
   background: var(--color-bg-elevated);
   transition: border-color 0.15s ease, transform 0.15s ease;
@@ -1017,7 +1027,7 @@ a.catalog-facet-chip.is-active:visited {
   width: 13rem;
   min-width: 0;
   height: 2.1rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm, 8px);
 }
 
 .catalog-skeleton-block {
@@ -1043,7 +1053,7 @@ a.catalog-facet-chip.is-active:visited {
 .catalog-skeleton-line {
   display: block;
   height: 0.74rem;
-  border-radius: 999px;
+  border-radius: var(--radius-control, 2px);
 }
 
 .catalog-skeleton-line--title {
@@ -1075,7 +1085,7 @@ a.catalog-facet-chip.is-active:visited {
   display: inline-flex;
   gap: 0.22rem;
   padding: 0.18rem;
-  border-radius: 6px;
+  border-radius: var(--radius-control, 2px);
   background: var(--media-strip-bg);
   border: 1px solid var(--media-strip-border);
 }
@@ -1083,7 +1093,7 @@ a.catalog-facet-chip.is-active:visited {
 .catalog-card-media-slot {
   min-width: auto;
   padding: 0.18rem 0.25rem;
-  border-radius: 4px;
+  border-radius: var(--radius-control, 2px);
   text-align: center;
   line-height: 0;
   border: 1px solid transparent;
@@ -1252,7 +1262,7 @@ a.catalog-facet-chip.is-active:visited {
   border: 1px solid var(--color-border);
   font-size: 0.65rem;
   padding: 0.12rem 0.35rem;
-  border-radius: 999px;
+  border-radius: var(--radius-control, 2px);
   background: var(--color-bg-panel);
   color: var(--color-text-muted);
   font-family: var(--font-ui);

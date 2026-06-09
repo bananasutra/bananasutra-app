@@ -23,7 +23,7 @@
   --catalog-breadcrumb-link-border: var(--color-border);
   --catalog-breadcrumb-focus-outline-width: 2px;
   --catalog-breadcrumb-focus-outline-offset: 2px;
-  --catalog-breadcrumb-focus-radius: 3px;
+  --catalog-breadcrumb-focus-radius: var(--radius-control);
   /* ≤560px */
   --catalog-breadcrumb-gap-sm: 0.28rem;
   --catalog-breadcrumb-margin-bottom-sm: 0.85rem;
@@ -118,10 +118,19 @@
   --catalog-tab-active-rule-width: 3px;
   --catalog-tab-active-rule-color: var(--color-text-strong);
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-pill: 999px;
+  /*
+   * Corner radius — nav chrome (2px) is the default everywhere.
+   * Prefer these tokens; page-level overrides only for documented exceptions.
+   */
+  --radius-control: 2px;
+  --radius-thumb: var(--radius-control);
+  --radius-surface: var(--radius-control);
+  --catalog-radius-card: var(--radius-control);
+  /* Legacy aliases — map to control so existing var(--radius-sm) call sites stay flat. */
+  --radius-sm: var(--radius-control);
+  --radius-md: var(--radius-control);
+  --radius-lg: var(--radius-control);
+  --radius-pill: var(--radius-control);
 
   --space-1: 4px;
   --space-2: 8px;

@@ -507,7 +507,7 @@
   min-height: 2.4rem;
   padding: 0.65rem 0.95rem;
   border: 1px solid var(--color-border);
-  border-radius: 999px;
+  border-radius: var(--radius-control, 2px);
   background: var(--color-bg-panel);
   color: var(--color-text-strong);
   font: 700 0.72rem/1.35 var(--font-ui);
@@ -572,7 +572,7 @@
   flex: 0 0 auto;
   padding: 0.44rem 0.68rem;
   border: 1px solid var(--color-border);
-  border-radius: 999px;
+  border-radius: var(--radius-control, 2px);
   background: var(--color-bg-panel);
   color: var(--color-text-muted);
   font: 700 0.66rem/1.25 var(--font-ui);
@@ -864,7 +864,7 @@
 
 .quote-item__sutra-link {
   border: 1px solid color-mix(in srgb, var(--color-border) 80%, transparent);
-  border-radius: 999px;
+  border-radius: var(--radius-control, 2px);
   padding: 0.16rem 0.4rem;
   text-decoration: none;
 }
@@ -876,7 +876,7 @@
 
 .quote-item__topic {
   border: 1px solid color-mix(in srgb, var(--color-border) 80%, transparent);
-  border-radius: 999px;
+  border-radius: var(--radius-control, 2px);
   padding: 0.16rem 0.4rem;
 }
 

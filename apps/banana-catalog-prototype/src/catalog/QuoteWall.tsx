@@ -7,6 +7,11 @@ import { SUTRA_CONTEXT, sutraHrefForFamily, type SutraFamilyKey } from './sutraC
 import { songCatalogPath } from './songPaths'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
+import {
+  CatalogFilterBar,
+  type CatalogFilterBarActivePill,
+  type CatalogFilterBarFacetGroup,
+} from './CatalogFilterBar'
 
 function formatCount(n: number): string {
   return new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(n)
@@ -49,6 +54,7 @@ export function QuoteWall() {
   const rows = useMemo(() => data ?? [], [data])
   const [topicFilter, setTopicFilter] = useState('all')
   const [findQuote, setFindQuote] = useState('')
+  const [filterBarExpanded, setFilterBarExpanded] = useState(false)
 
   const pageMeta = renderPageMeta({
     title: 'The Quotes',
@@ -99,6 +105,52 @@ export function QuoteWall() {
   }, [findQuote, rows, topicFilter])
   const sortedQuotes = useMemo(() => sortQuotes(filtered), [filtered])
 
+  const findQuery = findQuote.trim()
+  const quoteActivePills: CatalogFilterBarActivePill[] = []
+  if (findQuery) {
+    quoteActivePills.push({
+      id: 'find',
+      label: `Search: ${findQuery}`,
+      onClick: () => setFindQuote(''),
+    })
+  }
+  if (topicFilter !== 'all') {
+    quoteActivePills.push({
+      id: 'topic',
+      label: `Topic: ${topicFilter}`,
+      onClick: () => setTopicFilter('all'),
+    })
+  }
+
+  const quoteFacetGroups: CatalogFilterBarFacetGroup[] = [
+    {
+      id: 'topic',
+      label: 'Topic',
+      allLabel: 'All topics',
+      allCount: contextualTopicRows.length,
+      onClearGroup: () => setTopicFilter('all'),
+      options: topicOptions.map(([topic]) => {
+        const count = contextualTopicRows.filter((row) => topicLabel(row.core_topic) === topic).length
+        return {
+          id: `topic-${topic}`,
+          label: topic,
+          count,
+          active: topicFilter === topic,
+          disabled: topicFilter !== topic && count === 0,
+          onClick: () => setTopicFilter(topic),
+          title: `${count} quotes`,
+        }
+      }),
+    },
+  ]
+
+  const clearAllFilters = () => {
+    setTopicFilter('all')
+    setFindQuote('')
+  }
+
+  const resultSummary = `Showing ${formatCount(filtered.length)} of ${formatCount(rows.length)} quotes`
+
   if (loading) {
     return (
       <div className="about-page__body about-page__body--quotes about-page__body--loading">
@@ -124,49 +176,25 @@ export function QuoteWall() {
           {formatCount(rows.length)} sparks that lit the songs. Filter by topic or search when you want a narrower lane.
         </p>
 
-        <label className="about-page-search">
-          <span>Search quotes</span>
-          <input
-            type="search"
-            value={findQuote}
-            onChange={(event) => setFindQuote(event.target.value)}
-            placeholder="Find a quote, muse, sutra, topic, or song..."
-          />
-        </label>
-
-        <div className="about-filter-stack" aria-label="Quote filters">
-          <p className="catalog-facet-help">
-            Filters combine across groups (AND). Multiple picks inside one group combine as OR.
-          </p>
-          <div className="about-filter-group" aria-label="Filter quotes by topic">
-            <button
-              type="button"
-              className={`about-filter-pill${topicFilter === 'all' ? ' is-active' : ''}`}
-              onClick={() => setTopicFilter('all')}
-            >
-              All topics <span>{formatCount(contextualTopicRows.length)}</span>
-            </button>
-            {topicOptions.map(([topic]) => {
-              const count = contextualTopicRows.filter((row) => topicLabel(row.core_topic) === topic).length
-              const disabled = topicFilter !== topic && count === 0
-              return (
-                <button
-                  key={topic}
-                  type="button"
-                  className={`about-filter-pill${topicFilter === topic ? ' is-active' : ''}`}
-                  onClick={() => setTopicFilter(topic)}
-                  disabled={disabled}
-                >
-                  {topic} <span>{formatCount(count)}</span>
-                </button>
-              )
-            })}
-          </div>
-        </div>
-
-        <p className="about-result-count" aria-live="polite">
-          Showing {formatCount(filtered.length)} of {formatCount(rows.length)} quotes.
-        </p>
+        <CatalogFilterBar
+          ariaLabel="Filter quotes"
+          panelId="quotes-filter-panel"
+          resultSummary={resultSummary}
+          activePills={quoteActivePills}
+          onClearAll={clearAllFilters}
+          facetGroups={quoteFacetGroups}
+          search={{
+            id: 'quotes-find-input',
+            label: 'Search',
+            ariaLabel: 'Find a quote, muse, sutra, topic, or song',
+            value: findQuote,
+            onChange: setFindQuote,
+            inputName: 'quotes_find',
+            placeholder: 'Find a quote, muse, sutra, topic, or song...',
+          }}
+          defaultExpanded={filterBarExpanded}
+          onExpandedChange={setFilterBarExpanded}
+        />
 
         <div className="quote-wall">
           <div className="quote-cluster__items">

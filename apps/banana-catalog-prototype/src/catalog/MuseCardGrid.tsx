@@ -6,6 +6,11 @@ import { useMusesCatalog } from './generatedData'
 import type { MuseCatalogItem } from './types'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
+import {
+  CatalogFilterBar,
+  type CatalogFilterBarActivePill,
+  type CatalogFilterBarFacetGroup,
+} from './CatalogFilterBar'
 import './CatalogApp.css'
 
 const INITIAL_MUSE_COUNT = 30
@@ -196,9 +201,7 @@ export function MuseCardGrid() {
     const params = new URLSearchParams(location.search)
     return (params.get('muse') || params.get('highlight') || '').trim()
   }, [location.search])
-  const [filtersOpen, setFiltersOpen] = useState(() =>
-    typeof window === 'undefined' ? true : window.innerWidth >= 900,
-  )
+  const [filterBarExpanded, setFilterBarExpanded] = useState(false)
   const [eraFilter, setEraFilter] = useState('all')
   const [genderFilter, setGenderFilter] = useState('all')
   const [typeFilter, setTypeFilter] = useState('all')
@@ -220,16 +223,6 @@ export function MuseCardGrid() {
       document.getElementById(id)?.scrollIntoView({ block: 'center' })
     })
   }, [highlightedMuse, loading])
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 899px)')
-    const sync = () => {
-      if (mq.matches) setFiltersOpen(false)
-    }
-    sync()
-    mq.addEventListener('change', sync)
-    return () => mq.removeEventListener('change', sync)
-  }, [])
 
   const eraOptions = useMemo(() => {
     const counts = new Map<string, number>()
@@ -360,58 +353,105 @@ export function MuseCardGrid() {
     setFindMuse('')
   }
 
-  const activeFilterContext = (
-    <section className="catalog-active-context" aria-label={hasActiveContext ? 'Active filters and result count' : 'Muses result count'}>
-      <p className="catalog-active-context__summary">{contextSummary}</p>
-      {hasActiveContext ? (
-        <div className="catalog-chips">
-          {findQuery ? (
-            <button type="button" className="catalog-chip catalog-chip--find" onClick={() => setFindMuse('')}>
-              Search: {findQuery}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </button>
-          ) : null}
-          {eraFilter !== 'all' ? (
-            <button type="button" className="catalog-chip" onClick={() => setEraFilter('all')}>
-              Era: {eraFilter}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </button>
-          ) : null}
-          {genderFilter !== 'all' ? (
-            <button type="button" className="catalog-chip" onClick={() => setGenderFilter('all')}>
-              Gender: {genderFilter}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </button>
-          ) : null}
-          {typeFilter !== 'all' ? (
-            <button type="button" className="catalog-chip" onClick={() => setTypeFilter('all')}>
-              Type: {typeFilter}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </button>
-          ) : null}
-          {countryFilter !== 'all' ? (
-            <button type="button" className="catalog-chip" onClick={() => setCountryFilter('all')}>
-              Country: {countryFilter}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </button>
-          ) : null}
-          <button type="button" className="catalog-clear" onClick={clearAllFilters}>
-            Clear all
-          </button>
-        </div>
-      ) : null}
-    </section>
-  )
+  const museActivePills: CatalogFilterBarActivePill[] = []
+  if (findQuery) {
+    museActivePills.push({
+      id: 'find',
+      label: `Search: ${findQuery}`,
+      onClick: () => setFindMuse(''),
+    })
+  }
+  if (eraFilter !== 'all') {
+    museActivePills.push({ id: 'era', label: `Era: ${eraFilter}`, onClick: () => setEraFilter('all') })
+  }
+  if (genderFilter !== 'all') {
+    museActivePills.push({ id: 'gender', label: `Gender: ${genderFilter}`, onClick: () => setGenderFilter('all') })
+  }
+  if (typeFilter !== 'all') {
+    museActivePills.push({ id: 'type', label: `Type: ${typeFilter}`, onClick: () => setTypeFilter('all') })
+  }
+  if (countryFilter !== 'all') {
+    museActivePills.push({ id: 'country', label: `Country: ${countryFilter}`, onClick: () => setCountryFilter('all') })
+  }
+
+  const museFacetGroups: CatalogFilterBarFacetGroup[] = [
+    {
+      id: 'era',
+      label: 'Era',
+      allLabel: 'All eras',
+      allCount: contextualEraRows.length,
+      onClearGroup: () => setEraFilter('all'),
+      options: eraOptions.map(([era]) => {
+        const count = contextualEraRows.filter((row) => splitList(row.era).includes(era)).length
+        return {
+          id: `era-${era}`,
+          label: era,
+          count,
+          active: eraFilter === era,
+          disabled: eraFilter !== era && count === 0,
+          onClick: () => setEraFilter(era),
+          title: `${count} muses`,
+        }
+      }),
+    },
+    {
+      id: 'gender',
+      label: 'Gender',
+      allLabel: 'All',
+      allCount: contextualGenderRows.length,
+      onClearGroup: () => setGenderFilter('all'),
+      options: genderOptions.map(([gender]) => {
+        const count = contextualGenderRows.filter((row) => row.gender_pronoun.trim() === gender).length
+        return {
+          id: `gender-${gender}`,
+          label: gender,
+          count,
+          active: genderFilter === gender,
+          disabled: genderFilter !== gender && count === 0,
+          onClick: () => setGenderFilter(gender),
+          title: `${count} muses`,
+        }
+      }),
+    },
+    {
+      id: 'type',
+      label: 'Type',
+      allLabel: 'All types',
+      allCount: contextualTypeRows.length,
+      onClearGroup: () => setTypeFilter('all'),
+      options: typeOptions.map(([type]) => {
+        const count = contextualTypeRows.filter((row) => splitList(row.type_category).includes(type)).length
+        return {
+          id: `type-${type}`,
+          label: type,
+          count,
+          active: typeFilter === type,
+          disabled: typeFilter !== type && count === 0,
+          onClick: () => setTypeFilter(type),
+          title: `${count} muses`,
+        }
+      }),
+    },
+    {
+      id: 'country',
+      label: 'Country',
+      allLabel: 'All countries',
+      allCount: contextualCountryRows.length,
+      onClearGroup: () => setCountryFilter('all'),
+      options: countryOptions.map(([country]) => {
+        const count = contextualCountryRows.filter((row) => row.country.trim() === country).length
+        return {
+          id: `country-${country}`,
+          label: country,
+          count,
+          active: countryFilter === country,
+          disabled: countryFilter !== country && count === 0,
+          onClick: () => setCountryFilter(country),
+          title: `${count} muses`,
+        }
+      }),
+    },
+  ]
 
   if (loading) {
     return (
@@ -438,261 +478,80 @@ export function MuseCardGrid() {
           {formatCount(rows.length)} thinkers, fools, poets, and troublemakers who inspired the songs.
         </p>
 
-        <label className="about-page-search">
-          <span>Search muses</span>
-          <input
-            id="muses-find-input-prominent"
-            type="search"
-            name="muses_find_prominent"
-            inputMode="search"
-            autoComplete="off"
-            spellCheck={false}
-            enterKeyHint="search"
-            value={findMuse}
-            onChange={(event) => setFindMuse(event.target.value)}
-            placeholder="Find a muse, theme, work, or quote..."
-          />
-        </label>
-
-        <div className={`catalog-layout about-muses-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
-          <aside
-            className={`catalog-filters${filtersOpen ? ' is-open' : ''}`}
-            aria-labelledby="muses-filters-heading"
-          >
-            <div className="catalog-filters-head">
-              <h2 id="muses-filters-heading" className="catalog-section-title">
-                Filters
-              </h2>
-              <button
-                type="button"
-                className="catalog-icon-btn"
-                onClick={() => setFiltersOpen(false)}
-                aria-expanded={filtersOpen}
-                aria-controls="muses-filter-panel"
+        <CatalogFilterBar
+          ariaLabel="Filter muses"
+          panelId="muses-filter-panel"
+          resultSummary={contextSummary}
+          showResultSummary={false}
+          activePills={museActivePills}
+          onClearAll={clearAllFilters}
+          facetGroups={museFacetGroups}
+          search={{
+            id: 'muses-find-input',
+            label: 'Search',
+            ariaLabel: 'Find a muse, theme, work, or quote',
+            value: findMuse,
+            onChange: setFindMuse,
+            inputName: 'muses_find',
+            placeholder: 'Find a muse, theme, work, or quote...',
+          }}
+          defaultExpanded={filterBarExpanded}
+          onExpandedChange={setFilterBarExpanded}
+          toolbarEnd={
+            <div className="catalog-sort muses-page__sort" aria-label="Sort muses">
+              <label className="catalog-sort-label" htmlFor="muses-sort-select">
+                Sort
+              </label>
+              <select
+                id="muses-sort-select"
+                className="catalog-sort-select"
+                value={sort}
+                onChange={(event) => setSort(event.target.value as MuseSortMode)}
               >
-                Hide
-              </button>
+                <option value="last_name_az">Last name (A–Z)</option>
+                <option value="first_name_az">First name (A–Z)</option>
+                <option value="songs">By song count</option>
+              </select>
             </div>
+          }
+        />
 
-            {activeFilterContext}
+        <div className="about-muses-main">
+          <p className="about-result-count" aria-live="polite">
+            {filtered.length === 0
+              ? `No muses match${findQuery ? ` "${findQuery}"` : ''}.`
+              : `Showing ${formatCount(visible.length)} of ${formatCount(filtered.length)} muses.`}
+          </p>
 
-            <div id="muses-filter-panel" className="catalog-facet-stack">
-              <p className="catalog-facet-help">
-                Filters combine across groups (AND). Multiple picks inside one group combine as OR.
-              </p>
-              <section className="catalog-facet" aria-labelledby="muses-search-heading">
-                <h3 id="muses-search-heading">Search</h3>
-                <label className="catalog-facet-find-label" htmlFor="muses-find-input">
-                  Find a muse, theme, work, or quote
-                </label>
-                <input
-                  id="muses-find-input"
-                  className="catalog-facet-find-input"
-                  type="search"
-                  name="muses_find"
-                  inputMode="search"
-                  autoComplete="off"
-                  spellCheck={false}
-                  enterKeyHint="search"
-                  value={findMuse}
-                  onChange={(event) => setFindMuse(event.target.value)}
-                />
-              </section>
-
-              <section className="catalog-facet" aria-labelledby="muses-era-heading">
-                <h3 id="muses-era-heading">Era</h3>
-                <div className="catalog-facet-chips" role="group" aria-label="Filter muses by era">
-                  <button
-                    type="button"
-                    className={`catalog-facet-chip${eraFilter === 'all' ? ' is-active' : ''}`}
-                    onClick={() => setEraFilter('all')}
-                  >
-                    <span>All eras</span>
-                    <span className="catalog-facet-count">{` (${formatCount(contextualEraRows.length)})`}</span>
-                  </button>
-                  {eraOptions.map(([era]) => (
-                    <button
-                      key={era}
-                      type="button"
-                      className={`catalog-facet-chip${eraFilter === era ? ' is-active' : ''}`}
-                      disabled={eraFilter !== era && contextualEraRows.filter((row) => splitList(row.era).includes(era)).length === 0}
-                      onClick={() => setEraFilter(era)}
-                    >
-                      <span>{era}</span>
-                      <span className="catalog-facet-count">
-                        {` (${formatCount(contextualEraRows.filter((row) => splitList(row.era).includes(era)).length)})`}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </section>
-
-              <section className="catalog-facet" aria-labelledby="muses-gender-heading">
-                <h3 id="muses-gender-heading">Gender</h3>
-                <div className="catalog-facet-chips" role="group" aria-label="Filter muses by gender">
-                  <button
-                    type="button"
-                    className={`catalog-facet-chip${genderFilter === 'all' ? ' is-active' : ''}`}
-                    onClick={() => setGenderFilter('all')}
-                  >
-                    <span>All</span>
-                    <span className="catalog-facet-count">{` (${formatCount(contextualGenderRows.length)})`}</span>
-                  </button>
-                  {genderOptions.map(([gender]) => (
-                    <button
-                      key={gender}
-                      type="button"
-                      className={`catalog-facet-chip${genderFilter === gender ? ' is-active' : ''}`}
-                      disabled={
-                        genderFilter !== gender &&
-                        contextualGenderRows.filter((row) => row.gender_pronoun.trim() === gender).length === 0
-                      }
-                      onClick={() => setGenderFilter(gender)}
-                    >
-                      <span>{gender}</span>
-                      <span className="catalog-facet-count">
-                        {` (${formatCount(contextualGenderRows.filter((row) => row.gender_pronoun.trim() === gender).length)})`}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </section>
-
-              <section className="catalog-facet" aria-labelledby="muses-type-heading">
-                <h3 id="muses-type-heading">Type</h3>
-                <div className="catalog-facet-chips" role="group" aria-label="Filter muses by type">
-                  <button
-                    type="button"
-                    className={`catalog-facet-chip${typeFilter === 'all' ? ' is-active' : ''}`}
-                    onClick={() => setTypeFilter('all')}
-                  >
-                    <span>All types</span>
-                    <span className="catalog-facet-count">{` (${formatCount(contextualTypeRows.length)})`}</span>
-                  </button>
-                  {typeOptions.map(([type]) => (
-                    <button
-                      key={type}
-                      type="button"
-                      className={`catalog-facet-chip${typeFilter === type ? ' is-active' : ''}`}
-                      disabled={
-                        typeFilter !== type &&
-                        contextualTypeRows.filter((row) => splitList(row.type_category).includes(type)).length === 0
-                      }
-                      onClick={() => setTypeFilter(type)}
-                    >
-                      <span>{type}</span>
-                      <span className="catalog-facet-count">
-                        {` (${formatCount(contextualTypeRows.filter((row) => splitList(row.type_category).includes(type)).length)})`}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </section>
-
-              <section className="catalog-facet" aria-labelledby="muses-country-heading">
-                <h3 id="muses-country-heading">Country</h3>
-                <div className="catalog-facet-chips" role="group" aria-label="Filter muses by country">
-                  <button
-                    type="button"
-                    className={`catalog-facet-chip${countryFilter === 'all' ? ' is-active' : ''}`}
-                    onClick={() => setCountryFilter('all')}
-                  >
-                    <span>All countries</span>
-                    <span className="catalog-facet-count">{` (${formatCount(contextualCountryRows.length)})`}</span>
-                  </button>
-                  {countryOptions.map(([country]) => (
-                    <button
-                      key={country}
-                      type="button"
-                      className={`catalog-facet-chip${countryFilter === country ? ' is-active' : ''}`}
-                      disabled={
-                        countryFilter !== country &&
-                        contextualCountryRows.filter((row) => row.country.trim() === country).length === 0
-                      }
-                      onClick={() => setCountryFilter(country)}
-                    >
-                      <span>{country}</span>
-                      <span className="catalog-facet-count">
-                        {` (${formatCount(contextualCountryRows.filter((row) => row.country.trim() === country).length)})`}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </section>
-
-            </div>
-          </aside>
-
-          <div className="catalog-main about-muses-main">
-            <div className="catalog-main__sort-row muses-page__sort-row">
-              <div className="catalog-sort muses-page__sort" aria-label="Sort muses">
-                <label className="catalog-sort-label" htmlFor="muses-sort-select">
-                  Sort
-                </label>
-                <select
-                  id="muses-sort-select"
-                  className="catalog-sort-select"
-                  value={sort}
-                  onChange={(event) => setSort(event.target.value as MuseSortMode)}
-                >
-                  <option value="last_name_az">Last name (A–Z)</option>
-                  <option value="first_name_az">First name (A–Z)</option>
-                  <option value="songs">By song count</option>
-                </select>
-              </div>
-            </div>
-
-            {!filtersOpen ? (
-              <>
-                {activeFilterContext}
-                <button
-                  type="button"
-                  className="catalog-filter-reopen"
-                  onClick={() => setFiltersOpen(true)}
-                  aria-expanded={false}
-                  aria-controls="muses-filter-panel"
-                >
-                  Show filters
-                </button>
-              </>
-            ) : null}
-
-            <p className="about-result-count" aria-live="polite">
-              {filtered.length === 0
-                ? `No muses match${findQuery ? ` "${findQuery}"` : ''}.`
-                : `Showing ${formatCount(visible.length)} of ${formatCount(filtered.length)} muses.`}
+          {filtered.length === 0 ? (
+            <p className="about-page__prose about-muses-empty">
+              Nothing here yet.{' '}
+              <a
+                className="about-page__text-link"
+                href="#bertrand"
+                onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+                  event.preventDefault()
+                  trackBertrandOpen({ surface: 'muses_search_empty', mode: 'read' })
+                  window.dispatchEvent(new CustomEvent('bbb:open', { detail: { reason: 'muses_search_empty' } }))
+                }}
+              >
+                Ring Bertrand
+              </a>{' '}
+              and tell him who you were looking for.
             </p>
+          ) : (
+            <div className="muse-grid">
+              {visible.map((item) => (
+                <MuseCard key={item.muse_id || item.muse} item={item} highlighted={item.muse === highlightedMuse} />
+              ))}
+            </div>
+          )}
 
-            {filtered.length === 0 ? (
-              <p className="about-page__prose about-muses-empty">
-                Nothing here yet.{' '}
-                <a
-                  className="about-page__text-link"
-                  href="#bertrand"
-                  onClick={(event: MouseEvent<HTMLAnchorElement>) => {
-                    event.preventDefault()
-                    trackBertrandOpen({ surface: 'muses_search_empty', mode: 'read' })
-                    window.dispatchEvent(new CustomEvent('bbb:open', { detail: { reason: 'muses_search_empty' } }))
-                  }}
-                >
-                  Ring Bertrand
-                </a>{' '}
-                and tell him who you were looking for.
-              </p>
-            ) : (
-              <div className="muse-grid">
-                {visible.map((item) => (
-                  <MuseCard key={item.muse_id || item.muse} item={item} highlighted={item.muse === highlightedMuse} />
-                ))}
-              </div>
-            )}
-
-            {!showAll && filtered.length > INITIAL_MUSE_COUNT ? (
-              <button type="button" className="about-show-all" onClick={() => setShowAll(true)}>
-                Show all {formatCount(filtered.length)} muses
-              </button>
-            ) : null}
-          </div>
+          {!showAll && filtered.length > INITIAL_MUSE_COUNT ? (
+            <button type="button" className="about-show-all" onClick={() => setShowAll(true)}>
+              Show all {formatCount(filtered.length)} muses
+            </button>
+          ) : null}
         </div>
       </section>
     </div>

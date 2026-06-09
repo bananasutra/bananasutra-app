@@ -48,7 +48,7 @@
 
   .discovery-search--header.discovery-search--header-mobile-open .discovery-search__field {
     border-width: 1px;
-    border-radius: 2px;
+    border-radius: var(--radius-control, 2px);
     box-shadow: none;
     padding: 0.38rem 0.5rem;
   }
@@ -63,7 +63,7 @@
   }
 
   .discovery-search--header.discovery-search--header-mobile-open .discovery-search__panel {
-    border-radius: 2px;
+    border-radius: var(--radius-control, 2px);
     border-width: 1px;
     box-shadow: none;
   }
@@ -116,7 +116,7 @@
   align-items: center;
   gap: 0.45rem;
   padding: 0.5rem 0.65rem;
-  border-radius: 12px;
+  border-radius: var(--radius-md, 12px);
   border: 2px solid var(--color-border);
   background: var(--color-bg-panel);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
@@ -131,7 +131,7 @@
 
 .discovery-search--hero .discovery-search__field {
   padding: 0.65rem 0.85rem;
-  border-radius: 14px;
+  border-radius: var(--radius-md, 12px);
 }
 
 .discovery-search__icon {
@@ -167,7 +167,7 @@
   line-height: 1;
   cursor: pointer;
   padding: 0.15rem 0.35rem;
-  border-radius: 6px;
+  border-radius: var(--radius-control, 2px);
 }
 
 .discovery-search__clear:hover {
@@ -187,7 +187,7 @@
   z-index: 160;
   max-height: min(70vh, 28rem);
   overflow: auto;
-  border-radius: 12px;
+  border-radius: var(--radius-md, 12px);
   border: 1px solid var(--color-border);
   background: var(--color-bg-shell);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
@@ -339,7 +339,7 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.22rem 0.5rem;
-  border-radius: 999px;
+  border-radius: var(--radius-control, 2px);
   border: 1px solid var(--color-border);
   background: var(--color-bg-elevated);
   color: var(--color-text-primary);
@@ -501,7 +501,7 @@
 .discovery-search__tab:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 1px;
-  border-radius: 4px;
+  border-radius: var(--radius-control, 2px);
 }
 
 .discovery-search__tab-count {
@@ -619,7 +619,7 @@
 .discovery-search__result-thumb {
   width: 42px;
   height: 42px;
-  border-radius: 6px;
+  border-radius: var(--radius-control, 2px);
   object-fit: cover;
   flex: 0 0 42px;
   background: var(--color-bg-inset);
@@ -661,13 +661,13 @@
 
 .discovery-search__result-row--active {
   background: var(--color-accent-soft);
-  border-radius: 6px;
+  border-radius: var(--radius-control, 2px);
 }
 
 .discovery-search__result-row:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 1px;
-  border-radius: 6px;
+  border-radius: var(--radius-control, 2px);
 }
 
 .discovery-search__results--empty .discovery-search__result-row--empty {
@@ -755,7 +755,7 @@
   flex: 0 0 auto;
   width: 72px;
   aspect-ratio: 16 / 9;
-  border-radius: 6px;
+  border-radius: var(--radius-control, 2px);
   overflow: hidden;
   line-height: 0;
   border: 1px solid #2a3144;

@@ -6,7 +6,11 @@ import {
   type WatchLpSutraFilter,
 } from './watchLpData'
 import { LISTEN_LP_SUTRA_FILTER_OPTIONS } from './listenLpData'
-import './lp-facet-bar.css'
+import {
+  CatalogFilterBar,
+  type CatalogFilterBarActivePill,
+  type CatalogFilterBarFacetGroup,
+} from './CatalogFilterBar'
 
 type Props = {
   playlists: WatchLpPlaylistPick[]
@@ -45,89 +49,67 @@ export function WatchLpFacetBar({
     shownCount,
     totalCount,
   })
-  const hasActive = activeSutra !== 'ALL' || activeGenre !== 'ALL'
+
+  const activePills: CatalogFilterBarActivePill[] = []
+  if (activeSutra !== 'ALL') {
+    activePills.push({
+      id: 'sutra',
+      label: sutraChipLabel(activeSutra),
+      onClick: onClearSutra,
+    })
+  }
+  if (activeGenre !== 'ALL') {
+    activePills.push({
+      id: 'genre',
+      label: activeGenre,
+      onClick: onClearGenre,
+    })
+  }
+
+  const facetGroups: CatalogFilterBarFacetGroup[] = [
+    {
+      id: 'sutra',
+      label: 'Question',
+      showAllChip: false,
+      options: WATCH_LP_SUTRA_FILTER_OPTIONS.map((opt) => ({
+        id: `sutra-${opt.value}`,
+        label: opt.label === 'All' ? 'All questions' : opt.label,
+        count: 0,
+        showCount: false,
+        active: opt.value === activeSutra,
+        className: opt.value !== 'ALL' ? 'catalog-filter-bar__chip--question' : undefined,
+        onClick: () => {
+          onSutraChange(opt.value)
+          if (opt.value !== 'ALL') onGenreChange('ALL')
+        },
+      })),
+    },
+    {
+      id: 'genre',
+      label: 'Genre',
+      showAllChip: false,
+      options: genreOptions.map((opt) => ({
+        id: `genre-${opt.value}`,
+        label: opt.label === 'All' ? 'All genres' : opt.label,
+        count: 0,
+        showCount: false,
+        active: opt.value === activeGenre,
+        onClick: () => {
+          onGenreChange(opt.value)
+          if (opt.value !== 'ALL') onSutraChange('ALL')
+        },
+      })),
+    },
+  ]
 
   return (
-    <div className="lp-facet-bar watch-lp__facet-bar" aria-label="Filter playlists">
-      {hasActive ? (
-        <div className="lp-facet-bar__active">
-          <span className="lp-facet-bar__count">Filtered</span>
-          {activeSutra !== 'ALL' ? (
-            <button type="button" className="lp-facet-bar__pill" onClick={onClearSutra}>
-              {sutraChipLabel(activeSutra)}
-              <span className="lp-facet-bar__pill-x" aria-hidden>
-                ×
-              </span>
-            </button>
-          ) : null}
-          {activeGenre !== 'ALL' ? (
-            <button type="button" className="lp-facet-bar__pill" onClick={onClearGenre}>
-              {activeGenre}
-              <span className="lp-facet-bar__pill-x" aria-hidden>
-                ×
-              </span>
-            </button>
-          ) : null}
-          <button type="button" className="lp-facet-bar__clear" onClick={onClearAll}>
-            Clear all
-          </button>
-        </div>
-      ) : null}
-
-      <div className="lp-facet-bar__panel">
-        <div className="lp-facet-bar__row">
-          <div className="lp-facet-bar__label">Choose a question</div>
-          <div className="lp-facet-bar__scroll">
-            <div className="lp-facet-bar__chips" role="group" aria-label="Choose a question">
-              {WATCH_LP_SUTRA_FILTER_OPTIONS.map((opt) => {
-                const on = opt.value === activeSutra
-                const isQuestion = opt.value !== 'ALL'
-                return (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    className={`lp-facet-bar__chip${isQuestion ? ' lp-facet-bar__chip--question' : ''}${on ? ' is-active' : ''}`}
-                    aria-pressed={on}
-                    onClick={() => {
-                      onSutraChange(opt.value)
-                      if (opt.value !== 'ALL') onGenreChange('ALL')
-                    }}
-                  >
-                    {opt.label === 'All' ? 'All questions' : opt.label}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-        <div className="lp-facet-bar__row">
-          <div className="lp-facet-bar__label">Choose a genre</div>
-          <div className="lp-facet-bar__scroll">
-            <div className="lp-facet-bar__chips" role="group" aria-label="Choose a genre">
-              {genreOptions.map((opt) => {
-                const on = opt.value === activeGenre
-                return (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    className={`lp-facet-bar__chip${on ? ' is-active' : ''}`}
-                    aria-pressed={on}
-                    onClick={() => {
-                      onGenreChange(opt.value)
-                      if (opt.value !== 'ALL') onSutraChange('ALL')
-                    }}
-                  >
-                    {opt.label === 'All' ? 'All genres' : opt.label}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
-      <p className="lp-facet-bar__status" aria-live="polite">
-        {statusText}
-      </p>
-    </div>
+    <CatalogFilterBar
+      ariaLabel="Filter playlists"
+      resultSummary={statusText}
+      activePills={activePills}
+      onClearAll={onClearAll}
+      facetGroups={facetGroups}
+      combineHelpText=""
+    />
   )
 }

@@ -557,7 +557,7 @@
 .home-portal__quote-sutra-link:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
-  border-radius: 2px;
+  border-radius: var(--radius-control, 2px);
 }
 
 .home-portal__quote-muse-link {
@@ -574,7 +574,7 @@
 .home-portal__quote-muse-link:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
-  border-radius: 2px;
+  border-radius: var(--radius-control, 2px);
 }
 
 .home-portal__quote-meta-sep {

@@ -52,6 +52,31 @@ export const SUTRA_INDEX_CORE_ORDER: readonly SutraFamilyKey[] = [
   'BOW',
 ] as const
 
+/** Canonical filter-chip order: core seven, then QUACK, then anything else A–Z. */
+export function sutraDisplaySortRank(display: string): number {
+  const norm = (display || '').trim().toUpperCase()
+  for (let i = 0; i < SUTRA_INDEX_CORE_ORDER.length; i += 1) {
+    const key = SUTRA_INDEX_CORE_ORDER[i]
+    if (norm === key || norm.startsWith(`${key}SUTRA`) || norm.startsWith(key)) return i
+  }
+  if (norm.includes('QUACK')) return SUTRA_INDEX_CORE_ORDER.length
+  return SUTRA_INDEX_CORE_ORDER.length + 100
+}
+
+export function compareSutraDisplayNames(a: string, b: string): number {
+  const rankDiff = sutraDisplaySortRank(a) - sutraDisplaySortRank(b)
+  if (rankDiff !== 0) return rankDiff
+  return a.localeCompare(b, undefined, { sensitivity: 'base' })
+}
+
+export function sortSutraDisplayNames(values: readonly string[]): string[] {
+  return [...values].sort(compareSutraDisplayNames)
+}
+
+export function sortSutraFacetEntries<T extends { value: string }>(entries: readonly T[]): T[] {
+  return [...entries].sort((a, b) => compareSutraDisplayNames(a.value, b.value))
+}
+
 export function sutraHrefForFamily(key: SutraFamilyKey): string {
   const slug = (SUTRA_CONTEXT[key]?.url_slug_sutra || '').trim()
   return slug ? sutraDetailPath(slug) : ABOUT_SUTRAS_HREF
