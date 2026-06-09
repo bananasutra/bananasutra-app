@@ -29,6 +29,7 @@ import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { ScrollRail } from './ScrollRail'
 import { CatalogPager } from './CatalogPager'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
+import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import './CatalogPager.css'
@@ -38,6 +39,11 @@ import { useSongCatalog } from './generatedData'
 
 const VIDEO_PAGE_SIZE = 30
 const FIND_DEBOUNCE_MS = 350
+const REELS_RAIL_SCROLL_STEP = 164
+
+function formatCount(n: number): string {
+  return n.toLocaleString('en-US')
+}
 
 function buildSongMapByLyricsId(songCatalog: SongCatalogItem[]): Map<string, SongCatalogItem> {
   const m = new Map<string, SongCatalogItem>()
@@ -619,6 +625,15 @@ export function VideosPage() {
 
   let nextPosterIndex = 0
 
+  const videosResultCountLine =
+    shownVideos.length === 0
+      ? hasActiveVideoFilters
+        ? 'No videos match these filters.'
+        : ''
+      : hasActiveVideoFilters
+        ? `Showing ${formatCount(shownVideos.length)} of ${formatCount(allVideos.length)} videos`
+        : `${formatCount(allVideos.length)} videos`
+
   const listSection = (
     <section className="videos-page__list-wrap" aria-label="Video list">
       {!youtubeCatalogReady ? (
@@ -629,10 +644,23 @@ export function VideosPage() {
         <p className="videos-page__empty">No videos match these filters.</p>
       ) : (
         <>
+          {videosResultCountLine ? (
+            <p className="videos-page__result-count about-result-count" aria-live="polite">
+              {videosResultCountLine}
+            </p>
+          ) : null}
           {verticalVideos.length > 0 ? (
             <div className="videos-page__rail-section">
-              <h2 className="videos-page__rail-heading catalog-section-title">Music reels</h2>
-              <ScrollRail className="videos-page__rail-scroll">
+              <h2 className="videos-page__section-heading catalog-section-title">
+                Music reels{' '}
+                <span className="videos-page__section-count">({formatCount(verticalVideos.length)})</span>
+              </h2>
+              <p className="catalog-lp-section-intro">Vertical clips. Swipe sideways through the tall ones.</p>
+              <ScrollRail
+                className="videos-page__rail-scroll listen-lp__scroll-rail"
+                variant="fade"
+                scrollStep={REELS_RAIL_SCROLL_STEP}
+              >
                 <ul className="videos-page__rail">
                   {verticalVideos.map((v) => renderCard(v, 'rail', nextPosterIndex++))}
                 </ul>
@@ -652,11 +680,14 @@ export function VideosPage() {
                 />
               ) : null}
               <div className="videos-page__grid-section">
-                {verticalVideos.length > 0 ? (
-                  <h2 className="videos-page__rail-heading videos-page__rail-heading--spaced catalog-section-title">
-                    Music videos
-                  </h2>
-                ) : null}
+                <h2
+                  className={`videos-page__section-heading catalog-section-title${
+                    verticalVideos.length > 0 ? ' videos-page__section-heading--spaced' : ''
+                  }`}
+                >
+                  Music videos <span className="videos-page__section-count">({formatCount(wideTotal)})</span>
+                </h2>
+                <p className="catalog-lp-section-intro">Wide format uploads. Tap a card for the song page or YouTube.</p>
                 <ul className="videos-page__grid">
                   {wideVideos.map((v) => renderCard(v, 'grid', nextPosterIndex++))}
                 </ul>
@@ -732,7 +763,7 @@ export function VideosPage() {
                 aria-busy={!youtubeCatalogReady}
               >
                 <h2 id="videos-featured-hero-heading" className="catalog-section-title">
-                  Featured Video
+                  Featured video
                 </h2>
                 {!youtubeCatalogReady ? (
                   <div className="videos-page__featured-hero-grid" aria-hidden="true">
@@ -758,9 +789,9 @@ export function VideosPage() {
                       />
                     </div>
                     <div className="catalog-featured-embed-copy videos-page__featured-hero-copy">
-                      <h3 className="catalog-featured-embed-copy__title">
+                      <p className="catalog-featured-embed-copy__title">
                         {featuredVideoHero.lyrics_title || featuredVideoHero.title}
-                      </h3>
+                      </p>
                       {(featuredVideoHero.sutra || '').trim() ? (
                         <p className="catalog-featured-embed-copy__meta">{featuredVideoHero.sutra.trim()}</p>
                       ) : null}
@@ -768,11 +799,12 @@ export function VideosPage() {
                         <p className="catalog-featured-embed-copy__desc">{featuredVideoHero.lyrics_summary?.trim()}</p>
                       ) : null}
                       {featuredHeroSongPageHref ? (
-                        <div className="catalog-featured-video-song-row">
-                          <Link className="catalog-song-page-cta" to={featuredHeroSongPageHref}>
-                            Song page
-                          </Link>
-                        </div>
+                        <Link className="catalog-featured-embed-copy__cta" to={featuredHeroSongPageHref}>
+                          Song page →
+                        </Link>
+                      ) : null}
+                      {(featuredVideoHero.yt_url || '').trim() ? (
+                        <CatalogMediaOutbound href={featuredVideoHero.yt_url.trim()} />
                       ) : null}
                     </div>
                   </div>
@@ -780,6 +812,14 @@ export function VideosPage() {
               </section>
             ) : null}
             {listSection}
+            {youtubeCatalogReady && shownVideos.length > 0 ? (
+              <Link
+                className="catalog-section-cta videos-page__watch-crosslink"
+                to={`${canonicalPathForRoute('/watch')}#watch-lp-playlists-heading`}
+              >
+                Watch playlists →
+              </Link>
+            ) : null}
           </main>
         </div>
       </div>

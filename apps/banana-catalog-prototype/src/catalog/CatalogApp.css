@@ -488,6 +488,11 @@ html {
     width: 100%;
   }
 
+  .catalog-layout:not(.catalog-layout--filters-collapsed) .videos-page__watch-crosslink {
+    order: 5;
+    width: 100%;
+  }
+
   .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-pager--bottom {
     order: 5;
     width: 100%;

@@ -37,6 +37,10 @@
   margin-top: 0.75rem;
 }
 
+#watch-lp-playlists-heading {
+  scroll-margin-top: calc(var(--catalog-header-h, 108px) + 0.75rem);
+}
+
 .watch-lp__load-more {
   display: inline-block;
   margin: 0.35rem 0 0.65rem;
