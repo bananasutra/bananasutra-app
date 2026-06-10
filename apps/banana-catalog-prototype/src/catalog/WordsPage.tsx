@@ -13,8 +13,11 @@ import { songMatchesFilters, sortSongs } from './filterSongs'
 import { songCatalogPath } from './songPaths'
 import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
-import { CatalogPager } from './CatalogPager'
-import './CatalogPager.css'
+import { CatalogInfiniteScrollFooter } from './CatalogInfiniteScrollFooter'
+import {
+  catalogInfiniteScrollStorageKey,
+  useCatalogInfiniteScroll,
+} from './useCatalogInfiniteScroll'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { coverImageUrl } from '../seo/imageUrl'
@@ -23,14 +26,14 @@ import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { searchParamsFromSearchString } from './urlSearchParams'
-import { parseSort, readCatalogBrowsePage } from './urlState'
+import { parseSort, readCatalogBrowsePage, serializeBrowseQuery } from './urlState'
+import { buildWordsPath, normalizeSortForWords, readWordsStateFromUrl } from './wordsUrlState'
 import {
   songMatchesWordsBucket,
   songOnWordsSurface,
   wordsCardStoryBadge,
   type WordsStoryBucket,
 } from './wordsStory'
-import { buildWordsPath, normalizeSortForWords, readWordsStateFromUrl } from './wordsUrlState'
 import {
   CatalogFilterBar,
   type CatalogFilterBarActivePill,
@@ -41,7 +44,6 @@ import './CatalogApp.css'
 import './WordsPage.css'
 
 const FIND_DEBOUNCE_MS = 350
-const PAGE_SIZE = 30
 
 function toggleSetMember(set: Set<string>, value: string): Set<string> {
   const next = new Set(set)
@@ -91,6 +93,7 @@ export function WordsPage() {
     [location.search],
   )
   const urlBrowsePage = useMemo(() => readCatalogBrowsePage(location.search), [location.search])
+  const [legacyPageSeed] = useState(() => urlBrowsePage)
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const [sort, setSort] = useState<SortMode>(() => readWordsStateFromUrl().sort)
@@ -229,23 +232,28 @@ export function WordsPage() {
     return sortSongs(list, sort)
   }, [wordsPool, filters, bucket, sort, findQuery])
 
-  const pageCount = Math.max(1, Math.ceil(filteredSorted.length / PAGE_SIZE))
-  const safePage = Math.min(urlBrowsePage, pageCount)
-  const pagedWords = useMemo(
-    () => filteredSorted.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
-    [filteredSorted, safePage],
-  )
+  const wordsScrollResetKey = useMemo(() => {
+    const base = serializeBrowseQuery(sort, filters, findQuery || undefined, 'all', 1)
+    return bucket === 'all' ? base : `${base}|wb=${bucket}`
+  }, [sort, filters, findQuery, bucket])
+
+  const {
+    visibleItems: pagedWords,
+    visibleCount: wordsVisibleCount,
+    totalCount: wordsTotalCount,
+    hasMore: wordsHasMore,
+    loadMore: loadMoreWords,
+  } = useCatalogInfiniteScroll({
+    items: filteredSorted,
+    resetKey: wordsScrollResetKey,
+    storageKey: catalogInfiniteScrollStorageKey('/words', wordsScrollResetKey),
+    legacyPage: legacyPageSeed,
+  })
 
   useEffect(() => {
-    if (urlBrowsePage !== safePage) {
-      navigate(buildWordsPath(sort, filters, findQuery || undefined, bucket, safePage), { replace: true })
-    }
-  }, [urlBrowsePage, safePage, sort, filters, findQuery, bucket, navigate])
-
-  const pagerLink = useCallback(
-    (target: number) => buildWordsPath(sort, filters, findQuery || undefined, bucket, target),
-    [sort, filters, findQuery, bucket],
-  )
+    if (urlBrowsePage <= 1) return
+    navigate(buildWordsPath(sort, filters, findQuery || undefined, bucket, 1), { replace: true })
+  }, [urlBrowsePage, sort, filters, findQuery, bucket, navigate])
 
   const facetSelections = countFacetSelections(filters)
   const hasActiveContext = facetSelections > 0 || bucket !== 'all' || Boolean(findQuery)
@@ -272,8 +280,7 @@ export function WordsPage() {
     filteredSorted.length,
     findQuery,
     findDraft,
-    urlBrowsePage,
-    safePage,
+    wordsVisibleCount,
   ])
 
   const wordsActivePills: CatalogFilterBarActivePill[] = []
@@ -456,16 +463,6 @@ export function WordsPage() {
           />
 
           <main id="main-content" className="catalog-main words-page__main">
-            {filteredSorted.length > 0 ? (
-              <CatalogPager
-                variant="top"
-                safePage={safePage}
-                pageCount={pageCount}
-                totalInView={filteredSorted.length}
-                pageSize={PAGE_SIZE}
-                pagerLink={pagerLink}
-              />
-            ) : null}
             <div className="words-page__grid">
               {pagedWords.map((song) => {
                 const secondaryMeta = [song.topic, song.intention, song.light_shadow]
@@ -525,13 +522,12 @@ export function WordsPage() {
               })}
             </div>
             {filteredSorted.length > 0 ? (
-              <CatalogPager
-                variant="bottom"
-                safePage={safePage}
-                pageCount={pageCount}
-                totalInView={filteredSorted.length}
-                pageSize={PAGE_SIZE}
-                pagerLink={pagerLink}
+              <CatalogInfiniteScrollFooter
+                visibleCount={wordsVisibleCount}
+                totalCount={wordsTotalCount}
+                hasMore={wordsHasMore}
+                loadMore={loadMoreWords}
+                noun="lyrics"
               />
             ) : null}
             {filteredSorted.length === 0 ? (

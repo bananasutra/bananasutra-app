@@ -3,8 +3,11 @@ import type { KeyboardEvent, MouseEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
 import { TRACKS_BROWSER_FACET_ORDER, TRACKS_FACET_LABELS } from './catalogFacetConfig'
-import { CatalogPager } from './CatalogPager'
-import './CatalogPager.css'
+import { CatalogInfiniteScrollFooter } from './CatalogInfiniteScrollFooter'
+import {
+  catalogInfiniteScrollStorageKey,
+  useCatalogInfiniteScroll,
+} from './useCatalogInfiniteScroll'
 import { facetCountsFromTracks } from './facetCountsFromTracks'
 import { buildContextualTrackFacetEntries } from './facetCountsContextual'
 import {
@@ -37,7 +40,7 @@ import {
   serializeTracksBrowseQuery,
 } from './urlState'
 import { coverImageUrl } from '../seo/imageUrl'
-import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
+import { canonicalPathForRoute } from './seoPaths'
 import { PLAY_ALL_HONEST_MOBILE_COPY, PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -50,7 +53,6 @@ import './CatalogApp.css'
 import './AboutPage.css'
 import './TracksPage.css'
 
-const PAGE_SIZE = 30
 const FIND_DEBOUNCE_MS = 350
 const EMPTY_TRACK_FACETS: Record<TracksFacetFilterKey, FacetEntry[]> = {
   sutra: [],
@@ -116,6 +118,7 @@ export function TracksPage() {
     () => readTracksBrowseFromSearch(location.search),
     [location.search],
   )
+  const [legacyPageSeed] = useState(() => urlPage)
 
   const [filters, setFilters] = useState<TracksFilterState>(urlFilters)
   const [findDraft, setFindDraft] = useState(urlFind)
@@ -166,7 +169,7 @@ export function TracksPage() {
       countTracksSelections(urlFilters) > 0 ||
       Boolean(urlFind.trim()) ||
       urlSort !== 'likes' ||
-      urlPage > 1,
+      legacyPageSeed > 1,
   )
 
   useEffect(() => {
@@ -246,21 +249,31 @@ export function TracksPage() {
     return list
   }, [catalogList, filters, urlFind, urlSort])
 
-  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
-  const safePage = Math.min(urlPage, pageCount)
-  const pageStart = (safePage - 1) * PAGE_SIZE
-  const pageRows = useMemo(
-    () => filtered.slice(pageStart, pageStart + PAGE_SIZE),
-    [filtered, pageStart],
+  const tracksScrollResetKey = useMemo(
+    () => serializeTracksBrowseQuery(filters, urlFind, 1, new URLSearchParams(), urlSort),
+    [filters, urlFind, urlSort],
   )
 
+  const {
+    visibleItems: listRows,
+    visibleCount: tracksVisibleCount,
+    totalCount: tracksTotalCount,
+    hasMore: tracksHasMore,
+    loadMore: loadMoreTracks,
+    ensureVisibleThroughIndex,
+    resetVisible,
+  } = useCatalogInfiniteScroll({
+    items: filtered,
+    resetKey: tracksScrollResetKey,
+    storageKey: catalogInfiniteScrollStorageKey('/tracks', tracksScrollResetKey),
+    legacyPage: legacyPageSeed,
+  })
+
   useEffect(() => {
-    if (urlPage !== safePage) {
-      const preserve = new URLSearchParams(location.search)
-      const path = buildTracksBrowsePathFull(filters, urlFind, safePage, preserve, urlSort)
-      navigate(path, { replace: true })
-    }
-  }, [urlPage, safePage, filters, urlFind, urlSort, location.search, navigate])
+    if (urlPage <= 1) return
+    const preserve = new URLSearchParams(location.search)
+    navigate(buildTracksBrowsePathFull(filters, urlFind, 1, preserve, urlSort), { replace: true })
+  }, [urlPage, filters, urlFind, urlSort, location.search, navigate])
 
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [embedReloadKey, setEmbedReloadKey] = useState(0)
@@ -277,7 +290,8 @@ export function TracksPage() {
   const scWidgetRef = useRef<SoundCloudWidget | null>(null)
   const filteredRef = useRef<TrackCatalogItem[]>([])
   const selectedIdRef = useRef<string | null>(null)
-  const safePageRef = useRef(1)
+  const ensureVisibleThroughIndexRef = useRef(ensureVisibleThroughIndex)
+  const resetVisibleRef = useRef(resetVisible)
   const filtersRefForAdvance = useRef<TracksFilterState>(filters)
   const urlFindRefForAdvance = useRef<string>(urlFind)
   const urlSortRefForAdvance = useRef<TrackSortMode>(urlSort)
@@ -288,8 +302,11 @@ export function TracksPage() {
     filteredRef.current = filtered
   }, [filtered])
   useEffect(() => {
-    safePageRef.current = safePage
-  }, [safePage])
+    ensureVisibleThroughIndexRef.current = ensureVisibleThroughIndex
+  }, [ensureVisibleThroughIndex])
+  useEffect(() => {
+    resetVisibleRef.current = resetVisible
+  }, [resetVisible])
   useEffect(() => {
     playAllActiveRef.current = playAllActive
   }, [playAllActive])
@@ -313,8 +330,8 @@ export function TracksPage() {
   }, [location.search])
 
   useEffect(() => {
-    if (!pageRows.length) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- clear player when page slice is empty
+    if (!listRows.length) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- clear player when list slice is empty
       setSelectedId(null)
       setScAutoplay(false)
       setIsScPlaying(false)
@@ -322,10 +339,10 @@ export function TracksPage() {
       return
     }
     setSelectedId((prev) => {
-      if (prev && pageRows.some((t) => t.track_id === prev)) return prev
-      return pageRows[0]?.track_id ?? null
+      if (prev && listRows.some((t) => t.track_id === prev)) return prev
+      return listRows[0]?.track_id ?? null
     })
-  }, [pageRows])
+  }, [listRows])
 
   useEffect(() => {
     if (skipScAutoplayOffOnNextSelectionChange.current) {
@@ -347,13 +364,13 @@ export function TracksPage() {
     countTracksSelections(filters),
     urlFind,
     filtered.length,
-    safePage,
+    tracksVisibleCount,
     trackCatalog === null ? -1 : catalogList.length,
   ])
 
   const selected = useMemo(
-    () => pageRows.find((t) => t.track_id === selectedId) ?? pageRows[0],
-    [pageRows, selectedId],
+    () => listRows.find((t) => t.track_id === selectedId) ?? filtered.find((t) => t.track_id === selectedId) ?? listRows[0],
+    [listRows, filtered, selectedId],
   )
   const queueIndex = selected?.track_id ? filtered.findIndex((t) => t.track_id === selected.track_id) : -1
   const canGoPrevious = queueIndex > 0
@@ -484,22 +501,9 @@ export function TracksPage() {
       })
     }
     playbackIntentRef.current = 'queue_advance'
-    const nextPage = Math.floor((idx + 1) / PAGE_SIZE) + 1
-    if (nextPage !== safePageRef.current) {
-      const preserve = new URLSearchParams(locationSearchRef.current)
-      navigate(
-        buildTracksBrowsePathFull(
-          filtersRefForAdvance.current,
-          urlFindRefForAdvance.current,
-          nextPage,
-          preserve,
-          urlSortRefForAdvance.current,
-        ),
-        { replace: true },
-      )
-    }
+    ensureVisibleThroughIndexRef.current(idx + 1)
     pickTrack(next, { keepPlayAll: true })
-  }, [navigate, pickTrack])
+  }, [pickTrack])
 
   const advanceToNextInQueueRef = useRef(advanceToNextInQueue)
   useEffect(() => {
@@ -513,21 +517,9 @@ export function TracksPage() {
     trackCatalogPlayAllStarted('tracks_filter', queue.length, tracksFilterContext(filtersRefForAdvance.current))
     playbackIntentRef.current = 'play_all_start'
     setPlayAllActive(true)
-    if (safePageRef.current !== 1) {
-      const preserve = new URLSearchParams(locationSearchRef.current)
-      navigate(
-        buildTracksBrowsePathFull(
-          filtersRefForAdvance.current,
-          urlFindRefForAdvance.current,
-          1,
-          preserve,
-          urlSortRefForAdvance.current,
-        ),
-        { replace: true },
-      )
-    }
+    resetVisibleRef.current()
     pickTrack(queue[0], { keepPlayAll: true })
-  }, [navigate, pickTrack])
+  }, [pickTrack])
 
   const stopCurrentPlayback = useCallback(() => {
     pausePlayback()
@@ -569,23 +561,10 @@ export function TracksPage() {
         })
       }
       playbackIntentRef.current = 'queue_skip'
-      const nextPage = Math.floor(nextIdx / PAGE_SIZE) + 1
-      if (nextPage !== safePageRef.current) {
-        const preserve = new URLSearchParams(locationSearchRef.current)
-        navigate(
-          buildTracksBrowsePathFull(
-            filtersRefForAdvance.current,
-            urlFindRefForAdvance.current,
-            nextPage,
-            preserve,
-            urlSortRefForAdvance.current,
-          ),
-          { replace: true },
-        )
-      }
+      ensureVisibleThroughIndexRef.current(nextIdx)
       pickTrack(next, { keepPlayAll: playAllActiveRef.current })
     },
-    [navigate, pickTrack],
+    [pickTrack],
   )
 
   /** Bind FINISH on the SoundCloud widget after each iframe (re)load — each remount creates a fresh widget. */
@@ -677,13 +656,6 @@ export function TracksPage() {
       },
     ]
   })
-
-  const pagerPreserve = () => new URLSearchParams(location.search)
-
-  const pagerLink = (target: number) => {
-    const qs = serializeTracksBrowseQuery(filters, urlFind, target, pagerPreserve(), urlSort)
-    return browsePathWithQuery('/tracks', qs)
-  }
 
   const total = catalogList.length
 
@@ -897,19 +869,8 @@ export function TracksPage() {
                   </div>
                 ) : null}
 
-                {filtered.length > 0 ? (
-                  <CatalogPager
-                    variant="top"
-                    safePage={safePage}
-                    pageCount={pageCount}
-                    totalInView={filtered.length}
-                    pageSize={PAGE_SIZE}
-                    pagerLink={pagerLink}
-                  />
-                ) : null}
-
                 <ul className="tracks-page__list">
-                  {pageRows.map((t) => {
+                  {listRows.map((t) => {
                     const active = t.track_id === selected?.track_id
                     /** Wave overlay reads as “now playing”; only show when this row triggered embed autoplay. */
                     const showPlayingWave = active && isScPlaying
@@ -1018,13 +979,13 @@ export function TracksPage() {
                 ) : null}
 
                 {filtered.length > 0 ? (
-                  <CatalogPager
-                    variant="bottom"
-                    safePage={safePage}
-                    pageCount={pageCount}
-                    totalInView={filtered.length}
-                    pageSize={PAGE_SIZE}
-                    pagerLink={pagerLink}
+                  <CatalogInfiniteScrollFooter
+                    visibleCount={tracksVisibleCount}
+                    totalCount={tracksTotalCount}
+                    hasMore={tracksHasMore}
+                    loadMore={loadMoreTracks}
+                    noun="top tracks"
+                    formatCount={formatCount}
                   />
                 ) : null}
               </main>

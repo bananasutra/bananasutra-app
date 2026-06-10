@@ -221,6 +221,15 @@
   outline-offset: 2px;
 }
 
+/* D-034: pseudo-infinite browse footer (manual load more, no scroll-auto). */
+.catalog-infinite-scroll-footer {
+  margin-top: 0.85rem;
+}
+
+.catalog-infinite-scroll-status {
+  margin: 0 0 0.35rem;
+}
+
 /* Viewport fade-up for shell sections (LP + home). JS adds `.is-visible` via ScrollRevealSection. */
 .catalog-scroll-reveal {
   opacity: 0;
