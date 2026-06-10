@@ -20,6 +20,7 @@ import { useMusesCatalog } from './generatedData'
 import { SUTRA_CONTEXT, type SutraFamilyKey, sutraHrefForFamily } from './sutraContext'
 import { sutraClassName } from './sutraTheme'
 import { songCatalogLinkTo } from './songPaths'
+import { ScrollRevealSection } from './ScrollRevealSection'
 import type { QuoteWallItem, SongCatalogItem } from './types'
 
 const SPLIT_MQ = '(min-width: 640px)'
@@ -360,7 +361,11 @@ export function LearnLpHub({ songCatalog }: Props) {
     )
 
   return (
-    <section className="catalog-page-shell__section learn-lp__hub-section" aria-labelledby="learn-lp-hub-heading">
+    <ScrollRevealSection
+      immediate
+      className="learn-lp__hub-section"
+      aria-labelledby="learn-lp-hub-heading"
+    >
       <h2 id="learn-lp-hub-heading" className="catalog-section-title">
         The seeds
       </h2>
@@ -412,6 +417,6 @@ export function LearnLpHub({ songCatalog }: Props) {
           {stageContent}
         </aside>
       </div>
-    </section>
+    </ScrollRevealSection>
   )
 }

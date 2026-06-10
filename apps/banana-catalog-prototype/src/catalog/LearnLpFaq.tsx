@@ -1,8 +1,9 @@
 import { LEARN_FAQ_ITEMS } from './learnLpData'
+import { ScrollRevealSection } from './ScrollRevealSection'
 
 export function LearnLpFaq() {
   return (
-    <section className="catalog-page-shell__section learn-lp__faq" aria-labelledby="learn-lp-faq-heading">
+    <ScrollRevealSection className="learn-lp__faq" aria-labelledby="learn-lp-faq-heading">
       <h2 id="learn-lp-faq-heading" className="catalog-section-title">
         Frequently flowering questions
       </h2>
@@ -17,6 +18,6 @@ export function LearnLpFaq() {
           </details>
         ))}
       </div>
-    </section>
+    </ScrollRevealSection>
   )
 }

@@ -12,6 +12,7 @@ import { HomePortalCoverStrip } from './HomePortalCoverStrip'
 import { HomePortalDoors } from './HomePortalDoors'
 import { HomePortalHeroQuote } from './HomePortalHeroQuote'
 import { HomePortalSutraGrid } from './HomePortalSutraGrid'
+import { ScrollRevealSection } from './ScrollRevealSection'
 import { LEARN_LP_META } from './learnLpData'
 import {
   buildCoverPool,
@@ -94,7 +95,7 @@ export function HomePortal() {
           </section>
 
           {coverStripTiles.length > 0 ? (
-            <section className="catalog-page-shell__section" aria-labelledby="home-cover-strip-heading">
+            <ScrollRevealSection aria-labelledby="home-cover-strip-heading">
               <h2 id="home-cover-strip-heading" className="catalog-section-title">
                 Feeling lucky?
               </h2>
@@ -102,13 +103,13 @@ export function HomePortal() {
                 Tap a cover and see where it takes you. It&apos;s chill. It&apos;s fun. It&apos;s free. Woo.
               </p>
               <HomePortalCoverStrip tiles={coverStripTiles} />
-            </section>
+            </ScrollRevealSection>
           ) : null}
 
           <HomePortalBbbNudge />
 
-          <section
-            className="catalog-page-shell__section home-portal__section--listen-rail"
+          <ScrollRevealSection
+            className="home-portal__section--listen-rail"
             aria-labelledby="home-drops-heading"
           >
             <h2 id="home-drops-heading" className="catalog-section-title">
@@ -121,11 +122,11 @@ export function HomePortal() {
             <Link className="catalog-section-cta" to={browsePathWithQuery('/songs', 'sort=newest')}>
               Browse newest songs →
             </Link>
-          </section>
+          </ScrollRevealSection>
 
           {listenerFavorites.length > 0 ? (
-            <section
-              className="catalog-page-shell__section home-portal__section--listen-rail"
+            <ScrollRevealSection
+              className="home-portal__section--listen-rail"
               aria-labelledby="home-have-a-bite-heading"
             >
               <h2 id="home-have-a-bite-heading" className="catalog-section-title">
@@ -133,12 +134,12 @@ export function HomePortal() {
               </h2>
               <p className="home-portal__section-intro">Here, have a top 5. Just press play.</p>
               <HomeHaveABitePlayer favorites={listenerFavorites} />
-            </section>
+            </ScrollRevealSection>
           ) : null}
 
           {featuredSongbook ? (
-            <section
-              className="catalog-page-shell__section home-portal__section--listen-rail"
+            <ScrollRevealSection
+              className="home-portal__section--listen-rail"
               aria-labelledby="home-songbook-spotlight-heading"
             >
               <h2 id="home-songbook-spotlight-heading" className="catalog-section-title">
@@ -148,10 +149,10 @@ export function HomePortal() {
                 This is where we settle in. Songbooks are the long-play option for the curious.
               </p>
               <HomeFeaturedSongbookCard book={featuredSongbook} />
-            </section>
+            </ScrollRevealSection>
           ) : null}
 
-          <section className="home-doors catalog-page-shell__section" aria-labelledby="home-doors-heading">
+          <ScrollRevealSection className="home-doors" aria-labelledby="home-doors-heading">
             <h2 id="home-doors-heading" className="catalog-section-title">
               Three doors
             </h2>
@@ -159,9 +160,9 @@ export function HomePortal() {
               Same windows, same human, three ways in. LEARN, LISTEN, or WATCH.
             </p>
             <HomePortalDoors learnQuote={heroQuote} listen={listenDoor} watch={watchDoor} />
-          </section>
+          </ScrollRevealSection>
 
-          <section className="catalog-page-shell__section" aria-labelledby="home-sutra-grid-heading">
+          <ScrollRevealSection aria-labelledby="home-sutra-grid-heading">
             <h2 id="home-sutra-grid-heading" className="catalog-section-title">
               Start here
             </h2>
@@ -172,7 +173,7 @@ export function HomePortal() {
             <Link className="catalog-section-cta" to={canonicalPathForRoute('/sutras')}>
               Explore all sutras →
             </Link>
-          </section>
+          </ScrollRevealSection>
         </main>
       </div>
 

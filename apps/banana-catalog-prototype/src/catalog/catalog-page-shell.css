@@ -220,3 +220,26 @@
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
+
+/* Viewport fade-up for shell sections (LP + home). JS adds `.is-visible` via ScrollRevealSection. */
+.catalog-scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease;
+}
+
+.catalog-scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog-scroll-reveal {
+    animation: none;
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   LEARN_HUB_LINKS,
@@ -7,6 +7,7 @@ import {
   pickSongsForMoodKey,
   type LearnMoodKey,
 } from './learnLpData'
+import { ScrollRevealSection } from './ScrollRevealSection'
 import { SongThumbCard } from './SongThumbCard'
 import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
 import type { SongCatalogItem } from './types'
@@ -16,29 +17,7 @@ type Props = {
 }
 
 export function LearnLpMoodEntry({ songCatalog }: Props) {
-  const sectionRef = useRef<HTMLElement>(null)
-  const [visible, setVisible] = useState(
-    () => typeof window === 'undefined' || !('IntersectionObserver' in window),
-  )
   const [activeMood, setActiveMood] = useState<LearnMoodKey | null>(null)
-
-  useEffect(() => {
-    const node = sectionRef.current
-    if (!node || !('IntersectionObserver' in window)) return
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setVisible(true)
-            observer.disconnect()
-          }
-        }
-      },
-      { threshold: 0.15, rootMargin: '0px 0px -10% 0px' },
-    )
-    observer.observe(node)
-    return () => observer.disconnect()
-  }, [])
 
   const moodSongs = useMemo(() => {
     if (!activeMood) return null
@@ -48,9 +27,8 @@ export function LearnLpMoodEntry({ songCatalog }: Props) {
   const response = activeMood ? LEARN_MOOD_RESPONSES[activeMood] : null
 
   return (
-    <section
-      ref={sectionRef}
-      className={`catalog-page-shell__section learn-lp__carry${visible ? ' is-visible' : ''}`}
+    <ScrollRevealSection
+      className="learn-lp__mood-entry"
       aria-labelledby="learn-lp-mood-heading"
     >
       <h2 id="learn-lp-mood-heading" className="catalog-section-title">
@@ -137,6 +115,6 @@ export function LearnLpMoodEntry({ songCatalog }: Props) {
           ) : null}
         </div>
       ) : null}
-    </section>
+    </ScrollRevealSection>
   )
 }
