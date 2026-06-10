@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { KeyboardEvent, MouseEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
@@ -297,6 +297,8 @@ export function TracksPage() {
   const urlSortRefForAdvance = useRef<TrackSortMode>(urlSort)
   const locationSearchRef = useRef(location.search)
   const playbackIntentRef = useRef<PlaybackIntent>('user_pick')
+  const scrollActiveRowOnNextPaintRef = useRef(false)
+  const trackListRef = useRef<HTMLUListElement>(null)
 
   useEffect(() => {
     filteredRef.current = filtered
@@ -352,6 +354,17 @@ export function TracksPage() {
     setScAutoplay(false)
     setIsScPlaying(false)
   }, [selectedId])
+
+  useLayoutEffect(() => {
+    if (!scrollActiveRowOnNextPaintRef.current || !selectedId) return
+    scrollActiveRowOnNextPaintRef.current = false
+    const row = trackListRef.current?.querySelector<HTMLElement>(
+      `[data-track-id="${CSS.escape(selectedId)}"]`,
+    )
+    if (!row) return
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    row.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' })
+  }, [selectedId, listRows])
 
   const pageMeta = renderPageMeta({
     title: 'Top Tracks on SoundCloud',
@@ -471,7 +484,7 @@ export function TracksPage() {
     }
   }
 
-  /** Move to the next item in the full filtered queue and auto-paginate so the row is visible. */
+  /** Move to the next item in the full filtered queue; expand list + scroll row into view. */
   const advanceToNextInQueue = useCallback(() => {
     const queue = filteredRef.current
     const currentId = selectedIdRef.current
@@ -502,6 +515,7 @@ export function TracksPage() {
     }
     playbackIntentRef.current = 'queue_advance'
     ensureVisibleThroughIndexRef.current(idx + 1)
+    scrollActiveRowOnNextPaintRef.current = true
     pickTrack(next, { keepPlayAll: true })
   }, [pickTrack])
 
@@ -562,6 +576,7 @@ export function TracksPage() {
       }
       playbackIntentRef.current = 'queue_skip'
       ensureVisibleThroughIndexRef.current(nextIdx)
+      scrollActiveRowOnNextPaintRef.current = true
       pickTrack(next, { keepPlayAll: playAllActiveRef.current })
     },
     [pickTrack],
@@ -869,7 +884,7 @@ export function TracksPage() {
                   </div>
                 ) : null}
 
-                <ul className="tracks-page__list">
+                <ul ref={trackListRef} className="tracks-page__list">
                   {listRows.map((t) => {
                     const active = t.track_id === selected?.track_id
                     /** Wave overlay reads as “now playing”; only show when this row triggered embed autoplay. */
@@ -891,7 +906,7 @@ export function TracksPage() {
                       .filter(Boolean)
                       .join(' · ')
                     return (
-                      <li key={t.track_id} className="tracks-page__item">
+                      <li key={t.track_id} className="tracks-page__item" data-track-id={t.track_id}>
                         <div
                           role="button"
                           tabIndex={0}
