@@ -21,7 +21,7 @@ import { buildContextualSongFacetEntries } from './facetCountsContextual'
 import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
 import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
-import { buildBrowsePath, readBrowseStateFromSearchParams, readCatalogBrowsePage, readStateFromUrl } from './urlState'
+import { buildBrowsePath, readBrowseStateFromSearchParams, readCatalogBrowsePage, readStateFromUrl, serializeBrowseQuery } from './urlState'
 import { searchParamsFromSearchString } from './urlSearchParams'
 import {
   CatalogFilterBar,
@@ -32,8 +32,11 @@ import {
 import { facetEntriesToToggleChips } from './catalogFilterBarBuilders'
 import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
-import { CatalogPager } from './CatalogPager'
-import './CatalogPager.css'
+import { CatalogInfiniteScrollFooter } from './CatalogInfiniteScrollFooter'
+import {
+  catalogInfiniteScrollStorageKey,
+  useCatalogInfiniteScroll,
+} from './useCatalogInfiniteScroll'
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
@@ -43,7 +46,6 @@ import { hasListenerCatalogMedia } from './listenerCatalog'
 import { FooterSocialIcon } from './FooterSocialIcons'
 import './CatalogApp.css'
 
-const PAGE_SIZE = 30
 const FIND_DEBOUNCE_MS = 350
 const SONG_CARD_COVER_REQUEST_WIDTH = 480
 const SONG_CARD_COVER_SIZES = '(max-width: 640px) 48vw, (max-width: 1100px) 32vw, 260px'
@@ -160,6 +162,7 @@ export function CatalogApp() {
   }, [filters, sort, media])
 
   const urlBrowsePage = useMemo(() => readCatalogBrowsePage(location.search), [location.search])
+  const [legacyPageSeed] = useState(() => urlBrowsePage)
 
   const mediaOptionCounts = useMemo(() => {
     const counts: Record<MediaComboFilter, number> = {
@@ -207,6 +210,11 @@ export function CatalogApp() {
     }, FIND_DEBOUNCE_MS)
     return () => window.clearTimeout(tid)
   }, [findDraft, findQuery, navigate])
+
+  useEffect(() => {
+    if (urlBrowsePage <= 1) return
+    navigate(buildBrowsePath(sort, filters, findQuery || undefined, media, 1), { replace: true })
+  }, [urlBrowsePage, sort, filters, findQuery, media, navigate])
 
   useEffect(() => {
     const draftLen = findDraft.trim().length
@@ -272,23 +280,23 @@ export function CatalogApp() {
     return sortSongs(list, sort)
   }, [listenerCatalogSongs, filters, media, sort, findQuery, deepSearchByLyricsId])
 
-  const pageCount = Math.max(1, Math.ceil(filteredSorted.length / PAGE_SIZE))
-  const safePage = Math.min(urlBrowsePage, pageCount)
-  const pagedSongs = useMemo(
-    () => filteredSorted.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
-    [filteredSorted, safePage],
-  )
-
-  useEffect(() => {
-    if (urlBrowsePage !== safePage) {
-      navigate(buildBrowsePath(sort, filters, findQuery || undefined, media, safePage), { replace: true })
-    }
-  }, [urlBrowsePage, safePage, sort, filters, findQuery, media, navigate])
-
-  const pagerLink = useCallback(
-    (target: number) => buildBrowsePath(sort, filters, findQuery || undefined, media, target),
+  const songsScrollResetKey = useMemo(
+    () => serializeBrowseQuery(sort, filters, findQuery || undefined, media, 1),
     [sort, filters, findQuery, media],
   )
+
+  const {
+    visibleItems: pagedSongs,
+    visibleCount: songsVisibleCount,
+    totalCount: songsTotalCount,
+    hasMore: songsHasMore,
+    loadMore: loadMoreSongs,
+  } = useCatalogInfiniteScroll({
+    items: filteredSorted,
+    resetKey: songsScrollResetKey,
+    storageKey: catalogInfiniteScrollStorageKey('/songs', songsScrollResetKey),
+    legacyPage: legacyPageSeed,
+  })
 
   const facetSelections = countFacetSelections(filters)
   const hasActiveContext = facetSelections > 0 || media !== 'all' || Boolean(findQuery)
@@ -318,7 +326,7 @@ export function CatalogApp() {
     filteredSorted.length,
     findQuery,
     findDraft,
-    safePage,
+    songsVisibleCount,
   ])
 
   const songActivePills: CatalogFilterBarActivePill[] = []
@@ -537,16 +545,6 @@ export function CatalogApp() {
           />
 
           <main id="main-content" className="catalog-main songs-page__main">
-          {filteredSorted.length > 0 ? (
-            <CatalogPager
-              variant="top"
-              safePage={safePage}
-              pageCount={pageCount}
-              totalInView={filteredSorted.length}
-              pageSize={PAGE_SIZE}
-              pagerLink={pagerLink}
-            />
-          ) : null}
           <div className="catalog-grid">
             {pagedSongs.map((song) => {
               const secondaryMeta = [song.topic, song.intention, song.light_shadow]
@@ -637,13 +635,12 @@ export function CatalogApp() {
             })}
           </div>
           {filteredSorted.length > 0 ? (
-            <CatalogPager
-              variant="bottom"
-              safePage={safePage}
-              pageCount={pageCount}
-              totalInView={filteredSorted.length}
-              pageSize={PAGE_SIZE}
-              pagerLink={pagerLink}
+            <CatalogInfiniteScrollFooter
+              visibleCount={songsVisibleCount}
+              totalCount={songsTotalCount}
+              hasMore={songsHasMore}
+              loadMore={loadMoreSongs}
+              noun="songs"
             />
           ) : null}
           {filteredSorted.length === 0 ? <p className="catalog-empty">No songs match these filters. Try loosening one axis.</p> : null}

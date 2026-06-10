@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { reportVideosFilterTransition } from './catalogAnalytics'
 import {
@@ -27,17 +27,19 @@ import { coverImageUrl } from '../seo/imageUrl'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { ScrollRail } from './ScrollRail'
-import { CatalogPager } from './CatalogPager'
+import { CatalogInfiniteScrollFooter } from './CatalogInfiniteScrollFooter'
+import {
+  catalogInfiniteScrollStorageKey,
+  useCatalogInfiniteScroll,
+} from './useCatalogInfiniteScroll'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
-import './CatalogPager.css'
 import './CatalogApp.css'
 import './VideosPage.css'
 import { useSongCatalog } from './generatedData'
 
-const VIDEO_PAGE_SIZE = 30
 const FIND_DEBOUNCE_MS = 350
 const REELS_RAIL_SCROLL_STEP = 164
 
@@ -188,6 +190,7 @@ export function VideosPage() {
   const [youtubeCatalogReady, setYoutubeCatalogReady] = useState(false)
   const [searchParams] = useSearchParams()
   const filters = useMemo(() => readVideosFiltersFromParams(searchParams), [searchParams])
+  const [legacyPageSeed] = useState(() => filters.page)
   const [findDraft, setFindDraft] = useState(filters.find)
   const filtersRef = useRef(filters)
   const prevVideoFiltersRef = useRef<VideosUrlFilters | null>(null)
@@ -313,6 +316,11 @@ export function VideosPage() {
     navigate(hrefVideos({ linkTarget: 'all' }, filters), { replace: true })
   }, [filters.linkTarget, orphanUploadCount, filters, navigate])
 
+  useEffect(() => {
+    if (filters.page <= 1) return
+    navigate(hrefVideos({ page: 1 }, filters), { replace: true })
+  }, [filters.page, filters, navigate])
+
   const sutraOptions = useMemo(
     () => sortSutraDisplayNames(collectDistinctSorted(allVideos, (v) => v.sutra)),
     [allVideos],
@@ -380,31 +388,31 @@ export function VideosPage() {
   const verticalVideos = useMemo(() => shownVideos.filter(isVerticalFormat), [shownVideos])
   const wideOnlyVideos = useMemo(() => shownVideos.filter((v) => !isVerticalFormat(v)), [shownVideos])
 
-  const pageCount = Math.max(1, Math.ceil(wideOnlyVideos.length / VIDEO_PAGE_SIZE))
-  const urlVideoPage = filters.page
-  const safeVideoPage = Math.min(urlVideoPage, pageCount)
-
-  useEffect(() => {
-    if (urlVideoPage === safeVideoPage) return
-    navigate(hrefVideos({ page: safeVideoPage }, filters), { replace: true })
-  }, [urlVideoPage, safeVideoPage, filters, navigate])
-
-  const wideVideos = useMemo(
+  const videosScrollResetKey = useMemo(
     () =>
-      wideOnlyVideos.slice(
-        (safeVideoPage - 1) * VIDEO_PAGE_SIZE,
-        safeVideoPage * VIDEO_PAGE_SIZE,
-      ),
-    [wideOnlyVideos, safeVideoPage],
+      [
+        filters.find,
+        filters.sutra,
+        filters.topic,
+        filters.intention,
+        filters.media,
+        filters.linkTarget,
+      ].join('|'),
+    [filters.find, filters.sutra, filters.topic, filters.intention, filters.media, filters.linkTarget],
   )
 
-  const wideTotal = wideOnlyVideos.length
-  const showWidePager = wideTotal > VIDEO_PAGE_SIZE
-
-  const videoPagerLink = useCallback(
-    (target: number) => hrefVideos({ page: target }, filters),
-    [filters],
-  )
+  const {
+    visibleItems: wideVideos,
+    visibleCount: wideVisibleCount,
+    totalCount: wideTotal,
+    hasMore: wideHasMore,
+    loadMore: loadMoreWideVideos,
+  } = useCatalogInfiniteScroll({
+    items: wideOnlyVideos,
+    resetKey: videosScrollResetKey,
+    storageKey: catalogInfiniteScrollStorageKey('/videos', videosScrollResetKey),
+    legacyPage: legacyPageSeed,
+  })
 
   useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString(), filterBarExpanded])
 
@@ -668,41 +676,27 @@ export function VideosPage() {
             </div>
           ) : null}
           {wideVideos.length > 0 ? (
-            <>
-              {showWidePager ? (
-                <CatalogPager
-                  variant="top"
-                  safePage={safeVideoPage}
-                  pageCount={pageCount}
-                  totalInView={wideTotal}
-                  pageSize={VIDEO_PAGE_SIZE}
-                  pagerLink={videoPagerLink}
-                />
-              ) : null}
-              <div className="videos-page__grid-section">
-                <h2
-                  className={`videos-page__section-heading catalog-section-title${
-                    verticalVideos.length > 0 ? ' videos-page__section-heading--spaced' : ''
-                  }`}
-                >
-                  Music videos <span className="videos-page__section-count">({formatCount(wideTotal)})</span>
-                </h2>
-                <p className="catalog-lp-section-intro">Wide format uploads. Tap a card for the song page or YouTube.</p>
-                <ul className="videos-page__grid">
-                  {wideVideos.map((v) => renderCard(v, 'grid', nextPosterIndex++))}
-                </ul>
-              </div>
-              {showWidePager ? (
-                <CatalogPager
-                  variant="bottom"
-                  safePage={safeVideoPage}
-                  pageCount={pageCount}
-                  totalInView={wideTotal}
-                  pageSize={VIDEO_PAGE_SIZE}
-                  pagerLink={videoPagerLink}
-                />
-              ) : null}
-            </>
+            <div className="videos-page__grid-section">
+              <h2
+                className={`videos-page__section-heading catalog-section-title${
+                  verticalVideos.length > 0 ? ' videos-page__section-heading--spaced' : ''
+                }`}
+              >
+                Music videos <span className="videos-page__section-count">({formatCount(wideTotal)})</span>
+              </h2>
+              <p className="catalog-lp-section-intro">Wide format uploads. Tap a card for the song page or YouTube.</p>
+              <ul className="videos-page__grid">
+                {wideVideos.map((v) => renderCard(v, 'grid', nextPosterIndex++))}
+              </ul>
+              <CatalogInfiniteScrollFooter
+                visibleCount={wideVisibleCount}
+                totalCount={wideTotal}
+                hasMore={wideHasMore}
+                loadMore={loadMoreWideVideos}
+                noun="music videos"
+                formatCount={formatCount}
+              />
+            </div>
           ) : null}
         </>
       )}
@@ -786,6 +780,7 @@ export function VideosPage() {
                         facadeUntilClick
                         facadePosterEager
                         posterWidth={640}
+                        showOutboundFooter={false}
                       />
                     </div>
                     <div className="catalog-featured-embed-copy videos-page__featured-hero-copy">
