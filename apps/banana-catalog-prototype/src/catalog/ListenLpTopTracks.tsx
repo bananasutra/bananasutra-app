@@ -10,6 +10,7 @@ import {
   type PlaybackIntent,
 } from './catalogAnalytics'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
+import { ScrollRevealSection } from './ScrollRevealSection'
 import { PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
 import { songCatalogPath } from './songPaths'
 import { coverImageUrl } from '../seo/imageUrl'
@@ -342,7 +343,7 @@ export function ListenLpTopTracks({
 
   if (!hasTracks && !hasEps) {
     return (
-      <section className="catalog-page-shell__section listen-lp__section" aria-labelledby="listen-lp-tracks-heading">
+      <ScrollRevealSection immediate className="listen-lp__section" aria-labelledby="listen-lp-tracks-heading">
         <h2 id="listen-lp-tracks-heading" className="catalog-section-title">
           What&apos;s popular?
         </h2>
@@ -350,12 +351,12 @@ export function ListenLpTopTracks({
         <Link className="catalog-section-cta" to="/tracks/">
           Browse all tracks →
         </Link>
-      </section>
+      </ScrollRevealSection>
     )
   }
 
   return (
-    <section className="catalog-page-shell__section listen-lp__section" aria-labelledby="listen-lp-tracks-heading">
+    <ScrollRevealSection immediate className="listen-lp__section" aria-labelledby="listen-lp-tracks-heading">
       <h2 id="listen-lp-tracks-heading" className="catalog-section-title">
         What&apos;s popular?
       </h2>
@@ -607,6 +608,6 @@ export function ListenLpTopTracks({
       <Link className="catalog-section-cta" to="/tracks/">
         Browse all tracks →
       </Link>
-    </section>
+    </ScrollRevealSection>
   )
 }

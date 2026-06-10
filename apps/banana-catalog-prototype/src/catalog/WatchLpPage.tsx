@@ -15,6 +15,7 @@ import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useExclusiveYoutubeEmbedsPlayback } from './useExclusiveYoutubeEmbedsPlayback'
 import { WatchLpBertrandTail } from './WatchLpBertrandTail'
+import { ScrollRevealSection } from './ScrollRevealSection'
 import { WatchLpFacetBar } from './WatchLpFacetBar'
 import { allSongbooks } from './songbooks'
 import { songbookSlugForYoutubePlaylist } from './songbookYoutubeMatch'
@@ -256,8 +257,9 @@ export function WatchLpPage() {
               Loading videos…
             </p>
           ) : (
-            <section
-              className="catalog-page-shell__section watch-lp__section watch-lp__spotlight"
+            <ScrollRevealSection
+              immediate
+              className="watch-lp__section watch-lp__spotlight"
               aria-labelledby="watch-lp-spotlight-heading"
             >
               <h2 id="watch-lp-spotlight-heading" className="catalog-section-title">
@@ -303,7 +305,7 @@ export function WatchLpPage() {
                   </>
                 }
               />
-            </section>
+            </ScrollRevealSection>
           )}
 
           {playlists === null && !catalogLoadError ? (
@@ -311,8 +313,8 @@ export function WatchLpPage() {
               Loading playlists…
             </p>
           ) : (
-            <section
-              className="catalog-page-shell__section watch-lp__section watch-lp__playlists-block"
+            <ScrollRevealSection
+              className="watch-lp__section watch-lp__playlists-block"
               aria-labelledby="watch-lp-playlists-heading"
             >
               <h2 id="watch-lp-playlists-heading" className="catalog-section-title">
@@ -376,7 +378,7 @@ export function WatchLpPage() {
                   Load all {sortedPlaylists.length} playlists
                 </button>
               ) : null}
-            </section>
+            </ScrollRevealSection>
           )}
 
           <div className="watch-lp__phase3-note" aria-labelledby="watch-lp-phase3-heading">

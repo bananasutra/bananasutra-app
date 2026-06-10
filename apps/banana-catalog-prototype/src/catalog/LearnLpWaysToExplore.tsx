@@ -5,6 +5,7 @@ import { canonicalPathForRoute } from './seoPaths'
 import { CATALOG_BROWSE_PATH } from './urlState'
 import { songOnWordsSurface } from './wordsStory'
 import type { SongCatalogItem } from './types'
+import { ScrollRevealSection } from './ScrollRevealSection'
 import './LearnLpWaysToExplore.css'
 
 function buildSummaryCount(key: string): number {
@@ -34,7 +35,7 @@ export function LearnLpWaysToExplore() {
   const wordsSurfaceCount = HOME_BROWSE_CATALOG.filter((s) => songOnWordsSurface(s)).length
 
   return (
-    <section className="catalog-page-shell__section learn-lp__explore" aria-labelledby="learn-lp-explore-heading">
+    <ScrollRevealSection immediate className="learn-lp__explore" aria-labelledby="learn-lp-explore-heading">
       <h2 id="learn-lp-explore-heading" className="catalog-section-title">
         Ways to explore
       </h2>
@@ -107,6 +108,6 @@ export function LearnLpWaysToExplore() {
           </Link>
         </li>
       </ul>
-    </section>
+    </ScrollRevealSection>
   )
 }

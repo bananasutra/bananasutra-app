@@ -10,6 +10,7 @@ import { ListenLpFacetBar } from './ListenLpFacetBar'
 import { ListenLpSongbookThumb } from './ListenLpSongbookThumb'
 import { ListenLpTopTracks } from './ListenLpTopTracks'
 import { ScrollRail } from './ScrollRail'
+import { ScrollRevealSection } from './ScrollRevealSection'
 import { SongThumbCard } from './SongThumbCard'
 import { allSongbooks } from './songbooks'
 import { songbookHrefFromCatalogItem } from './homePortalUtils'
@@ -144,7 +145,11 @@ export function ListenLpPage() {
             <p className="catalog-page-sub">{LISTEN_LP_META.sub}</p>
           </header>
 
-          <section className="catalog-page-shell__section listen-lp__section" aria-labelledby="listen-lp-new-heading">
+          <ScrollRevealSection
+            immediate
+            className="listen-lp__section"
+            aria-labelledby="listen-lp-new-heading"
+          >
             <h2 id="listen-lp-new-heading" className="catalog-section-title">
               What&apos;s new?
             </h2>
@@ -175,7 +180,7 @@ export function ListenLpPage() {
             <Link className="catalog-section-cta" to="/songs/?sort=newest">
               Explore the fool catalog →
             </Link>
-          </section>
+          </ScrollRevealSection>
 
           {trackLoadError ? <p className="listen-lp__load-error">{trackLoadError}</p> : null}
 
@@ -194,8 +199,8 @@ export function ListenLpPage() {
           )}
 
           {featuredSongbook ? (
-            <section
-              className="catalog-page-shell__section listen-lp__section listen-lp__featured"
+            <ScrollRevealSection
+              className="listen-lp__section listen-lp__featured"
               aria-labelledby="listen-lp-featured-heading"
             >
               <h2 id="listen-lp-featured-heading" className="catalog-section-title">
@@ -218,11 +223,11 @@ export function ListenLpPage() {
                   />
                 }
               />
-            </section>
+            </ScrollRevealSection>
           ) : null}
 
-          <section
-            className="catalog-page-shell__section listen-lp__section listen-lp__songbooks-block"
+          <ScrollRevealSection
+            className="listen-lp__section listen-lp__songbooks-block"
             aria-labelledby="listen-lp-songbooks-block-heading"
           >
             <h2 id="listen-lp-songbooks-block-heading" className="catalog-section-title">
@@ -273,7 +278,7 @@ export function ListenLpPage() {
             <Link className="catalog-section-cta" to="/songbooks/">
               All songbooks →
             </Link>
-          </section>
+          </ScrollRevealSection>
 
           <ListenLpBertrandTail />
         </main>
