@@ -30,6 +30,8 @@ type Props = {
   durationByName?: Map<string, number>
   iframeRef?: RefObject<HTMLIFrameElement | null>
   onBeforePlay?: () => void
+  /** Fires when the GO gate releases the iframe (true) or playlist remounts (false). */
+  onPlayingChange?: (playing: boolean) => void
   /** When set, genre playlists can deep-link to the matching `/songbooks/:slug` page. */
   songbookSlug?: string | null
 }
@@ -39,17 +41,23 @@ function WatchLpPlaylistEmbedInner({
   durationByName,
   iframeRef,
   onBeforePlay,
+  onPlayingChange,
   songbookSlug,
 }: {
   playlist: YouTubePlaylistCatalogItem
   durationByName?: Map<string, number>
   iframeRef?: RefObject<HTMLIFrameElement | null>
   onBeforePlay?: () => void
+  onPlayingChange?: (playing: boolean) => void
   songbookSlug?: string | null
 }) {
   const clientMounted = useClientMounted()
   const [facadeReleased, setFacadeReleased] = useState(false)
   const playlistId = (playlist.playlist_id || '').trim()
+
+  useEffect(() => {
+    onPlayingChange?.(facadeReleased)
+  }, [facadeReleased, onPlayingChange])
 
   const iframeSrc = useMemo(() => {
     if (!playlistId || !facadeReleased) return ''
@@ -133,6 +141,7 @@ export function WatchLpPlaylistEmbed({
   durationByName,
   iframeRef,
   onBeforePlay,
+  onPlayingChange,
   songbookSlug,
 }: Props) {
   if (!playlist) {
@@ -147,6 +156,7 @@ export function WatchLpPlaylistEmbed({
       durationByName={durationByName}
       iframeRef={iframeRef}
       onBeforePlay={onBeforePlay}
+      onPlayingChange={onPlayingChange}
       songbookSlug={songbookSlug}
     />
   )

@@ -79,6 +79,7 @@ export function WatchLpPage() {
   const [pickedFeaturedId, setPickedFeaturedId] = useState<string | null>(null)
   const [pickedPlaylistId, setPickedPlaylistId] = useState<string | null>(null)
   const [showAllPlaylists, setShowAllPlaylists] = useState(false)
+  const [isPlaylistEmbedPlaying, setIsPlaylistEmbedPlaying] = useState(false)
 
   useExclusiveYoutubeEmbedsPlayback(Boolean(youtubeVideos?.length && playlists?.length))
 
@@ -176,6 +177,11 @@ export function WatchLpPage() {
   }, [pickedPlaylistId, visiblePlaylists, sortedPlaylists, allPlaylists])
 
   const activePlaylistId = activePlaylist?.playlist_id ?? null
+
+  useEffect(() => {
+    setIsPlaylistEmbedPlaying(false)
+  }, [activePlaylistId])
+
   const genreSongbooks = useMemo(() => allSongbooks(), [])
   const activePlaylistSongbookSlug = useMemo(
     () => (activePlaylist ? songbookSlugForYoutubePlaylist(activePlaylist, genreSongbooks) : null),
@@ -330,6 +336,7 @@ export function WatchLpPage() {
                   durationByName={playlistDurationByName}
                   iframeRef={playlistYtRef}
                   onBeforePlay={pauseSpotlightEmbed}
+                  onPlayingChange={setIsPlaylistEmbedPlaying}
                   songbookSlug={activePlaylistSongbookSlug}
                 />
               </div>
@@ -361,6 +368,7 @@ export function WatchLpPage() {
                       playlist={pl}
                       durationByName={playlistDurationByName}
                       isActive={pl.playlist_id === activePlaylistId}
+                      isPlaying={pl.playlist_id === activePlaylistId && isPlaylistEmbedPlaying}
                       onSelect={() => setPickedPlaylistId(pl.playlist_id)}
                     />
                   ))}
@@ -372,7 +380,7 @@ export function WatchLpPage() {
               {sortedPlaylists.length > WATCH_LP_PLAYLIST_GRID_LIMIT && !showAllPlaylists ? (
                 <button
                   type="button"
-                  className="catalog-section-cta watch-lp__load-more"
+                  className="catalog-index-show-more"
                   onClick={() => setShowAllPlaylists(true)}
                 >
                   Load all {sortedPlaylists.length} playlists

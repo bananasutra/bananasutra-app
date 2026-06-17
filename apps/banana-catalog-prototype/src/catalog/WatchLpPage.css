@@ -41,16 +41,6 @@
   scroll-margin-top: calc(var(--catalog-header-h, 108px) + 0.75rem);
 }
 
-.watch-lp__load-more {
-  display: inline-block;
-  margin: 0.35rem 0 0.65rem;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  font: inherit;
-  padding: 0;
-}
-
 .watch-lp__spotlight-rail-eyebrow {
   margin: 0 0 0.4rem;
   font-size: 0.68rem;
