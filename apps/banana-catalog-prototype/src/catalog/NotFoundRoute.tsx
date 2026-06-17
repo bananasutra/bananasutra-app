@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { logNotFound } from './notFoundLogger'
 import { buildNotFoundOpenEventDetail } from '../bbb/notFoundRouting'
+import { MonkeyGame } from './MonkeyGame'
 
 export type NotFoundRouteProps = {
   onLogNotFound?: (input: { badPath: string; referrer?: string }) => Promise<void> | void
@@ -35,6 +36,7 @@ export function NotFoundRoute({ onLogNotFound = logNotFound }: NotFoundRouteProp
               <span className="catalog-not-found__oops">OOOPS</span>
               <span className="catalog-not-found__prompt">[page not found]</span>
             </h1>
+            <MonkeyGame />
             <div className="catalog-not-found__actions">
               <Link to="/" className="catalog-not-found__cta catalog-not-found__cta--home">
                 Peel Me Back Home

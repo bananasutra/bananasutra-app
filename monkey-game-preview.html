@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monkey Game — bananasutra preview</title>
+  <style>
+    /* ── token mirror (matches tokens.css) ──────────────────────────────── */
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --color-bg-page:      #f4f1e8;
+      --color-text-strong:  #1e2814;
+      --color-text-muted:   #4f5945;
+      --color-text-faint:   #66705d;
+      --color-border:       #cdd2c9;
+      --color-border-strong:#a8b0a2;
+      --color-accent:       #524a40;
+      --color-accent-on:    #f4f1e8;
+      --font-ui: system-ui, sans-serif;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --color-bg-page:      #13110d;
+      --color-text-strong:  #fff8ed;
+      --color-text-muted:   #c7b8a6;
+      --color-text-faint:   #a59584;
+      --color-border:       #4a4037;
+      --color-border-strong:#6b5c4f;
+      --color-accent:       #a89f94;
+      --color-accent-on:    #13110d;
+      --font-ui: system-ui, sans-serif;
+    }
+
+    /* ── reset + page ───────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--color-bg-page);
+      font-family: var(--font-ui);
+      color: var(--color-text-strong);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem 1rem;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    /* ── 404 title mimic ────────────────────────────────────────────────── */
+    .title {
+      text-align: center;
+    }
+    .title__oops {
+      display: block;
+      font: 800 clamp(2.5rem, 10vw, 5.3rem) / 0.92 var(--font-ui);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-strong);
+    }
+    .title__sub {
+      display: block;
+      font: 600 clamp(1rem, 2.4vw, 1.35rem) / 1.2 var(--font-ui);
+      letter-spacing: 0.04em;
+      color: var(--color-text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* ── game ───────────────────────────────────────────────────────────── */
+    .game-wrap {
+      width: min(100%, 44rem);
+    }
+    .monkey-game {
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .monkey-game__hud {
+      display: flex;
+      justify-content: space-between;
+      font: 600 0.72rem / 1 var(--font-ui);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--color-text-faint);
+      margin-bottom: 0.35rem;
+      padding: 0 0.1rem;
+    }
+    .monkey-game__stage {
+      position: relative;
+      overflow: hidden;
+    }
+    .monkey-game__canvas {
+      display: block;
+      width: 100%;
+      height: 160px;
+    }
+    .monkey-game__overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .monkey-game__overlay-msg {
+      margin: 0;
+      font: 600 0.78rem / 1.35 var(--font-ui);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      text-align: center;
+      padding: 0 1rem;
+    }
+
+    /* ── theme toggle ───────────────────────────────────────────────────── */
+    .theme-btn {
+      appearance: none;
+      border: 1px solid var(--color-border-strong);
+      border-radius: 2px;
+      padding: 0.55rem 1rem;
+      background: transparent;
+      color: var(--color-text-muted);
+      font: 600 0.78rem / 1 var(--font-ui);
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: border-color 120ms, color 120ms;
+    }
+    .theme-btn:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="title">
+    <span class="title__oops">OOOPS</span>
+    <span class="title__sub">[page not found]</span>
+  </div>
+
+  <div class="game-wrap">
+    <div class="monkey-game" id="game">
+      <div class="monkey-game__hud">
+        <span>Score: <span id="score">0</span></span>
+        <span>Best: <span id="high">0</span></span>
+      </div>
+      <div class="monkey-game__stage" id="stage">
+        <canvas id="canvas" class="monkey-game__canvas"></canvas>
+        <div class="monkey-game__overlay" id="overlay">
+          <p class="monkey-game__overlay-msg" id="msg">Space or tap to start</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="theme-btn" id="themeBtn">Switch to dark mode</button>
+
+  <script>
+    // ── constants ────────────────────────────────────────────────────────────
+    const LW = 600, LH = 160;
+    const GROUND_Y = 118;
+    const MONKEY_X = 78;
+    const MONKEY_SZ = 38;
+    const PEEL_SZ = 34;
+    const GRAVITY = 0.55;
+    const JUMP_VEL = -12.5;
+    const BASE_SPEED = 4.5;
+    const MAX_SPEED = 9.5;
+
+    // ── setup canvas ─────────────────────────────────────────────────────────
+    const canvas = document.getElementById('canvas');
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = LW * dpr;
+    canvas.height = LH * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    // ── DOM refs ─────────────────────────────────────────────────────────────
+    const scoreEl  = document.getElementById('score');
+    const highEl   = document.getElementById('high');
+    const overlayEl = document.getElementById('overlay');
+    const msgEl    = document.getElementById('msg');
+
+    // ── helpers ──────────────────────────────────────────────────────────────
+    const cssVar = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+    const getHS  = () => { try { return parseInt(localStorage.getItem('bs-monkey-hs') || '0') } catch { return 0 } };
+    const saveHS = (n) => { try { localStorage.setItem('bs-monkey-hs', String(n)) } catch {} };
+
+    // ── game state ───────────────────────────────────────────────────────────
+    let status    = 'idle';
+    let monkeyY   = GROUND_Y - MONKEY_SZ;
+    let monkeyVY  = 0;
+    let peels     = [];
+    let score     = 0;
+    let speed     = BASE_SPEED;
+    let frame     = 0;
+    let nextPeel  = 72;
+    let peelId    = 0;
+    let animId    = 0;
+
+    highEl.textContent = String(getHS());
+
+    // ── draw ─────────────────────────────────────────────────────────────────
+    function draw() {
+      ctx.clearRect(0, 0, LW, LH);
+
+      // Ground line
+      ctx.strokeStyle = cssVar('--color-border');
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, GROUND_Y);
+      ctx.lineTo(LW, GROUND_Y);
+      ctx.stroke();
+
+      // Ground texture dots
+      ctx.fillStyle = cssVar('--color-border');
+      for (let x = 10; x < LW; x += 20) ctx.fillRect(x, GROUND_Y + 4, 2, 2);
+
+      // Monkey
+      const onGround = monkeyY >= GROUND_Y - MONKEY_SZ - 2;
+      const bob = (status === 'running' && onGround) ? Math.sin(frame * 0.28) * 1.5 : 0;
+      ctx.font = `${MONKEY_SZ}px serif`;
+      ctx.textBaseline = 'bottom';
+      ctx.fillText('🐒', MONKEY_X, monkeyY + MONKEY_SZ + bob);
+
+      // Peels
+      ctx.font = `${PEEL_SZ}px serif`;
+      for (const p of peels) ctx.fillText('🍌', p.x, GROUND_Y + 2);
+    }
+
+    // ── loop ─────────────────────────────────────────────────────────────────
+    function loop() {
+      frame++;
+
+      // Physics
+      monkeyVY += GRAVITY;
+      monkeyY  += monkeyVY;
+      if (monkeyY >= GROUND_Y - MONKEY_SZ) { monkeyY = GROUND_Y - MONKEY_SZ; monkeyVY = 0; }
+
+      // Score + speed
+      score = Math.floor(frame / 6);
+      speed = Math.min(BASE_SPEED + frame * 0.004, MAX_SPEED);
+      scoreEl.textContent = String(score);
+
+      // Spawn
+      nextPeel--;
+      if (nextPeel <= 0) {
+        peels.push({ x: LW + 10, id: peelId++ });
+        const gap = Math.max(44, 85 - score * 0.25);
+        nextPeel = gap + Math.random() * 36;
+      }
+
+      // Move + prune
+      for (const p of peels) p.x -= speed;
+      peels = peels.filter(p => p.x > -60);
+
+      // Collision (forgiving hitboxes)
+      const mL = MONKEY_X + 10,  mR = MONKEY_X + MONKEY_SZ - 12;
+      const mT = monkeyY + 10,   mB = monkeyY + MONKEY_SZ - 4;
+      for (const p of peels) {
+        const pL = p.x + 7,            pR = p.x + PEEL_SZ - 7;
+        const pT = GROUND_Y - PEEL_SZ + 8, pB = GROUND_Y - 4;
+        if (mR > pL && mL < pR && mB > pT && mT < pB) { die(); return; }
+      }
+
+      draw();
+      animId = requestAnimationFrame(loop);
+    }
+
+    // ── state transitions ────────────────────────────────────────────────────
+    function startGame() {
+      cancelAnimationFrame(animId);
+      status = 'running'; monkeyY = GROUND_Y - MONKEY_SZ; monkeyVY = 0;
+      peels = []; score = 0; speed = BASE_SPEED; frame = 0; nextPeel = 72;
+      scoreEl.textContent = '0';
+      overlayEl.style.display = 'none';
+      animId = requestAnimationFrame(loop);
+    }
+
+    function die() {
+      status = 'dead';
+      cancelAnimationFrame(animId);
+      const hs = Math.max(score, getHS());
+      saveHS(hs);
+      highEl.textContent = String(hs);
+      overlayEl.style.display = 'flex';
+      msgEl.textContent = `YOU SLIPPED — ${score} pts · Space or tap to retry`;
+      draw();
+    }
+
+    function doJump() {
+      if (status === 'idle' || status === 'dead') { startGame(); return; }
+      if (monkeyY >= GROUND_Y - MONKEY_SZ - 2) monkeyVY = JUMP_VEL;
+    }
+
+    // ── events ───────────────────────────────────────────────────────────────
+    window.addEventListener('keydown', e => {
+      if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); doJump(); }
+    });
+    document.getElementById('stage').addEventListener('pointerdown', doJump);
+
+    // theme toggle
+    document.getElementById('themeBtn').addEventListener('click', () => {
+      const html = document.documentElement;
+      const isDark = html.dataset.theme === 'dark';
+      html.dataset.theme = isDark ? 'light' : 'dark';
+      document.getElementById('themeBtn').textContent = isDark ? 'Switch to dark mode' : 'Switch to light mode';
+      draw(); // redraw immediately so canvas colors update
+    });
+
+    // ── initial draw ─────────────────────────────────────────────────────────
+    draw();
+  </script>
+</body>
+</html>
