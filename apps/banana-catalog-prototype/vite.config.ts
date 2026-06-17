@@ -27,4 +27,32 @@ export default defineConfig({
     port: 5174,
     strictPort: true,
   },
+  build: {
+    rolldownOptions: {
+      output: {
+        // Match production chunk layout: keep Vite's CSS preload helper in jsx-runtime
+        // instead of a shared vendor megachunk, and avoid lazy routes importing the
+        // entry index bundle (circular dep → dynamic import() fails on stage).
+        manualChunks(id) {
+          if (id.includes('node_modules/react/jsx-runtime') || id.includes('node_modules/react/jsx-dev-runtime')) {
+            return 'jsx-runtime'
+          }
+          if (id.includes('node_modules/react-router-dom') || id.includes('node_modules/react-router/dist')) {
+            return 'react-router'
+          }
+          if (
+            id.includes('/catalog/seoPaths') ||
+            id.includes('/catalog/urlState') ||
+            id.includes('/catalog/songPaths') ||
+            id.includes('/catalog/slugify')
+          ) {
+            return 'catalog-routing'
+          }
+          if (id.includes('/lib/analytics') || id.includes('/catalog/catalogAnalytics')) {
+            return 'catalog-analytics'
+          }
+        },
+      },
+    },
+  },
 })
