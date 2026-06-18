@@ -1013,6 +1013,13 @@
   outline-offset: 2px;
 }
 
+.song-detail-audio-action-btn__glyph {
+  display: inline-block;
+  font-size: 0.85em;
+  line-height: 1;
+  transform: translateY(-0.02em);
+}
+
 .song-detail-audio-action-btn--queue,
 .song-detail-audio-action-btn--stop {
   background: var(--color-bg-panel, #fff);

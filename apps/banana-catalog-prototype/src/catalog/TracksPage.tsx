@@ -10,17 +10,7 @@ import {
 } from './useCatalogInfiniteScroll'
 import { facetCountsFromTracks } from './facetCountsFromTracks'
 import { buildContextualTrackFacetEntries } from './facetCountsContextual'
-import {
-  trackCatalogPlayAllStarted,
-  trackCatalogPlayAllStopped,
-  trackCatalogPlayStarted,
-  trackCatalogQueueAdvanced,
-  trackCatalogQueueSkipped,
-  tracksFilterContext,
-  reportTracksFilterPatch,
-  type PlaybackIntent,
-} from './catalogAnalytics'
-import type { QueueSource } from '../lib/analytics'
+import { reportTracksFilterPatch } from './catalogAnalytics'
 import { filterTracksByFindQuery, sortTrackCatalog, trackMatchesFilters } from './filterTracks'
 import {
   CatalogFilterBar,
@@ -41,11 +31,15 @@ import {
 } from './urlState'
 import { coverImageUrl } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
-import { PLAY_ALL_HONEST_MOBILE_COPY, PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
+import { PLAY_ALL_HONEST_MOBILE_COPY, usePlayAllDesktopAvailable } from './playAllPlatform'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { formatDurationDisplay } from './durationFormat'
-import { bindSoundCloudWidgetPlayback } from './soundCloudWidgetPlayback'
+import {
+  PlayerQueueProvider,
+  trackCatalogItemToPlayable,
+  useTracksPagePlayerQueue,
+} from './playerQueue'
 import { sutraQuestionFromDisplay } from './sutraContext'
 import { sutraClassName } from './sutraTheme'
 import { type SoundCloudWidget } from './soundcloudWidgetApi'
@@ -279,42 +273,21 @@ export function TracksPage() {
   const [embedReloadKey, setEmbedReloadKey] = useState(0)
   /** SoundCloud `auto_play` only after an explicit row action — not on first paint / URL-driven page slice. */
   const [scAutoplay, setScAutoplay] = useState(false)
-  const [isScPlaying, setIsScPlaying] = useState(false)
   const skipScAutoplayOffOnNextSelectionChange = useRef(false)
 
-  /** "Play All" queue mode: keep auto-advancing through `filtered` until the user stops or runs out of tracks. */
-  const [playAllActive, setPlayAllActive] = useState(false)
-  const playAllActiveRef = useRef(false)
-  const isScPlayingRef = useRef(false)
   const playerWrapRef = useRef<HTMLDivElement>(null)
   const scWidgetRef = useRef<SoundCloudWidget | null>(null)
   const filteredRef = useRef<TrackCatalogItem[]>([])
   const selectedIdRef = useRef<string | null>(null)
-  const ensureVisibleThroughIndexRef = useRef(ensureVisibleThroughIndex)
-  const resetVisibleRef = useRef(resetVisible)
   const filtersRefForAdvance = useRef<TracksFilterState>(filters)
   const urlFindRefForAdvance = useRef<string>(urlFind)
   const urlSortRefForAdvance = useRef<TrackSortMode>(urlSort)
-  const locationSearchRef = useRef(location.search)
-  const playbackIntentRef = useRef<PlaybackIntent>('user_pick')
   const scrollActiveRowOnNextPaintRef = useRef(false)
   const trackListRef = useRef<HTMLUListElement>(null)
 
   useEffect(() => {
     filteredRef.current = filtered
   }, [filtered])
-  useEffect(() => {
-    ensureVisibleThroughIndexRef.current = ensureVisibleThroughIndex
-  }, [ensureVisibleThroughIndex])
-  useEffect(() => {
-    resetVisibleRef.current = resetVisible
-  }, [resetVisible])
-  useEffect(() => {
-    playAllActiveRef.current = playAllActive
-  }, [playAllActive])
-  useEffect(() => {
-    isScPlayingRef.current = isScPlaying
-  }, [isScPlaying])
   useEffect(() => {
     selectedIdRef.current = selectedId
   }, [selectedId])
@@ -327,24 +300,42 @@ export function TracksPage() {
   useEffect(() => {
     urlSortRefForAdvance.current = urlSort
   }, [urlSort])
-  useEffect(() => {
-    locationSearchRef.current = location.search
-  }, [location.search])
+
+  const playerQueue = useTracksPagePlayerQueue({
+    filteredRef,
+    selectedIdRef,
+    filtersRef: filtersRefForAdvance,
+    urlFindRef: urlFindRefForAdvance,
+    urlSortRef: urlSortRefForAdvance,
+    scWidgetRef,
+    onBeforePlayTrack: () => {
+      skipScAutoplayOffOnNextSelectionChange.current = true
+    },
+    ensureVisibleThroughIndex,
+    resetVisible,
+    scrollActiveRowOnNextPaintRef,
+    setScAutoplay,
+    setSelectedId,
+    setEmbedReloadKey,
+  })
+  const { state: queueState, actions: queueActions, bindWidgetOnLoad, startPlayAllFromPage, resetSession } =
+    playerQueue
+  const playAllActive = queueState.playAllActive
+  const isScPlaying = queueState.playing
 
   useEffect(() => {
     if (!listRows.length) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- clear player when list slice is empty
       setSelectedId(null)
       setScAutoplay(false)
-      setIsScPlaying(false)
-      setPlayAllActive(false)
+      resetSession()
       return
     }
     setSelectedId((prev) => {
       if (prev && listRows.some((t) => t.track_id === prev)) return prev
       return listRows[0]?.track_id ?? null
     })
-  }, [listRows])
+  }, [listRows, resetSession])
 
   useEffect(() => {
     if (skipScAutoplayOffOnNextSelectionChange.current) {
@@ -352,7 +343,6 @@ export function TracksPage() {
       return
     }
     setScAutoplay(false)
-    setIsScPlaying(false)
   }, [selectedId])
 
   useLayoutEffect(() => {
@@ -421,54 +411,11 @@ export function TracksPage() {
     navigate(buildTracksBrowsePathFull(filters, urlFind, 1, preserve, next), { replace: true })
   }
 
-  const pausePlayback = useCallback(() => {
-    try {
-      scWidgetRef.current?.pause()
-    } catch {
-      // Ignore widget pause failures and keep UI state responsive.
-    }
-    setIsScPlaying(false)
-  }, [])
-
-  const resumePlayback = useCallback(() => {
-    try {
-      scWidgetRef.current?.play()
-      setScAutoplay(true)
-    } catch {
-      // Ignore widget play failures.
-    }
-  }, [])
-
   const pickTrack = useCallback(
-    (t: TrackCatalogItem, { keepPlayAll = false }: { keepPlayAll?: boolean } = {}) => {
-      if (t.track_id === selectedIdRef.current && scWidgetRef.current) {
-        if (isScPlayingRef.current) {
-          pausePlayback()
-          return
-        }
-        resumePlayback()
-        return
-      }
-
-      if (!keepPlayAll && playAllActiveRef.current) {
-        const queue = filteredRef.current
-        const idx = queue.findIndex((row) => row.track_id === selectedIdRef.current)
-        trackCatalogPlayAllStopped('tracks_filter', idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
-        setPlayAllActive(false)
-      }
-      const source: QueueSource = playAllActiveRef.current ? 'tracks_filter' : 'single'
-      trackCatalogPlayStarted(t, source, playbackIntentRef.current)
-      playbackIntentRef.current = 'user_pick'
-      skipScAutoplayOffOnNextSelectionChange.current = true
-      setScAutoplay(true)
-      if (t.track_id === selectedIdRef.current) {
-        setEmbedReloadKey((k) => k + 1)
-        return
-      }
-      setSelectedId(t.track_id)
-      setEmbedReloadKey((k) => k + 1)
+    (t: TrackCatalogItem, options?: { keepPlayAll?: boolean }) => {
+      queueActions.pickTrack(trackCatalogItemToPlayable(t), options)
     },
-    [pausePlayback, resumePlayback],
+    [queueActions],
   )
 
   const rowActivate = (e: MouseEvent | KeyboardEvent, t: TrackCatalogItem) => {
@@ -484,128 +431,9 @@ export function TracksPage() {
     }
   }
 
-  /** Move to the next item in the full filtered queue; expand list + scroll row into view. */
-  const advanceToNextInQueue = useCallback(() => {
-    const queue = filteredRef.current
-    const currentId = selectedIdRef.current
-    if (!queue.length || !currentId) {
-      setPlayAllActive(false)
-      return
-    }
-    const idx = queue.findIndex((t) => t.track_id === currentId)
-    if (idx < 0) {
-      setPlayAllActive(false)
-      return
-    }
-    const next = queue[idx + 1]
-    if (!next) {
-      trackCatalogPlayAllStopped('tracks_filter', queue.length, queue.length, 'queue_exhausted')
-      setPlayAllActive(false)
-      return
-    }
-    const current = queue[idx]
-    if (current) {
-      trackCatalogQueueAdvanced({
-        from: current,
-        to: next,
-        position: idx + 2,
-        total: queue.length,
-        source: 'tracks_filter',
-      })
-    }
-    playbackIntentRef.current = 'queue_advance'
-    ensureVisibleThroughIndexRef.current(idx + 1)
-    scrollActiveRowOnNextPaintRef.current = true
-    pickTrack(next, { keepPlayAll: true })
-  }, [pickTrack])
-
-  const advanceToNextInQueueRef = useRef(advanceToNextInQueue)
-  useEffect(() => {
-    advanceToNextInQueueRef.current = advanceToNextInQueue
-  }, [advanceToNextInQueue])
-
-  const startPlayAll = useCallback(() => {
-    if (!window.matchMedia(PLAY_ALL_DESKTOP_MEDIA_QUERY).matches) return
-    const queue = filteredRef.current
-    if (!queue.length) return
-    trackCatalogPlayAllStarted('tracks_filter', queue.length, tracksFilterContext(filtersRefForAdvance.current))
-    playbackIntentRef.current = 'play_all_start'
-    setPlayAllActive(true)
-    resetVisibleRef.current()
-    pickTrack(queue[0], { keepPlayAll: true })
-  }, [pickTrack])
-
-  const stopCurrentPlayback = useCallback(() => {
-    pausePlayback()
-  }, [pausePlayback])
-
-  const pausePlayAll = useCallback(() => {
-    pausePlayback()
-  }, [pausePlayback])
-
-  const resumePlayAll = useCallback(() => {
-    resumePlayback()
-  }, [resumePlayback])
-
-  const stopPlayAll = useCallback(() => {
-    const queue = filteredRef.current
-    const idx = queue.findIndex((row) => row.track_id === selectedIdRef.current)
-    trackCatalogPlayAllStopped('tracks_filter', idx >= 0 ? idx + 1 : 0, queue.length, 'user_stop')
-    setPlayAllActive(false)
-    stopCurrentPlayback()
-  }, [stopCurrentPlayback])
-
-  const jumpInQueue = useCallback(
-    (delta: -1 | 1) => {
-      const queue = filteredRef.current
-      const currentId = selectedIdRef.current
-      if (!queue.length || !currentId) return
-      const idx = queue.findIndex((t) => t.track_id === currentId)
-      if (idx < 0) return
-      const nextIdx = idx + delta
-      if (nextIdx < 0 || nextIdx >= queue.length) return
-      const next = queue[nextIdx]
-      const current = queue[idx]
-      if (current) {
-        trackCatalogQueueSkipped({
-          from: current,
-          to: next,
-          direction: delta === 1 ? 'next' : 'previous',
-          source: playAllActiveRef.current ? 'tracks_filter' : 'single',
-        })
-      }
-      playbackIntentRef.current = 'queue_skip'
-      ensureVisibleThroughIndexRef.current(nextIdx)
-      scrollActiveRowOnNextPaintRef.current = true
-      pickTrack(next, { keepPlayAll: playAllActiveRef.current })
-    },
-    [pickTrack],
-  )
-
-  /** Bind FINISH on the SoundCloud widget after each iframe (re)load — each remount creates a fresh widget. */
   const handlePlayerLoad = useCallback(() => {
-    const wrap = playerWrapRef.current
-    if (!wrap) return
-    const iframe = wrap.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
-    if (!iframe) return
-    void import('./soundcloudWidgetApi')
-      .then(({ loadSoundCloudWidgetApi }) => loadSoundCloudWidgetApi())
-      .then((SC) => {
-        if (!document.body.contains(iframe)) return
-        const widget = SC.Widget(iframe)
-        scWidgetRef.current = widget
-        bindSoundCloudWidgetPlayback(widget, SC, {
-          onPlayingChange: setIsScPlaying,
-          onFinish: () => {
-            if (!playAllActiveRef.current) return
-            advanceToNextInQueueRef.current()
-          },
-        })
-      })
-      .catch(() => {
-        // Widget API failed to load; Play All becomes effectively manual.
-      })
-  }, [])
+    bindWidgetOnLoad(playerWrapRef.current)
+  }, [bindWidgetOnLoad])
 
   const facetSelections = countTracksSelections(filters)
   const hasActiveContext = facetSelections > 0 || Boolean(urlFind.trim())
@@ -675,6 +503,7 @@ export function TracksPage() {
   const total = catalogList.length
 
   return (
+    <PlayerQueueProvider value={playerQueue}>
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
       {pageMeta}
       <GlobalHeader ref={headerRef} />
@@ -805,7 +634,7 @@ export function TracksPage() {
                               <button
                                 type="button"
                                 className="tracks-page__play-all-btn"
-                                onClick={pausePlayAll}
+                                onClick={() => queueActions.pause()}
                               >
                                 <span className="tracks-page__play-all-glyph" aria-hidden>
                                   ❚❚
@@ -816,7 +645,7 @@ export function TracksPage() {
                               <button
                                 type="button"
                                 className="tracks-page__play-all-btn"
-                                onClick={resumePlayAll}
+                                onClick={() => queueActions.resume()}
                               >
                                 <span className="tracks-page__play-all-glyph" aria-hidden>
                                   ▶
@@ -827,7 +656,7 @@ export function TracksPage() {
                             <button
                               type="button"
                               className="tracks-page__play-all-btn tracks-page__play-all-btn--stop"
-                              onClick={stopPlayAll}
+                              onClick={() => queueActions.stop()}
                             >
                               <span className="tracks-page__play-all-glyph" aria-hidden>
                                 ■
@@ -839,7 +668,7 @@ export function TracksPage() {
                           <button
                             type="button"
                             className="tracks-page__play-all-btn"
-                            onClick={startPlayAll}
+                            onClick={startPlayAllFromPage}
                           >
                             <span className="tracks-page__play-all-glyph" aria-hidden>
                               ▶
@@ -853,7 +682,7 @@ export function TracksPage() {
                               <button
                                 type="button"
                                 className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
-                                onClick={() => jumpInQueue(-1)}
+                                onClick={() => queueActions.jump(-1)}
                                 disabled={!canGoPrevious}
                               >
                                 Previous
@@ -861,7 +690,7 @@ export function TracksPage() {
                               <button
                                 type="button"
                                 className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
-                                onClick={() => jumpInQueue(1)}
+                                onClick={() => queueActions.jump(1)}
                                 disabled={!canGoNext}
                               >
                                 Next
@@ -1011,5 +840,6 @@ export function TracksPage() {
 
       <GlobalFooter />
     </div>
+    </PlayerQueueProvider>
   )
 }

@@ -26,23 +26,15 @@ import { CatalogVideoSpotlight, type CatalogVideoSpotlightItem } from './Catalog
 import { CatalogVideoSpotlightRailThumb } from './CatalogVideoSpotlightRailThumb'
 import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import {
-  PLAY_ALL_DESKTOP_MEDIA_QUERY,
   songDetailPlayAllHonestMobileCopy,
   usePlayAllDesktopAvailable,
 } from './playAllPlatform'
-import {
-  findTrackByScUrl,
-  trackSongDetailPlayAllStarted,
-  trackSongDetailPlayAllStopped,
-  trackSongDetailPlayStarted,
-  trackSongDetailQueueAdvanced,
-  trackSongDetailQueueSkipped,
-  type PlaybackIntent,
-} from './catalogAnalytics'
 import { formatDurationDisplay } from './durationFormat'
-import { bindSoundCloudWidgetPlayback } from './soundCloudWidgetPlayback'
-import { loadSoundCloudWidgetApi } from './soundcloudWidgetApi'
-import type { SoundCloudWidget } from './soundcloudWidgetApi'
+import {
+  PlayerQueueProvider,
+  songDetailTrackToPlayable,
+  useSongDetailTopTracksQueue,
+} from './playerQueue'
 import {
   catalogPathSlugFromTitleAndSlug,
   lyricsIdFromSongUrlSlug,
@@ -561,30 +553,10 @@ function SongDetailLoaded({
 
   const [audioListenTab, setAudioListenTab] = useState<AudioListenTab>('tracks')
   const [topTracksExpanded, setTopTracksExpanded] = useState(false)
-  const [playAllTopTracksActive, setPlayAllTopTracksActive] = useState(false)
-  const [isScPlaying, setIsScPlaying] = useState(false)
-  const playAllTopTracksActiveRef = useRef(false)
-  const isScPlayingRef = useRef(false)
   const playerWrapRef = useRef<HTMLDivElement | null>(null)
-  const scWidgetRef = useRef<SoundCloudWidget | null>(null)
+  const scWidgetRef = useRef<import('./soundcloudWidgetApi').SoundCloudWidget | null>(null)
   const inAppPlayableTracksRef = useRef<SongDetailTrack[]>(inAppPlayableTracks)
   const playingUrlRef = useRef<string>(playingUrl)
-  const advanceToNextInQueueRef = useRef<() => void>(() => {})
-  const playbackIntentRef = useRef<PlaybackIntent>('user_pick')
-  const queueIndex = useMemo(
-    () => inAppPlayableTracks.findIndex((t) => t.sc_url.trim() === playingUrl.trim()),
-    [inAppPlayableTracks, playingUrl],
-  )
-  const canGoPrevious = queueIndex > 0
-  const canGoNext = queueIndex >= 0 && queueIndex < inAppPlayableTracks.length - 1
-
-  useEffect(() => {
-    playAllTopTracksActiveRef.current = playAllTopTracksActive
-  }, [playAllTopTracksActive])
-
-  useEffect(() => {
-    isScPlayingRef.current = isScPlaying
-  }, [isScPlaying])
 
   useEffect(() => {
     inAppPlayableTracksRef.current = inAppPlayableTracks
@@ -594,191 +566,56 @@ function SongDetailLoaded({
     playingUrlRef.current = playingUrl
   }, [playingUrl])
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset playing indicator when embed track changes
-    setIsScPlaying(false)
-  }, [playingUrl])
-
   const soundcloudMainEmbedHeight =
     playingUrl.includes('/sets/') ? SC_EMBED_HEIGHT_SET_PLAYLIST : SC_EMBED_HEIGHT_TRACK_LIST
 
-  const requestSoundcloudPlayback = useCallback((url: string) => {
+  const requestSoundcloudPlayback = useCallback((url: string, opts?: { fromPlayAllStart?: boolean }) => {
+    const trimmed = url.trim()
+    const sameUrl = trimmed === playingUrlRef.current.trim()
+    if (opts?.fromPlayAllStart && sameUrl) return
     setSelectedUrl(url)
     setSoundcloudReloadKey((k) => k + 1)
   }, [])
 
-  const pausePlayback = useCallback(() => {
-    try {
-      scWidgetRef.current?.pause()
-    } catch {
-      // Keep controls responsive even if widget API is unavailable.
-    }
-    setIsScPlaying(false)
-  }, [])
+  const topTracksQueue = useSongDetailTopTracksQueue({
+    inAppPlayableTracksRef,
+    playingUrlRef,
+    scWidgetRef,
+    lyricsId: detail.lyrics_id,
+    songTitle: detail.lyrics_title,
+    songSlug: detail.url_slug,
+    lyricsExtract,
+    requestSoundcloudPlayback,
+  })
+  const {
+    state: queueState,
+    actions: queueActions,
+    bindWidgetOnLoad,
+    startPlayAllFromPage,
+  } = topTracksQueue
+  const playAllTopTracksActive = queueState.playAllActive
+  const isScPlaying = queueState.playing
 
-  const resumePlayback = useCallback(() => {
-    try {
-      scWidgetRef.current?.play()
-    } catch {
-      // Ignore widget play failures.
-    }
-  }, [])
+  const queueIndex = useMemo(
+    () => inAppPlayableTracks.findIndex((t) => t.sc_url.trim() === playingUrl.trim()),
+    [inAppPlayableTracks, playingUrl],
+  )
+  const canGoPrevious = queueIndex > 0
+  const canGoNext = queueIndex >= 0 && queueIndex < inAppPlayableTracks.length - 1
 
   const pickTopTrack = useCallback(
-    (url: string, { keepPlayAll = false }: { keepPlayAll?: boolean } = {}) => {
-      const trimmedUrl = url.trim()
-      if (trimmedUrl && trimmedUrl === playingUrlRef.current.trim() && scWidgetRef.current) {
-        if (isScPlayingRef.current) {
-          pausePlayback()
-          return
-        }
-        resumePlayback()
-        return
-      }
-
-      const queue = inAppPlayableTracksRef.current
-      const track = findTrackByScUrl(queue, url)
-      if (!keepPlayAll && playAllTopTracksActiveRef.current) {
-        const idx = queue.findIndex((t) => t.sc_url.trim() === playingUrlRef.current.trim())
-        trackSongDetailPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
-        playAllTopTracksActiveRef.current = false
-        setPlayAllTopTracksActive(false)
-      }
-      if (track) {
-        trackSongDetailPlayStarted(track, playbackIntentRef.current)
-      }
-      playbackIntentRef.current = 'user_pick'
-      requestSoundcloudPlayback(url)
+    (url: string, options?: { keepPlayAll?: boolean }) => {
+      const trimmed = url.trim()
+      const track = inAppPlayableTracksRef.current.find((t) => t.sc_url.trim() === trimmed)
+      if (!track) return
+      queueActions.pickTrack(songDetailTrackToPlayable(track, lyricsExtract), options)
     },
-    [pausePlayback, requestSoundcloudPlayback, resumePlayback],
+    [lyricsExtract, queueActions],
   )
-
-  const stopCurrentPlayback = useCallback(() => {
-    pausePlayback()
-  }, [pausePlayback])
-
-  const stopPlayAllTopTracks = useCallback(() => {
-    const queue = inAppPlayableTracksRef.current
-    const idx = queue.findIndex((t) => t.sc_url.trim() === playingUrlRef.current.trim())
-    trackSongDetailPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'user_stop')
-    playAllTopTracksActiveRef.current = false
-    setPlayAllTopTracksActive(false)
-    stopCurrentPlayback()
-  }, [stopCurrentPlayback])
-
-  const pausePlayAllTopTracks = useCallback(() => {
-    pausePlayback()
-  }, [pausePlayback])
-
-  const resumePlayAllTopTracks = useCallback(() => {
-    resumePlayback()
-  }, [resumePlayback])
-
-  const startPlayAllTopTracks = useCallback(() => {
-    if (!window.matchMedia(PLAY_ALL_DESKTOP_MEDIA_QUERY).matches) return
-    const queue = inAppPlayableTracksRef.current
-    const firstUrl = queue[0]?.sc_url.trim()
-    if (!firstUrl) return
-    trackSongDetailPlayAllStarted(queue.length)
-    playbackIntentRef.current = 'play_all_start'
-    playAllTopTracksActiveRef.current = true
-    setPlayAllTopTracksActive(true)
-    pickTopTrack(firstUrl, { keepPlayAll: true })
-  }, [pickTopTrack])
-
-  const jumpInQueue = useCallback(
-    (delta: -1 | 1) => {
-      const queue = inAppPlayableTracksRef.current
-      const current = playingUrlRef.current.trim()
-      if (!queue.length || !current) return
-      const idx = queue.findIndex((t) => t.sc_url.trim() === current)
-      if (idx < 0) return
-      const nextIdx = idx + delta
-      if (nextIdx < 0 || nextIdx >= queue.length) return
-      const nextUrl = queue[nextIdx]?.sc_url.trim()
-      if (!nextUrl) return
-      const currentTrack = findTrackByScUrl(queue, current)
-      const nextTrack = findTrackByScUrl(queue, nextUrl)
-      if (currentTrack && nextTrack) {
-        trackSongDetailQueueSkipped({
-          from: currentTrack,
-          to: nextTrack,
-          direction: delta === 1 ? 'next' : 'previous',
-        })
-      }
-      playbackIntentRef.current = 'queue_skip'
-      pickTopTrack(nextUrl, { keepPlayAll: playAllTopTracksActiveRef.current })
-    },
-    [pickTopTrack],
-  )
-
-  const advanceToNextInQueue = useCallback(() => {
-    const queue = inAppPlayableTracksRef.current
-    const current = playingUrlRef.current.trim()
-
-    if (!queue.length || !current) {
-      stopPlayAllTopTracks()
-      return
-    }
-
-    const idx = queue.findIndex((t) => t.sc_url.trim() === current)
-    if (idx < 0) {
-      stopPlayAllTopTracks()
-      return
-    }
-
-    const next = queue[idx + 1]
-    if (!next) {
-      trackSongDetailPlayAllStopped(queue.length, queue.length, 'queue_exhausted')
-      stopPlayAllTopTracks()
-      return
-    }
-
-    const nextUrl = next.sc_url.trim()
-    if (!nextUrl) {
-      stopPlayAllTopTracks()
-      return
-    }
-
-    const currentTrack = findTrackByScUrl(queue, current)
-    if (currentTrack) {
-      trackSongDetailQueueAdvanced({
-        from: currentTrack,
-        to: next,
-        position: idx + 2,
-        total: queue.length,
-      })
-    }
-    playbackIntentRef.current = 'queue_advance'
-    pickTopTrack(nextUrl, { keepPlayAll: true })
-  }, [pickTopTrack, stopPlayAllTopTracks])
-
-  useEffect(() => {
-    advanceToNextInQueueRef.current = advanceToNextInQueue
-  }, [advanceToNextInQueue])
 
   const handlePlayerLoad = useCallback(() => {
-    const wrap = playerWrapRef.current
-    if (!wrap) return
-    const iframe = wrap.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
-    if (!iframe) return
-
-    void loadSoundCloudWidgetApi()
-      .then((SC) => {
-        const widget = SC.Widget(iframe)
-        scWidgetRef.current = widget
-        bindSoundCloudWidgetPlayback(widget, SC, {
-          onPlayingChange: setIsScPlaying,
-          onFinish: () => {
-            if (!playAllTopTracksActiveRef.current) return
-            advanceToNextInQueueRef.current()
-          },
-        })
-      })
-      .catch(() => {
-        // Widget API failed to load; Play All becomes effectively manual.
-      })
-  }, [])
+    bindWidgetOnLoad(playerWrapRef.current)
+  }, [bindWidgetOnLoad])
 
   const writtenYear = (detail.written_year ?? '').trim()
   const museName = (detail.muse ?? '').trim()
@@ -974,6 +811,7 @@ function SongDetailLoaded({
   }, [hasYoutubeVideos, detail.lyrics_id])
 
   return (
+    <PlayerQueueProvider value={topTracksQueue}>
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
       <GlobalHeader ref={headerRef} />
 
@@ -1236,24 +1074,33 @@ function SongDetailLoaded({
                                 <button
                                   type="button"
                                   className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
-                                  onClick={pausePlayAllTopTracks}
+                                  onClick={() => queueActions.pause()}
                                 >
+                                  <span className="song-detail-audio-action-btn__glyph" aria-hidden>
+                                    ❚❚
+                                  </span>
                                   Pause
                                 </button>
                               ) : (
                                 <button
                                   type="button"
                                   className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
-                                  onClick={resumePlayAllTopTracks}
+                                  onClick={() => queueActions.resume()}
                                 >
+                                  <span className="song-detail-audio-action-btn__glyph" aria-hidden>
+                                    ▶
+                                  </span>
                                   Resume
                                 </button>
                               )}
                               <button
                                 type="button"
                                 className="song-detail-audio-action-btn song-detail-audio-action-btn--stop"
-                                onClick={stopPlayAllTopTracks}
+                                onClick={() => queueActions.stop()}
                               >
+                                <span className="song-detail-audio-action-btn__glyph" aria-hidden>
+                                  ■
+                                </span>
                                 Stop playing all
                               </button>
                             </>
@@ -1261,8 +1108,11 @@ function SongDetailLoaded({
                             <button
                               type="button"
                               className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
-                              onClick={startPlayAllTopTracks}
+                              onClick={startPlayAllFromPage}
                             >
+                              <span className="song-detail-audio-action-btn__glyph" aria-hidden>
+                                ▶
+                              </span>
                               {`Play all ${inAppPlayableTracks.length} top track${inAppPlayableTracks.length === 1 ? '' : 's'}`}
                             </button>
                           ) : null}
@@ -1272,7 +1122,7 @@ function SongDetailLoaded({
                                 <button
                                   type="button"
                                   className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
-                                  onClick={() => jumpInQueue(-1)}
+                                  onClick={() => queueActions.jump(-1)}
                                   disabled={!canGoPrevious}
                                 >
                                   Previous
@@ -1280,7 +1130,7 @@ function SongDetailLoaded({
                                 <button
                                   type="button"
                                   className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
-                                  onClick={() => jumpInQueue(1)}
+                                  onClick={() => queueActions.jump(1)}
                                   disabled={!canGoNext}
                                 >
                                   Next
@@ -1567,5 +1417,6 @@ function SongDetailLoaded({
 
       <GlobalFooter />
     </div>
+    </PlayerQueueProvider>
   )
 }
