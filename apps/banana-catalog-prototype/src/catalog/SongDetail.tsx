@@ -1220,7 +1220,7 @@ function SongDetailLoaded({
 
               {shouldShowTracksList ? (
                 <section className="song-detail-tracks" aria-labelledby="song-tracks-heading">
-                  <h2 id="song-tracks-heading" className="song-detail-subsection-title">
+                  <h2 id="song-tracks-heading" className="catalog-section-title">
                     {inAppPlayableTracks.length > 1 ? 'Top tracks' : 'Track picks'}
                   </h2>
                   {inAppPlayableTracks.length > 1 ? (
@@ -1346,9 +1346,15 @@ function SongDetailLoaded({
                       aria-controls="song-top-tracks-list"
                       onClick={() => setTopTracksExpanded((v) => !v)}
                     >
-                      {topTracksExpanded
-                        ? 'Show less'
-                        : `Show all ${orderedTracks.length} top tracks →`}
+                      <span className="song-detail-panel-expand__label">
+                        {topTracksExpanded
+                          ? 'Show less'
+                          : `Show all ${orderedTracks.length} top tracks`}
+                      </span>
+                      <span
+                        className={`song-detail-panel-expand__chevron${topTracksExpanded ? ' is-open' : ''}`}
+                        aria-hidden
+                      />
                     </button>
                   ) : null}
                 </section>
@@ -1369,7 +1375,7 @@ function SongDetailLoaded({
                         <section className="song-detail-youtube" aria-label="YouTube player">
                           {useSongVideoSpotlight && songVideoSpotlightFeatured && videoInView ? (
                             <CatalogVideoSpotlight
-                              className="song-detail-youtube-spotlight catalog-video-spotlight--compact-rail"
+                              className="song-detail-youtube-spotlight catalog-video-spotlight--borderless catalog-video-spotlight--compact-rail"
                               featured={songVideoSpotlightFeatured}
                               rail={songVideoSpotlightRail}
                               activeVideoId={effectiveYoutubeVideoId}
@@ -1446,7 +1452,13 @@ function SongDetailLoaded({
                           aria-controls="song-lyrics-body"
                           onClick={() => setLyricsExpanded((v) => !v)}
                         >
-                          {lyricsExpanded ? 'Show less' : 'Show full lyrics'}
+                          <span className="song-detail-panel-expand__label">
+                            {lyricsExpanded ? 'Show less' : 'Show full lyrics'}
+                          </span>
+                          <span
+                            className={`song-detail-panel-expand__chevron${lyricsExpanded ? ' is-open' : ''}`}
+                            aria-hidden
+                          />
                         </button>
                       ) : null}
                     </div>
@@ -1461,7 +1473,10 @@ function SongDetailLoaded({
           {showVideoBelow ? (
             <section
               ref={videoSectionRef}
-              className="song-detail-media song-detail-media--video song-detail-video-below song-detail-shell-section"
+              className={
+                'song-detail-media song-detail-media--video song-detail-video-below song-detail-shell-section' +
+                (useLyricsMediaSplit ? ' song-detail-shell-section--breakout' : '')
+              }
               id="song-video-section"
               aria-labelledby="song-video-below-heading"
             >
@@ -1471,7 +1486,7 @@ function SongDetailLoaded({
               <section className="song-detail-youtube" aria-label="YouTube player">
                 {useSongVideoSpotlight && songVideoSpotlightFeatured && videoInView ? (
                   <CatalogVideoSpotlight
-                    className="song-detail-youtube-spotlight catalog-video-spotlight--compact-rail"
+                    className="song-detail-youtube-spotlight catalog-video-spotlight--borderless catalog-video-spotlight--compact-rail"
                     featured={songVideoSpotlightFeatured}
                     rail={songVideoSpotlightRail}
                     activeVideoId={effectiveYoutubeVideoId}
@@ -1512,7 +1527,11 @@ function SongDetailLoaded({
 
           {songbookRecord && detail.songbook ? (
             <section className="song-detail-shell-section">
-              <SongDetailAlsoPartOfCard book={songbookRecord} />
+              <SongDetailAlsoPartOfCard
+                book={songbookRecord}
+                lyricsId={detail.lyrics_id}
+                isLyricsOnly={!hasAudioContent && !hasYoutubeVideos}
+              />
             </section>
           ) : null}
 
@@ -1522,7 +1541,7 @@ function SongDetailLoaded({
               aria-labelledby="song-related-heading"
             >
                 <h2 id="song-related-heading" className="catalog-section-title">
-                  Sister songs
+                  Explore sister songs
                 </h2>
                 <ul className="song-thumb-grid song-thumb-grid--section song-detail-sister-grid">
                   {orderedRelatedSongs.slice(0, 8).map((related) => {
