@@ -1,5 +1,6 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import type { DiscoverySearchProps } from './DiscoverySearch'
+import { DISCOVERY_SEARCH_OPEN_EVENT } from './discoverySearchConstants'
 
 const DiscoverySearchRoot = lazy(() =>
   import('./DiscoverySearch').then((m) => ({ default: m.DiscoverySearch })),
@@ -15,6 +16,16 @@ export function DiscoverySearchLazy(props: DiscoverySearchProps) {
     setOpenOnMount(true)
     setMountSearch(true)
   }
+
+  useEffect(() => {
+    if (!shouldDefer) return
+    const onOpen = () => {
+      mountFromIcon()
+      document.querySelector('.global-header__search-slot')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+    window.addEventListener(DISCOVERY_SEARCH_OPEN_EVENT, onOpen)
+    return () => window.removeEventListener(DISCOVERY_SEARCH_OPEN_EVENT, onOpen)
+  }, [shouldDefer])
 
   if (!mountSearch) {
     return (

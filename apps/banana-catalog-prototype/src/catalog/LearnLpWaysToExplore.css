@@ -74,6 +74,14 @@
   outline-offset: 2px;
 }
 
+.learn-lp__explore-search-card {
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
 .about-page__how-desc {
   font-size: 0.84rem;
   line-height: 1.55;

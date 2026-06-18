@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import buildSummaryJson from '../data/generated/_build_summary.json'
 import songCatalogBrowseJson from '../data/generated/song_catalog_browse.json'
 import { canonicalPathForRoute } from './seoPaths'
+import { openDiscoverySearch } from './discoverySearchConstants'
 import { CATALOG_BROWSE_PATH } from './urlState'
 import { songOnWordsSurface } from './wordsStory'
 import type { SongCatalogItem } from './types'
@@ -44,7 +45,11 @@ export function LearnLpWaysToExplore() {
       </p>
       <ul className="about-page__how-grid learn-lp__explore-grid">
         <li className="about-page__how-cell">
-          <Link className="about-page__how-card" to={`${CATALOG_BROWSE_PATH}#catalog-songs-find-input`}>
+          <button
+            type="button"
+            className="about-page__how-card learn-lp__explore-search-card"
+            onClick={() => openDiscoverySearch()}
+          >
             <span className="about-page__how-label">Search &amp; discover →</span>
             <span className="about-page__how-stat">
               {`${formatCount(searchDiscoverRowCount)} songs & lyrics · find + filters`}
@@ -52,7 +57,7 @@ export function LearnLpWaysToExplore() {
             <span className="about-page__how-desc">
               Find any song by title, sutra, muse, topic, or vibe. Start typing, start finding.
             </span>
-          </Link>
+          </button>
         </li>
         <li className="about-page__how-cell">
           <Link className="about-page__how-card" to={canonicalPathForRoute('/songbooks')}>
