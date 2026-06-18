@@ -6,6 +6,16 @@ import { sutraClassName } from './sutraTheme'
 
 type Props = {
   book: SongbookCatalogItem & { slug: string }
+  /** Current song — drives full vs. related songbook heading (SD-08). */
+  lyricsId?: string
+  isLyricsOnly?: boolean
+}
+
+function songbookCardHeading(book: SongbookCatalogItem, lyricsId: string | undefined, isLyricsOnly: boolean): string {
+  if (!isLyricsOnly || !lyricsId) return 'Listen to full songbook'
+  const member = book.member_songs.find((s) => s.lyrics_id === lyricsId)
+  if (member?.has_in_app_playback) return 'Listen to full songbook'
+  return 'Listen to related songbook'
 }
 
 function formatCount(n: number): string {
@@ -13,7 +23,8 @@ function formatCount(n: number): string {
 }
 
 /** Variant B — stats + browse CTA below breakout (hero keeps identity line). */
-export function SongDetailAlsoPartOfCard({ book }: Props) {
+export function SongDetailAlsoPartOfCard({ book, lyricsId, isLyricsOnly = false }: Props) {
+  const heading = songbookCardHeading(book, lyricsId, isLyricsOnly)
   const art = (book.playlist_artwork_url || book.songbook_art_url || '').trim()
   const sutra = (book.sutras || '').split(',')[0]?.trim() ?? ''
   const trackCount = book.playlist_track_count || book.song_count || 0
@@ -34,7 +45,7 @@ export function SongDetailAlsoPartOfCard({ book }: Props) {
   return (
     <section className="song-detail-also" aria-labelledby="song-also-heading">
       <h2 id="song-also-heading" className="catalog-section-title">
-        Listen in the full songbook
+        {heading}
       </h2>
       <div className="song-detail-also__card">
         {art ? (
