@@ -252,8 +252,20 @@
     "featured_description": ""
   },
   {
+    "playlist_name": "ACCORDIONsutra",
+    "playlist_type": "collection",
+    "playlist_id": "PLmBA9ODM1xHNJcfAN2numSQurcbpeZro4",
+    "playlist_url": "https://www.youtube.com/playlist?list=PLmBA9ODM1xHNJcfAN2numSQurcbpeZro4",
+    "thumbnail_url": "https://i.ytimg.com/vi/aX912qVQ4AU/maxresdefault.jpg",
+    "video_count": 6,
+    "sutra": "",
+    "description": "",
+    "featured": false,
+    "featured_description": ""
+  },
+  {
     "playlist_name": "BANJOsutra",
-    "playlist_type": "genre (all)",
+    "playlist_type": "collection",
     "playlist_id": "PLmBA9ODM1xHOKzkGZ6DX6ndWiRcTwwU0R",
     "playlist_url": "https://www.youtube.com/playlist?list=PLmBA9ODM1xHOKzkGZ6DX6ndWiRcTwwU0R",
     "thumbnail_url": "https://i.ytimg.com/vi/5WOBXVQRhAQ/maxresdefault.jpg",
@@ -272,6 +284,18 @@
     "video_count": 379,
     "sutra": "",
     "description": "The complete bananasutra archive: every song, reel, and spoken word. The full cabaret of the catalog.",
+    "featured": false,
+    "featured_description": ""
+  },
+  {
+    "playlist_name": "BLABLAsutra",
+    "playlist_type": "genre (all)",
+    "playlist_id": "PLmBA9ODM1xHO9pKEdjD5rkrze2l2596D8",
+    "playlist_url": "https://www.youtube.com/playlist?list=PLmBA9ODM1xHO9pKEdjD5rkrze2l2596D8",
+    "thumbnail_url": "https://i.ytimg.com/vi/pSBv8kq6NnA/maxresdefault.jpg",
+    "video_count": 44,
+    "sutra": "",
+    "description": "Repetition as ritual. Songs designed to loop in your head and rewire something slowly.",
     "featured": false,
     "featured_description": ""
   },
@@ -296,6 +320,18 @@
     "video_count": 80,
     "sutra": "",
     "description": "Where the carnivalesque meets the confrontational. Burlesque as political theater, sensuality as resistance.",
+    "featured": false,
+    "featured_description": ""
+  },
+  {
+    "playlist_name": "CELLOsutra",
+    "playlist_type": "collection",
+    "playlist_id": "PLmBA9ODM1xHOxnuhaybPpgyQ-4jeHzJAp",
+    "playlist_url": "https://www.youtube.com/playlist?list=PLmBA9ODM1xHOxnuhaybPpgyQ-4jeHzJAp",
+    "thumbnail_url": "https://i.ytimg.com/vi/5gVicAAKdrg/maxresdefault.jpg",
+    "video_count": 17,
+    "sutra": "",
+    "description": "",
     "featured": false,
     "featured_description": ""
   },
@@ -348,6 +384,30 @@
     "featured_description": ""
   },
   {
+    "playlist_name": "Hidden Peels",
+    "playlist_type": "songbook",
+    "playlist_id": "PLmBA9ODM1xHNQe75qV7FHS_jeyHiYJHG9",
+    "playlist_url": "https://www.youtube.com/playlist?list=PLmBA9ODM1xHNQe75qV7FHS_jeyHiYJHG9",
+    "thumbnail_url": "https://i.ytimg.com/vi/W8OoEE_LL3A/maxresdefault.jpg",
+    "video_count": 49,
+    "sutra": "",
+    "description": "",
+    "featured": false,
+    "featured_description": ""
+  },
+  {
+    "playlist_name": "INDIEsutra",
+    "playlist_type": "genre (all)",
+    "playlist_id": "PLmBA9ODM1xHOY4XVWmtpus0iqSXCUgpp2",
+    "playlist_url": "https://www.youtube.com/playlist?list=PLmBA9ODM1xHOY4XVWmtpus0iqSXCUgpp2",
+    "thumbnail_url": "https://i.ytimg.com/vi/5gVicAAKdrg/maxresdefault.jpg",
+    "video_count": 52,
+    "sutra": "",
+    "description": "",
+    "featured": false,
+    "featured_description": ""
+  },
+  {
     "playlist_name": "JAZZsutra",
     "playlist_type": "genre (all)",
     "playlist_id": "PLmBA9ODM1xHM4L7n8FiABFkY1iVfYT8mm",
@@ -372,38 +432,14 @@
     "featured_description": ""
   },
   {
-    "playlist_name": "LULLABIESsutra",
-    "playlist_type": "collection",
-    "playlist_id": "PLmBA9ODM1xHPBqiTUHJuDtTeZfafWCMUG",
-    "playlist_url": "https://www.youtube.com/playlist?list=PLmBA9ODM1xHPBqiTUHJuDtTeZfafWCMUG",
-    "thumbnail_url": "https://i.ytimg.com/vi/QMaxq0XhyRk/maxresdefault.jpg",
-    "video_count": 26,
-    "sutra": "",
-    "description": "",
-    "featured": false,
-    "featured_description": ""
-  },
-  {
     "playlist_name": "LULLAsutra",
-    "playlist_type": "genre (all)",
+    "playlist_type": "collection",
     "playlist_id": "PLmBA9ODM1xHPBqiTUHJuDtTeZfafWCMUG",
     "playlist_url": "https://www.youtube.com/playlist?list=PLmBA9ODM1xHPBqiTUHJuDtTeZfafWCMUG",
     "thumbnail_url": "https://i.ytimg.com/vi/QMaxq0XhyRk/maxresdefault.jpg",
     "video_count": 20,
     "sutra": "",
     "description": "Lullabies for adults who never quite got the comfort they needed as children. Tender, slow, and a little melancholy.",
-    "featured": false,
-    "featured_description": ""
-  },
-  {
-    "playlist_name": "MANTRAsutra",
-    "playlist_type": "genre (all)",
-    "playlist_id": "PLmBA9ODM1xHO9pKEdjD5rkrze2l2596D8",
-    "playlist_url": "https://www.youtube.com/playlist?list=PLmBA9ODM1xHO9pKEdjD5rkrze2l2596D8",
-    "thumbnail_url": "https://i.ytimg.com/vi/pSBv8kq6NnA/maxresdefault.jpg",
-    "video_count": 44,
-    "sutra": "",
-    "description": "Repetition as ritual. Songs designed to loop in your head and rewire something slowly.",
     "featured": false,
     "featured_description": ""
   },
@@ -421,7 +457,7 @@
   },
   {
     "playlist_name": "PIANOsutra",
-    "playlist_type": "genre (all)",
+    "playlist_type": "collection",
     "playlist_id": "PLmBA9ODM1xHMYkR9hzlVk7SoaTvykSz2p",
     "playlist_url": "https://www.youtube.com/playlist?list=PLmBA9ODM1xHMYkR9hzlVk7SoaTvykSz2p",
     "thumbnail_url": "https://i.ytimg.com/vi/dcbMQpx_aTI/maxresdefault.jpg",
