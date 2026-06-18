@@ -300,3 +300,9 @@ a.catalog-filter-bar__chip.is-active:visited {
 .catalog-filter-bar__panel:not(.is-open) {
   display: none;
 }
+
+.catalog-filter-bar__panel-footer {
+  margin-top: 0.15rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--color-border);
+}

@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { CatalogFeaturedEmbedCopy } from './CatalogFeaturedEmbedCopy'
 import { songbookFeaturedKickerLabel } from './homePortalUtils'
-import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
+import { formatSongbookScPlaylistMeta } from './songbookPlaylistMeta'
 import type { SongbookCatalogItem } from './types'
 import './FeaturedSongbookSpotlight.css'
 import './catalog-page-shell.css'
@@ -18,8 +19,8 @@ type Props = {
 }
 
 /**
- * Featured songbook layout: embed + copy with kicker → playlist meta → title → description → CTA.
- * Tokenized across home, /listen, and /songbooks.
+ * Featured songbook layout: embed + tokenized copy (kicker → title + tracks·duration → description → CTA).
+ * Shared across home, /listen, /songbooks, and /sutras detail.
  */
 export function FeaturedSongbookSpotlight({
   book,
@@ -29,21 +30,24 @@ export function FeaturedSongbookSpotlight({
   className = '',
   layout = 'split',
 }: Props) {
-  const kicker = songbookFeaturedKickerLabel(book)
+  const copy = (
+    <CatalogFeaturedEmbedCopy
+      meta={songbookFeaturedKickerLabel(book)}
+      title={book.songbook}
+      titleMeta={formatSongbookScPlaylistMeta(book)}
+      description={book.description}
+    >
+      <Link className="catalog-featured-embed-copy__cta" to={ctaTo}>
+        {ctaLabel}
+      </Link>
+    </CatalogFeaturedEmbedCopy>
+  )
 
   if (layout === 'stacked') {
     return (
       <div className={['catalog-featured-songbook', 'catalog-featured-songbook--stacked', className].filter(Boolean).join(' ')}>
         <div className="catalog-featured-songbook__embed">{embed}</div>
-        <div className="catalog-featured-embed-copy catalog-featured-songbook__stacked-copy">
-          <p className="catalog-featured-embed-copy__meta catalog-featured-songbook__kicker">{kicker}</p>
-          <SongbookPlaylistMetaLine book={book} className="catalog-featured-songbook__meta" />
-          <p className="catalog-featured-embed-copy__title">{book.songbook}</p>
-          {book.description ? <p className="catalog-featured-embed-copy__desc">{book.description}</p> : null}
-          <Link className="catalog-featured-embed-copy__cta" to={ctaTo}>
-            {ctaLabel}
-          </Link>
-        </div>
+        <div className="catalog-featured-songbook__stacked-copy">{copy}</div>
       </div>
     )
   }
@@ -52,15 +56,7 @@ export function FeaturedSongbookSpotlight({
     <div className={['catalog-featured-songbook', className].filter(Boolean).join(' ')}>
       <div className="catalog-featured-songbook__grid">
         <div className="catalog-featured-songbook__embed">{embed}</div>
-        <div className="catalog-featured-songbook__copy">
-          <p className="catalog-featured-songbook__kicker">{kicker}</p>
-          <SongbookPlaylistMetaLine book={book} className="catalog-featured-songbook__meta" />
-          <h3 className="catalog-featured-songbook__title">{book.songbook}</h3>
-          {book.description ? <p className="catalog-featured-songbook__desc">{book.description}</p> : null}
-          <Link className="catalog-section-cta catalog-featured-songbook__cta" to={ctaTo}>
-            {ctaLabel}
-          </Link>
-        </div>
+        <div className="catalog-featured-songbook__copy">{copy}</div>
       </div>
     </div>
   )

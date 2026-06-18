@@ -138,9 +138,65 @@
   color: var(--color-link-hover);
 }
 
-/* Featured embed copy — title, meta, description below any in-page player. */
+/* Featured embed copy — kicker, stats, title + duration, description below any in-page player. */
 .catalog-featured-embed-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
   margin: var(--catalog-featured-embed-copy-gap-top) 0 0;
+}
+
+.catalog-featured-embed-copy__meta {
+  margin: 0;
+  font-size: var(--catalog-featured-embed-meta-size);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: var(--catalog-featured-embed-meta-line-height);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.catalog-featured-embed-copy__stats {
+  margin: 0;
+  font-size: var(--catalog-featured-embed-meta-size);
+  line-height: var(--catalog-featured-embed-meta-line-height);
+  color: var(--color-text-muted);
+}
+
+.catalog-featured-embed-copy__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.45rem;
+  margin: 0;
+}
+
+.catalog-featured-embed-copy__title-row .catalog-featured-embed-copy__title {
+  margin: 0;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.catalog-featured-embed-copy__title-meta {
+  flex: 0 0 auto;
+  font-size: var(--catalog-featured-embed-meta-size);
+  line-height: var(--catalog-featured-embed-meta-line-height);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 640px) {
+  .catalog-featured-embed-copy {
+    gap: 0.22rem;
+  }
+
+  .catalog-featured-embed-copy__title-row {
+    flex-wrap: nowrap;
+    gap: 0.55rem;
+  }
+
+  .catalog-featured-embed-copy__title-meta {
+    white-space: nowrap;
+  }
 }
 
 .catalog-featured-embed-copy__title {
@@ -162,15 +218,8 @@
   text-decoration: underline;
 }
 
-.catalog-featured-embed-copy__meta {
-  margin: 0 0 0.2rem;
-  font-size: var(--catalog-featured-embed-meta-size);
-  line-height: var(--catalog-featured-embed-meta-line-height);
-  color: var(--color-text-muted);
-}
-
 .catalog-featured-embed-copy__desc {
-  margin: 0 0 0.25rem;
+  margin: 0;
   font-size: var(--catalog-featured-embed-desc-size);
   line-height: var(--catalog-featured-embed-desc-line-height);
   color: var(--color-text-muted);

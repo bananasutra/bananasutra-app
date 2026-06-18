@@ -66,6 +66,9 @@ const PARAM_FIND = 'find'
 
 const PARAM_MEDIA = 'media'
 
+/** Opt-in on `/songs`: include lyrics-only rows (default pool is listener media only). */
+const PARAM_INCLUDE_LYRICS_ONLY = 'include_lyrics_only'
+
 const PARAM_BROWSE_PAGE = 'page'
 
 const MEDIA_VALUES: ReadonlySet<MediaComboFilter> = new Set(['all', 'lyrics_sc', 'lyrics_yt', 'full'])
@@ -79,10 +82,16 @@ export function parseMediaCombo(raw: string | null): MediaComboFilter {
   return 'all'
 }
 
+export function parseIncludeLyricsOnly(raw: string | null): boolean {
+  const v = (raw ?? '').trim().toLowerCase()
+  return v === '1' || v === 'true' || v === 'yes'
+}
+
 export function readBrowseStateFromSearchParams(params: URLSearchParams): {
   sort: SortMode
   filters: FilterState
   media: MediaComboFilter
+  includeLyricsOnly: boolean
   page: number
 } {
   const sort = parseSort(params.get('sort'))
@@ -92,14 +101,16 @@ export function readBrowseStateFromSearchParams(params: URLSearchParams): {
     filters[key] = parseCommaSet(raw)
   })
   const media = parseMediaCombo(params.get(PARAM_MEDIA))
+  const includeLyricsOnly = parseIncludeLyricsOnly(params.get(PARAM_INCLUDE_LYRICS_ONLY))
   const page = Math.max(1, parseInt(params.get(PARAM_BROWSE_PAGE) || '1', 10) || 1)
-  return { sort, filters, media, page }
+  return { sort, filters, media, includeLyricsOnly, page }
 }
 
 export function readStateFromUrl(): {
   sort: SortMode
   filters: FilterState
   media: MediaComboFilter
+  includeLyricsOnly: boolean
   page: number
 } {
   return readBrowseStateFromSearchParams(searchParamsFromSearchString(window.location.search))
@@ -112,6 +123,7 @@ export function serializeBrowseQuery(
   find?: string,
   media: MediaComboFilter = 'all',
   page: number = 1,
+  includeLyricsOnly = false,
 ): string {
   const params = new URLSearchParams()
   const sortParam = serializeSort(sort)
@@ -123,6 +135,7 @@ export function serializeBrowseQuery(
   const f = find?.trim()
   if (f) params.set(PARAM_FIND, f)
   if (media && media !== 'all') params.set(PARAM_MEDIA, media)
+  if (includeLyricsOnly) params.set(PARAM_INCLUDE_LYRICS_ONLY, '1')
   if (page > 1) params.set(PARAM_BROWSE_PAGE, String(page))
   return params.toString()
 }
@@ -134,8 +147,9 @@ export function buildBrowsePath(
   find?: string,
   media: MediaComboFilter = 'all',
   page: number = 1,
+  includeLyricsOnly = false,
 ): string {
-  const qs = serializeBrowseQuery(sort, filters, find, media, page)
+  const qs = serializeBrowseQuery(sort, filters, find, media, page, includeLyricsOnly)
   return qs ? `${CATALOG_BROWSE_PATH}?${qs}` : CATALOG_BROWSE_PATH
 }
 
@@ -244,7 +258,13 @@ export function buildTracksBrowsePathFull(
   return browsePathWithQuery('/tracks', qs)
 }
 
-const BROWSE_PARAM_KEYS = new Set<string>(['sort', ...Object.values(PARAM), PARAM_MEDIA, PARAM_BROWSE_PAGE])
+const BROWSE_PARAM_KEYS = new Set<string>([
+  'sort',
+  ...Object.values(PARAM),
+  PARAM_MEDIA,
+  PARAM_INCLUDE_LYRICS_ONLY,
+  PARAM_BROWSE_PAGE,
+])
 
 /** True when `search` contains any catalog browse facet/sort param (legacy `/?…` redirects). */
 export function searchHasBrowseParams(search: string): boolean {
@@ -273,10 +293,16 @@ export function readCatalogBrowsePage(search: string): number {
  * Persist sort + facet filters + optional text `find` (discovery “see all” broad match).
  * Pass `find: ''` to clear; omit `find` to keep the current URL’s `find` value.
  */
-export function writeStateToUrl(sort: SortMode, filters: FilterState, find?: string, media: MediaComboFilter = 'all'): void {
+export function writeStateToUrl(
+  sort: SortMode,
+  filters: FilterState,
+  find?: string,
+  media: MediaComboFilter = 'all',
+  includeLyricsOnly = false,
+): void {
   const prev = searchParamsFromSearchString(window.location.search)
   const nextFind = find !== undefined ? find.trim() : (prev.get(PARAM_FIND) ?? '').trim()
   const page = Math.max(1, parseInt(prev.get(PARAM_BROWSE_PAGE) || '1', 10) || 1)
-  const path = buildBrowsePath(sort, filters, nextFind || undefined, media, page)
+  const path = buildBrowsePath(sort, filters, nextFind || undefined, media, page, includeLyricsOnly)
   window.history.replaceState(null, '', path)
 }
