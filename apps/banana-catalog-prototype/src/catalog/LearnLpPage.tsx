@@ -16,6 +16,7 @@ import './CatalogApp.css'
 import './catalog-page-shell.css'
 import './LearnLpPage.css'
 import './LearnLpWaysToExplore.css'
+import './SutrasPages.css'
 import './WordsPage.css'
 
 export function LearnLpPage() {

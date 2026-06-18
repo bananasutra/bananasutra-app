@@ -42,6 +42,7 @@ import {
   buildTracksBrowsePathFull,
   CATALOG_BROWSE_PATH,
 } from './urlState'
+import { DISCOVERY_SEARCH_OPEN_EVENT } from './discoverySearchConstants'
 import './CatalogApp.css'
 import './DiscoverySearch.css'
 import { loadSongSearchDeep, loadYoutubeByLyricsId, useSongCatalogBrowse } from './generatedData'
@@ -308,6 +309,16 @@ export function DiscoverySearch({
     setOpen(true)
     window.setTimeout(() => inputRef.current?.focus(), 0)
   }, [])
+
+  useEffect(() => {
+    if (variant !== 'header') return
+    const onOpen = () => {
+      openHeaderSearch()
+      document.querySelector('.global-header__search-slot')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+    window.addEventListener(DISCOVERY_SEARCH_OPEN_EVENT, onOpen)
+    return () => window.removeEventListener(DISCOVERY_SEARCH_OPEN_EVENT, onOpen)
+  }, [openHeaderSearch, variant])
 
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {
