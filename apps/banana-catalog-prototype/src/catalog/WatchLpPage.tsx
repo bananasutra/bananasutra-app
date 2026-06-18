@@ -80,6 +80,7 @@ export function WatchLpPage() {
   const [pickedPlaylistId, setPickedPlaylistId] = useState<string | null>(null)
   const [showAllPlaylists, setShowAllPlaylists] = useState(false)
   const [isPlaylistEmbedPlaying, setIsPlaylistEmbedPlaying] = useState(false)
+  const [isSpotlightEmbedPlaying, setIsSpotlightEmbedPlaying] = useState(false)
 
   useExclusiveYoutubeEmbedsPlayback(Boolean(youtubeVideos?.length && playlists?.length))
 
@@ -182,6 +183,11 @@ export function WatchLpPage() {
     setIsPlaylistEmbedPlaying(false)
   }, [activePlaylistId])
 
+  const handleSelectFeaturedVideo = (videoId: string) => {
+    setPickedFeaturedId(videoId)
+    setIsSpotlightEmbedPlaying(false)
+  }
+
   const genreSongbooks = useMemo(() => allSongbooks(), [])
   const activePlaylistSongbookSlug = useMemo(
     () => (activePlaylist ? songbookSlugForYoutubePlaylist(activePlaylist, genreSongbooks) : null),
@@ -230,8 +236,14 @@ export function WatchLpPage() {
     setPickedPlaylistId(null)
   }
 
-  const pausePlaylistEmbed = () => pauseYoutubeEmbed(playlistYtRef.current)
-  const pauseSpotlightEmbed = () => pauseYoutubeEmbed(spotlightYtRef.current)
+  const pausePlaylistEmbed = () => {
+    pauseYoutubeEmbed(playlistYtRef.current)
+    setIsPlaylistEmbedPlaying(false)
+  }
+  const pauseSpotlightEmbed = () => {
+    pauseYoutubeEmbed(spotlightYtRef.current)
+    setIsSpotlightEmbedPlaying(false)
+  }
 
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell watch-lp">
@@ -274,27 +286,30 @@ export function WatchLpPage() {
               <p className="catalog-lp-section-intro">Most recent clips first. Tap a thumbnail to swap the player.</p>
 
               <CatalogVideoSpotlight
-                className="watch-lp__spotlight-player catalog-video-spotlight--compact-rail"
+                className="watch-lp__spotlight-player catalog-video-spotlight--borderless catalog-video-spotlight--compact-rail"
                 featured={featuredSpotlight}
                 rail={railSpotlight}
                 activeVideoId={featuredVideo?.video_id ?? null}
-                onSelectVideo={setPickedFeaturedId}
+                onSelectVideo={handleSelectFeaturedVideo}
                 iframeRef={spotlightYtRef}
                 onBeforePlay={pausePlaylistEmbed}
+                onPlayingChange={setIsSpotlightEmbedPlaying}
                 railEyebrow="More recent clips"
                 renderRailCell={(video, isActive, onSelect) => {
                   const source = recentRail.shown.find((v) => v.video_id === video.videoId)
                   if (!source) return null
                   const title = (source.lyrics_title || source.title || 'Video').trim()
                   const railLines = watchLpVideoRailThumbLines(source)
+                  const isNowPlaying = isActive && isSpotlightEmbedPlaying
                   return (
                     <CatalogVideoSpotlightRailThumb
                       thumbnailUrl={source.thumbnail_url}
                       sutra={railLines.sutra}
                       duration={railLines.duration}
                       isActive={isActive}
+                      isPlaying={isNowPlaying}
                       onSelect={onSelect}
-                      ariaLabel={`${title}${isActive ? ' (now showing)' : ''}`}
+                      ariaLabel={`${title}${isNowPlaying ? ' (now playing)' : isActive ? ' (selected)' : ''}`}
                     />
                   )
                 }}
@@ -338,10 +353,12 @@ export function WatchLpPage() {
                   onBeforePlay={pauseSpotlightEmbed}
                   onPlayingChange={setIsPlaylistEmbedPlaying}
                   songbookSlug={activePlaylistSongbookSlug}
+                  borderless
                 />
               </div>
 
-              <WatchLpFacetBar
+              <div className="catalog-embed-section-follow">
+                <WatchLpFacetBar
                 playlists={allPlaylists}
                 activeSutra={activeSutra}
                 activeGenre={activeGenre}
@@ -358,7 +375,8 @@ export function WatchLpPage() {
                   setPickedPlaylistId(null)
                 }}
                 onClearAll={clearPlaylistFilters}
-              />
+                />
+              </div>
 
               {visiblePlaylists.length ? (
                 <ul className="watch-lp__playlist-grid" aria-live="polite">
@@ -388,15 +406,6 @@ export function WatchLpPage() {
               ) : null}
             </ScrollRevealSection>
           )}
-
-          <div className="watch-lp__phase3-note" aria-labelledby="watch-lp-phase3-heading">
-            <p id="watch-lp-phase3-heading" className="watch-lp__phase3-label">
-              Phase 3 · persistent YT player
-            </p>
-            <p className="watch-lp__phase3-body">
-              Desktop-only queue that survives route changes. Same GO gate as the SoundCloud persistent player.
-            </p>
-          </div>
 
           <p className="watch-lp__honest-note">
             Background video pauses on most mobile browsers. Keep the app open while watching.

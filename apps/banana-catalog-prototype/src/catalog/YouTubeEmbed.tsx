@@ -33,6 +33,8 @@ export type YoutubeEmbeddedPlayerProps = {
   onBeforePlay?: () => void
   /** Runs when the embed iframe finishes loading (YouTube JS API handshake). */
   onIframeLoad?: () => void
+  /** Fires when the GO gate releases the iframe (true) or the video remounts (false). */
+  onPlayingChange?: (playing: boolean) => void
   /** For above-the-fold heroes: eager poster + high fetch priority while facade is visible. */
   facadePosterEager?: boolean
   /** Poster transformation width for the facade image. */
@@ -75,6 +77,7 @@ export function YoutubeEmbeddedPlayer({
   facadeUntilClick = false,
   onBeforePlay,
   onIframeLoad,
+  onPlayingChange,
   facadePosterEager = false,
   posterWidth = 400,
   showOutboundFooter = true,
@@ -83,6 +86,10 @@ export function YoutubeEmbeddedPlayer({
   const clientMounted = useClientMounted()
   const [facadeReleased, setFacadeReleased] = useState(false)
   const showFacade = Boolean(facadeUntilClick && id && !facadeReleased)
+
+  useEffect(() => {
+    onPlayingChange?.(facadeReleased)
+  }, [facadeReleased, onPlayingChange])
 
   const iframeSrc = useMemo(() => {
     if (!id || showFacade) return ''

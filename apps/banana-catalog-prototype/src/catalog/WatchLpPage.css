@@ -28,13 +28,8 @@
   color: var(--color-text-strong);
 }
 
-.watch-lp__spotlight-player.catalog-video-spotlight {
-  border: 0;
-  border-radius: 0;
-}
-
-.watch-lp__playlists-block .watch-lp__facet-bar {
-  margin-top: 0.75rem;
+.watch-lp__playlists-player {
+  width: 100%;
 }
 
 #watch-lp-playlists-heading {
@@ -68,16 +63,6 @@
 .watch-lp__spotlight-browse {
   margin: 0;
   flex-shrink: 0;
-}
-
-/* Keep watching — playlists */
-.watch-lp__playlists-block .watch-lp__facet-bar {
-  margin-bottom: 0.65rem;
-}
-
-.watch-lp__playlists-player {
-  width: 100%;
-  margin-bottom: 1rem;
 }
 
 .watch-lp__playlist-grid {
@@ -310,31 +295,6 @@
   font-size: 0.62rem;
   color: var(--color-text-muted, #666);
   font-style: italic;
-}
-
-/* Phase 3 note (informational) */
-.watch-lp__phase3-note {
-  border: 2px dashed #667;
-  border-radius: var(--radius-control, 2px);
-  padding: 0.65rem 0.75rem;
-  background: #f8f8fc;
-  margin-top: 0.35rem;
-}
-
-.watch-lp__phase3-label {
-  margin: 0 0 0.25rem;
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #446;
-}
-
-.watch-lp__phase3-body {
-  margin: 0;
-  font-size: 0.68rem;
-  line-height: 1.5;
-  color: #446;
 }
 
 /* D-021 honest mobile copy */

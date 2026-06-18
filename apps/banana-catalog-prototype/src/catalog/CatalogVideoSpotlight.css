@@ -7,6 +7,14 @@
   overflow: hidden;
 }
 
+/* LP sections that stack embed + copy without a card frame (watch what's new, cinema). */
+.catalog-video-spotlight--borderless {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
 .catalog-video-spotlight__hero {
   margin: 0;
 }
@@ -77,6 +85,7 @@
 }
 
 .catalog-video-spotlight__thumb-pick {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -114,6 +123,21 @@
 .catalog-video-spotlight__thumb-pick:focus-visible {
   outline: 2px solid var(--color-focus, var(--color-link, #524a40));
   outline-offset: 2px;
+}
+
+.catalog-video-spotlight__thumb-now {
+  position: absolute;
+  top: 0.35rem;
+  left: 0.35rem;
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--color-link, #524a40);
+  color: #fff;
+  padding: 0.12rem 0.32rem;
+  border-radius: var(--radius-control, 2px);
+  z-index: 1;
 }
 
 .catalog-video-spotlight__thumb-frame {

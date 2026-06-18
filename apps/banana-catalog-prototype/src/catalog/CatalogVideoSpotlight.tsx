@@ -3,7 +3,7 @@ import { Link, type To } from 'react-router-dom'
 import { ScrollRail } from './ScrollRail'
 import { sutraClassName } from './sutraTheme'
 import { formatDurationDisplay } from './durationFormat'
-import { CatalogMediaOutbound } from './CatalogMediaOutbound'
+import { CatalogFeaturedEmbedCopy } from './CatalogFeaturedEmbedCopy'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import { youtubeWatchPageUrl } from './youtubeEmbedUrl'
 import './catalog-page-shell.css'
@@ -58,6 +58,8 @@ type Props = {
   renderRailCell?: (video: CatalogVideoSpotlightItem, isActive: boolean, onSelect: () => void) => ReactNode
   iframeRef?: RefObject<HTMLIFrameElement | null>
   onBeforePlay?: () => void
+  /** Fires when the GO gate releases the hero iframe (true) or the featured video remounts (false). */
+  onPlayingChange?: (playing: boolean) => void
   railEyebrow?: string
   footer?: ReactNode
   className?: string
@@ -71,6 +73,7 @@ export function CatalogVideoSpotlight({
   renderRailCell,
   iframeRef,
   onBeforePlay,
+  onPlayingChange,
   railEyebrow = 'More clips',
   footer,
   className = '',
@@ -101,11 +104,13 @@ export function CatalogVideoSpotlight({
           facadePosterEager
           posterWidth={640}
           onBeforePlay={onBeforePlay}
+          onPlayingChange={onPlayingChange}
           showOutboundFooter={false}
         />
-        <div className="catalog-featured-embed-copy catalog-video-spotlight__detail">
-          <h3 className="catalog-featured-embed-copy__title">
-            {featured.inApp && featured.songHref ? (
+        <CatalogFeaturedEmbedCopy
+          detailBand
+          title={
+            featured.inApp && featured.songHref ? (
               <Link className="catalog-featured-embed-copy__title-link" to={featured.songHref}>
                 {title}
               </Link>
@@ -120,26 +125,29 @@ export function CatalogVideoSpotlight({
               </a>
             ) : (
               title
-            )}
-          </h3>
-          {metaParts.length ? (
-            <p className="catalog-featured-embed-copy__meta">
-              {featured.sutra ? (
-                <span className={`catalog-sutra-word ${sutraClassName(featured.sutra)}`}>{featured.sutra}</span>
-              ) : null}
-              {durationLabel ? (
-                <span>{featured.sutra ? ` · ${durationLabel}` : durationLabel}</span>
-              ) : null}
-            </p>
-          ) : null}
-          {featured.summary ? <p className="catalog-featured-embed-copy__desc">{featured.summary}</p> : null}
+            )
+          }
+          meta={
+            metaParts.length ? (
+              <>
+                {featured.sutra ? (
+                  <span className={`catalog-sutra-word ${sutraClassName(featured.sutra)}`}>{featured.sutra}</span>
+                ) : null}
+                {durationLabel ? (
+                  <span>{featured.sutra ? ` · ${durationLabel}` : durationLabel}</span>
+                ) : null}
+              </>
+            ) : undefined
+          }
+          description={featured.summary}
+          outboundHref={youtubeOutboundHref}
+        >
           {featured.songHref ? (
             <Link className="catalog-featured-embed-copy__cta" to={featured.songHref}>
               Open song page →
             </Link>
           ) : null}
-          {youtubeOutboundHref ? <CatalogMediaOutbound href={youtubeOutboundHref} /> : null}
-        </div>
+        </CatalogFeaturedEmbedCopy>
       </article>
 
       {rail.length ? (

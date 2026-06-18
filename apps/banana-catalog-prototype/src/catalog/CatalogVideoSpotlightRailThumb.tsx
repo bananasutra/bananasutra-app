@@ -8,6 +8,7 @@ type Props = {
   sutra?: string | null
   duration?: string | null
   isActive: boolean
+  isPlaying?: boolean
   onSelect: () => void
   ariaLabel: string
 }
@@ -19,6 +20,7 @@ export function CatalogVideoSpotlightRailThumb({
   sutra,
   duration,
   isActive,
+  isPlaying = false,
   onSelect,
   ariaLabel,
 }: Props) {
@@ -32,6 +34,7 @@ export function CatalogVideoSpotlightRailThumb({
       aria-label={ariaLabel}
       onClick={onSelect}
     >
+      {isPlaying ? <span className="catalog-video-spotlight__thumb-now">Playing</span> : null}
       {poster ? (
         <span className="catalog-video-spotlight__thumb-frame">
           <img src={poster} alt="" width={160} height={90} loading="lazy" decoding="async" />
