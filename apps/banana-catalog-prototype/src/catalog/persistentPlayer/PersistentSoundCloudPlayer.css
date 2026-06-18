@@ -1,0 +1,9 @@
+.persistent-sc-player {
+  width: 100%;
+}
+
+.persistent-sc-player__iframe {
+  display: block;
+  border: 0;
+  width: 100%;
+}

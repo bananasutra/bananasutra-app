@@ -12,7 +12,10 @@ export {
   type PlayableTrackSelectionMode,
 } from './playableTrackAdapters'
 export { PlayerQueueContext } from './playerQueueContext'
-export { PlayerQueueProvider, type PlayerQueueProviderProps } from './PlayerQueueProvider'
+export { PlayerQueueProvider, IdlePlayerQueueProvider, type PlayerQueueProviderProps } from './PlayerQueueProvider'
+export { PlayerQueueRoot } from './PlayerQueueRoot'
+export { usePlayerQueueInternals } from './playerQueueInternalsContext'
+export { usePlayerQueuePageBridge } from './usePlayerQueuePageBridge'
 export { useSongDetailTopTracksQueue, type UseSongDetailTopTracksQueueArgs } from './songDetailQueue'
 export { useTracksPagePlayerQueue, type UseTracksPagePlayerQueueArgs } from './tracksPageQueue'
 export { usePlayerQueue, usePlayerQueueOptional } from './usePlayerQueue'

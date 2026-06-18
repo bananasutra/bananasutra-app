@@ -11,7 +11,7 @@ import {
 } from './catalogAnalytics'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { ScrollRevealSection } from './ScrollRevealSection'
-import { PLAY_ALL_DESKTOP_MEDIA_QUERY, usePlayAllDesktopAvailable } from './playAllPlatform'
+import { isPlayAllDesktopDevice, usePlayAllDesktopAvailable } from './playAllPlatform'
 import { songCatalogPath } from './songPaths'
 import { coverImageUrl } from '../seo/imageUrl'
 import { bindSoundCloudWidgetPlayback } from './soundCloudWidgetPlayback'
@@ -257,7 +257,7 @@ export function ListenLpTopTracks({
   }, [advanceToNextInQueue])
 
   const startPlayAll = useCallback(() => {
-    if (!window.matchMedia(PLAY_ALL_DESKTOP_MEDIA_QUERY).matches) return
+    if (!isPlayAllDesktopDevice()) return
     const queue = tracksRef.current
     if (!queue.length) return
     trackCatalogPlayAllStarted(QUEUE_SOURCE, queue.length, undefined, LISTEN_MODE)

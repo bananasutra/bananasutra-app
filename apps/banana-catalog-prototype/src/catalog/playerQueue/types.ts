@@ -16,6 +16,15 @@ export type PlayableTrack = {
   primary_genre: string
   /** Mini-bar single-track fallback copy when no queue source. */
   lyrics_extract?: string
+  /** List / artwork thumbnail for persistent mini-bar. */
+  cover_url?: string
+  duration_sec?: number
+  duration_raw?: string
+  play_count?: number
+  like_count?: number
+  secondary_genres?: string[]
+  /** Canonical `/songs/:slug` segment for mini-bar song link. */
+  url_slug?: string
 }
 
 /** Discriminated queue origin — richer than analytics `QueueSource` string literals. */

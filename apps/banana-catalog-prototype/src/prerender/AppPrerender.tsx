@@ -21,6 +21,7 @@ import { ManifestoPage } from '../catalog/ManifestoPage'
 import { SearchRedirect } from '../catalog/SearchRedirect'
 import { LegacyAboutSutraDetailRedirect } from '../catalog/LegacyAboutSutraDetailRedirect'
 import { NotFoundRoute } from '../catalog/NotFoundRoute'
+import { PlayerQueueRoot } from '../catalog/playerQueue/PlayerQueueRoot'
 
 function CatalogBrowseRoute() {
   return <CatalogApp />
@@ -31,6 +32,7 @@ export function AppPrerender({ location }: { location: string }) {
     <StrictMode>
       <ThemeProvider>
         <StaticRouter location={location}>
+          <PlayerQueueRoot>
             <a href="#main-content" className="skip-link">
               Skip to main content
             </a>
@@ -61,6 +63,7 @@ export function AppPrerender({ location }: { location: string }) {
               <Route path="/sitemap" element={<SitemapPage />} />
               <Route path="*" element={<NotFoundRoute />} />
             </Routes>
+          </PlayerQueueRoot>
         </StaticRouter>
       </ThemeProvider>
     </StrictMode>

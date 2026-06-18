@@ -9,6 +9,7 @@ import { useSyncPrintPageUrl } from './catalog/useSyncPrintPageUrl'
 import { applyAnalyticsDebugFromSearch } from './lib/analytics'
 import { useAnalyticsPageView } from './useAnalyticsPageView'
 import { BbbChatWidget } from './bbb/BbbChatWidget'
+import { PlayerQueueRoot } from './catalog/playerQueue/PlayerQueueRoot'
 import { NotFoundRoute } from './catalog/NotFoundRoute'
 import { LegacyAboutSutraDetailRedirect } from './catalog/LegacyAboutSutraDetailRedirect'
 
@@ -147,12 +148,17 @@ export default function App() {
       ? GITHUB_PROJECT_BASENAME
       : undefined
 
+  useLayoutEffect(() => {
+    document.getElementById('app-boot-splash')?.remove()
+  }, [])
+
   return (
     <HelmetProvider>
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
       <BrowserRouter basename={routerBasename}>
+        <PlayerQueueRoot>
         <BootPrefetch />
         <NavigationLoadingBridge />
         <ScrollToTopOnNavigate />
@@ -317,6 +323,7 @@ export default function App() {
           <Route path="*" element={<NotFoundRoute />} />
         </Routes>
         {BBB_CHAT_ENABLED ? <BbbChatWidget /> : null}
+        </PlayerQueueRoot>
       </BrowserRouter>
     </HelmetProvider>
   )

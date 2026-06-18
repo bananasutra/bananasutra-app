@@ -1,5 +1,6 @@
 import { useCallback, useMemo, type MutableRefObject } from 'react'
 import type { TrackSortMode, TrackCatalogItem, TracksFilterState } from '../types'
+import { requestPersistentScLoad } from '../persistentPlayer/persistentScBootstrap'
 import {
   trackCatalogPlayAllStarted,
   trackCatalogPlayAllStopped,
@@ -8,11 +9,11 @@ import {
   trackCatalogQueueSkipped,
   tracksFilterContext,
 } from '../catalogAnalytics'
-import type { SoundCloudWidget } from '../soundcloudWidgetApi'
 import type { PagePlayerQueueAnalytics } from './pagePlayerQueueAnalytics'
 import { trackCatalogItemToPlayable } from './playableTrackAdapters'
 import type { PlayableTrack, PlayerQueueSource } from './types'
-import { usePagePlayerQueue, type UsePagePlayerQueueResult } from './usePagePlayerQueue'
+import { usePlayerQueue } from './usePlayerQueue'
+import { usePlayerQueueRegistrar, type PagePlayerQueueRegistration } from './playerQueueRegistrarContext'
 
 export type UseTracksPagePlayerQueueArgs = {
   filteredRef: MutableRefObject<TrackCatalogItem[]>
@@ -20,7 +21,6 @@ export type UseTracksPagePlayerQueueArgs = {
   filtersRef: MutableRefObject<TracksFilterState>
   urlFindRef: MutableRefObject<string>
   urlSortRef: MutableRefObject<TrackSortMode>
-  scWidgetRef: MutableRefObject<SoundCloudWidget | null>
   onBeforePlayTrack: () => void
   ensureVisibleThroughIndex: (index: number) => void
   resetVisible: () => void
@@ -30,16 +30,16 @@ export type UseTracksPagePlayerQueueArgs = {
   setEmbedReloadKey: React.Dispatch<React.SetStateAction<number>>
 }
 
-export function useTracksPagePlayerQueue(
-  args: UseTracksPagePlayerQueueArgs,
-): UsePagePlayerQueueResult & { startPlayAllFromPage: () => void } {
+export function useTracksPagePlayerQueue(args: UseTracksPagePlayerQueueArgs): {
+  registration: PagePlayerQueueRegistration
+  startPlayAllFromPage: () => void
+} {
   const {
     filteredRef,
     selectedIdRef,
     filtersRef,
     urlFindRef,
     urlSortRef,
-    scWidgetRef,
     onBeforePlayTrack,
     ensureVisibleThroughIndex,
     resetVisible,
@@ -48,6 +48,9 @@ export function useTracksPagePlayerQueue(
     setSelectedId,
     setEmbedReloadKey,
   } = args
+
+  const { actions } = usePlayerQueue()
+  const { usePersistentPlayback, persistentApiRef } = usePlayerQueueRegistrar()
 
   const findCatalogTrack = useCallback(
     (trackId: string): TrackCatalogItem | undefined => filteredRef.current.find((t) => t.track_id === trackId),
@@ -98,12 +101,20 @@ export function useTracksPagePlayerQueue(
   const onPlayTrack = useCallback(
     (track: PlayableTrack, opts: { fromPlayAllStart?: boolean }) => {
       const sameRow = track.track_id === selectedIdRef.current
-      if (opts.fromPlayAllStart && sameRow) {
-        // Safari: scAutoplay=true changes iframe key and remounts outside the gesture chain.
-        onBeforePlayTrack()
+      onBeforePlayTrack()
+
+      if (usePersistentPlayback) {
+        if (!sameRow) setSelectedId(track.track_id)
+        if (opts.fromPlayAllStart) {
+          requestPersistentScLoad(track.sc_url, { autoPlay: true, remount: true })
+        } else {
+          persistentApiRef.current?.loadTrack(track.sc_url, { autoPlay: true })
+        }
         return
       }
-      onBeforePlayTrack()
+
+      if (opts.fromPlayAllStart && sameRow) return
+
       setScAutoplay(true)
       if (sameRow) {
         setEmbedReloadKey((k) => k + 1)
@@ -112,7 +123,15 @@ export function useTracksPagePlayerQueue(
       setSelectedId(track.track_id)
       setEmbedReloadKey((k) => k + 1)
     },
-    [onBeforePlayTrack, selectedIdRef, setEmbedReloadKey, setScAutoplay, setSelectedId],
+    [
+      onBeforePlayTrack,
+      persistentApiRef,
+      selectedIdRef,
+      setEmbedReloadKey,
+      setScAutoplay,
+      setSelectedId,
+      usePersistentPlayback,
+    ],
   )
 
   const buildPlayAllSource = useCallback((): Extract<PlayerQueueSource, { type: 'tracks_filter' }> => {
@@ -126,31 +145,37 @@ export function useTracksPagePlayerQueue(
 
   const getQueue = useCallback(() => filteredRef.current.map(trackCatalogItemToPlayable), [filteredRef])
 
-  const queue = usePagePlayerQueue({
-    selectionMode: 'track_id',
-    getQueue,
-    getCurrentKey: () => selectedIdRef.current,
-    widgetRef: scWidgetRef,
-    analytics,
-    buildPlayAllSource,
-    onPlayTrack,
-    onAdvanceToIndex: (index) => {
-      ensureVisibleThroughIndex(index)
-      scrollActiveRowOnNextPaintRef.current = true
-    },
-    onStartPlayAll: () => resetVisible(),
-    onResume: () => setScAutoplay(true),
-  })
+  const registration = useMemo(
+    (): PagePlayerQueueRegistration => ({
+      selectionMode: 'track_id',
+      getQueue,
+      getCurrentKey: () => selectedIdRef.current,
+      analytics,
+      buildPlayAllSource,
+      onPlayTrack,
+      onAdvanceToIndex: (index) => {
+        ensureVisibleThroughIndex(index)
+        scrollActiveRowOnNextPaintRef.current = true
+      },
+      onStartPlayAll: () => resetVisible(),
+      onResume: () => setScAutoplay(true),
+    }),
+    [
+      analytics,
+      buildPlayAllSource,
+      ensureVisibleThroughIndex,
+      getQueue,
+      onPlayTrack,
+      resetVisible,
+      scrollActiveRowOnNextPaintRef,
+      selectedIdRef,
+      setScAutoplay,
+    ],
+  )
 
   const startPlayAllFromPage = useCallback(() => {
-    queue.actions.startPlayAll(buildPlayAllSource(), getQueue())
-  }, [buildPlayAllSource, getQueue, queue.actions])
+    actions.startPlayAll(buildPlayAllSource(), getQueue())
+  }, [actions, buildPlayAllSource, getQueue])
 
-  return useMemo(
-    () => ({
-      ...queue,
-      startPlayAllFromPage,
-    }),
-    [queue, startPlayAllFromPage],
-  )
+  return { registration, startPlayAllFromPage }
 }
