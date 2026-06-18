@@ -1,28 +1,10 @@
-/* Shared YT playlist embed (watch LP + songbook detail). */
+/* Shared YT playlist embed (watch LP + songbook detail). Player shell uses catalog-video-spotlight tokens. */
 
 .watch-lp__playlist-embed-empty {
   margin: 0 0 0.85rem;
   font-size: 0.72rem;
   color: var(--color-text-muted, #666);
   font-style: italic;
-}
-
-.watch-lp__playlist-embed-layout {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-.watch-lp__playlist-embed-shell {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  border-radius: var(--radius-control, 2px);
-  overflow: hidden;
-  background: #1a1a1a;
-  border: 1px solid var(--color-border, #ddd);
 }
 
 .watch-lp__playlist-embed-facade,
@@ -116,7 +98,7 @@
   border: 0;
 }
 
-.watch-lp__playlist-embed.is-playing .watch-lp__playlist-embed-shell {
+.watch-lp__playlist-embed.is-playing .catalog-video-spotlight__embed {
   animation: watch-lp-embed-pulse 0.65s ease;
 }
 
@@ -129,27 +111,8 @@
   }
 }
 
-.watch-lp__playlist-embed-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: flex-end;
-  gap: 0.35rem 0.75rem;
-}
-
-.watch-lp__playlist-embed-songbook-link {
-  margin-right: 0.75rem;
-  font-size: 0.68rem;
-  color: var(--color-link, #524a40);
-  text-decoration: none;
-}
-
-.watch-lp__playlist-embed-songbook-link:hover {
-  text-decoration: underline;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .watch-lp__playlist-embed.is-playing .watch-lp__playlist-embed-shell {
+  .watch-lp__playlist-embed.is-playing .catalog-video-spotlight__embed {
     animation: none;
   }
 }

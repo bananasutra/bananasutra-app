@@ -59,7 +59,10 @@ export function youtubePrivacyEmbedSrc(videoId: string, options?: YoutubePrivacy
 }
 
 /** Standard YouTube playlist iframe embed (`videoseries?list=`). */
-export function youtubePlaylistEmbedSrc(playlistId: string, options?: Pick<YoutubePrivacyEmbedOptions, 'autoplay'>): string {
+export function youtubePlaylistEmbedSrc(
+  playlistId: string,
+  options?: Pick<YoutubePrivacyEmbedOptions, 'autoplay' | 'enableJsApi'>,
+): string {
   const id = playlistId.trim()
   if (!id) return ''
   const q = new URLSearchParams({
@@ -69,6 +72,12 @@ export function youtubePlaylistEmbedSrc(playlistId: string, options?: Pick<Youtu
     iv_load_policy: '3',
     playsinline: '1',
   })
+  if (options?.enableJsApi) {
+    q.set('enablejsapi', '1')
+    if (typeof window !== 'undefined' && window.location?.origin) {
+      q.set('origin', window.location.origin)
+    }
+  }
   if (options?.autoplay) q.set('autoplay', '1')
   return `https://www.youtube.com/embed/videoseries?${q}`
 }

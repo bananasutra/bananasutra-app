@@ -9,8 +9,9 @@ import {
   watchLpPlaylistThumbLabel,
 } from './watchLpData'
 import { youtubePlaylistEmbedSrc } from './youtubeEmbedUrl'
-import { CatalogMediaOutbound } from './CatalogMediaOutbound'
+import { CatalogFeaturedEmbedCopy } from './CatalogFeaturedEmbedCopy'
 import './catalog-page-shell.css'
+import './CatalogVideoSpotlight.css'
 import './WatchLpPlaylistEmbed.css'
 
 const YT_IFRAME_ALLOW =
@@ -34,6 +35,8 @@ type Props = {
   onPlayingChange?: (playing: boolean) => void
   /** When set, genre playlists can deep-link to the matching `/songbooks/:slug` page. */
   songbookSlug?: string | null
+  /** Strip outer spotlight card border (watch LP sections use borderless stack). */
+  borderless?: boolean
 }
 
 function WatchLpPlaylistEmbedInner({
@@ -43,6 +46,7 @@ function WatchLpPlaylistEmbedInner({
   onBeforePlay,
   onPlayingChange,
   songbookSlug,
+  borderless = false,
 }: {
   playlist: YouTubePlaylistCatalogItem
   durationByName?: Map<string, number>
@@ -50,6 +54,7 @@ function WatchLpPlaylistEmbedInner({
   onBeforePlay?: () => void
   onPlayingChange?: (playing: boolean) => void
   songbookSlug?: string | null
+  borderless?: boolean
 }) {
   const clientMounted = useClientMounted()
   const [facadeReleased, setFacadeReleased] = useState(false)
@@ -61,7 +66,7 @@ function WatchLpPlaylistEmbedInner({
 
   const iframeSrc = useMemo(() => {
     if (!playlistId || !facadeReleased) return ''
-    return youtubePlaylistEmbedSrc(playlistId, { autoplay: true })
+    return youtubePlaylistEmbedSrc(playlistId, { autoplay: true, enableJsApi: true })
   }, [playlistId, facadeReleased])
 
   const title = playlist.playlist_name.trim() || 'YouTube playlist'
@@ -70,10 +75,19 @@ function WatchLpPlaylistEmbedInner({
   const poster = playlist.thumbnail_url ? coverImageUrl(playlist.thumbnail_url, { width: 640 }) : null
   const ytHref = (playlist.playlist_url || '').trim()
 
+  const shellClass = [
+    'catalog-video-spotlight',
+    borderless ? 'catalog-video-spotlight--borderless' : '',
+    'watch-lp__playlist-embed',
+    facadeReleased ? 'is-playing' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
-    <div className={`watch-lp__playlist-embed${facadeReleased ? ' is-playing' : ''}`} aria-live="polite">
-      <div className="watch-lp__playlist-embed-layout">
-        <div className="watch-lp__playlist-embed-shell" style={{ aspectRatio: '16 / 9' }}>
+    <div className={shellClass} aria-live="polite">
+      <article className="catalog-video-spotlight__hero">
+        <div className="catalog-video-spotlight__embed" style={{ aspectRatio: '16 / 9' }}>
           {!clientMounted ? (
             <div className="watch-lp__playlist-embed-placeholder" role="status" aria-label={`Loading playlist: ${title}`}>
               {poster ? <img src={poster} alt="" className="watch-lp__playlist-embed-poster" decoding="async" /> : null}
@@ -105,7 +119,7 @@ function WatchLpPlaylistEmbedInner({
             <iframe
               key={playlistId}
               ref={iframeRef}
-              className="watch-lp__playlist-embed-iframe yt-embed-frame"
+              className="watch-lp__playlist-embed-iframe yt-embed-frame catalog-video-spotlight__iframe"
               title={title}
               src={iframeSrc}
               loading="lazy"
@@ -114,24 +128,20 @@ function WatchLpPlaylistEmbedInner({
             />
           )}
         </div>
-        <div className="catalog-featured-embed-copy">
-          <p className="catalog-featured-embed-copy__title">{displayTitle}</p>
-          <p className="catalog-featured-embed-copy__meta">
-            {watchLpPlaylistMetaLine(playlist, durationByName)}
-          </p>
-          {description ? <p className="catalog-featured-embed-copy__desc">{description}</p> : null}
-        </div>
-        {ytHref || songbookSlug ? (
-          <div className="watch-lp__playlist-embed-actions">
-            {songbookSlug ? (
-              <Link className="watch-lp__playlist-embed-songbook-link" to={songbookCatalogPath(songbookSlug)}>
-                View songbook →
-              </Link>
-            ) : null}
-            {ytHref ? <CatalogMediaOutbound href={ytHref} /> : null}
-          </div>
-        ) : null}
-      </div>
+        <CatalogFeaturedEmbedCopy
+          detailBand
+          title={displayTitle}
+          meta={watchLpPlaylistMetaLine(playlist, durationByName)}
+          description={description}
+          outboundHref={ytHref || null}
+        >
+          {songbookSlug ? (
+            <Link className="catalog-featured-embed-copy__cta" to={songbookCatalogPath(songbookSlug)}>
+              View songbook →
+            </Link>
+          ) : null}
+        </CatalogFeaturedEmbedCopy>
+      </article>
     </div>
   )
 }
@@ -143,6 +153,7 @@ export function WatchLpPlaylistEmbed({
   onBeforePlay,
   onPlayingChange,
   songbookSlug,
+  borderless = false,
 }: Props) {
   if (!playlist) {
     return <p className="watch-lp__playlist-embed-empty">No playlists match this filter.</p>
@@ -158,6 +169,7 @@ export function WatchLpPlaylistEmbed({
       onBeforePlay={onBeforePlay}
       onPlayingChange={onPlayingChange}
       songbookSlug={songbookSlug}
+      borderless={borderless}
     />
   )
 }

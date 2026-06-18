@@ -111,6 +111,13 @@
   border-bottom: none;
 }
 
+/* After in-page embed + copy, before filters or browse grid (watch LP cinema, etc.). */
+.catalog-embed-section-follow {
+  margin-top: 0;
+  padding-top: var(--catalog-shell-section-pad-y);
+  border-top: var(--catalog-shell-rule);
+}
+
 /* Right-aligned outbound media links (SoundCloud, YouTube) — shared across embed surfaces. */
 .catalog-media-outbound {
   margin: var(--catalog-media-outbound-gap-before) 0 0;
