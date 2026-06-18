@@ -63,7 +63,7 @@
   width: 100%;
   margin: 0;
   padding: 1.05rem 1rem;
-  font: 600 0.62rem/1.35 var(--font-ui);
+  font: 700 0.72rem/1.35 var(--font-ui);
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--color-text-muted);
@@ -378,7 +378,7 @@
 }
 
 .catalog-footer__sitemap-link {
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.06em;
   color: var(--color-text-muted);
   text-decoration: none;
