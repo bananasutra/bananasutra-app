@@ -115,7 +115,10 @@ export function CatalogApp() {
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalogBrowse()
   const catalogSongs = useMemo(() => songCatalogRows ?? [], [songCatalogRows])
   const listenerCatalogSongs = useMemo(() => catalogSongs.filter(hasListenerCatalogMedia), [catalogSongs])
-  const fullFacetEntries = useMemo(() => facetCountsFromSongs(listenerCatalogSongs), [listenerCatalogSongs])
+  const lyricsOnlySongCount = useMemo(
+    () => catalogSongs.filter((song) => !hasListenerCatalogMedia(song)).length,
+    [catalogSongs],
+  )
 
   const [browseSeed] = useState(() =>
     readBrowseStateFromSearchParams(searchParamsFromSearchString(window.location.search)),
@@ -123,7 +126,14 @@ export function CatalogApp() {
   const [sort, setSort] = useState<SortMode>(browseSeed.sort)
   const [filters, setFilters] = useState<FilterState>(browseSeed.filters)
   const [media, setMedia] = useState<MediaComboFilter>(browseSeed.media)
+  const [includeLyricsOnly, setIncludeLyricsOnly] = useState(browseSeed.includeLyricsOnly)
   const [filterBarExpanded, setFilterBarExpanded] = useState(false)
+
+  const browsePoolSongs = useMemo(
+    () => (includeLyricsOnly ? catalogSongs : listenerCatalogSongs),
+    [catalogSongs, listenerCatalogSongs, includeLyricsOnly],
+  )
+  const fullFacetEntries = useMemo(() => facetCountsFromSongs(browsePoolSongs), [browsePoolSongs])
 
   const pageMeta = renderPageMeta({
     title: 'Songs Catalog',
@@ -140,7 +150,7 @@ export function CatalogApp() {
   const contextualFacetEntries = useMemo(
     () =>
       buildContextualSongFacetEntries(
-        listenerCatalogSongs,
+        browsePoolSongs,
         Object.fromEntries(
           FACET_GROUPS.map((group) => [group, fullFacetEntries[group] ?? []]),
         ) as Record<FilterFacetKey, { value: string; count: number }[]>,
@@ -150,28 +160,30 @@ export function CatalogApp() {
         findQuery,
         deepSearchByLyricsId ?? undefined,
       ),
-    [listenerCatalogSongs, fullFacetEntries, filters, media, findQuery, deepSearchByLyricsId],
+    [browsePoolSongs, fullFacetEntries, filters, media, findQuery, deepSearchByLyricsId],
   )
   const filtersRef = useRef(filters)
   const sortRef = useRef(sort)
   const mediaRef = useRef(media)
+  const includeLyricsOnlyRef = useRef(includeLyricsOnly)
   useEffect(() => {
     filtersRef.current = filters
     sortRef.current = sort
     mediaRef.current = media
-  }, [filters, sort, media])
+    includeLyricsOnlyRef.current = includeLyricsOnly
+  }, [filters, sort, media, includeLyricsOnly])
 
   const urlBrowsePage = useMemo(() => readCatalogBrowsePage(location.search), [location.search])
   const [legacyPageSeed] = useState(() => urlBrowsePage)
 
   const mediaOptionCounts = useMemo(() => {
     const counts: Record<MediaComboFilter, number> = {
-      all: listenerCatalogSongs.length,
+      all: browsePoolSongs.length,
       lyrics_sc: 0,
       lyrics_yt: 0,
       full: 0,
     }
-    for (const s of listenerCatalogSongs) {
+    for (const s of browsePoolSongs) {
       const sc = songHasSoundcloudListenPath(s)
       const yt = Boolean(s.has_youtube_video)
       if (sc && !yt) counts.lyrics_sc += 1
@@ -179,7 +191,7 @@ export function CatalogApp() {
       else if (sc && yt) counts.full += 1
     }
     return counts
-  }, [listenerCatalogSongs])
+  }, [browsePoolSongs])
 
   useEffect(() => {
     const next = readStateFromUrl()
@@ -187,6 +199,7 @@ export function CatalogApp() {
     setSort(next.sort)
     setFilters(next.filters)
     setMedia(next.media)
+    setIncludeLyricsOnly(next.includeLyricsOnly)
   }, [location.search])
 
   useEffect(() => {
@@ -204,6 +217,7 @@ export function CatalogApp() {
           findDraft.trim() || undefined,
           mediaRef.current,
           1,
+          includeLyricsOnlyRef.current,
         ),
         { replace: true },
       )
@@ -213,8 +227,8 @@ export function CatalogApp() {
 
   useEffect(() => {
     if (urlBrowsePage <= 1) return
-    navigate(buildBrowsePath(sort, filters, findQuery || undefined, media, 1), { replace: true })
-  }, [urlBrowsePage, sort, filters, findQuery, media, navigate])
+    navigate(buildBrowsePath(sort, filters, findQuery || undefined, media, 1, includeLyricsOnly), { replace: true })
+  }, [urlBrowsePage, sort, filters, findQuery, media, includeLyricsOnly, navigate])
 
   useEffect(() => {
     const draftLen = findDraft.trim().length
@@ -247,13 +261,15 @@ export function CatalogApp() {
       findOverride?: string,
       nextMedia?: MediaComboFilter,
       nextPage?: number,
+      nextIncludeLyricsOnly?: boolean,
     ) => {
       const nextFind = findOverride !== undefined ? findOverride.trim() : findQuery
       const m = nextMedia ?? media
       const p = nextPage !== undefined ? nextPage : urlBrowsePage
-      navigate(buildBrowsePath(nextSort, nextFilters, nextFind || undefined, m, p), { replace: true })
+      const lyricsOnly = nextIncludeLyricsOnly ?? includeLyricsOnly
+      navigate(buildBrowsePath(nextSort, nextFilters, nextFind || undefined, m, p, lyricsOnly), { replace: true })
     },
-    [findQuery, media, navigate, urlBrowsePage],
+    [findQuery, media, includeLyricsOnly, navigate, urlBrowsePage],
   )
 
   const setSortAndSync = (mode: SortMode) => {
@@ -272,17 +288,22 @@ export function CatalogApp() {
     syncUrl(sort, filters, undefined, next, 1)
   }
 
+  const setIncludeLyricsOnlyAndSync = (next: boolean) => {
+    setIncludeLyricsOnly(next)
+    syncUrl(sort, filters, undefined, media, 1, next)
+  }
+
   const filteredSorted = useMemo(() => {
-    let list = listenerCatalogSongs.filter(
+    let list = browsePoolSongs.filter(
       (s) => songMatchesFilters(s, filters) && songMatchesMediaCombo(s, media),
     )
     if (findQuery) list = filterSongsByFindAnyQuery(list, findQuery, deepSearchByLyricsId ?? undefined)
     return sortSongs(list, sort)
-  }, [listenerCatalogSongs, filters, media, sort, findQuery, deepSearchByLyricsId])
+  }, [browsePoolSongs, filters, media, sort, findQuery, deepSearchByLyricsId])
 
   const songsScrollResetKey = useMemo(
-    () => serializeBrowseQuery(sort, filters, findQuery || undefined, media, 1),
-    [sort, filters, findQuery, media],
+    () => serializeBrowseQuery(sort, filters, findQuery || undefined, media, 1, includeLyricsOnly),
+    [sort, filters, findQuery, media, includeLyricsOnly],
   )
 
   const {
@@ -299,23 +320,25 @@ export function CatalogApp() {
   })
 
   const facetSelections = countFacetSelections(filters)
-  const hasActiveContext = facetSelections > 0 || media !== 'all' || Boolean(findQuery)
+  const hasActiveContext =
+    facetSelections > 0 || media !== 'all' || includeLyricsOnly || Boolean(findQuery)
   const showDeepRefiningHint = Boolean(findQuery) && deepSearchLoading && !deepSearchByLyricsId
   const contextSummary = hasActiveContext
-    ? `${filteredSorted.length} of ${listenerCatalogSongs.length} songs · ${facetSelections} filter${
+    ? `${filteredSorted.length} of ${browsePoolSongs.length} songs · ${facetSelections} filter${
         facetSelections === 1 ? '' : 's'
-      }${media !== 'all' ? ' · media filter' : ''}${findQuery ? ' · discovery filter' : ''}${
-        showDeepRefiningHint ? ' · refining lyrics…' : ''
-      }`
-    : `${listenerCatalogSongs.length} songs`
+      }${media !== 'all' ? ' · media filter' : ''}${includeLyricsOnly ? ' · lyrics-only included' : ''}${
+        findQuery ? ' · discovery filter' : ''
+      }${showDeepRefiningHint ? ' · refining lyrics…' : ''}`
+    : `${browsePoolSongs.length} songs`
 
   const clearAllFilters = () => {
     const cleared = emptyFilterState()
     reportSongsFilterPatch(filters, cleared)
     setFilters(cleared)
     setMedia('all')
+    setIncludeLyricsOnly(false)
     setFindDraft('')
-    syncUrl(sort, cleared, '', 'all', 1)
+    syncUrl(sort, cleared, '', 'all', 1, false)
   }
 
   useSyncCatalogHeaderHeight(pageRef, headerRef, [
@@ -323,6 +346,7 @@ export function CatalogApp() {
     filterBarExpanded,
     facetSelections,
     media,
+    includeLyricsOnly,
     filteredSorted.length,
     findQuery,
     findDraft,
@@ -344,6 +368,14 @@ export function CatalogApp() {
       label: <>Media: {MEDIA_FILTER_LABELS[media]}</>,
       onClick: () => setMediaAndSync('all'),
       title: 'Clear media filter',
+    })
+  }
+  if (includeLyricsOnly) {
+    songActivePills.push({
+      id: 'include-lyrics-only',
+      label: <>Lyrics-only songs included</>,
+      onClick: () => setIncludeLyricsOnlyAndSync(false),
+      title: 'Exclude lyrics-only songs',
     })
   }
   for (const key of Object.keys(filters) as (keyof FilterState)[]) {
@@ -520,6 +552,22 @@ export function CatalogApp() {
             }}
             defaultExpanded={filterBarExpanded}
             onExpandedChange={setFilterBarExpanded}
+            panelFooter={
+              <label className="songs-page__lyrics-only-toggle">
+                <input
+                  type="checkbox"
+                  checked={includeLyricsOnly}
+                  onChange={(e) => setIncludeLyricsOnlyAndSync(e.target.checked)}
+                />
+                <span className="songs-page__lyrics-only-toggle-label">
+                  Include lyrics-only songs
+                  <span className="songs-page__lyrics-only-toggle-hint" aria-hidden>
+                    {' '}
+                    (+{lyricsOnlySongCount})
+                  </span>
+                </span>
+              </label>
+            }
             toolbarEnd={
               <div
                 className="catalog-sort songs-page__sort"

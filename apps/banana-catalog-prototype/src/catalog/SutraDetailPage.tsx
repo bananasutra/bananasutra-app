@@ -18,7 +18,6 @@ import {
   sutraFamilyKeyFromSongField,
 } from './sutraPageUtils'
 import type { SutraFamilyKey } from './sutraContext'
-import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import { ScrollRail } from './ScrollRail'
 import { SongThumbCard } from './SongThumbCard'
 import { browseRowHasAudioSection, songCatalogLinkTo, songCatalogPath, sutraDetailPath } from './songPaths'
@@ -37,10 +36,12 @@ import {
 } from './useExclusiveYoutubeSoundcloudPlayback'
 import {
   pickRandomSongbookFromPool,
+  songbookFeaturedKickerLabel,
   songbookHrefFromCatalogItem,
 } from './homePortalUtils'
 import { formatDurationDisplay } from './durationFormat'
-import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
+import { CatalogFeaturedEmbedCopy } from './CatalogFeaturedEmbedCopy'
+import { formatSongbookScPlaylistMeta } from './songbookPlaylistMeta'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
 import './SongbooksPage.css'
@@ -363,12 +364,11 @@ export function SutraDetailPage() {
     : 0
   const featuredEpDuration = formatDurationDisplay(featuredEp?.duration_total ?? featuredEpDurationSeconds)
   const featuredEpSongbookTitle = (featuredEp?.ep_songbook_title || '').trim()
-  const featuredEpPlaylistMetaLine =
+  const featuredEpTitleMeta =
     featuredEp?.ep_url && featuredEp.ep_url.includes('soundcloud.com')
       ? [
           featuredEp.ep_total_tracks != null ? `${featuredEp.ep_total_tracks} tracks` : null,
           featuredEpDuration.trim() || null,
-          `${formatCount(featuredEp.total_plays)} plays`,
         ]
           .filter(Boolean)
           .join(' · ')
@@ -593,21 +593,19 @@ export function SutraDetailPage() {
                     height={soundcloudListEmbedHeight(featuredEp.ep_url, 'ep')}
                   />
                 </div>
-                <div className="catalog-featured-embed-copy sutra-detail__media-block-copy">
-                  <p className="catalog-featured-embed-copy__title">{featuredEp.ep_title}</p>
-                  {featuredEp.ep_description ? (
-                    <p className="catalog-featured-embed-copy__desc">{featuredEp.ep_description}</p>
-                  ) : null}
-                  {featuredEpPlaylistMetaLine ? (
-                    <p className="catalog-songbook-playlist-meta sutra-detail__feat-sc-playlist-meta">{featuredEpPlaylistMetaLine}</p>
-                  ) : null}
+                <CatalogFeaturedEmbedCopy
+                  className="sutra-detail__media-block-copy"
+                  title={featuredEp.ep_title}
+                  titleMeta={featuredEpTitleMeta || null}
+                  description={featuredEp.ep_description}
+                  outboundHref={featuredEp.ep_url}
+                >
                   {featuredEpSongbookTitle ? (
                     <Link className="sutra-detail__cta" to={songbookHref(featuredEpSongbookTitle)}>
                       View song →
                     </Link>
                   ) : null}
-                  <CatalogMediaOutbound href={featuredEp.ep_url} label="Open on SoundCloud ↗" />
-                </div>
+                </CatalogFeaturedEmbedCopy>
               </>
             ) : featuredSongbookFallback ? (
               <>
@@ -621,19 +619,18 @@ export function SutraDetailPage() {
                     />
                   ) : null}
                 </div>
-                <div className="catalog-featured-embed-copy sutra-detail__media-block-copy">
-                  <p className="catalog-featured-embed-copy__title">{featuredSongbookFallback.songbook}</p>
-                  {featuredSongbookFallback.description ? (
-                    <p className="catalog-featured-embed-copy__desc">{featuredSongbookFallback.description}</p>
-                  ) : null}
-                  <SongbookPlaylistMetaLine book={featuredSongbookFallback} className="sutra-detail__feat-sc-playlist-meta" />
+                <CatalogFeaturedEmbedCopy
+                  className="sutra-detail__media-block-copy"
+                  meta={songbookFeaturedKickerLabel(featuredSongbookFallback)}
+                  title={featuredSongbookFallback.songbook}
+                  titleMeta={formatSongbookScPlaylistMeta(featuredSongbookFallback)}
+                  description={featuredSongbookFallback.description}
+                  outboundHref={featuredSongbookFallback.playlist_url || null}
+                >
                   <Link className="sutra-detail__cta" to={songbookHref(featuredSongbookFallback.songbook)}>
                     View songbook →
                   </Link>
-                  {featuredSongbookFallback.playlist_url ? (
-                    <CatalogMediaOutbound href={featuredSongbookFallback.playlist_url} label="Open on SoundCloud ↗" />
-                  ) : null}
-                </div>
+                </CatalogFeaturedEmbedCopy>
               </>
             ) : (
               <p className="sutra-detail__empty">No featured EP or songbook embed on file for this sutra yet.</p>
@@ -656,19 +653,18 @@ export function SutraDetailPage() {
                   height={soundcloudListEmbedHeight(sutraSpotlightSongbook.playlist_url, 'songbook')}
                 />
               </div>
-              <div className="catalog-featured-embed-copy sutra-detail__media-block-copy">
-                <p className="catalog-featured-embed-copy__title">{sutraSpotlightSongbook.songbook}</p>
-                {sutraSpotlightSongbook.description ? (
-                  <p className="catalog-featured-embed-copy__desc">{sutraSpotlightSongbook.description}</p>
-                ) : null}
-                <SongbookPlaylistMetaLine book={sutraSpotlightSongbook} className="sutra-detail__feat-sc-playlist-meta" />
+              <CatalogFeaturedEmbedCopy
+                className="sutra-detail__media-block-copy"
+                meta={songbookFeaturedKickerLabel(sutraSpotlightSongbook)}
+                title={sutraSpotlightSongbook.songbook}
+                titleMeta={formatSongbookScPlaylistMeta(sutraSpotlightSongbook)}
+                description={sutraSpotlightSongbook.description}
+                outboundHref={sutraSpotlightSongbook.playlist_url || null}
+              >
                 <Link className="sutra-detail__cta" to={songbookHrefFromCatalogItem(sutraSpotlightSongbook)}>
                   View songbook →
                 </Link>
-                {sutraSpotlightSongbook.playlist_url ? (
-                  <CatalogMediaOutbound href={sutraSpotlightSongbook.playlist_url} label="Open on SoundCloud ↗" />
-                ) : null}
-              </div>
+              </CatalogFeaturedEmbedCopy>
             </section>
           ) : null}
 

@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import type { SongbookCatalogItem } from './types'
 import { coverImageUrl } from '../seo/imageUrl'
-import { formatHomeCount } from './homePortalData'
 import { songbookHrefFromCatalogItem } from './homePortalUtils'
 import { canonicalPathForRoute } from './seoPaths'
+import { CatalogFeaturedEmbedCopy } from './CatalogFeaturedEmbedCopy'
+import { formatSongbookScPlaylistMeta } from './songbookPlaylistMeta'
+import './catalog-page-shell.css'
 
 type Props = {
   book: SongbookCatalogItem
@@ -12,8 +14,6 @@ type Props = {
 /** Songbook spotlight — cover-forward (matches latest drops featured layout). */
 export function HomeFeaturedSongbookCard({ book }: Props) {
   const art = (book.playlist_artwork_url || book.songbook_art_url || '').trim()
-  const trackCount = book.playlist_track_count || book.song_count || 0
-  const plays = book.playlist_total_plays || 0
   const rawDesc = (book.description || '').replace(/\s+/g, ' ').trim()
   const description = rawDesc.length > 140 ? `${rawDesc.slice(0, 137)}…` : rawDesc
   const href = songbookHrefFromCatalogItem(book)
@@ -32,14 +32,15 @@ export function HomeFeaturedSongbookCard({ book }: Props) {
             decoding="async"
           />
         ) : null}
-        <div className="home-songbook-spotlight__body">
-          <p className="home-songbook-spotlight__kicker">
-            {trackCount} tracks · {formatHomeCount(plays)} plays · continuous play on mobile
-          </p>
-          <h3 className="home-songbook-spotlight__title">{book.songbook}</h3>
-          {description ? <p className="home-songbook-spotlight__desc">{description}</p> : null}
+        <CatalogFeaturedEmbedCopy
+          className="home-songbook-spotlight__copy"
+          meta="Continuous play on mobile"
+          title={book.songbook}
+          titleMeta={formatSongbookScPlaylistMeta(book)}
+          description={description}
+        >
           <span className="home-songbook-spotlight__cta">Open songbook →</span>
-        </div>
+        </CatalogFeaturedEmbedCopy>
       </Link>
       <Link className="catalog-section-cta" to={canonicalPathForRoute('/songbooks')}>
         Browse all songbooks →

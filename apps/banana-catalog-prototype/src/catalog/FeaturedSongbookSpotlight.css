@@ -10,37 +10,6 @@
   }
 }
 
-.catalog-featured-songbook__kicker {
-  margin: 0 0 0.25rem;
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-muted, #666);
-}
-
-.catalog-featured-songbook__meta {
-  margin: 0 0 0.35rem;
-}
-
-.catalog-featured-songbook__title {
-  margin: 0 0 0.45rem;
-  font-size: 1.15rem;
-  line-height: 1.25;
-}
-
-.catalog-featured-songbook__desc {
-  margin: 0 0 0.55rem;
-  font-family: var(--catalog-page-lede-font-family);
-  font-size: var(--catalog-page-lede-font-size);
-  line-height: var(--catalog-page-lede-line-height);
-  color: var(--catalog-page-lede-color);
-}
-
-.catalog-featured-songbook__cta {
-  display: block;
-}
-
 .catalog-featured-songbook--stacked {
   display: flex;
   flex-direction: column;
@@ -57,16 +26,17 @@
   margin-top: var(--catalog-featured-embed-copy-gap-top);
 }
 
-.catalog-featured-songbook--stacked .catalog-featured-songbook__kicker {
-  margin-bottom: 0.15rem;
+.catalog-featured-songbook--stacked .catalog-featured-embed-copy {
+  margin-top: 0;
 }
 
-.catalog-featured-songbook--stacked .catalog-featured-songbook__meta {
-  margin-bottom: 0.2rem;
+.catalog-featured-songbook .catalog-featured-embed-copy__title {
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  line-height: 1.25;
 }
 
 @media (min-width: 768px) {
-  .catalog-featured-songbook__cta {
+  .catalog-featured-songbook__copy .catalog-featured-embed-copy__cta {
     text-align: left;
   }
 }

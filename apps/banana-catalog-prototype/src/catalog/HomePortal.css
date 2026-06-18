@@ -370,26 +370,28 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
 }
 
-.home-songbook-spotlight__kicker {
-  margin: 0;
-  font-size: 0.72rem;
-  color: var(--color-text-muted);
+.home-songbook-spotlight__copy {
+  margin-top: 0;
+  gap: 0.18rem;
 }
 
-.home-songbook-spotlight__title {
-  margin: 0.2rem 0 0;
+.home-songbook-spotlight__copy .catalog-featured-embed-copy__meta {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.home-songbook-spotlight__copy .catalog-featured-embed-copy__title {
   font-size: 1rem;
   font-weight: 700;
-  line-height: 1.25;
-  color: var(--color-text-strong);
 }
 
-.home-songbook-spotlight__desc {
-  margin: 0.25rem 0 0;
+.home-songbook-spotlight__copy .catalog-featured-embed-copy__desc {
   font-size: 0.78rem;
   font-style: italic;
-  color: var(--color-text-muted);
   line-height: 1.45;
+  -webkit-line-clamp: 4;
 }
 
 .home-songbook-spotlight__cta {

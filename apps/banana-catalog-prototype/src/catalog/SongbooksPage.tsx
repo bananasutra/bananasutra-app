@@ -553,6 +553,7 @@ export function SongbooksPage() {
                 <FeaturedSongbookSpotlight
                   book={featuredSongbook}
                   className="songbooks-page__featured-spotlight"
+                  layout="stacked"
                   ctaTo={songbookHref(featuredSongbook.songbook)}
                   embed={
                     <LazySoundCloudEmbed scUrl={featuredSongbook.playlist_url} title={featuredSongbook.songbook} />

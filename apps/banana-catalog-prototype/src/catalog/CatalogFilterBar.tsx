@@ -76,6 +76,8 @@ type CatalogFilterBarProps = {
   showResultSummary?: boolean
   /** Right side of toolbar row (e.g. sort dropdown). */
   toolbarEnd?: ReactNode
+  /** Optional row at bottom of expanded filter panel (e.g. opt-in checkboxes). */
+  panelFooter?: ReactNode
 }
 
 export function CatalogFilterBar({
@@ -95,6 +97,7 @@ export function CatalogFilterBar({
   onExpandedChange,
   showResultSummary = true,
   toolbarEnd,
+  panelFooter,
 }: CatalogFilterBarProps) {
   const autoPanelId = useId()
   const panelId = panelIdProp ?? `catalog-filter-panel-${autoPanelId.replace(/:/g, '')}`
@@ -319,6 +322,8 @@ export function CatalogFilterBar({
         {facetGroups.map(renderFacetGroup)}
 
         {secondaryGroupPosition === 'after-facets' ? renderSecondaryGroup() : null}
+
+        {panelFooter ? <div className="catalog-filter-bar__panel-footer">{panelFooter}</div> : null}
 
         {combineHelpText ? (
           <p className="catalog-filter-bar__help catalog-filter-bar__help--footer">{combineHelpText}</p>
