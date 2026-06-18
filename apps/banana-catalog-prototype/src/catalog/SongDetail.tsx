@@ -20,6 +20,8 @@ import {
   useExclusiveYoutubeSoundcloudPlayback,
   type ExclusiveYoutubeSoundcloudControls,
 } from './useExclusiveYoutubeSoundcloudPlayback'
+import { useExclusiveYoutubeEmbedsPlayback } from './useExclusiveYoutubeEmbedsPlayback'
+import { pauseAllYoutubeEmbedsExcept, pauseYoutubeEmbed } from './youtubeEmbedControl'
 import { CatalogVideoSpotlight, type CatalogVideoSpotlightItem } from './CatalogVideoSpotlight'
 import { CatalogVideoSpotlightRailThumb } from './CatalogVideoSpotlightRailThumb'
 import { CatalogMediaOutbound } from './CatalogMediaOutbound'
@@ -826,21 +828,36 @@ function SongDetailLoaded({
     hasSongbookPlaylist: Boolean(songbookPlaylistUrl),
   })
 
+  const songExclusivePlaybackEnabled = Boolean(showEpPanel || hasPlayableTrack || hasYoutubeVideos)
+  const embeddableYoutubeCount = useMemo(
+    () => youtubeVideos.filter((v) => v.can_embed).length,
+    [youtubeVideos],
+  )
+  const songYtYtExclusivityEnabled = embeddableYoutubeCount >= 2
+
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
     soundcloudWrapRefs: [epEmbedWrapRef, playerWrapRef],
-    enabled: Boolean(showEpPanel || hasPlayableTrack || hasYoutubeVideos),
+    enabled: songExclusivePlaybackEnabled,
     controlsRef: exclusivePlaybackRef,
     syncKey: `${lyricsId}|ep:${primaryEpUrl}|tr:${playingUrl}|tab:${audioListenTab}|yt:${effectiveYoutubeVideoId}`,
   })
+
+  useExclusiveYoutubeEmbedsPlayback(songYtYtExclusivityEnabled)
 
   const pauseSoundcloudForVideo = useCallback(() => {
     exclusivePlaybackRef.current?.pauseAllSoundcloud()
   }, [])
 
+  const onBeforeYoutubePlay = useCallback(() => {
+    pauseSoundcloudForVideo()
+    pauseAllYoutubeEmbedsExcept(youtubeExclusiveRef.current)
+  }, [pauseSoundcloudForVideo])
+
   const selectYoutubeVideo = useCallback(
     (videoId: string) => {
       pauseSoundcloudForVideo()
+      pauseYoutubeEmbed(youtubeExclusiveRef.current)
       setSelectedYoutubeVideoId(videoId)
     },
     [pauseSoundcloudForVideo],
@@ -1360,16 +1377,17 @@ function SongDetailLoaded({
                               railEyebrow="More for this song"
                               renderRailCell={renderSongVideoRailCell}
                               iframeRef={youtubeExclusiveRef}
-                              onBeforePlay={pauseSoundcloudForVideo}
+                              onBeforePlay={onBeforeYoutubePlay}
                             />
                           ) : focusedYoutubeVideo?.can_embed && videoInView ? (
                             <YoutubeEmbeddedPlayer
                               videoId={focusedYoutubeVideo.video_id}
                               title={`YouTube: ${focusedYoutubeVideo.title || detail.lyrics_title}`}
                               iframeRef={youtubeExclusiveRef}
+                              enableJsApi={songExclusivePlaybackEnabled}
                               loading="lazy"
                               facadeUntilClick
-                              onBeforePlay={pauseSoundcloudForVideo}
+                              onBeforePlay={onBeforeYoutubePlay}
                             />
                           ) : focusedYoutubeVideo ? (
                             <div className="song-detail-youtube-no-embed" role="region" aria-label="Selected video not embeddable">
@@ -1461,16 +1479,17 @@ function SongDetailLoaded({
                     railEyebrow="More for this song"
                     renderRailCell={renderSongVideoRailCell}
                     iframeRef={youtubeExclusiveRef}
-                    onBeforePlay={pauseSoundcloudForVideo}
+                    onBeforePlay={onBeforeYoutubePlay}
                   />
                 ) : focusedYoutubeVideo?.can_embed && videoInView ? (
                   <YoutubeEmbeddedPlayer
                     videoId={focusedYoutubeVideo.video_id}
                     title={`YouTube: ${focusedYoutubeVideo.title || detail.lyrics_title}`}
                     iframeRef={youtubeExclusiveRef}
+                    enableJsApi={songExclusivePlaybackEnabled}
                     loading="lazy"
                     facadeUntilClick
-                    onBeforePlay={pauseSoundcloudForVideo}
+                    onBeforePlay={onBeforeYoutubePlay}
                   />
                 ) : focusedYoutubeVideo ? (
                   <div className="song-detail-youtube-no-embed" role="region" aria-label="Selected video not embeddable">
