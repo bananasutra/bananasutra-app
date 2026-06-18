@@ -5,6 +5,7 @@
     "dev": "npm run dev --prefix apps/banana-catalog-prototype --",
     "build": "npm run build --prefix apps/banana-catalog-prototype",
     "verify:seo": "npm run verify:seo --prefix apps/banana-catalog-prototype",
+    "verify:build": "npm run verify:build --prefix apps/banana-catalog-prototype",
     "build:data": "npm run build:data --prefix apps/banana-catalog-prototype",
     "catalog:data": "npm run catalog:snapshot:validate && npm run build:data --prefix apps/banana-catalog-prototype && npm run catalog:slug:audit && npm run catalog:genres:audit",
     "catalog:snapshot:validate": "python3 apps/banana-catalog-prototype/scripts/validate_snapshot.py",
