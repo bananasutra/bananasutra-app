@@ -96,10 +96,16 @@ export function useTracksPagePlayerQueue(
   )
 
   const onPlayTrack = useCallback(
-    (track: PlayableTrack) => {
+    (track: PlayableTrack, opts: { fromPlayAllStart?: boolean }) => {
+      const sameRow = track.track_id === selectedIdRef.current
+      if (opts.fromPlayAllStart && sameRow) {
+        // Safari: scAutoplay=true changes iframe key and remounts outside the gesture chain.
+        onBeforePlayTrack()
+        return
+      }
       onBeforePlayTrack()
       setScAutoplay(true)
-      if (track.track_id === selectedIdRef.current) {
+      if (sameRow) {
         setEmbedReloadKey((k) => k + 1)
         return
       }

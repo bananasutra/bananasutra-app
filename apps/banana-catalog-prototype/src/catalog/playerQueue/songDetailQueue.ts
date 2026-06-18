@@ -22,7 +22,7 @@ export type UseSongDetailTopTracksQueueArgs = {
   songTitle: string
   songSlug?: string
   lyricsExtract?: string
-  requestSoundcloudPlayback: (url: string) => void
+  requestSoundcloudPlayback: (url: string, opts?: { fromPlayAllStart?: boolean }) => void
 }
 
 export function useSongDetailTopTracksQueue(
@@ -75,10 +75,12 @@ export function useSongDetailTopTracksQueue(
   )
 
   const onPlayTrack = useCallback(
-    (track: PlayableTrack) => {
+    (track: PlayableTrack, opts: { fromPlayAllStart?: boolean }) => {
+      const sameUrl = track.sc_url.trim() === playingUrlRef.current.trim()
+      if (opts.fromPlayAllStart && sameUrl) return
       requestSoundcloudPlayback(track.sc_url)
     },
-    [requestSoundcloudPlayback],
+    [playingUrlRef, requestSoundcloudPlayback],
   )
 
   const buildPlayAllSource = useCallback(
@@ -103,7 +105,7 @@ export function useSongDetailTopTracksQueue(
     widgetRef: scWidgetRef,
     analytics,
     buildPlayAllSource,
-    onPlayTrack: (track) => onPlayTrack(track),
+    onPlayTrack: (track, opts) => onPlayTrack(track, opts),
   })
 
   const startPlayAllFromPage = useCallback(() => {

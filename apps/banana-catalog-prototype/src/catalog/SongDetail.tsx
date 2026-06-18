@@ -569,7 +569,10 @@ function SongDetailLoaded({
   const soundcloudMainEmbedHeight =
     playingUrl.includes('/sets/') ? SC_EMBED_HEIGHT_SET_PLAYLIST : SC_EMBED_HEIGHT_TRACK_LIST
 
-  const requestSoundcloudPlayback = useCallback((url: string) => {
+  const requestSoundcloudPlayback = useCallback((url: string, opts?: { fromPlayAllStart?: boolean }) => {
+    const trimmed = url.trim()
+    const sameUrl = trimmed === playingUrlRef.current.trim()
+    if (opts?.fromPlayAllStart && sameUrl) return
     setSelectedUrl(url)
     setSoundcloudReloadKey((k) => k + 1)
   }, [])
@@ -1073,6 +1076,9 @@ function SongDetailLoaded({
                                   className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
                                   onClick={() => queueActions.pause()}
                                 >
+                                  <span className="song-detail-audio-action-btn__glyph" aria-hidden>
+                                    ❚❚
+                                  </span>
                                   Pause
                                 </button>
                               ) : (
@@ -1081,6 +1087,9 @@ function SongDetailLoaded({
                                   className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
                                   onClick={() => queueActions.resume()}
                                 >
+                                  <span className="song-detail-audio-action-btn__glyph" aria-hidden>
+                                    ▶
+                                  </span>
                                   Resume
                                 </button>
                               )}
@@ -1089,6 +1098,9 @@ function SongDetailLoaded({
                                 className="song-detail-audio-action-btn song-detail-audio-action-btn--stop"
                                 onClick={() => queueActions.stop()}
                               >
+                                <span className="song-detail-audio-action-btn__glyph" aria-hidden>
+                                  ■
+                                </span>
                                 Stop playing all
                               </button>
                             </>
@@ -1098,6 +1110,9 @@ function SongDetailLoaded({
                               className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
                               onClick={startPlayAllFromPage}
                             >
+                              <span className="song-detail-audio-action-btn__glyph" aria-hidden>
+                                ▶
+                              </span>
                               {`Play all ${inAppPlayableTracks.length} top track${inAppPlayableTracks.length === 1 ? '' : 's'}`}
                             </button>
                           ) : null}

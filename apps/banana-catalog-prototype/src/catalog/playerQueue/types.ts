@@ -63,6 +63,11 @@ export type PlayerQueueState = {
 export type PickTrackOptions = {
   /** Keep play-all session when picking another row in the same queue. */
   keepPlayAll?: boolean
+  /**
+   * Play All start (desktop): keep embed mounted when row already selected and call
+   * widget.play() synchronously inside the click handler (Safari gesture chain).
+   */
+  fromPlayAllStart?: boolean
 }
 
 export type PlayerQueueActions = {

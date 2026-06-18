@@ -23,7 +23,10 @@ export type PagePlayerQueueConfig = {
   analytics: PagePlayerQueueAnalytics
   buildPlayAllSource: () => Exclude<PlayerQueueSource, { type: 'single' }>
   /** Embed remount / selection side effects owned by the page. */
-  onPlayTrack: (track: PlayableTrack, opts: { intent: PlaybackIntent; keepPlayAll: boolean }) => void
+  onPlayTrack: (
+    track: PlayableTrack,
+    opts: { intent: PlaybackIntent; keepPlayAll: boolean; fromPlayAllStart?: boolean },
+  ) => void
   /** TracksPage: expand infinite scroll + scroll active row into view. */
   onAdvanceToIndex?: (index: number) => void
   /** TracksPage: reset visible slice when starting play all. */
@@ -68,6 +71,7 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
   const playingRef = useRef(false)
   const playbackIntentRef = useRef<PlaybackIntent>('user_pick')
   const advanceRef = useRef<() => void>(() => {})
+  const pendingGesturePlayRef = useRef(false)
 
   useEffect(() => {
     playAllActiveRef.current = playAllActive
@@ -94,11 +98,43 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
     }
   }, [widgetRef, onResume])
 
+  /** Safari: widget.play() must run inside the user-gesture call stack (Play All start). */
+  const syncPlayInGesture = useCallback(() => {
+    void import('../soundcloudWidgetApi').then(({ loadSoundCloudWidgetApi }) => loadSoundCloudWidgetApi())
+    const widget = widgetRef.current
+    if (widget) {
+      pendingGesturePlayRef.current = false
+      try {
+        widget.play()
+        setPlaying(true)
+      } catch {
+        // Widget play failed; bindWidgetOnLoad may retry when API attaches.
+      }
+      return
+    }
+    pendingGesturePlayRef.current = true
+  }, [widgetRef])
+
   const pickTrack = useCallback(
     (track: PlayableTrack, options: PickTrackOptions = {}) => {
-      const { keepPlayAll = false } = options
+      const { keepPlayAll = false, fromPlayAllStart = false } = options
       const key = playableTrackKey(track, selectionMode)
       const currentKey = getCurrentKey()
+
+      if (fromPlayAllStart) {
+        if (!keepPlayAll && playAllActiveRef.current) {
+          const queue = getQueue()
+          const idx = findTrackIndex(queue, currentKey, selectionMode)
+          analytics.onPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
+          setPlayAllActive(false)
+          playAllActiveRef.current = false
+        }
+        analytics.onPlayStarted(track, playbackIntentRef.current, playAllActiveRef.current)
+        playbackIntentRef.current = 'user_pick'
+        onPlayTrack(track, { intent: playbackIntentRef.current, keepPlayAll, fromPlayAllStart: true })
+        syncPlayInGesture()
+        return
+      }
 
       if (key && key === currentKey && widgetRef.current) {
         if (playingRef.current) {
@@ -121,7 +157,7 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
       playbackIntentRef.current = 'user_pick'
       onPlayTrack(track, { intent: playbackIntentRef.current, keepPlayAll })
     },
-    [analytics, getCurrentKey, getQueue, onPlayTrack, pause, resume, selectionMode, widgetRef],
+    [analytics, getCurrentKey, getQueue, onPlayTrack, pause, resume, selectionMode, syncPlayInGesture, widgetRef],
   )
 
   const stop = useCallback(() => {
@@ -198,9 +234,9 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
       playbackIntentRef.current = 'play_all_start'
       setPlayAllActive(true)
       playAllActiveRef.current = true
-      onStartPlayAll?.()
       const first = tracks[0]
-      if (first) pickTrack(first, { keepPlayAll: true })
+      if (first) pickTrack(first, { keepPlayAll: true, fromPlayAllStart: true })
+      onStartPlayAll?.()
     },
     [analytics, onStartPlayAll, pickTrack],
   )
@@ -247,7 +283,6 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
   const bindWidgetOnLoad = useCallback(
     (wrap: HTMLElement | null) => {
       if (!wrap) return
-      setPlaying(false)
       const iframe = wrap.querySelector<HTMLIFrameElement>('iframe.sc-embed-frame')
       if (!iframe) return
       void import('../soundcloudWidgetApi')
@@ -263,6 +298,14 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
               advanceRef.current()
             },
           })
+          if (pendingGesturePlayRef.current) {
+            pendingGesturePlayRef.current = false
+            try {
+              widget.play()
+            } catch {
+              // Play All may need an explicit Resume tap if autoplay is blocked.
+            }
+          }
         })
         .catch(() => {
           // Widget API failed to load; Play All becomes effectively manual.
