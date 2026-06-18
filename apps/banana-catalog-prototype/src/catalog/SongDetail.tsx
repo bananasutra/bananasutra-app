@@ -27,12 +27,15 @@ import { CatalogVideoSpotlightRailThumb } from './CatalogVideoSpotlightRailThumb
 import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import {
   songDetailPlayAllHonestMobileCopy,
+  SONG_DETAIL_TWO_COL_MEDIA_QUERY,
   usePlayAllDesktopAvailable,
 } from './playAllPlatform'
 import { formatDurationDisplay } from './durationFormat'
 import {
-  PlayerQueueProvider,
   songDetailTrackToPlayable,
+  usePlayerQueue,
+  usePlayerQueueInternals,
+  usePlayerQueuePageBridge,
   useSongDetailTopTracksQueue,
 } from './playerQueue'
 import {
@@ -123,19 +126,19 @@ function normSoundcloudUrl(url: string): string {
 const SC_EMBED_HEIGHT_TRACK_LIST = 166
 const SC_EMBED_HEIGHT_SET_PLAYLIST = 450
 
-/** Matches `@media (min-width: 900px)` for `.song-detail-split--two-col` — lyrics clamp only there. */
-const SONG_DETAIL_TWO_COL_MQ = '(min-width: 900px)'
-
 /** W-055 wireframe §6: cap top-tracks list before expand (balance vs. lyrics column). */
 const SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT = 3
 
 function useSongDetailLyricsClampViewport(): boolean {
   const subscribe = useCallback((onStoreChange: () => void) => {
-    const mq = window.matchMedia(SONG_DETAIL_TWO_COL_MQ)
+    const mq = window.matchMedia(SONG_DETAIL_TWO_COL_MEDIA_QUERY)
     mq.addEventListener('change', onStoreChange)
     return () => mq.removeEventListener('change', onStoreChange)
   }, [])
-  const getSnapshot = useCallback(() => window.matchMedia(SONG_DETAIL_TWO_COL_MQ).matches, [])
+  const getSnapshot = useCallback(
+    () => window.matchMedia(SONG_DETAIL_TWO_COL_MEDIA_QUERY).matches,
+    [],
+  )
   const getServerSnapshot = useCallback(() => false, [])
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 }
@@ -554,7 +557,6 @@ function SongDetailLoaded({
   const [audioListenTab, setAudioListenTab] = useState<AudioListenTab>('tracks')
   const [topTracksExpanded, setTopTracksExpanded] = useState(false)
   const playerWrapRef = useRef<HTMLDivElement | null>(null)
-  const scWidgetRef = useRef<import('./soundcloudWidgetApi').SoundCloudWidget | null>(null)
   const inAppPlayableTracksRef = useRef<SongDetailTrack[]>(inAppPlayableTracks)
   const playingUrlRef = useRef<string>(playingUrl)
 
@@ -577,22 +579,30 @@ function SongDetailLoaded({
     setSoundcloudReloadKey((k) => k + 1)
   }, [])
 
-  const topTracksQueue = useSongDetailTopTracksQueue({
+  const syncPlayingUrl = useCallback((url: string) => {
+    const trimmed = url.trim()
+    if (!trimmed) return
+    playingUrlRef.current = trimmed
+    setSelectedUrl(trimmed)
+  }, [])
+
+  const { registration, startPlayAllFromPage } = useSongDetailTopTracksQueue({
     inAppPlayableTracksRef,
     playingUrlRef,
-    scWidgetRef,
     lyricsId: detail.lyrics_id,
     songTitle: detail.lyrics_title,
     songSlug: detail.url_slug,
     lyricsExtract,
     requestSoundcloudPlayback,
+    syncPlayingUrl,
+    songUrlSlug: detail.url_slug,
   })
-  const {
-    state: queueState,
-    actions: queueActions,
-    bindWidgetOnLoad,
+  const { bindWidgetOnLoad } = usePlayerQueueInternals()
+  usePlayerQueuePageBridge('song-detail-top-tracks', registration, {
     startPlayAllFromPage,
-  } = topTracksQueue
+    bindWidgetOnLoad,
+  })
+  const { state: queueState, actions: queueActions } = usePlayerQueue()
   const playAllTopTracksActive = queueState.playAllActive
   const isScPlaying = queueState.playing
 
@@ -608,9 +618,9 @@ function SongDetailLoaded({
       const trimmed = url.trim()
       const track = inAppPlayableTracksRef.current.find((t) => t.sc_url.trim() === trimmed)
       if (!track) return
-      queueActions.pickTrack(songDetailTrackToPlayable(track, lyricsExtract), options)
+      queueActions.pickTrack(songDetailTrackToPlayable(track, lyricsExtract, detail.url_slug), options)
     },
-    [lyricsExtract, queueActions],
+    [detail.url_slug, lyricsExtract, queueActions],
   )
 
   const handlePlayerLoad = useCallback(() => {
@@ -634,17 +644,12 @@ function SongDetailLoaded({
   const hasScCatalogListen = Boolean(catalogListenUrl)
   const defaultingToCatalogExport =
     hasScCatalogListen && !defaultTrack && !fallbackScUrl && !(selectedUrl?.trim())
+  /** Multi-track list or catalog-export listen — not “video replaces listen slot” UX (D-013). */
+  const hasTopTracksListenUi = shouldShowTracksList || hasScCatalogListen
   const hasAudioContent =
     hasPlayableTrack || hasEpFallback || hasAnyTrackUrls || shouldShowTracksList || hasScCatalogListen
-  const hasScAudio = hasAudioContent
-  const hasTopTracksPanel = Boolean(
-    hasPlayableTrack || hasScCatalogListen || shouldShowTracksList || (hasEpFallback && !showEpEmbed),
-  )
-  const hasAudioSourceTabs = Boolean(showEpEmbed && hasTopTracksPanel)
-  const showTracksPanel = hasTopTracksPanel && (!hasAudioSourceTabs || audioListenTab === 'tracks')
-  const showEpPanel = Boolean(showEpEmbed && (!hasTopTracksPanel || (hasAudioSourceTabs && audioListenTab === 'ep')))
-  const showVideoInColumn = hasYoutubeVideos && !hasScAudio
-  const showVideoBelow = hasYoutubeVideos && hasScAudio
+  const showVideoInColumn = hasYoutubeVideos && !hasTopTracksListenUi
+  const showVideoBelow = hasYoutubeVideos && hasTopTracksListenUi
   const showAudioSection = hasAudioContent
   const showVideoSection = showVideoInColumn
   const hasMediaColumnForSplit = showAudioSection || showVideoInColumn
@@ -652,7 +657,12 @@ function SongDetailLoaded({
   const isLyricsOnlyNoCoverHero =
     !(detail.cover_image_url || '').trim() && !hasAudioContent && !hasYoutubeVideos
   const useLyricsMediaSplit = hasLyrics && hasMediaColumnForSplit
-  const hasListenTabNav = hasAudioSourceTabs && useLyricsMediaSplit
+  /** Listen | Full EP tabs when video or top-tracks competes with EP — not for EP-only rows. */
+  const hasListenTabNav =
+    useLyricsMediaSplit && showEpEmbed && (hasTopTracksListenUi || showVideoInColumn)
+  const showTracksPanel =
+    hasTopTracksListenUi && (!hasListenTabNav || audioListenTab === 'tracks')
+  const showEpPanel = Boolean(showEpEmbed && (!hasListenTabNav || audioListenTab === 'ep'))
   const tracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Top tracks'
   const topTracksHasOverflow = orderedTracks.length > SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT
   const topTracksListExpanded = topTracksExpanded || !topTracksHasOverflow
@@ -739,10 +749,12 @@ function SongDetailLoaded({
   useEffect(() => {
     queueMicrotask(() => {
       setLyricsExpanded(false)
-      setAudioListenTab('tracks')
       setTopTracksExpanded(false)
+      const defaultListenTab: AudioListenTab =
+        showEpEmbed && !hasTopTracksListenUi && !hasYoutubeVideos ? 'ep' : 'tracks'
+      setAudioListenTab(defaultListenTab)
     })
-  }, [detail.lyrics_id])
+  }, [detail.lyrics_id, hasTopTracksListenUi, hasYoutubeVideos, showEpEmbed])
 
   useEffect(() => {
     if (!topTracksHasOverflow || topTracksExpanded) return
@@ -811,7 +823,6 @@ function SongDetailLoaded({
   }, [hasYoutubeVideos, detail.lyrics_id])
 
   return (
-    <PlayerQueueProvider value={topTracksQueue}>
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
       <GlobalHeader ref={headerRef} />
 
@@ -1010,7 +1021,7 @@ function SongDetailLoaded({
                       </section>
                     ) : null}
 
-                    {showAudioSection && showTracksPanel ? (
+                    {showAudioSection && showTracksPanel && !showVideoInColumn ? (
                       <section
                         className="song-detail-media"
                         aria-label="Track playback"
@@ -1026,17 +1037,19 @@ function SongDetailLoaded({
                         Here&apos;s the SoundCloud version for this song.
                       </p>
                     ) : null}
-                    <div ref={playerWrapRef}>
-                      <LazySoundCloudEmbed
-                        scUrl={playingUrl}
-                        title={`SoundCloud: ${detail.lyrics_title}`}
-                        mode="list"
-                        height={soundcloudMainEmbedHeight}
-                        autoPlay={Boolean((selectedUrl ?? '').trim())}
-                        reloadKey={soundcloudReloadKey}
-                        onLoad={handlePlayerLoad}
-                      />
-                    </div>
+                    {!playAllDesktopAvailable ? (
+                      <div ref={playerWrapRef}>
+                        <LazySoundCloudEmbed
+                          scUrl={playingUrl}
+                          title={`SoundCloud: ${detail.lyrics_title}`}
+                          mode="list"
+                          height={soundcloudMainEmbedHeight}
+                          autoPlay={Boolean((selectedUrl ?? '').trim())}
+                          reloadKey={soundcloudReloadKey}
+                          onLoad={handlePlayerLoad}
+                        />
+                      </div>
+                    ) : null}
                   </>
                 ) : hasEpFallback && !showEpEmbed ? (
                   <>
@@ -1217,11 +1230,8 @@ function SongDetailLoaded({
                         ref={videoSectionRef}
                         className="song-detail-media song-detail-media--video"
                         id="song-video-section"
-                        aria-labelledby="song-video-heading"
+                        aria-label={SONG_VIDEO_SECTION_TITLE}
                       >
-                        <h2 id="song-video-heading" className="catalog-section-title">
-                          {SONG_VIDEO_SECTION_TITLE}
-                        </h2>
                         <section className="song-detail-youtube" aria-label="YouTube player">
                           {useSongVideoSpotlight && songVideoSpotlightFeatured && videoInView ? (
                             <CatalogVideoSpotlight
@@ -1325,7 +1335,7 @@ function SongDetailLoaded({
               ref={videoSectionRef}
               className={
                 'song-detail-media song-detail-media--video song-detail-video-below song-detail-shell-section' +
-                (useLyricsMediaSplit ? ' song-detail-shell-section--breakout' : '')
+                (useLyricsMediaSplit ? ' song-detail-shell-section--wide-divider' : '')
               }
               id="song-video-section"
               aria-labelledby="song-video-below-heading"
@@ -1417,6 +1427,5 @@ function SongDetailLoaded({
 
       <GlobalFooter />
     </div>
-    </PlayerQueueProvider>
   )
 }

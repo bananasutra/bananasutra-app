@@ -36,13 +36,14 @@ import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { formatDurationDisplay } from './durationFormat'
 import {
-  PlayerQueueProvider,
   trackCatalogItemToPlayable,
+  usePlayerQueue,
+  usePlayerQueueInternals,
+  usePlayerQueuePageBridge,
   useTracksPagePlayerQueue,
 } from './playerQueue'
 import { sutraQuestionFromDisplay } from './sutraContext'
 import { sutraClassName } from './sutraTheme'
-import { type SoundCloudWidget } from './soundcloudWidgetApi'
 import './CatalogApp.css'
 import './AboutPage.css'
 import './TracksPage.css'
@@ -276,7 +277,6 @@ export function TracksPage() {
   const skipScAutoplayOffOnNextSelectionChange = useRef(false)
 
   const playerWrapRef = useRef<HTMLDivElement>(null)
-  const scWidgetRef = useRef<SoundCloudWidget | null>(null)
   const filteredRef = useRef<TrackCatalogItem[]>([])
   const selectedIdRef = useRef<string | null>(null)
   const filtersRefForAdvance = useRef<TracksFilterState>(filters)
@@ -301,13 +301,12 @@ export function TracksPage() {
     urlSortRefForAdvance.current = urlSort
   }, [urlSort])
 
-  const playerQueue = useTracksPagePlayerQueue({
+  const { registration, startPlayAllFromPage } = useTracksPagePlayerQueue({
     filteredRef,
     selectedIdRef,
     filtersRef: filtersRefForAdvance,
     urlFindRef: urlFindRefForAdvance,
     urlSortRef: urlSortRefForAdvance,
-    scWidgetRef,
     onBeforePlayTrack: () => {
       skipScAutoplayOffOnNextSelectionChange.current = true
     },
@@ -318,8 +317,13 @@ export function TracksPage() {
     setSelectedId,
     setEmbedReloadKey,
   })
-  const { state: queueState, actions: queueActions, bindWidgetOnLoad, startPlayAllFromPage, resetSession } =
-    playerQueue
+  const { bindWidgetOnLoad, resetSession } = usePlayerQueueInternals()
+  usePlayerQueuePageBridge('tracks-page', registration, {
+    startPlayAllFromPage,
+    resetSession,
+    bindWidgetOnLoad,
+  })
+  const { state: queueState, actions: queueActions } = usePlayerQueue()
   const playAllActive = queueState.playAllActive
   const isScPlaying = queueState.playing
 
@@ -375,6 +379,7 @@ export function TracksPage() {
     () => listRows.find((t) => t.track_id === selectedId) ?? filtered.find((t) => t.track_id === selectedId) ?? listRows[0],
     [listRows, filtered, selectedId],
   )
+  const showNowPlayingSection = Boolean(selected?.sc_url) && !playAllDesktopAvailable
   const queueIndex = selected?.track_id ? filtered.findIndex((t) => t.track_id === selected.track_id) : -1
   const canGoPrevious = queueIndex > 0
   const canGoNext = queueIndex >= 0 && queueIndex < filtered.length - 1
@@ -503,7 +508,6 @@ export function TracksPage() {
   const total = catalogList.length
 
   return (
-    <PlayerQueueProvider value={playerQueue}>
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
       {pageMeta}
       <GlobalHeader ref={headerRef} />
@@ -593,20 +597,22 @@ export function TracksPage() {
               />
 
               <main id="main-content" className="catalog-main tracks-page__main">
-                {selected?.sc_url ? (
+                {showNowPlayingSection ? (
                   <section className="tracks-page__player" aria-label="Now playing">
                     <h2 className="tracks-page__player-h catalog-section-title">Now playing</h2>
-                    <div className="tracks-page__player-frame" ref={playerWrapRef}>
-                      <LazySoundCloudEmbed
-                        scUrl={selected.sc_url}
-                        title={selected.track_title || 'SoundCloud track'}
-                        height={embedHeight}
-                        mode="visual"
-                        autoPlay={scAutoplay}
-                        reloadKey={embedReloadKey}
-                        onLoad={handlePlayerLoad}
-                      />
-                    </div>
+                    {!playAllDesktopAvailable ? (
+                      <div className="tracks-page__player-frame" ref={playerWrapRef}>
+                        <LazySoundCloudEmbed
+                          scUrl={selected.sc_url}
+                          title={selected.track_title || 'SoundCloud track'}
+                          height={embedHeight}
+                          mode="visual"
+                          autoPlay={scAutoplay}
+                          reloadKey={embedReloadKey}
+                          onLoad={handlePlayerLoad}
+                        />
+                      </div>
+                    ) : null}
                     <p className="tracks-page__sc-link-wrap">
                       <a
                         className="tracks-page__sc-link"
@@ -840,6 +846,5 @@ export function TracksPage() {
 
       <GlobalFooter />
     </div>
-    </PlayerQueueProvider>
   )
 }

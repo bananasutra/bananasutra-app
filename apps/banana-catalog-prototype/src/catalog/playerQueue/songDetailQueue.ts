@@ -8,36 +8,45 @@ import {
   trackSongDetailQueueSkipped,
 } from '../catalogAnalytics'
 import type { SongDetailTrack } from '../types'
-import type { SoundCloudWidget } from '../soundcloudWidgetApi'
 import type { PagePlayerQueueAnalytics } from './pagePlayerQueueAnalytics'
 import { normScUrl, songDetailTrackToPlayable } from './playableTrackAdapters'
 import type { PlayableTrack, PlayerQueueSource } from './types'
-import { usePagePlayerQueue, type UsePagePlayerQueueResult } from './usePagePlayerQueue'
+import { usePlayerQueue } from './usePlayerQueue'
+import { usePlayerQueueRegistrar, type PagePlayerQueueRegistration } from './playerQueueRegistrarContext'
+import { requestPersistentScLoad } from '../persistentPlayer/persistentScBootstrap'
 
 export type UseSongDetailTopTracksQueueArgs = {
   inAppPlayableTracksRef: MutableRefObject<SongDetailTrack[]>
   playingUrlRef: MutableRefObject<string>
-  scWidgetRef: MutableRefObject<SoundCloudWidget | null>
   lyricsId: string
   songTitle: string
   songSlug?: string
   lyricsExtract?: string
+  songUrlSlug?: string
   requestSoundcloudPlayback: (url: string, opts?: { fromPlayAllStart?: boolean }) => void
+  syncPlayingUrl: (url: string) => void
 }
 
 export function useSongDetailTopTracksQueue(
   args: UseSongDetailTopTracksQueueArgs,
-): UsePagePlayerQueueResult & { startPlayAllFromPage: () => void } {
+): {
+  registration: PagePlayerQueueRegistration
+  startPlayAllFromPage: () => void
+} {
   const {
     inAppPlayableTracksRef,
     playingUrlRef,
-    scWidgetRef,
     lyricsId,
     songTitle,
     songSlug,
     lyricsExtract,
+    songUrlSlug,
     requestSoundcloudPlayback,
+    syncPlayingUrl,
   } = args
+
+  const { actions } = usePlayerQueue()
+  const { usePersistentPlayback, persistentApiRef } = usePlayerQueueRegistrar()
 
   const findDetailTrack = useCallback(
     (track: PlayableTrack): SongDetailTrack | undefined => {
@@ -75,12 +84,30 @@ export function useSongDetailTopTracksQueue(
   )
 
   const onPlayTrack = useCallback(
-    (track: PlayableTrack, opts: { fromPlayAllStart?: boolean }) => {
-      const sameUrl = track.sc_url.trim() === playingUrlRef.current.trim()
+    (
+      track: PlayableTrack,
+      opts: { intent?: string; keepPlayAll?: boolean; fromPlayAllStart?: boolean },
+    ) => {
+      void opts.intent
+      void opts.keepPlayAll
+      const url = track.sc_url.trim()
+      if (!url) return
+
+      if (usePersistentPlayback) {
+        if (opts.fromPlayAllStart) {
+          requestPersistentScLoad(url, { autoPlay: true, remount: true })
+        } else {
+          persistentApiRef.current?.loadTrack(url, { autoPlay: true })
+        }
+        syncPlayingUrl(url)
+        return
+      }
+
+      const sameUrl = url === playingUrlRef.current.trim()
       if (opts.fromPlayAllStart && sameUrl) return
-      requestSoundcloudPlayback(track.sc_url)
+      requestSoundcloudPlayback(url, { fromPlayAllStart: opts.fromPlayAllStart })
     },
-    [playingUrlRef, requestSoundcloudPlayback],
+    [persistentApiRef, playingUrlRef, requestSoundcloudPlayback, syncPlayingUrl, usePersistentPlayback],
   )
 
   const buildPlayAllSource = useCallback(
@@ -94,29 +121,32 @@ export function useSongDetailTopTracksQueue(
   )
 
   const getQueue = useCallback(
-    () => inAppPlayableTracksRef.current.map((t) => songDetailTrackToPlayable(t, lyricsExtract)),
-    [inAppPlayableTracksRef, lyricsExtract],
+    () =>
+      inAppPlayableTracksRef.current.map((t) =>
+        songDetailTrackToPlayable(t, lyricsExtract, songUrlSlug),
+      ),
+    [inAppPlayableTracksRef, lyricsExtract, songUrlSlug],
   )
 
-  const queue = usePagePlayerQueue({
-    selectionMode: 'sc_url',
-    getQueue,
-    getCurrentKey: () => normScUrl(playingUrlRef.current),
-    widgetRef: scWidgetRef,
-    analytics,
-    buildPlayAllSource,
-    onPlayTrack: (track, opts) => onPlayTrack(track, opts),
-  })
+  const registration = useMemo(
+    (): PagePlayerQueueRegistration => ({
+      selectionMode: 'track_id',
+      getQueue,
+      getCurrentKey: () => {
+        const url = normScUrl(playingUrlRef.current)
+        const match = inAppPlayableTracksRef.current.find((t) => t.sc_url.trim() === url)
+        return match?.track_id ?? null
+      },
+      analytics,
+      buildPlayAllSource,
+      onPlayTrack: (track, opts) => onPlayTrack(track, opts),
+    }),
+    [analytics, buildPlayAllSource, getQueue, onPlayTrack, playingUrlRef],
+  )
 
   const startPlayAllFromPage = useCallback(() => {
-    queue.actions.startPlayAll(buildPlayAllSource(), getQueue())
-  }, [buildPlayAllSource, getQueue, queue.actions])
+    actions.startPlayAll(buildPlayAllSource(), getQueue())
+  }, [actions, buildPlayAllSource, getQueue])
 
-  return useMemo(
-    () => ({
-      ...queue,
-      startPlayAllFromPage,
-    }),
-    [queue, startPlayAllFromPage],
-  )
+  return { registration, startPlayAllFromPage }
 }

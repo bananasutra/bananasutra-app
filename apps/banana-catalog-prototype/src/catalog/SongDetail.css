@@ -754,17 +754,8 @@
   max-width: 100%;
 }
 
-@media (min-width: 900px) {
-  .song-detail-shell-section--breakout {
-    width: min(60rem, 100vw - 2rem);
-    margin-inline: calc(50% - min(30rem, 50vw - 1rem));
-  }
-
-  .song-detail-breakout {
-    width: min(60rem, 100vw - 2rem);
-    margin-inline: calc(50% - min(30rem, 50vw - 1rem));
-  }
-
+/* Lyrics beside media: wide viewports or desktop-class pointers (narrow desktop windows). */
+@media (min-width: 900px), ((hover: hover) and (pointer: fine)) {
   .song-detail-split--two-col {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -788,6 +779,16 @@
     grid-column: 1;
     grid-row: 1;
     min-width: 0;
+    overflow: hidden;
+  }
+
+  .song-detail-split--two-col .song-detail-media--video {
+    max-width: 100%;
+  }
+
+  .song-detail-split--two-col .song-detail-media--video .catalog-video-spotlight,
+  .song-detail-split--two-col .song-detail-media--video .yt-embed-shell {
+    max-width: 100%;
   }
 
   .song-detail-split--two-col .song-detail-split__lyrics-col {
@@ -815,6 +816,41 @@
     flex: 1 1 auto;
     min-height: 0;
     max-height: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .song-detail-breakout {
+    width: min(60rem, 100vw - 2rem);
+    margin-inline: calc(50% - min(30rem, 50vw - 1rem));
+  }
+}
+
+@media (min-width: 900px) {
+  .song-detail-shell-section--breakout {
+    width: min(60rem, 100vw - 2rem);
+    margin-inline: calc(50% - min(30rem, 50vw - 1rem));
+  }
+
+  /* Stacked video below lyrics split: wide divider, narrow embed (matches hero / related). */
+  .song-detail-shell-section--wide-divider {
+    border-top: 0;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  .song-detail-shell-section--wide-divider::before {
+    content: '';
+    display: block;
+    width: min(60rem, 100vw - 2rem);
+    margin-inline: calc(50% - min(30rem, 50vw - 1rem));
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.35rem;
+  }
+
+  .song-detail-breakout {
+    width: min(60rem, 100vw - 2rem);
+    margin-inline: calc(50% - min(30rem, 50vw - 1rem));
   }
 
   .song-detail-hero:not(.song-detail-hero--lyrics-only) {

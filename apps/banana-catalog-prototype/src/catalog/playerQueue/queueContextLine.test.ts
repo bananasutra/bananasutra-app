@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { emptyTracksFilterState } from '../types'
-import { queueContextLine, queueResumeContextLine } from './queueContextLine'
+import { queueContextLine, queueResumeContextLine, tracksFilterCollectionLabel } from './queueContextLine'
 import type { PlayerQueueState, PlayableTrack } from './types'
 
 const baseTrack: PlayableTrack = {
@@ -39,7 +39,7 @@ test('queueContextLine formats tracks_filter with sutra and genre', () => {
       position: 1,
     }),
   )
-  assert.equal(line, 'Playing track 2 of 2 from KNOWsutra · FOLK')
+  assert.equal(line, 'Playing top track 2 of 2 from KNOWsutra · FOLK')
 })
 
 test('queueContextLine formats song_variants', () => {
@@ -50,7 +50,32 @@ test('queueContextLine formats song_variants', () => {
       position: 1,
     }),
   )
-  assert.equal(line, 'Playing track 2 of 4 from Tell the truth')
+  assert.equal(line, 'Playing song top track 2 of 4')
+})
+
+test('tracksFilterCollectionLabel uses facet values and search', () => {
+  const filters = emptyTracksFilterState()
+  filters.sutra = new Set(['KNOW'])
+  filters.mood = new Set(['KINDLY'])
+  assert.equal(tracksFilterCollectionLabel(filters, 'banana'), 'search “banana” · KNOWsutra · KINDLY')
+  assert.equal(tracksFilterCollectionLabel(emptyTracksFilterState(), ''), '')
+})
+
+test('tracksFilterCollectionLabel does not double sutra suffix', () => {
+  const filters = emptyTracksFilterState()
+  filters.sutra = new Set(['SHOWsutra'])
+  assert.equal(tracksFilterCollectionLabel(filters, ''), 'SHOWsutra')
+})
+
+test('queueContextLine omits from clause when tracks are unfiltered', () => {
+  const line = queueContextLine(
+    state({
+      source: { type: 'tracks_filter', filters: emptyTracksFilterState(), find: '', sort: 'likes' },
+      tracks: [baseTrack],
+      position: 0,
+    }),
+  )
+  assert.equal(line, 'Playing top track 1 of 1')
 })
 
 test('queueContextLine formats songbook', () => {
@@ -61,7 +86,7 @@ test('queueContextLine formats songbook', () => {
       position: 0,
     }),
   )
-  assert.equal(line, 'Playing from Best of KNOWsutra')
+  assert.equal(line, 'Playing top track 1 of 1 from Best of KNOWsutra')
 })
 
 test('queueContextLine uses lyrics_extract for single track', () => {

@@ -3,12 +3,36 @@
  * Under 50 chars where possible; no em-dashes per voice guide.
  */
 
+import type { TracksFilterState } from '../types'
+import { TRACKS_BROWSER_FACET_ORDER } from '../catalogFacetConfig'
 import type { PlayerQueueSource, PlayerQueueState, PlayableTrack } from './types'
 import { currentQueueTrack } from './types'
 
-function firstSetValue(set: Set<string> | undefined): string | undefined {
-  if (!set?.size) return undefined
-  return set.values().next().value
+function sutraFilterLabel(value: string): string {
+  const trimmed = value.trim()
+  if (!trimmed) return ''
+  return /sutra$/i.test(trimmed) ? trimmed : `${trimmed}sutra`
+}
+
+function tracksFilterHasContext(filters: TracksFilterState, find: string): boolean {
+  if (find.trim()) return true
+  return TRACKS_BROWSER_FACET_ORDER.some((key) => filters[key].size > 0)
+}
+
+export function tracksFilterCollectionLabel(filters: TracksFilterState, find: string): string {
+  const parts: string[] = []
+  const findTrim = find.trim()
+  if (findTrim) parts.push(`search “${findTrim}”`)
+
+  for (const key of TRACKS_BROWSER_FACET_ORDER) {
+    for (const value of filters[key]) {
+      parts.push(key === 'sutra' ? sutraFilterLabel(value) : value)
+    }
+  }
+
+  if (parts.length === 0) return ''
+  if (parts.length <= 3) return parts.join(' · ')
+  return `${parts.length} filters`
 }
 
 function tracksFilterContextLine(
@@ -17,15 +41,14 @@ function tracksFilterContextLine(
   total: number,
 ): string {
   const n = position + 1
-  if (source.collection_name?.trim()) {
-    return `Playing track ${n} of ${total} from ${source.collection_name.trim()}`
+  if (!tracksFilterHasContext(source.filters, source.find) && !source.collection_name?.trim()) {
+    return `Playing top track ${n} of ${total}`
   }
-  const sutra = firstSetValue(source.filters.sutra)
-  const genre = firstSetValue(source.filters.primary_genre)
-  if (sutra && genre) return `Playing track ${n} of ${total} from ${sutra}sutra · ${genre}`
-  if (sutra) return `Playing track ${n} of ${total} from ${sutra}sutra`
-  if (genre) return `Playing track ${n} of ${total} from ${genre}`
-  return `Playing track ${n} of ${total} from filtered tracks`
+  const collection =
+    source.collection_name?.trim() || tracksFilterCollectionLabel(source.filters, source.find)
+  return collection
+    ? `Playing top track ${n} of ${total} from ${collection}`
+    : `Playing top track ${n} of ${total}`
 }
 
 function singleTrackContextLine(track: PlayableTrack): string {
@@ -54,11 +77,11 @@ export function queueContextLine(state: PlayerQueueState): string {
     case 'tracks_filter':
       return tracksFilterContextLine(source, position, total)
     case 'songbook':
-      return `Playing from ${source.songbook_name}`
+      return `Playing top track ${position + 1} of ${total} from ${source.songbook_name}`
     case 'song_variants':
-      return `Playing track ${position + 1} of ${total} from ${source.song_title}`
+      return `Playing song top track ${position + 1} of ${total}`
     case 'listen_lp':
-      return `Playing track ${position + 1} of ${total} from top tracks`
+      return `Playing top track ${position + 1} of ${total}`
     default:
       return singleTrackContextLine(current)
   }

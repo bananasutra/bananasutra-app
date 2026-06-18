@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react'
+import type { PersistentScPlayerApi } from '../persistentPlayer/persistentScPlayerContext'
+import { requestPersistentScLoad } from '../persistentPlayer/persistentScBootstrap'
 import type { PlaybackIntent } from '../catalogAnalytics'
-import { PLAY_ALL_DESKTOP_MEDIA_QUERY } from '../playAllPlatform'
+import { isPlayAllDesktopDevice } from '../playAllPlatform'
 import { bindSoundCloudWidgetPlayback } from '../soundCloudWidgetPlayback'
 import type { SoundCloudWidget } from '../soundcloudWidgetApi'
 import type { PagePlayerQueueAnalytics } from './pagePlayerQueueAnalytics'
@@ -16,24 +18,21 @@ import type {
 
 export type PagePlayerQueueConfig = {
   selectionMode: PlayableTrackSelectionMode
-  /** Live queue list (filtered tracks or in-app song variants). */
   getQueue: () => readonly PlayableTrack[]
   getCurrentKey: () => string | null
-  widgetRef: React.MutableRefObject<SoundCloudWidget | null>
+  widgetRef: MutableRefObject<SoundCloudWidget | null>
   analytics: PagePlayerQueueAnalytics
   buildPlayAllSource: () => Exclude<PlayerQueueSource, { type: 'single' }>
-  /** Embed remount / selection side effects owned by the page. */
   onPlayTrack: (
     track: PlayableTrack,
     opts: { intent: PlaybackIntent; keepPlayAll: boolean; fromPlayAllStart?: boolean },
   ) => void
-  /** TracksPage: expand infinite scroll + scroll active row into view. */
   onAdvanceToIndex?: (index: number) => void
-  /** TracksPage: reset visible slice when starting play all. */
   onStartPlayAll?: () => void
-  /** TracksPage: keep scAutoplay true when resuming from pause. */
   onResume?: () => void
 }
+
+export type PagePlayerQueueRegistration = Omit<PagePlayerQueueConfig, 'widgetRef'>
 
 function findTrackIndex(queue: readonly PlayableTrack[], key: string | null, mode: PlayableTrackSelectionMode): number {
   if (!key) return -1
@@ -44,34 +43,46 @@ export type UsePagePlayerQueueResult = PlayerQueueContextValue & {
   bindWidgetOnLoad: (wrap: HTMLElement | null) => void
   /** Clear play-all session without stop analytics (e.g. list became empty). */
   resetSession: () => void
+  /** Wire FINISH / playing sync on the app-root persistent iframe (desktop W-025). */
+  wirePersistentPlayer: (handlers: {
+    setOnFinish: (handler: (() => void) | null) => void
+    setOnPlayingChange: (handler: ((playing: boolean) => void) | null) => void
+  }) => void
 }
 
-export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayerQueueResult {
-  const {
-    selectionMode,
-    getQueue,
-    getCurrentKey,
-    widgetRef,
-    analytics,
-    onPlayTrack,
-    onAdvanceToIndex,
-    onStartPlayAll,
-    onResume,
-  } = config
+export function usePagePlayerQueue(
+  registrationRef: MutableRefObject<PagePlayerQueueRegistration>,
+  widgetRef: MutableRefObject<SoundCloudWidget | null>,
+  persistentApiRef: MutableRefObject<PersistentScPlayerApi | null>,
+  usePersistentPlayback: boolean,
+): UsePagePlayerQueueResult {
+  const configRef = useRef<PagePlayerQueueConfig>({ ...registrationRef.current, widgetRef })
 
-  const configRef = useRef(config)
-  useEffect(() => {
-    configRef.current = config
-  }, [config])
+  useLayoutEffect(() => {
+    configRef.current = { ...registrationRef.current, widgetRef }
+  })
 
   const [source, setSource] = useState<PlayerQueueSource | null>(null)
   const [playAllActive, setPlayAllActive] = useState(false)
   const [playing, setPlaying] = useState(false)
+  const [sessionTracks, setSessionTracks] = useState<readonly PlayableTrack[]>([])
+  const [activeTrackKey, setActiveTrackKey] = useState<string | null>(null)
   const playAllActiveRef = useRef(false)
   const playingRef = useRef(false)
   const playbackIntentRef = useRef<PlaybackIntent>('user_pick')
   const advanceRef = useRef<() => void>(() => {})
   const pendingGesturePlayRef = useRef(false)
+
+  const resolveQueue = useCallback((): readonly PlayableTrack[] => {
+    if (sessionTracks.length > 0 && (playAllActiveRef.current || source != null)) {
+      return sessionTracks
+    }
+    return configRef.current.getQueue()
+  }, [source])
+
+  const resolveCurrentKey = useCallback((): string | null => {
+    return activeTrackKey ?? configRef.current.getCurrentKey()
+  }, [activeTrackKey])
 
   useEffect(() => {
     playAllActiveRef.current = playAllActive
@@ -82,24 +93,48 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
 
   const pause = useCallback(() => {
     try {
-      widgetRef.current?.pause()
+      if (usePersistentPlayback) {
+        persistentApiRef.current?.widgetRef.current?.pause()
+      } else {
+        widgetRef.current?.pause()
+      }
     } catch {
       // Ignore widget pause failures and keep UI state responsive.
     }
     setPlaying(false)
-  }, [widgetRef])
+  }, [persistentApiRef, usePersistentPlayback, widgetRef])
 
   const resume = useCallback(() => {
     try {
-      widgetRef.current?.play()
-      onResume?.()
+      if (usePersistentPlayback) {
+        const api = persistentApiRef.current
+        const key = resolveCurrentKey()
+        const queue = resolveQueue()
+        const idx = findTrackIndex(queue, key, configRef.current.selectionMode)
+        const track = idx >= 0 ? queue[idx] : null
+        const url = track?.sc_url.trim() ?? ''
+        if (url) {
+          api?.loadTrack(url, { autoPlay: true })
+        } else {
+          api?.syncPlayInGesture()
+        }
+        setPlaying(true)
+      } else {
+        widgetRef.current?.play()
+        setPlaying(true)
+      }
+      configRef.current.onResume?.()
     } catch {
       // Ignore widget play failures.
     }
-  }, [widgetRef, onResume])
+  }, [persistentApiRef, resolveCurrentKey, resolveQueue, usePersistentPlayback, widgetRef])
 
   /** Safari: widget.play() must run inside the user-gesture call stack (Play All start). */
   const syncPlayInGesture = useCallback(() => {
+    if (usePersistentPlayback) {
+      persistentApiRef.current?.syncPlayInGesture()
+      return
+    }
     void import('../soundcloudWidgetApi').then(({ loadSoundCloudWidgetApi }) => loadSoundCloudWidgetApi())
     const widget = widgetRef.current
     if (widget) {
@@ -113,72 +148,123 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
       return
     }
     pendingGesturePlayRef.current = true
-  }, [widgetRef])
+  }, [persistentApiRef, usePersistentPlayback, widgetRef])
 
   const pickTrack = useCallback(
     (track: PlayableTrack, options: PickTrackOptions = {}) => {
       const { keepPlayAll = false, fromPlayAllStart = false } = options
-      const key = playableTrackKey(track, selectionMode)
-      const currentKey = getCurrentKey()
+      const { selectionMode: mode, analytics: pageAnalytics, onPlayTrack: playTrackSideEffect } = configRef.current
+      const key = playableTrackKey(track, mode)
+      const currentKey = resolveCurrentKey()
 
       if (fromPlayAllStart) {
         if (!keepPlayAll && playAllActiveRef.current) {
-          const queue = getQueue()
-          const idx = findTrackIndex(queue, currentKey, selectionMode)
-          analytics.onPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
+          const queue = resolveQueue()
+          const idx = findTrackIndex(queue, currentKey, mode)
+          pageAnalytics.onPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
           setPlayAllActive(false)
           playAllActiveRef.current = false
         }
-        analytics.onPlayStarted(track, playbackIntentRef.current, playAllActiveRef.current)
+        pageAnalytics.onPlayStarted(track, playbackIntentRef.current, playAllActiveRef.current)
         playbackIntentRef.current = 'user_pick'
-        onPlayTrack(track, { intent: playbackIntentRef.current, keepPlayAll, fromPlayAllStart: true })
-        syncPlayInGesture()
+        setActiveTrackKey(key)
+        // Engine-owned bootstrap: page onPlayTrack can be stale (frozen Tracks registration)
+        // after route changes — must not rely on it for first iframe mount on Play All.
+        if (usePersistentPlayback) {
+          const scUrl = track.sc_url.trim()
+          if (scUrl) {
+            requestPersistentScLoad(scUrl, { autoPlay: true, remount: true })
+          }
+        }
+        configRef.current.onPlayTrack(track, {
+          intent: playbackIntentRef.current,
+          keepPlayAll,
+          fromPlayAllStart: true,
+        })
+        // Persistent remount bumps iframe async — syncPlayInGesture here races a dying iframe.
+        if (usePersistentPlayback) {
+          setPlaying(true)
+        } else {
+          syncPlayInGesture()
+        }
         return
       }
 
-      if (key && key === currentKey && widgetRef.current) {
-        if (playingRef.current) {
+      if (key && key === currentKey) {
+        const activeWidget = usePersistentPlayback
+          ? persistentApiRef.current?.widgetRef.current
+          : widgetRef.current
+        if (!activeWidget) {
+          if (usePersistentPlayback) {
+            const queue = resolveQueue()
+            const idx = findTrackIndex(queue, key, mode)
+            const queued = idx >= 0 ? queue[idx] : null
+            if (queued) {
+              playTrackSideEffect(queued, {
+                intent: playbackIntentRef.current,
+                keepPlayAll: playAllActiveRef.current,
+              })
+            } else {
+              syncPlayInGesture()
+            }
+            return
+          }
+        } else if (playingRef.current) {
           pause()
           return
+        } else {
+          resume()
+          return
         }
-        resume()
-        return
       }
 
       if (!keepPlayAll && playAllActiveRef.current) {
-        const queue = getQueue()
-        const idx = findTrackIndex(queue, currentKey, selectionMode)
-        analytics.onPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
+        const queue = resolveQueue()
+        const idx = findTrackIndex(queue, currentKey, mode)
+        pageAnalytics.onPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
         setPlayAllActive(false)
         playAllActiveRef.current = false
+        setSessionTracks(configRef.current.getQueue())
       }
 
-      analytics.onPlayStarted(track, playbackIntentRef.current, playAllActiveRef.current)
+      if (!keepPlayAll || !playAllActiveRef.current) {
+        setSessionTracks(configRef.current.getQueue())
+      }
+
+      pageAnalytics.onPlayStarted(track, playbackIntentRef.current, playAllActiveRef.current)
       playbackIntentRef.current = 'user_pick'
-      onPlayTrack(track, { intent: playbackIntentRef.current, keepPlayAll })
+      setActiveTrackKey(key)
+      playTrackSideEffect(track, { intent: playbackIntentRef.current, keepPlayAll })
     },
-    [analytics, getCurrentKey, getQueue, onPlayTrack, pause, resume, selectionMode, syncPlayInGesture, widgetRef],
+    [pause, persistentApiRef, resolveCurrentKey, resolveQueue, resume, syncPlayInGesture, usePersistentPlayback, widgetRef],
   )
 
   const stop = useCallback(() => {
-    const queue = getQueue()
-    const idx = findTrackIndex(queue, getCurrentKey(), selectionMode)
-    analytics.onPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'user_stop')
+    const { analytics: pageAnalytics, selectionMode: mode } = configRef.current
+    const queue = resolveQueue()
+    const idx = findTrackIndex(queue, resolveCurrentKey(), mode)
+    pageAnalytics.onPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'user_stop')
     setPlayAllActive(false)
     playAllActiveRef.current = false
     setSource(null)
+    setSessionTracks([])
+    setActiveTrackKey(null)
+    if (usePersistentPlayback) {
+      persistentApiRef.current?.dismiss()
+    }
     pause()
-  }, [analytics, getCurrentKey, getQueue, pause, selectionMode])
+  }, [pause, persistentApiRef, resolveCurrentKey, resolveQueue, usePersistentPlayback])
 
   const advance = useCallback(() => {
-    const queue = getQueue()
-    const currentKey = getCurrentKey()
+    const { analytics: pageAnalytics, selectionMode: mode, onAdvanceToIndex: scrollToIndex } = configRef.current
+    const queue = resolveQueue()
+    const currentKey = resolveCurrentKey()
     if (!queue.length || !currentKey) {
       setPlayAllActive(false)
       playAllActiveRef.current = false
       return
     }
-    const idx = findTrackIndex(queue, currentKey, selectionMode)
+    const idx = findTrackIndex(queue, currentKey, mode)
     if (idx < 0) {
       setPlayAllActive(false)
       playAllActiveRef.current = false
@@ -186,19 +272,19 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
     }
     const next = queue[idx + 1]
     if (!next) {
-      analytics.onPlayAllStopped(queue.length, queue.length, 'queue_exhausted')
+      pageAnalytics.onPlayAllStopped(queue.length, queue.length, 'queue_exhausted')
       setPlayAllActive(false)
       playAllActiveRef.current = false
       return
     }
     const current = queue[idx]
     if (current) {
-      analytics.onQueueAdvanced(current, next, idx + 2, queue.length)
+      pageAnalytics.onQueueAdvanced(current, next, idx + 2, queue.length)
     }
     playbackIntentRef.current = 'queue_advance'
-    onAdvanceToIndex?.(idx + 1)
+    scrollToIndex?.(idx + 1)
     pickTrack(next, { keepPlayAll: true })
-  }, [analytics, getCurrentKey, getQueue, onAdvanceToIndex, pickTrack, selectionMode])
+  }, [pickTrack, resolveCurrentKey, resolveQueue])
 
   useEffect(() => {
     advanceRef.current = advance
@@ -206,39 +292,41 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
 
   const jump = useCallback(
     (delta: -1 | 1) => {
-      const queue = getQueue()
-      const currentKey = getCurrentKey()
+      const { analytics: pageAnalytics, selectionMode: mode, onAdvanceToIndex: scrollToIndex } = configRef.current
+      const queue = resolveQueue()
+      const currentKey = resolveCurrentKey()
       if (!queue.length || !currentKey) return
-      const idx = findTrackIndex(queue, currentKey, selectionMode)
+      const idx = findTrackIndex(queue, currentKey, mode)
       if (idx < 0) return
       const nextIdx = idx + delta
       if (nextIdx < 0 || nextIdx >= queue.length) return
       const next = queue[nextIdx]
       const current = queue[idx]
       if (current && next) {
-        analytics.onQueueSkipped(current, next, delta === 1 ? 'next' : 'previous', playAllActiveRef.current)
+        pageAnalytics.onQueueSkipped(current, next, delta === 1 ? 'next' : 'previous', playAllActiveRef.current)
       }
       playbackIntentRef.current = 'queue_skip'
-      onAdvanceToIndex?.(nextIdx)
+      scrollToIndex?.(nextIdx)
       pickTrack(next, { keepPlayAll: playAllActiveRef.current })
     },
-    [analytics, getCurrentKey, getQueue, onAdvanceToIndex, pickTrack, selectionMode],
+    [pickTrack, resolveCurrentKey, resolveQueue],
   )
 
   const startPlayAll = useCallback(
     (playAllSource: Exclude<PlayerQueueSource, { type: 'single' }>, tracks: readonly PlayableTrack[]) => {
-      if (!window.matchMedia(PLAY_ALL_DESKTOP_MEDIA_QUERY).matches) return
+      if (!isPlayAllDesktopDevice()) return
       if (!tracks.length) return
+      setSessionTracks(tracks)
       setSource(playAllSource)
-      analytics.onPlayAllStarted(tracks.length)
+      configRef.current.analytics.onPlayAllStarted(tracks.length)
       playbackIntentRef.current = 'play_all_start'
       setPlayAllActive(true)
       playAllActiveRef.current = true
       const first = tracks[0]
       if (first) pickTrack(first, { keepPlayAll: true, fromPlayAllStart: true })
-      onStartPlayAll?.()
+      configRef.current.onStartPlayAll?.()
     },
-    [analytics, onStartPlayAll, pickTrack],
+    [pickTrack],
   )
 
   const actions: PlayerQueueActions = useMemo(
@@ -248,11 +336,11 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
       advance,
       jump,
       jumpTo: (position) => {
-        const queue = getQueue()
+        const queue = resolveQueue()
         const track = queue[position]
         if (!track) return
         playbackIntentRef.current = 'queue_skip'
-        onAdvanceToIndex?.(position)
+        configRef.current.onAdvanceToIndex?.(position)
         pickTrack(track, { keepPlayAll: playAllActiveRef.current })
       },
       pause,
@@ -264,12 +352,12 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
         }
       },
     }),
-    [advance, getQueue, jump, onAdvanceToIndex, pause, pickTrack, resume, startPlayAll, stop],
+    [advance, jump, pause, pickTrack, resolveQueue, resume, startPlayAll, stop],
   )
 
   const state: PlayerQueueState = useMemo(() => {
-    const tracks = getQueue()
-    const position = findTrackIndex(tracks, getCurrentKey(), selectionMode)
+    const tracks = sessionTracks.length > 0 ? sessionTracks : configRef.current.getQueue()
+    const position = findTrackIndex(tracks, resolveCurrentKey(), configRef.current.selectionMode)
     return {
       source,
       tracks,
@@ -278,7 +366,7 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
       currentPositionMs: 0,
       playAllActive,
     }
-  }, [getCurrentKey, getQueue, playAllActive, playing, selectionMode, source])
+  }, [playAllActive, playing, resolveCurrentKey, sessionTracks, source])
 
   const bindWidgetOnLoad = useCallback(
     (wrap: HTMLElement | null) => {
@@ -318,8 +406,27 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
     setPlayAllActive(false)
     playAllActiveRef.current = false
     setSource(null)
+    setSessionTracks([])
+    setActiveTrackKey(null)
     setPlaying(false)
-  }, [])
+    if (usePersistentPlayback) {
+      persistentApiRef.current?.dismiss()
+    }
+  }, [persistentApiRef, usePersistentPlayback])
+
+  const wirePersistentPlayer = useCallback(
+    (handlers: {
+      setOnFinish: (handler: (() => void) | null) => void
+      setOnPlayingChange: (handler: ((playing: boolean) => void) | null) => void
+    }) => {
+      handlers.setOnFinish(() => {
+        if (!playAllActiveRef.current) return
+        advanceRef.current()
+      })
+      handlers.setOnPlayingChange(setPlaying)
+    },
+    [],
+  )
 
   return useMemo(
     () => ({
@@ -327,7 +434,8 @@ export function usePagePlayerQueue(config: PagePlayerQueueConfig): UsePagePlayer
       actions,
       bindWidgetOnLoad,
       resetSession,
+      wirePersistentPlayer,
     }),
-    [actions, bindWidgetOnLoad, resetSession, state],
+    [actions, bindWidgetOnLoad, resetSession, state, wirePersistentPlayer],
   )
 }

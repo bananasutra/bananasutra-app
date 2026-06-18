@@ -1,0 +1,188 @@
+.persistent-player-shell {
+  position: fixed;
+  left: 50%;
+  bottom: 0.65rem;
+  transform: translateX(-50%);
+  width: min(42rem, calc(100vw - 1.25rem));
+  min-width: min(var(--persistent-sc-player-min-width, 480px), calc(100vw - 1.25rem));
+  z-index: 40;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.persistent-player-shell--visible {
+  max-height: 90vh;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.persistent-player-bar {
+  width: 100%;
+  padding: 0.5rem 0.65rem 0.65rem;
+  background: var(--color-bg-panel, #fff);
+  border: 1px solid var(--color-border, #d8d0c4);
+  border-radius: var(--radius-control, 2px);
+  box-shadow: var(--catalog-row-hover-shadow, 0 8px 28px rgb(0 0 0 / 12%));
+  color: var(--color-text-primary, inherit);
+}
+
+.persistent-player-bar__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.65rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+}
+
+.persistent-player-bar__meta {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.persistent-player-bar__context {
+  margin: 0;
+  font-family: var(--font-ui, "Sora", system-ui, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-text-primary, inherit);
+}
+
+.persistent-player-bar__track-meta {
+  margin: 0.12rem 0 0;
+  font-family: var(--font-ui, "Sora", system-ui, sans-serif);
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: var(--color-text-muted, #6b635a);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.persistent-player-bar__sep {
+  color: var(--color-text-muted, #6b635a);
+}
+
+.persistent-player-bar__sutra {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.persistent-player-bar__sutra:hover {
+  text-decoration: underline;
+}
+
+.persistent-player-bar__song-link {
+  color: var(--color-link, #524a40);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.persistent-player-bar__song-link:hover {
+  color: var(--color-link-hover, var(--color-link, #524a40));
+  text-decoration: underline;
+}
+
+.persistent-player-bar__song-label {
+  font-weight: 600;
+  color: var(--color-text-primary, inherit);
+}
+
+.persistent-player-bar__stats {
+  color: var(--color-text-muted, #6b635a);
+}
+
+.persistent-player-bar__actions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.persistent-player-bar__transport {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--color-border, #d8d0c4);
+  border-radius: var(--radius-control, 2px);
+  overflow: hidden;
+  background: var(--color-bg-inset, #f7f3ed);
+}
+
+.persistent-player-bar__transport-btn {
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  padding: 0.3rem 0.45rem;
+  border: 0;
+  border-right: 1px solid var(--color-border, #d8d0c4);
+  background: transparent;
+  color: var(--color-text-primary, inherit);
+  cursor: pointer;
+  font-size: 0.8125rem;
+  line-height: 1;
+}
+
+.persistent-player-bar__transport-btn:last-child {
+  border-right: 0;
+}
+
+.persistent-player-bar__transport-btn:hover:not(:disabled) {
+  background: var(--color-bg-elevated, #fff);
+}
+
+.persistent-player-bar__transport-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.persistent-player-bar__transport-btn--play {
+  min-width: 2.35rem;
+  font-size: 0.875rem;
+}
+
+.persistent-player-bar__stop-btn {
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--color-border, #d8d0c4);
+  border-radius: var(--radius-control, 2px);
+  background: var(--color-bg-inset, #f7f3ed);
+  color: var(--color-text-primary, inherit);
+  cursor: pointer;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.persistent-player-bar__stop-btn:hover {
+  background: var(--color-bg-elevated, #fff);
+}
+
+.persistent-player-bar__embed {
+  border-radius: var(--radius-control, 2px);
+  overflow: hidden;
+  background: var(--color-bg-inset, #f7f3ed);
+}
+
+.persistent-player-bar__embed .persistent-sc-player {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.persistent-player-bar__embed .persistent-sc-player__iframe {
+  display: block;
+  border: 0;
+  width: 100%;
+  min-width: var(--persistent-sc-player-min-width, 480px);
+}
