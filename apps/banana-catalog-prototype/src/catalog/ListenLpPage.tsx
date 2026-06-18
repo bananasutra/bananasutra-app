@@ -204,7 +204,7 @@ export function ListenLpPage() {
               aria-labelledby="listen-lp-featured-heading"
             >
               <h2 id="listen-lp-featured-heading" className="catalog-section-title">
-                Discover a songbook
+                Songbook spotlight
               </h2>
               <p className="catalog-lp-section-intro">
                 A curated playlist, organized around a single theme. Full lyrics on the song page.
@@ -231,7 +231,7 @@ export function ListenLpPage() {
             aria-labelledby="listen-lp-songbooks-block-heading"
           >
             <h2 id="listen-lp-songbooks-block-heading" className="catalog-section-title">
-              Explore songbooks
+              Explore all songbooks
             </h2>
             <p className="catalog-lp-section-intro listen-lp__songbooks-block-intro">
               Pick one guiding question or one genre. All matching songbooks show in the grid below.
@@ -276,7 +276,7 @@ export function ListenLpPage() {
             ) : null}
 
             <Link className="catalog-section-cta" to="/songbooks/">
-              All songbooks →
+              Explore all songbooks →
             </Link>
           </ScrollRevealSection>
 

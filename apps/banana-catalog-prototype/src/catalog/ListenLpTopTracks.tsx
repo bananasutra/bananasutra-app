@@ -349,7 +349,7 @@ export function ListenLpTopTracks({
         </h2>
         <p className="listen-lp__empty">No popular tracks in the catalog right now.</p>
         <Link className="catalog-section-cta" to="/tracks/">
-          Browse all tracks →
+          Listen to all top tracks →
         </Link>
       </ScrollRevealSection>
     )
@@ -606,7 +606,7 @@ export function ListenLpTopTracks({
       </div>
 
       <Link className="catalog-section-cta" to="/tracks/">
-        Browse all tracks →
+        Listen to all top tracks →
       </Link>
     </ScrollRevealSection>
   )
