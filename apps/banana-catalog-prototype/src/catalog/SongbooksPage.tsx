@@ -6,6 +6,8 @@ import {
   type CatalogFilterBarFacetGroup,
 } from './CatalogFilterBar'
 import { linkFacetChip } from './catalogFilterBarBuilders'
+import { sutraClassName, sutraFilterChipClassName } from './sutraTheme'
+import { sutraQuestionFromDisplay } from './sutraContext'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
@@ -423,9 +425,14 @@ export function SongbooksPage() {
   if (filters.sutra) {
     songbookActivePills.push({
       id: 'sutra',
-      label: <>Sutra: {filters.sutra}</>,
+      label: (
+        <>
+          Sutra:{' '}
+          <span className={`catalog-facet-sutra-name ${sutraClassName(filters.sutra)}`}>{filters.sutra}</span>
+        </>
+      ),
       href: hrefSongbooks({ sutra: '' }, filters),
-      title: 'Remove sutra filter',
+      title: `Remove sutra filter · ${sutraQuestionFromDisplay(filters.sutra)}`,
     })
   }
   if (filters.topic) {
@@ -469,12 +476,15 @@ export function SongbooksPage() {
         const disabled = !active && option.count === 0
         return linkFacetChip({
           id: `sutra-${option.value}`,
-          label: option.value,
+          label: (
+            <span className={`catalog-facet-sutra-name ${sutraClassName(option.value)}`}>{option.value}</span>
+          ),
           href: hrefSongbooks({ sutra: active ? '' : option.value }, filters),
           count: option.count,
           active,
           disabled,
-          title: `${option.count} songbooks`,
+          className: sutraFilterChipClassName(option.value),
+          title: `${sutraQuestionFromDisplay(option.value)} (${option.count} songbooks)`,
         })
       }),
     },

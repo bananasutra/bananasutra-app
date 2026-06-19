@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { CatalogFilterBarChipOption } from './CatalogFilterBar'
-import { sutraClassName } from './sutraTheme'
+import { sutraClassName, sutraFilterChipClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
 import type { FacetEntry } from './types'
 
@@ -26,6 +26,7 @@ export function facetEntriesToToggleChips(args: {
       count,
       active,
       disabled,
+      className: args.isSutra ? sutraFilterChipClassName(value) : undefined,
       onClick: () => args.onToggle(value),
       title: args.isSutra
         ? `${sutraQuestionFromDisplay(value)} (${count} ${args.countLabel})`
@@ -70,6 +71,7 @@ export function linkFacetChip(args: {
   active: boolean
   disabled?: boolean
   title?: string
+  className?: string
 }): CatalogFilterBarChipOption {
   return {
     id: args.id,
@@ -79,5 +81,6 @@ export function linkFacetChip(args: {
     active: args.active,
     disabled: args.disabled,
     title: args.title,
+    className: args.className,
   }
 }

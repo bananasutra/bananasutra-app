@@ -285,6 +285,172 @@ a.catalog-filter-bar__chip.is-active:visited {
   opacity: 0.85;
 }
 
+/* PL-02 — sutra facet chips: soft tint + left rail at rest; solid sutra fill when active. */
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra {
+  border-left: 3px solid transparent;
+  padding-left: calc(0.65rem - 3px);
+}
+
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-know {
+  background: color-mix(in srgb, var(--sutra-know) 16%, var(--color-bg-panel));
+  border-left-color: var(--sutra-know);
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-blow {
+  background: color-mix(in srgb, var(--sutra-blow) 16%, var(--color-bg-panel));
+  border-left-color: var(--sutra-blow);
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-show {
+  background: color-mix(in srgb, var(--sutra-show) 16%, var(--color-bg-panel));
+  border-left-color: var(--sutra-show);
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-grow {
+  background: color-mix(in srgb, var(--sutra-grow) 16%, var(--color-bg-panel));
+  border-left-color: var(--sutra-grow);
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-flow {
+  background: color-mix(in srgb, var(--sutra-flow) 16%, var(--color-bg-panel));
+  border-left-color: var(--sutra-flow);
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-glow {
+  background: color-mix(in srgb, var(--sutra-glow) 16%, var(--color-bg-panel));
+  border-left-color: var(--sutra-glow);
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-bow {
+  background: color-mix(in srgb, var(--sutra-bow) 16%, var(--color-bg-panel));
+  border-left-color: var(--sutra-bow);
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-quack {
+  background: color-mix(in srgb, var(--sutra-quack) 16%, var(--color-bg-panel));
+  border-left-color: var(--sutra-quack);
+}
+
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-know {
+  background: var(--sutra-know);
+  border-left-color: color-mix(in srgb, var(--sutra-know) 72%, #000);
+  color: #fff;
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-blow {
+  background: var(--sutra-blow);
+  border-left-color: color-mix(in srgb, var(--sutra-blow) 72%, #000);
+  color: #fff;
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-show {
+  background: var(--sutra-show);
+  border-left-color: color-mix(in srgb, var(--sutra-show) 72%, #000);
+  color: #fff;
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-grow {
+  background: var(--sutra-grow);
+  border-left-color: color-mix(in srgb, var(--sutra-grow) 72%, #000);
+  color: #fff;
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-flow {
+  background: var(--sutra-flow);
+  border-left-color: color-mix(in srgb, var(--sutra-flow) 72%, #000);
+  color: #fff;
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-glow {
+  background: var(--sutra-glow);
+  border-left-color: color-mix(in srgb, var(--sutra-glow) 72%, #000);
+  color: #fff;
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-bow {
+  background: var(--sutra-bow);
+  border-left-color: color-mix(in srgb, var(--sutra-bow) 72%, #000);
+  color: #fff;
+}
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-quack {
+  background: var(--sutra-quack);
+  border-left-color: color-mix(in srgb, var(--sutra-quack) 72%, #000);
+  color: #fff;
+}
+
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active .catalog-facet-sutra-name,
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active .catalog-facet-sutra-name.is-sutra-know,
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active .catalog-facet-sutra-name.is-sutra-blow,
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active .catalog-facet-sutra-name.is-sutra-show,
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active .catalog-facet-sutra-name.is-sutra-grow,
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active .catalog-facet-sutra-name.is-sutra-flow,
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active .catalog-facet-sutra-name.is-sutra-glow,
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active .catalog-facet-sutra-name.is-sutra-bow,
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active .catalog-facet-sutra-name.is-sutra-quack {
+  color: inherit;
+}
+
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active .catalog-filter-bar__chip-count {
+  color: inherit;
+  opacity: 0.88;
+}
+
+.catalog-filter-bar__pill .catalog-facet-sutra-name,
+.catalog-filter-bar__pill .catalog-facet-sutra-name.is-sutra-know,
+.catalog-filter-bar__pill .catalog-facet-sutra-name.is-sutra-blow,
+.catalog-filter-bar__pill .catalog-facet-sutra-name.is-sutra-show,
+.catalog-filter-bar__pill .catalog-facet-sutra-name.is-sutra-grow,
+.catalog-filter-bar__pill .catalog-facet-sutra-name.is-sutra-flow,
+.catalog-filter-bar__pill .catalog-facet-sutra-name.is-sutra-glow,
+.catalog-filter-bar__pill .catalog-facet-sutra-name.is-sutra-bow,
+.catalog-filter-bar__pill .catalog-facet-sutra-name.is-sutra-quack {
+  color: inherit;
+}
+
+@media (hover: hover) {
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-know:hover {
+    background: color-mix(in srgb, var(--sutra-know) 24%, var(--color-bg-panel));
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-blow:hover {
+    background: color-mix(in srgb, var(--sutra-blow) 24%, var(--color-bg-panel));
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-show:hover {
+    background: color-mix(in srgb, var(--sutra-show) 24%, var(--color-bg-panel));
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-grow:hover {
+    background: color-mix(in srgb, var(--sutra-grow) 24%, var(--color-bg-panel));
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-flow:hover {
+    background: color-mix(in srgb, var(--sutra-flow) 24%, var(--color-bg-panel));
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-glow:hover {
+    background: color-mix(in srgb, var(--sutra-glow) 24%, var(--color-bg-panel));
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-bow:hover {
+    background: color-mix(in srgb, var(--sutra-bow) 24%, var(--color-bg-panel));
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:not(.is-active):not(.is-disabled).catalog-filter-bar__chip-sutra-quack:hover {
+    background: color-mix(in srgb, var(--sutra-quack) 24%, var(--color-bg-panel));
+  }
+
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-know:hover {
+    background: color-mix(in srgb, var(--sutra-know) 88%, #000);
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-blow:hover {
+    background: color-mix(in srgb, var(--sutra-blow) 88%, #000);
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-show:hover {
+    background: color-mix(in srgb, var(--sutra-show) 88%, #000);
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-grow:hover {
+    background: color-mix(in srgb, var(--sutra-grow) 88%, #000);
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-flow:hover {
+    background: color-mix(in srgb, var(--sutra-flow) 88%, #000);
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-glow:hover {
+    background: color-mix(in srgb, var(--sutra-glow) 88%, #000);
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-bow:hover {
+    background: color-mix(in srgb, var(--sutra-bow) 88%, #000);
+  }
+  .catalog-filter-bar__chip.catalog-filter-bar__chip-sutra.is-active.catalog-filter-bar__chip-sutra-quack:hover {
+    background: color-mix(in srgb, var(--sutra-quack) 88%, #000);
+  }
+}
+
+.catalog-filter-bar__chip.catalog-filter-bar__chip-sutra:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 .catalog-filter-bar__chip--question {
   white-space: normal;
   max-width: 11rem;
