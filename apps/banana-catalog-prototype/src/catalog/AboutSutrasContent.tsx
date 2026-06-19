@@ -79,7 +79,7 @@ export function AboutSutrasContent() {
   const pageMeta = renderPageMeta({
     title: 'The Seven Sutras',
     description: 'Explore the seven BANANASUTRA sutras, the questions behind them, and the songs they organize.',
-    path: canonicalPathForRoute('/about/sutras'),
+    path: canonicalPathForRoute('/sutras'),
   })
 
   const sutraStats = useMemo(() => {

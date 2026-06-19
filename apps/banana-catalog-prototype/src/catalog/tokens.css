@@ -6,8 +6,8 @@
   --font-body: "Sora", "Sora Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-ui: "Sora", "Sora Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Content column cap — header, footer, `.catalog-layout-shell` (see desktop override below). */
-  --catalog-layout-max-width: 1400px;
+  /* Content column cap — header, footer, `.catalog-layout-shell` (D-035: ~48rem / v3-lp --lp-column). */
+  --catalog-layout-max-width: 48rem;
 
   /* Breadcrumbs — typography + rhythm (CatalogBreadcrumbs.css consumes these only). */
   --catalog-breadcrumb-font-weight: 600;
@@ -23,7 +23,7 @@
   --catalog-breadcrumb-link-border: var(--color-border);
   --catalog-breadcrumb-focus-outline-width: 2px;
   --catalog-breadcrumb-focus-outline-offset: 2px;
-  --catalog-breadcrumb-focus-radius: 3px;
+  --catalog-breadcrumb-focus-radius: var(--radius-control);
   /* ≤560px */
   --catalog-breadcrumb-gap-sm: 0.28rem;
   --catalog-breadcrumb-margin-bottom-sm: 0.85rem;
@@ -48,6 +48,17 @@
   --catalog-page-lede-line-height: 1.65;
   --catalog-page-lede-color: var(--color-text-muted);
 
+  /* Section subcopy under h2 — smaller than page intro lede. */
+  --catalog-section-intro-font-size: 0.82rem;
+  --catalog-section-intro-line-height: 1.5;
+  --catalog-section-intro-color: var(--color-text-muted);
+  --catalog-section-intro-gap-after-title: 0.3rem;
+  --catalog-section-intro-gap-after: 0.55rem;
+
+  /* Outbound embed links (Open on YouTube ↗, Open on SoundCloud ↗) — one rhythm everywhere. */
+  --catalog-media-outbound-gap-before: 0.35rem;
+  --catalog-media-outbound-link-size: 0.68rem;
+
   /*
    * Shell pages (About, Songbooks, style guide): rules between intro ↔ jump nav, section rhythm,
    * and a stronger small-caps label than `.catalog-section-title` / homepage hero kicker.
@@ -59,10 +70,20 @@
   --catalog-shell-section-label-tracking: 0.08em;
   --catalog-shell-section-label-color: var(--color-text-primary);
 
-  /* Featured full-width video blocks — title must read below section `.catalog-section-title` (h2). */
-  --catalog-featured-embed-title-size: clamp(0.98rem, 2.1vw, 1.12rem);
-  --catalog-featured-embed-title-weight: 600;
+  /*
+   * Featured embed copy below player (watch LP cinema, spotlight hero, sutra detail, /videos).
+   * Smaller than section h2 — one rhythm sitewide.
+   */
+  --catalog-featured-embed-copy-gap-top: 0.55rem;
+  --catalog-featured-embed-title-size: 0.82rem;
+  --catalog-featured-embed-title-weight: 700;
   --catalog-featured-embed-title-line-height: 1.35;
+  --catalog-featured-embed-meta-size: 0.62rem;
+  --catalog-featured-embed-meta-line-height: 1.4;
+  --catalog-featured-embed-desc-size: 0.68rem;
+  --catalog-featured-embed-desc-line-height: 1.45;
+  --catalog-featured-embed-thumb-sutra-size: 0.58rem;
+  --catalog-featured-embed-thumb-duration-size: 0.56rem;
 
   /*
    * Section CTA — right-aligned, uppercase Sora, underline+arrow.
@@ -74,7 +95,7 @@
   --catalog-section-cta-color: var(--color-text-muted);
   --catalog-section-cta-hover-color: var(--color-link-hover);
 
-  /* Optional lede / subhead line-length cap (use `.catalog-page-shell__measure` on the element). */
+  /* Legacy token — 48rem shell caps width; `.catalog-page-shell__measure` no longer narrows copy. */
   --catalog-shell-lede-measure: 62ch;
   /*
    * Jump nav band: distance from lede to top rule, from each rule to the link row — keep equal
@@ -118,10 +139,19 @@
   --catalog-tab-active-rule-width: 3px;
   --catalog-tab-active-rule-color: var(--color-text-strong);
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-pill: 999px;
+  /*
+   * Corner radius — nav chrome (2px) is the default everywhere.
+   * Prefer these tokens; page-level overrides only for documented exceptions.
+   */
+  --radius-control: 2px;
+  --radius-thumb: var(--radius-control);
+  --radius-surface: var(--radius-control);
+  --catalog-radius-card: var(--radius-control);
+  /* Legacy aliases — map to control so existing var(--radius-sm) call sites stay flat. */
+  --radius-sm: var(--radius-control);
+  --radius-md: var(--radius-control);
+  --radius-lg: var(--radius-control);
+  --radius-pill: var(--radius-control);
 
   --space-1: 4px;
   --space-2: 8px;
@@ -141,6 +171,11 @@
   --dur-fast: 150ms;
   --dur-base: 180ms;
   --dur-slow: 250ms;
+
+  /* LEARN LP chromatic accent — tracks KNOWsutra; FAQ, mood entry, quote card. */
+  --learn-accent: var(--sutra-know);
+  /* Hub tile hover/active — warm link tone in dark; KNOW accent in light. */
+  --learn-tile-accent: var(--learn-accent);
 
   --sutra-know: #2f4f66;
   --sutra-blow: #6b2f29;
@@ -265,14 +300,7 @@
   --sutra-glow: #d7b175;
   --sutra-bow: #bda4c5;
   --sutra-quack: #d79a7e;
+
+  --learn-tile-accent: var(--color-link);
 }
 
-/*
- * Below ~1200px the 1400px token almost never binds, so line length stays as on tablet/phone.
- * From laptop/desktop widths up, use a slightly narrower column for readability.
- */
-@media (min-width: 1200px) {
-  :root {
-    --catalog-layout-max-width: 1180px;
-  }
-}

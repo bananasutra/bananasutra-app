@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
-  DISCOVERY_FACET_HELP as FACET_HELP,
   DISCOVERY_FACET_LABELS as FACET_LABELS,
   CATALOG_BROWSER_FACET_ORDER as FACET_GROUPS,
 } from './catalogFacetConfig'
@@ -14,8 +13,11 @@ import { songMatchesFilters, sortSongs } from './filterSongs'
 import { songCatalogPath } from './songPaths'
 import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
-import { CatalogPager } from './CatalogPager'
-import './CatalogPager.css'
+import { CatalogInfiniteScrollFooter } from './CatalogInfiniteScrollFooter'
+import {
+  catalogInfiniteScrollStorageKey,
+  useCatalogInfiniteScroll,
+} from './useCatalogInfiniteScroll'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { coverImageUrl } from '../seo/imageUrl'
@@ -24,19 +26,24 @@ import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { searchParamsFromSearchString } from './urlSearchParams'
-import { parseSort, readCatalogBrowsePage } from './urlState'
+import { parseSort, readCatalogBrowsePage, serializeBrowseQuery } from './urlState'
+import { buildWordsPath, normalizeSortForWords, readWordsStateFromUrl } from './wordsUrlState'
 import {
   songMatchesWordsBucket,
   songOnWordsSurface,
   wordsCardStoryBadge,
   type WordsStoryBucket,
 } from './wordsStory'
-import { buildWordsPath, normalizeSortForWords, readWordsStateFromUrl } from './wordsUrlState'
+import {
+  CatalogFilterBar,
+  type CatalogFilterBarActivePill,
+  type CatalogFilterBarFacetGroup,
+} from './CatalogFilterBar'
+import { facetEntriesToToggleChips } from './catalogFilterBarBuilders'
 import './CatalogApp.css'
 import './WordsPage.css'
 
 const FIND_DEBOUNCE_MS = 350
-const PAGE_SIZE = 30
 
 function toggleSetMember(set: Set<string>, value: string): Set<string> {
   const next = new Set(set)
@@ -86,15 +93,14 @@ export function WordsPage() {
     [location.search],
   )
   const urlBrowsePage = useMemo(() => readCatalogBrowsePage(location.search), [location.search])
+  const [legacyPageSeed] = useState(() => urlBrowsePage)
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const [sort, setSort] = useState<SortMode>(() => readWordsStateFromUrl().sort)
   const [filters, setFilters] = useState<FilterState>(() => readWordsStateFromUrl().filters)
   const [bucket, setBucket] = useState<WordsStoryBucket>(() => readWordsStateFromUrl().bucket)
   const [findDraft, setFindDraft] = useState(findQuery)
-  const [filtersOpen, setFiltersOpen] = useState(() =>
-    typeof window === 'undefined' ? true : window.innerWidth >= 900,
-  )
+  const [filterBarExpanded, setFilterBarExpanded] = useState(false)
 
   const sortRef = useRef(sort)
   const filtersRef = useRef(filters)
@@ -110,16 +116,6 @@ export function WordsPage() {
     description: 'Read BANANASUTRA lyrics. Searchable song words, meaning first.',
     path: canonicalPathForRoute('/words'),
   })
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 899px)')
-    const syncFiltersToViewport = () => {
-      if (mq.matches) setFiltersOpen(false)
-    }
-    syncFiltersToViewport()
-    mq.addEventListener('change', syncFiltersToViewport)
-    return () => mq.removeEventListener('change', syncFiltersToViewport)
-  }, [])
 
   const wordsPool = useMemo(() => {
     if (!songCatalogRows) return []
@@ -236,23 +232,28 @@ export function WordsPage() {
     return sortSongs(list, sort)
   }, [wordsPool, filters, bucket, sort, findQuery])
 
-  const pageCount = Math.max(1, Math.ceil(filteredSorted.length / PAGE_SIZE))
-  const safePage = Math.min(urlBrowsePage, pageCount)
-  const pagedWords = useMemo(
-    () => filteredSorted.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
-    [filteredSorted, safePage],
-  )
+  const wordsScrollResetKey = useMemo(() => {
+    const base = serializeBrowseQuery(sort, filters, findQuery || undefined, 'all', 1)
+    return bucket === 'all' ? base : `${base}|wb=${bucket}`
+  }, [sort, filters, findQuery, bucket])
+
+  const {
+    visibleItems: pagedWords,
+    visibleCount: wordsVisibleCount,
+    totalCount: wordsTotalCount,
+    hasMore: wordsHasMore,
+    loadMore: loadMoreWords,
+  } = useCatalogInfiniteScroll({
+    items: filteredSorted,
+    resetKey: wordsScrollResetKey,
+    storageKey: catalogInfiniteScrollStorageKey('/words', wordsScrollResetKey),
+    legacyPage: legacyPageSeed,
+  })
 
   useEffect(() => {
-    if (urlBrowsePage !== safePage) {
-      navigate(buildWordsPath(sort, filters, findQuery || undefined, bucket, safePage), { replace: true })
-    }
-  }, [urlBrowsePage, safePage, sort, filters, findQuery, bucket, navigate])
-
-  const pagerLink = useCallback(
-    (target: number) => buildWordsPath(sort, filters, findQuery || undefined, bucket, target),
-    [sort, filters, findQuery, bucket],
-  )
+    if (urlBrowsePage <= 1) return
+    navigate(buildWordsPath(sort, filters, findQuery || undefined, bucket, 1), { replace: true })
+  }, [urlBrowsePage, sort, filters, findQuery, bucket, navigate])
 
   const facetSelections = countFacetSelections(filters)
   const hasActiveContext = facetSelections > 0 || bucket !== 'all' || Boolean(findQuery)
@@ -273,67 +274,95 @@ export function WordsPage() {
 
   useSyncCatalogHeaderHeight(pageRef, headerRef, [
     sort,
-    filtersOpen,
+    filterBarExpanded,
     facetSelections,
     bucket,
     filteredSorted.length,
     findQuery,
     findDraft,
-    urlBrowsePage,
-    safePage,
+    wordsVisibleCount,
   ])
 
-  const activeFilterContext = (
-    <section
-      className="catalog-active-context"
-      aria-label={hasActiveContext ? 'Active filters and result count' : 'Words result count'}
-    >
-      <p className="catalog-active-context__summary">{contextSummary}</p>
-      {hasActiveContext ? (
-        <div className="catalog-chips">
-          {findQuery ? (
-            <button type="button" className="catalog-chip catalog-chip--find" onClick={() => syncUrl(sort, filters, '', bucket, 1)}>
-              Discovery: {findQuery}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
+  const wordsActivePills: CatalogFilterBarActivePill[] = []
+  if (findQuery) {
+    wordsActivePills.push({
+      id: 'find',
+      label: `Search: ${findQuery}`,
+      onClick: () => syncUrl(sort, filters, '', bucket, 1),
+    })
+  }
+  if (bucket !== 'all') {
+    wordsActivePills.push({
+      id: 'bucket',
+      label: `Story: ${BUCKET_OPTIONS.find((b) => b.id === bucket)?.label}`,
+      onClick: () => setBucketAndSync('all'),
+    })
+  }
+  for (const key of Object.keys(filters) as (keyof FilterState)[]) {
+    for (const value of filters[key]) {
+      wordsActivePills.push({
+        id: `${key}-${value}`,
+        label: (
+          <>
+            {FACET_LABELS[key as FacetGroupKey] ?? key}:{' '}
+            {key === 'sutra' ? (
+              <span className={`catalog-facet-sutra-name ${sutraClassName(value)}`} title={sutraQuestionFromDisplay(value)}>
+                {value}
               </span>
-            </button>
-          ) : null}
-          {bucket !== 'all' ? (
-            <button type="button" className="catalog-chip" onClick={() => setBucketAndSync('all')}>
-              Story: {BUCKET_OPTIONS.find((b) => b.id === bucket)?.label}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </button>
-          ) : null}
-          {(Object.keys(filters) as (keyof FilterState)[]).flatMap((key) =>
-            [...filters[key]].map((value) => (
-              <button
-                key={`${key}-${value}`}
-                type="button"
-                className="catalog-chip"
-                onClick={() => patchFilters({ ...filters, [key]: toggleSetMember(filters[key], value) })}
-              >
-                {FACET_LABELS[key as FacetGroupKey] ?? key}:{' '}
-                {key === 'sutra' ? (
-                  <span className={`catalog-facet-sutra-name ${sutraClassName(value)}`} title={sutraQuestionFromDisplay(value)}>{value}</span>
-                ) : (
-                  value
-                )}
-                <span className="catalog-chip-x" aria-hidden>
-                  ×
-                </span>
-              </button>
-            )),
-          )}
-          <button type="button" className="catalog-clear" onClick={clearAllFilters}>
-            Clear all
-          </button>
-        </div>
-      ) : null}
-    </section>
-  )
+            ) : (
+              value
+            )}
+          </>
+        ),
+        onClick: () => patchFilters({ ...filters, [key]: toggleSetMember(filters[key], value) }),
+      })
+    }
+  }
+
+  const wordsFacetGroups: CatalogFilterBarFacetGroup[] = [
+    {
+      id: 'story',
+      label: 'Story',
+      showAllChip: false,
+      options: BUCKET_OPTIONS.map(({ id, label, help }) => {
+        const active = bucket === id
+        const count = bucketCounts[id]
+        return {
+          id: `bucket-${id}`,
+          label,
+          count,
+          active,
+          disabled: !active && count === 0,
+          onClick: () => setBucketAndSync(id),
+          title: help,
+        }
+      }),
+    },
+    ...FACET_GROUPS.flatMap((group) => {
+      const entries = contextualFacetEntries[group] ?? []
+      if (!entries.length) return []
+      const filterKey = group as keyof FilterState
+      return [
+        {
+          id: group,
+          label: FACET_LABELS[group],
+          showAllChip: false,
+          options: facetEntriesToToggleChips({
+            groupId: group,
+            entries,
+            isSutra: group === 'sutra',
+            isActive: (value) => filters[filterKey].has(value),
+            onToggle: (value) =>
+              patchFilters({
+                ...filters,
+                [filterKey]: toggleSetMember(filters[filterKey], value),
+              }),
+            countLabel: 'lyrics',
+          }),
+        },
+      ]
+    }),
+  ]
 
   if (catalogLoading) {
     return (
@@ -396,127 +425,26 @@ export function WordsPage() {
           </p>
         </div>
 
-        <div className={`catalog-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
-          <aside
-            className={`catalog-filters${filtersOpen ? ' is-open' : ''}`}
-            aria-labelledby="words-filters-heading"
-          >
-            <div className="catalog-filters-head">
-              <h2 id="words-filters-heading" className="catalog-section-title">
-                Filters
-              </h2>
-              <button
-                type="button"
-                className="catalog-icon-btn"
-                onClick={() => setFiltersOpen(false)}
-                aria-expanded={filtersOpen}
-                aria-controls="words-filter-panel"
-              >
-                Hide
-              </button>
-            </div>
-
-            {filtersOpen ? activeFilterContext : null}
-
-            <div id="words-filter-panel" className="catalog-facet-stack">
-              <p className="catalog-facet-help">
-                Filters combine across groups (AND). Multiple picks inside one group combine as OR.
-              </p>
-              <section className="catalog-facet" aria-labelledby="words-search-heading">
-                <h3 id="words-search-heading">Search</h3>
-                <label className="catalog-facet-find-label" htmlFor="words-find-input">
-                  Search by title, summary, or lyric notes
-                </label>
-                <input
-                  id="words-find-input"
-                  className="catalog-facet-find-input"
-                  type="search"
-                  name="words_find"
-                  inputMode="search"
-                  autoComplete="off"
-                  spellCheck={false}
-                  enterKeyHint="search"
-                  value={findDraft}
-                  onChange={(e) => setFindDraft(e.target.value)}
-                />
-              </section>
-              <section className="catalog-facet" aria-labelledby="words-bucket-heading">
-                <h3 id="words-bucket-heading">Story</h3>
-                <p className="catalog-facet-help" id="words-bucket-desc">
-                  Lyrics without a release yet, songs still growing. <em>New seedling</em> = freshly written.{' '}
-                  <em>In the works</em> = being produced. Songs that are already published live on{' '}
-                  <Link to={canonicalPathForRoute('/songs')}>
-                    Songs
-                  </Link>{' '}
-                  instead.
-                </p>
-                <div className="catalog-facet-chips" role="group" aria-describedby="words-bucket-desc">
-                  {BUCKET_OPTIONS.map(({ id, label, help }) => {
-                    const active = bucket === id
-                    const count = bucketCounts[id]
-                    const disabled = !active && count === 0
-                    return (
-                      <button
-                        key={id}
-                        type="button"
-                        className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
-                        disabled={disabled}
-                        onClick={() => setBucketAndSync(id)}
-                        title={help}
-                      >
-                        <span>{label}</span>
-                        <span className="catalog-facet-count">{` (${count})`}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-              </section>
-              {FACET_GROUPS.map((group) => {
-                const entries = contextualFacetEntries[group] ?? []
-                if (!entries.length) return null
-                const filterKey = group as keyof FilterState
-                const headingId = `words-${group}-heading`
-                return (
-                  <section key={group} className="catalog-facet" aria-labelledby={headingId}>
-                    <h3 id={headingId} title={FACET_HELP[group]}>
-                      {FACET_LABELS[group]}
-                    </h3>
-                    <div className="catalog-facet-chips" role="group" aria-labelledby={headingId}>
-                      {entries.map(({ value, count }) => {
-                        const active = filters[filterKey].has(value)
-                        const disabled = !active && count === 0
-                        return (
-                          <button
-                            key={value}
-                            type="button"
-                            className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
-                            disabled={disabled}
-                            onClick={() =>
-                              patchFilters({
-                                ...filters,
-                                [filterKey]: toggleSetMember(filters[filterKey], value),
-                              })
-                            }
-                            title={group === 'sutra' ? `${sutraQuestionFromDisplay(value)} (${count} lyrics)` : `${count} lyrics`}
-                          >
-                            {group === 'sutra' ? (
-                              <span className={`catalog-facet-sutra-name ${sutraClassName(value)}`}>{value}</span>
-                            ) : (
-                              <span>{value}</span>
-                            )}
-                            <span className="catalog-facet-count">{` (${count})`}</span>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </section>
-                )
-              })}
-            </div>
-          </aside>
-
-          <main id="main-content" className="catalog-main">
-            <div className="catalog-main__sort-row words-page__sort-row">
+        <div className="words-page__content">
+          <CatalogFilterBar
+            ariaLabel="Filter lyrics"
+            panelId="words-filter-panel"
+            resultSummary={contextSummary}
+            showResultSummary={false}
+            activePills={wordsActivePills}
+            onClearAll={clearAllFilters}
+            facetGroups={wordsFacetGroups}
+            search={{
+              id: 'words-find-input',
+              label: 'Search',
+              ariaLabel: 'Search by title, summary, or lyric notes',
+              value: findDraft,
+              onChange: setFindDraft,
+              inputName: 'words_find',
+            }}
+            defaultExpanded={filterBarExpanded}
+            onExpandedChange={setFilterBarExpanded}
+            toolbarEnd={
               <div className="catalog-sort words-page__sort" aria-label="Sort Words list by date or title">
                 <label className="catalog-sort-label" htmlFor="words-sort-select">
                   Sort
@@ -531,33 +459,10 @@ export function WordsPage() {
                   <option value="title_az">Song title (A–Z)</option>
                 </select>
               </div>
-            </div>
+            }
+          />
 
-            {!filtersOpen ? (
-              <>
-                {activeFilterContext}
-                <button
-                  type="button"
-                  className="catalog-filter-reopen"
-                  onClick={() => setFiltersOpen(true)}
-                  aria-expanded={false}
-                  aria-controls="words-filter-panel"
-                >
-                  Show filters
-                </button>
-              </>
-            ) : null}
-
-            {filteredSorted.length > 0 ? (
-              <CatalogPager
-                variant="top"
-                safePage={safePage}
-                pageCount={pageCount}
-                totalInView={filteredSorted.length}
-                pageSize={PAGE_SIZE}
-                pagerLink={pagerLink}
-              />
-            ) : null}
+          <main id="main-content" className="catalog-main words-page__main">
             <div className="words-page__grid">
               {pagedWords.map((song) => {
                 const secondaryMeta = [song.topic, song.intention, song.light_shadow]
@@ -617,13 +522,12 @@ export function WordsPage() {
               })}
             </div>
             {filteredSorted.length > 0 ? (
-              <CatalogPager
-                variant="bottom"
-                safePage={safePage}
-                pageCount={pageCount}
-                totalInView={filteredSorted.length}
-                pageSize={PAGE_SIZE}
-                pagerLink={pagerLink}
+              <CatalogInfiniteScrollFooter
+                visibleCount={wordsVisibleCount}
+                totalCount={wordsTotalCount}
+                hasMore={wordsHasMore}
+                loadMore={loadMoreWords}
+                noun="lyrics"
               />
             ) : null}
             {filteredSorted.length === 0 ? (

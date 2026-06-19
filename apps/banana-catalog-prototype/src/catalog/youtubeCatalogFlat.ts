@@ -1,3 +1,4 @@
+import { parseDurationClock } from './durationFormat'
 import { loadYoutubeByLyricsId } from './generatedData'
 import type { YouTubeCatalogVideo } from './types'
 
@@ -17,6 +18,24 @@ export function dedupeYoutubeVideosByVideoId(videos: YouTubeCatalogVideo[]): You
     out.push(v)
   }
   return out
+}
+
+/** Sum video durations by YT playlist name (from comma-separated `playlist_names`). */
+export function buildYoutubePlaylistDurationByName(
+  videos: YouTubeCatalogVideo[],
+): Map<string, number> {
+  const map = new Map<string, number>()
+  for (const video of videos) {
+    const names = (video.playlist_names || '')
+      .split(',')
+      .map((name) => name.trim())
+      .filter(Boolean)
+    const seconds = parseDurationClock(video.duration || '')
+    for (const name of names) {
+      map.set(name, (map.get(name) ?? 0) + seconds)
+    }
+  }
+  return map
 }
 
 /** Matches {@link VideosPage} hub ordering: newest `publish_date`, then lyrics title. */

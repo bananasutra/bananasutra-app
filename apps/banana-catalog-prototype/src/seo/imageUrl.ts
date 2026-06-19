@@ -10,12 +10,15 @@ function isHttpUrl(value: string): boolean {
   return /^https?:\/\//i.test(value)
 }
 
-/** YouTube maxres posters often 404 or slow; hqdefault is reliable for list/hero thumbs. */
+/** YouTube thumbs: maxresdefault (16:9) crops cleanly to square; sd/hq (4:3) bake letterboxing. */
 function normalizeRemoteImageSource(source: string): string {
   try {
     const u = new URL(source)
-    if (u.hostname === 'i.ytimg.com' && u.pathname.endsWith('/maxresdefault.jpg')) {
-      u.pathname = u.pathname.replace(/\/maxresdefault\.jpg$/i, '/hqdefault.jpg')
+    if (u.hostname === 'i.ytimg.com') {
+      u.pathname = u.pathname.replace(
+        /\/(hqdefault|mqdefault|sddefault|default)\.jpg$/i,
+        '/maxresdefault.jpg',
+      )
       return u.toString()
     }
   } catch {
@@ -33,8 +36,8 @@ export function nativeImageMaxWidth(source: string): number | null {
       const m = u.pathname.match(/-t(\d+)x(\d+)\./i)
       if (m) return Math.max(Number(m[1]), Number(m[2]))
     }
-    if (u.hostname === 'i.ytimg.com' && /\/hqdefault\.jpg$/i.test(u.pathname)) {
-      return 480
+    if (u.hostname === 'i.ytimg.com' && /\/maxresdefault\.jpg$/i.test(u.pathname)) {
+      return 1280
     }
   } catch {
     return null

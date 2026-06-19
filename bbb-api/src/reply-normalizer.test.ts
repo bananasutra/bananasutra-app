@@ -13,7 +13,7 @@ test("normalizeOrientationReply returns canonical orientation map", () => {
   const normalized = normalizeOrientationReply(raw);
   assert.match(normalized, /(Welcome|Bonjour|Glad you asked)/);
   assert.match(normalized, /(quick map|Quick map)/);
-  assert.match(normalized, /\*\*\[Sutras\]\(\/about\/sutras\):\*\*/);
+  assert.match(normalized, /\*\*\[Sutras\]\(\/sutras\):\*\*/);
   assert.match(normalized, /\*\*\[Songbooks\]\(\/songbooks\):\*\*/);
   assert.match(normalized, /\*\*\[Songs\]\(\/songs\):\*\*/);
   assert.match(normalized, /\[LIGHT\]\(\/songs\/\?ls=LIGHT\)/);
@@ -40,7 +40,7 @@ test("normalizeOrientationReply varies phrasing by input while preserving struct
   const b = normalizeOrientationReply("orientation variant B");
   assert.notEqual(a, b);
   for (const output of [a, b]) {
-    assert.match(output, /\*\*\[Sutras\]\(\/about\/sutras\):\*\*/);
+    assert.match(output, /\*\*\[Sutras\]\(\/sutras\):\*\*/);
     assert.match(output, /\*\*\[Songbooks\]\(\/songbooks\):\*\*/);
     assert.match(output, /\*\*\[Songs\]\(\/songs\):\*\*/);
     assert.match(output, /\*\*\[Top Tracks\]\(\/tracks\):\*\*/);

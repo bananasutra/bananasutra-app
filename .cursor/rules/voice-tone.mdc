@@ -1,0 +1,117 @@
+---
+description: BANANASUTRA voice and tone rules. Activates on any file where user-facing copy is being written or edited.
+globs:
+  - _docs/planning/REDESIGN/**
+  - apps/banana-catalog-prototype/src/**/*.tsx
+  - apps/banana-catalog-prototype/src/**/*.ts
+  - apps/banana-catalog-prototype/src/data/generated/**
+alwaysApply: false
+---
+
+# Voice and Tone Rule
+
+When writing or editing any user-facing copy in the BANANASUTRA app, this rule applies.
+
+## Read the canonical guide first
+
+`_docs/planning/REDESIGN/VOICE-AND-TONE-v1.md` is the source of truth. Read it before drafting any new copy slice (W-018, W-018b, W-018c, W-018d, W-019, W-028, W-038, or any other surface that adds user-facing text).
+
+North star: the About hero negation chain in the guide. When in doubt, re-read it.
+
+Companion refs for specific surfaces: `BBB-PLACEMENT-MAP.md` (Bertrand entries), `CROSS-SONG-LISTENING-SPEC.md` (mini-bar context lines).
+
+## Quick-reference rules (when in doubt, see the full guide)
+
+### Five non-negotiables
+1. **Honest before clever.** Name limits plainly; no false cheer hiding a real state.
+2. **Warm without performing warmth.** No "Hi there!", no exclamation marks for energy, no emoji as crutch. No corporate "we" when "I" or "you" is what's actually happening.
+3. **Plays with language.** Wordplay welcome; brand vocabulary used naturally (bananas, sutra, sonderland, naked truth, apes gone wrong, ideas you can feel).
+4. **Philosophical without preaching.** Ideas show up where they belong (about, sutra pages, lyrics), not on play buttons or filter chips.
+5. **Anti-corporate without grim.** Critique with humor; holding both is the point.
+
+### Punctuation rules (hard)
+- **No em-dashes anywhere.** Use commas, periods, parens, colons.
+- **Sentence case for everything user-facing.** Headings, buttons, labels, modal titles, link text. No Title Case.
+- **All-caps reserved for**: BANANASUTRA brand emphasis, sutra names (KNOWsutra, BLOWsutra, etc.), READ/LISTEN/WATCH mode-toggle labels only.
+- **No exclamation marks** except rare landing moments.
+- **No emoji** as substitute for tone.
+- **Ellipsis** rare; never marketing pauses ("Discover... music...").
+
+### Pronouns
+- **"I"** for creator voice.
+- **"you"** sparingly.
+- **"we"** only when shared experience is genuinely the subject, never corporate warmth.
+- **"users"** never; use "people", "listeners", or a specific pronoun.
+
+### Length budgets
+- Page intros: 1-3 sentences max
+- Button labels: 2-5 words
+- Tooltips: under 60 chars, one line
+- Empty states: 1-2 sentences + 1 action
+- Error states: 1 sentence + 1 action
+- Loading states: 1-3 words ("Loading songs", "Loading…")
+- Mini-bar context line: under 50 chars, factual, no em-dashes
+- Bertrand entry: headline under 8 words, subhead under 16 words
+
+### Surface patterns
+- **Buttons:** specific over generic ("Play all 4 tracks", "Stop playing all", "Show filters" / "Hide filters", "Clear all", "Watch on YouTube", "Resume from 1:24" when position known).
+- **Section intros:** one strong sentence + one clarifying sentence (max). Optional inline link.
+- **Empty states:** state the fact + offer next action. Never apologetic.
+- **Error states:** brief diagnosis + practical action.
+- **Honest platform limits:** neutral, factual, specific. No "Sorry, but..." padding. Rare exception: YouTube block copy may use "Sorry. Proof the world is bananas." (see guide).
+- **Mini-bar context:** always factual ("Playing track 3 of 30 from KNOWsutra · Folk"), never atmospheric.
+
+### Forbidden patterns (catch yourself)
+- Marketing fluff: "discover" / "explore" when overused ("browse" is fine), "seamless", "intuitive", "powerful", "unleash", "unlock", "elevate", "curated for you", "your perfect/next/favorite/best", "music that X you"
+- AI assistant register: "How can I help?", "I'd be happy to...", "Let me know if you need anything else"
+- Tech bro lingo: "10x", "scale", "leverage", "synergy", "game-changing", "disruptive", "innovative"
+- Hedging: "perhaps", "might be", "could potentially", "it seems that...", "we think you'll like..."
+- Apologetic: "Sorry, but...", "Unfortunately...", "We apologize for the inconvenience"
+- Generic music app: "Find your next favorite song", "Soundtrack of your life", "Where music finds you", "Lose yourself in the music"
+- Faux intimacy: "Hi there!", "Hey friend!", "Welcome back!", "We missed you!"
+- Punctuation crimes: em-dashes, Title Case headings, multiple exclamation marks, excessive ellipses, emoji as tone substitute
+
+### Brand vocabulary (use naturally)
+- `bananas`, `sutra`, `KNOWsutra` etc. (no space before "sutra"), `bananasutra` (casual), `BANANASUTRA` (brand emphasis), `sonderland`, `meaning-first`, `naked truth`, `songs for a world gone bananas` (tagline; sparingly), `homemade, end to end`, `ideas you can feel`, `compass` / `north stars`, `Bertrand` / `BBB` / `Banana Butler`
+- Signature patterns: negation chain ("It's not X. It's not Y. It's Z."), "Why? Because...", sutra-aware micro-copy ("Stay in KNOWsutra, or drift somewhere else."), lyric drops when a song's `lyrics_extract` fits the moment
+
+### Mode tonality (same voice, cadence shifts)
+- **READ:** slightly longer sentences, more lyrical/philosophical register
+- **LISTEN:** shorter, more direct, immediate action implied
+- **WATCH:** visual language, brief, acknowledges video as medium
+- **Honest copy (any mode):** neutral, factual, never apologetic
+
+### Bertrand: two registers
+- **Brand UI about Bertrand** (entry cards, CTAs, tooltips): brand voice per this guide.
+- **Bertrand's chat replies:** governed by `_docs/planning/BBB/BBB-SYSTEM-PROMPT-V2.md`, not this guide.
+
+## Sign-off questions before shipping copy
+
+Run these on every copy slice before opening the PR:
+
+1. Does it sound like Banana wrote it? (Read out loud.)
+2. As honest as possible?
+3. Earns its length?
+4. Sentence case checked?
+5. Em-dash check (zero)?
+6. Forbidden pattern scan?
+7. Brand vocabulary used where it fits (not forced)?
+8. Mode-appropriate?
+9. Carries the spirit of the About hero?
+
+## When proposing copy
+
+For any new surface, **show 3 variations**, then Banana picks. Don't ship the first draft.
+
+For copy edits to existing surfaces, show before / after and explain what the change accomplishes per the voice guide rules.
+
+## Push back
+
+If a copy slice asks you to violate one of these rules (e.g. "make this more exciting!" interpreted as exclamation marks and marketing fluff), push back per `CURSOR-EPIC-BRIEF.md` push-back rules. Name the voice guide rule being violated. Offer the in-voice alternative.
+
+## When this rule does NOT apply
+
+- Bertrand's chat responses (see Bertrand system prompt above)
+- Code comments and developer documentation
+- Commit messages (follow `.cursor/rules/git-release-workflow.mdc` instead)
+- Internal `_docs/` planning docs (loose voice is fine; only user-facing surfaces require this rule)

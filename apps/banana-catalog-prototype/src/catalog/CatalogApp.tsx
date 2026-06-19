@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
-  DISCOVERY_FACET_HELP as FACET_HELP,
   DISCOVERY_FACET_LABELS as FACET_LABELS,
   CATALOG_BROWSER_FACET_ORDER as FACET_GROUPS,
 } from './catalogFacetConfig'
@@ -22,12 +21,22 @@ import { buildContextualSongFacetEntries } from './facetCountsContextual'
 import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
 import { sutraClassName } from './sutraTheme'
 import { sutraQuestionFromDisplay } from './sutraContext'
-import { buildBrowsePath, readBrowseStateFromSearchParams, readCatalogBrowsePage, readStateFromUrl } from './urlState'
+import { buildBrowsePath, readBrowseStateFromSearchParams, readCatalogBrowsePage, readStateFromUrl, serializeBrowseQuery } from './urlState'
 import { searchParamsFromSearchString } from './urlSearchParams'
+import {
+  CatalogFilterBar,
+  type CatalogFilterBarActivePill,
+  type CatalogFilterBarFacetGroup,
+  type CatalogFilterBarSecondaryGroup,
+} from './CatalogFilterBar'
+import { facetEntriesToToggleChips } from './catalogFilterBarBuilders'
 import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
-import { CatalogPager } from './CatalogPager'
-import './CatalogPager.css'
+import { CatalogInfiniteScrollFooter } from './CatalogInfiniteScrollFooter'
+import {
+  catalogInfiniteScrollStorageKey,
+  useCatalogInfiniteScroll,
+} from './useCatalogInfiniteScroll'
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
@@ -37,7 +46,6 @@ import { hasListenerCatalogMedia } from './listenerCatalog'
 import { FooterSocialIcon } from './FooterSocialIcons'
 import './CatalogApp.css'
 
-const PAGE_SIZE = 30
 const FIND_DEBOUNCE_MS = 350
 const SONG_CARD_COVER_REQUEST_WIDTH = 480
 const SONG_CARD_COVER_SIZES = '(max-width: 640px) 48vw, (max-width: 1100px) 32vw, 260px'
@@ -107,7 +115,10 @@ export function CatalogApp() {
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalogBrowse()
   const catalogSongs = useMemo(() => songCatalogRows ?? [], [songCatalogRows])
   const listenerCatalogSongs = useMemo(() => catalogSongs.filter(hasListenerCatalogMedia), [catalogSongs])
-  const fullFacetEntries = useMemo(() => facetCountsFromSongs(listenerCatalogSongs), [listenerCatalogSongs])
+  const lyricsOnlySongCount = useMemo(
+    () => catalogSongs.filter((song) => !hasListenerCatalogMedia(song)).length,
+    [catalogSongs],
+  )
 
   const [browseSeed] = useState(() =>
     readBrowseStateFromSearchParams(searchParamsFromSearchString(window.location.search)),
@@ -115,25 +126,20 @@ export function CatalogApp() {
   const [sort, setSort] = useState<SortMode>(browseSeed.sort)
   const [filters, setFilters] = useState<FilterState>(browseSeed.filters)
   const [media, setMedia] = useState<MediaComboFilter>(browseSeed.media)
-  const [filtersOpen, setFiltersOpen] = useState(() =>
-    typeof window === 'undefined' ? true : window.innerWidth >= 900,
+  const [includeLyricsOnly, setIncludeLyricsOnly] = useState(browseSeed.includeLyricsOnly)
+  const [filterBarExpanded, setFilterBarExpanded] = useState(false)
+
+  const browsePoolSongs = useMemo(
+    () => (includeLyricsOnly ? catalogSongs : listenerCatalogSongs),
+    [catalogSongs, listenerCatalogSongs, includeLyricsOnly],
   )
+  const fullFacetEntries = useMemo(() => facetCountsFromSongs(browsePoolSongs), [browsePoolSongs])
 
   const pageMeta = renderPageMeta({
     title: 'Songs Catalog',
     description: 'Browse all BANANASUTRA songs. Filter by sutra, topic, intention, genre, and language.',
     path: canonicalPathForRoute('/songs'),
   })
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 899px)')
-    const syncFiltersToViewport = () => {
-      if (mq.matches) setFiltersOpen(false)
-    }
-    syncFiltersToViewport()
-    mq.addEventListener('change', syncFiltersToViewport)
-    return () => mq.removeEventListener('change', syncFiltersToViewport)
-  }, [])
 
   const findQuery = useMemo(() => searchParamsFromSearchString(location.search).get('find')?.trim() ?? '', [location.search])
 
@@ -144,7 +150,7 @@ export function CatalogApp() {
   const contextualFacetEntries = useMemo(
     () =>
       buildContextualSongFacetEntries(
-        listenerCatalogSongs,
+        browsePoolSongs,
         Object.fromEntries(
           FACET_GROUPS.map((group) => [group, fullFacetEntries[group] ?? []]),
         ) as Record<FilterFacetKey, { value: string; count: number }[]>,
@@ -154,27 +160,30 @@ export function CatalogApp() {
         findQuery,
         deepSearchByLyricsId ?? undefined,
       ),
-    [listenerCatalogSongs, fullFacetEntries, filters, media, findQuery, deepSearchByLyricsId],
+    [browsePoolSongs, fullFacetEntries, filters, media, findQuery, deepSearchByLyricsId],
   )
   const filtersRef = useRef(filters)
   const sortRef = useRef(sort)
   const mediaRef = useRef(media)
+  const includeLyricsOnlyRef = useRef(includeLyricsOnly)
   useEffect(() => {
     filtersRef.current = filters
     sortRef.current = sort
     mediaRef.current = media
-  }, [filters, sort, media])
+    includeLyricsOnlyRef.current = includeLyricsOnly
+  }, [filters, sort, media, includeLyricsOnly])
 
   const urlBrowsePage = useMemo(() => readCatalogBrowsePage(location.search), [location.search])
+  const [legacyPageSeed] = useState(() => urlBrowsePage)
 
   const mediaOptionCounts = useMemo(() => {
     const counts: Record<MediaComboFilter, number> = {
-      all: listenerCatalogSongs.length,
+      all: browsePoolSongs.length,
       lyrics_sc: 0,
       lyrics_yt: 0,
       full: 0,
     }
-    for (const s of listenerCatalogSongs) {
+    for (const s of browsePoolSongs) {
       const sc = songHasSoundcloudListenPath(s)
       const yt = Boolean(s.has_youtube_video)
       if (sc && !yt) counts.lyrics_sc += 1
@@ -182,7 +191,7 @@ export function CatalogApp() {
       else if (sc && yt) counts.full += 1
     }
     return counts
-  }, [listenerCatalogSongs])
+  }, [browsePoolSongs])
 
   useEffect(() => {
     const next = readStateFromUrl()
@@ -190,6 +199,7 @@ export function CatalogApp() {
     setSort(next.sort)
     setFilters(next.filters)
     setMedia(next.media)
+    setIncludeLyricsOnly(next.includeLyricsOnly)
   }, [location.search])
 
   useEffect(() => {
@@ -207,12 +217,18 @@ export function CatalogApp() {
           findDraft.trim() || undefined,
           mediaRef.current,
           1,
+          includeLyricsOnlyRef.current,
         ),
         { replace: true },
       )
     }, FIND_DEBOUNCE_MS)
     return () => window.clearTimeout(tid)
   }, [findDraft, findQuery, navigate])
+
+  useEffect(() => {
+    if (urlBrowsePage <= 1) return
+    navigate(buildBrowsePath(sort, filters, findQuery || undefined, media, 1, includeLyricsOnly), { replace: true })
+  }, [urlBrowsePage, sort, filters, findQuery, media, includeLyricsOnly, navigate])
 
   useEffect(() => {
     const draftLen = findDraft.trim().length
@@ -245,13 +261,15 @@ export function CatalogApp() {
       findOverride?: string,
       nextMedia?: MediaComboFilter,
       nextPage?: number,
+      nextIncludeLyricsOnly?: boolean,
     ) => {
       const nextFind = findOverride !== undefined ? findOverride.trim() : findQuery
       const m = nextMedia ?? media
       const p = nextPage !== undefined ? nextPage : urlBrowsePage
-      navigate(buildBrowsePath(nextSort, nextFilters, nextFind || undefined, m, p), { replace: true })
+      const lyricsOnly = nextIncludeLyricsOnly ?? includeLyricsOnly
+      navigate(buildBrowsePath(nextSort, nextFilters, nextFind || undefined, m, p, lyricsOnly), { replace: true })
     },
-    [findQuery, media, navigate, urlBrowsePage],
+    [findQuery, media, includeLyricsOnly, navigate, urlBrowsePage],
   )
 
   const setSortAndSync = (mode: SortMode) => {
@@ -270,108 +288,156 @@ export function CatalogApp() {
     syncUrl(sort, filters, undefined, next, 1)
   }
 
+  const setIncludeLyricsOnlyAndSync = (next: boolean) => {
+    setIncludeLyricsOnly(next)
+    syncUrl(sort, filters, undefined, media, 1, next)
+  }
+
   const filteredSorted = useMemo(() => {
-    let list = listenerCatalogSongs.filter(
+    let list = browsePoolSongs.filter(
       (s) => songMatchesFilters(s, filters) && songMatchesMediaCombo(s, media),
     )
     if (findQuery) list = filterSongsByFindAnyQuery(list, findQuery, deepSearchByLyricsId ?? undefined)
     return sortSongs(list, sort)
-  }, [listenerCatalogSongs, filters, media, sort, findQuery, deepSearchByLyricsId])
+  }, [browsePoolSongs, filters, media, sort, findQuery, deepSearchByLyricsId])
 
-  const pageCount = Math.max(1, Math.ceil(filteredSorted.length / PAGE_SIZE))
-  const safePage = Math.min(urlBrowsePage, pageCount)
-  const pagedSongs = useMemo(
-    () => filteredSorted.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
-    [filteredSorted, safePage],
+  const songsScrollResetKey = useMemo(
+    () => serializeBrowseQuery(sort, filters, findQuery || undefined, media, 1, includeLyricsOnly),
+    [sort, filters, findQuery, media, includeLyricsOnly],
   )
 
-  useEffect(() => {
-    if (urlBrowsePage !== safePage) {
-      navigate(buildBrowsePath(sort, filters, findQuery || undefined, media, safePage), { replace: true })
-    }
-  }, [urlBrowsePage, safePage, sort, filters, findQuery, media, navigate])
-
-  const pagerLink = useCallback(
-    (target: number) => buildBrowsePath(sort, filters, findQuery || undefined, media, target),
-    [sort, filters, findQuery, media],
-  )
+  const {
+    visibleItems: pagedSongs,
+    visibleCount: songsVisibleCount,
+    totalCount: songsTotalCount,
+    hasMore: songsHasMore,
+    loadMore: loadMoreSongs,
+  } = useCatalogInfiniteScroll({
+    items: filteredSorted,
+    resetKey: songsScrollResetKey,
+    storageKey: catalogInfiniteScrollStorageKey('/songs', songsScrollResetKey),
+    legacyPage: legacyPageSeed,
+  })
 
   const facetSelections = countFacetSelections(filters)
-  const hasActiveContext = facetSelections > 0 || media !== 'all' || Boolean(findQuery)
+  const hasActiveContext =
+    facetSelections > 0 || media !== 'all' || includeLyricsOnly || Boolean(findQuery)
   const showDeepRefiningHint = Boolean(findQuery) && deepSearchLoading && !deepSearchByLyricsId
   const contextSummary = hasActiveContext
-    ? `${filteredSorted.length} of ${listenerCatalogSongs.length} songs · ${facetSelections} filter${
+    ? `${filteredSorted.length} of ${browsePoolSongs.length} songs · ${facetSelections} filter${
         facetSelections === 1 ? '' : 's'
-      }${media !== 'all' ? ' · media filter' : ''}${findQuery ? ' · discovery filter' : ''}${
-        showDeepRefiningHint ? ' · refining lyrics…' : ''
-      }`
-    : `${listenerCatalogSongs.length} songs`
+      }${media !== 'all' ? ' · media filter' : ''}${includeLyricsOnly ? ' · lyrics-only included' : ''}${
+        findQuery ? ' · discovery filter' : ''
+      }${showDeepRefiningHint ? ' · refining lyrics…' : ''}`
+    : `${browsePoolSongs.length} songs`
 
   const clearAllFilters = () => {
     const cleared = emptyFilterState()
     reportSongsFilterPatch(filters, cleared)
     setFilters(cleared)
     setMedia('all')
+    setIncludeLyricsOnly(false)
     setFindDraft('')
-    syncUrl(sort, cleared, '', 'all', 1)
+    syncUrl(sort, cleared, '', 'all', 1, false)
   }
 
   useSyncCatalogHeaderHeight(pageRef, headerRef, [
     sort,
-    filtersOpen,
+    filterBarExpanded,
     facetSelections,
     media,
+    includeLyricsOnly,
     filteredSorted.length,
     findQuery,
     findDraft,
-    safePage,
+    songsVisibleCount,
   ])
 
-  const activeFilterContext = (
-    <section
-      className="catalog-active-context"
-      aria-label={hasActiveContext ? 'Active filters and result count' : 'Catalog result count'}
-    >
-      <p className="catalog-active-context__summary">{contextSummary}</p>
-      {hasActiveContext ? (
-        <div className="catalog-chips">
-          {findQuery ? (
-            <button type="button" className="catalog-chip catalog-chip--find" onClick={() => syncUrl(sort, filters, '', media, 1)}>
-              Discovery: {findQuery}
-              <span className="catalog-chip-x" aria-hidden>×</span>
-            </button>
-          ) : null}
-          {media !== 'all' ? (
-            <button type="button" className="catalog-chip" onClick={() => setMediaAndSync('all')}>
-              Media: {MEDIA_FILTER_LABELS[media]}
-              <span className="catalog-chip-x" aria-hidden>×</span>
-            </button>
-          ) : null}
-          {(Object.keys(filters) as (keyof FilterState)[]).flatMap((key) =>
-            [...filters[key]].map((value) => (
-              <button
-                key={`${key}-${value}`}
-                type="button"
-                className="catalog-chip"
-                onClick={() => patchFilters({ ...filters, [key]: toggleSetMember(filters[key], value) })}
-              >
-                {FACET_LABELS[key as FacetGroupKey] ?? key}:{' '}
-                {key === 'sutra' ? (
-                  <span className={`catalog-facet-sutra-name ${sutraClassName(value)}`} title={sutraQuestionFromDisplay(value)}>{value}</span>
-                ) : (
-                  value
-                )}
-                <span className="catalog-chip-x" aria-hidden>×</span>
-              </button>
-            )),
-          )}
-          <button type="button" className="catalog-clear" onClick={clearAllFilters}>
-            Clear all
-          </button>
-        </div>
-      ) : null}
-    </section>
-  )
+  const songActivePills: CatalogFilterBarActivePill[] = []
+  if (findQuery) {
+    songActivePills.push({
+      id: 'find',
+      label: <>Search: {findQuery}</>,
+      onClick: () => syncUrl(sort, filters, '', media, 1),
+      title: 'Remove text filter',
+    })
+  }
+  if (media !== 'all') {
+    songActivePills.push({
+      id: 'media',
+      label: <>Media: {MEDIA_FILTER_LABELS[media]}</>,
+      onClick: () => setMediaAndSync('all'),
+      title: 'Clear media filter',
+    })
+  }
+  if (includeLyricsOnly) {
+    songActivePills.push({
+      id: 'include-lyrics-only',
+      label: <>Lyrics-only songs included</>,
+      onClick: () => setIncludeLyricsOnlyAndSync(false),
+      title: 'Exclude lyrics-only songs',
+    })
+  }
+  for (const key of Object.keys(filters) as (keyof FilterState)[]) {
+    for (const value of filters[key]) {
+      songActivePills.push({
+        id: `${key}-${value}`,
+        label: (
+          <>
+            {FACET_LABELS[key as FacetGroupKey] ?? key}:{' '}
+            {key === 'sutra' ? (
+              <span className={`catalog-facet-sutra-name ${sutraClassName(value)}`} title={sutraQuestionFromDisplay(value)}>
+                {value}
+              </span>
+            ) : (
+              value
+            )}
+          </>
+        ),
+        onClick: () => patchFilters({ ...filters, [key]: toggleSetMember(filters[key], value) }),
+        title: key === 'sutra' ? sutraQuestionFromDisplay(value) : undefined,
+      })
+    }
+  }
+
+  const songMediaGroup: CatalogFilterBarSecondaryGroup = {
+    id: 'media',
+    label: 'Media',
+    helpText: 'Filter by media paths for songs with listener media. Lyrics-only pieces are on Words.',
+    options: MEDIA_FILTER_OPTIONS.map(({ id, label }) => ({
+      id: `media-${id}`,
+      label,
+      count: mediaOptionCounts[id],
+      active: media === id,
+      onClick: () => setMediaAndSync(id),
+      title: `${mediaOptionCounts[id]} songs`,
+    })),
+  }
+
+  const songFacetGroups: CatalogFilterBarFacetGroup[] = FACET_GROUPS.flatMap((group) => {
+    const entries = contextualFacetEntries[group] ?? []
+    if (!entries.length) return []
+    const filterKey = group as keyof FilterState
+    return [
+      {
+        id: group,
+        label: FACET_LABELS[group],
+        showAllChip: false,
+        options: facetEntriesToToggleChips({
+          groupId: group,
+          entries,
+          isSutra: group === 'sutra',
+          isActive: (value) => filters[filterKey].has(value),
+          onToggle: (value) =>
+            patchFilters({
+              ...filters,
+              [filterKey]: toggleSetMember(filters[filterKey], value),
+            }),
+          countLabel: 'songs',
+        }),
+      },
+    ]
+  })
 
   if (catalogLoading) {
     return (
@@ -457,172 +523,74 @@ export function CatalogApp() {
           <h1 className="catalog-page-h1">The Songs</h1>
           <p className="catalog-page-sub">
             Every song in the collection, meaning-first. Filter by sutra, light or shadow, topic, intention, or
-            language. Each song has a
-            short paragraph on why it exists, and music you can play right here. Lyrics-only pieces live on{' '}
-            <Link to={canonicalPathForRoute('/words')}>Words</Link>.
+            language. Each song has a short paragraph on why it exists, and music you can play right here.
           </p>
         </div>
 
-        <div className={`catalog-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
-          <aside
-            className={`catalog-filters${filtersOpen ? ' is-open' : ''}`}
-            aria-labelledby="catalog-filters-heading"
-          >
-            <div className="catalog-filters-head">
-              <h2 id="catalog-filters-heading" className="catalog-section-title">
-                Filters
-              </h2>
-              <button
-                type="button"
-                className="catalog-icon-btn"
-                onClick={() => setFiltersOpen(false)}
-                aria-expanded={filtersOpen}
-                aria-controls="catalog-filter-panel"
-              >
-                Hide
-              </button>
-            </div>
-
-            {filtersOpen ? activeFilterContext : null}
-
-            <div id="catalog-filter-panel" className="catalog-facet-stack">
-            <p className="catalog-facet-help">
-              Filters combine across groups (AND). Multiple picks inside one group combine as OR.
-            </p>
-            <section className="catalog-facet" aria-labelledby="catalog-songs-search-heading">
-              <h3 id="catalog-songs-search-heading">Search</h3>
-              <label className="catalog-facet-find-label" htmlFor="catalog-songs-find-input">
-                Search by title, meaning summary, extract, or lyrics
+        <div className="songs-page__content">
+          <CatalogFilterBar
+            ariaLabel="Filter songs"
+            panelId="catalog-filter-panel"
+            resultSummary={contextSummary}
+            showResultSummary={false}
+            activePills={songActivePills}
+            onClearAll={clearAllFilters}
+            secondaryGroup={songMediaGroup}
+            secondaryGroupPosition="after-facets"
+            facetGroups={songFacetGroups}
+            search={{
+              id: 'catalog-songs-find-input',
+              label: 'Search',
+              ariaLabel: 'Search songs by title, meaning summary, extract, or lyrics',
+              value: findDraft,
+              onChange: setFindDraft,
+              onFocus: () => setFindInputFocused(true),
+              onBlur: () => setFindInputFocused(false),
+              inputName: 'songs_find',
+            }}
+            defaultExpanded={filterBarExpanded}
+            onExpandedChange={setFilterBarExpanded}
+            panelFooter={
+              <label className="songs-page__lyrics-only-toggle">
+                <input
+                  type="checkbox"
+                  checked={includeLyricsOnly}
+                  onChange={(e) => setIncludeLyricsOnlyAndSync(e.target.checked)}
+                />
+                <span className="songs-page__lyrics-only-toggle-label">
+                  Include lyrics-only songs
+                  <span className="songs-page__lyrics-only-toggle-hint" aria-hidden>
+                    {' '}
+                    (+{lyricsOnlySongCount})
+                  </span>
+                </span>
               </label>
-              <input
-                id="catalog-songs-find-input"
-                className="catalog-facet-find-input"
-                type="search"
-                name="songs_find"
-                inputMode="search"
-                autoComplete="off"
-                spellCheck={false}
-                enterKeyHint="search"
-                value={findDraft}
-                onChange={(e) => setFindDraft(e.target.value)}
-                onFocus={() => setFindInputFocused(true)}
-                onBlur={() => setFindInputFocused(false)}
-              />
-            </section>
-            <section className="catalog-facet" aria-labelledby="catalog-media-heading">
-              <h3 id="catalog-media-heading">Media</h3>
-              <p className="catalog-facet-help" id="catalog-media-desc">
-                Filter by media paths for songs with listener media. Lyrics-only pieces are on{' '}
-                <Link to={canonicalPathForRoute('/words')}>Words</Link>.
-              </p>
-              <div className="catalog-facet-chips" role="group" aria-describedby="catalog-media-desc">
-                {MEDIA_FILTER_OPTIONS.map(({ id, label }) => {
-                  const active = media === id
-                  const count = mediaOptionCounts[id]
-                  return (
-                    <button
-                      key={id}
-                      type="button"
-                      className={`catalog-facet-chip${active ? ' is-active' : ''}`}
-                      onClick={() => setMediaAndSync(id)}
-                      title={`${count} songs`}
-                    >
-                      <span>{label}</span>
-                      <span className="catalog-facet-count">{` (${count})`}</span>
-                    </button>
-                  )
-                })}
+            }
+            toolbarEnd={
+              <div
+                className="catalog-sort songs-page__sort"
+                aria-label="Sort songs by engagement, likes, plays, publish date, or title"
+              >
+                <label className="catalog-sort-label" htmlFor="catalog-sort-select">
+                  Sort
+                </label>
+                <select
+                  id="catalog-sort-select"
+                  className="catalog-sort-select"
+                  value={sort}
+                  onChange={(e) => setSortAndSync(e.target.value as SortMode)}
+                >
+                  <option value="engagement_total">Most engagement</option>
+                  <option value="likes_total">Most likes</option>
+                  <option value="plays_total">Most plays</option>
+                  <option value="newest">Newest (publish date)</option>
+                  <option value="title_az">Song title (A–Z)</option>
+                </select>
               </div>
-            </section>
-            {FACET_GROUPS.map((group) => {
-              const entries = contextualFacetEntries[group] ?? []
-              if (!entries.length) return null
-              const filterKey = group as keyof FilterState
-              const headingId = `catalog-${group}-heading`
-              return (
-                <section key={group} className="catalog-facet" aria-labelledby={headingId}>
-                  <h3 id={headingId} title={FACET_HELP[group]}>{FACET_LABELS[group]}</h3>
-                  <div className="catalog-facet-chips" role="group" aria-labelledby={headingId}>
-                    {entries.map(({ value, count }) => {
-                      const active = filters[filterKey].has(value)
-                      const disabled = !active && count === 0
-                      return (
-                        <button
-                          key={value}
-                          type="button"
-                          className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
-                          disabled={disabled}
-                          onClick={() =>
-                            patchFilters({
-                              ...filters,
-                              [filterKey]: toggleSetMember(filters[filterKey], value),
-                            })
-                          }
-                          title={group === 'sutra' ? `${sutraQuestionFromDisplay(value)} (${count} songs)` : `${count} songs`}
-                        >
-                          {group === 'sutra' ? (
-                            <span className={`catalog-facet-sutra-name ${sutraClassName(value)}`}>{value}</span>
-                          ) : (
-                            <span>{value}</span>
-                          )}
-                          <span className="catalog-facet-count">{` (${count})`}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
-                </section>
-              )
-            })}
-            </div>
-          </aside>
+            }
+          />
 
-          <main id="main-content" className="catalog-main">
-          <div className="catalog-main__sort-row songs-page__sort-row">
-            <div
-              className="catalog-sort songs-page__sort"
-              aria-label="Sort songs by engagement, likes, plays, publish date, or title"
-            >
-              <label className="catalog-sort-label" htmlFor="catalog-sort-select">
-                Sort
-              </label>
-              <select
-                id="catalog-sort-select"
-                className="catalog-sort-select"
-                value={sort}
-                onChange={(e) => setSortAndSync(e.target.value as SortMode)}
-              >
-                <option value="engagement_total">Most engagement</option>
-                <option value="likes_total">Most likes</option>
-                <option value="plays_total">Most plays</option>
-                <option value="newest">Newest (publish date)</option>
-                <option value="title_az">Song title (A–Z)</option>
-              </select>
-            </div>
-          </div>
-          {!filtersOpen ? (
-            <>
-              {activeFilterContext}
-              <button
-                type="button"
-                className="catalog-filter-reopen"
-                onClick={() => setFiltersOpen(true)}
-                aria-expanded={false}
-                aria-controls="catalog-filter-panel"
-              >
-                Show filters
-              </button>
-            </>
-          ) : null}
-          {filteredSorted.length > 0 ? (
-            <CatalogPager
-              variant="top"
-              safePage={safePage}
-              pageCount={pageCount}
-              totalInView={filteredSorted.length}
-              pageSize={PAGE_SIZE}
-              pagerLink={pagerLink}
-            />
-          ) : null}
+          <main id="main-content" className="catalog-main songs-page__main">
           <div className="catalog-grid">
             {pagedSongs.map((song) => {
               const secondaryMeta = [song.topic, song.intention, song.light_shadow]
@@ -713,13 +681,12 @@ export function CatalogApp() {
             })}
           </div>
           {filteredSorted.length > 0 ? (
-            <CatalogPager
-              variant="bottom"
-              safePage={safePage}
-              pageCount={pageCount}
-              totalInView={filteredSorted.length}
-              pageSize={PAGE_SIZE}
-              pagerLink={pagerLink}
+            <CatalogInfiniteScrollFooter
+              visibleCount={songsVisibleCount}
+              totalCount={songsTotalCount}
+              hasMore={songsHasMore}
+              loadMore={loadMoreSongs}
+              noun="songs"
             />
           ) : null}
           {filteredSorted.length === 0 ? <p className="catalog-empty">No songs match these filters. Try loosening one axis.</p> : null}

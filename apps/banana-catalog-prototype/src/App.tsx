@@ -1,6 +1,6 @@
 import { Component, lazy, Suspense, type ReactNode, useEffect, useLayoutEffect, useState } from 'react'
 import { HelmetProvider } from 'react-helmet-async'
-import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
+import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { NavigationLoadingBridge } from './NavigationLoadingBridge'
 import { prefetchCatalogRoutesIdle } from './routePrefetch'
 import { SearchRedirect } from './catalog/SearchRedirect'
@@ -9,7 +9,9 @@ import { useSyncPrintPageUrl } from './catalog/useSyncPrintPageUrl'
 import { applyAnalyticsDebugFromSearch } from './lib/analytics'
 import { useAnalyticsPageView } from './useAnalyticsPageView'
 import { BbbChatWidget } from './bbb/BbbChatWidget'
+import { PlayerQueueRoot } from './catalog/playerQueue/PlayerQueueRoot'
 import { NotFoundRoute } from './catalog/NotFoundRoute'
+import { LegacyAboutSutraDetailRedirect } from './catalog/LegacyAboutSutraDetailRedirect'
 
 const HomePortal = lazy(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
 const AboutPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutPage })))
@@ -26,6 +28,10 @@ const WordsPage = lazy(() => import('./catalog/WordsPage').then((m) => ({ defaul
 const SutraDetailPage = lazy(() => import('./catalog/SutraDetailPage').then((m) => ({ default: m.SutraDetailPage })))
 const StyleGuidePage = lazy(() => import('./catalog/StyleGuidePage').then((m) => ({ default: m.StyleGuidePage })))
 const SitemapPage = lazy(() => import('./catalog/SitemapPage').then((m) => ({ default: m.SitemapPage })))
+const LearnLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.LearnLpPage })))
+const ListenLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.ListenLpPage })))
+const WatchLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.WatchLpPage })))
+const ManifestoPage = lazy(() => import('./catalog/ManifestoPage').then((m) => ({ default: m.ManifestoPage })))
 const GITHUB_PROJECT_BASENAME = '/bananasutra-app'
 const BBB_CHAT_ENABLED =
   (import.meta.env.VITE_BBB_CHAT_ENABLED?.trim().toLowerCase() ?? (import.meta.env.DEV ? 'true' : 'false')) === 'true'
@@ -142,12 +148,17 @@ export default function App() {
       ? GITHUB_PROJECT_BASENAME
       : undefined
 
+  useLayoutEffect(() => {
+    document.getElementById('app-boot-splash')?.remove()
+  }, [])
+
   return (
     <HelmetProvider>
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
       <BrowserRouter basename={routerBasename}>
+        <PlayerQueueRoot>
         <BootPrefetch />
         <NavigationLoadingBridge />
         <ScrollToTopOnNavigate />
@@ -157,6 +168,30 @@ export default function App() {
             element={
               <RouteBoundary>
                 <HomePortal />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/learn"
+            element={
+              <RouteBoundary>
+                <LearnLpPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/listen"
+            element={
+              <RouteBoundary>
+                <ListenLpPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/watch"
+            element={
+              <RouteBoundary>
+                <WatchLpPage />
               </RouteBoundary>
             }
           />
@@ -186,7 +221,7 @@ export default function App() {
             }
           />
           <Route
-            path="/about/sutras"
+            path="/sutras"
             element={
               <RouteBoundary>
                 <AboutSutrasPage />
@@ -194,7 +229,7 @@ export default function App() {
             }
           />
           <Route
-            path="/about/muses"
+            path="/muses"
             element={
               <RouteBoundary>
                 <AboutMusesPage />
@@ -202,7 +237,7 @@ export default function App() {
             }
           />
           <Route
-            path="/about/quotes"
+            path="/quotes"
             element={
               <RouteBoundary>
                 <AboutQuotesPage />
@@ -210,13 +245,25 @@ export default function App() {
             }
           />
           <Route
-            path="/about/:slug"
+            path="/manifesto"
+            element={
+              <RouteBoundary>
+                <ManifestoPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/sutras/:slug"
             element={
               <RouteBoundary>
                 <SutraDetailPage />
               </RouteBoundary>
             }
           />
+          <Route path="/about/sutras" element={<Navigate to="/sutras/" replace />} />
+          <Route path="/about/muses" element={<Navigate to="/muses/" replace />} />
+          <Route path="/about/quotes" element={<Navigate to="/quotes/" replace />} />
+          <Route path="/about/:slug" element={<LegacyAboutSutraDetailRedirect />} />
           <Route
             path="/songbooks"
             element={
@@ -276,6 +323,7 @@ export default function App() {
           <Route path="*" element={<NotFoundRoute />} />
         </Routes>
         {BBB_CHAT_ENABLED ? <BbbChatWidget /> : null}
+        </PlayerQueueRoot>
       </BrowserRouter>
     </HelmetProvider>
   )

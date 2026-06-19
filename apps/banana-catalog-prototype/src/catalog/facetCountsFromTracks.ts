@@ -1,4 +1,5 @@
 import { facetEntriesFromCountMap } from './facetCountsCore'
+import { sortSutraFacetEntries } from './sutraContext'
 import type { FacetEntry, TrackCatalogItem, TracksFacetFilterKey } from './types'
 
 /** Facet value counts for `/tracks` filter sidebar (full flat catalog). */
@@ -39,7 +40,7 @@ export function facetCountsFromTracks(tracks: TrackCatalogItem[]): Record<Tracks
   }
 
   return {
-    sutra: facetEntriesFromCountMap(sutra, { sensitivity: 'base' }),
+    sutra: sortSutraFacetEntries(facetEntriesFromCountMap(sutra, { sensitivity: 'base' })),
     light_shadow: facetEntriesFromCountMap(lightShadow, { sensitivity: 'base' }),
     primary_genre: facetEntriesFromCountMap(primary, { sensitivity: 'base' }),
     secondary_genre: facetEntriesFromCountMap(secondary, { sensitivity: 'base' }),

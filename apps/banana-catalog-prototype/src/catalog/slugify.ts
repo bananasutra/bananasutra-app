@@ -13,7 +13,7 @@ export function lyricsTitleToUrlSlug(title: string): string {
   return base || 'song'
 }
 
-/** Resolved `/about/:slug` segment when sutra pages use JSON context (Airtable slug or slugified label). */
+/** Resolved `/sutras/:slug` segment when sutra pages use JSON context (Airtable slug or slugified label). */
 export function sutraCatalogUrlSlug(row: { sutra: string; url_slug_sutra?: string }): string {
   const raw = (row.url_slug_sutra || '').trim()
   if (raw) return raw

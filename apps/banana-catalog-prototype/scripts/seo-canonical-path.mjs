@@ -3,19 +3,21 @@
  * Keep in sync with `src/catalog/seoPaths.ts`.
  */
 
-const ABOUT_STATIC_HUBS = new Set(['/about/sutras', '/about/muses', '/about/quotes'])
-
-/** Listing / hub routes emitted as `dist/<route>/index.html` (R26). */
+/** Listing / hub routes emitted as `dist/<route>/index.html` (R26). W-074: flat About hubs. */
 export const STATIC_SSG_INDEX_PATHS = new Set([
+  '/learn',
+  '/listen',
+  '/watch',
   '/songs',
   '/songbooks',
   '/tracks',
   '/videos',
   '/words',
   '/about',
-  '/about/sutras',
-  '/about/muses',
-  '/about/quotes',
+  '/sutras',
+  '/muses',
+  '/quotes',
+  '/manifesto',
   '/sitemap',
 ])
 
@@ -25,8 +27,6 @@ export function canonicalPathForRoute(pathname) {
   if (STATIC_SSG_INDEX_PATHS.has(pathname)) return `${pathname}/`
   if (/^\/songs\/[^/]+$/.test(pathname)) return `${pathname}/`
   if (/^\/songbooks\/[^/]+$/.test(pathname)) return `${pathname}/`
-  if (/^\/about\/[^/]+$/.test(pathname) && !ABOUT_STATIC_HUBS.has(pathname)) {
-    return `${pathname}/`
-  }
+  if (/^\/sutras\/[^/]+$/.test(pathname)) return `${pathname}/`
   return pathname
 }

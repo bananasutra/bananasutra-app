@@ -1,0 +1,137 @@
+/* Shared LP facet bar — horizontal scroll chips (listen + watch until W-066). */
+
+.lp-facet-bar {
+  padding-top: 0.35rem;
+}
+
+.lp-facet-bar__active {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.45rem;
+}
+
+.lp-facet-bar__count {
+  font-size: 0.62rem;
+  color: var(--color-text-muted, #666);
+  margin-right: 0.15rem;
+}
+
+.lp-facet-bar__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.18rem 0.45rem;
+  border-radius: var(--radius-control, 2px);
+  font-size: 0.62rem;
+  font-weight: 650;
+  background: var(--color-link, #524a40);
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.lp-facet-bar__pill-x {
+  opacity: 0.85;
+  font-size: 0.85em;
+}
+
+.lp-facet-bar__clear {
+  padding: 0.15rem 0.35rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.62rem;
+  color: var(--color-link, #524a40);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.lp-facet-bar__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.lp-facet-bar__row {
+  display: grid;
+  grid-template-columns: minmax(4.25rem, 5.25rem) minmax(0, 1fr);
+  gap: 0.25rem 0.55rem;
+  align-items: center;
+  min-width: 0;
+}
+
+.lp-facet-bar__label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-text-muted, #666);
+}
+
+.lp-facet-bar__scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-bottom: 0.1rem;
+  min-width: 0;
+  mask-image: linear-gradient(to right, #000 calc(100% - 1.25rem), transparent);
+}
+
+.lp-facet-bar__chips {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.3rem;
+  width: max-content;
+  min-width: 100%;
+}
+
+.lp-facet-bar__chip {
+  flex: 0 0 auto;
+  min-height: 2.75rem;
+  padding: 0.35rem 0.65rem;
+  border: none;
+  border-radius: var(--radius-control, 2px);
+  background: color-mix(in srgb, var(--color-text-primary, #111) 7%, var(--color-bg-panel, #fff));
+  font: inherit;
+  font-size: 0.68rem;
+  line-height: 1.25;
+  color: var(--color-text-primary, #111);
+  cursor: pointer;
+  white-space: nowrap;
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lp-facet-bar__chip.is-active {
+  background: var(--color-link, #524a40);
+  color: #fff;
+  font-weight: 650;
+}
+
+@media (hover: hover) {
+  .lp-facet-bar__chip:not(.is-active):hover {
+    background: color-mix(in srgb, var(--color-link, #524a40) 16%, var(--color-bg-panel, #fff));
+  }
+}
+
+.lp-facet-bar__status {
+  margin: 0.35rem 0 0;
+  font-size: 0.62rem;
+  color: var(--color-text-muted, #666);
+}
+
+.lp-facet-bar__chip--question {
+  white-space: normal;
+  max-width: 11rem;
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .lp-facet-bar__chip--question {
+    max-width: 13rem;
+  }
+}

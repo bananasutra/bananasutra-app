@@ -43,6 +43,10 @@ jobs:
           VITE_BBB_API_ENDPOINT: ${{ secrets.VITE_BBB_API_ENDPOINT }}
           VITE_BBB_CHAT_ENABLED: "true"
 
+      - name: Verify production build chunks (lazy routes + CSS)
+        run: npm run verify:build
+        working-directory: apps/banana-catalog-prototype
+
       - name: Verify SEO artifacts (sitemap + seo-metadata)
         run: npm run verify:seo
         working-directory: apps/banana-catalog-prototype

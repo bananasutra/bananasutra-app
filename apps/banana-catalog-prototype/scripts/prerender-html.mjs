@@ -20,7 +20,7 @@ const PILOT_ROUTES = new Set([
   '/songs',
   '/songs/ego-ain-t-your-amigo',
   '/songbooks/ask-naked-truth',
-  '/about/knowsutra',
+  '/sutras/knowsutra',
 ])
 
 function fail(msg) {

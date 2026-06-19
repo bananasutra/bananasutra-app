@@ -118,11 +118,11 @@ function main() {
   // Epic §2.1 static list (no /style-guide — internal shell page)
   push('/', { changefreq: 'weekly', priority: '1.0', lastmod: BUILD_LASTMOD })
 
-  for (const p of ['/songs', '/tracks', '/videos', '/words', '/songbooks']) {
+  for (const p of ['/learn', '/listen', '/watch', '/songs', '/tracks', '/videos', '/words', '/songbooks']) {
     push(p, { changefreq: 'weekly', priority: '0.9', lastmod: BUILD_LASTMOD })
   }
 
-  for (const p of ['/about', '/about/sutras', '/about/muses', '/about/quotes']) {
+  for (const p of ['/about', '/sutras', '/muses', '/quotes', '/manifesto']) {
     push(p, { changefreq: 'monthly', priority: '0.8', lastmod: BUILD_LASTMOD })
   }
 
@@ -130,7 +130,7 @@ function main() {
     const entry = sutraContext[familyKey]
     const slug = (entry.url_slug_sutra || '').trim().toLowerCase()
     if (!slug) continue
-    push(`/about/${slug}`, { changefreq: 'monthly', priority: '0.8', lastmod: BUILD_LASTMOD })
+    push(`/sutras/${slug}`, { changefreq: 'monthly', priority: '0.8', lastmod: BUILD_LASTMOD })
   }
 
   const seenSongbookSlug = new Set()

@@ -16,7 +16,7 @@ test("template includes required Bertrand opening phrasing", () => {
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Treat popularity\/engagement as a gentle quality signal/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /including hidden gems/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Keep the sutra lens explicit/);
-  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Sutras\]\(\/about\/sutras\)/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Sutras\]\(\/sutras\)/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /listening-first option/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Concise does not mean cold; a warm sentence is fine/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /3-5 short bullets max/);

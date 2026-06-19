@@ -167,6 +167,30 @@ function main() {
     ),
   )
   addRoute(
+    '/learn',
+    routeEntry(
+      'Learn',
+      'What is bananasutra? Start here. The songs make more sense once you know the sutras. Orientation hub for sutras, muses, quotes, and words.',
+      '/learn',
+    ),
+  )
+  addRoute(
+    '/listen',
+    routeEntry(
+      'Listen',
+      'Press play. The catalog is already sorted into stories. Top tracks for a quick hit. Songbooks when you want a longer ride. Full lyrics on song pages.',
+      '/listen',
+    ),
+  )
+  addRoute(
+    '/watch',
+    routeEntry(
+      'Watch',
+      'Picture the songs. Same catalog, eyes open. Music videos and YouTube playlists organized by sutra and story.',
+      '/watch',
+    ),
+  )
+  addRoute(
     '/songs',
     routeEntry(
       'Songs Catalog',
@@ -212,27 +236,35 @@ function main() {
     ),
   )
   addRoute(
-    '/about/sutras',
+    '/sutras',
     routeEntry(
       'The Seven Sutras',
       'Explore the seven BANANASUTRA sutras, the questions behind them, and the songs they organize.',
-      '/about/sutras',
+      '/sutras',
     ),
   )
   addRoute(
-    '/about/muses',
+    '/muses',
     routeEntry(
       'The Muses',
       'Explore the thinkers, fools, poets, and troublemakers who inspired BANANASUTRA songs.',
-      '/about/muses',
+      '/muses',
     ),
   )
   addRoute(
-    '/about/quotes',
+    '/quotes',
     routeEntry(
       'The Quotes',
       'Explore the quotes and ideas behind BANANASUTRA songs, grouped by theme.',
-      '/about/quotes',
+      '/quotes',
+    ),
+  )
+  addRoute(
+    '/manifesto',
+    routeEntry(
+      'AI Art Fair Use Manifesto',
+      "A framework for using AI without losing your soul, or someone else's work. Liberty, Equality, Fraternity. Human authorship, AI as instrument.",
+      '/manifesto',
     ),
   )
   addRoute(
@@ -266,7 +298,7 @@ function main() {
     const entry = sutraContext[familyKey]
     const slug = (entry.url_slug_sutra || '').trim().toLowerCase()
     if (!slug) continue
-    const pathname = `/about/${slug}`
+    const pathname = `/sutras/${slug}`
     const shortTitle = `${familyKey} · Sutra`
     const desc = `Explore the ${familyKey} sutra — songs, featured video, and related songbooks.`
     addRoute(pathname, routeEntry(shortTitle, desc, pathname))

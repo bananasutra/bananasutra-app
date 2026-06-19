@@ -5,7 +5,6 @@ import { GlobalHeader } from './GlobalHeader'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { allSongbooks, songbookHref } from './songbooks'
 import { browsePathWithQuery } from './seoPaths'
-import { songCatalogPath, sutraDetailPath } from './songPaths'
 import { buildBrowsePathForFacet } from './urlState'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { SUTRA_CONTEXT, sutraEntryBySlug, sutraHrefForFamily } from './sutraContext'
@@ -19,7 +18,9 @@ import {
   sutraFamilyKeyFromSongField,
 } from './sutraPageUtils'
 import type { SutraFamilyKey } from './sutraContext'
+import { ScrollRail } from './ScrollRail'
 import { SongThumbCard } from './SongThumbCard'
+import { browseRowHasAudioSection, songCatalogLinkTo, songCatalogPath, sutraDetailPath } from './songPaths'
 import { coverImageUrl } from '../seo/imageUrl'
 import { sutraCreativeWorkJsonLd } from '../seo/jsonLd'
 import { renderPageMeta } from './usePageMeta'
@@ -28,20 +29,35 @@ import { useSongCatalog } from './generatedData'
 import { songOnWordsSurface } from './wordsStory'
 import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
-import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
+import { YoutubeEmbeddedPlayer, YoutubeEmbedOutboundFooter } from './YouTubeEmbed'
 import {
   useExclusiveYoutubeSoundcloudPlayback,
   type ExclusiveYoutubeSoundcloudControls,
 } from './useExclusiveYoutubeSoundcloudPlayback'
+import { usePlayerQueueRegistrar } from './playerQueue/playerQueueRegistrarContext'
 import {
   pickRandomSongbookFromPool,
+  songbookFeaturedKickerLabel,
   songbookHrefFromCatalogItem,
 } from './homePortalUtils'
-import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
+import { formatDurationDisplay } from './durationFormat'
+import { CatalogFeaturedEmbedCopy } from './CatalogFeaturedEmbedCopy'
+import { formatSongbookScPlaylistMeta } from './songbookPlaylistMeta'
 import type { YouTubeCatalogVideo } from './types'
 import './CatalogApp.css'
 import './SongbooksPage.css'
+import './ListenLpPage.css'
 import './SutrasPages.css'
+
+const SUTRA_LATEST_DROPS_LIMIT = 6
+/** List-mode SC widget heights (no artwork — track list visible on mobile). */
+const SC_EMBED_HEIGHT_EP_LIST = 450
+const SC_EMBED_HEIGHT_SONGBOOK_LIST = 760
+
+function soundcloudListEmbedHeight(scUrl: string, kind: 'ep' | 'songbook'): number {
+  if (kind === 'songbook') return SC_EMBED_HEIGHT_SONGBOOK_LIST
+  return scUrl.includes('/sets/') ? SC_EMBED_HEIGHT_EP_LIST : 166
+}
 
 /** Per-sutra "what's next" copy for the bottom pivot section. */
 const WHATS_NEXT: Record<SutraFamilyKey, { label: string; body: string }> = {
@@ -134,22 +150,6 @@ function pickRandomVideo(videos: YouTubeCatalogVideo[]): YouTubeCatalogVideo | n
   return videos[index] ?? null
 }
 
-function formatDurationTotal(raw: string | number | null | undefined): string {
-  if (raw === null || raw === undefined) return ''
-  const text = String(raw).trim()
-  if (!text) return ''
-  // If already formatted in clock style, pass through.
-  if (/^\d{1,2}:\d{2}(:\d{2})?$/.test(text)) return text
-  const secs = Number(text)
-  if (!Number.isFinite(secs) || secs <= 0) return ''
-  const rounded = Math.round(secs)
-  const h = Math.floor(rounded / 3600)
-  const m = Math.floor((rounded % 3600) / 60)
-  const s = rounded % 60
-  if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-  return `${m}:${String(s).padStart(2, '0')}`
-}
-
 export function SutraDetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const location = useLocation()
@@ -164,6 +164,7 @@ export function SutraDetailPage() {
     [],
   )
   const exclusivePlaybackRef = useRef<ExclusiveYoutubeSoundcloudControls | null>(null)
+  const { persistentScEmbedWrapRef, usePersistentPlayback } = usePlayerQueueRegistrar()
   const [youtubeIframeGen, setYoutubeIframeGen] = useState(0)
   const pullTypingIntervalRef = useRef<number | undefined>(undefined)
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
@@ -283,7 +284,7 @@ export function SutraDetailPage() {
     return [...songsInFamily]
       .filter(songHasAudioOrVideo)
       .sort((a, b) => parsePublishedAt(b.published_at) - parsePublishedAt(a.published_at))
-      .slice(0, 6)
+      .slice(0, SUTRA_LATEST_DROPS_LIMIT)
   }, [songsInFamily])
 
   const lyricsOnlyCount = useMemo(() => songsInFamily.filter(songOnWordsSurface).length, [songsInFamily])
@@ -313,6 +314,7 @@ export function SutraDetailPage() {
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
     soundcloudWrapRefs: sutraSoundcloudWrapRefs,
+    persistentScWrapRef: usePersistentPlayback ? persistentScEmbedWrapRef : undefined,
     enabled: sutraExclusivePlaybackEnabled,
     controlsRef: exclusivePlaybackRef,
     syncKey: `${familyKey ?? ''}|${featuredSutraVideo?.video_id ?? ''}|${featuredScUrlForExclusive}|spot:${(sutraSpotlightSongbook?.playlist_url || '').trim()}|yt:${youtubeIframeGen}`,
@@ -363,14 +365,13 @@ export function SutraDetailPage() {
         .filter((song) => (song.primary_ep_url || '').trim() === featuredEpUrl)
         .reduce((sum, song) => sum + (Number.isFinite(song.aggregate_duration_sec) ? song.aggregate_duration_sec : 0), 0)
     : 0
-  const featuredEpDuration = formatDurationTotal(featuredEp?.duration_total ?? featuredEpDurationSeconds)
+  const featuredEpDuration = formatDurationDisplay(featuredEp?.duration_total ?? featuredEpDurationSeconds)
   const featuredEpSongbookTitle = (featuredEp?.ep_songbook_title || '').trim()
-  const featuredEpPlaylistMetaLine =
+  const featuredEpTitleMeta =
     featuredEp?.ep_url && featuredEp.ep_url.includes('soundcloud.com')
       ? [
           featuredEp.ep_total_tracks != null ? `${featuredEp.ep_total_tracks} tracks` : null,
           featuredEpDuration.trim() || null,
-          `${formatCount(featuredEp.total_plays)} plays`,
         ]
           .filter(Boolean)
           .join(' · ')
@@ -490,20 +491,30 @@ export function SutraDetailPage() {
             <h2 id="sutra-browse-heading" className="catalog-section-title">
               Latest {entry.sutra} drops
             </h2>
+            <p className="catalog-lp-section-intro">
+              Fresh in. Lyrics, meaning, and playback on each song page.
+            </p>
             {latestDrops.length ? (
-              <ul className="song-thumb-grid song-thumb-grid--home sutra-detail__song-grid" aria-label={`Latest ${entry.sutra} drops`}>
-                {latestDrops.map((s) => (
-                  <li key={s.lyrics_id} className="song-thumb-grid__cell">
-                    <SongThumbCard
-                      to={songCatalogPath(s.lyrics_title, s.url_slug)}
-                      coverUrl={s.cover_image_url}
-                      title={s.lyrics_title}
-                      metaLabel={s.sutra}
-                    />
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+              <ScrollRail className="listen-lp__scroll-rail" variant="fade">
+                <ul className="listen-lp__rail-list" aria-label={`Latest ${entry.sutra} drops`}>
+                  {latestDrops.map((song) => (
+                    <li key={song.lyrics_id} className="listen-lp__rail-cell">
+                      <SongThumbCard
+                        to={songCatalogLinkTo(song.lyrics_title, song.url_slug, {
+                          section: browseRowHasAudioSection(song) ? 'audio' : undefined,
+                        })}
+                        coverUrl={song.cover_image_url}
+                        title={song.lyrics_title}
+                        metaLabel={song.sutra}
+                        publishedAt={song.published_at}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </ScrollRail>
+            ) : (
+              <p className="sutra-detail__empty">No recent drops with audio or video in this sutra yet.</p>
+            )}
             <Link className="catalog-section-cta" to={browseHref}>
               View all {stats ? formatCount(stats.songs) : '…'} {entry.sutra} songs →
             </Link>
@@ -530,11 +541,11 @@ export function SutraDetailPage() {
 
           <section className="sutra-detail__section" aria-labelledby="sutra-featured-heading">
             <h2 id="sutra-featured-heading" className="catalog-section-title">
-              Featured {entry.sutra} Video
+              Featured {entry.sutra} video
             </h2>
             {featuredSutraVideo ? (
-              <div className="sutra-detail__feat">
-                <div className="sutra-detail__feat-embed sutra-detail__feat-embed--video-contained">
+              <>
+                <div className="sutra-detail__media-block-embed sutra-detail__media-block-embed--video">
                   <YoutubeEmbeddedPlayer
                     videoId={featuredSutraVideo.video_id}
                     title={
@@ -548,21 +559,24 @@ export function SutraDetailPage() {
                     embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
                     iframeClassName="sutra-detail__yt-embed"
                     facadeUntilClick
+                    showOutboundFooter={false}
                     onBeforePlay={() => exclusivePlaybackRef.current?.pauseAllSoundcloud()}
                     onIframeLoad={() => setYoutubeIframeGen((g) => g + 1)}
-                    outboundFooterClassName="sutra-detail__yt-outbound"
                   />
                 </div>
-                <div className="sutra-detail__feat-copy">
-                  <h3 className="sutra-detail__feat-title">{featuredSutraVideo.lyrics_title || featuredSutraVideo.title}</h3>
+                <div className="catalog-featured-embed-copy sutra-detail__media-block-copy">
+                  <p className="catalog-featured-embed-copy__title">
+                    {featuredSutraVideo.lyrics_title || featuredSutraVideo.title}
+                  </p>
                   {(featuredSutraVideo.lyrics_summary || '').trim() ? (
-                    <p className="sutra-detail__feat-desc">{featuredSutraVideo.lyrics_summary?.trim()}</p>
+                    <p className="catalog-featured-embed-copy__desc">{featuredSutraVideo.lyrics_summary?.trim()}</p>
                   ) : null}
                   <Link className="sutra-detail__cta" to={videosHref}>
-                    View {entry.sutra} Videos →
+                    View {entry.sutra} videos →
                   </Link>
+                  <YoutubeEmbedOutboundFooter videoId={featuredSutraVideo.video_id} />
                 </div>
-              </div>
+              </>
             ) : (
               <p className="sutra-detail__empty">No featured {entry.sutra} video marked in the catalog yet.</p>
             )}
@@ -573,79 +587,87 @@ export function SutraDetailPage() {
               Featured {entry.sutra} EP
             </h2>
             {featuredEp?.ep_url && featuredEp.ep_url.includes('soundcloud.com') ? (
-              <div className="sutra-detail__feat">
-                <div className="sutra-detail__feat-embed" ref={soundcloudExclusiveWrapRef}>
+              <>
+                <div className="sutra-detail__media-block-embed" ref={soundcloudExclusiveWrapRef}>
                   <LazySoundCloudEmbed
                     scUrl={featuredEp.ep_url}
                     title={featuredEp.ep_title}
-                    height={280}
+                    mode="list"
+                    height={soundcloudListEmbedHeight(featuredEp.ep_url, 'ep')}
                   />
                 </div>
-                <div className="sutra-detail__feat-copy">
-                  <h3 className="sutra-detail__feat-title">{featuredEp.ep_title}</h3>
-                  {featuredEp.ep_description ? (
-                    <p className="sutra-detail__feat-desc">{featuredEp.ep_description}</p>
-                  ) : null}
-                  {featuredEpPlaylistMetaLine ? (
-                    <p className="catalog-songbook-playlist-meta sutra-detail__feat-sc-playlist-meta">{featuredEpPlaylistMetaLine}</p>
-                  ) : null}
+                <CatalogFeaturedEmbedCopy
+                  className="sutra-detail__media-block-copy"
+                  title={featuredEp.ep_title}
+                  titleMeta={featuredEpTitleMeta || null}
+                  description={featuredEp.ep_description}
+                  outboundHref={featuredEp.ep_url}
+                >
                   {featuredEpSongbookTitle ? (
                     <Link className="sutra-detail__cta" to={songbookHref(featuredEpSongbookTitle)}>
-                      View Song →
+                      View song →
                     </Link>
                   ) : null}
-                </div>
-              </div>
+                </CatalogFeaturedEmbedCopy>
+              </>
             ) : featuredSongbookFallback ? (
-              <div className="sutra-detail__feat">
-                <div className="sutra-detail__feat-embed" ref={soundcloudExclusiveWrapRef}>
+              <>
+                <div className="sutra-detail__media-block-embed" ref={soundcloudExclusiveWrapRef}>
                   {featuredSongbookFallback.playlist_url ? (
                     <LazySoundCloudEmbed
                       scUrl={featuredSongbookFallback.playlist_url}
                       title={featuredSongbookFallback.songbook}
-                      height={280}
+                      mode="list"
+                      height={soundcloudListEmbedHeight(featuredSongbookFallback.playlist_url, 'songbook')}
                     />
                   ) : null}
                 </div>
-                <div className="sutra-detail__feat-copy">
-                  <h3 className="sutra-detail__feat-title">{featuredSongbookFallback.songbook}</h3>
-                  {featuredSongbookFallback.description ? (
-                    <p className="sutra-detail__feat-desc">{featuredSongbookFallback.description}</p>
-                  ) : null}
-                  <SongbookPlaylistMetaLine book={featuredSongbookFallback} className="sutra-detail__feat-sc-playlist-meta" />
+                <CatalogFeaturedEmbedCopy
+                  className="sutra-detail__media-block-copy"
+                  meta={songbookFeaturedKickerLabel(featuredSongbookFallback)}
+                  title={featuredSongbookFallback.songbook}
+                  titleMeta={formatSongbookScPlaylistMeta(featuredSongbookFallback)}
+                  description={featuredSongbookFallback.description}
+                  outboundHref={featuredSongbookFallback.playlist_url || null}
+                >
                   <Link className="sutra-detail__cta" to={songbookHref(featuredSongbookFallback.songbook)}>
-                    View Songbook →
+                    View songbook →
                   </Link>
-                </div>
-              </div>
+                </CatalogFeaturedEmbedCopy>
+              </>
             ) : (
               <p className="sutra-detail__empty">No featured EP or songbook embed on file for this sutra yet.</p>
             )}
           </section>
 
           {sutraSpotlightSongbook ? (
-            <section className="sutra-detail__section sutra-detail__section--songbook-spotlight" aria-labelledby="sutra-spotlight-songbook-heading">
+            <section
+              className="sutra-detail__section sutra-detail__section--songbook-spotlight"
+              aria-labelledby="sutra-spotlight-songbook-heading"
+            >
               <h2 id="sutra-spotlight-songbook-heading" className="catalog-section-title">
                 {entry.sutra} songbook spotlight
               </h2>
-              <div className="sutra-detail__feat">
-                <div className="sutra-detail__feat-embed" ref={sutraSpotlightSoundcloudWrapRef}>
-                  <LazySoundCloudEmbed
-                    scUrl={sutraSpotlightSongbook.playlist_url}
-                    title={sutraSpotlightSongbook.songbook}
-                  />
-                </div>
-                <div className="sutra-detail__feat-copy">
-                  <h3 className="sutra-detail__feat-title">{sutraSpotlightSongbook.songbook}</h3>
-                  {sutraSpotlightSongbook.description ? (
-                    <p className="sutra-detail__feat-desc">{sutraSpotlightSongbook.description}</p>
-                  ) : null}
-                  <SongbookPlaylistMetaLine book={sutraSpotlightSongbook} className="sutra-detail__feat-sc-playlist-meta" />
-                  <Link className="sutra-detail__cta" to={songbookHrefFromCatalogItem(sutraSpotlightSongbook)}>
-                    View Songbook →
-                  </Link>
-                </div>
+              <div className="sutra-detail__media-block-embed" ref={sutraSpotlightSoundcloudWrapRef}>
+                <LazySoundCloudEmbed
+                  scUrl={sutraSpotlightSongbook.playlist_url}
+                  title={sutraSpotlightSongbook.songbook}
+                  mode="list"
+                  height={soundcloudListEmbedHeight(sutraSpotlightSongbook.playlist_url, 'songbook')}
+                />
               </div>
+              <CatalogFeaturedEmbedCopy
+                className="sutra-detail__media-block-copy"
+                meta={songbookFeaturedKickerLabel(sutraSpotlightSongbook)}
+                title={sutraSpotlightSongbook.songbook}
+                titleMeta={formatSongbookScPlaylistMeta(sutraSpotlightSongbook)}
+                description={sutraSpotlightSongbook.description}
+                outboundHref={sutraSpotlightSongbook.playlist_url || null}
+              >
+                <Link className="sutra-detail__cta" to={songbookHrefFromCatalogItem(sutraSpotlightSongbook)}>
+                  View songbook →
+                </Link>
+              </CatalogFeaturedEmbedCopy>
             </section>
           ) : null}
 

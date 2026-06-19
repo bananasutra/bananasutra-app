@@ -29,7 +29,7 @@ export function AboutContent() {
 
   useEffect(() => {
     if (location.hash === '#sutras') {
-      navigate(canonicalPathForRoute('/about/sutras'), { replace: true })
+      navigate(canonicalPathForRoute('/sutras'), { replace: true })
     }
   }, [location.hash, navigate])
 
@@ -95,7 +95,7 @@ export function AboutContent() {
             ))}
           </ul>
           <p className="about-page__sutra-glance-more">
-            <Link className="about-page__text-link" to={canonicalPathForRoute('/about/sutras')}>
+            <Link className="about-page__text-link" to={canonicalPathForRoute('/sutras')}>
               Learn more about the sutras →
             </Link>
           </p>

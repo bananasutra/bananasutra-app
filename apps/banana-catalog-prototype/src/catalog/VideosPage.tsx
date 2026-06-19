@@ -1,31 +1,51 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { reportVideosFilterTransition } from './catalogAnalytics'
+import {
+  CatalogFilterBar,
+  type CatalogFilterBarActivePill,
+  type CatalogFilterBarChipOption,
+  type CatalogFilterBarFacetGroup,
+  type CatalogFilterBarSecondaryGroup,
+} from './CatalogFilterBar'
 import { flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
-import { songMatchesMediaCombo } from './filterSongs'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { filterYoutubeVideosBySearchQuery } from './searchMatch'
 import { songCatalogLinkTo } from './songPaths'
-import { sutraClassName } from './sutraTheme'
-import { sutraQuestionFromDisplay } from './sutraContext'
+import { sutraClassName, sutraFilterChipClassName } from './sutraTheme'
+import { sortSutraDisplayNames, sutraQuestionFromDisplay } from './sutraContext'
 import type { SongCatalogItem, YouTubeCatalogVideo } from './types'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
+import {
+  applyVideoFilters,
+  hrefVideos,
+  readVideosFiltersFromParams,
+  videoLinkedSongHasSC,
+  type VideosUrlFilters,
+} from './videosFiltersCore'
 import { coverImageUrl } from '../seo/imageUrl'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { ScrollRail } from './ScrollRail'
-import { CatalogPager } from './CatalogPager'
+import { CatalogInfiniteScrollFooter } from './CatalogInfiniteScrollFooter'
+import {
+  catalogInfiniteScrollStorageKey,
+  useCatalogInfiniteScroll,
+} from './useCatalogInfiniteScroll'
 import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
+import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
-import './CatalogPager.css'
 import './CatalogApp.css'
 import './VideosPage.css'
 import { useSongCatalog } from './generatedData'
 
-const VIDEO_PAGE_SIZE = 30
 const FIND_DEBOUNCE_MS = 350
+const REELS_RAIL_SCROLL_STEP = 164
+
+function formatCount(n: number): string {
+  return n.toLocaleString('en-US')
+}
 
 function buildSongMapByLyricsId(songCatalog: SongCatalogItem[]): Map<string, SongCatalogItem> {
   const m = new Map<string, SongCatalogItem>()
@@ -34,17 +54,6 @@ function buildSongMapByLyricsId(songCatalog: SongCatalogItem[]): Map<string, Son
     if (id) m.set(id, s)
   }
   return m
-}
-
-/** Video-specific media filter — intentionally simpler than the songs-page version. */
-type VideoMediaFilter = 'all' | 'has_sc'
-
-/** Returns true when the video's linked song is also available on SoundCloud. */
-function videoLinkedSongHasSC(v: YouTubeCatalogVideo, songs: Map<string, SongCatalogItem>): boolean {
-  const lid = (v.lyrics_id || '').trim()
-  const song = lid ? songs.get(lid) : undefined
-  if (!song) return false
-  return songMatchesMediaCombo(song, 'lyrics_sc') || songMatchesMediaCombo(song, 'full')
 }
 
 function splitListTokens(raw: string): string[] {
@@ -84,102 +93,11 @@ function collectDistinctSorted(videos: YouTubeCatalogVideo[], getter: (v: YouTub
   return [...seen].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
 }
 
-type VideoCardLinkTarget = 'all' | 'in_app' | 'off_site'
-
-type VideosUrlFilters = {
-  find: string
-  sutra: string
-  topic: string
-  intention: string
-  linkTarget: VideoCardLinkTarget
-  media: VideoMediaFilter
-  page: number
-}
-
 type VideoFacetChipKey = 'sutra' | 'topic' | 'intention'
-
-function readLinkTarget(searchParams: URLSearchParams): VideoCardLinkTarget {
-  const raw = (searchParams.get('link') ?? '').trim().toLowerCase()
-  if (raw === 'in_app' || raw === 'song') return 'in_app'
-  if (raw === 'off_site' || raw === 'youtube' || raw === 'external') return 'off_site'
-  if (searchParams.get('catalog') === '1') return 'in_app'
-  return 'all'
-}
-
-function readVideoMediaFilter(searchParams: URLSearchParams): VideoMediaFilter {
-  const raw = (searchParams.get('media') ?? '').trim().toLowerCase()
-  if (raw === 'has_sc') return 'has_sc'
-  if (raw === 'any') return 'all'
-  return 'all'
-}
-
-function readFiltersFromParams(searchParams: URLSearchParams): VideosUrlFilters {
-  return {
-    find: (searchParams.get('find') ?? '').trim(),
-    sutra: (searchParams.get('sutra') ?? '').trim(),
-    topic: (searchParams.get('topic') ?? '').trim(),
-    intention: (searchParams.get('intention') ?? '').trim(),
-    linkTarget: readLinkTarget(searchParams),
-    media: readVideoMediaFilter(searchParams),
-    page: Math.max(1, parseInt(searchParams.get('page') || '1', 10) || 1),
-  }
-}
-
-function filtersToQueryString(f: VideosUrlFilters): string {
-  const p = new URLSearchParams()
-  if (f.find) p.set('find', f.find)
-  if (f.sutra) p.set('sutra', f.sutra)
-  if (f.topic) p.set('topic', f.topic)
-  if (f.intention) p.set('intention', f.intention)
-  if (f.linkTarget === 'in_app') p.set('link', 'in_app')
-  else if (f.linkTarget === 'off_site') p.set('link', 'off_site')
-  if (f.media && f.media !== 'all') p.set('media', f.media)
-  if (f.page > 1) p.set('page', String(f.page))
-  const s = p.toString()
-  return s ? `?${s}` : ''
-}
-
-function hrefVideos(partial: Partial<VideosUrlFilters>, base: VideosUrlFilters): string {
-  const merged: VideosUrlFilters = { ...base, ...partial }
-  const keys = Object.keys(partial) as (keyof VideosUrlFilters)[]
-  if (keys.some((k) => k !== 'page')) merged.page = 1
-  return browsePathWithQuery('/videos', filtersToQueryString(merged).replace(/^\?/, ''))
-}
 
 function isVerticalFormat(video: YouTubeCatalogVideo): boolean {
   const f = (video.format || '').trim().toLowerCase()
   return f.includes('9:16') || f.includes('vertical') || f === 'shorts'
-}
-
-function applyVideoFilters(
-  videos: YouTubeCatalogVideo[],
-  f: VideosUrlFilters,
-  inAppIds: Set<string>,
-  songsByLyricsId: Map<string, SongCatalogItem>,
-): YouTubeCatalogVideo[] {
-  let out = videos
-  if (f.media === 'has_sc') {
-    out = out.filter((v) => videoLinkedSongHasSC(v, songsByLyricsId))
-  }
-  if (f.linkTarget === 'in_app') {
-    out = out.filter((v) => inAppIds.has(v.lyrics_id))
-  } else if (f.linkTarget === 'off_site') {
-    out = out.filter((v) => !inAppIds.has(v.lyrics_id))
-  }
-  if (f.sutra) {
-    const s = f.sutra.toLowerCase()
-    out = out.filter((v) => (v.sutra || '').trim().toLowerCase() === s)
-  }
-  if (f.topic) {
-    out = out.filter((v) => (v.song_topic || '').trim() === f.topic)
-  }
-  if (f.intention) {
-    out = out.filter((v) => (v.song_intention || '').trim() === f.intention)
-  }
-  if (f.find) {
-    out = filterYoutubeVideosBySearchQuery(out, f.find)
-  }
-  return out
 }
 
 function hashString(input: string): number {
@@ -271,7 +189,8 @@ export function VideosPage() {
   const [youtubeCatalogVideos, setYoutubeCatalogVideos] = useState<YouTubeCatalogVideo[]>([])
   const [youtubeCatalogReady, setYoutubeCatalogReady] = useState(false)
   const [searchParams] = useSearchParams()
-  const filters = useMemo(() => readFiltersFromParams(searchParams), [searchParams])
+  const filters = useMemo(() => readVideosFiltersFromParams(searchParams), [searchParams])
+  const [legacyPageSeed] = useState(() => filters.page)
   const [findDraft, setFindDraft] = useState(filters.find)
   const filtersRef = useRef(filters)
   const prevVideoFiltersRef = useRef<VideosUrlFilters | null>(null)
@@ -314,9 +233,7 @@ export function VideosPage() {
     }, FIND_DEBOUNCE_MS)
     return () => window.clearTimeout(tid)
   }, [findDraft, filters.find, navigate])
-  const [filtersOpen, setFiltersOpen] = useState(() =>
-    typeof window === 'undefined' ? true : window.innerWidth >= 900,
-  )
+  const [filterBarExpanded, setFilterBarExpanded] = useState(false)
   const visitSeedRef = useRef(Math.floor(Math.random() * 1_000_000_000))
 
   const inAppIds = useMemo(() => {
@@ -394,22 +311,20 @@ export function VideosPage() {
   }, [searchParams, navigate])
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 899px)')
-    const sync = () => {
-      if (mq.matches) setFiltersOpen(false)
-    }
-    sync()
-    mq.addEventListener('change', sync)
-    return () => mq.removeEventListener('change', sync)
-  }, [])
-
-  useEffect(() => {
     if (filters.linkTarget !== 'off_site') return
     if (orphanUploadCount > 0) return
     navigate(hrefVideos({ linkTarget: 'all' }, filters), { replace: true })
   }, [filters.linkTarget, orphanUploadCount, filters, navigate])
 
-  const sutraOptions = useMemo(() => collectDistinctSorted(allVideos, (v) => v.sutra), [allVideos])
+  useEffect(() => {
+    if (filters.page <= 1) return
+    navigate(hrefVideos({ page: 1 }, filters), { replace: true })
+  }, [filters.page, filters, navigate])
+
+  const sutraOptions = useMemo(
+    () => sortSutraDisplayNames(collectDistinctSorted(allVideos, (v) => v.sutra)),
+    [allVideos],
+  )
   const topicOptions = useMemo(() => collectDistinctSorted(allVideos, (v) => v.song_topic), [allVideos])
   const intentionOptions = useMemo(() => collectDistinctSorted(allVideos, (v) => v.song_intention), [allVideos])
 
@@ -444,7 +359,9 @@ export function VideosPage() {
     const featuredPool = shownVideos.filter((v) => Boolean(v.can_embed) && Boolean(v.video_featured))
     if (featuredPool.length === 0) return null
     const baseSeed = String(visitSeedRef.current)
-    const filterSeed = hasActiveVideoFilters ? filtersToQueryString(filters) : '__all__'
+    const filterSeed = hasActiveVideoFilters
+      ? `${filters.find}|${filters.sutra}|${filters.topic}|${filters.intention}|${filters.media}|${filters.linkTarget}`
+      : '__all__'
     const pickIdx = hashString(`${baseSeed}|${filterSeed}`) % featuredPool.length
     return featuredPool[pickIdx] ?? null
   }, [shownVideos, hasActiveVideoFilters, filters])
@@ -471,33 +388,33 @@ export function VideosPage() {
   const verticalVideos = useMemo(() => shownVideos.filter(isVerticalFormat), [shownVideos])
   const wideOnlyVideos = useMemo(() => shownVideos.filter((v) => !isVerticalFormat(v)), [shownVideos])
 
-  const pageCount = Math.max(1, Math.ceil(wideOnlyVideos.length / VIDEO_PAGE_SIZE))
-  const urlVideoPage = filters.page
-  const safeVideoPage = Math.min(urlVideoPage, pageCount)
-
-  useEffect(() => {
-    if (urlVideoPage === safeVideoPage) return
-    navigate(hrefVideos({ page: safeVideoPage }, filters), { replace: true })
-  }, [urlVideoPage, safeVideoPage, filters, navigate])
-
-  const wideVideos = useMemo(
+  const videosScrollResetKey = useMemo(
     () =>
-      wideOnlyVideos.slice(
-        (safeVideoPage - 1) * VIDEO_PAGE_SIZE,
-        safeVideoPage * VIDEO_PAGE_SIZE,
-      ),
-    [wideOnlyVideos, safeVideoPage],
+      [
+        filters.find,
+        filters.sutra,
+        filters.topic,
+        filters.intention,
+        filters.media,
+        filters.linkTarget,
+      ].join('|'),
+    [filters.find, filters.sutra, filters.topic, filters.intention, filters.media, filters.linkTarget],
   )
 
-  const wideTotal = wideOnlyVideos.length
-  const showWidePager = wideTotal > VIDEO_PAGE_SIZE
+  const {
+    visibleItems: wideVideos,
+    visibleCount: wideVisibleCount,
+    totalCount: wideTotal,
+    hasMore: wideHasMore,
+    loadMore: loadMoreWideVideos,
+  } = useCatalogInfiniteScroll({
+    items: wideOnlyVideos,
+    resetKey: videosScrollResetKey,
+    storageKey: catalogInfiniteScrollStorageKey('/videos', videosScrollResetKey),
+    legacyPage: legacyPageSeed,
+  })
 
-  const videoPagerLink = useCallback(
-    (target: number) => hrefVideos({ page: target }, filters),
-    [filters],
-  )
-
-  useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString(), filtersOpen])
+  useSyncCatalogHeaderHeight(pageRef, headerRef, [searchParams.toString(), filterBarExpanded])
 
   if (!catalogLoading && (catalogError || songCatalogRows === null)) {
     return (
@@ -513,63 +430,168 @@ export function VideosPage() {
     )
   }
 
-  const chipSection = (
+  const buildVideoFacetGroup = (
     id: string,
-    heading: string,
+    label: string,
     options: string[],
     paramKey: VideoFacetChipKey,
     current: string,
     contextualRows: YouTubeCatalogVideo[],
-  ) => {
+  ): CatalogFilterBarFacetGroup | null => {
     if (!options.length) return null
-    const total = contextualRows.length
-    return (
-      <section className="catalog-facet" aria-labelledby={id}>
-        <h3 id={id}>{heading}</h3>
-        <div className="catalog-facet-chips" role="group" aria-labelledby={id}>
-          <Link
-            className={`catalog-facet-chip${!current ? ' is-active' : ''}`}
-            to={hrefVideos({ [paramKey]: '' }, filters)}
-            title={`${total} videos`}
-          >
-            <span>All</span>
-            <span className="catalog-facet-count">{` (${total})`}</span>
-          </Link>
-          {options.map((opt) => {
-            const active = current === opt
-            const count = contextualRows.filter((video) =>
-              paramKey === 'sutra'
-                ? (video.sutra || '').trim().toLowerCase() === opt.toLowerCase()
-                : paramKey === 'topic'
-                  ? (video.song_topic || '').trim() === opt
-                  : (video.song_intention || '').trim() === opt,
-            ).length
-            const disabled = !active && count === 0
-            return (
-              <Link
-                key={`${paramKey}-${opt}`}
-                className={`catalog-facet-chip${active ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
-                to={hrefVideos({ [paramKey]: active ? '' : opt }, filters)}
-                title={paramKey === 'sutra' ? `${sutraQuestionFromDisplay(opt)} (${count} videos)` : `${count} videos`}
-                aria-disabled={disabled}
-                tabIndex={disabled ? -1 : undefined}
-                onClick={(event) => {
-                  if (disabled) event.preventDefault()
-                }}
-              >
-                {paramKey === 'sutra' ? (
-                  <span className={`catalog-facet-sutra-name ${sutraClassName(opt)}`}>{opt}</span>
-                ) : (
-                  <span>{opt}</span>
-                )}
-                <span className="catalog-facet-count">{` (${count})`}</span>
-              </Link>
-            )
-          })}
-        </div>
-      </section>
-    )
+    const chipOptions: CatalogFilterBarChipOption[] = options.map((opt) => {
+      const active = current === opt
+      const count = contextualRows.filter((video) =>
+        paramKey === 'sutra'
+          ? (video.sutra || '').trim().toLowerCase() === opt.toLowerCase()
+          : paramKey === 'topic'
+            ? (video.song_topic || '').trim() === opt
+            : (video.song_intention || '').trim() === opt,
+      ).length
+      return {
+        id: `${paramKey}-${opt}`,
+        label:
+          paramKey === 'sutra' ? (
+            <span className={`catalog-facet-sutra-name ${sutraClassName(opt)}`}>{opt}</span>
+          ) : (
+            opt
+          ),
+        href: hrefVideos({ [paramKey]: active ? '' : opt }, filters),
+        count,
+        active,
+        disabled: !active && count === 0,
+        className: paramKey === 'sutra' ? sutraFilterChipClassName(opt) : undefined,
+        title: paramKey === 'sutra' ? `${sutraQuestionFromDisplay(opt)} (${count} videos)` : `${count} videos`,
+      }
+    })
+    return {
+      id,
+      label,
+      allHref: hrefVideos({ [paramKey]: '' }, filters),
+      allCount: contextualRows.length,
+      options: chipOptions,
+    }
   }
+
+  const videoContextSummary = hasActiveVideoFilters
+    ? `${shownVideos.length} of ${allVideos.length} videos`
+    : `${allVideos.length} videos`
+
+  const videoActivePills: CatalogFilterBarActivePill[] = []
+  if (filters.find) {
+    videoActivePills.push({
+      id: 'find',
+      label: <>Search: {filters.find}</>,
+      href: hrefVideos({ find: '' }, filters),
+      title: 'Remove text filter',
+      className: 'catalog-filter-bar__pill--find',
+    })
+  }
+  if (filters.media === 'has_sc') {
+    videoActivePills.push({
+      id: 'media-sc',
+      label: '+ SoundCloud',
+      href: hrefVideos({ media: 'all', linkTarget: 'all' }, filters),
+      title: 'Clear media filter',
+    })
+  }
+  if (filters.linkTarget === 'off_site') {
+    videoActivePills.push({
+      id: 'link-off-site',
+      label: 'YouTube-only',
+      href: hrefVideos({ linkTarget: 'all' }, filters),
+      title: 'Show all videos',
+    })
+  }
+  if (filters.sutra) {
+    videoActivePills.push({
+      id: 'sutra',
+      label: (
+        <>
+          Sutra:{' '}
+          <span className={`catalog-facet-sutra-name ${sutraClassName(filters.sutra)}`}>{filters.sutra}</span>
+        </>
+      ),
+      href: hrefVideos({ sutra: '' }, filters),
+      title: `Remove sutra filter · ${sutraQuestionFromDisplay(filters.sutra)}`,
+    })
+  }
+  if (filters.topic) {
+    videoActivePills.push({
+      id: 'topic',
+      label: <>Topic: {filters.topic}</>,
+      href: hrefVideos({ topic: '' }, filters),
+      title: 'Remove topic filter',
+    })
+  }
+  if (filters.intention) {
+    videoActivePills.push({
+      id: 'intention',
+      label: <>Intention: {filters.intention}</>,
+      href: hrefVideos({ intention: '' }, filters),
+      title: 'Remove intention filter',
+    })
+  }
+
+  const mediaAllCount = contextualRowsWithoutMediaLink.length
+  const mediaHasScCount = contextualRowsWithoutMediaLink.filter((video) =>
+    videoLinkedSongHasSC(video, songsByLyricsId),
+  ).length
+  const mediaYoutubeOnlyCount = contextualRowsWithoutMediaLink.filter(
+    (video) => !inAppIds.has((video.lyrics_id || '').trim()),
+  ).length
+  const mediaAllActive = filters.media === 'all' && filters.linkTarget !== 'off_site'
+  const mediaHasScActive = filters.media === 'has_sc'
+  const mediaOffSiteActive = filters.linkTarget === 'off_site'
+  const disableMediaHasSc = !mediaHasScActive && mediaHasScCount === 0
+  const disableMediaOffSite = !mediaOffSiteActive && mediaYoutubeOnlyCount === 0
+
+  const videoSecondaryGroup: CatalogFilterBarSecondaryGroup = {
+    id: 'media',
+    label: 'Media',
+    helpText: "Some videos also have SoundCloud playback or full lyrics. Filter by what's available.",
+    options: [
+      {
+        id: 'media-all',
+        label: 'All',
+        href: hrefVideos({ media: 'all', linkTarget: 'all' }, filters),
+        count: mediaAllCount,
+        active: mediaAllActive,
+        title: `All ${mediaAllCount} videos`,
+      },
+      {
+        id: 'media-has-sc',
+        label: '+ SoundCloud',
+        href: hrefVideos({ media: 'has_sc', linkTarget: 'all' }, filters),
+        count: mediaHasScCount,
+        active: mediaHasScActive,
+        disabled: disableMediaHasSc,
+        title: `${mediaHasScCount} videos with linked song on SoundCloud`,
+      },
+      {
+        id: 'media-off-site',
+        label: 'YouTube-only',
+        href: hrefVideos({ linkTarget: 'off_site', media: 'all' }, filters),
+        count: mediaYoutubeOnlyCount,
+        active: mediaOffSiteActive,
+        disabled: disableMediaOffSite,
+        title: `${mediaYoutubeOnlyCount} videos with no linked song page`,
+      },
+    ],
+  }
+
+  const videoFacetGroups = [
+    buildVideoFacetGroup('sutra', 'Sutra', sutraOptions, 'sutra', filters.sutra, contextualRowsWithoutSutra),
+    buildVideoFacetGroup('topic', 'Topic', topicOptions, 'topic', filters.topic, contextualRowsWithoutTopic),
+    buildVideoFacetGroup(
+      'intention',
+      'Intention',
+      intentionOptions,
+      'intention',
+      filters.intention,
+      contextualRowsWithoutIntention,
+    ),
+  ].filter((group): group is CatalogFilterBarFacetGroup => group !== null)
 
   const renderCard = (v: YouTubeCatalogVideo, layout: 'rail' | 'grid', posterIndex: number) => {
     const posterEager = posterIndex < 3
@@ -610,96 +632,16 @@ export function VideosPage() {
     )
   }
 
-  const videoContextSummary = hasActiveVideoFilters
-    ? `${shownVideos.length} of ${allVideos.length} videos`
-    : `${allVideos.length} videos`
-
-  const videoActiveFilterContext = (
-    <section
-      className="catalog-active-context"
-      aria-label={hasActiveVideoFilters ? 'Active filters and result count' : 'Videos result count'}
-    >
-      <p className="catalog-active-context__summary">{videoContextSummary}</p>
-      {hasActiveVideoFilters ? (
-        <div className="catalog-chips">
-          {filters.find ? (
-            <Link
-              to={hrefVideos({ find: '' }, filters)}
-              className="catalog-chip catalog-chip--find"
-              title="Remove text filter"
-            >
-              Discovery: {filters.find}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </Link>
-          ) : null}
-          {filters.media === 'has_sc' ? (
-            <Link
-              to={hrefVideos({ media: 'all', linkTarget: 'all' }, filters)}
-              className="catalog-chip"
-              title="Clear media filter"
-            >
-              + SoundCloud
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </Link>
-          ) : null}
-          {filters.linkTarget === 'off_site' ? (
-            <Link
-              to={hrefVideos({ linkTarget: 'all' }, filters)}
-              className="catalog-chip"
-              title="Show all videos"
-            >
-              YouTube-only
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </Link>
-          ) : null}
-          {filters.sutra ? (
-            <Link
-              to={hrefVideos({ sutra: '' }, filters)}
-              className="catalog-chip"
-              title={`Remove sutra filter · ${sutraQuestionFromDisplay(filters.sutra)}`}
-            >
-              Sutra:{' '}
-              <span className={`catalog-facet-sutra-name ${sutraClassName(filters.sutra)}`}>{filters.sutra}</span>
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </Link>
-          ) : null}
-          {filters.topic ? (
-            <Link to={hrefVideos({ topic: '' }, filters)} className="catalog-chip" title="Remove topic filter">
-              Topic: {filters.topic}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </Link>
-          ) : null}
-          {filters.intention ? (
-            <Link
-              to={hrefVideos({ intention: '' }, filters)}
-              className="catalog-chip"
-              title="Remove intention filter"
-            >
-              Intention: {filters.intention}
-              <span className="catalog-chip-x" aria-hidden>
-                ×
-              </span>
-            </Link>
-          ) : null}
-          <Link to={clearAllVideosFiltersHref} className="catalog-clear">
-            Clear all
-          </Link>
-        </div>
-      ) : null}
-    </section>
-  )
-
   let nextPosterIndex = 0
+
+  const videosResultCountLine =
+    shownVideos.length === 0
+      ? hasActiveVideoFilters
+        ? 'No videos match these filters.'
+        : ''
+      : hasActiveVideoFilters
+        ? `Showing ${formatCount(shownVideos.length)} of ${formatCount(allVideos.length)} videos`
+        : `${formatCount(allVideos.length)} videos`
 
   const listSection = (
     <section className="videos-page__list-wrap" aria-label="Video list">
@@ -711,10 +653,23 @@ export function VideosPage() {
         <p className="videos-page__empty">No videos match these filters.</p>
       ) : (
         <>
+          {videosResultCountLine ? (
+            <p className="videos-page__result-count about-result-count" aria-live="polite">
+              {videosResultCountLine}
+            </p>
+          ) : null}
           {verticalVideos.length > 0 ? (
             <div className="videos-page__rail-section">
-              <h2 className="videos-page__rail-heading catalog-section-title">Music reels</h2>
-              <ScrollRail className="videos-page__rail-scroll">
+              <h2 className="videos-page__section-heading catalog-section-title">
+                Music reels{' '}
+                <span className="videos-page__section-count">({formatCount(verticalVideos.length)})</span>
+              </h2>
+              <p className="catalog-lp-section-intro">Vertical clips. Swipe sideways through the tall ones.</p>
+              <ScrollRail
+                className="videos-page__rail-scroll listen-lp__scroll-rail"
+                variant="fade"
+                scrollStep={REELS_RAIL_SCROLL_STEP}
+              >
                 <ul className="videos-page__rail">
                   {verticalVideos.map((v) => renderCard(v, 'rail', nextPosterIndex++))}
                 </ul>
@@ -722,38 +677,27 @@ export function VideosPage() {
             </div>
           ) : null}
           {wideVideos.length > 0 ? (
-            <>
-              {showWidePager ? (
-                <CatalogPager
-                  variant="top"
-                  safePage={safeVideoPage}
-                  pageCount={pageCount}
-                  totalInView={wideTotal}
-                  pageSize={VIDEO_PAGE_SIZE}
-                  pagerLink={videoPagerLink}
-                />
-              ) : null}
-              <div className="videos-page__grid-section">
-                {verticalVideos.length > 0 ? (
-                  <h2 className="videos-page__rail-heading videos-page__rail-heading--spaced catalog-section-title">
-                    Music videos
-                  </h2>
-                ) : null}
-                <ul className="videos-page__grid">
-                  {wideVideos.map((v) => renderCard(v, 'grid', nextPosterIndex++))}
-                </ul>
-              </div>
-              {showWidePager ? (
-                <CatalogPager
-                  variant="bottom"
-                  safePage={safeVideoPage}
-                  pageCount={pageCount}
-                  totalInView={wideTotal}
-                  pageSize={VIDEO_PAGE_SIZE}
-                  pagerLink={videoPagerLink}
-                />
-              ) : null}
-            </>
+            <div className="videos-page__grid-section">
+              <h2
+                className={`videos-page__section-heading catalog-section-title${
+                  verticalVideos.length > 0 ? ' videos-page__section-heading--spaced' : ''
+                }`}
+              >
+                Music videos <span className="videos-page__section-count">({formatCount(wideTotal)})</span>
+              </h2>
+              <p className="catalog-lp-section-intro">Wide format uploads. Tap a card for the song page or YouTube.</p>
+              <ul className="videos-page__grid">
+                {wideVideos.map((v) => renderCard(v, 'grid', nextPosterIndex++))}
+              </ul>
+              <CatalogInfiniteScrollFooter
+                visibleCount={wideVisibleCount}
+                totalCount={wideTotal}
+                hasMore={wideHasMore}
+                loadMore={loadMoreWideVideos}
+                noun="music videos"
+                formatCount={formatCount}
+              />
+            </div>
           ) : null}
         </>
       )}
@@ -784,144 +728,29 @@ export function VideosPage() {
           </p>
         </div>
 
-        <div className={`catalog-layout${filtersOpen ? '' : ' catalog-layout--filters-collapsed'}`}>
-          <aside
-            className={`catalog-filters${filtersOpen ? ' is-open' : ''}`}
-            aria-labelledby="videos-filters-heading"
-          >
-            <div className="catalog-filters-head">
-              <h2 id="videos-filters-heading" className="catalog-section-title">
-                Filters
-              </h2>
-              <button
-                type="button"
-                className="catalog-icon-btn"
-                onClick={() => setFiltersOpen(false)}
-                aria-expanded={filtersOpen}
-                aria-controls="videos-filter-panel"
-              >
-                Hide
-              </button>
-            </div>
+        <div className="videos-page__content">
+          <CatalogFilterBar
+            ariaLabel="Filter videos"
+            panelId="videos-filter-panel"
+            resultSummary={videoContextSummary}
+            showResultSummary={false}
+            activePills={videoActivePills}
+            clearAllHref={clearAllVideosFiltersHref}
+            facetGroups={videoFacetGroups}
+            secondaryGroup={videoSecondaryGroup}
+            search={{
+              id: 'videos-find-input',
+              label: 'Search',
+              ariaLabel: 'Search videos by title or catalog info',
+              value: findDraft,
+              onChange: setFindDraft,
+              inputName: 'videos_find',
+            }}
+            defaultExpanded={filterBarExpanded}
+            onExpandedChange={setFilterBarExpanded}
+          />
 
-            {filtersOpen ? videoActiveFilterContext : null}
-
-            <div id="videos-filter-panel" className="catalog-facet-stack">
-              <section className="catalog-facet" aria-labelledby="videos-search-heading">
-                <h3 id="videos-search-heading">Search</h3>
-                <label className="catalog-facet-find-label" htmlFor="videos-find-input">
-                  Search by title or catalog info
-                </label>
-                <input
-                  id="videos-find-input"
-                  className="catalog-facet-find-input"
-                  type="search"
-                  name="videos_find"
-                  inputMode="search"
-                  autoComplete="off"
-                  spellCheck={false}
-                  enterKeyHint="search"
-                  value={findDraft}
-                  onChange={(e) => setFindDraft(e.target.value)}
-                />
-              </section>
-              <section className="catalog-facet" aria-labelledby="videos-media-heading">
-                <h3 id="videos-media-heading">Media</h3>
-                <p className="catalog-facet-help" id="videos-media-desc">
-                  Some videos also have SoundCloud playback or full lyrics—filter by what&apos;s available.
-                </p>
-                <div className="catalog-facet-chips" role="group" aria-describedby="videos-media-desc">
-                  {/*
-                    Global filter contract: contextual counts use current selection context
-                    excluding the group being rendered.
-                  */}
-                  {(() => {
-                    const allCount = contextualRowsWithoutMediaLink.length
-                    const hasScCount = contextualRowsWithoutMediaLink.filter((video) =>
-                      videoLinkedSongHasSC(video, songsByLyricsId),
-                    ).length
-                    const youtubeOnlyCount = contextualRowsWithoutMediaLink.filter(
-                      (video) => !inAppIds.has((video.lyrics_id || '').trim()),
-                    ).length
-                    const allActive = filters.media === 'all' && filters.linkTarget !== 'off_site'
-                    const hasScActive = filters.media === 'has_sc'
-                    const offSiteActive = filters.linkTarget === 'off_site'
-                    const disableHasSc = !hasScActive && hasScCount === 0
-                    const disableOffSite = !offSiteActive && youtubeOnlyCount === 0
-                    return (
-                      <>
-                  <Link
-                    className={`catalog-facet-chip${allActive ? ' is-active' : ''}`}
-                    to={hrefVideos({ media: 'all', linkTarget: 'all' }, filters)}
-                    title={`All ${allCount} videos`}
-                  >
-                    <span>All</span>
-                    <span className="catalog-facet-count">{` (${allCount})`}</span>
-                  </Link>
-                  <Link
-                    className={`catalog-facet-chip${hasScActive ? ' is-active' : ''}${disableHasSc ? ' is-disabled' : ''}`}
-                    to={hrefVideos({ media: 'has_sc', linkTarget: 'all' }, filters)}
-                    title={`${hasScCount} videos with linked song on SoundCloud`}
-                    aria-disabled={disableHasSc}
-                    tabIndex={disableHasSc ? -1 : undefined}
-                    onClick={(event) => {
-                      if (disableHasSc) event.preventDefault()
-                    }}
-                  >
-                    <span>+ SoundCloud</span>
-                    <span className="catalog-facet-count">{` (${hasScCount})`}</span>
-                  </Link>
-                  <Link
-                    className={`catalog-facet-chip${offSiteActive ? ' is-active' : ''}${disableOffSite ? ' is-disabled' : ''}`}
-                    to={hrefVideos({ linkTarget: 'off_site', media: 'all' }, filters)}
-                    title={`${youtubeOnlyCount} videos with no linked song page`}
-                    aria-disabled={disableOffSite}
-                    tabIndex={disableOffSite ? -1 : undefined}
-                    onClick={(event) => {
-                      if (disableOffSite) event.preventDefault()
-                    }}
-                  >
-                    <span>YouTube-only</span>
-                    <span className="catalog-facet-count">{` (${youtubeOnlyCount})`}</span>
-                  </Link>
-                      </>
-                    )
-                  })()}
-                </div>
-              </section>
-
-              <p className="catalog-facet-help">
-                Filters combine across groups (AND). Multiple picks inside one group combine as OR.
-              </p>
-              {chipSection('videos-sutra-heading', 'Sutra', sutraOptions, 'sutra', filters.sutra, contextualRowsWithoutSutra)}
-              {chipSection('videos-topic-heading', 'Topic', topicOptions, 'topic', filters.topic, contextualRowsWithoutTopic)}
-              {chipSection(
-                'videos-intention-heading',
-                'Intention',
-                intentionOptions,
-                'intention',
-                filters.intention,
-                contextualRowsWithoutIntention,
-              )}
-
-            </div>
-          </aside>
-
-          <main id="main-content" className="catalog-main">
-            {!filtersOpen ? (
-              <>
-                {videoActiveFilterContext}
-                <button
-                  type="button"
-                  className="catalog-filter-reopen"
-                  onClick={() => setFiltersOpen(true)}
-                  aria-expanded={false}
-                  aria-controls="videos-filter-panel"
-                >
-                  Show filters
-                </button>
-              </>
-            ) : null}
+          <main id="main-content" className="catalog-main videos-page__main">
             {!youtubeCatalogReady || featuredVideoHero ? (
               <section
                 className={`videos-page__featured-hero${!youtubeCatalogReady ? ' videos-page__featured-hero--pending' : ''}`}
@@ -929,7 +758,7 @@ export function VideosPage() {
                 aria-busy={!youtubeCatalogReady}
               >
                 <h2 id="videos-featured-hero-heading" className="catalog-section-title">
-                  Featured Video
+                  Featured video
                 </h2>
                 {!youtubeCatalogReady ? (
                   <div className="videos-page__featured-hero-grid" aria-hidden="true">
@@ -952,25 +781,26 @@ export function VideosPage() {
                         facadeUntilClick
                         facadePosterEager
                         posterWidth={640}
-                        outboundFooterClassName="videos-page__featured-hero-yt-outbound"
+                        showOutboundFooter={false}
                       />
                     </div>
-                    <div className="videos-page__featured-hero-copy">
-                      <h3 className="videos-page__featured-hero-title">
+                    <div className="catalog-featured-embed-copy videos-page__featured-hero-copy">
+                      <p className="catalog-featured-embed-copy__title">
                         {featuredVideoHero.lyrics_title || featuredVideoHero.title}
-                      </h3>
-                      {(featuredVideoHero.lyrics_summary || '').trim() ? (
-                        <p className="videos-page__featured-hero-summary">{featuredVideoHero.lyrics_summary?.trim()}</p>
-                      ) : null}
+                      </p>
                       {(featuredVideoHero.sutra || '').trim() ? (
-                        <p className="videos-page__featured-hero-sutra">{featuredVideoHero.sutra.trim()}</p>
+                        <p className="catalog-featured-embed-copy__meta">{featuredVideoHero.sutra.trim()}</p>
+                      ) : null}
+                      {(featuredVideoHero.lyrics_summary || '').trim() ? (
+                        <p className="catalog-featured-embed-copy__desc">{featuredVideoHero.lyrics_summary?.trim()}</p>
                       ) : null}
                       {featuredHeroSongPageHref ? (
-                        <div className="catalog-featured-video-song-row">
-                          <Link className="catalog-song-page-cta" to={featuredHeroSongPageHref}>
-                            Song page
-                          </Link>
-                        </div>
+                        <Link className="catalog-featured-embed-copy__cta" to={featuredHeroSongPageHref}>
+                          Song page →
+                        </Link>
+                      ) : null}
+                      {(featuredVideoHero.yt_url || '').trim() ? (
+                        <CatalogMediaOutbound href={featuredVideoHero.yt_url.trim()} />
                       ) : null}
                     </div>
                   </div>
@@ -978,6 +808,14 @@ export function VideosPage() {
               </section>
             ) : null}
             {listSection}
+            {youtubeCatalogReady && shownVideos.length > 0 ? (
+              <Link
+                className="catalog-section-cta videos-page__watch-crosslink"
+                to={`${canonicalPathForRoute('/watch')}#watch-lp-playlists-heading`}
+              >
+                Watch playlists →
+              </Link>
+            ) : null}
           </main>
         </div>
       </div>

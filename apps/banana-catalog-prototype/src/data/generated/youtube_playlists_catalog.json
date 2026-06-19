@@ -360,6 +360,18 @@
     "featured_description": ""
   },
   {
+    "playlist_name": "INDIEsutra",
+    "playlist_type": "genre (all)",
+    "playlist_id": "PLmBA9ODM1xHOY4XVWmtpus0iqSXCUgpp2",
+    "playlist_url": "https://www.youtube.com/playlist?list=PLmBA9ODM1xHOY4XVWmtpus0iqSXCUgpp2",
+    "thumbnail_url": "https://i.ytimg.com/vi/VVueG4q8Fr0/maxresdefault.jpg",
+    "video_count": 52,
+    "sutra": "",
+    "description": "Indie as attitude: melodic, off-center, and unafraid of a hook that doesn't explain itself.",
+    "featured": false,
+    "featured_description": ""
+  },
+  {
     "playlist_name": "FOTUS CIRCUS (Felon Of The United States)",
     "playlist_type": "collection",
     "playlist_id": "PLmBA9ODM1xHN3xHvgvok6BNwHXMpb9idM",

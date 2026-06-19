@@ -146,7 +146,7 @@ test("buildRecommendationContext anchors fun asks to SHOWsutra and cheeky mood r
     [{ role: "assistant", content: "Welcome intro already done." }, { role: "user", content: "what's fun around here?" }],
     fixtureInjects,
   );
-  assert.match(context, /anchor the lens on \[SHOWsutra\]\(\/about\/showsutra\)/);
+  assert.match(context, /anchor the lens on \[SHOWsutra\]\(\/sutras\/showsutra\)/);
   assert.match(context, /Do not repeat your identity intro/);
   assert.match(context, /Start with one short natural acknowledgement of the ask/);
   assert.match(context, /not label-style blocks like "Sutra lens:"/);
@@ -221,22 +221,58 @@ test("buildRecommendationContext adds song-detail page acknowledgement guidance"
   assert.match(context, /ask one axis-choice question \(topic\/intention vs\. sound\/genre\)/);
 });
 
+test("inferPageType classifies flat sutra detail paths", () => {
+  assert.equal(inferPageType({ pathname: "/sutras/knowsutra" }), "sutra-page");
+  assert.equal(inferPageType({ pathname: "/about/knowsutra" }), "sutra-page");
+});
+
+test("inferPageType classifies flat and legacy About hub paths", () => {
+  assert.equal(inferPageType({ pathname: "/sutras" }), "sutras-overview");
+  assert.equal(inferPageType({ pathname: "/sutras/" }), "sutras-overview");
+  assert.equal(inferPageType({ pathname: "/about/sutras" }), "sutras-overview");
+  assert.equal(inferPageType({ pathname: "/muses" }), "muses");
+  assert.equal(inferPageType({ pathname: "/muses/" }), "muses");
+  assert.equal(inferPageType({ pathname: "/about/muses" }), "muses");
+  assert.equal(inferPageType({ pathname: "/quotes" }), "quotes");
+  assert.equal(inferPageType({ pathname: "/quotes/" }), "quotes");
+  assert.equal(inferPageType({ pathname: "/about/quotes" }), "quotes");
+});
+
 test("buildRecommendationContext adds sutras-overview acknowledgement guidance", () => {
   const context = buildRecommendationContext(
     [{ role: "user", content: "what should I listen to here?" }],
     fixtureInjects,
     { pathname: "/about/sutras" },
   );
-  assert.match(context, /User is on \/about\/sutras \(the compass page\)/);
+  assert.match(context, /User is on \/sutras \(the compass page\)/);
+});
+
+test("buildRecommendationContext adds sutras-overview guidance for flat /sutras path", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "what should I listen to here?" }],
+    fixtureInjects,
+    { pathname: "/sutras" },
+  );
+  assert.match(context, /User is on \/sutras \(the compass page\)/);
 });
 
 test("buildRecommendationContext adds sutra-page acknowledgement guidance", () => {
   const context = buildRecommendationContext(
     [{ role: "user", content: "what should I listen to?" }],
     fixtureInjects,
+    { pathname: "/sutras/knowsutra" },
+  );
+  assert.match(context, /User is on a specific sutra page \(\/sutras\/knowsutra\)/);
+  assert.match(context, /ground guidance in this sutra before expanding/);
+});
+
+test("buildRecommendationContext adds sutra-page acknowledgement guidance for legacy /about path", () => {
+  const context = buildRecommendationContext(
+    [{ role: "user", content: "what should I listen to?" }],
+    fixtureInjects,
     { pathname: "/about/knowsutra" },
   );
-  assert.match(context, /User is on a specific sutra page \(\/about\/knowsutra\)/);
+  assert.match(context, /User is on a specific sutra page \(\/sutras\/knowsutra\)/);
   assert.match(context, /ground guidance in this sutra before expanding/);
 });
 
@@ -246,7 +282,7 @@ test("buildRecommendationContext adds muses page acknowledgement guidance", () =
     fixtureInjects,
     { pathname: "/about/muses" },
   );
-  assert.match(context, /User is on \/about\/muses/);
+  assert.match(context, /User is on \/muses/);
 });
 
 test("buildRecommendationContext keeps generic high-signal page guidance on root route", () => {
@@ -562,7 +598,7 @@ test("orientation asks inject concise actionable link-pack guidance", () => {
   assert.match(context, /start with a warm welcome-style sentence/);
   assert.match(context, /do not lead with song\/track totals unless user explicitly asked for numbers/);
   assert.match(context, /Orientation opening anti-brochure rule \(MUST\): do not open with a provenance\/attribution paragraph/);
-  assert.match(context, /Orientation link pack \(MUST\): include \[Sutras\]\(\/about\/sutras\), \[Songs\]\(\/songs\), \[Tracks\]\(\/tracks\), and \[About\]\(\/about\)/);
+  assert.match(context, /Orientation link pack \(MUST\): include \[Sutras\]\(\/sutras\), \[Songs\]\(\/songs\), \[Tracks\]\(\/tracks\), and \[About\]\(\/about\)/);
   assert.match(context, /present the quick map in this order: Sutras, Songbooks, Songs, then Tracks/);
   assert.match(context, /Orientation link formatting \(MUST\): embed links inline as markdown labels/);
   assert.match(context, /never parenthetical raw routes like 'Songs \(\/songs\)'/);

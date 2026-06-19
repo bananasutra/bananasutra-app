@@ -146,7 +146,7 @@ a:focus-visible {
 
 .app-route-fallback__retry,
 .app-route-fallback__home-link {
-  border-radius: 999px;
+  border-radius: var(--radius-control, 2px);
   padding: 0.55rem 0.9rem;
   font-size: 0.9rem;
   font-weight: 700;
@@ -206,7 +206,7 @@ a:focus-visible {
 .catalog-not-found__cta {
   appearance: none;
   border: 1px solid var(--color-border-strong);
-  border-radius: 999px;
+  border-radius: var(--radius-control, 2px);
   padding: 0.72rem 1.15rem;
   min-height: 2.65rem;
   cursor: pointer;
@@ -265,25 +265,6 @@ a:focus-visible {
   width: 42%;
   background: var(--color-accent);
   animation: nav-route-loading-bar-move 0.85s ease-in-out infinite;
-}
-
-.yt-embed-outbound {
-  margin: 0.55rem auto 0;
-  max-width: min(100%, 760px);
-  padding: 0 0.15rem;
-  font-size: 0.68rem;
-  line-height: 1.45;
-  color: var(--color-text-muted);
-  font-family: var(--font-ui);
-  text-align: right;
-}
-
-.yt-embed-outbound__note {
-  font-weight: 400;
-}
-
-.yt-embed-outbound__link {
-  font-weight: 600;
 }
 
 /* R24 prerender: never put <iframe src="youtube…"> in static HTML — only poster until client mounts. */
@@ -412,7 +393,7 @@ a:focus-visible {
   .yt-embed-wrap,
   .yt-embed-facade,
   .yt-embed-client-placeholder,
-  .yt-embed-outbound,
+  .catalog-media-outbound,
   .nav-route-loading-bar,
   .skip-link {
     display: none !important;

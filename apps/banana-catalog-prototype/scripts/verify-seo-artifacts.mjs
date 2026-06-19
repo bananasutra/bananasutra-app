@@ -90,15 +90,19 @@ function warn(msg) {
 /** Paths that must exist in seo-metadata (includes `/style-guide`; sitemap omits it). */
 const REQUIRED_SEO_PATHS = [
   '/',
+  '/learn',
+  '/listen',
+  '/watch',
   '/songs',
   '/songbooks',
   '/tracks',
   '/videos',
   '/words',
   '/about',
-  '/about/sutras',
-  '/about/muses',
-  '/about/quotes',
+  '/sutras',
+  '/muses',
+  '/quotes',
+  '/manifesto',
   '/sitemap',
   '/style-guide',
 ]
@@ -110,7 +114,7 @@ function expectedSutraPathnames(sutraContext) {
   const out = []
   for (const key of Object.keys(sutraContext)) {
     const slug = (sutraContext[key].url_slug_sutra || '').trim().toLowerCase()
-    if (slug) out.push(`/about/${slug}`)
+    if (slug) out.push(`/sutras/${slug}`)
   }
   return out.sort()
 }
@@ -345,11 +349,47 @@ function main() {
     }
   }
 
-  const sutraPrerender = path.join(distDir, 'about/knowsutra/index.html')
+  const sutraPrerender = path.join(distDir, 'sutras/knowsutra/index.html')
   if (fs.existsSync(sutraPrerender)) {
     const head = fs.readFileSync(sutraPrerender, 'utf8').match(/<head>([\s\S]*?)<\/head>/)?.[1] ?? ''
     if (!head.includes('CreativeWork')) {
       fail('prerender sutra sample: <head> JSON-LD missing CreativeWork')
+    }
+    if (!head.includes('https://bananasutra.com/sutras/knowsutra/')) {
+      fail('prerender sutra sample: missing canonical https://bananasutra.com/sutras/knowsutra/')
+    }
+  }
+
+  // W-074 — legacy About hub paths emit static redirect HTML (GitHub Pages)
+  for (const legacy of ['/about/sutras', '/about/muses', '/about/quotes']) {
+    const redirectPath = path.join(distDir, legacy.replace(/^\//, ''), 'index.html')
+    if (!fs.existsSync(redirectPath)) {
+      fail(`missing legacy redirect HTML at dist/${legacy.replace(/^\//, '')}/index.html — run generate-route-redirects.mjs`)
+    }
+    const html = fs.readFileSync(redirectPath, 'utf8')
+    if (!html.includes('rel="canonical"') || !html.includes('window.location.replace')) {
+      fail(`legacy redirect HTML at ${legacy} missing canonical or JS redirect`)
+    }
+  }
+
+  for (const legacySutra of expectedSutraPathnames(sutraContext)) {
+    const legacyPath = legacySutra.replace(/^\/sutras\//, '/about/')
+    const redirectPath = path.join(distDir, legacyPath.replace(/^\//, ''), 'index.html')
+    if (!fs.existsSync(redirectPath)) {
+      fail(`missing legacy sutra redirect HTML at dist/${legacyPath.replace(/^\//, '')}/index.html — run generate-route-redirects.mjs`)
+    }
+    const html = fs.readFileSync(redirectPath, 'utf8')
+    const wantTarget = canonicalPathForRoute(legacySutra)
+    if (!html.includes('rel="canonical"') || !html.includes(wantTarget) || !html.includes('window.location.replace')) {
+      fail(`legacy sutra redirect HTML at ${legacyPath} missing canonical target ${wantTarget}`)
+    }
+  }
+
+  const flatHubPrerender = path.join(distDir, 'sutras/index.html')
+  if (fs.existsSync(flatHubPrerender)) {
+    const head = fs.readFileSync(flatHubPrerender, 'utf8').match(/<head>([\s\S]*?)<\/head>/)?.[1] ?? ''
+    if (!head.includes('rel="canonical"') || !head.includes('https://bananasutra.com/sutras/')) {
+      fail('prerender /sutras: missing canonical https://bananasutra.com/sutras/')
     }
   }
 

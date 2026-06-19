@@ -47,15 +47,19 @@ function songbookSlugFromRow(row) {
 export function listPrerenderRoutes() {
   const staticRoutes = [
     '/',
+    '/learn',
+    '/listen',
+    '/watch',
     '/songs',
     '/songbooks',
     '/tracks',
     '/videos',
     '/words',
     '/about',
-    '/about/sutras',
-    '/about/muses',
-    '/about/quotes',
+    '/sutras',
+    '/muses',
+    '/quotes',
+    '/manifesto',
     '/sitemap',
     '/style-guide',
   ]
@@ -77,7 +81,7 @@ export function listPrerenderRoutes() {
 
   for (const key of Object.keys(sutraContext)) {
     const slug = (sutraContext[key].url_slug_sutra || '').trim().toLowerCase()
-    if (slug) routes.add(`/about/${slug}`)
+    if (slug) routes.add(`/sutras/${slug}`)
   }
 
   for (const row of songBrowse) {

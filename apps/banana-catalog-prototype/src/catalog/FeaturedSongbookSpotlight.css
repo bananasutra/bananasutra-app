@@ -1,0 +1,42 @@
+.catalog-featured-songbook__grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .catalog-featured-songbook__grid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.catalog-featured-songbook--stacked {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.catalog-featured-songbook--stacked .catalog-featured-songbook__embed {
+  width: 100%;
+  min-width: 0;
+}
+
+.catalog-featured-songbook--stacked .catalog-featured-songbook__stacked-copy {
+  margin-top: var(--catalog-featured-embed-copy-gap-top);
+}
+
+.catalog-featured-songbook--stacked .catalog-featured-embed-copy {
+  margin-top: 0;
+}
+
+.catalog-featured-songbook .catalog-featured-embed-copy__title {
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  line-height: 1.25;
+}
+
+@media (min-width: 768px) {
+  .catalog-featured-songbook__copy .catalog-featured-embed-copy__cta {
+    text-align: left;
+  }
+}

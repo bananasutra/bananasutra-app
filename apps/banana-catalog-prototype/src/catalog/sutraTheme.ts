@@ -23,3 +23,10 @@ export function sutraClassName(rawSutra: string): string {
   if (!key) return ''
   return sutraClassByKey[key]
 }
+
+/** Modifier classes for CatalogFilterBar sutra facet chips (PL-02 token + contrast). */
+export function sutraFilterChipClassName(rawSutra: string): string {
+  const key = normalizeSutra(rawSutra)
+  if (!key) return ''
+  return `catalog-filter-bar__chip-sutra catalog-filter-bar__chip-sutra-${key.toLowerCase()}`
+}

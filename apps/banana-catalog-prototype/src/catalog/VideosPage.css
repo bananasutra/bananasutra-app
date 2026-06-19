@@ -1,21 +1,29 @@
 .videos-page__code {
   font-size: 0.65em;
   padding: 0.05em 0.28em;
-  border-radius: 3px;
+  border-radius: var(--radius-control, 2px);
   background: rgba(255, 255, 255, 0.06);
 }
 
 .videos-page__empty {
   margin: 0;
   padding: 1.25rem;
-  border-radius: 10px;
+  border-radius: var(--radius-sm, 8px);
   border: 1px dashed var(--color-border-strong);
   color: var(--color-text-muted);
   text-align: center;
 }
 
-.catalog-page-intro:has(~ .catalog-layout .videos-page__featured-hero) {
+.catalog-page-intro:has(~ .videos-page__content .videos-page__featured-hero) {
   padding-bottom: 0.65rem;
+}
+
+.videos-page__content {
+  min-width: 0;
+}
+
+.videos-page__main {
+  min-width: 0;
 }
 
 .videos-page__featured-hero {
@@ -29,7 +37,7 @@
 .videos-page__featured-hero-skeleton-embed {
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 10px;
+  border-radius: var(--radius-sm, 8px);
   border: 1px solid var(--color-border);
   background: var(--color-bg-panel);
 }
@@ -44,7 +52,7 @@
 .videos-page__featured-hero-skeleton-line {
   display: block;
   height: 0.85rem;
-  border-radius: 4px;
+  border-radius: var(--radius-control, 2px);
   background: var(--color-bg-panel);
   border: 1px solid var(--color-border);
 }
@@ -79,17 +87,13 @@
   margin-bottom: 0.75rem;
 }
 
-.videos-page__featured-hero-embed-wrap .videos-page__featured-hero-yt-outbound {
-  max-width: none;
-}
-
 .videos-page__featured-hero-embed {
   position: relative;
   width: 100%;
   max-width: none;
   margin: 0;
   aspect-ratio: 16 / 9;
-  border-radius: 10px;
+  border-radius: var(--radius-sm, 8px);
   overflow: hidden;
 }
 
@@ -98,34 +102,6 @@
   max-width: none;
   margin-inline: 0;
   min-height: 0;
-}
-
-.videos-page__featured-hero-title {
-  margin: 0 0 0.45rem;
-  font-family: var(--font-body);
-  font-weight: var(--catalog-featured-embed-title-weight);
-  font-size: var(--catalog-featured-embed-title-size);
-  line-height: var(--catalog-featured-embed-title-line-height);
-  color: var(--color-text-strong);
-}
-
-.videos-page__featured-hero-summary {
-  margin: 0 0 0.5rem;
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: var(--color-text-primary);
-}
-
-.videos-page__featured-hero-sutra {
-  margin: 0;
-  font: 700 0.68rem/1.35 var(--font-ui);
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-
-.videos-page__featured-hero-copy .catalog-featured-video-song-row {
-  margin-top: 0.7rem;
 }
 
 .videos-page__featured-hero-iframe {
@@ -152,22 +128,39 @@
   min-width: 0;
 }
 
+.videos-page__result-count {
+  margin: 0 0 1rem;
+}
+
 .videos-page__rail-section {
   margin-bottom: 1.35rem;
 }
 
-.videos-page__rail-heading {
-  margin: 0 0 0.5rem;
+.videos-page__section-heading {
+  margin: 0 0 0.35rem;
 }
 
-.videos-page__rail-heading--spaced {
+.videos-page__section-heading--spaced {
   margin-top: 0.25rem;
 }
 
-/* Override ScrollRail inner padding/margin for the reels row. */
-.videos-page__rail-scroll .scroll-rail__inner {
-  margin: 0 -0.25rem;
-  padding: 0.1rem 0;
+.videos-page__section-count {
+  color: var(--color-text-faint);
+  font-weight: 650;
+}
+
+.videos-page__grid-section .catalog-lp-section-intro {
+  margin-bottom: 0.75rem;
+}
+
+.videos-page__watch-crosslink {
+  display: inline-block;
+  margin: 1.15rem 0 0.35rem;
+}
+
+/* Reels rail: fade-mask scroll (Listen LP / watch spotlight pattern). */
+.videos-page__rail-scroll.listen-lp__scroll-rail .scroll-rail__inner {
+  padding: 0.1rem 0.15rem 0.2rem;
 }
 
 .videos-page__rail {
@@ -186,6 +179,7 @@
   padding: 0;
   flex: 0 0 auto;
   width: 148px;
+  scroll-snap-align: start;
 }
 
 .videos-page__card {
@@ -194,7 +188,7 @@
   height: 100%;
   text-decoration: none;
   color: inherit;
-  border-radius: 12px;
+  border-radius: var(--radius-thumb, var(--radius-control, 2px));
   overflow: hidden;
   border: 1px solid var(--color-border);
   background: linear-gradient(165deg, var(--color-bg-elevated) 0%, var(--color-bg-inset) 55%);
@@ -254,7 +248,7 @@
   color: #14110d;
   background: rgba(255, 214, 120, 0.94);
   padding: 0.14rem 0.32rem;
-  border-radius: 4px;
+  border-radius: var(--radius-control, 2px);
   line-height: 1.2;
   pointer-events: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);

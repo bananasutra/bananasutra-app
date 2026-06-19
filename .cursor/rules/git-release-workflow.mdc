@@ -82,7 +82,13 @@ git push origin main
 git checkout staging && git pull origin staging
 ```
 
-## Feature commits
+**Post-merge verification (production):**
+
+- GitHub Pages / catalog: https://bananasutra.com loads redesign; flat routes `/sutras/`, `/muses/`, `/quotes/` work; legacy `/about/sutras` etc. 301 to flat paths.
+- **BBB worker (`bbb-api`):** ships automatically via `.github/workflows/deploy-bbb-api.yml` when `bbb-api/**` is in the `main` push. **Do not** deploy W-074 `bbb-api` changes early via Track 1 — Bertrand would link to flat URLs before they exist on prod. Confirm Actions green, then smoke-test: open `/sutras/`, ask Bertrand an orientation question; links and page context should use flat paths.
+- seo-worker: confirm deploy if `workers/seo-worker/**` changed in the same release.
+
+---
 
 - Imperative subjects: `feat(scope): …`, `fix(scope): …`, `chore(scope): …`.
 - Never commit `_docs/`, `.env`, or secrets.
