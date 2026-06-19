@@ -9,6 +9,7 @@ import { ListenLpBertrandTail } from './ListenLpBertrandTail'
 import { ListenLpFacetBar } from './ListenLpFacetBar'
 import { ListenLpSongbookThumb } from './ListenLpSongbookThumb'
 import { ListenLpTopTracks } from './ListenLpTopTracks'
+import { ListenLpWhatsNewSamples } from './ListenLpWhatsNewSamples'
 import { ScrollRail } from './ScrollRail'
 import { ScrollRevealSection } from './ScrollRevealSection'
 import { SongThumbCard } from './SongThumbCard'
@@ -26,6 +27,7 @@ import {
   pickTopTracksForListenLp,
   type ListenLpSutraFilter,
 } from './listenLpData'
+import { buildListenLpWhatsNewPicks, pickWhatsNewSpotlightSongs } from './listenLpWhatsNewData'
 import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
 import { useSongCatalogBrowse } from './generatedData'
 import { canonicalPathForRoute } from './seoPaths'
@@ -92,6 +94,11 @@ export function ListenLpPage() {
   const epGenresByUrl = useMemo(() => buildEpGenresByUrl(trackCatalog), [trackCatalog])
   const epTrackCountByUrl = useMemo(() => buildEpTrackCountByUrl(trackCatalog), [trackCatalog])
   const latestSongs = useMemo(() => pickLatestSongsForListenLp(songCatalogRows), [songCatalogRows])
+  const whatsNewSongs = useMemo(() => pickWhatsNewSpotlightSongs(songCatalogRows), [songCatalogRows])
+  const whatsNewPicks = useMemo(
+    () => buildListenLpWhatsNewPicks(whatsNewSongs, trackCatalog),
+    [whatsNewSongs, trackCatalog],
+  )
   const exploreSongbooksAll = useMemo(
     () => pickExploreSongbooksForListenLp(songbooks, activeSutra, activeGenre),
     [songbooks, activeSutra, activeGenre],
@@ -117,7 +124,7 @@ export function ListenLpPage() {
     showAllSongbooks,
     topTracks.length,
     topEps.length,
-    latestSongs.length,
+    whatsNewPicks.length,
     exploreSongbooksShown.length,
     trackCatalog === null ? -1 : topTracks.length,
   ])
@@ -154,9 +161,11 @@ export function ListenLpPage() {
               What&apos;s new?
             </h2>
             <p className="catalog-lp-section-intro">
-              Fresh in. Lyrics, meaning, and playback on each song page.
+              Fresh in. Tap play on a cover to sample. Full lyrics on the song page.
             </p>
-            {latestSongs.length ? (
+            {whatsNewPicks.length ? (
+              <ListenLpWhatsNewSamples picks={whatsNewPicks} />
+            ) : latestSongs.length ? (
               <ScrollRail className="listen-lp__scroll-rail" variant="fade">
                 <ul className="listen-lp__rail-list">
                   {latestSongs.map((song) => (

@@ -362,14 +362,14 @@ export function ListenLpTopTracks({
       </h2>
 
       <div className="listen-lp__popular-player">
-        <div className="listen-lp__popular-tabs" role="tablist" aria-label="Popular listening">
+        <div className="song-detail-tabs listen-lp__popular-tabs" role="tablist" aria-label="Popular listening">
           <button
             type="button"
             role="tab"
             id="listen-lp-tab-tracks"
             aria-selected={playerTab === 'tracks'}
             aria-controls="listen-lp-panel-tracks"
-            className={`listen-lp__popular-tab${playerTab === 'tracks' ? ' is-active' : ''}`}
+            className={`song-detail-tab${playerTab === 'tracks' ? ' is-active' : ''}`}
             disabled={!hasTracks}
             onClick={() => switchTab('tracks')}
           >
@@ -381,7 +381,7 @@ export function ListenLpTopTracks({
             id="listen-lp-tab-eps"
             aria-selected={playerTab === 'eps'}
             aria-controls="listen-lp-panel-eps"
-            className={`listen-lp__popular-tab${playerTab === 'eps' ? ' is-active' : ''}`}
+            className={`song-detail-tab${playerTab === 'eps' ? ' is-active' : ''}`}
             disabled={!hasEps}
             onClick={() => switchTab('eps')}
           >
