@@ -6,9 +6,8 @@ import { sortYoutubeVideosHubOrder } from './youtubeCatalogFlat'
 export const WATCH_LP_META = {
   title: 'Watch',
   description:
-    'Picture the songs. Same catalog, eyes open. Music videos and YouTube playlists organized by sutra and story.',
+    'Picture the songs. Same catalog, eyes open. Recent clips and playlists on the watch door; browse every upload with filters on Videos.',
   lead: 'Picture the songs. Same catalog, eyes open.',
-  sub: "Start with what's new. Browse playlists by story or by sound when you want the long form.",
 } as const
 
 export const WATCH_LP_PICKS_RAIL_LIMIT = 8
