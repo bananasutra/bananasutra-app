@@ -51,6 +51,17 @@ export default defineConfig({
           if (id.includes('/lib/analytics') || id.includes('/catalog/catalogAnalytics')) {
             return 'catalog-analytics'
           }
+          // W-025 — shared catalog helpers used by both HomePortal and player queue must not
+          // land in the entry index bundle (verify-build-chunks / stage deploy guardrail).
+          if (id.includes('/catalog/durationFormat')) {
+            return 'catalog-duration'
+          }
+          if (id.includes('/seo/imageUrl')) {
+            return 'catalog-image-url'
+          }
+          if (id.includes('/catalog/sutraTheme')) {
+            return 'catalog-sutra-theme'
+          }
         },
       },
     },
