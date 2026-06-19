@@ -22,7 +22,7 @@ export function LearnLpBertrandTail({ onOpenChat }: Props) {
         <p id="learn-lp-bertrand-heading" className="learn-lp__bertrand-headline">
           Still not sure where to start? He knows the whole story.{' '}
           <a className="learn-lp__bertrand-cta" href="#bertrand" onClick={handleOpen}>
-            Open chat →
+            Ask Bertrand →
           </a>
         </p>
       </aside>

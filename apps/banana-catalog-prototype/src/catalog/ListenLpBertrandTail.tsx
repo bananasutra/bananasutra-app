@@ -22,7 +22,7 @@ export function ListenLpBertrandTail({ onOpenChat }: Props) {
         <p id="listen-lp-bertrand-heading" className="listen-lp__bertrand-headline">
           Or, tell Bertrand how you&apos;re feeling. He understands…{' '}
           <a className="listen-lp__bertrand-cta" href="#bertrand" onClick={handleOpen}>
-            Open chat →
+            Ask Bertrand →
           </a>
         </p>
       </aside>
