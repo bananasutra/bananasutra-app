@@ -1,11 +1,10 @@
 import type { To } from 'react-router-dom'
 import chromeStatsJson from '../data/generated/catalog_chrome_stats.json'
 import songCatalogBrowseJson from '../data/generated/song_catalog_browse.json'
-import trackCatalogJson from '../data/generated/track_catalog.json'
-import youtubeByLyricsJson from '../data/generated/youtube_by_lyrics_id.json'
 import type { SongCatalogItem, TrackCatalogItem, YouTubeCatalogVideo } from './types'
 import { songCatalogLinkTo } from './songPaths'
 import { dedupeYoutubeVideosByVideoId } from './youtubeCatalogFlat'
+import { pickTopTracksForListenLp } from './listenLpData'
 import {
   SUTRA_CONTEXT,
   SUTRA_INDEX_CORE_ORDER,
@@ -42,8 +41,6 @@ export const HOME_LATEST_DROPS_LIMIT = 4
 export const HOME_VIDEO_TEASER_LIMIT = 3
 
 const HOME_BROWSE = songCatalogBrowseJson as SongCatalogItem[]
-const HOME_TRACKS = trackCatalogJson as TrackCatalogItem[]
-const YT_BY_LYRICS = youtubeByLyricsJson as Record<string, YouTubeCatalogVideo[]>
 
 const BROWSE_BY_SLUG = new Map(HOME_BROWSE.map((s) => [(s.url_slug || '').trim(), s]))
 
@@ -197,10 +194,8 @@ export function pickRandomHeroQuote(quotes: HomeHeroQuote[]): HomeHeroQuote | nu
   return quotes[idx] ?? null
 }
 
-export function pickListenDoorPreview(): HomeListenDoorPreview | null {
-  const top = [...HOME_TRACKS]
-    .filter((t) => (t.url_slug || '').trim() && t.play_count > 0)
-    .sort((a, b) => b.play_count - a.play_count)[0]
+export function pickListenDoorPreview(catalog: TrackCatalogItem[] | null): HomeListenDoorPreview | null {
+  const top = pickTopTracksForListenLp(catalog)[0]
   if (!top) return null
   const song = BROWSE_BY_SLUG.get((top.url_slug || '').trim())
   const art = (song?.cover_image_url || top.list_cover_url || '').trim()
@@ -214,16 +209,19 @@ export function pickListenDoorPreview(): HomeListenDoorPreview | null {
   }
 }
 
-function flattenYoutubeVideos(): YouTubeCatalogVideo[] {
+function flattenYoutubeVideos(youtubeByLyrics: Record<string, YouTubeCatalogVideo[]>): YouTubeCatalogVideo[] {
   const rows: YouTubeCatalogVideo[] = []
-  Object.values(YT_BY_LYRICS).forEach((arr) => {
+  Object.values(youtubeByLyrics).forEach((arr) => {
     arr.forEach((v) => rows.push(v))
   })
   return rows
 }
 
-export function pickWatchDoorPreview(): HomeWatchDoorPreview | null {
-  const rows = flattenYoutubeVideos()
+export function pickWatchDoorPreview(
+  youtubeByLyrics: Record<string, YouTubeCatalogVideo[]> | null,
+): HomeWatchDoorPreview | null {
+  if (!youtubeByLyrics) return null
+  const rows = flattenYoutubeVideos(youtubeByLyrics)
     .filter((v) => (v.url_slug || '').trim() && (v.thumbnail_url || '').trim())
     .map((v) => ({
       videoId: v.video_id,
@@ -311,8 +309,11 @@ export function buildSutraCards(): HomeSutraCard[] {
   return cards
 }
 
-export function buildHomeVideoTeasers(limit = HOME_VIDEO_TEASER_LIMIT): HomeVideoTeaser[] {
-  return pickRandomHomeVideoTeasers(limit)
+export function buildHomeVideoTeasers(
+  youtubeByLyrics: Record<string, YouTubeCatalogVideo[]>,
+  limit = HOME_VIDEO_TEASER_LIMIT,
+): HomeVideoTeaser[] {
+  return pickRandomHomeVideoTeasers(youtubeByLyrics, limit)
 }
 
 /** YouTube mqdefault is always 16:9 (320×180). */
@@ -333,8 +334,11 @@ function shuffleHomeVideoPool<T>(items: T[]): T[] {
 }
 
 /** Random video teaser picks on each page load. */
-export function pickRandomHomeVideoTeasers(limit = HOME_VIDEO_TEASER_LIMIT): HomeVideoTeaser[] {
-  const rows = dedupeYoutubeVideosByVideoId(flattenYoutubeVideos()).filter(
+export function pickRandomHomeVideoTeasers(
+  youtubeByLyrics: Record<string, YouTubeCatalogVideo[]>,
+  limit = HOME_VIDEO_TEASER_LIMIT,
+): HomeVideoTeaser[] {
+  const rows = dedupeYoutubeVideosByVideoId(flattenYoutubeVideos(youtubeByLyrics)).filter(
     (v) => (v.url_slug || '').trim() && (v.video_id || '').trim(),
   )
   return shuffleHomeVideoPool(rows)
@@ -348,15 +352,6 @@ export function pickRandomHomeVideoTeasers(limit = HOME_VIDEO_TEASER_LIMIT): Hom
     }))
 }
 
-function countCatalogVideos(): number {
-  const seen = new Set<string>()
-  flattenYoutubeVideos().forEach((v) => {
-    const id = (v.video_id || '').trim()
-    if (id) seen.add(id)
-  })
-  return seen.size
-}
-
 /** Bottom stats row — echoes header counts plus videos (wireframe §7). */
 export function buildHomeStatsSummary(): HomeStatsSummaryItem[] {
   const stats = chromeStatsJson as {
@@ -364,8 +359,9 @@ export function buildHomeStatsSummary(): HomeStatsSummaryItem[] {
     songbookCount: number
     songCount: number
     topTrackCount: number
+    videoCount: number
   }
-  const videoCount = countCatalogVideos()
+  const videoCount = stats.videoCount ?? 0
   return [
     {
       value: stats.sutraCount,
@@ -400,30 +396,29 @@ export function buildHomeStatsSummary(): HomeStatsSummaryItem[] {
   ]
 }
 
-export function buildListenerFavorites(limit = 5): HomeListenerFavorite[] {
-  const seen = new Set<string>()
-  const rows: HomeListenerFavorite[] = []
-  for (const t of [...HOME_TRACKS].filter((x) => x.url_slug && x.play_count).sort((a, b) => b.play_count - a.play_count)) {
-    const slug = (t.url_slug || '').trim()
-    if (seen.has(slug)) continue
-    seen.add(slug)
-    const song = BROWSE_BY_SLUG.get(slug)
-    rows.push({
-      rank: rows.length + 1,
-      trackId: t.track_id,
-      title: t.lyrics_title || t.track_title,
-      slug,
-      sutra: t.sutra || song?.sutra || '',
-      genre: (t.primary_genre || '').trim(),
-      duration: (t.duration_raw || '').trim(),
-      plays: t.play_count || 0,
-      art: (song?.cover_image_url || t.list_cover_url || '').trim(),
-      scUrl: (t.sc_url || '').trim(),
-      href: songCatalogLinkTo(t.lyrics_title, t.url_slug),
+export function buildListenerFavorites(
+  catalog: TrackCatalogItem[] | null,
+  limit = 5,
+): HomeListenerFavorite[] {
+  return pickTopTracksForListenLp(catalog)
+    .slice(0, limit)
+    .map((t, index) => {
+      const slug = (t.url_slug || '').trim()
+      const song = BROWSE_BY_SLUG.get(slug)
+      return {
+        rank: index + 1,
+        trackId: t.track_id,
+        title: t.lyrics_title || t.track_title,
+        slug,
+        sutra: t.sutra || song?.sutra || '',
+        genre: (t.primary_genre || '').trim(),
+        duration: (t.duration_raw || '').trim(),
+        plays: t.play_count || 0,
+        art: (song?.cover_image_url || t.list_cover_url || '').trim(),
+        scUrl: (t.sc_url || '').trim(),
+        href: songCatalogLinkTo(t.lyrics_title, t.url_slug),
+      }
     })
-    if (rows.length >= limit) break
-  }
-  return rows
 }
 
 export function sutraCardToneClass(key: SutraFamilyKey): string {

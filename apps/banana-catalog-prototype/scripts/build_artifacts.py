@@ -32,7 +32,7 @@ Outputs:
   src/data/generated/youtube_playlists_catalog.json — in-app YT playlists from **clean ``yt_playlists-<date>.csv``**
     (``ytplaylist_in_app`` gate); for future ``/watch`` LP playlist cards. Per-video ``playlist_names`` stay in
     ``youtube_by_lyrics_id.json``.
-  src/data/generated/catalog_chrome_stats.json — tiny header strip counts (sutras/songbooks/songs/top tracks)
+  src/data/generated/catalog_chrome_stats.json — tiny header strip counts (sutras/songbooks/songs/top tracks/videos)
     to avoid loading full catalogs in GlobalHeader.
   src/data/generated/song_slug_index.json — slug → lyrics_id map for `/songs/:slug` routing (avoids loading full song_detail.json in songPaths).
   src/data/generated/track_catalog.json — flat list of in-app SoundCloud tracks (Phase 3 `/tracks`); sorted popularity then newest `created_at`.
@@ -128,11 +128,22 @@ def sutra_family_chrome(value: str) -> str:
     return upper
 
 
+def count_unique_youtube_video_ids(youtube_by_lyrics_id: dict[str, list[dict[str, Any]]]) -> int:
+    seen: set[str] = set()
+    for videos in youtube_by_lyrics_id.values():
+        for row in videos:
+            video_id = str(row.get("video_id") or "").strip()
+            if video_id:
+                seen.add(video_id)
+    return len(seen)
+
+
 def build_catalog_chrome_stats(
     facets: dict[str, Any],
     song_catalog: list[dict[str, Any]],
     songbook_catalog: list[dict[str, Any]],
     top_track_count: int,
+    youtube_by_lyrics_id: dict[str, list[dict[str, Any]]],
 ) -> dict[str, int]:
     sutra_entries = facets.get("sutra") or []
     sutra_families = {sutra_family_chrome(str(e.get("value") or "")) for e in sutra_entries}
@@ -143,6 +154,7 @@ def build_catalog_chrome_stats(
         "songbookCount": len(songbook_catalog),
         "songCount": len(song_catalog),
         "topTrackCount": top_track_count,
+        "videoCount": count_unique_youtube_video_ids(youtube_by_lyrics_id),
     }
 
 
@@ -2536,7 +2548,9 @@ def main() -> None:
 
     song_slug_index = build_song_slug_index(song_detail)
     track_catalog = build_track_catalog_flat(song_detail, cards_by_lyrics_id, config.like_weight)
-    catalog_chrome_stats = build_catalog_chrome_stats(facets, song_catalog, songbook_catalog, len(track_catalog))
+    catalog_chrome_stats = build_catalog_chrome_stats(
+        facets, song_catalog, songbook_catalog, len(track_catalog), youtube_by_lyrics_id
+    )
 
     outputs = {
         "song_catalog.json": song_catalog,
