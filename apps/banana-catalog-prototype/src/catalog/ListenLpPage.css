@@ -331,33 +331,57 @@
   background: var(--color-bg-panel, #fff);
 }
 
-.listen-lp__popular-tabs {
+/* PL-05c: match song page tab styling (song-detail-tabs / song-detail-tab) */
+.listen-lp__popular-player .listen-lp__popular-tabs,
+.listen-lp__popular-player .song-detail-tabs {
+  position: static;
+  top: auto;
+  z-index: auto;
   display: flex;
-  border-bottom: 1px solid var(--color-border, #ddd);
-  background: var(--color-bg-inset, #f4f1ea);
-}
-
-.listen-lp__popular-tab {
-  flex: 1 1 50%;
-  min-height: 2.75rem;
-  padding: 0.5rem 0.65rem;
-  border: 0;
-  border-bottom: 2px solid transparent;
+  flex-wrap: nowrap;
+  gap: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--color-border);
   background: transparent;
-  font: inherit;
-  font-size: 0.72rem;
-  font-weight: 650;
-  color: var(--color-text-muted, #666);
+  box-sizing: border-box;
+}
+
+.listen-lp__popular-player .song-detail-tab {
+  flex: 1 1 0;
+  min-width: 0;
+  width: 50%;
+  min-height: 2.35rem;
+  padding: 0.5rem 0.35rem;
+  border: none;
+  border-bottom: var(--catalog-tab-active-rule-width) solid transparent;
+  margin-bottom: -1px;
+  background: transparent;
+  color: var(--color-text-faint);
+  font: var(--catalog-shell-section-label-weight) 0.72rem/1 var(--font-ui);
+  letter-spacing: var(--catalog-shell-section-label-tracking);
+  text-transform: uppercase;
+  text-align: center;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
-.listen-lp__popular-tab.is-active {
-  color: var(--color-text-primary, #111);
-  border-bottom-color: var(--color-link, #524a40);
-  background: var(--color-bg-panel, #fff);
+.listen-lp__popular-player .song-detail-tab:hover {
+  color: var(--color-text-primary);
 }
 
-.listen-lp__popular-tab:disabled {
+.listen-lp__popular-player .song-detail-tab.is-active {
+  border-bottom-color: var(--catalog-tab-active-rule-color);
+  color: var(--color-text-strong);
+}
+
+.listen-lp__popular-player .song-detail-tab:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.listen-lp__popular-player .song-detail-tab:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
@@ -407,6 +431,14 @@
 .listen-lp__featured-spotlight .sc-embed-frame {
   width: 100%;
   min-height: 450px;
+}
+
+@media (max-width: 560px) {
+  .listen-lp__popular-player .song-detail-tab {
+    font-size: 0.68rem;
+    min-height: 2.15rem;
+    padding: 0.44rem 0.18rem;
+  }
 }
 
 @media (max-width: 640px) {
