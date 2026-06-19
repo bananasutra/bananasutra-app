@@ -4,7 +4,7 @@ import {
   PersistentScPlayerContext,
   type PersistentScPlayerApi,
 } from '../persistentPlayer/persistentScPlayerContext'
-import { requestPersistentScLoad, resetPersistentScBootstrap } from '../persistentPlayer/persistentScBootstrap'
+import { requestPersistentScLoad, resetAndPrimePersistentSc } from '../persistentPlayer/persistentScBootstrap'
 import type { SoundCloudWidget } from '../soundcloudWidgetApi'
 import { noopPlayerQueueAnalytics } from './noopPlayerQueueAnalytics'
 import { PlayerQueueProvider } from './PlayerQueueProvider'
@@ -58,7 +58,7 @@ export function PlayerQueueRoot({ children }: { children: ReactNode }) {
       syncPlayInGesture: () => {},
       setOnFinish: () => {},
       setOnPlayingChange: () => {},
-      dismiss: () => resetPersistentScBootstrap(),
+      dismiss: () => resetAndPrimePersistentSc(),
     }
   } else if (!playAllDesktop) {
     persistentApiRef.current = null

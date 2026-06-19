@@ -32,6 +32,10 @@ import {
 } from './playAllPlatform'
 import { formatDurationDisplay } from './durationFormat'
 import {
+  queueContextLine,
+  queueSessionActive,
+  queueSessionOwnsPage,
+  selectedTrackId,
   songDetailTrackToPlayable,
   usePlayerQueue,
   usePlayerQueueInternals,
@@ -607,13 +611,30 @@ function SongDetailLoaded({
   const { state: queueState, actions: queueActions } = usePlayerQueue()
   const playAllTopTracksActive = queueState.playAllActive
   const isScPlaying = queueState.playing
+  const playingTrackId = selectedTrackId(queueState)
+  const sessionActive = queueSessionActive(queueState)
+  const queueOwnsPage = queueSessionOwnsPage(queueState, 'song_detail')
+  const foreignSessionActive = sessionActive && !queueOwnsPage
+  const foreignPlaybackNote = useMemo(() => {
+    const line = queueContextLine(queueState).trim()
+    if (!line) return 'Playing in mini player below. Use the bar for controls.'
+    return `${line}. Use the mini player for controls.`
+  }, [queueState])
 
-  const queueIndex = useMemo(
-    () => inAppPlayableTracks.findIndex((t) => t.sc_url.trim() === playingUrl.trim()),
-    [inAppPlayableTracks, playingUrl],
-  )
-  const canGoPrevious = queueIndex > 0
-  const canGoNext = queueIndex >= 0 && queueIndex < inAppPlayableTracks.length - 1
+  const queueIndex =
+    queueOwnsPage && playAllTopTracksActive
+      ? queueState.position
+      : inAppPlayableTracks.findIndex((t) => t.sc_url.trim() === playingUrl.trim())
+  const canGoPrevious =
+    queueOwnsPage && playAllTopTracksActive ? queueState.position > 0 : queueIndex > 0
+  const canGoNext =
+    queueOwnsPage && playAllTopTracksActive
+      ? queueState.position >= 0 && queueState.position < queueState.tracks.length - 1
+      : queueIndex >= 0 && queueIndex < inAppPlayableTracks.length - 1
+  const queueStatusTotal =
+    queueOwnsPage && playAllTopTracksActive && queueState.tracks.length > 0
+      ? queueState.tracks.length
+      : inAppPlayableTracks.length
 
   const pickTopTrack = useCallback(
     (url: string, options?: { keepPlayAll?: boolean }) => {
@@ -1080,9 +1101,29 @@ function SongDetailLoaded({
                   {inAppPlayableTracks.length > 1 ? (
                     <div
                       className="song-detail-audio-playall"
-                      aria-label={playAllDesktopAvailable ? 'Play all top tracks' : undefined}
+                      aria-label={playAllDesktopAvailable && !foreignSessionActive ? 'Play all top tracks' : undefined}
                     >
-                      {playAllDesktopAvailable || playAllTopTracksActive ? (
+                      {foreignSessionActive ? (
+                        <>
+                          <p className="song-detail-audio-hint song-detail-audio-hint--foreign">
+                            {foreignPlaybackNote}
+                          </p>
+                          {playAllDesktopAvailable && !playAllTopTracksActive ? (
+                            <div className="song-detail-audio-playall-row">
+                              <button
+                                type="button"
+                                className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
+                                onClick={startPlayAllFromPage}
+                              >
+                                <span className="song-detail-audio-action-btn__glyph" aria-hidden>
+                                  ▶
+                                </span>
+                                {`Play all ${inAppPlayableTracks.length} top track${inAppPlayableTracks.length === 1 ? '' : 's'}`}
+                              </button>
+                            </div>
+                          ) : null}
+                        </>
+                      ) : playAllDesktopAvailable || playAllTopTracksActive ? (
                         <div className="song-detail-audio-playall-row">
                           {playAllTopTracksActive ? (
                             <>
@@ -1154,8 +1195,8 @@ function SongDetailLoaded({
                               </div>
                               <span className="song-detail-audio-status" aria-live="polite">
                                 {queueIndex >= 0
-                                  ? `Track ${queueIndex + 1} of ${inAppPlayableTracks.length}`
-                                  : `Track 0 of ${inAppPlayableTracks.length}`}
+                                  ? `Track ${queueIndex + 1} of ${queueStatusTotal}`
+                                  : `Track 0 of ${queueStatusTotal}`}
                               </span>
                             </>
                           ) : null}
@@ -1176,7 +1217,10 @@ function SongDetailLoaded({
                   <ul className="song-detail-track-list" id="song-top-tracks-list">
                     {displayedTopTracks.map((t) => {
                       const url = t.sc_url.trim()
-                      const active = Boolean(url && playingUrl && url === playingUrl)
+                      const active =
+                        playingTrackId != null && queueOwnsPage
+                          ? t.track_id === playingTrackId
+                          : Boolean(url && playingUrl && url === playingUrl)
                       const hidden = !trackIsInApp(t)
                       return (
                         <li key={t.track_id} className="song-detail-track-row">

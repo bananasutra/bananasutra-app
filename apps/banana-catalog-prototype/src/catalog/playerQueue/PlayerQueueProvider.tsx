@@ -1,5 +1,7 @@
-import { useMemo, type MutableRefObject, type ReactNode, type RefObject } from 'react'
+import { useEffect, useMemo, type MutableRefObject, type ReactNode, type RefObject } from 'react'
 import type { PersistentScPlayerApi } from '../persistentPlayer/persistentScPlayerContext'
+import { primePersistentScIframe } from '../persistentPlayer/persistentScBootstrap'
+import { loadSoundCloudWidgetApi } from '../soundcloudWidgetApi'
 import { PersistentPlayerShell } from '../persistentPlayer/PersistentPlayerShell'
 import type { SoundCloudWidget } from '../soundcloudWidgetApi'
 import { IDLE_PLAYER_QUEUE_STATE, noopPlayerQueueActions } from './idleState'
@@ -34,6 +36,12 @@ export function PlayerQueueProvider({
   value,
 }: PlayerQueueProviderProps) {
   const engine = usePagePlayerQueue(registrationRef, widgetRef, persistentApiRef, usePersistentPlayback)
+
+  useEffect(() => {
+    if (!usePersistentPlayback) return
+    primePersistentScIframe()
+    void loadSoundCloudWidgetApi()
+  }, [usePersistentPlayback])
 
   useWirePersistentPlayer(persistentApiRef, engine.wirePersistentPlayer, usePersistentPlayback)
 

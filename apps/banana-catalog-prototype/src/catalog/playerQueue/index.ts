@@ -36,6 +36,9 @@ export type {
 export {
   currentQueueTrack,
   queueIsActive,
+  queueSessionActive,
+  queueSessionOwnsPage,
   selectedScUrl,
   selectedTrackId,
+  type PlayerQueuePageKind,
 } from './types'

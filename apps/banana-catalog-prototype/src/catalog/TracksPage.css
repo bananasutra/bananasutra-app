@@ -446,6 +446,14 @@
   border-radius: 0 var(--radius-sm, 8px) var(--radius-sm, 8px) 0;
 }
 
+.tracks-page__play-all-note--foreign {
+  margin: 0 0 0.55rem;
+  padding: 0.45rem 0.65rem;
+  background: var(--color-surface-muted, rgba(0, 0, 0, 0.03));
+  border-left: 3px solid var(--color-border-strong, #bbb);
+  border-radius: 0 var(--radius-sm, 8px) var(--radius-sm, 8px) 0;
+}
+
 .tracks-page__play-all-btn {
   display: inline-flex;
   align-items: center;

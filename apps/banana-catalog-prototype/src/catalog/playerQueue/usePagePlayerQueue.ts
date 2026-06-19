@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react'
 import type { PersistentScPlayerApi } from '../persistentPlayer/persistentScPlayerContext'
-import { requestPersistentScLoad } from '../persistentPlayer/persistentScBootstrap'
+import { persistentScIframeIsWarm, requestPersistentScLoadSync } from '../persistentPlayer/persistentScBootstrap'
+import { markPersistentGesturePlayWindow } from '../persistentPlayer/persistentGesturePlay'
 import type { PlaybackIntent } from '../catalogAnalytics'
 import { isPlayAllDesktopDevice } from '../playAllPlatform'
 import { bindSoundCloudWidgetPlayback } from '../soundCloudWidgetPlayback'
@@ -108,17 +109,21 @@ export function usePagePlayerQueue(
     try {
       if (usePersistentPlayback) {
         const api = persistentApiRef.current
-        const key = resolveCurrentKey()
-        const queue = resolveQueue()
-        const idx = findTrackIndex(queue, key, configRef.current.selectionMode)
-        const track = idx >= 0 ? queue[idx] : null
-        const url = track?.sc_url.trim() ?? ''
-        if (url) {
-          api?.loadTrack(url, { autoPlay: true })
+        const widget = api?.widgetRef.current
+        if (widget) {
+          markPersistentGesturePlayWindow()
+          api?.syncPlayInGesture()
         } else {
+          const key = resolveCurrentKey()
+          const queue = resolveQueue()
+          const idx = findTrackIndex(queue, key, configRef.current.selectionMode)
+          const track = idx >= 0 ? queue[idx] : null
+          const url = track?.sc_url.trim() ?? ''
+          if (url) {
+            requestPersistentScLoadSync(url, { autoPlay: true })
+          }
           api?.syncPlayInGesture()
         }
-        setPlaying(true)
       } else {
         widgetRef.current?.play()
         setPlaying(true)
@@ -173,7 +178,19 @@ export function usePagePlayerQueue(
         if (usePersistentPlayback) {
           const scUrl = track.sc_url.trim()
           if (scUrl) {
-            requestPersistentScLoad(scUrl, { autoPlay: true, remount: true })
+            markPersistentGesturePlayWindow()
+            const api = persistentApiRef.current
+            const widgetReady = Boolean(api?.widgetRef.current)
+            if (widgetReady && api) {
+              api.loadTrack(scUrl, { autoPlay: true, remount: false })
+              api.syncPlayInGesture()
+            } else if (persistentScIframeIsWarm()) {
+              requestPersistentScLoadSync(scUrl, { autoPlay: true, remount: false })
+              api?.syncPlayInGesture()
+            } else {
+              requestPersistentScLoadSync(scUrl, { autoPlay: true, remount: true })
+              api?.syncPlayInGesture()
+            }
           }
         }
         configRef.current.onPlayTrack(track, {
@@ -181,10 +198,7 @@ export function usePagePlayerQueue(
           keepPlayAll,
           fromPlayAllStart: true,
         })
-        // Persistent remount bumps iframe async — syncPlayInGesture here races a dying iframe.
-        if (usePersistentPlayback) {
-          setPlaying(true)
-        } else {
+        if (!usePersistentPlayback) {
           syncPlayInGesture()
         }
         return

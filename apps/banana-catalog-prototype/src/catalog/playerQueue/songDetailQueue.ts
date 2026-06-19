@@ -13,7 +13,6 @@ import { normScUrl, songDetailTrackToPlayable } from './playableTrackAdapters'
 import type { PlayableTrack, PlayerQueueSource } from './types'
 import { usePlayerQueue } from './usePlayerQueue'
 import { usePlayerQueueRegistrar, type PagePlayerQueueRegistration } from './playerQueueRegistrarContext'
-import { requestPersistentScLoad } from '../persistentPlayer/persistentScBootstrap'
 
 export type UseSongDetailTopTracksQueueArgs = {
   inAppPlayableTracksRef: MutableRefObject<SongDetailTrack[]>
@@ -95,10 +94,10 @@ export function useSongDetailTopTracksQueue(
 
       if (usePersistentPlayback) {
         if (opts.fromPlayAllStart) {
-          requestPersistentScLoad(url, { autoPlay: true, remount: true })
-        } else {
-          persistentApiRef.current?.loadTrack(url, { autoPlay: true })
+          syncPlayingUrl(url)
+          return
         }
+        persistentApiRef.current?.loadTrack(url, { autoPlay: true })
         syncPlayingUrl(url)
         return
       }
