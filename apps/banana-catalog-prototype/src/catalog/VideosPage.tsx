@@ -12,7 +12,7 @@ import { flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { songCatalogLinkTo } from './songPaths'
-import { sutraClassName } from './sutraTheme'
+import { sutraClassName, sutraFilterChipClassName } from './sutraTheme'
 import { sortSutraDisplayNames, sutraQuestionFromDisplay } from './sutraContext'
 import type { SongCatalogItem, YouTubeCatalogVideo } from './types'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
@@ -460,6 +460,7 @@ export function VideosPage() {
         count,
         active,
         disabled: !active && count === 0,
+        className: paramKey === 'sutra' ? sutraFilterChipClassName(opt) : undefined,
         title: paramKey === 'sutra' ? `${sutraQuestionFromDisplay(opt)} (${count} videos)` : `${count} videos`,
       }
     })

@@ -146,6 +146,7 @@ export function CatalogFilterBar({
         className={className}
         disabled={option.disabled}
         title={option.title}
+        aria-pressed={option.active}
         onClick={option.onClick}
       >
         {option.label}
