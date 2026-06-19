@@ -1,3 +1,5 @@
+import { flushSync } from 'react-dom'
+
 /** Module scope — survives React Strict Mode remount; iframe mounts from snapshot + generation bump. */
 export type PersistentScBootstrap = {
   url: string | null
@@ -46,11 +48,31 @@ export function getPersistentScBootstrapSnapshot(): PersistentScBootstrap {
 /** @deprecated Read via getPersistentScBootstrapSnapshot in React; kept for non-React callers. */
 export const persistentScBootstrap = bootstrapState
 
+/** Stable catalog track — hidden iframe warm-up on desktop (Safari needs widget bound before Play All gesture). */
+export const PERSISTENT_SC_PRIMER_URL =
+  'https://soundcloud.com/bananasutra/08-tell-the-truth-knowsutra-true-blues-cover-8'
+
+export function persistentScIframeIsWarm(): boolean {
+  return bootstrapState.url != null
+}
+
+/** Mount hidden SC iframe early so Play All can widget.load + play inside the click handler. */
+export function primePersistentScIframe(): void {
+  if (bootstrapState.url != null) return
+  setPersistentScBootstrap(PERSISTENT_SC_PRIMER_URL, false, false)
+}
+
 export function resetPersistentScBootstrap(): void {
   bootstrapState.url = null
   bootstrapState.autoPlay = false
   bootstrapState.generation = 0
   emitBootstrapChange()
+}
+
+/** Stop/teardown then immediately re-warm iframe for the next Play All (Safari). */
+export function resetAndPrimePersistentSc(): void {
+  resetPersistentScBootstrap()
+  primePersistentScIframe()
 }
 
 export function setPersistentScBootstrap(url: string, autoPlay: boolean, remount = false): void {
@@ -79,6 +101,16 @@ export function requestPersistentScLoad(scUrl: string, opts: PersistentScLoadReq
   }
 
   setPersistentScBootstrap(trimmed, autoPlay, coldStart && remount)
+}
+
+/**
+ * Safari Play All: mount persistent iframe synchronously inside the user-gesture stack.
+ * Without flushSync, React commits the iframe after the gesture ends and autoplay is blocked.
+ */
+export function requestPersistentScLoadSync(scUrl: string, opts: PersistentScLoadRequest = {}): void {
+  flushSync(() => {
+    requestPersistentScLoad(scUrl, opts)
+  })
 }
 
 syncBootstrapSnapshot()

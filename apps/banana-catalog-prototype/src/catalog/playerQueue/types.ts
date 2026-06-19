@@ -130,3 +130,27 @@ export function selectedScUrl(state: PlayerQueueState): string | null {
 export function queueIsActive(state: PlayerQueueState): boolean {
   return state.playAllActive && state.tracks.length > 0 && state.source != null
 }
+
+/** True when any playback session is in flight (play-all, single pick, or paused queue). */
+export function queueSessionActive(state: PlayerQueueState): boolean {
+  return state.playAllActive || state.playing || state.source != null
+}
+
+export type PlayerQueuePageKind = 'tracks' | 'song_detail' | 'listen_lp' | 'songbook'
+
+/** Whether the global queue `source` was started from this page (cross-route UI gating). */
+export function queueSessionOwnsPage(state: PlayerQueueState, page: PlayerQueuePageKind): boolean {
+  if (!state.source) return !state.playAllActive
+  switch (page) {
+    case 'tracks':
+      return state.source.type === 'tracks_filter'
+    case 'song_detail':
+      return state.source.type === 'song_variants'
+    case 'listen_lp':
+      return state.source.type === 'listen_lp'
+    case 'songbook':
+      return state.source.type === 'songbook'
+    default:
+      return false
+  }
+}

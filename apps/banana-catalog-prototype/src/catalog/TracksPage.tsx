@@ -37,6 +37,10 @@ import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { formatDurationDisplay } from './durationFormat'
 import {
   trackCatalogItemToPlayable,
+  queueContextLine,
+  queueSessionActive,
+  queueSessionOwnsPage,
+  selectedTrackId,
   usePlayerQueue,
   usePlayerQueueInternals,
   usePlayerQueuePageBridge,
@@ -326,6 +330,15 @@ export function TracksPage() {
   const { state: queueState, actions: queueActions } = usePlayerQueue()
   const playAllActive = queueState.playAllActive
   const isScPlaying = queueState.playing
+  const playingTrackId = selectedTrackId(queueState)
+  const sessionActive = queueSessionActive(queueState)
+  const queueOwnsPage = queueSessionOwnsPage(queueState, 'tracks')
+  const foreignSessionActive = sessionActive && !queueOwnsPage
+  const foreignPlaybackNote = useMemo(() => {
+    const line = queueContextLine(queueState).trim()
+    if (!line) return 'Playing in mini player below. Use the bar for controls.'
+    return `${line}. Use the mini player for controls.`
+  }, [queueState])
 
   useEffect(() => {
     if (!listRows.length) {
@@ -333,8 +346,6 @@ export function TracksPage() {
       setSelectedId(null)
       setScAutoplay(false)
       if (trackCatalog === null) return
-      const sessionActive =
-        queueState.playAllActive || queueState.playing || queueState.source != null
       if (sessionActive) return
       if (filtered.length === 0) {
         resetSession()
@@ -342,16 +353,19 @@ export function TracksPage() {
       return
     }
     setSelectedId((prev) => {
+      if (playingTrackId && listRows.some((t) => t.track_id === playingTrackId)) {
+        return playingTrackId
+      }
+      if (sessionActive && playingTrackId) return null
       if (prev && listRows.some((t) => t.track_id === prev)) return prev
       return listRows[0]?.track_id ?? null
     })
   }, [
     filtered.length,
     listRows,
-    queueState.playAllActive,
-    queueState.playing,
-    queueState.source,
+    playingTrackId,
     resetSession,
+    sessionActive,
     trackCatalog,
   ])
 
@@ -393,10 +407,24 @@ export function TracksPage() {
     () => listRows.find((t) => t.track_id === selectedId) ?? filtered.find((t) => t.track_id === selectedId) ?? listRows[0],
     [listRows, filtered, selectedId],
   )
+  const highlightTrackId = useMemo(() => {
+    if (playingTrackId && listRows.some((t) => t.track_id === playingTrackId)) return playingTrackId
+    return selectedId
+  }, [listRows, playingTrackId, selectedId])
   const showNowPlayingSection = Boolean(selected?.sc_url) && !playAllDesktopAvailable
-  const queueIndex = selected?.track_id ? filtered.findIndex((t) => t.track_id === selected.track_id) : -1
-  const canGoPrevious = queueIndex > 0
-  const canGoNext = queueIndex >= 0 && queueIndex < filtered.length - 1
+  const queueIndex =
+    queueOwnsPage && playAllActive
+      ? queueState.position
+      : selected?.track_id
+        ? filtered.findIndex((t) => t.track_id === selected.track_id)
+        : -1
+  const canGoPrevious = queueOwnsPage && playAllActive ? queueState.position > 0 : queueIndex > 0
+  const canGoNext =
+    queueOwnsPage && playAllActive
+      ? queueState.position >= 0 && queueState.position < queueState.tracks.length - 1
+      : queueIndex >= 0 && queueIndex < filtered.length - 1
+  const queueStatusTotal =
+    queueOwnsPage && playAllActive && queueState.tracks.length > 0 ? queueState.tracks.length : filtered.length
 
   const syncToUrl = useCallback(
     (nextFilters: TracksFilterState, find: string, page: number, sort: TrackSortMode) => {
@@ -643,10 +671,30 @@ export function TracksPage() {
                 {filtered.length > 0 ? (
                   <div
                     className="tracks-page__play-all"
-                    role={playAllDesktopAvailable ? 'group' : undefined}
-                    aria-label={playAllDesktopAvailable ? 'Play all top tracks' : undefined}
+                    role={playAllDesktopAvailable && !foreignSessionActive ? 'group' : undefined}
+                    aria-label={playAllDesktopAvailable && !foreignSessionActive ? 'Play all top tracks' : undefined}
                   >
-                    {playAllDesktopAvailable || playAllActive ? (
+                    {foreignSessionActive ? (
+                      <>
+                        <p className="tracks-page__play-all-note tracks-page__play-all-note--foreign">
+                          {foreignPlaybackNote}
+                        </p>
+                        {playAllDesktopAvailable && filtered.length > 1 && !playAllActive ? (
+                          <div className="tracks-page__play-all-row">
+                            <button
+                              type="button"
+                              className="tracks-page__play-all-btn"
+                              onClick={startPlayAllFromPage}
+                            >
+                              <span className="tracks-page__play-all-glyph" aria-hidden>
+                                ▶
+                              </span>
+                              {`Play all ${filtered.length} top tracks`}
+                            </button>
+                          </div>
+                        ) : null}
+                      </>
+                    ) : playAllDesktopAvailable || playAllActive ? (
                       <div className="tracks-page__play-all-row">
                         {playAllActive ? (
                           <>
@@ -718,8 +766,8 @@ export function TracksPage() {
                             </div>
                             <span className="tracks-page__play-all-status" aria-live="polite">
                               {queueIndex >= 0
-                                ? `Top track ${queueIndex + 1} of ${filtered.length}`
-                                : `Top track 0 of ${filtered.length}`}
+                                ? `Top track ${queueIndex + 1} of ${queueStatusTotal}`
+                                : `Top track 0 of ${queueStatusTotal}`}
                             </span>
                           </>
                         ) : null}
@@ -735,9 +783,10 @@ export function TracksPage() {
 
                 <ul ref={trackListRef} className="tracks-page__list">
                   {listRows.map((t) => {
-                    const active = t.track_id === selected?.track_id
-                    /** Wave overlay reads as “now playing”; only show when this row triggered embed autoplay. */
-                    const showPlayingWave = active && isScPlaying
+                    const active = t.track_id === highlightTrackId
+                    /** Wave overlay reads as “now playing”; only when this row matches the persistent queue track. */
+                    const showPlayingWave =
+                      isScPlaying && playingTrackId != null && t.track_id === playingTrackId
                     const href = songCatalogPath(t.lyrics_title, t.url_slug)
                     const cover = coverImageUrl(thumbSrc(t.list_cover_url), { width: 200 })
                     const g = genreLine(t)

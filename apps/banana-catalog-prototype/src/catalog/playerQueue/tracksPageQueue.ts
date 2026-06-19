@@ -1,6 +1,5 @@
 import { useCallback, useMemo, type MutableRefObject } from 'react'
 import type { TrackSortMode, TrackCatalogItem, TracksFilterState } from '../types'
-import { requestPersistentScLoad } from '../persistentPlayer/persistentScBootstrap'
 import {
   trackCatalogPlayAllStarted,
   trackCatalogPlayAllStopped,
@@ -105,9 +104,7 @@ export function useTracksPagePlayerQueue(args: UseTracksPagePlayerQueueArgs): {
 
       if (usePersistentPlayback) {
         if (!sameRow) setSelectedId(track.track_id)
-        if (opts.fromPlayAllStart) {
-          requestPersistentScLoad(track.sc_url, { autoPlay: true, remount: true })
-        } else {
+        if (!opts.fromPlayAllStart) {
           persistentApiRef.current?.loadTrack(track.sc_url, { autoPlay: true })
         }
         return

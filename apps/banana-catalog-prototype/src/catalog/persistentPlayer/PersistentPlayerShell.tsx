@@ -52,7 +52,7 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
 
   const canGoPrevious = state.position > 0
   const canGoNext = state.position >= 0 && state.position < state.tracks.length - 1
-  const stopLabel = state.playAllActive ? 'Stop playing all' : 'Stop queue'
+  const dismissLabel = state.playAllActive ? 'Close and stop playing all' : 'Close player'
 
   const hasTrackMeta = Boolean(sutraHref || songLinkTo || genreDuration)
 
@@ -146,12 +146,14 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
             </div>
             <button
               type="button"
-              className="persistent-player-bar__stop-btn"
+              className="persistent-player-bar__dismiss-btn"
               onClick={() => actions.stop()}
-              aria-label={stopLabel}
-              title={stopLabel}
+              aria-label={dismissLabel}
+              title={dismissLabel}
             >
-              <span aria-hidden>■</span>
+              <span className="persistent-player-bar__dismiss-icon" aria-hidden>
+                ×
+              </span>
             </button>
           </div>
         </div>

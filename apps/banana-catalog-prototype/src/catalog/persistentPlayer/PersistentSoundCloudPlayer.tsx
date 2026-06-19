@@ -21,7 +21,16 @@ import {
   type SoundCloudWidgetGlobal,
   type SoundCloudWidgetLoadOptions,
 } from './soundcloudWidgetExtended'
-import { resetPersistentScBootstrap, requestPersistentScLoad, setPersistentScBootstrap } from './persistentScBootstrap'
+import {
+  clearPersistentGesturePlayWindow,
+  markPersistentGesturePlayWindow,
+  persistentGesturePlayWindowActive,
+} from './persistentGesturePlay'
+import {
+  resetAndPrimePersistentSc,
+  requestPersistentScLoad,
+  requestPersistentScLoadSync,
+} from './persistentScBootstrap'
 import type { PersistentScPlayerApi } from './persistentScPlayerContext'
 import { usePersistentScBootstrap } from './usePersistentScBootstrap'
 import './PersistentSoundCloudPlayer.css'
@@ -31,6 +40,12 @@ const POSITION_POLL_MS = 1500
 export type PersistentSoundCloudPlayerProps = {
   apiRef: MutableRefObject<PersistentScPlayerApi | null>
   widgetRef: MutableRefObject<SoundCloudWidget | null>
+}
+
+function scApiFromWindow(): SoundCloudWidgetGlobal | null {
+  if (typeof window === 'undefined') return null
+  const sc = window.SC as SoundCloudWidgetGlobal | undefined
+  return sc?.Widget ? sc : null
 }
 
 /**
@@ -79,18 +94,32 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
     }, POSITION_POLL_MS)
   }, [])
 
-  const tryPlayWidget = useCallback((widget: SoundCloudWidgetExtended | null | undefined) => {
-    if (!widget) return false
-    try {
-      widget.play()
-      onPlayingChangeRef.current?.(true)
-      pendingGesturePlayRef.current = false
-      return true
-    } catch {
-      pendingGesturePlayRef.current = true
-      return false
-    }
-  }, [])
+  const syncPlayingStateFromWidget = useCallback(
+    (widget: SoundCloudWidgetExtended | null | undefined) => {
+      if (!widget) return
+      widget.isPaused((paused) => {
+        onPlayingChangeRef.current?.(!paused)
+      })
+    },
+    [],
+  )
+
+  const tryPlayWidget = useCallback(
+    (widget: SoundCloudWidgetExtended | null | undefined, opts: { notify?: boolean } = {}) => {
+      if (!widget) return false
+      const notify = opts.notify ?? true
+      try {
+        widget.play()
+        pendingGesturePlayRef.current = false
+        if (notify) onPlayingChangeRef.current?.(true)
+        return true
+      } catch {
+        pendingGesturePlayRef.current = true
+        return false
+      }
+    },
+    [],
+  )
 
   const handleReady = useCallback(() => {
     advancedForCurrentTrackRef.current = false
@@ -99,10 +128,11 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
     widget?.getDuration((ms) => {
       durationMsRef.current = ms > 0 ? ms : null
     })
-    if (pendingGesturePlayRef.current) {
+    syncPlayingStateFromWidget(widget)
+    if (pendingGesturePlayRef.current || persistentGesturePlayWindowActive()) {
       tryPlayWidget(widget)
     }
-  }, [tryPlayWidget])
+  }, [syncPlayingStateFromWidget, tryPlayWidget])
 
   const handleFinish = useCallback(() => {
     if (advancedForCurrentTrackRef.current) return
@@ -110,40 +140,57 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
     onFinishRef.current?.()
   }, [])
 
+  const bindWidgetFromIframe = useCallback(
+    (iframe: HTMLIFrameElement): boolean => {
+      const sc = scRef.current ?? scApiFromWindow()
+      if (!sc?.Widget || !document.body.contains(iframe)) return false
+
+      scRef.current = sc
+      const widget = sc.Widget(iframe)
+      widgetRefInternal.current = widget
+      widgetRef.current = widget
+      bindPersistentWidgetPlayback(widget, sc, {
+        onReady: handleReady,
+        onFinish: handleFinish,
+        onPlayProgress: (positionMs) => {
+          const durationMs = durationMsRef.current
+          if (durationMs == null || advancedForCurrentTrackRef.current) return
+          if (positionMs >= durationMs - SC_FINISH_FALLBACK_LEAD_MS) {
+            handleFinish()
+          }
+        },
+        onPlayingChange: (playing) => {
+          onPlayingChangeRef.current?.(playing)
+          if (playing) {
+            clearPersistentGesturePlayWindow()
+            startPositionPoll()
+          } else {
+            stopPositionPoll()
+          }
+        },
+      })
+      syncPlayingStateFromWidget(widget)
+      if (pendingGesturePlayRef.current || persistentGesturePlayWindowActive()) {
+        tryPlayWidget(widget)
+      }
+      return true
+    },
+    [handleFinish, handleReady, startPositionPoll, stopPositionPoll, syncPlayingStateFromWidget, tryPlayWidget, widgetRef],
+  )
+
   const ensureWidgetReady = useCallback(async (): Promise<boolean> => {
     if (widgetRefInternal.current && scRef.current) return true
     const iframe = iframeRef.current
     if (!iframe) return false
+
+    if (bindWidgetFromIframe(iframe)) return true
     if (initPromiseRef.current) return initPromiseRef.current
 
     initPromiseRef.current = (async () => {
       try {
-        const sc = (await loadSoundCloudWidgetApi()) as unknown as SoundCloudWidgetGlobal
+        await loadSoundCloudWidgetApi()
         if (!iframeRef.current || !document.body.contains(iframeRef.current)) return false
-        scRef.current = sc
-        const widget = sc.Widget(iframeRef.current)
-        widgetRefInternal.current = widget
-        widgetRef.current = widget
-        bindPersistentWidgetPlayback(widget, sc, {
-          onReady: handleReady,
-          onFinish: handleFinish,
-          onPlayProgress: (positionMs) => {
-            const durationMs = durationMsRef.current
-            if (durationMs == null || advancedForCurrentTrackRef.current) return
-            if (positionMs >= durationMs - SC_FINISH_FALLBACK_LEAD_MS) {
-              handleFinish()
-            }
-          },
-          onPlayingChange: (playing) => {
-            onPlayingChangeRef.current?.(playing)
-            if (playing) startPositionPoll()
-            else stopPositionPoll()
-          },
-        })
-        if (pendingGesturePlayRef.current) {
-          tryPlayWidget(widget)
-        }
-        return true
+        return bindWidgetFromIframe(iframeRef.current)
       } catch {
         initPromiseRef.current = null
         return false
@@ -151,31 +198,39 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
     })()
 
     return initPromiseRef.current
-  }, [handleFinish, handleReady, startPositionPoll, stopPositionPoll, widgetRef])
+  }, [bindWidgetFromIframe])
 
   const beginWidgetLoad = useCallback(
     (widget: SoundCloudWidgetExtended, trimmed: string, autoPlay: boolean) => {
       advancedForCurrentTrackRef.current = false
       durationMsRef.current = null
       loadedUrlRef.current = trimmed
-      if (autoPlay) pendingGesturePlayRef.current = true
+      if (autoPlay) {
+        pendingGesturePlayRef.current = true
+        markPersistentGesturePlayWindow()
+      }
 
       const loadOptions: SoundCloudWidgetLoadOptions = {
         ...soundcloudWidgetLoadOptions(theme, autoPlay, PERSISTENT_SC_PLAYER_MODE),
         callback: () => {
-          if (pendingGesturePlayRef.current) {
+          syncPlayingStateFromWidget(widget)
+          if (pendingGesturePlayRef.current || persistentGesturePlayWindowActive()) {
             tryPlayWidget(widget)
           }
         },
       }
       widget.load(trimmed, loadOptions)
+      if (autoPlay) {
+        tryPlayWidget(widget, { notify: false })
+      }
     },
-    [theme, tryPlayWidget],
+    [syncPlayingStateFromWidget, theme, tryPlayWidget],
   )
 
   const dismiss = useCallback(() => {
     stopPositionPoll()
     pendingGesturePlayRef.current = false
+    clearPersistentGesturePlayWindow()
     loadedUrlRef.current = null
     advancedForCurrentTrackRef.current = false
     durationMsRef.current = null
@@ -188,7 +243,7 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
     widgetRefInternal.current = null
     widgetRef.current = null
     scRef.current = null
-    resetPersistentScBootstrap()
+    resetAndPrimePersistentSc()
   }, [stopPositionPoll, widgetRef])
 
   const loadTrack = useCallback(
@@ -198,6 +253,7 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
       const autoPlay = opts.autoPlay ?? false
       const remount = opts.remount ?? false
       void loadSoundCloudWidgetApi()
+      if (autoPlay) markPersistentGesturePlayWindow()
 
       if (remount) {
         widgetRefInternal.current = null
@@ -206,7 +262,11 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
         initPromiseRef.current = null
         loadedUrlRef.current = trimmed
         if (autoPlay) pendingGesturePlayRef.current = true
-        requestPersistentScLoad(trimmed, { autoPlay, remount: true })
+        if (autoPlay) {
+          requestPersistentScLoadSync(trimmed, { autoPlay, remount: true })
+        } else {
+          requestPersistentScLoad(trimmed, { autoPlay, remount: true })
+        }
         return
       }
 
@@ -217,7 +277,11 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
       if (!iframeMounted || !widget) {
         loadedUrlRef.current = trimmed
         if (autoPlay) pendingGesturePlayRef.current = true
-        requestPersistentScLoad(trimmed, { autoPlay, remount: sameAsBootstrap && iframeMounted })
+        if (autoPlay) {
+          requestPersistentScLoadSync(trimmed, { autoPlay, remount: sameAsBootstrap && iframeMounted })
+        } else {
+          requestPersistentScLoad(trimmed, { autoPlay, remount: sameAsBootstrap && iframeMounted })
+        }
         return
       }
 
@@ -228,25 +292,27 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
         return
       }
 
-      if (!sameAsBootstrap) {
-        setPersistentScBootstrap(trimmed, autoPlay)
-      }
       beginWidgetLoad(widget, trimmed, autoPlay)
     },
     [beginWidgetLoad, bootstrapUrl, widgetRef],
   )
 
   const syncPlayInGesture = useCallback(() => {
+    markPersistentGesturePlayWindow()
+    pendingGesturePlayRef.current = true
     void loadSoundCloudWidgetApi()
+
     const widget = widgetRefInternal.current
     if (widget) {
-      pendingGesturePlayRef.current = true
       tryPlayWidget(widget)
       return
     }
-    pendingGesturePlayRef.current = true
+
+    const iframe = iframeRef.current
+    if (iframe && bindWidgetFromIframe(iframe)) return
+
     void ensureWidgetReady()
-  }, [ensureWidgetReady, tryPlayWidget])
+  }, [bindWidgetFromIframe, ensureWidgetReady, tryPlayWidget])
 
   useLayoutEffect(() => {
     const api = apiRef.current
@@ -263,7 +329,10 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
   }, [apiRef, dismiss, loadTrack, syncPlayInGesture])
 
   useEffect(() => {
-    if (bootstrapAutoPlay) pendingGesturePlayRef.current = true
+    if (bootstrapAutoPlay) {
+      pendingGesturePlayRef.current = true
+      markPersistentGesturePlayWindow()
+    }
   }, [bootstrapAutoPlay, bootstrapGeneration, bootstrapUrl])
 
   useLayoutEffect(() => {
@@ -279,8 +348,10 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
     widgetRefInternal.current = null
     widgetRef.current = null
     scRef.current = null
+    const iframe = iframeRef.current
+    if (iframe && bindWidgetFromIframe(iframe)) return
     void ensureWidgetReady()
-  }, [ensureWidgetReady, widgetRef])
+  }, [bindWidgetFromIframe, ensureWidgetReady, widgetRef])
 
   useEffect(() => () => stopPositionPoll(), [stopPositionPoll])
 
@@ -293,7 +364,7 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
   return (
     <div className="persistent-sc-player">
       <iframe
-        key={`${bootstrapGeneration}:${bootstrapUrl}`}
+        key={`persistent-sc-${bootstrapGeneration}`}
         ref={iframeRef}
         className="sc-embed-frame sc-embed-frame--persistent persistent-sc-player__iframe"
         title="SoundCloud player"
