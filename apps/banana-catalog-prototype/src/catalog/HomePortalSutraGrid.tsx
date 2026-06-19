@@ -1,14 +1,21 @@
 import { Link } from 'react-router-dom'
 import { SUTRA_CONTEXT, sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
+import { formatHomeCount } from './homePortalData'
 
 const SUTRA_GRID_KEYS: readonly SutraFamilyKey[] = ['KNOW', 'BLOW', 'SHOW', 'GROW', 'FLOW', 'GLOW', 'BOW', 'QUACK']
 
-/** Stage sutra tile grid — question + practice, color-coded (pre–W-064 cardEssence cards). */
-export function HomePortalSutraGrid() {
+type Props = {
+  songCounts: ReadonlyMap<SutraFamilyKey, number>
+}
+
+/** Sutra tile grid — question, practice, live song count. */
+export function HomePortalSutraGrid({ songCounts }: Props) {
   return (
     <div className="home-portal__sutra-grid">
       {SUTRA_GRID_KEYS.map((key) => {
         const ctx = SUTRA_CONTEXT[key]
+        const count = songCounts.get(key) ?? 0
+        const countLabel = count === 1 ? '1 song' : `${formatHomeCount(count)} songs`
         return (
           <Link
             key={key}
@@ -21,6 +28,7 @@ export function HomePortalSutraGrid() {
               <span className="home-portal__sutra-tile-practice">
                 {key === 'QUACK' ? 'Sub of BLOW' : ctx.practice}
               </span>
+              <span className="home-portal__sutra-tile-count">{countLabel}</span>
             </div>
           </Link>
         )

@@ -9,8 +9,9 @@ type Props = Pick<
   /**
    * `interaction_or_autoplay`: keep iframe out of initial paint until user intent
    * (tap/click) or explicit autoplay from a row action.
+   * `immediate`: mount embed on first paint (home top-5 default track; no autoplay).
    */
-  activation?: 'near_viewport_or_idle' | 'interaction_or_autoplay'
+  activation?: 'near_viewport_or_idle' | 'interaction_or_autoplay' | 'immediate'
 }
 
 function assignForwardedRef<T>(ref: ForwardedRef<T>, node: T | null): void {
@@ -49,8 +50,8 @@ export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function La
   ref,
 ) {
   const rootRef = useRef<HTMLDivElement | null>(null)
-  const [active, setActive] = useState(false)
-  const [interactive, setInteractive] = useState(false)
+  const [active, setActive] = useState(() => activation === 'immediate')
+  const [interactive, setInteractive] = useState(() => activation === 'immediate')
 
   const setRootRef = (node: HTMLDivElement | null) => {
     rootRef.current = node

@@ -12,8 +12,10 @@ html {
 
 .catalog.catalog-page {
   max-width: var(--catalog-layout-max-width);
+  width: 100%;
   margin: 0 auto;
   padding: 0 1rem 2.5rem;
+  overflow-x: clip;
   /* Space for fixed header; exact height set by JS as --catalog-header-h (fallback ≈ discovery header) */
   padding-top: calc(var(--catalog-header-h, 108px) + 10px);
   overflow-anchor: none;
