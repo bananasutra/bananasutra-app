@@ -332,14 +332,28 @@ export function TracksPage() {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- clear player when list slice is empty
       setSelectedId(null)
       setScAutoplay(false)
-      resetSession()
+      if (trackCatalog === null) return
+      const sessionActive =
+        queueState.playAllActive || queueState.playing || queueState.source != null
+      if (sessionActive) return
+      if (filtered.length === 0) {
+        resetSession()
+      }
       return
     }
     setSelectedId((prev) => {
       if (prev && listRows.some((t) => t.track_id === prev)) return prev
       return listRows[0]?.track_id ?? null
     })
-  }, [listRows, resetSession])
+  }, [
+    filtered.length,
+    listRows,
+    queueState.playAllActive,
+    queueState.playing,
+    queueState.source,
+    resetSession,
+    trackCatalog,
+  ])
 
   useEffect(() => {
     if (skipScAutoplayOffOnNextSelectionChange.current) {

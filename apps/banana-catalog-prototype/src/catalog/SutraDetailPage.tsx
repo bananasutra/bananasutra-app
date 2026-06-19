@@ -34,6 +34,7 @@ import {
   useExclusiveYoutubeSoundcloudPlayback,
   type ExclusiveYoutubeSoundcloudControls,
 } from './useExclusiveYoutubeSoundcloudPlayback'
+import { usePlayerQueueRegistrar } from './playerQueue/playerQueueRegistrarContext'
 import {
   pickRandomSongbookFromPool,
   songbookFeaturedKickerLabel,
@@ -163,6 +164,7 @@ export function SutraDetailPage() {
     [],
   )
   const exclusivePlaybackRef = useRef<ExclusiveYoutubeSoundcloudControls | null>(null)
+  const { persistentScEmbedWrapRef, usePersistentPlayback } = usePlayerQueueRegistrar()
   const [youtubeIframeGen, setYoutubeIframeGen] = useState(0)
   const pullTypingIntervalRef = useRef<number | undefined>(undefined)
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
@@ -312,6 +314,7 @@ export function SutraDetailPage() {
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
     soundcloudWrapRefs: sutraSoundcloudWrapRefs,
+    persistentScWrapRef: usePersistentPlayback ? persistentScEmbedWrapRef : undefined,
     enabled: sutraExclusivePlaybackEnabled,
     controlsRef: exclusivePlaybackRef,
     syncKey: `${familyKey ?? ''}|${featuredSutraVideo?.video_id ?? ''}|${featuredScUrlForExclusive}|spot:${(sutraSpotlightSongbook?.playlist_url || '').trim()}|yt:${youtubeIframeGen}`,

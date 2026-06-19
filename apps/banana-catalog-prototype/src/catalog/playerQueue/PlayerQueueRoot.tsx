@@ -43,6 +43,7 @@ export function PlayerQueueRoot({ children }: { children: ReactNode }) {
   const mobileWidgetRef = useRef<SoundCloudWidget | null>(null)
   const persistentWidgetRef = useRef<SoundCloudWidget | null>(null)
   const persistentApiRef = useRef<PersistentScPlayerApi | null>(null)
+  const persistentScEmbedWrapRef = useRef<HTMLDivElement | null>(null)
 
   const liveRegistrationRef = useRef<PagePlayerQueueRegistration>(IDLE_PAGE_REGISTRATION)
   const frozenRegistrationRef = useRef<PagePlayerQueueRegistration | null>(null)
@@ -84,6 +85,7 @@ export function PlayerQueueRoot({ children }: { children: ReactNode }) {
       clearPageRegistration,
       widgetRef,
       persistentApiRef,
+      persistentScEmbedWrapRef,
       usePersistentPlayback: playAllDesktop,
     }),
     [clearPageRegistration, playAllDesktop, setPageRegistration, widgetRef],
@@ -95,6 +97,7 @@ export function PlayerQueueRoot({ children }: { children: ReactNode }) {
         registrationRef={registrationRef}
         widgetRef={widgetRef}
         persistentApiRef={persistentApiRef}
+        persistentScEmbedWrapRef={persistentScEmbedWrapRef}
         usePersistentPlayback={playAllDesktop}
       >
         <PersistentScPlayerContext.Provider value={persistentApiRef.current}>
