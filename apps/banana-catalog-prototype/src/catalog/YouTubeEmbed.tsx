@@ -6,6 +6,7 @@ import {
   youtubePrivacyEmbedSrc,
   youtubeWatchPageUrl,
 } from './youtubeEmbedUrl'
+import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 
 type SongDetailProps = {
   videoId: string
@@ -23,8 +24,6 @@ export type YoutubeEmbeddedPlayerProps = {
   embedWrapperClassName?: string
   embedWrapperStyle?: CSSProperties
   loading?: 'lazy' | 'eager'
-  /** Optional layout hook for the outbound line below featured heroes (width alignment). */
-  outboundFooterClassName?: string
   /**
    * Poster + tap mounts the iframe (gesture‑gated). Used everywhere YouTube loads — reduces passive embed
    * probes (logged‑out / incognito) vs autoplaying an iframe as soon as the shell hydrates.
@@ -34,10 +33,14 @@ export type YoutubeEmbeddedPlayerProps = {
   onBeforePlay?: () => void
   /** Runs when the embed iframe finishes loading (YouTube JS API handshake). */
   onIframeLoad?: () => void
+  /** Fires when the GO gate releases the iframe (true) or the video remounts (false). */
+  onPlayingChange?: (playing: boolean) => void
   /** For above-the-fold heroes: eager poster + high fetch priority while facade is visible. */
   facadePosterEager?: boolean
   /** Poster transformation width for the facade image. */
   posterWidth?: number
+  /** When false, omit the default outbound link (parent places it below copy). Default true. */
+  showOutboundFooter?: boolean
 }
 
 const YT_IFRAME_ALLOW =
@@ -56,19 +59,10 @@ function useClientMounted(): boolean {
 /**
  * Fallback when YouTube&apos;s embed misbehaves — same upload on youtube.com.
  */
-export function YoutubeEmbedOutboundFooter({ videoId, className }: { videoId: string; className?: string }) {
+export function YoutubeEmbedOutboundFooter({ videoId }: { videoId: string }) {
   const href = youtubeWatchPageUrl(videoId)
   if (!href) return null
-  return (
-    <p className={['yt-embed-outbound', className].filter(Boolean).join(' ')}>
-      <span className="yt-embed-outbound__note">
-        YouTube blocking video playback? Sorry. Proof the world is bananas…{' '}
-      </span>
-      <a href={href} target="_blank" rel="noopener noreferrer" className="yt-embed-outbound__link">
-        Watch on YouTube
-      </a>
-    </p>
-  )
+  return <CatalogMediaOutbound href={href} />
 }
 
 export function YoutubeEmbeddedPlayer({
@@ -80,17 +74,22 @@ export function YoutubeEmbeddedPlayer({
   embedWrapperClassName = 'yt-embed-shell',
   embedWrapperStyle,
   loading = 'lazy',
-  outboundFooterClassName,
   facadeUntilClick = false,
   onBeforePlay,
   onIframeLoad,
+  onPlayingChange,
   facadePosterEager = false,
   posterWidth = 400,
+  showOutboundFooter = true,
 }: YoutubeEmbeddedPlayerProps) {
   const id = videoId.trim()
   const clientMounted = useClientMounted()
   const [facadeReleased, setFacadeReleased] = useState(false)
   const showFacade = Boolean(facadeUntilClick && id && !facadeReleased)
+
+  useEffect(() => {
+    onPlayingChange?.(facadeReleased)
+  }, [facadeReleased, onPlayingChange])
 
   const iframeSrc = useMemo(() => {
     if (!id || showFacade) return ''
@@ -104,7 +103,7 @@ export function YoutubeEmbeddedPlayer({
   const iframeClass = ['yt-embed-frame', iframeClassName].filter(Boolean).join(' ')
   const poster = coverImageUrl(youtubePosterThumbnailUrl(id), { width: posterWidth })
 
-  const outbound = <YoutubeEmbedOutboundFooter videoId={id} className={outboundFooterClassName} />
+  const outbound = showOutboundFooter ? <YoutubeEmbedOutboundFooter videoId={id} /> : null
 
   if (!clientMounted) {
     return (

@@ -22,18 +22,26 @@ test('buildSrcset drops widths above native SoundCloud art (no 640w CF)', () => 
   assert.doesNotMatch(set, /\/cdn-cgi\/image\//)
 })
 
-test('coverImageUrl normalizes YouTube maxresdefault to hqdefault', () => {
+test('coverImageUrl keeps YouTube maxresdefault for square-friendly crops', () => {
   const src = 'https://i.ytimg.com/vi/9FwaPZK_8XI/maxresdefault.jpg'
   const out = coverImageUrl(src, { width: 200 })
-  assert.match(out, /hqdefault\.jpg/)
-  assert.doesNotMatch(out, /maxresdefault/)
+  assert.match(out, /maxresdefault\.jpg/)
   assert.doesNotMatch(out, /\/cdn-cgi\/image\//)
 })
 
-test('buildSrcset caps YouTube hqdefault at 480w', () => {
+test('coverImageUrl upgrades YouTube hqdefault to maxresdefault', () => {
   const src = 'https://i.ytimg.com/vi/9FwaPZK_8XI/hqdefault.jpg'
-  const set = buildSrcset(src, [240, 360, 480, 640])
-  assert.doesNotMatch(set, /640w/)
+  const out = coverImageUrl(src, { width: 200 })
+  assert.match(out, /maxresdefault\.jpg/)
+  assert.doesNotMatch(out, /hqdefault/)
+  assert.doesNotMatch(out, /\/cdn-cgi\/image\//)
+})
+
+test('buildSrcset caps YouTube maxresdefault at 1280w', () => {
+  const src = 'https://i.ytimg.com/vi/9FwaPZK_8XI/hqdefault.jpg'
+  const set = buildSrcset(src, [240, 360, 480, 640, 960, 1280, 1600])
+  assert.match(set, /1280w/)
+  assert.doesNotMatch(set, /1600w/)
   assert.doesNotMatch(set, /\/cdn-cgi\/image\//)
 })
 

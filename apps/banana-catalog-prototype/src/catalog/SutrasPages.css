@@ -138,6 +138,27 @@
   min-height: 6.5rem;
 }
 
+.sutra-detail__media-block-embed {
+  margin-bottom: 0.75rem;
+  min-width: 0;
+}
+
+.sutra-detail__media-block-embed .catalog-lazy-sc-embed,
+.sutra-detail__media-block-embed .catalog-lazy-sc-embed__placeholder,
+.sutra-detail__media-block-embed .catalog-sc-passthrough-embed,
+.sutra-detail__media-block-embed .sc-embed-frame {
+  min-height: 0;
+}
+
+.sutra-detail__media-block-embed--video > .yt-embed-root {
+  min-width: 0;
+  width: 100%;
+}
+
+.sutra-detail__media-block-copy .catalog-media-outbound {
+  margin-top: 0.5rem;
+}
+
 .sutra-detail__pull {
   background: transparent;
 }
@@ -239,11 +260,6 @@
   height: 100%;
   border: none;
   border-radius: var(--radius-sm);
-}
-
-.sutra-detail__yt-outbound {
-  max-width: none;
-  margin-inline: 0;
 }
 
 /* Featured EP / video h3 — subordinate to section H2 labels. */

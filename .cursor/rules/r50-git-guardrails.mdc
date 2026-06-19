@@ -50,7 +50,7 @@ git push origin r50-overhaul
 - Cherry-pick redesign commits onto Track 1 branches without Banana’s explicit plan
 - `git push origin main` or `staging → main` for redesign work
 
-**Final R50 ship to production** (once, end of overhaul): only after Banana explicitly approves → `r50-overhaul` → `staging` → `main` with subject `release: merge staging (R50 redesign overhaul)`. See `git-release-workflow.mdc`.
+**Final R50 ship to production** (once, end of overhaul): only after Banana explicitly approves → `r50-overhaul` → `staging` → `main` with subject `release: merge staging (R50 redesign overhaul)`. See `git-release-workflow.mdc`. **Exception:** W-074 `bbb-api` route/link updates must not cherry-pick to `main` ahead of that ship (Bertrand would 404-link to flat routes before catalog has them).
 
 ---
 

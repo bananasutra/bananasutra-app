@@ -81,7 +81,7 @@
 .sitemap-page__link:focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: var(--focus-ring-offset);
-  border-radius: 2px;
+  border-radius: var(--radius-control, 2px);
 }
 
 .sitemap-page__section-lede {

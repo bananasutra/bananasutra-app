@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANANASUTRA — Homepage Wireframe v2</title>
+<style>
+/* ─── Design tokens (match actual site palette) ─── */
+:root {
+  --bg:       #f8f4ee;
+  --bg2:      #f0ebe1;
+  --bg3:      #e8e2d6;
+  --border:   rgba(0,0,0,.12);
+  --border2:  rgba(0,0,0,.08);
+  --text:     #1a1611;
+  --muted:    #6b6255;
+  --faint:    #a09585;
+  --serif:    "Georgia", "Times New Roman", serif;
+  --mono:     "Courier New", monospace;
+  --sans:     -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --radius:   6px;
+  /* Sutra colors — actual site values */
+  --know:  #5B8BB8;
+  --blow:  #CC4A40;
+  --show:  #D4929A;
+  --grow:  #6A9A5C;
+  --flow:  #5A9E96;
+  --glow:  #C8962A;
+  --bow:   #8872A8;
+  --quack: #C86040;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #ddd8cf;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* ─── WF Meta bar ─── */
+.wf-bar {
+  position: sticky; top: 0; z-index: 200;
+  background: #1a1611;
+  color: rgba(255,255,255,.85);
+  padding: 0 24px;
+  height: 36px;
+  display: flex; align-items: center; gap: 16px;
+  font-family: var(--mono); font-size: 10px;
+}
+.wf-badge { background: #c86040; color: #fff; padding: 2px 8px; border-radius: 2px; font-weight: bold; letter-spacing: .06em; }
+.wf-tabs { display: flex; gap: 0; margin-left: auto; }
+.wf-tab {
+  padding: 0 14px; height: 36px; display: flex; align-items: center;
+  cursor: pointer; border-bottom: 2px solid transparent;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .08em; color: rgba(255,255,255,.5);
+  transition: color .15s;
+}
+.wf-tab.active { color: #fff; border-bottom-color: #c8a84b; }
+.wf-legend { display: flex; gap: 12px; }
+.wf-leg { display: flex; align-items: center; gap: 5px; color: rgba(255,255,255,.45); font-size: 9px; }
+.wf-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+/* ─── Viewport panels ─── */
+.viewports {
+  display: flex; gap: 32px;
+  padding: 32px 32px 0;
+  align-items: flex-start;
+  overflow-x: auto;
+}
+.vp-wrap { flex-shrink: 0; }
+.vp-label {
+  font-family: var(--mono); font-size: 10px; color: rgba(0,0,0,.4);
+  letter-spacing: .1em; margin-bottom: 8px; text-transform: uppercase;
+}
+.vp-frame {
+  background: var(--bg);
+  box-shadow: 0 4px 24px rgba(0,0,0,.18);
+  border-radius: 4px;
+  overflow: hidden;
+  transform-origin: top left;
+}
+
+/* Desktop wrapper */
+.desktop-wrap .vp-frame { width: 820px; }
+
+/* Tablet */
+.tablet-wrap .vp-frame { width: 680px; transform: scale(.72); transform-origin: top left; }
+.tablet-wrap { width: calc(680px * .72); }
+
+/* Mobile */
+.mobile-wrap .vp-frame { width: 375px; transform: scale(.72); transform-origin: top left; }
+.mobile-wrap { width: calc(375px * .72); }
+
+/* ─── Annotation chips ─── */
+.ann {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: .06em;
+  padding: 2px 8px; border-radius: 2px; border: 1px solid;
+  margin-bottom: 6px; cursor: default;
+}
+.ann.keep   { border-color: #3d7a52; color: #3d7a52; background: #f0f8f4; }
+.ann.remove { border-color: #c0392b; color: #c0392b; background: #fdf0ef; }
+.ann.move   { border-color: #b07820; color: #b07820; background: #fdf8f0; }
+.ann.merge  { border-color: #6040a0; color: #6040a0; background: #f5f0fc; }
+.ann.new    { border-color: #1a60b0; color: #1a60b0; background: #f0f4fd; }
+
+/* ─── SITE CHROME ─── */
+.site-header {
+  background: #13110d;
+  padding: 14px 24px;
+  display: flex; align-items: center; gap: 16px;
+  position: sticky; top: 36px; z-index: 100;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.brand { flex-shrink: 0; }
+.brand-name { font-family: var(--serif); font-size: 18px; color: #e8dfc8; font-weight: bold; letter-spacing: .02em; }
+.brand-sub  { font-family: var(--serif); font-size: 11px; color: rgba(232,223,200,.55); font-style: italic; }
+.brand-stats { font-family: var(--mono); font-size: 9px; color: rgba(232,223,200,.35); letter-spacing: .05em; margin-top: 2px; }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.nav-pills { display: flex; }
+.nav-pill {
+  padding: 5px 14px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+  border: 1px solid rgba(232,223,200,.2); color: rgba(232,223,200,.6);
+}
+.nav-pill:first-child { border-radius: 4px 0 0 4px; }
+.nav-pill:last-child  { border-radius: 0 4px 4px 0; }
+.nav-pill.act { background: rgba(232,223,200,.12); color: #e8dfc8; border-color: rgba(232,223,200,.4); }
+.nav-icon { color: rgba(232,223,200,.5); font-size: 14px; padding: 0 4px; cursor: pointer; }
+
+/* ─── CONTENT SHELL ─── */
+.content { max-width: 800px; margin: 0 auto; background: #13110d; }
+
+/* ─── SECTION WRAPPERS ─── */
+.section {
+  padding: 48px 24px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  position: relative;
+}
+.section-ann {
+  position: absolute; top: 12px; right: 12px;
+  display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end;
+}
+.sec-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .12em;
+  color: rgba(232,223,200,.3); text-transform: uppercase; margin-bottom: 14px;
+}
+.sec-h2 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
+  color: rgba(232,223,200,.4); text-transform: uppercase; margin-bottom: 16px;
+}
+.sec-h2-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
+.sec-link { font-family: var(--mono); font-size: 10px; color: rgba(232,223,200,.35); letter-spacing: .06em; }
+
+/* ─── HERO ─── */
+.hero { padding: 72px 24px 64px; text-align: center; border-bottom: 1px solid rgba(255,255,255,.07); }
+.hero-label { font-family: var(--sans); font-size: 14px; color: rgba(232,223,200,.55); letter-spacing: .01em; margin-bottom: 24px; }
+.hero-quote {
+  font-family: var(--serif); font-size: 30px; line-height: 1.35;
+  color: #e8dfc8; max-width: 560px; margin: 0 auto 20px; position: relative;
+}
+.hero-quote::before { content: '\201C'; font-size: 72px; color: rgba(232,223,200,.12); position: absolute; top: -20px; left: -8px; line-height: 1; }
+.hero-songlink { font-family: var(--mono); font-size: 11px; color: rgba(232,223,200,.5); letter-spacing: .06em; }
+.hero-songlink span { color: #c8a84b; }
+.hero-note { font-family: var(--mono); font-size: 9px; color: rgba(232,223,200,.25); margin-top: 8px; letter-spacing: .06em; }
+
+/* ─── SUTRA GRID (§2 — moved up) ─── */
+.sutra-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.sutra-tile {
+  padding: 14px 12px 12px;
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.06);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+}
+.sutra-tile::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.st-know::before { background: var(--know); }
+.st-blow::before { background: var(--blow); }
+.st-show::before { background: var(--show); }
+.st-grow::before { background: var(--grow); }
+.st-flow::before { background: var(--flow); }
+.st-glow::before { background: var(--glow); }
+.st-bow::before  { background: var(--bow); }
+.st-quack::before { background: var(--quack); }
+.st-quack { border-style: dashed; }
+
+.sutra-name { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; margin-bottom: 4px; }
+.st-know .sutra-name { color: var(--know); }
+.st-blow .sutra-name { color: var(--blow); }
+.st-show .sutra-name { color: var(--show); }
+.st-grow .sutra-name { color: var(--grow); }
+.st-flow .sutra-name { color: var(--flow); }
+.st-glow .sutra-name { color: var(--glow); }
+.st-bow  .sutra-name { color: var(--bow); }
+.st-quack .sutra-name { color: var(--quack); }
+
+.sutra-q    { font-family: var(--serif); font-size: 12px; color: rgba(232,223,200,.6); line-height: 1.4; }
+.sutra-verb { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; color: rgba(232,223,200,.25); margin-top: 8px; text-transform: uppercase; }
+.sutra-count { font-family: var(--mono); font-size: 9px; color: rgba(232,223,200,.2); margin-top: 4px; }
+
+/* ─── NOW PLAYING (merged Latest Drops + Top 5) ─── */
+.now-cols { display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; }
+
+/* Drop cards */
+.drop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.drop-card {
+  aspect-ratio: 1; border-radius: var(--radius); overflow: hidden;
+  position: relative; background: rgba(255,255,255,.06);
+  cursor: pointer;
+}
+.drop-img { width: 100%; height: 100%; object-fit: cover; opacity: .85; }
+.drop-img-ph {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.02) 100%);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(232,223,200,.15); font-family: var(--mono); font-size: 10px;
+}
+.drop-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 100%);
+  padding: 20px 10px 10px;
+}
+.drop-sutra { font-family: var(--mono); font-size: 8px; letter-spacing: .1em; color: rgba(232,223,200,.5); margin-bottom: 2px; }
+.drop-title { font-family: var(--serif); font-size: 12px; color: #e8dfc8; line-height: 1.25; }
+.drop-date  { font-family: var(--mono); font-size: 9px; color: rgba(232,223,200,.35); margin-top: 2px; }
+
+/* Track list */
+.track-list { display: flex; flex-direction: column; }
+.track-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.track-row:last-child { border-bottom: none; }
+.track-n { font-family: var(--mono); font-size: 10px; color: rgba(232,223,200,.2); width: 14px; text-align: right; flex-shrink: 0; }
+.track-info { flex: 1; min-width: 0; }
+.track-title { font-family: var(--serif); font-size: 13px; color: #e8dfc8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.track-meta  { font-family: var(--mono); font-size: 9px; color: rgba(232,223,200,.35); margin-top: 1px; }
+.track-dur   { font-family: var(--mono); font-size: 10px; color: rgba(232,223,200,.3); flex-shrink: 0; }
+.track-play  {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  border: 1px solid rgba(232,223,200,.2); display: flex; align-items: center; justify-content: center;
+  color: #c8a84b; font-size: 8px; cursor: pointer;
+}
+.track-row.playing .track-play { background: #c8a84b; color: #13110d; border-color: #c8a84b; }
+.track-row.playing .track-title { color: #c8a84b; }
+
+/* Mini player — UNIFIED design */
+.mini-player {
+  margin-top: 12px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.mp-thumb {
+  width: 36px; height: 36px; border-radius: 3px; flex-shrink: 0;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.mp-info { flex: 1; min-width: 0; }
+.mp-title { font-family: var(--serif); font-size: 12px; color: #e8dfc8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mp-sub   { font-family: var(--mono); font-size: 9px; color: rgba(232,223,200,.35); margin-top: 1px; }
+.mp-bar   { height: 2px; background: rgba(255,255,255,.1); border-radius: 1px; margin-top: 5px; position: relative; }
+.mp-bar::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 30%; background: #c8a84b; border-radius: 1px; }
+.mp-controls { display: flex; gap: 8px; align-items: center; color: rgba(232,223,200,.5); font-size: 12px; flex-shrink: 0; }
+.mp-controls .play-btn { color: #c8a84b; font-size: 14px; }
+
+.player-note {
+  margin-top: 8px;
+  font-family: var(--mono); font-size: 9px; color: rgba(232,223,200,.25);
+  letter-spacing: .04em; line-height: 1.5;
+}
+
+/* ─── FEELING LUCKY (redesigned) ─── */
+.lucky-strip {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr); /* 11 squares, fills full width exactly */
+  gap: 6px;
+  margin: 16px 0 12px;
+}
+.lucky-thumb {
+  aspect-ratio: 1; /* square album covers, always */
+  width: 100%;
+  border-radius: 4px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.06);
+  position: relative; overflow: hidden; cursor: pointer;
+}
+.lucky-thumb:hover { opacity: .85; }
+.lucky-reload {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 10px; color: rgba(232,223,200,.4);
+  letter-spacing: .06em; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.1); border-radius: 999px;
+  padding: 5px 14px; margin-top: 4px;
+}
+
+.bertrand-row {
+  display: flex; align-items: center; gap: 12px; margin-top: 10px;
+  padding-top: 10px; border-top: 1px solid rgba(255,255,255,.06);
+}
+.bertrand-text { font-family: var(--sans); font-size: 13px; color: rgba(232,223,200,.45); }
+.bertrand-link { font-family: var(--serif); font-size: 15px; color: #e8dfc8; font-style: italic; border-bottom: 1px solid rgba(232,223,200,.2); cursor: pointer; }
+
+/* ─── SONGBOOKS CORNER (3 cards) ─── */
+.sb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+.sb-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius); overflow: hidden; cursor: pointer;
+}
+.sb-img {
+  height: 100px;
+  background: linear-gradient(135deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.02) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 9px; color: rgba(232,223,200,.2);
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.sb-body { padding: 12px 12px 14px; }
+.sb-type { font-family: var(--mono); font-size: 8px; letter-spacing: .1em; color: rgba(232,223,200,.3); margin-bottom: 4px; }
+.sb-title { font-family: var(--serif); font-size: 13px; color: #e8dfc8; line-height: 1.3; margin-bottom: 6px; }
+.sb-desc  { font-family: var(--sans); font-size: 11px; color: rgba(232,223,200,.45); line-height: 1.5; }
+.sb-meta  { font-family: var(--mono); font-size: 9px; color: rgba(232,223,200,.3); margin-top: 8px; }
+.sb-cta   { font-family: var(--mono); font-size: 9px; color: rgba(200,168,75,.7); letter-spacing: .06em; margin-top: 10px; display: block; }
+
+/* ─── VIDEO TEASER ─── */
+.video-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+.video-card {
+  border-radius: var(--radius); overflow: hidden;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.07);
+  cursor: pointer; position: relative;
+}
+.video-thumb {
+  aspect-ratio: 16/9; width: 100%;
+  background: rgba(255,255,255,.06);
+  /* No play icon — card links to song's video section, not an inline player */
+}
+.video-label {
+  padding: 8px 10px;
+  font-family: var(--serif); font-size: 11px; color: rgba(232,223,200,.6);
+  line-height: 1.3;
+}
+.video-label .video-cta {
+  display: block;
+  font-family: var(--mono); font-size: 9px; color: rgba(200,168,75,.6);
+  letter-spacing: .06em; margin-top: 3px;
+}
+
+/* ─── STATS SUMMARY ROW (bottom) ─── */
+.stats-summary {
+  padding: 36px 24px;
+  border-top: 1px solid rgba(255,255,255,.07);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  display: flex; gap: 0;
+}
+.stat-item {
+  flex: 1; text-align: center;
+  padding: 0 8px;
+  border-right: 1px solid rgba(255,255,255,.07);
+  cursor: pointer; text-decoration: none;
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  display: block;
+  font-family: var(--mono); font-size: 32px;
+  color: #e8dfc8; letter-spacing: -.02em; line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-label {
+  font-family: var(--mono); font-size: 9px;
+  color: rgba(232,223,200,.3); letter-spacing: .12em; text-transform: uppercase;
+}
+.stat-item:hover .stat-num { color: #c8a84b; }
+.stat-item:hover .stat-label { color: rgba(200,168,75,.6); }
+
+/* ─── CONTACT ─── */
+.contact-toggle {
+  width: 100%; padding: 16px 24px; background: rgba(255,255,255,.03);
+  border: none; border-top: 1px solid rgba(255,255,255,.07);
+  font-family: var(--mono); font-size: 10px; color: rgba(232,223,200,.3);
+  letter-spacing: .1em; text-align: center; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+/* ─── FOOTER ─── */
+.site-footer {
+  background: rgba(0,0,0,.3);
+  padding: 24px 24px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.footer-socials { display: flex; justify-content: center; gap: 18px; margin-bottom: 14px; }
+.footer-icon { width: 24px; height: 24px; background: rgba(255,255,255,.08); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+.footer-copy { font-family: var(--mono); font-size: 9px; color: rgba(232,223,200,.2); letter-spacing: .06em; line-height: 1.8; }
+
+/* ─── Notes panel ─── */
+.notes-panel {
+  background: #f0ece4;
+  border-top: 2px solid #c8a84b;
+  padding: 24px 32px;
+  margin: 32px 0 0;
+}
+.notes-panel h3 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
+  color: #6b6255; text-transform: uppercase; margin-bottom: 16px;
+}
+.notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.note-item {}
+.note-sec { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; color: #a09585; margin-bottom: 4px; }
+.note-text { font-family: var(--sans); font-size: 11px; color: #4a4035; line-height: 1.6; }
+
+/* ─── Mobile-specific overrides (inside .mobile-wrap) ─── */
+.mobile-wrap .site-header { padding: 10px 14px; }
+.mobile-wrap .nav-pills { display: none; }
+.mobile-wrap .brand-stats { display: none; }
+.mobile-wrap .hero { padding: 40px 16px 36px; }
+.mobile-wrap .hero-quote { font-size: 22px; }
+.mobile-wrap .sutra-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.mobile-wrap .now-cols { grid-template-columns: 1fr; gap: 24px; }
+.mobile-wrap .drop-grid { grid-template-columns: repeat(2, 1fr); }
+.mobile-wrap .sb-grid { grid-template-columns: 1fr; }
+.mobile-wrap .lucky-strip {
+  grid-template-columns: repeat(3, 1fr); /* 6 thumbs → clean 2×3, squares via aspect-ratio */
+}
+/* tablet: 9 columns */
+.tablet-wrap .lucky-strip {
+  grid-template-columns: repeat(9, 1fr);
+}
+.mobile-wrap .section { padding: 36px 16px; }
+.mobile-wrap .mini-player { margin-top: 16px; }
+
+/* Tablet overrides */
+.tablet-wrap .sutra-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.tablet-wrap .now-cols { grid-template-columns: 1fr; gap: 20px; }
+.tablet-wrap .drop-grid { grid-template-columns: repeat(4, 1fr); }
+.tablet-wrap .sb-grid { grid-template-columns: repeat(3, 1fr); }
+
+/* ─── Full-width desktop view below ─── */
+.desktop-full { display: none; }
+.desktop-full.active { display: block; margin-top: 32px; }
+.desktop-full .vp-frame { width: 820px; margin: 0 auto; box-shadow: 0 4px 40px rgba(0,0,0,.25); }
+</style>
+</head>
+<body>
+
+<!-- ─── WF Meta bar ─── -->
+<div class="wf-bar">
+  <span class="wf-badge">WIREFRAME v2</span>
+  <span style="color:rgba(255,255,255,.4)">BANANASUTRA · Homepage · Revised post-feedback</span>
+  <div class="wf-legend">
+    <div class="wf-leg"><div class="wf-dot" style="background:#3d7a52"></div>Keep</div>
+    <div class="wf-leg"><div class="wf-dot" style="background:#c0392b"></div>Remove</div>
+    <div class="wf-leg"><div class="wf-dot" style="background:#b07820"></div>Move</div>
+    <div class="wf-leg"><div class="wf-dot" style="background:#6040a0"></div>Merge</div>
+    <div class="wf-leg"><div class="wf-dot" style="background:#1a60b0"></div>New/Revised</div>
+  </div>
+  <div class="wf-tabs">
+    <div class="wf-tab active" onclick="showView('all')">ALL 3</div>
+    <div class="wf-tab" onclick="showView('desktop')">DESKTOP</div>
+    <div class="wf-tab" onclick="showView('tablet')">TABLET</div>
+    <div class="wf-tab" onclick="showView('mobile')">MOBILE</div>
+  </div>
+</div>
+
+<!-- ─── Three-up viewport row ─── -->
+<div class="viewports" id="viewport-row">
+
+  <!-- ═══ DESKTOP (820px) ═══ -->
+  <div class="vp-wrap desktop-wrap">
+    <div class="vp-label">DESKTOP · 820px content · ≥1024px viewport</div>
+    <div class="vp-frame">
+
+      <!-- NAV -->
+      <header class="site-header">
+        <div class="brand">
+          <div class="brand-name">BANANASUTRA</div>
+          <div class="brand-sub">Songs for a world gone bananas.</div>
+          <div class="brand-stats">7 SUTRAS · 37 SONGBOOKS · 394 SONGS · 678 TOP TRACKS</div>
+        </div>
+        <div class="header-right">
+          <div style="font-family:var(--mono);font-size:10px;color:rgba(232,223,200,.3);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:5px 14px;">⌕ Search…</div>
+          <div class="nav-pills">
+            <div class="nav-pill">LEARN</div>
+            <div class="nav-pill">LISTEN</div>
+            <div class="nav-pill">WATCH</div>
+          </div>
+          <div class="nav-icon">☰</div>
+        </div>
+      </header>
+
+      <div class="content">
+
+        <!-- §1 HERO — KEEP -->
+        <section class="hero" style="position:relative">
+          <div class="section-ann">
+            <span class="ann keep">KEEP</span>
+            <span class="ann new">no wordmark repeat</span>
+          </div>
+          <div class="hero-label">Ideas you can feel.</div>
+          <div class="hero-quote">
+            We're tiny specks… right?… Just flickers of light… right?… In an infinite night… right?… Still… we shine… right?
+          </div>
+          <div class="hero-songlink">We're Tiny Specks, Right? · <span>BOWsutra →</span></div>
+          <div class="hero-note">↻ Rotating lyric · changes on each page load</div>
+        </section>
+
+        <!-- §2 SUTRAS — MOVED UP from §8 -->
+        <section class="section">
+          <div class="section-ann">
+            <span class="ann move">MOVED UP from §8</span>
+            <span class="ann new">color + orientation above fold</span>
+          </div>
+          <div class="sec-h2-row">
+            <div class="sec-h2">The seven sutras · the compass behind the songs</div>
+            <div class="sec-link">Explore sutras →</div>
+          </div>
+          <div class="sutra-grid-4">
+            <div class="sutra-tile st-know">
+              <div class="sutra-name">KNOWsutra</div>
+              <div class="sutra-q">Is it true?</div>
+              <div class="sutra-verb">ASK</div>
+              <div class="sutra-count">XX songs</div>
+            </div>
+            <div class="sutra-tile st-blow">
+              <div class="sutra-name">BLOWsutra</div>
+              <div class="sutra-q">Is it fair?</div>
+              <div class="sutra-verb">SPEAK</div>
+              <div class="sutra-count">XX songs</div>
+            </div>
+            <div class="sutra-tile st-show">
+              <div class="sutra-name">SHOWsutra</div>
+              <div class="sutra-q">Is it fun?</div>
+              <div class="sutra-verb">PLAY</div>
+              <div class="sutra-count">XX songs</div>
+            </div>
+            <div class="sutra-tile st-grow">
+              <div class="sutra-name">GROWsutra</div>
+              <div class="sutra-q">Is it brave?</div>
+              <div class="sutra-verb">DARE</div>
+              <div class="sutra-count">XX songs</div>
+            </div>
+            <div class="sutra-tile st-flow">
+              <div class="sutra-name">FLOWsutra</div>
+              <div class="sutra-q">Is it free?</div>
+              <div class="sutra-verb">TRUST</div>
+              <div class="sutra-count">XX songs</div>
+            </div>
+            <div class="sutra-tile st-glow">
+              <div class="sutra-name">GLOWsutra</div>
+              <div class="sutra-q">Is it full?</div>
+              <div class="sutra-verb">BLESS</div>
+              <div class="sutra-count">XX songs</div>
+            </div>
+            <div class="sutra-tile st-bow">
+              <div class="sutra-name">BOWsutra</div>
+              <div class="sutra-q">Is it awe?</div>
+              <div class="sutra-verb">BOW</div>
+              <div class="sutra-count">XX songs</div>
+            </div>
+            <div class="sutra-tile st-quack">
+              <div class="sutra-name">QUACKsutra</div>
+              <div class="sutra-q">Is it foul?</div>
+              <div class="sutra-verb">SUB OF BLOW</div>
+              <div class="sutra-count">XX songs</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- §3 NOW PLAYING — MERGED Latest Drops + Have a Bite -->
+        <section class="section">
+          <div class="section-ann">
+            <span class="ann merge">MERGED · Latest Drops + Have a Bite</span>
+          </div>
+          <div class="now-cols">
+            <!-- Left: Latest Drops (image cards) -->
+            <div>
+              <div class="sec-h2-row">
+                <div class="sec-h2">Latest drops</div>
+                <div class="sec-link">Browse newest songs →</div>
+              </div>
+              <div class="drop-grid">
+                <div class="drop-card">
+                  <div class="drop-img-ph">cover art</div>
+                  <div class="drop-overlay">
+                    <div class="drop-sutra">GROWSUTRA</div>
+                    <div class="drop-title">Broken Whole (Encore)</div>
+                    <div class="drop-date">Jun 2, 2026</div>
+                  </div>
+                </div>
+                <div class="drop-card">
+                  <div class="drop-img-ph">cover art</div>
+                  <div class="drop-overlay">
+                    <div class="drop-sutra">GROWSUTRA</div>
+                    <div class="drop-title">The Courage To Care</div>
+                    <div class="drop-date">May 26, 2026</div>
+                  </div>
+                </div>
+                <div class="drop-card">
+                  <div class="drop-img-ph">cover art</div>
+                  <div class="drop-overlay">
+                    <div class="drop-sutra">GROWSUTRA</div>
+                    <div class="drop-title">Camus Dit Oui</div>
+                    <div class="drop-date">May 20, 2026</div>
+                  </div>
+                </div>
+                <div class="drop-card">
+                  <div class="drop-img-ph">cover art</div>
+                  <div class="drop-overlay">
+                    <div class="drop-sutra">GLOWSUTRA</div>
+                    <div class="drop-title">Grateful For The Weird</div>
+                    <div class="drop-date">May 20, 2026</div>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top:4px;font-family:var(--mono);font-size:9px;color:rgba(232,223,200,.25)">→ Cards link to song page with lyrics + audio</div>
+            </div>
+
+            <!-- Right: Top 5 + mini player -->
+            <div>
+              <div class="sec-h2-row">
+                <div class="sec-h2">Top 5 · press play</div>
+                <div class="sec-link">Listen to all tracks →</div>
+              </div>
+              <div class="track-list">
+                <div class="track-row playing">
+                  <div class="track-n">1</div>
+                  <div class="track-play">▶</div>
+                  <div class="track-info">
+                    <div class="track-title">Tell The Truth</div>
+                    <div class="track-meta">KNOWsutra · BLUES</div>
+                  </div>
+                  <div class="track-dur">4:31</div>
+                </div>
+                <div class="track-row">
+                  <div class="track-n">2</div>
+                  <div class="track-play">▶</div>
+                  <div class="track-info">
+                    <div class="track-title">It's An Ethical Paradox</div>
+                    <div class="track-meta">KNOWsutra · JAZZ</div>
+                  </div>
+                  <div class="track-dur">3:59</div>
+                </div>
+                <div class="track-row">
+                  <div class="track-n">3</div>
+                  <div class="track-play">▶</div>
+                  <div class="track-info">
+                    <div class="track-title">Ego Ain't Your Amigo</div>
+                    <div class="track-meta">BLOWsutra · DUB</div>
+                  </div>
+                  <div class="track-dur">4:44</div>
+                </div>
+                <div class="track-row">
+                  <div class="track-n">4</div>
+                  <div class="track-play">▶</div>
+                  <div class="track-info">
+                    <div class="track-title">The Love of A Dove</div>
+                    <div class="track-meta">KNOWsutra · BLUES</div>
+                  </div>
+                  <div class="track-dur">3:46</div>
+                </div>
+                <div class="track-row">
+                  <div class="track-n">5</div>
+                  <div class="track-play">▶</div>
+                  <div class="track-info">
+                    <div class="track-title">The Atheist Tango</div>
+                    <div class="track-meta">GROWsutra · LOFI</div>
+                  </div>
+                  <div class="track-dur">2:24</div>
+                </div>
+              </div>
+              <!-- Mini player — unified design -->
+              <div class="mini-player">
+                <div class="mp-thumb"></div>
+                <div class="mp-info">
+                  <div class="mp-title">Tell The Truth</div>
+                  <div class="mp-sub">KNOWsutra · BLUES · 4:31</div>
+                  <div class="mp-bar"></div>
+                </div>
+                <div class="mp-controls">
+                  <span>⏮</span>
+                  <span class="play-btn">▶</span>
+                  <span>⏭</span>
+                </div>
+              </div>
+              <div class="player-note">
+                Inline player only — loads on tap, does not persist across page scroll.<br>
+                Same mini-player design used on /listen page. Proposed refinement: align both.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- §4 FEELING LUCKY — REVISED -->
+        <section class="section">
+          <div class="section-ann">
+            <span class="ann new">REVISED · horizontal strip · reload button · no play overlay</span>
+          </div>
+          <div class="sec-h2-row">
+            <div class="sec-h2">Feeling lucky?</div>
+            <div class="lucky-reload">↻ Reload</div>
+          </div>
+          <div style="font-family:var(--sans);font-size:13px;color:rgba(232,223,200,.45);margin-bottom:12px">
+            Tap a cover and see where it takes you. It's chill. It's fun. It's free. Woo.
+          </div>
+          <div class="lucky-strip">
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+          </div>
+          <div class="bertrand-row">
+            <div class="bertrand-text">Not sure where to start?</div>
+            <div class="bertrand-link">Ask Bertrand (he knows)</div>
+          </div>
+        </section>
+
+        <!-- §5 SONGBOOKS CORNER — EXPANDED to 3 cards -->
+        <section class="section">
+          <div class="section-ann">
+            <span class="ann new">EXPANDED · 1 featured → 3 cards (topic / genre / language)</span>
+          </div>
+          <div class="sec-h2-row">
+            <div class="sec-h2">The songbooks corner</div>
+            <div class="sec-link">Browse all songbooks →</div>
+          </div>
+          <div style="font-family:var(--sans);font-size:13px;color:rgba(232,223,200,.45);margin-bottom:4px">
+            This is where we settle in. Songbooks are the long-play option for the curious.
+          </div>
+          <div class="sb-grid">
+            <div class="sb-card">
+              <div class="sb-img">cover image</div>
+              <div class="sb-body">
+                <div class="sb-type">TOPIC · BLOWsutra</div>
+                <div class="sb-title">Speak: REVOLT (now)</div>
+                <div class="sb-desc">36 tracks of righteous noise. The songs that wouldn't keep quiet.</div>
+                <div class="sb-meta">36 tracks · 1h 59m · DUB BLUES ROCK</div>
+                <a class="sb-cta">Open songbook →</a>
+              </div>
+            </div>
+            <div class="sb-card">
+              <div class="sb-img">cover image</div>
+              <div class="sb-body">
+                <div class="sb-type">GENRE · Best-of</div>
+                <div class="sb-title">Hidden Peels</div>
+                <div class="sb-desc">83 tracks — hidden gems under 500 plays. The unpopular ones.</div>
+                <div class="sb-meta">83 tracks · 4h 31m · DUB LOFI INDIE…</div>
+                <a class="sb-cta">Open songbook →</a>
+              </div>
+            </div>
+            <div class="sb-card">
+              <div class="sb-img">cover image</div>
+              <div class="sb-body">
+                <div class="sb-type">LANGUAGE · Français</div>
+                <div class="sb-title">World: FRENCHsutra</div>
+                <div class="sb-desc">31 tracks entirely in French. Oui, the banana speaks français.</div>
+                <div class="sb-meta">31 tracks · 1h 46m · FOLK LOFI BLUES</div>
+                <a class="sb-cta">Open songbook →</a>
+              </div>
+            </div>
+          </div>
+          <div style="font-family:var(--mono);font-size:9px;color:rgba(232,223,200,.2);margin-top:10px">
+            Three types: Topic/Sutra · Genre (best-of) · Language — each represents a different settle-in experience
+          </div>
+        </section>
+
+        <!-- §6 VIDEOS TEASER — NEW -->
+        <section class="section" style="position:relative">
+          <div class="section-ann">
+            <span class="ann new">NEW · lightweight video presence · no player</span>
+          </div>
+          <div class="sec-h2-row">
+            <div class="sec-h2">Picture the songs.</div>
+            <div class="sec-link">Watch all videos →</div>
+          </div>
+          <div style="font-family:var(--sans);font-size:13px;color:rgba(232,223,200,.45);margin-bottom:4px">
+            Same songs, visual format. Music films and YouTube playlists, organized by sutra and story.
+          </div>
+          <div class="video-strip">
+            <div class="video-card">
+              <div class="video-thumb"></div>
+              <div class="video-label">Tell The Truth
+                <span class="video-cta">KNOWsutra · watch video →</span>
+              </div>
+            </div>
+            <div class="video-card">
+              <div class="video-thumb"></div>
+              <div class="video-label">Broken Whole (Encore)
+                <span class="video-cta">GROWsutra · watch video →</span>
+              </div>
+            </div>
+            <div class="video-card">
+              <div class="video-thumb"></div>
+              <div class="video-label">Camus Dit Oui
+                <span class="video-cta">GROWsutra · watch video →</span>
+              </div>
+            </div>
+          </div>
+          <div style="font-family:var(--mono);font-size:9px;color:rgba(232,223,200,.2);margin-top:10px">
+            Each card links to that song's video section (e.g. /songs/tell-the-truth/?section=video) — no inline player · lazy-load thumbnails
+          </div>
+        </section>
+
+        <!-- §7 STATS SUMMARY ROW — NEW at bottom -->
+        <div class="stats-summary">
+          <a class="stat-item">
+            <span class="stat-num">7</span>
+            <span class="stat-label">Sutras</span>
+          </a>
+          <a class="stat-item">
+            <span class="stat-num">37</span>
+            <span class="stat-label">Songbooks</span>
+          </a>
+          <a class="stat-item">
+            <span class="stat-num">394</span>
+            <span class="stat-label">Songs</span>
+          </a>
+          <a class="stat-item">
+            <span class="stat-num">678</span>
+            <span class="stat-label">Tracks</span>
+          </a>
+          <a class="stat-item">
+            <span class="stat-num">470</span>
+            <span class="stat-label">Videos</span>
+          </a>
+        </div>
+        <div style="padding:8px 24px 16px;font-family:var(--mono);font-size:9px;color:rgba(232,223,200,.18);letter-spacing:.06em">
+          Each number links to its section · echoes header · videos count is the +1 not in header
+        </div>
+
+        <!-- REMOVED sections (tombstones) -->
+        <div style="opacity:.2;padding:12px 24px;display:flex;gap:10px">
+          <div style="border:1px dashed rgba(192,57,43,.4);border-radius:var(--radius);padding:10px 14px;font-family:var(--mono);font-size:9px;color:rgba(192,57,43,.5)">✕ REMOVED · Three Doors</div>
+          <div style="border:1px dashed rgba(192,57,43,.4);border-radius:var(--radius);padding:10px 14px;font-family:var(--mono);font-size:9px;color:rgba(192,57,43,.5)">✕ REMOVED · Start Here (sutras now in §2)</div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="contact-toggle">
+          QUESTIONS? FEEDBACK? GET IN TOUCH ▾
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="site-footer">
+          <div class="footer-socials">
+            <div class="footer-icon">☁</div>
+            <div class="footer-icon">▶</div>
+            <div class="footer-icon">◉</div>
+            <div class="footer-icon">◈</div>
+            <div class="footer-icon">S</div>
+            <div class="footer-icon">⊛</div>
+          </div>
+          <div class="footer-copy">
+            SITEMAP · Last updated June 6, 2026<br>
+            © 2026 BANANASUTRA . Curious. Kind. Silly. Human.
+          </div>
+        </footer>
+
+      </div><!-- /content -->
+    </div><!-- /vp-frame desktop -->
+  </div><!-- /desktop-wrap -->
+
+  <!-- ═══ TABLET (680px) ═══ -->
+  <div class="vp-wrap tablet-wrap">
+    <div class="vp-label">TABLET · 680px · 72% scale shown</div>
+    <div class="vp-frame">
+      <header class="site-header">
+        <div class="brand">
+          <div class="brand-name">BANANASUTRA</div>
+          <div class="brand-sub">Songs for a world gone bananas.</div>
+          <div class="brand-stats">7 SUTRAS · 37 SONGBOOKS · 394 SONGS</div>
+        </div>
+        <div class="header-right">
+          <div style="font-family:var(--mono);font-size:10px;color:rgba(232,223,200,.3);border:1px solid rgba(255,255,255,.08);border-radius:999px;padding:5px 14px;">⌕</div>
+          <div class="nav-pills">
+            <div class="nav-pill">LEARN</div>
+            <div class="nav-pill">LISTEN</div>
+            <div class="nav-pill">WATCH</div>
+          </div>
+          <div class="nav-icon">☰</div>
+        </div>
+      </header>
+      <div class="content">
+        <!-- Hero -->
+        <section class="hero">
+          <div class="hero-label">Ideas you can feel.</div>
+          <div class="hero-quote" style="font-size:26px">We're tiny specks… right?… Just flickers of light…</div>
+          <div class="hero-songlink">We're Tiny Specks, Right? · <span>BOWsutra →</span></div>
+        </section>
+        <!-- §2 Sutras — 4 col on tablet -->
+        <section class="section">
+          <div class="sec-h2">The seven sutras</div>
+          <div class="sutra-grid-4">
+            <div class="sutra-tile st-know"><div class="sutra-name">KNOWsutra</div><div class="sutra-q">Is it true?</div></div>
+            <div class="sutra-tile st-blow"><div class="sutra-name">BLOWsutra</div><div class="sutra-q">Is it fair?</div></div>
+            <div class="sutra-tile st-show"><div class="sutra-name">SHOWsutra</div><div class="sutra-q">Is it fun?</div></div>
+            <div class="sutra-tile st-grow"><div class="sutra-name">GROWsutra</div><div class="sutra-q">Is it brave?</div></div>
+            <div class="sutra-tile st-flow"><div class="sutra-name">FLOWsutra</div><div class="sutra-q">Is it free?</div></div>
+            <div class="sutra-tile st-glow"><div class="sutra-name">GLOWsutra</div><div class="sutra-q">Is it full?</div></div>
+            <div class="sutra-tile st-bow"><div class="sutra-name">BOWsutra</div><div class="sutra-q">Is it awe?</div></div>
+            <div class="sutra-tile st-quack"><div class="sutra-name">QUACKsutra</div><div class="sutra-q">Is it foul?</div></div>
+          </div>
+        </section>
+        <!-- §3 Now playing — stacked on tablet -->
+        <section class="section">
+          <div class="now-cols">
+            <div>
+              <div class="sec-h2">Latest drops</div>
+              <div class="drop-grid">
+                <div class="drop-card"><div class="drop-img-ph">img</div><div class="drop-overlay"><div class="drop-sutra">GROWSUTRA</div><div class="drop-title">Broken Whole (Encore)</div></div></div>
+                <div class="drop-card"><div class="drop-img-ph">img</div><div class="drop-overlay"><div class="drop-sutra">GROWSUTRA</div><div class="drop-title">The Courage To Care</div></div></div>
+                <div class="drop-card"><div class="drop-img-ph">img</div><div class="drop-overlay"><div class="drop-sutra">GROWSUTRA</div><div class="drop-title">Camus Dit Oui</div></div></div>
+                <div class="drop-card"><div class="drop-img-ph">img</div><div class="drop-overlay"><div class="drop-sutra">GLOWSUTRA</div><div class="drop-title">Grateful For The Weird</div></div></div>
+              </div>
+            </div>
+            <div>
+              <div class="sec-h2">Top 5 · press play</div>
+              <div class="track-list">
+                <div class="track-row"><div class="track-n">1</div><div class="track-play">▶</div><div class="track-info"><div class="track-title">Tell The Truth</div><div class="track-meta">KNOWsutra · BLUES</div></div><div class="track-dur">4:31</div></div>
+                <div class="track-row"><div class="track-n">2</div><div class="track-play">▶</div><div class="track-info"><div class="track-title">It's An Ethical Paradox</div><div class="track-meta">KNOWsutra · JAZZ</div></div><div class="track-dur">3:59</div></div>
+                <div class="track-row"><div class="track-n">3</div><div class="track-play">▶</div><div class="track-info"><div class="track-title">Ego Ain't Your Amigo</div><div class="track-meta">BLOWsutra · DUB</div></div><div class="track-dur">4:44</div></div>
+                <div class="track-row"><div class="track-n">4</div><div class="track-play">▶</div><div class="track-info"><div class="track-title">The Love of A Dove</div><div class="track-meta">KNOWsutra · BLUES</div></div><div class="track-dur">3:46</div></div>
+                <div class="track-row"><div class="track-n">5</div><div class="track-play">▶</div><div class="track-info"><div class="track-title">The Atheist Tango</div><div class="track-meta">GROWsutra · LOFI</div></div><div class="track-dur">2:24</div></div>
+              </div>
+              <div class="mini-player">
+                <div class="mp-thumb"></div>
+                <div class="mp-info"><div class="mp-title">Tell The Truth</div><div class="mp-sub">KNOWsutra · BLUES</div><div class="mp-bar"></div></div>
+                <div class="mp-controls"><span>⏮</span><span class="play-btn">▶</span><span>⏭</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- §4 Lucky -->
+        <section class="section">
+          <div class="sec-h2-row"><div class="sec-h2">Feeling lucky?</div><div class="lucky-reload">↻ Reload</div></div>
+          <div class="lucky-strip">
+            <div class="lucky-thumb"></div><div class="lucky-thumb"></div><div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div><div class="lucky-thumb"></div><div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div><div class="lucky-thumb"></div><div class="lucky-thumb"></div>
+          </div>
+          <div class="bertrand-row">
+            <div class="bertrand-text">Not sure where to start?</div>
+            <div class="bertrand-link">Ask Bertrand (he knows)</div>
+          </div>
+        </section>
+        <!-- §5 Songbooks — 3 col on tablet -->
+        <section class="section">
+          <div class="sec-h2-row"><div class="sec-h2">The songbooks corner</div><div class="sec-link">Browse all songbooks →</div></div>
+          <div class="sb-grid">
+            <div class="sb-card"><div class="sb-img">img</div><div class="sb-body"><div class="sb-type">TOPIC</div><div class="sb-title">Speak: REVOLT</div><div class="sb-meta">36 tracks · 1h 59m</div><a class="sb-cta">Open →</a></div></div>
+            <div class="sb-card"><div class="sb-img">img</div><div class="sb-body"><div class="sb-type">BEST-OF</div><div class="sb-title">Hidden Peels</div><div class="sb-meta">83 tracks · 4h 31m</div><a class="sb-cta">Open →</a></div></div>
+            <div class="sb-card"><div class="sb-img">img</div><div class="sb-body"><div class="sb-type">LANGUAGE</div><div class="sb-title">FRENCHsutra</div><div class="sb-meta">31 tracks · 1h 46m</div><a class="sb-cta">Open →</a></div></div>
+          </div>
+        </section>
+        <!-- Videos teaser tablet -->
+        <section class="section">
+          <div class="sec-h2-row"><div class="sec-h2">Picture the songs.</div><div class="sec-link">Watch all videos →</div></div>
+          <div class="video-strip">
+            <div class="video-card"><div class="video-thumb"></div><div class="video-label">Tell The Truth<span class="video-cta">KNOWsutra · watch video →</span></div></div>
+            <div class="video-card"><div class="video-thumb"></div><div class="video-label">Broken Whole (Encore)<span class="video-cta">GROWsutra · watch video →</span></div></div>
+            <div class="video-card"><div class="video-thumb"></div><div class="video-label">Camus Dit Oui<span class="video-cta">GROWsutra · watch video →</span></div></div>
+          </div>
+        </section>
+        <!-- Stats summary tablet -->
+        <div class="stats-summary" style="padding:24px 20px">
+          <a class="stat-item"><span class="stat-num" style="font-size:22px">7</span><span class="stat-label">Sutras</span></a>
+          <a class="stat-item"><span class="stat-num" style="font-size:22px">37</span><span class="stat-label">Songbooks</span></a>
+          <a class="stat-item"><span class="stat-num" style="font-size:22px">394</span><span class="stat-label">Songs</span></a>
+          <a class="stat-item"><span class="stat-num" style="font-size:22px">678</span><span class="stat-label">Tracks</span></a>
+          <a class="stat-item"><span class="stat-num" style="font-size:22px">470</span><span class="stat-label">Videos</span></a>
+        </div>
+        <div class="contact-toggle">QUESTIONS? FEEDBACK? GET IN TOUCH ▾</div>
+        <footer class="site-footer">
+          <div class="footer-socials"><div class="footer-icon">☁</div><div class="footer-icon">▶</div><div class="footer-icon">◉</div></div>
+          <div class="footer-copy">© 2026 BANANASUTRA · Curious. Kind. Silly. Human.</div>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MOBILE (375px) ═══ -->
+  <div class="vp-wrap mobile-wrap">
+    <div class="vp-label">MOBILE · 375px · 72% scale shown</div>
+    <div class="vp-frame">
+      <header class="site-header">
+        <div class="brand">
+          <div class="brand-name" style="font-size:15px">BANANASUTRA</div>
+          <div class="brand-sub">Songs for a world gone bananas.</div>
+        </div>
+        <div class="header-right">
+          <div class="nav-icon">⌕</div>
+          <div class="nav-icon">☰</div>
+        </div>
+      </header>
+      <div class="content">
+        <!-- Hero mobile -->
+        <section class="hero">
+          <div class="hero-label">Ideas you can feel.</div>
+          <div class="hero-quote" style="font-size:20px;max-width:none">We're tiny specks… right?… Still… we shine… right?</div>
+          <div class="hero-songlink" style="font-size:10px">We're Tiny Specks, Right? · <span>BOWsutra →</span></div>
+        </section>
+        <!-- Sutras 2×4 on mobile -->
+        <section class="section">
+          <div class="sec-h2">The seven sutras</div>
+          <div class="sutra-grid-4">
+            <div class="sutra-tile st-know"><div class="sutra-name" style="font-size:10px">KNOWsutra</div><div class="sutra-q" style="font-size:10px">Is it true?</div></div>
+            <div class="sutra-tile st-blow"><div class="sutra-name" style="font-size:10px">BLOWsutra</div><div class="sutra-q" style="font-size:10px">Is it fair?</div></div>
+            <div class="sutra-tile st-show"><div class="sutra-name" style="font-size:10px">SHOWsutra</div><div class="sutra-q" style="font-size:10px">Is it fun?</div></div>
+            <div class="sutra-tile st-grow"><div class="sutra-name" style="font-size:10px">GROWsutra</div><div class="sutra-q" style="font-size:10px">Is it brave?</div></div>
+            <div class="sutra-tile st-flow"><div class="sutra-name" style="font-size:10px">FLOWsutra</div><div class="sutra-q" style="font-size:10px">Is it free?</div></div>
+            <div class="sutra-tile st-glow"><div class="sutra-name" style="font-size:10px">GLOWsutra</div><div class="sutra-q" style="font-size:10px">Is it full?</div></div>
+            <div class="sutra-tile st-bow"><div class="sutra-name" style="font-size:10px">BOWsutra</div><div class="sutra-q" style="font-size:10px">Is it awe?</div></div>
+            <div class="sutra-tile st-quack"><div class="sutra-name" style="font-size:10px">QUACKsutra</div><div class="sutra-q" style="font-size:10px">Is it foul?</div></div>
+          </div>
+        </section>
+        <!-- Latest drops mobile — 2×2 -->
+        <section class="section">
+          <div class="sec-h2">Latest drops</div>
+          <div class="drop-grid">
+            <div class="drop-card"><div class="drop-img-ph">img</div><div class="drop-overlay"><div class="drop-sutra">GROW</div><div class="drop-title" style="font-size:10px">Broken Whole</div></div></div>
+            <div class="drop-card"><div class="drop-img-ph">img</div><div class="drop-overlay"><div class="drop-sutra">GROW</div><div class="drop-title" style="font-size:10px">Courage To Care</div></div></div>
+            <div class="drop-card"><div class="drop-img-ph">img</div><div class="drop-overlay"><div class="drop-sutra">GROW</div><div class="drop-title" style="font-size:10px">Camus Dit Oui</div></div></div>
+            <div class="drop-card"><div class="drop-img-ph">img</div><div class="drop-overlay"><div class="drop-sutra">GLOW</div><div class="drop-title" style="font-size:10px">Grateful For The Weird</div></div></div>
+          </div>
+        </section>
+        <!-- Top 5 mobile -->
+        <section class="section" style="padding-top:0">
+          <div class="sec-h2-row"><div class="sec-h2">Top 5 · press play</div><div class="sec-link">Listen to all tracks →</div></div>
+          <div class="track-list">
+            <div class="track-row"><div class="track-n">1</div><div class="track-play">▶</div><div class="track-info"><div class="track-title" style="font-size:12px">Tell The Truth</div><div class="track-meta">KNOWsutra · BLUES</div></div><div class="track-dur">4:31</div></div>
+            <div class="track-row"><div class="track-n">2</div><div class="track-play">▶</div><div class="track-info"><div class="track-title" style="font-size:12px">It's An Ethical Paradox</div><div class="track-meta">KNOWsutra · JAZZ</div></div><div class="track-dur">3:59</div></div>
+            <div class="track-row"><div class="track-n">3</div><div class="track-play">▶</div><div class="track-info"><div class="track-title" style="font-size:12px">Ego Ain't Your Amigo</div><div class="track-meta">BLOWsutra · DUB</div></div><div class="track-dur">4:44</div></div>
+            <div class="track-row"><div class="track-n">4</div><div class="track-play">▶</div><div class="track-info"><div class="track-title" style="font-size:12px">The Love of A Dove</div><div class="track-meta">KNOWsutra · BLUES</div></div><div class="track-dur">3:46</div></div>
+            <div class="track-row"><div class="track-n">5</div><div class="track-play">▶</div><div class="track-info"><div class="track-title" style="font-size:12px">The Atheist Tango</div><div class="track-meta">GROWsutra · LOFI</div></div><div class="track-dur">2:24</div></div>
+          </div>
+          <div class="mini-player" style="margin-top:12px">
+            <div class="mp-thumb"></div>
+            <div class="mp-info"><div class="mp-title" style="font-size:11px">Tell The Truth</div><div class="mp-sub">KNOWsutra</div><div class="mp-bar"></div></div>
+            <div class="mp-controls" style="font-size:11px"><span>⏮</span><span class="play-btn">▶</span><span>⏭</span></div>
+          </div>
+        </section>
+        <!-- Lucky mobile -->
+        <section class="section">
+          <div class="sec-h2-row"><div class="sec-h2">Feeling lucky?</div><div class="lucky-reload" style="font-size:9px;padding:4px 10px">↻ Reload</div></div>
+          <div class="lucky-strip">
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+            <div class="lucky-thumb"></div>
+          </div>
+          <div class="bertrand-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+            <div class="bertrand-text" style="font-size:11px">Not sure where to start?</div>
+            <div class="bertrand-link" style="font-size:13px">Ask Bertrand (he knows)</div>
+          </div>
+        </section>
+        <!-- Songbooks mobile — single col -->
+        <section class="section">
+          <div class="sec-h2-row"><div class="sec-h2">Songbooks corner</div><div class="sec-link">Browse all songbooks →</div></div>
+          <div class="sb-grid" style="grid-template-columns:1fr">
+            <div class="sb-card" style="display:grid;grid-template-columns:80px 1fr">
+              <div class="sb-img" style="height:auto;min-height:80px;border-bottom:none;border-right:1px solid rgba(255,255,255,.05)">img</div>
+              <div class="sb-body"><div class="sb-type">TOPIC</div><div class="sb-title" style="font-size:12px">Speak: REVOLT</div><div class="sb-meta">36 tracks · 1h 59m</div><a class="sb-cta">Open →</a></div>
+            </div>
+            <div class="sb-card" style="display:grid;grid-template-columns:80px 1fr">
+              <div class="sb-img" style="height:auto;min-height:80px;border-bottom:none;border-right:1px solid rgba(255,255,255,.05)">img</div>
+              <div class="sb-body"><div class="sb-type">BEST-OF</div><div class="sb-title" style="font-size:12px">Hidden Peels</div><div class="sb-meta">83 tracks · 4h 31m</div><a class="sb-cta">Open →</a></div>
+            </div>
+            <div class="sb-card" style="display:grid;grid-template-columns:80px 1fr">
+              <div class="sb-img" style="height:auto;min-height:80px;border-bottom:none;border-right:1px solid rgba(255,255,255,.05)">img</div>
+              <div class="sb-body"><div class="sb-type">LANGUAGE</div><div class="sb-title" style="font-size:12px">FRENCHsutra</div><div class="sb-meta">31 tracks · 1h 46m</div><a class="sb-cta">Open →</a></div>
+            </div>
+          </div>
+        </section>
+        <!-- Videos teaser mobile — 2 cards -->
+        <section class="section">
+          <div class="sec-h2-row"><div class="sec-h2">Picture the songs.</div><div class="sec-link">Watch all videos →</div></div>
+          <div class="video-strip" style="grid-template-columns:repeat(2,1fr)">
+            <div class="video-card"><div class="video-thumb"></div><div class="video-label">Tell The Truth<span class="video-cta">watch →</span></div></div>
+            <div class="video-card"><div class="video-thumb"></div><div class="video-label">Broken Whole<span class="video-cta">watch →</span></div></div>
+          </div>
+        </section>
+        <!-- Stats summary mobile — 2 rows -->
+        <div class="stats-summary" style="padding:20px 16px;flex-wrap:wrap">
+          <a class="stat-item" style="flex:0 0 33%;border-right:none;margin-bottom:16px"><span class="stat-num" style="font-size:20px">7</span><span class="stat-label">Sutras</span></a>
+          <a class="stat-item" style="flex:0 0 33%;border-right:none;margin-bottom:16px"><span class="stat-num" style="font-size:20px">37</span><span class="stat-label">Songbooks</span></a>
+          <a class="stat-item" style="flex:0 0 33%;border-right:none;margin-bottom:16px"><span class="stat-num" style="font-size:20px">394</span><span class="stat-label">Songs</span></a>
+          <a class="stat-item" style="flex:0 0 50%;border-right:none"><span class="stat-num" style="font-size:20px">678</span><span class="stat-label">Tracks</span></a>
+          <a class="stat-item" style="flex:0 0 50%;border-right:none"><span class="stat-num" style="font-size:20px">470</span><span class="stat-label">Videos</span></a>
+        </div>
+        <div class="contact-toggle" style="font-size:9px">QUESTIONS? FEEDBACK? ▾</div>
+        <footer class="site-footer" style="padding:16px">
+          <div class="footer-copy" style="font-size:8px">© 2026 BANANASUTRA · Curious. Kind. Silly. Human.</div>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /viewports -->
+
+<!-- ─── Notes Panel ─── -->
+<div class="notes-panel">
+  <h3>Change log & design decisions</h3>
+  <div class="notes-grid">
+    <div class="note-item">
+      <div class="note-sec">§1 · HERO</div>
+      <div class="note-text"><strong>Keep as-is.</strong> No wordmark repeat — brand is already in the header. Rotating lyric stays. Centered serif quote works well.</div>
+    </div>
+    <div class="note-item">
+      <div class="note-sec">§2 · SUTRAS (moved from §8)</div>
+      <div class="note-text"><strong>Moved up.</strong> Colored sutra tiles are the first visual "color hit" after the hero. Solves the "too text-heavy above fold" problem without adding images. 4-col on desktop/tablet → 2-col on mobile.</div>
+    </div>
+    <div class="note-item">
+      <div class="note-sec">§3 · NOW PLAYING (merged)</div>
+      <div class="note-text"><strong>Latest Drops + Have a Bite merged.</strong> Two listening sections in a row was confusing. Now: image cards left, track list right (desktop) → stacked on mobile. Single unified mini-player design for both homepage and /listen.</div>
+    </div>
+    <div class="note-item">
+      <div class="note-sec">§4 · FEELING LUCKY (revised)</div>
+      <div class="note-text"><strong>Horizontal strip</strong> (matches existing layout). Reload button added. No play overlay — covers link to song page. Bertrand CTA is a plain text link, no avatar/duck icon.</div>
+    </div>
+    <div class="note-item">
+      <div class="note-sec">§5 · SONGBOOKS (expanded)</div>
+      <div class="note-text"><strong>1 card → 3 cards.</strong> One topic/sutra · one genre/best-of · one language — representing the three types of songbook. Metadata shown as plain text line, not tag pills. CTA is the only button element.</div>
+    </div>
+    <div class="note-item">
+      <div class="note-sec">Removed · Three Doors + Duplicate Sutras</div>
+      <div class="note-text"><strong>Three Doors removed:</strong> LEARN/LISTEN/WATCH live in the nav header. <strong>Start Here removed:</strong> sutras already appear in §2. No content is lost.</div>
+    </div>
+    <div class="note-item">
+      <div class="note-sec">Mini player · /listen alignment</div>
+      <div class="note-text">Proposed unified mini-player: thumb · title/sutra/bar · prev/play/next controls. Same component on homepage (inline, loads on tap) and /listen (persistent bar). No persistent player for single-track play.</div>
+    </div>
+    <div class="note-item">
+      <div class="note-sec">Performance notes</div>
+      <div class="note-text">Sutra tiles: no images, CSS only — zero load cost. Drop cards: lazy-load cover images. Lucky strip: random 11 picks server-side, no JS carousel. Songbook SC embed: defer until visible (intersection observer, as existing).</div>
+    </div>
+    <div class="note-item">
+      <div class="note-sec">/learn · /listen · /watch suggestions</div>
+      <div class="note-text"><strong>/learn:</strong> "Feel it in a song" mood picker is good — consider moving above "Ways to explore". <strong>/listen:</strong> Align track list style + mini player with homepage. <strong>/watch:</strong> Consider adding 3 featured video cards above the full video wall to ease cold landing.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showView(v) {
+  document.querySelectorAll('.wf-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  const row = document.getElementById('viewport-row');
+  if (v === 'all') {
+    row.style.display = 'flex';
+    document.querySelectorAll('.vp-wrap').forEach(el => el.style.display = '');
+  } else {
+    row.style.display = 'flex';
+    document.querySelectorAll('.vp-wrap').forEach(el => el.style.display = 'none');
+    const map = { desktop: 'desktop-wrap', tablet: 'tablet-wrap', mobile: 'mobile-wrap' };
+    document.querySelector('.' + map[v]).style.display = '';
+    if (v === 'desktop') {
+      document.querySelector('.desktop-wrap .vp-frame').style.transform = 'none';
+      document.querySelector('.desktop-wrap').style.width = 'auto';
+    }
+  }
+}
+</script>
+</body>
+</html>

@@ -99,6 +99,8 @@ Optional runtime env vars (non-secret) in `wrangler.toml`:
 npm run deploy
 ```
 
+**R50 route flattening (W-074):** `bbb-api` changes for flat `/sutras`, `/muses`, `/quotes` ship with the **final R50 production launch** (`r50-overhaul` → `staging` → `main`), not via an early Track 1 deploy. Early deploy would make Bertrand link to URLs that do not exist on bananasutra.com yet. CI deploys automatically on push to `main` when `bbb-api/**` changes (`.github/workflows/deploy-bbb-api.yml`).
+
 ---
 
 ## Command reference (daily use)

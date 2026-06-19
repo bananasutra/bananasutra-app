@@ -20,6 +20,7 @@ test("pathnameNeedsSpaShell: known client prefixes", () => {
   assert.equal(pathnameNeedsSpaShell("/songs/curious-like-a-kiss"), true);
   assert.equal(pathnameNeedsSpaShell("/songs"), true);
   assert.equal(pathnameNeedsSpaShell("/songbooks/banana"), true);
+  assert.equal(pathnameNeedsSpaShell("/sutras"), true);
   assert.equal(pathnameNeedsSpaShell("/about/sutras"), true);
   assert.equal(pathnameNeedsSpaShell("/tracks"), true);
   assert.equal(pathnameNeedsSpaShell("/videos"), true);

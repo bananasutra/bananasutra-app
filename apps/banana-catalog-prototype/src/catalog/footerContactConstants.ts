@@ -13,12 +13,22 @@ export function isFooterContactHref(href: string): boolean {
   }
 }
 
+export function scrollFooterContactPanelIntoView(): void {
+  const scrollTarget = () => {
+    const panel = document.getElementById(FOOTER_CONTACT_PANEL_ID)
+    if (!panel) return
+    panel.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+  requestAnimationFrame(() => {
+    scrollTarget()
+    window.setTimeout(scrollTarget, 120)
+  })
+}
+
 export function openFooterContactPanel(): void {
   if (window.location.hash !== FOOTER_CONTACT_PANEL_HASH) {
     window.location.hash = FOOTER_CONTACT_PANEL_HASH
   }
   window.dispatchEvent(new Event(FOOTER_CONTACT_OPEN_EVENT))
-  requestAnimationFrame(() => {
-    document.getElementById(FOOTER_CONTACT_PANEL_ID)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-  })
+  scrollFooterContactPanelIntoView()
 }

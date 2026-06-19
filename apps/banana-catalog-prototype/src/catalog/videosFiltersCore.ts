@@ -1,5 +1,6 @@
 import { songMatchesMediaCombo } from './filterSongs'
 import { filterYoutubeVideosBySearchQuery } from './searchMatch'
+import { browsePathWithQuery } from './seoPaths'
 import type { SongCatalogItem, YouTubeCatalogVideo } from './types'
 
 export type VideoMediaFilter = 'all' | 'has_sc'
@@ -51,4 +52,52 @@ export function applyVideoFilters(
     out = filterYoutubeVideosBySearchQuery(out, f.find)
   }
   return out
+}
+
+function readLinkTarget(searchParams: URLSearchParams): VideoCardLinkTarget {
+  const raw = (searchParams.get('link') ?? '').trim().toLowerCase()
+  if (raw === 'in_app' || raw === 'song') return 'in_app'
+  if (raw === 'off_site' || raw === 'youtube' || raw === 'external') return 'off_site'
+  if (searchParams.get('catalog') === '1') return 'in_app'
+  return 'all'
+}
+
+function readVideoMediaFilter(searchParams: URLSearchParams): VideoMediaFilter {
+  const raw = (searchParams.get('media') ?? '').trim().toLowerCase()
+  if (raw === 'has_sc') return 'has_sc'
+  if (raw === 'any') return 'all'
+  return 'all'
+}
+
+export function readVideosFiltersFromParams(searchParams: URLSearchParams): VideosUrlFilters {
+  return {
+    find: (searchParams.get('find') ?? '').trim(),
+    sutra: (searchParams.get('sutra') ?? '').trim(),
+    topic: (searchParams.get('topic') ?? '').trim(),
+    intention: (searchParams.get('intention') ?? '').trim(),
+    linkTarget: readLinkTarget(searchParams),
+    media: readVideoMediaFilter(searchParams),
+    page: Math.max(1, parseInt(searchParams.get('page') || '1', 10) || 1),
+  }
+}
+
+export function videosFiltersToQueryString(f: VideosUrlFilters): string {
+  const p = new URLSearchParams()
+  if (f.find) p.set('find', f.find)
+  if (f.sutra) p.set('sutra', f.sutra)
+  if (f.topic) p.set('topic', f.topic)
+  if (f.intention) p.set('intention', f.intention)
+  if (f.linkTarget === 'in_app') p.set('link', 'in_app')
+  else if (f.linkTarget === 'off_site') p.set('link', 'off_site')
+  if (f.media && f.media !== 'all') p.set('media', f.media)
+  if (f.page > 1) p.set('page', String(f.page))
+  const s = p.toString()
+  return s ? `?${s}` : ''
+}
+
+export function hrefVideos(partial: Partial<VideosUrlFilters>, base: VideosUrlFilters): string {
+  const merged: VideosUrlFilters = { ...base, ...partial }
+  const keys = Object.keys(partial) as (keyof VideosUrlFilters)[]
+  if (keys.some((k) => k !== 'page')) merged.page = 1
+  return browsePathWithQuery('/videos', videosFiltersToQueryString(merged).replace(/^\?/, ''))
 }

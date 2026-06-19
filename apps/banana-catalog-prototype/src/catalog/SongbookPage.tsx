@@ -17,16 +17,25 @@ import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyn
 import { useSongCatalog } from './generatedData'
 import { SongThumbCard } from './SongThumbCard'
 import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
-import { dedupeYoutubeVideosByVideoId, flattenYoutubeCatalogVideos } from './youtubeCatalogFlat'
-import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
-import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
+import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
+import { youtubePlaylistForSongbook } from './songbookYoutubeMatch'
+import {
+  buildYoutubePlaylistDurationByName,
+  dedupeYoutubeVideosByVideoId,
+  flattenYoutubeCatalogVideos,
+} from './youtubeCatalogFlat'
+import { CatalogMediaOutbound } from './CatalogMediaOutbound'
+import { WatchLpPlaylistEmbed } from './WatchLpPlaylistEmbed'
 import {
   useExclusiveYoutubeSoundcloudPlayback,
   type ExclusiveYoutubeSoundcloudControls,
 } from './useExclusiveYoutubeSoundcloudPlayback'
-import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
-import type { YouTubeCatalogVideo } from './types'
+import { usePlayerQueueRegistrar } from './playerQueue/playerQueueRegistrarContext'
+import type { YouTubeCatalogVideo, YouTubePlaylistCatalogItem } from './types'
 import './CatalogApp.css'
+import './catalog-page-shell.css'
+import './ListenLpPage.css'
+import './SongDetail.css'
 import './SongbooksPage.css'
 
 function splitCsvTokens(value: string): string[] {
@@ -42,28 +51,6 @@ function sortSongbookMembersByPopularity(rows: SongbookMemberSong[]): SongbookMe
     if (b.aggregate_like_count !== a.aggregate_like_count) return b.aggregate_like_count - a.aggregate_like_count
     return a.lyrics_title.localeCompare(b.lyrics_title)
   })
-}
-
-function pickRandomVideo(videos: YouTubeCatalogVideo[]): YouTubeCatalogVideo | null {
-  if (videos.length === 0) return null
-  const index = Math.floor(Math.random() * videos.length)
-  return videos[index] ?? null
-}
-
-/** IA §3.4-style line; uses `songbook_type` from SONGBOOKs (not SC playlist internal typing). */
-function songbookKindBadgeLabel(songbookType: string | undefined): string | null {
-  switch ((songbookType ?? '').trim().toLowerCase()) {
-    case 'sutra':
-      return 'SONGBOOK · SUTRA'
-    case 'collection':
-      return 'SONGBOOK · COLLECTION'
-    case 'genre':
-      return 'SONGBOOK · GENRE'
-    case 'language':
-      return 'SONGBOOK · LANGUAGE'
-    default:
-      return null
-  }
 }
 
 /**
@@ -88,16 +75,17 @@ function tracksHrefForPrimaryGenre(token: string): string {
 export function SongbookPage() {
   const { slug = '' } = useParams()
   const location = useLocation()
-  const { key: routeVisitKey } = location
   const pageRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const youtubeExclusiveRef = useRef<HTMLIFrameElement>(null)
   const soundcloudExclusiveWrapRef = useRef<HTMLDivElement>(null)
   const songbookSoundcloudWrapRefs = useMemo(() => [soundcloudExclusiveWrapRef] as const, [])
   const exclusivePlaybackRef = useRef<ExclusiveYoutubeSoundcloudControls | null>(null)
+  const { persistentScEmbedWrapRef, usePersistentPlayback } = usePlayerQueueRegistrar()
   const [youtubeIframeGen, setYoutubeIframeGen] = useState(0)
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
-  const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[]>([])
+  const [youtubePlaylists, setYoutubePlaylists] = useState<YouTubePlaylistCatalogItem[]>([])
+  const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[] | null>(null)
 
   const songCatalogByLyricsId = useMemo(() => {
     const rows = songCatalogRows ?? []
@@ -141,27 +129,40 @@ export function SongbookPage() {
     [sortedMemberSongs, songCatalogByLyricsId],
   )
   const playlistIsSet = (songbook?.playlist_url ?? '').includes('/sets/')
-  const songbookKindLabel = songbook ? songbookKindBadgeLabel(songbook.songbook_type) : null
 
   const songbookTypeKey = (songbook?.songbook_type ?? '').trim().toLowerCase()
-  // Genre/collection rows often have no linked lyrics members — hide misleading "0 songs" in hero.
-  const showHeroSongCount =
-    songbookTypeKey !== 'sutra' &&
-    songbookTypeKey !== 'language' &&
-    songbookTypeKey !== 'genre' &&
-    songbookTypeKey !== 'collection'
-  const isSutraSongbook = songbookTypeKey === 'sutra'
-
+  const heroFacetTopics = useMemo(() => {
+    const secondarySutra = (songbook?.secondary_sutra ?? '').trim()
+    const topics = topicTokens.filter((topic) => topic.trim())
+    const rows: { key: string; label: string; href: string }[] = []
+    if (secondarySutra) {
+      rows.push({
+        key: `secondary-sutra-${secondarySutra}`,
+        label: secondarySutra,
+        href: buildBrowsePathForFacet('sutra', secondarySutra),
+      })
+    }
+    for (const topic of topics) {
+      rows.push({
+        key: `topic-${topic}`,
+        label: topic,
+        href: buildBrowsePathForFacet('topic', topic),
+      })
+    }
+    return rows
+  }, [songbook?.secondary_sutra, topicTokens])
   useEffect(() => {
     let cancelled = false
-    flattenYoutubeCatalogVideos()
-      .then((rows) => {
+    fetchCatalogData(catalogDataFileUrl('youtube_playlists_catalog.json'))
+      .then(async (response) => {
+        if (!response.ok) throw new Error('youtube playlists fetch failed')
+        const rows = (await response.json()) as YouTubePlaylistCatalogItem[]
         if (cancelled) return
-        setYoutubeVideos(dedupeYoutubeVideosByVideoId(rows))
+        setYoutubePlaylists(rows)
       })
       .catch(() => {
         if (cancelled) return
-        setYoutubeVideos([])
+        setYoutubePlaylists([])
       })
     return () => {
       cancelled = true
@@ -183,42 +184,51 @@ export function SongbookPage() {
   const genrePrimaryToken =
     songbook && songbookTypeKey === 'genre' ? primaryGenreTokenFromSongbookTitle(songbook.songbook) : null
   const genreTracksBrowseHref = genrePrimaryToken ? tracksHrefForPrimaryGenre(genrePrimaryToken) : null
-  const memberLyricsIdSet = useMemo(
-    () => new Set((songbook?.member_lyrics_ids ?? []).map((id) => (id || '').trim()).filter(Boolean)),
-    [songbook?.member_lyrics_ids],
-  )
-  const featuredSongbookVideos = useMemo(() => {
-    if (!isSutraSongbook || memberLyricsIdSet.size === 0) return []
-    return youtubeVideos.filter(
-      (v) => memberLyricsIdSet.has((v.lyrics_id || '').trim()) && Boolean(v.video_featured) && Boolean(v.can_embed),
-    )
-  }, [isSutraSongbook, memberLyricsIdSet, youtubeVideos])
-  const featuredSongbookVideo = useMemo(() => pickRandomVideo(featuredSongbookVideos), [featuredSongbookVideos, routeVisitKey])
-  const featuredSongbookVideoSummary = (featuredSongbookVideo?.lyrics_summary || '').trim() || (
-    featuredSongbookVideo?.lyrics_id ? (songCatalogByLyricsId.get(featuredSongbookVideo.lyrics_id)?.summary_short || '').trim() : ''
-  )
+  const songbookYoutubePlaylist = useMemo(() => {
+    if (!songbook || youtubePlaylists.length === 0) return null
+    return youtubePlaylistForSongbook(songbook, youtubePlaylists)
+  }, [songbook, youtubePlaylists])
 
-  const featuredSongbookSongPageHref = useMemo(() => {
-    if (!featuredSongbookVideo) return null
-    const id = (featuredSongbookVideo.lyrics_id || '').trim()
-    return featuredYoutubeSongPageHref(featuredSongbookVideo, Boolean(id && songCatalogByLyricsId.has(id)))
-  }, [featuredSongbookVideo, songCatalogByLyricsId])
+  useEffect(() => {
+    if (!songbookYoutubePlaylist) {
+      setYoutubeVideos(null)
+      return
+    }
+    let cancelled = false
+    void flattenYoutubeCatalogVideos()
+      .then((rows) => {
+        if (cancelled) return
+        setYoutubeVideos(dedupeYoutubeVideosByVideoId(rows))
+      })
+      .catch(() => {
+        if (cancelled) return
+        setYoutubeVideos(null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [songbookYoutubePlaylist?.playlist_id])
+
+  const playlistDurationByName = useMemo(
+    () => (youtubeVideos ? buildYoutubePlaylistDurationByName(youtubeVideos) : new Map<string, number>()),
+    [youtubeVideos],
+  )
 
   const songbookExclusivePlaybackEnabled = Boolean(
     !catalogLoading &&
       songCatalogRows != null &&
       songbook &&
       (songbook.playlist_url || '').trim() &&
-      isSutraSongbook &&
-      featuredSongbookVideo,
+      songbookYoutubePlaylist,
   )
 
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
     soundcloudWrapRefs: songbookSoundcloudWrapRefs,
+    persistentScWrapRef: usePersistentPlayback ? persistentScEmbedWrapRef : undefined,
     enabled: songbookExclusivePlaybackEnabled,
     controlsRef: exclusivePlaybackRef,
-    syncKey: `${slug}|${featuredSongbookVideo?.video_id ?? ''}|${(songbook?.playlist_url ?? '').trim()}|yt:${youtubeIframeGen}`,
+    syncKey: `${slug}|${songbookYoutubePlaylist?.playlist_id ?? ''}|${(songbook?.playlist_url ?? '').trim()}|yt:${youtubeIframeGen}`,
   })
 
   /** Songbook JSON is sync; only grids need the song catalog. Keep hero on first paint (same idea as /songs/). */
@@ -263,7 +273,7 @@ export function SongbookPage() {
             </Link>
           </main>
         ) : (
-          <main id="main-content" className="songbooks-page">
+          <main id="main-content" className="songbooks-page songbooks-page--detail catalog-layout-shell">
             <nav className="catalog-breadcrumbs" aria-label="Breadcrumb">
               <Link to="/" className="catalog-breadcrumbs__link">
                 Home
@@ -280,70 +290,55 @@ export function SongbookPage() {
               <span className="catalog-breadcrumbs__current" aria-current="page">{songbook.songbook}</span>
             </nav>
 
-            <header className="songbooks-page__hero">
-              {songbook.playlist_artwork_url ? (
-                <picture className="songbooks-page__hero-art">
-                  <source
-                    srcSet={buildSrcset(songbook.playlist_artwork_url)}
-                    sizes="(max-width: 640px) 400px, 640px"
-                    type="image/webp"
-                  />
-                  <img
-                    className="songbooks-page__hero-art"
-                    src={coverImageUrl(songbook.playlist_artwork_url, { width: 400 })}
-                    alt=""
-                    width={320}
-                    height={320}
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="sync"
-                  />
-                </picture>
-              ) : (
-                <div className="songbooks-page__hero-art songbooks-page__hero-art--fallback" aria-hidden>
-                  🍌
-                </div>
-              )}
-              <div className="songbooks-page__hero-text songbooks-page__hero-text--detail">
+            <header className="songbooks-page__hero songbooks-page__hero--detail">
+              <div className="songbooks-page__hero-art-wrap">
+                {songbook.playlist_artwork_url ? (
+                  <picture>
+                    <source
+                      srcSet={buildSrcset(songbook.playlist_artwork_url)}
+                      sizes="(max-width: 640px) 100vw, 640px"
+                      type="image/webp"
+                    />
+                    <img
+                      className="songbooks-page__hero-art"
+                      src={coverImageUrl(songbook.playlist_artwork_url, { width: 400 })}
+                      alt=""
+                      width={320}
+                      height={320}
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="sync"
+                    />
+                  </picture>
+                ) : (
+                  <div className="songbooks-page__hero-art songbooks-page__hero-art--fallback" aria-hidden>
+                    🍌
+                  </div>
+                )}
+              </div>
+              <div className="song-detail-hero-text songbooks-page__hero-text--detail">
                 <h1 className="catalog-page-h1 songbooks-page__hero-title">{songbook.songbook}</h1>
                 {songbook.description ? <p className="songbooks-page__hero-description">{songbook.description}</p> : null}
-                <SongbookPlaylistMetaLine book={songbook} />
-                {songbookKindLabel ? (
-                  <p className="songbooks-page__kind-row">
-                    <span className="songbooks-page__kind-badge">{songbookKindLabel}</span>
-                  </p>
-                ) : null}
-                {showHeroSongCount ? (
-                  <p className="songbooks-page__hero-song-count">
-                    {songbook.song_count === 1 ? '1 song' : `${songbook.song_count} songs`}
-                  </p>
-                ) : null}
-                {sutraTokens.length || topicTokens.length || songbook.secondary_sutra ? (
-                  <div className="songbooks-page__tags">
+                {sutraTokens.length ? (
+                  <ul className="song-detail-secondary-meta song-detail-secondary-meta--sutra" aria-label="Sutra">
                     {sutraTokens.map((sutra) => (
-                      <Link
-                        key={`sutra-${sutra}`}
-                        className={`songbooks-page__tag-link songbooks-page__tag-link--sutra catalog-meta-pill--sutra ${sutraClassName(sutra)}`.trim()}
-                        to={buildBrowsePathForFacet('sutra', sutra)}
-                      >
-                        {sutra}
-                      </Link>
-                    ))}
-                  </div>
-                ) : null}
-                {songbook.secondary_sutra || topicTokens.length ? (
-                  <ul className="songbooks-page__secondary-meta" aria-label="Secondary songbook metadata">
-                    {songbook.secondary_sutra ? (
-                      <li className="songbooks-page__secondary-meta-item">
-                        <Link className="songbooks-page__secondary-link" to={buildBrowsePathForFacet('sutra', songbook.secondary_sutra)}>
-                          secondary sutra: {songbook.secondary_sutra}
+                      <li key={`sutra-${sutra}`} className="song-detail-secondary-meta-item">
+                        <Link
+                          className="song-detail-secondary-link"
+                          to={buildBrowsePathForFacet('sutra', sutra)}
+                        >
+                          <span className={`catalog-facet-sutra-name ${sutraClassName(sutra)}`}>{sutra}</span>
                         </Link>
                       </li>
-                    ) : null}
-                    {topicTokens.map((topic) => (
-                      <li key={`topic-${topic}`} className="songbooks-page__secondary-meta-item">
-                        <Link className="songbooks-page__secondary-link" to={buildBrowsePathForFacet('topic', topic)}>
-                          topic: {topic}
+                    ))}
+                  </ul>
+                ) : null}
+                {heroFacetTopics.length ? (
+                  <ul className="song-detail-secondary-meta" aria-label="Songbook metadata">
+                    {heroFacetTopics.map((facet) => (
+                      <li key={facet.key} className="song-detail-secondary-meta-item">
+                        <Link className="song-detail-secondary-link" to={facet.href}>
+                          {facet.label}
                         </Link>
                       </li>
                     ))}
@@ -352,47 +347,15 @@ export function SongbookPage() {
               </div>
             </header>
 
-            {isSutraSongbook && featuredSongbookVideo ? (
-              <section className="songbooks-page__featured-video" aria-labelledby="songbook-featured-video-heading">
-                <h2 id="songbook-featured-video-heading" className="catalog-section-title">
-                  Featured Video
-                </h2>
-                <YoutubeEmbeddedPlayer
-                  videoId={featuredSongbookVideo.video_id}
-                  title={featuredSongbookVideo.lyrics_title || featuredSongbookVideo.title || 'Featured video'}
-                  enableJsApi={songbookExclusivePlaybackEnabled}
-                  iframeRef={youtubeExclusiveRef}
-                  embedWrapperClassName="songbooks-page__featured-video-embed"
-                  embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSongbookVideo.format) }}
-                  iframeClassName="songbooks-page__featured-video-iframe"
-                  facadeUntilClick
-                  onBeforePlay={() => exclusivePlaybackRef.current?.pauseAllSoundcloud()}
-                  onIframeLoad={() => setYoutubeIframeGen((g) => g + 1)}
-                  outboundFooterClassName="songbooks-page__featured-video-yt-outbound"
-                />
-                <div className="songbooks-page__featured-video-copy">
-                  <h3 className="songbooks-page__featured-video-title">
-                    {featuredSongbookVideo.lyrics_title || featuredSongbookVideo.title}
-                  </h3>
-                  {featuredSongbookVideoSummary ? (
-                    <p className="songbooks-page__featured-video-summary">{featuredSongbookVideoSummary}</p>
-                  ) : null}
-                  {featuredSongbookSongPageHref ? (
-                    <div className="catalog-featured-video-song-row">
-                      <Link className="catalog-song-page-cta" to={featuredSongbookSongPageHref}>
-                        Song page
-                      </Link>
-                    </div>
-                  ) : null}
-                </div>
-              </section>
-            ) : null}
-
             {songbook.playlist_url ? (
-              <section className="songbooks-page__playlist" aria-labelledby="songbook-playlist-heading">
+              <section
+                className="catalog-page-shell__section songbooks-page__playlist"
+                aria-labelledby="songbook-playlist-heading"
+              >
                 <h2 id="songbook-playlist-heading" className="catalog-section-title">
-                  Songbook Playlist on Soundcloud
+                  Listen to songbook
                 </h2>
+                <SongbookPlaylistMetaLine book={songbook} className="songbooks-page__section-playlist-meta" />
                 <SoundCloudPassthroughEmbed
                   ref={soundcloudExclusiveWrapRef}
                   scUrl={songbook.playlist_url}
@@ -401,11 +364,38 @@ export function SongbookPage() {
                   height={playlistIsSet ? 760 : 680}
                   loading="eager"
                 />
+                <CatalogMediaOutbound href={songbook.playlist_url} label="Open on SoundCloud ↗" />
+              </section>
+            ) : null}
+
+            {songbookYoutubePlaylist ? (
+              <section
+                className="catalog-page-shell__section songbooks-page__yt-playlist"
+                aria-labelledby="songbook-yt-playlist-heading"
+              >
+                <h2 id="songbook-yt-playlist-heading" className="catalog-section-title">
+                  BANANASUTRA cinema
+                </h2>
+                <p className="catalog-lp-section-intro">
+                  The video version. Same songbook, eyes open.
+                </p>
+                <WatchLpPlaylistEmbed
+                  playlist={songbookYoutubePlaylist}
+                  durationByName={playlistDurationByName}
+                  iframeRef={youtubeExclusiveRef}
+                  onBeforePlay={() => {
+                    exclusivePlaybackRef.current?.pauseAllSoundcloud()
+                    setYoutubeIframeGen((g) => g + 1)
+                  }}
+                />
               </section>
             ) : null}
 
             {songbookTypeKey === 'genre' && relatedCount === 0 && genreTracksBrowseHref ? (
-              <section className="songbooks-page__genre-tracks" aria-labelledby="songbook-genre-tracks-heading">
+              <section
+                className="catalog-page-shell__section songbooks-page__genre-tracks"
+                aria-labelledby="songbook-genre-tracks-heading"
+              >
                 <h2 id="songbook-genre-tracks-heading" className="catalog-section-title">
                   Matching tracks
                 </h2>
@@ -418,7 +408,10 @@ export function SongbookPage() {
             ) : null}
 
             {songbookTypeKey === 'genre' && relatedCount === 0 && !genreTracksBrowseHref ? (
-              <section className="songbooks-page__genre-fallback" aria-labelledby="songbook-genre-fallback-heading">
+              <section
+                className="catalog-page-shell__section songbooks-page__genre-fallback"
+                aria-labelledby="songbook-genre-fallback-heading"
+              >
                 <h2 id="songbook-genre-fallback-heading" className="catalog-section-title">
                   Browse catalog
                 </h2>
@@ -431,8 +424,11 @@ export function SongbookPage() {
             ) : null}
 
             {!hideEmptyGenreOrCollectionRelated ? (
-              <section className="songbooks-page__songs" aria-labelledby="songbook-songs-heading">
-                <h2 id="songbook-songs-heading" className="songbooks-page__songs-title catalog-section-title">
+              <section
+                className="catalog-page-shell__section songbooks-page__songs"
+                aria-labelledby="songbook-songs-heading"
+              >
+                <h2 id="songbook-songs-heading" className="catalog-section-title">
                   {catalogLoading ? 'Related songs' : relatedSongsHeading}
                 </h2>
                 {catalogLoading ? (
