@@ -62,6 +62,18 @@ export default defineConfig({
           if (id.includes('/catalog/sutraTheme')) {
             return 'catalog-sutra-theme'
           }
+          if (id.includes('/catalog/sutraPageUtils')) {
+            return 'catalog-sutra-page-utils'
+          }
+          if (id.includes('/catalog/songbookPlaylistMeta')) {
+            return 'catalog-songbook-meta'
+          }
+          if (id.includes('/catalog/catalogDataUrl')) {
+            return 'catalog-data-url'
+          }
+          if (id.includes('/catalog/listenLpData')) {
+            return 'catalog-listen-lp-data'
+          }
         },
       },
     },
