@@ -1,33 +1,34 @@
-import { useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { Link, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import songCatalogBrowseJson from '../data/generated/song_catalog_browse.json'
 import songbookCatalogJson from '../data/generated/songbook_catalog.json'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { HomeFeaturedSongbookCard } from './HomeFeaturedSongbookCard'
-import { HomeHaveABitePlayer } from './HomeHaveABitePlayer'
-import { HomeLatestDropsSpotlight } from './HomeLatestDropsSpotlight'
+import { HomeLatestDropsSection, HomeTopTracksSection } from './HomeNowPlayingSection'
 import { HomePortalBbbNudge } from './HomePortalBbbNudge'
 import { HomePortalCoverStrip } from './HomePortalCoverStrip'
-import { HomePortalDoors } from './HomePortalDoors'
 import { HomePortalHeroQuote } from './HomePortalHeroQuote'
 import { HomePortalSutraGrid } from './HomePortalSutraGrid'
+import { HomeSongbooksCorner } from './HomeSongbooksCorner'
+import { HomeStatsSummary } from './HomeStatsSummary'
+import { HomeVideoTeaser } from './HomeVideoTeaser'
 import { ScrollRevealSection } from './ScrollRevealSection'
-import { LEARN_LP_META } from './learnLpData'
 import {
   buildCoverPool,
   buildHeroQuotePool,
+  buildHomeStatsSummary,
   buildListenerFavorites,
+  HOME_COVER_STRIP_COUNT,
   HOME_LATEST_DROPS_LIMIT,
-  pickHeroQuoteForVisit,
-  pickListenDoorPreview,
-  pickWatchDoorPreview,
+  pickRandomHeroQuote,
+  pickRandomHomeVideoTeasers,
   shuffleCoverStrip,
 } from './homePortalData'
+import { pickRandomHomeSongbookCorner } from './homePortalUtils'
 import { pickLatestSongsForListenLp } from './listenLpData'
-import { resolveHiddenPeelsSongbook } from './homePortalUtils'
+import { buildSutraStats } from './sutraPageUtils'
 import type { SongCatalogItem, SongbookCatalogItem } from './types'
-import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
+import { canonicalPathForRoute } from './seoPaths'
 import { CATALOG_BROWSE_PATH, searchHasBrowseParams } from './urlState'
 import { PageMeta } from './PageMeta'
 import { websiteJsonLd } from '../seo/jsonLd'
@@ -46,25 +47,32 @@ export function HomePortal() {
   const legacyRedirect = location.pathname === '/' && searchHasBrowseParams(location.search)
   const fullSearch = searchParams.toString()
 
-  const heroQuotePool = useMemo(() => buildHeroQuotePool(), [])
-  const heroQuote = useMemo(() => pickHeroQuoteForVisit(heroQuotePool), [heroQuotePool])
-  const listenDoor = useMemo(() => pickListenDoorPreview(), [])
-  const watchDoor = useMemo(() => pickWatchDoorPreview(), [])
+  const [heroQuote] = useState(() => pickRandomHeroQuote(buildHeroQuotePool()))
   const latestSongs = useMemo(
     () => pickLatestSongsForListenLp(songCatalogBrowseJson as SongCatalogItem[], HOME_LATEST_DROPS_LIMIT),
     [],
   )
   const listenerFavorites = useMemo(() => buildListenerFavorites(5), [])
-
-  const coverStripSeed = useMemo(() => `${location.key}|${Math.random()}`, [location.key])
-  const coverStripTiles = useMemo(() => shuffleCoverStrip(buildCoverPool(), coverStripSeed), [coverStripSeed])
-
-  const featuredSongbook = useMemo(
-    () => resolveHiddenPeelsSongbook((songbookCatalogJson as SongbookCatalogItem[]) ?? []),
-    [],
+  const sutraSongCounts = useMemo(() => {
+    const stats = buildSutraStats(songCatalogBrowseJson as SongCatalogItem[])
+    return new Map([...stats.entries()].map(([key, row]) => [key, row.songs]))
+  }, [])
+  const [songbookCornerCards] = useState(() =>
+    pickRandomHomeSongbookCorner((songbookCatalogJson as SongbookCatalogItem[]) ?? []),
   )
+  const [videoTeasers] = useState(() => pickRandomHomeVideoTeasers())
+  const statsSummary = useMemo(() => buildHomeStatsSummary(), [])
 
-  useSyncCatalogHeaderHeight(pageRef, headerRef, [fullSearch])
+  const [luckySeed, setLuckySeed] = useState(() => `${location.key}|${Date.now()}`)
+  const coverStripTiles = useMemo(
+    () => shuffleCoverStrip(buildCoverPool(), luckySeed, HOME_COVER_STRIP_COUNT),
+    [luckySeed],
+  )
+  const reloadLuckyStrip = useCallback(() => {
+    setLuckySeed(`${location.key}|${Date.now()}`)
+  }, [location.key])
+
+  useSyncCatalogHeaderHeight(pageRef, headerRef, [fullSearch, luckySeed])
 
   if (legacyRedirect) {
     return <Navigate to={{ pathname: CATALOG_BROWSE_PATH, search: location.search }} replace />
@@ -94,86 +102,56 @@ export function HomePortal() {
             {heroQuote ? <HomePortalHeroQuote quote={heroQuote} /> : null}
           </section>
 
-          {coverStripTiles.length > 0 ? (
-            <ScrollRevealSection aria-labelledby="home-cover-strip-heading">
-              <h2 id="home-cover-strip-heading" className="catalog-section-title">
-                Feeling lucky?
-              </h2>
-              <p className="home-portal__section-intro">
-                Tap a cover and see where it takes you. It&apos;s chill. It&apos;s fun. It&apos;s free. Woo.
-              </p>
-              <HomePortalCoverStrip tiles={coverStripTiles} />
-            </ScrollRevealSection>
-          ) : null}
-
-          <HomePortalBbbNudge />
-
-          <ScrollRevealSection
-            className="home-portal__section--listen-rail"
-            aria-labelledby="home-drops-heading"
-          >
-            <h2 id="home-drops-heading" className="catalog-section-title">
-              Latest drops
+          <ScrollRevealSection aria-labelledby="home-sutra-grid-heading">
+            <h2 id="home-sutra-grid-heading" className="catalog-section-title">
+              The seven sutras
             </h2>
-            <p className="home-portal__section-intro">
-              Fresh in. Lyrics, meaning, and playback on each song page.
+            <p className="catalog-lp-section-intro">
+              Start here. This is the compass behind the songs.
             </p>
-            <HomeLatestDropsSpotlight songs={latestSongs} />
-            <Link className="catalog-section-cta" to={browsePathWithQuery('/songs', 'sort=newest')}>
-              Browse newest songs →
+            <HomePortalSutraGrid songCounts={sutraSongCounts} />
+            <Link className="catalog-section-cta" to={canonicalPathForRoute('/sutras')}>
+              Explore sutras →
             </Link>
           </ScrollRevealSection>
 
+          <ScrollRevealSection className="home-portal__section--listen-rail" aria-labelledby="home-drops-heading">
+            <HomeLatestDropsSection songs={latestSongs} />
+          </ScrollRevealSection>
+
           {listenerFavorites.length > 0 ? (
-            <ScrollRevealSection
-              className="home-portal__section--listen-rail"
-              aria-labelledby="home-have-a-bite-heading"
-            >
-              <h2 id="home-have-a-bite-heading" className="catalog-section-title">
-                or, have a bite.
-              </h2>
-              <p className="home-portal__section-intro">Here, have a top 5. Just press play.</p>
-              <HomeHaveABitePlayer favorites={listenerFavorites} />
+            <ScrollRevealSection className="home-portal__section--listen-rail" aria-labelledby="home-have-a-bite-heading">
+              <HomeTopTracksSection favorites={listenerFavorites} />
             </ScrollRevealSection>
           ) : null}
 
-          {featuredSongbook ? (
+          {coverStripTiles.length > 0 ? (
+            <ScrollRevealSection className="home-portal__section--lucky" aria-labelledby="home-cover-strip-heading">
+              <HomePortalCoverStrip tiles={coverStripTiles} onReload={reloadLuckyStrip} />
+              <HomePortalBbbNudge />
+            </ScrollRevealSection>
+          ) : null}
+
+          {songbookCornerCards.length > 0 ? (
             <ScrollRevealSection
               className="home-portal__section--listen-rail"
               aria-labelledby="home-songbook-spotlight-heading"
             >
-              <h2 id="home-songbook-spotlight-heading" className="catalog-section-title">
-                the songbooks corner
-              </h2>
-              <p className="home-portal__section-intro">
-                This is where we settle in. Songbooks are the long-play option for the curious.
-              </p>
-              <HomeFeaturedSongbookCard book={featuredSongbook} />
+              <HomeSongbooksCorner cards={songbookCornerCards} />
             </ScrollRevealSection>
           ) : null}
 
-          <ScrollRevealSection className="home-doors" aria-labelledby="home-doors-heading">
-            <h2 id="home-doors-heading" className="catalog-section-title">
-              Three doors
-            </h2>
-            <p className="home-portal__section-intro catalog-page-shell__measure">
-              Same windows, same human, three ways in. LEARN, LISTEN, or WATCH.
-            </p>
-            <HomePortalDoors learnQuote={heroQuote} listen={listenDoor} watch={watchDoor} />
-          </ScrollRevealSection>
+          {videoTeasers.length > 0 ? (
+            <ScrollRevealSection aria-labelledby="home-video-teaser-heading">
+              <HomeVideoTeaser videos={videoTeasers} />
+            </ScrollRevealSection>
+          ) : null}
 
-          <ScrollRevealSection aria-labelledby="home-sutra-grid-heading">
-            <h2 id="home-sutra-grid-heading" className="catalog-section-title">
-              Start here
-            </h2>
-            <p className="home-portal__section-intro catalog-page-shell__measure">
-              {LEARN_LP_META.lead} So does everything else. Funny because it&apos;s true.
-            </p>
-            <HomePortalSutraGrid />
-            <Link className="catalog-section-cta" to={canonicalPathForRoute('/sutras')}>
-              Explore all sutras →
-            </Link>
-          </ScrollRevealSection>
+          {statsSummary.length > 0 ? (
+            <ScrollRevealSection immediate className="home-portal__section--stats" aria-label="Catalog scale">
+              <HomeStatsSummary items={statsSummary} />
+            </ScrollRevealSection>
+          ) : null}
         </main>
       </div>
 

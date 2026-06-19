@@ -9,11 +9,17 @@ import { sutraClassName } from './sutraTheme'
 
 type Props = {
   favorites: HomeListenerFavorite[]
+  /** When false, browse CTA lives in section footer. */
+  showBrowseCta?: boolean
 }
 
-/** In-place listen — listen LP player shell; embed loads on row tap (no homepage autoplay). */
-export function HomeHaveABitePlayer({ favorites }: Props) {
-  const [selectedTrackId, setSelectedTrackId] = useState<string | null>(null)
+function firstPlayableTrackId(favorites: HomeListenerFavorite[]): string | null {
+  return favorites.find((f) => (f.scUrl || '').trim())?.trackId ?? null
+}
+
+/** Top tracks — listen LP shell; first track embed loads on page load. */
+export function HomeHaveABitePlayer({ favorites, showBrowseCta = true }: Props) {
+  const [selectedTrackId, setSelectedTrackId] = useState<string | null>(() => firstPlayableTrackId(favorites))
   const [scAutoplay, setScAutoplay] = useState(false)
   const [embedKey, setEmbedKey] = useState(0)
   const playerWrapRef = useRef<HTMLDivElement>(null)
@@ -22,19 +28,24 @@ export function HomeHaveABitePlayer({ favorites }: Props) {
     if (!favorites.length) {
       setSelectedTrackId(null)
       setScAutoplay(false)
+      return
     }
+    setSelectedTrackId((prev) => {
+      if (prev && favorites.some((f) => f.trackId === prev && (f.scUrl || '').trim())) return prev
+      return firstPlayableTrackId(favorites)
+    })
   }, [favorites])
 
   useEffect(() => {
     const onPageShow = (event: PageTransitionEvent) => {
       if (!event.persisted) return
-      setSelectedTrackId(null)
+      setSelectedTrackId(firstPlayableTrackId(favorites))
       setScAutoplay(false)
       setEmbedKey((k) => k + 1)
     }
     window.addEventListener('pageshow', onPageShow)
     return () => window.removeEventListener('pageshow', onPageShow)
-  }, [])
+  }, [favorites])
 
   const selected = useMemo(
     () => favorites.find((t) => t.trackId === selectedTrackId) ?? null,
@@ -85,11 +96,9 @@ export function HomeHaveABitePlayer({ favorites }: Props) {
               mode="list"
               autoPlay={scAutoplay}
               reloadKey={embedKey}
-              activation="interaction_or_autoplay"
+              activation="immediate"
             />
-          ) : (
-            <p className="home-bite-player__hint">Tap a track below to load the player.</p>
-          )}
+          ) : null}
         </div>
 
         <ol className="listen-lp__track-list home-bite-player__list" aria-label="Top tracks">
@@ -133,9 +142,11 @@ export function HomeHaveABitePlayer({ favorites }: Props) {
           })}
         </ol>
       </div>
-      <Link className="catalog-section-cta" to={canonicalPathForRoute('/tracks')}>
-        Explore all tracks →
-      </Link>
+      {showBrowseCta ? (
+        <Link className="catalog-section-cta" to={canonicalPathForRoute('/tracks')}>
+          Explore all tracks →
+        </Link>
+      ) : null}
     </>
   )
 }

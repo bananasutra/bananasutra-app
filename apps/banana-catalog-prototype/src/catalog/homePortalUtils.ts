@@ -10,6 +10,82 @@ export function songbookHrefFromCatalogItem(b: SongbookCatalogItem): string {
 /** `url_slug_songbook` for the Hidden Peels homepage spotlight. */
 export const HOME_HIDDEN_PEELS_SLUG = 'hidden-peels'
 
+/** Topic/sutra card in the songbooks corner (wireframe §5). */
+export const HOME_REVOLT_SONGBOOK_SLUG = 'speak-revolt-now'
+
+/** Language card in the songbooks corner (wireframe §5). */
+export const HOME_FRENCH_SONGBOOK_SLUG = 'lang-french'
+
+export type HomeSongbookCornerSlot = 'topic' | 'genre' | 'language'
+
+export type HomeSongbookCornerCard = {
+  slot: HomeSongbookCornerSlot
+  book: SongbookCatalogItem
+}
+
+function songbookBySlug(books: SongbookCatalogItem[], slug: string): SongbookCatalogItem | null {
+  const normalized = slug.trim().toLowerCase()
+  const match = books.find((b) => (b.url_slug_songbook || '').trim().toLowerCase() === normalized)
+  if (!match || !(match.playlist_url || '').includes('/sets/')) return null
+  return match
+}
+
+/** Three playlist types for homepage corner: topic/sutra, genre best-of, language — random per reload. */
+export function pickRandomHomeSongbookCorner(books: SongbookCatalogItem[]): HomeSongbookCornerCard[] {
+  const used = new Set<string>()
+  const cards: HomeSongbookCornerCard[] = []
+
+  const markUsed = (book: SongbookCatalogItem) => {
+    used.add((book.songbook_id || book.songbook || '').trim())
+  }
+
+  const isUsed = (book: SongbookCatalogItem) => used.has((book.songbook_id || book.songbook || '').trim())
+
+  const poolForSlot = (slot: HomeSongbookCornerSlot): SongbookCatalogItem[] =>
+    books.filter((b) => {
+      if (!(b.playlist_url || '').includes('/sets/')) return false
+      if (isUsed(b)) return false
+      const type = (b.songbook_type || '').trim().toLowerCase()
+      if (slot === 'topic') return type === 'sutra'
+      if (slot === 'genre') return type === 'genre' || type === 'collection'
+      if (slot === 'language') return type === 'language'
+      return false
+    })
+
+  for (const slot of ['topic', 'genre', 'language'] as const) {
+    const pick = pickRandomSongbookFromPool(poolForSlot(slot), null)
+    if (pick) {
+      markUsed(pick)
+      cards.push({ slot, book: pick })
+    }
+  }
+
+  return cards
+}
+
+/** @deprecated Fixed picks — use {@link pickRandomHomeSongbookCorner} on home. */
+export function resolveHomeSongbookCorner(books: SongbookCatalogItem[]): HomeSongbookCornerCard[] {
+  const topic = songbookBySlug(books, HOME_REVOLT_SONGBOOK_SLUG)
+  const genre = resolveHiddenPeelsSongbook(books)
+  const language = songbookBySlug(books, HOME_FRENCH_SONGBOOK_SLUG)
+  const cards: HomeSongbookCornerCard[] = []
+  if (topic) cards.push({ slot: 'topic', book: topic })
+  if (genre) cards.push({ slot: 'genre', book: genre })
+  if (language) cards.push({ slot: 'language', book: language })
+  return cards
+}
+
+/** Kicker line for homepage songbook corner cards (wireframe §5). */
+export function homeSongbookCornerKicker(slot: HomeSongbookCornerSlot, book: SongbookCatalogItem): string {
+  if (slot === 'topic') {
+    const sutra = (book.sutras || '').split(',')[0]?.trim()
+    return sutra ? `TOPIC · ${sutra}` : 'TOPIC'
+  }
+  if (slot === 'genre') return 'GENRE · Best-of'
+  const lang = (book.songbook || '').replace(/^World:\s*/i, '').trim()
+  return lang ? `LANGUAGE · ${lang}` : 'LANGUAGE'
+}
+
 /** Homepage spotlight: Hidden Peels by slug, else SC→SONGBOOK join row by `songbook_id` if slug alone fails. */
 export function resolveHiddenPeelsSongbook(books: SongbookCatalogItem[]): SongbookCatalogItem | null {
   const slug = HOME_HIDDEN_PEELS_SLUG

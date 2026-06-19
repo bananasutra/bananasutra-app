@@ -1,8 +1,7 @@
 import type { MouseEvent } from 'react'
 import { trackBertrandOpen } from '../lib/analytics'
-import { ScrollRevealSection } from './ScrollRevealSection'
 
-/** W-064 discovery nudge — text CTA between playful browse and structured sections. */
+/** Bertrand inline nudge under feeling lucky. */
 export function HomePortalBbbNudge() {
   const handleOpen = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -11,13 +10,11 @@ export function HomePortalBbbNudge() {
   }
 
   return (
-    <ScrollRevealSection as="aside" className="home-bbb-nudge home-portal__bbb" aria-labelledby="home-bbb-heading">
-      <p id="home-bbb-heading" className="home-bbb-nudge__text">
-        Not sure where to start?
-      </p>
+    <p className="home-bbb-nudge home-portal__bbb home-portal__bbb--lucky">
+      <span className="home-bbb-nudge__text">Not sure where to start?</span>{' '}
       <button type="button" className="home-bbb-nudge__cta" onClick={handleOpen}>
         Ask Bertrand (he knows)
       </button>
-    </ScrollRevealSection>
+    </p>
   )
 }

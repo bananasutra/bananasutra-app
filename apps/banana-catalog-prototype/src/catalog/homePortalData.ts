@@ -1,9 +1,11 @@
 import type { To } from 'react-router-dom'
+import chromeStatsJson from '../data/generated/catalog_chrome_stats.json'
 import songCatalogBrowseJson from '../data/generated/song_catalog_browse.json'
 import trackCatalogJson from '../data/generated/track_catalog.json'
 import youtubeByLyricsJson from '../data/generated/youtube_by_lyrics_id.json'
 import type { SongCatalogItem, TrackCatalogItem, YouTubeCatalogVideo } from './types'
 import { songCatalogLinkTo } from './songPaths'
+import { dedupeYoutubeVideosByVideoId } from './youtubeCatalogFlat'
 import {
   SUTRA_CONTEXT,
   SUTRA_INDEX_CORE_ORDER,
@@ -30,11 +32,14 @@ export const HERO_QUOTE_SLUGS = [
   'we-re-tiny-specks-right',
 ] as const
 
-/** Desktop: horizontal scroll strip — enough tiles to feel explorable, not a fake fade. */
-export const HOME_COVER_STRIP_COUNT = 36
+/** Feeling lucky strip — square covers in a responsive grid (wireframe §4). */
+export const HOME_COVER_STRIP_COUNT = 11
 
-/** Latest drops on home — pairs with top-5 bite list below. */
-export const HOME_LATEST_DROPS_LIMIT = 5
+/** Latest drops on home — 2×2 grid beside top-5 player (wireframe §3). */
+export const HOME_LATEST_DROPS_LIMIT = 4
+
+/** Video teaser cards on home (wireframe §6). */
+export const HOME_VIDEO_TEASER_LIMIT = 3
 
 const HOME_BROWSE = songCatalogBrowseJson as SongCatalogItem[]
 const HOME_TRACKS = trackCatalogJson as TrackCatalogItem[]
@@ -105,6 +110,21 @@ export type HomeListenerFavorite = {
   href: To
 }
 
+export type HomeVideoTeaser = {
+  videoId: string
+  title: string
+  sutra: string
+  thumbnail: string
+  href: To
+}
+
+export type HomeStatsSummaryItem = {
+  value: number
+  label: string
+  href: string
+  ariaLabel: string
+}
+
 export function hashString(input: string): number {
   let hash = 0
   for (let idx = 0; idx < input.length; idx += 1) {
@@ -162,11 +182,18 @@ export function buildHeroQuotePool(): HomeHeroQuote[] {
   return HERO_QUOTE_SLUGS.map(trimHeroQuote).filter((q): q is HomeHeroQuote => Boolean(q))
 }
 
-/** Day-hash pick — matches `v3-lp-home.js` `pickHeroQuote`. */
+/** Day-hash pick — stable for a calendar day (legacy / non-home surfaces). */
 export function pickHeroQuoteForVisit(quotes: HomeHeroQuote[]): HomeHeroQuote | null {
   if (!quotes.length) return null
   const dayKey = new Date().toISOString().slice(0, 10)
   const idx = hashString(dayKey) % quotes.length
+  return quotes[idx] ?? null
+}
+
+/** Random pick on each page load (home hero). */
+export function pickRandomHeroQuote(quotes: HomeHeroQuote[]): HomeHeroQuote | null {
+  if (!quotes.length) return null
+  const idx = Math.floor(Math.random() * quotes.length)
   return quotes[idx] ?? null
 }
 
@@ -282,6 +309,95 @@ export function buildSutraCards(): HomeSutraCard[] {
   }
 
   return cards
+}
+
+export function buildHomeVideoTeasers(limit = HOME_VIDEO_TEASER_LIMIT): HomeVideoTeaser[] {
+  return pickRandomHomeVideoTeasers(limit)
+}
+
+/** YouTube mqdefault is always 16:9 (320×180). */
+export function youtubeVideoThumb16x9(videoId: string, fallback = ''): string {
+  const id = (videoId || '').trim()
+  return id ? `https://i.ytimg.com/vi/${id}/mqdefault.jpg` : fallback
+}
+
+function shuffleHomeVideoPool<T>(items: T[]): T[] {
+  const copy = [...items]
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const tmp = copy[i]!
+    copy[i] = copy[j]!
+    copy[j] = tmp
+  }
+  return copy
+}
+
+/** Random video teaser picks on each page load. */
+export function pickRandomHomeVideoTeasers(limit = HOME_VIDEO_TEASER_LIMIT): HomeVideoTeaser[] {
+  const rows = dedupeYoutubeVideosByVideoId(flattenYoutubeVideos()).filter(
+    (v) => (v.url_slug || '').trim() && (v.video_id || '').trim(),
+  )
+  return shuffleHomeVideoPool(rows)
+    .slice(0, limit)
+    .map((v) => ({
+      videoId: v.video_id,
+      title: v.lyrics_title || v.title,
+      sutra: (v.sutra || '').trim(),
+      thumbnail: youtubeVideoThumb16x9(v.video_id, v.thumbnail_url),
+      href: songCatalogLinkTo(v.lyrics_title, v.url_slug, { section: 'video' }),
+    }))
+}
+
+function countCatalogVideos(): number {
+  const seen = new Set<string>()
+  flattenYoutubeVideos().forEach((v) => {
+    const id = (v.video_id || '').trim()
+    if (id) seen.add(id)
+  })
+  return seen.size
+}
+
+/** Bottom stats row — echoes header counts plus videos (wireframe §7). */
+export function buildHomeStatsSummary(): HomeStatsSummaryItem[] {
+  const stats = chromeStatsJson as {
+    sutraCount: number
+    songbookCount: number
+    songCount: number
+    topTrackCount: number
+  }
+  const videoCount = countCatalogVideos()
+  return [
+    {
+      value: stats.sutraCount,
+      label: 'Sutras',
+      href: '/sutras/',
+      ariaLabel: `${formatHomeCount(stats.sutraCount)} sutras`,
+    },
+    {
+      value: stats.songbookCount,
+      label: 'Songbooks',
+      href: '/songbooks/',
+      ariaLabel: `${formatHomeCount(stats.songbookCount)} songbooks`,
+    },
+    {
+      value: stats.songCount,
+      label: 'Songs',
+      href: '/songs/',
+      ariaLabel: `${formatHomeCount(stats.songCount)} songs`,
+    },
+    {
+      value: stats.topTrackCount,
+      label: 'Tracks',
+      href: '/tracks/',
+      ariaLabel: `${formatHomeCount(stats.topTrackCount)} tracks`,
+    },
+    {
+      value: videoCount,
+      label: 'Videos',
+      href: '/videos/',
+      ariaLabel: `${formatHomeCount(videoCount)} videos`,
+    },
+  ]
 }
 
 export function buildListenerFavorites(limit = 5): HomeListenerFavorite[] {
