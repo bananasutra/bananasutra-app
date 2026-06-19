@@ -86,6 +86,63 @@ function iframesFromSoundcloudWraps(
   return out
 }
 
+/** Imperative pause for SoundCloud widgets under embed wrap refs (inline + persistent). */
+export function pauseSoundcloudWidgetsInWraps(
+  wrapRefs: ReadonlyArray<RefObject<HTMLElement | null>>,
+  excludeIframe: HTMLIFrameElement | null = null,
+  preserveViewport = true,
+): void {
+  const targets = iframesFromSoundcloudWraps(wrapRefs).filter((el) => el !== excludeIframe)
+  if (!targets.length) return
+
+  const anchor = { left: window.scrollX, top: window.scrollY }
+
+  void loadSoundCloudWidgetApi()
+    .then((SC) => {
+      for (const iframe of targets) {
+        if (!document.body.contains(iframe)) continue
+        try {
+          SC.Widget(iframe).pause()
+        } catch {
+          // ignore
+        }
+      }
+      if (preserveViewport) restoreViewportAfterSoundcloudPause(anchor.left, anchor.top)
+    })
+    .catch(() => {
+      // ignore
+    })
+}
+
+function pauseSoundcloudIframesExcept(
+  iframes: HTMLIFrameElement[],
+  excludeIframe: HTMLIFrameElement | null,
+  preserveViewport: boolean,
+  isStale: () => boolean,
+): void {
+  const targets = iframes.filter((el) => el !== excludeIframe)
+  if (!targets.length) return
+
+  const anchor = { left: window.scrollX, top: window.scrollY }
+
+  void loadSoundCloudWidgetApi()
+    .then((SC) => {
+      if (isStale()) return
+      for (const iframe of targets) {
+        if (!document.body.contains(iframe)) continue
+        try {
+          SC.Widget(iframe).pause()
+        } catch {
+          // ignore
+        }
+      }
+      if (preserveViewport && !isStale()) restoreViewportAfterSoundcloudPause(anchor.left, anchor.top)
+    })
+    .catch(() => {
+      // ignore
+    })
+}
+
 /** SoundCloud pause() scrolls the playlist into view; restore the pre-pause viewport briefly. */
 function restoreViewportAfterSoundcloudPause(left: number, top: number): void {
   const run = () => {
@@ -112,6 +169,8 @@ export type ExclusiveYoutubeSoundcloudOptions = {
   youtubeIframeRef: RefObject<HTMLIFrameElement | null>
   /** Ancestors of each `.sc-embed-frame` iframe (e.g. featured EP wrap + lazy spotlight wrap). */
   soundcloudWrapRefs: ReadonlyArray<RefObject<HTMLElement | null>>
+  /** Desktop persistent player embed host (app-root). Pauses/binds with inline SC widgets. */
+  persistentScWrapRef?: RefObject<HTMLElement | null>
   /** When false, listeners and widget bindings are not installed. */
   enabled: boolean
   /** Bumps the effect when featured media URLs change (iframe nodes / lazy timing). */
@@ -123,7 +182,7 @@ export type ExclusiveYoutubeSoundcloudOptions = {
 /**
  * When a YouTube featured embed and one or more SoundCloud widgets share a page,
  * ensures only one plays at a time (SoundCloud `PLAY` vs YouTube `onStateChange`), and SoundCloud
- * widgets pause each other (R16 cacophony-proof, extended for multiple SC regions).
+ * widgets pause each other (R16 cacophony-proof, extended for multiple SC regions + desktop persistent player).
  *
  * Cross-origin iframe clicks do not bubble to the parent, so exclusivity is driven by
  * player APIs / `postMessage`, not wrapper click handlers.
@@ -131,15 +190,20 @@ export type ExclusiveYoutubeSoundcloudOptions = {
 export function useExclusiveYoutubeSoundcloudPlayback({
   youtubeIframeRef,
   soundcloudWrapRefs,
+  persistentScWrapRef,
   enabled,
   syncKey,
   controlsRef,
 }: ExclusiveYoutubeSoundcloudOptions): void {
   const scBindSerialRef = useRef(0)
   const soundcloudWrapRefsRef = useRef(soundcloudWrapRefs)
+  const persistentScWrapRefRef = useRef(persistentScWrapRef)
   useEffect(() => {
     soundcloudWrapRefsRef.current = soundcloudWrapRefs
   }, [soundcloudWrapRefs])
+  useEffect(() => {
+    persistentScWrapRefRef.current = persistentScWrapRef
+  }, [persistentScWrapRef])
 
   useEffect(() => {
     if (!enabled) {
@@ -147,7 +211,12 @@ export function useExclusiveYoutubeSoundcloudPlayback({
       return
     }
 
-    const wraps = () => soundcloudWrapRefsRef.current
+    const wraps = (): ReadonlyArray<RefObject<HTMLElement | null>> => {
+      const base = soundcloudWrapRefsRef.current
+      const persistent = persistentScWrapRefRef.current
+      if (!persistent) return base
+      return [...base, persistent]
+    }
 
     let stabilizeSeq = 0
 
@@ -157,27 +226,12 @@ export function useExclusiveYoutubeSoundcloudPlayback({
     ) => {
       stabilizeSeq += 1
       const seq = stabilizeSeq
-      const anchor = { left: window.scrollX, top: window.scrollY }
-
-      const targets = iframesFromSoundcloudWraps(wraps()).filter((el) => el !== excludeIframe)
-      if (!targets.length) return
-
-      void loadSoundCloudWidgetApi()
-        .then((SC) => {
-          if (seq !== stabilizeSeq) return
-          for (const iframe of targets) {
-            if (!document.body.contains(iframe)) continue
-            try {
-              SC.Widget(iframe).pause()
-            } catch {
-              // ignore
-            }
-          }
-          if (preserveViewport) restoreViewportAfterSoundcloudPause(anchor.left, anchor.top)
-        })
-        .catch(() => {
-          // ignore
-        })
+      pauseSoundcloudIframesExcept(
+        iframesFromSoundcloudWraps(wraps()),
+        excludeIframe,
+        preserveViewport,
+        () => seq !== stabilizeSeq,
+      )
     }
 
     const pauseAllSoundcloud = () => pauseSoundcloudWidgetsExcept(null, true)
@@ -267,15 +321,27 @@ export function useExclusiveYoutubeSoundcloudPlayback({
     }
 
     const mos: MutationObserver[] = []
-    for (const wrapRef of wraps()) {
-      const wrap = wrapRef.current
-      if (!wrap) continue
-      const mo = new MutationObserver(() => tryBindAllSoundcloud())
-      mo.observe(wrap, { childList: true, subtree: true })
-      mos.push(mo)
+    const observedWraps = new WeakSet<HTMLElement>()
+
+    const attachSoundcloudWrapObservers = () => {
+      for (const wrapRef of wraps()) {
+        const wrap = wrapRef.current
+        if (!wrap || observedWraps.has(wrap)) continue
+        observedWraps.add(wrap)
+        const mo = new MutationObserver(() => tryBindAllSoundcloud())
+        mo.observe(wrap, { childList: true, subtree: true })
+        mos.push(mo)
+      }
     }
+
+    attachSoundcloudWrapObservers()
     tryBindAllSoundcloud()
     const scRetryIds = [400, 1200, 2000, 3200].map((ms) => window.setTimeout(tryBindAllSoundcloud, ms))
+    /** Persistent shell mounts after page children — poll until embed host exists. */
+    const persistentWrapPollId = window.setInterval(() => {
+      attachSoundcloudWrapObservers()
+      tryBindAllSoundcloud()
+    }, 250)
 
     return () => {
       cancelled = true
@@ -283,6 +349,7 @@ export function useExclusiveYoutubeSoundcloudPlayback({
       window.removeEventListener('message', onWindowMessage)
       ytLoadCleanup?.()
       window.clearInterval(ytPollId)
+      window.clearInterval(persistentWrapPollId)
       for (const id of scRetryIds) window.clearTimeout(id)
       for (const m of mos) m.disconnect()
       for (const c of scCleanups) {

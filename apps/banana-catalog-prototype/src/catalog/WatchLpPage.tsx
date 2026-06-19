@@ -14,6 +14,8 @@ import type { YouTubeCatalogVideo, YouTubePlaylistCatalogItem } from './types'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useExclusiveYoutubeEmbedsPlayback } from './useExclusiveYoutubeEmbedsPlayback'
+import { pauseSoundcloudWidgetsInWraps } from './useExclusiveYoutubeSoundcloudPlayback'
+import { usePlayerQueueRegistrar } from './playerQueue/playerQueueRegistrarContext'
 import { WatchLpBertrandTail } from './WatchLpBertrandTail'
 import { ScrollRevealSection } from './ScrollRevealSection'
 import { WatchLpFacetBar } from './WatchLpFacetBar'
@@ -82,7 +84,11 @@ export function WatchLpPage() {
   const [isPlaylistEmbedPlaying, setIsPlaylistEmbedPlaying] = useState(false)
   const [isSpotlightEmbedPlaying, setIsSpotlightEmbedPlaying] = useState(false)
 
-  useExclusiveYoutubeEmbedsPlayback(Boolean(youtubeVideos?.length && playlists?.length))
+  const { persistentScEmbedWrapRef, usePersistentPlayback } = usePlayerQueueRegistrar()
+
+  useExclusiveYoutubeEmbedsPlayback(Boolean(youtubeVideos?.length && playlists?.length), {
+    persistentScWrapRef: usePersistentPlayback ? persistentScEmbedWrapRef : undefined,
+  })
 
   useEffect(() => {
     let cancelled = false
@@ -236,13 +242,20 @@ export function WatchLpPage() {
     setPickedPlaylistId(null)
   }
 
+  const pausePersistentSoundcloud = () => {
+    if (!usePersistentPlayback) return
+    pauseSoundcloudWidgetsInWraps([persistentScEmbedWrapRef])
+  }
+
   const pausePlaylistEmbed = () => {
     pauseYoutubeEmbed(playlistYtRef.current)
     setIsPlaylistEmbedPlaying(false)
+    pausePersistentSoundcloud()
   }
   const pauseSpotlightEmbed = () => {
     pauseYoutubeEmbed(spotlightYtRef.current)
     setIsSpotlightEmbedPlaying(false)
+    pausePersistentSoundcloud()
   }
 
   return (

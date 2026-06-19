@@ -1,4 +1,4 @@
-import { useMemo, type MutableRefObject, type ReactNode } from 'react'
+import { useMemo, type MutableRefObject, type ReactNode, type RefObject } from 'react'
 import type { PersistentScPlayerApi } from '../persistentPlayer/persistentScPlayerContext'
 import { PersistentPlayerShell } from '../persistentPlayer/PersistentPlayerShell'
 import type { SoundCloudWidget } from '../soundcloudWidgetApi'
@@ -15,6 +15,7 @@ export type PlayerQueueProviderProps = {
   registrationRef: MutableRefObject<PagePlayerQueueRegistration>
   widgetRef: MutableRefObject<SoundCloudWidget | null>
   persistentApiRef: MutableRefObject<PersistentScPlayerApi | null>
+  persistentScEmbedWrapRef: RefObject<HTMLDivElement | null>
   usePersistentPlayback: boolean
   /** Override for tests. */
   value?: PlayerQueueContextValue
@@ -28,6 +29,7 @@ export function PlayerQueueProvider({
   registrationRef,
   widgetRef,
   persistentApiRef,
+  persistentScEmbedWrapRef,
   usePersistentPlayback,
   value,
 }: PlayerQueueProviderProps) {
@@ -55,7 +57,11 @@ export function PlayerQueueProvider({
       <PlayerQueueInternalsContext.Provider value={internals}>
         {children}
         {usePersistentPlayback ? (
-          <PersistentPlayerShell apiRef={persistentApiRef} widgetRef={widgetRef} />
+          <PersistentPlayerShell
+            apiRef={persistentApiRef}
+            widgetRef={widgetRef}
+            embedWrapRef={persistentScEmbedWrapRef}
+          />
         ) : null}
       </PlayerQueueInternalsContext.Provider>
     </PlayerQueueContext.Provider>

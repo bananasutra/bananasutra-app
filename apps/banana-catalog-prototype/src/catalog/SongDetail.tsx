@@ -38,6 +38,7 @@ import {
   usePlayerQueuePageBridge,
   useSongDetailTopTracksQueue,
 } from './playerQueue'
+import { usePlayerQueueRegistrar } from './playerQueue/playerQueueRegistrarContext'
 import {
   catalogPathSlugFromTitleAndSlug,
   lyricsIdFromSongUrlSlug,
@@ -553,6 +554,7 @@ function SongDetailLoaded({
   ).trim()
   const inAppPlayableTracks = orderedTracks.filter((t) => trackIsInApp(t) && t.sc_url.trim())
   const playAllDesktopAvailable = usePlayAllDesktopAvailable()
+  const { persistentScEmbedWrapRef, usePersistentPlayback } = usePlayerQueueRegistrar()
 
   const [audioListenTab, setAudioListenTab] = useState<AudioListenTab>('tracks')
   const [topTracksExpanded, setTopTracksExpanded] = useState(false)
@@ -685,6 +687,7 @@ function SongDetailLoaded({
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
     soundcloudWrapRefs: [epEmbedWrapRef, playerWrapRef],
+    persistentScWrapRef: usePersistentPlayback ? persistentScEmbedWrapRef : undefined,
     enabled: songExclusivePlaybackEnabled,
     controlsRef: exclusivePlaybackRef,
     syncKey: `${lyricsId}|ep:${primaryEpUrl}|tr:${playingUrl}|tab:${audioListenTab}|yt:${effectiveYoutubeVideoId}`,

@@ -1,4 +1,4 @@
-import { createContext, useContext, type MutableRefObject } from 'react'
+import { createContext, useContext, type MutableRefObject, type RefObject } from 'react'
 import type { PersistentScPlayerApi } from '../persistentPlayer/persistentScPlayerContext'
 import type { SoundCloudWidget } from '../soundcloudWidgetApi'
 import type { PagePlayerQueueConfig } from './usePagePlayerQueue'
@@ -11,6 +11,8 @@ export type PlayerQueueRegistrarValue = {
   clearPageRegistration: () => void
   widgetRef: MutableRefObject<SoundCloudWidget | null>
   persistentApiRef: MutableRefObject<PersistentScPlayerApi | null>
+  /** Host for desktop persistent `.sc-embed-frame` (W-029 exclusivity). */
+  persistentScEmbedWrapRef: RefObject<HTMLDivElement | null>
   usePersistentPlayback: boolean
 }
 

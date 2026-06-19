@@ -1,4 +1,4 @@
-import { useMemo, type CSSProperties, type MutableRefObject } from 'react'
+import { useMemo, type CSSProperties, type MutableRefObject, type RefObject } from 'react'
 import { Link } from 'react-router-dom'
 import { queueContextLine } from '../playerQueue/queueContextLine'
 import {
@@ -20,6 +20,7 @@ import './PersistentPlayerBar.css'
 export type PersistentPlayerShellProps = {
   apiRef: MutableRefObject<PersistentScPlayerApi | null>
   widgetRef: MutableRefObject<SoundCloudWidget | null>
+  embedWrapRef: RefObject<HTMLDivElement | null>
 }
 
 function barSessionActive(state: ReturnType<typeof usePlayerQueue>['state']): boolean {
@@ -37,7 +38,7 @@ function MetaSep() {
 /**
  * W-025 desktop shell — compact toolbar + SC compact embed (cover/title/waveform in iframe).
  */
-export function PersistentPlayerShell({ apiRef, widgetRef }: PersistentPlayerShellProps) {
+export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: PersistentPlayerShellProps) {
   const { state, actions } = usePlayerQueue()
   const visible = barSessionActive(state)
 
@@ -154,7 +155,7 @@ export function PersistentPlayerShell({ apiRef, widgetRef }: PersistentPlayerShe
             </button>
           </div>
         </div>
-        <div className="persistent-player-bar__embed">
+        <div ref={embedWrapRef} className="persistent-player-bar__embed">
           <PersistentSoundCloudPlayer apiRef={apiRef} widgetRef={widgetRef} />
         </div>
       </aside>

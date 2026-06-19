@@ -30,6 +30,7 @@ import {
   useExclusiveYoutubeSoundcloudPlayback,
   type ExclusiveYoutubeSoundcloudControls,
 } from './useExclusiveYoutubeSoundcloudPlayback'
+import { usePlayerQueueRegistrar } from './playerQueue/playerQueueRegistrarContext'
 import type { YouTubeCatalogVideo, YouTubePlaylistCatalogItem } from './types'
 import './CatalogApp.css'
 import './catalog-page-shell.css'
@@ -80,6 +81,7 @@ export function SongbookPage() {
   const soundcloudExclusiveWrapRef = useRef<HTMLDivElement>(null)
   const songbookSoundcloudWrapRefs = useMemo(() => [soundcloudExclusiveWrapRef] as const, [])
   const exclusivePlaybackRef = useRef<ExclusiveYoutubeSoundcloudControls | null>(null)
+  const { persistentScEmbedWrapRef, usePersistentPlayback } = usePlayerQueueRegistrar()
   const [youtubeIframeGen, setYoutubeIframeGen] = useState(0)
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
   const [youtubePlaylists, setYoutubePlaylists] = useState<YouTubePlaylistCatalogItem[]>([])
@@ -223,6 +225,7 @@ export function SongbookPage() {
   useExclusiveYoutubeSoundcloudPlayback({
     youtubeIframeRef: youtubeExclusiveRef,
     soundcloudWrapRefs: songbookSoundcloudWrapRefs,
+    persistentScWrapRef: usePersistentPlayback ? persistentScEmbedWrapRef : undefined,
     enabled: songbookExclusivePlaybackEnabled,
     controlsRef: exclusivePlaybackRef,
     syncKey: `${slug}|${songbookYoutubePlaylist?.playlist_id ?? ''}|${(songbook?.playlist_url ?? '').trim()}|yt:${youtubeIframeGen}`,
