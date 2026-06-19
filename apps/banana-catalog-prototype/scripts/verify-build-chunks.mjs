@@ -20,6 +20,9 @@ const MIN_CSS_ASSETS = 5
 /** Home route lazy chunk — must not import entry index (stage CSS outage root cause). */
 const CRITICAL_LAZY_STEMS = ['HomePortal']
 
+/** If a new app-root feature pulls shared catalog utils into index, add manualChunks in
+ *  vite.config.ts (see README § Stage deploy lessons learned 2026-06-19). */
+
 const INDEX_IMPORT_RE = /from"\.\/index-[^"]+\.js"/
 
 function fail(msg) {

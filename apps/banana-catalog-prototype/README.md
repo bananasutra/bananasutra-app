@@ -94,6 +94,26 @@ This runs **`tsc` → `vite build` → chunk/CSS verify → OG image generation 
 
 **Production chunk guardrail:** `npm run verify:build` (also runs automatically right after `vite build`) fails if lazy route chunks import the entry `index-*.js` bundle or if too few CSS assets were emitted — the failure mode that broke **stage.bananasutra.com** when Rolldown reshuffled chunks. Add the same command to **Cloudflare Pages** build settings for **`r50-overhaul`** if not already present.
 
+### Stage deploy lessons learned (2026-06-19 — W-025 silent failure)
+
+**Symptom:** Code merged to `r50-overhaul` and pushed, but https://stage.bananasutra.com showed the **old** player (inline SC embed, no persistent bar). Local dev worked.
+
+**Root cause:** Cloudflare Pages runs `npm run build`, which includes `verify-build-chunks`. W-025 pulled `PlayerQueueRoot` into the **entry** `index-*.js` bundle. Shared helpers (`durationFormat`, `coverImageUrl` / `seo/imageUrl`, `sutraTheme`) landed in index too. Lazy **`HomePortal`** also imports those helpers → it imported **back into index** → circular dep → verify **FAIL** → CF kept the last successful deploy (W-024, ~19h stale).
+
+**Fingerprint check:** Compare live `playerQueue-*.js` hash on stage vs a local `npx vite build`. Stale stage had `playerQueue-qL5WpDzs.js` (W-024); W-025+ produces different hashes. No `persistent-sc-player` in stage CSS/JS = persistent player not deployed.
+
+**Fix (commit `22315ff`):** `vite.config.ts` `manualChunks` for `catalog-duration`, `catalog-image-url`, `catalog-sutra-theme` so shared utils are **not** in the entry bundle. After push, confirm CF build green before QA.
+
+**Prevention checklist (every R50 slice that touches app root or player queue):**
+
+1. **Before merge/push to `r50-overhaul`:** run `npm run build` locally (not just `vite build` / dev server). Exit 0 required.
+2. **After push:** check Cloudflare Pages → Deployments for **`r50-overhaul`** — failed build = stage unchanged (silent stale deploy).
+3. **After green deploy:** hard-refresh stage; spot-check bundle hashes or persistent-player CSS class `persistent-sc-player`.
+4. **New shared modules** used by both `App.tsx` / player queue **and** lazy routes (especially `HomePortal`): add a `manualChunks` entry or expect verify failure.
+5. **Terminology:** “staging” in plan copy = **stage.bananasutra.com** (`r50-overhaul`). Git branch **`staging`** is Track 1 only — different pipeline (GitHub Pages on `main` pushes).
+
+**Do not** put entire `playerQueue/` in `manualChunks` without testing — it can absorb `react-router` and fail the separate `react-router-*.js` guard in `verify-build-chunks.mjs`.
+
 **Preview vs production-shaped HTML:** With Vite’s default **`appType: 'spa'`**, **`vite preview`** applies SPA fallback: HTML requests that do not match a file under `dist/` are rewritten to **`dist/index.html`**. Pre-rendered routes live at **`dist/<path>/index.html`** (for example **`dist/songs/<slug>/index.html`**), so **View Source on deep URLs after `npm run preview` can show the home shell** even though the prerendered files on disk are correct. For QA that matches static hosting (no SPA `--single`), serve `dist/` with **`npm run preview:dist`** (uses **`serve`** without `-s`). If a given host differs on trailing slashes (`/about` vs `/about/`), compare behavior to **GitHub Pages**.
 
 **OG layout changes:** incremental skips avoid refetching every cover on every build. For a full re-render after editing `scripts/ogSongCard.mjs`, use **`npm run build:fresh-og`** (same as `FORCE_OG=1 npm run build`) or delete `dist/og` locally, then build. **`npm run og:samples`** writes review PNGs under **`og-samples/`** (also gitignored).
