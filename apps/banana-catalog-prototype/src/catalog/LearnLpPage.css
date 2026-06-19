@@ -50,7 +50,7 @@
 }
 
 .learn-lp__tile-btn:hover {
-  border-color: var(--learn-accent);
+  border-color: var(--learn-tile-accent);
 }
 
 .learn-lp__tile-btn:active {
@@ -59,9 +59,9 @@
 
 .learn-lp__tile.is-open .learn-lp__tile-btn,
 .learn-lp__tile.is-active .learn-lp__tile-btn {
-  border-color: var(--learn-accent);
+  border-color: var(--learn-tile-accent);
   background: var(--color-bg-elevated);
-  box-shadow: 0 2px 10px rgba(42, 74, 106, 0.1);
+  box-shadow: var(--catalog-row-hover-shadow);
 }
 
 .learn-lp__tile.is-open .learn-lp__tile-btn {
@@ -75,8 +75,8 @@
   align-self: center;
   width: 0.45rem;
   height: 0.45rem;
-  border-right: 2px solid var(--learn-accent);
-  border-bottom: 2px solid var(--learn-accent);
+  border-right: 2px solid var(--learn-tile-accent);
+  border-bottom: 2px solid var(--learn-tile-accent);
   transform: rotate(-45deg);
   transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0.55;
@@ -121,7 +121,7 @@
 
 .learn-lp__tile.is-open .learn-lp__tile-drawer {
   grid-template-rows: 1fr;
-  border-color: var(--learn-accent);
+  border-color: var(--learn-tile-accent);
   background: var(--color-bg-elevated);
 }
 
@@ -229,7 +229,7 @@
   .learn-lp__tile.is-open .learn-lp__tile-btn {
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    border-bottom-color: var(--learn-accent);
+    border-bottom-color: var(--learn-tile-accent);
   }
 
   .learn-lp__hub-stage {
