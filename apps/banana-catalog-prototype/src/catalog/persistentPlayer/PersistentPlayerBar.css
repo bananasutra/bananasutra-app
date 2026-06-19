@@ -22,7 +22,8 @@
 .persistent-player-bar {
   width: 100%;
   padding: 0.5rem 0.65rem 0.65rem;
-  background: var(--color-bg-panel, #fff);
+  /* Elevated surface (matches selected track rows / floating chrome), not resting panel beige. */
+  background: var(--color-bg-elevated, #fff);
   border: 1px solid var(--color-border, #d8d0c4);
   border-radius: var(--radius-control, 2px);
   box-shadow: var(--catalog-row-hover-shadow, 0 8px 28px rgb(0 0 0 / 12%));
@@ -134,7 +135,7 @@
 }
 
 .persistent-player-bar__transport-btn:hover:not(:disabled) {
-  background: var(--color-bg-elevated, #fff);
+  background: var(--color-bg-panel, #efe9dc);
 }
 
 .persistent-player-bar__transport-btn:disabled {
@@ -164,13 +165,13 @@
 }
 
 .persistent-player-bar__stop-btn:hover {
-  background: var(--color-bg-elevated, #fff);
+  background: var(--color-bg-panel, #efe9dc);
 }
 
 .persistent-player-bar__embed {
   border-radius: var(--radius-control, 2px);
   overflow: hidden;
-  background: var(--color-bg-inset, #f7f3ed);
+  background: var(--color-bg-elevated, #fff);
 }
 
 .persistent-player-bar__embed .persistent-sc-player {
