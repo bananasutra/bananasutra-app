@@ -99,30 +99,22 @@ function main() {
   }
 
   const lazyBasenames = lazyRouteChunkBasenames(indexSource)
-  const criticalCircular = []
-  const otherCircular = []
+  const circularLazy = []
 
   for (const basename of lazyBasenames) {
     const chunkFile = resolveChunkFile(files, basename)
     const chunkSource = fs.readFileSync(path.join(assetsDir, chunkFile), 'utf8')
     if (!INDEX_IMPORT_RE.test(chunkSource)) continue
-    if (CRITICAL_LAZY_STEMS.includes(chunkStem(chunkFile))) {
-      criticalCircular.push(chunkFile)
-    } else {
-      otherCircular.push(chunkFile)
-    }
+    circularLazy.push(chunkFile)
   }
 
-  if (criticalCircular.length > 0) {
-    fail(
-      `critical lazy chunk(s) import entry bundle ${indexFile} (circular dep on first paint): ${criticalCircular.join(', ')}`,
-    )
-  }
-
-  if (otherCircular.length > 0) {
-    warn(
-      `${otherCircular.length} other lazy chunk(s) still import ${indexFile} (usually OK after bootstrap; consider splitting later): ${otherCircular.join(', ')}`,
-    )
+  if (circularLazy.length > 0) {
+    const critical = circularLazy.filter((f) => CRITICAL_LAZY_STEMS.includes(chunkStem(f)))
+    const label =
+      critical.length > 0
+        ? 'critical lazy chunk(s) import entry bundle (circular dep on first paint)'
+        : 'lazy route chunk(s) import entry bundle (circular dep; add manualChunks in vite.config.ts)'
+    fail(`${label} ${indexFile}: ${circularLazy.join(', ')}`)
   }
 
   ok(
