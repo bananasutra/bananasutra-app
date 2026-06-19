@@ -52,6 +52,38 @@ export function LearnLpMoodEntry({ songCatalog }: Props) {
           ))}
         </div>
 
+        {activeMood && moodSongs ? (
+          <div className="learn-lp__mood-songs">
+            <h3 className="learn-lp__mood-songs-heading">
+              {moodSongs.sample.length > 0
+                ? `Songs for ${moodSongs.sutraName}`
+                : `No songs in catalog for ${moodSongs.sutraName}`}
+            </h3>
+            {moodSongs.sample.length > 0 ? (
+              <ul className="learn-lp__mood-songs-grid">
+                {moodSongs.sample.map((song) => (
+                  <li key={song.lyrics_id} className="learn-lp__mood-songs-cell">
+                    <SongThumbCard
+                      to={songCatalogLinkTo(song.lyrics_title, song.url_slug, {
+                        section: browseRowHasAudioSection(song) ? 'audio' : undefined,
+                      })}
+                      coverUrl={song.cover_image_url}
+                      title={song.lyrics_title}
+                      metaLabel={song.sutra}
+                      publishedAt={song.published_at}
+                    />
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            {moodSongs.total > 0 ? (
+              <Link className="catalog-section-cta learn-lp__mood-songs-cta" to={LEARN_HUB_LINKS.listen}>
+                Browse listen →
+              </Link>
+            ) : null}
+          </div>
+        ) : null}
+
         {response ? (
           <div className="learn-lp__mood-response" aria-live="polite">
             <p className="learn-lp__mood-response-sutra">{response.sutraLine}</p>
@@ -83,38 +115,6 @@ export function LearnLpMoodEntry({ songCatalog }: Props) {
           </div>
         ) : null}
       </div>
-
-      {activeMood && moodSongs ? (
-        <div className="learn-lp__mood-songs">
-          <h3 className="learn-lp__mood-songs-heading">
-            {moodSongs.sample.length > 0
-              ? `Songs for ${moodSongs.sutraName}`
-              : `No songs in catalog for ${moodSongs.sutraName}`}
-          </h3>
-          {moodSongs.sample.length > 0 ? (
-            <ul className="learn-lp__mood-songs-grid">
-              {moodSongs.sample.map((song) => (
-                <li key={song.lyrics_id} className="learn-lp__mood-songs-cell">
-                  <SongThumbCard
-                    to={songCatalogLinkTo(song.lyrics_title, song.url_slug, {
-                      section: browseRowHasAudioSection(song) ? 'audio' : undefined,
-                    })}
-                    coverUrl={song.cover_image_url}
-                    title={song.lyrics_title}
-                    metaLabel={song.sutra}
-                    publishedAt={song.published_at}
-                  />
-                </li>
-              ))}
-            </ul>
-          ) : null}
-          {moodSongs.total > 0 ? (
-            <Link className="catalog-section-cta learn-lp__mood-songs-cta" to={LEARN_HUB_LINKS.listen}>
-              Browse listen →
-            </Link>
-          ) : null}
-        </div>
-      ) : null}
     </ScrollRevealSection>
   )
 }
