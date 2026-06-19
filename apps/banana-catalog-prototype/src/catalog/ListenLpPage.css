@@ -14,6 +14,187 @@
   font-weight: 700;
 }
 
+/* PL-05b — What's new: 3 sample cards, in-place play on cover */
+.listen-lp__whats-new-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.listen-lp__whats-new-grid__cell {
+  min-width: 0;
+  list-style: none;
+}
+
+.listen-lp__sample-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--radius-thumb, var(--radius-control, 2px));
+  overflow: hidden;
+  background: var(--color-bg-panel, #fff);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.12s ease;
+}
+
+.listen-lp__sample-card.is-active {
+  border-color: var(--catalog-track-row-selected-border, var(--color-link, #524a40));
+  box-shadow: inset -3px 0 0 0 var(--color-link, #524a40);
+}
+
+.listen-lp__sample-card__media {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--color-bg-inset, #f4f1ea);
+}
+
+.listen-lp__sample-card__embed-host {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.listen-lp__sample-card__embed-host .catalog-lazy-sc-embed,
+.listen-lp__sample-card__embed-host .sc-embed-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+}
+
+.listen-lp__sample-card__cover {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.15s ease;
+}
+
+.listen-lp__sample-card.is-playing .listen-lp__sample-card__cover {
+  opacity: 0.92;
+}
+
+.listen-lp__sample-card__cover--fallback {
+  display: grid;
+  place-items: center;
+  font-size: 1.75rem;
+  color: var(--color-text-muted, #666);
+}
+
+.listen-lp__sample-card__play {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+}
+
+.listen-lp__sample-card__play:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: -3px;
+}
+
+.listen-lp__sample-card.is-playing .listen-lp__sample-card__play-ring {
+  opacity: 0.92;
+}
+
+.listen-lp__sample-card__play-ring {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.62);
+  pointer-events: none;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.listen-lp__sample-card__play:hover .listen-lp__sample-card__play-ring {
+  transform: scale(1.05);
+}
+
+.listen-lp__sample-card__play-glyph {
+  margin-left: 0.12em;
+  font-size: 0.95rem;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: -0.08em;
+}
+
+.listen-lp__sample-card__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.45rem 0.5rem 0.55rem;
+  min-height: 0;
+}
+
+.listen-lp__sample-card__meta {
+  font: 600 0.52rem/1.2 var(--font-ui);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted, #666);
+}
+
+.listen-lp__sample-card__title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text-strong, #111);
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.listen-lp__sample-card__title:hover {
+  color: var(--color-link-hover, #3d3214);
+  text-decoration: underline;
+}
+
+.listen-lp__sample-card__date {
+  font-size: 0.68rem;
+  line-height: 1.2;
+  color: var(--color-text-faint, #888);
+}
+
+@media (max-width: 520px) {
+  .listen-lp__sample-card__play-ring {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+
+  .listen-lp__sample-card__play-glyph {
+    font-size: 0.82rem;
+  }
+
+  .listen-lp__sample-card__title {
+    font-size: 0.68rem;
+  }
+}
+
 .listen-lp__loading,
 .listen-lp__load-error,
 .listen-lp__empty {
