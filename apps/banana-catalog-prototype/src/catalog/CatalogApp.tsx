@@ -523,9 +523,7 @@ export function CatalogApp() {
           <h1 className="catalog-page-h1">The Songs</h1>
           <p className="catalog-page-sub">
             Every song in the collection, meaning-first. Filter by sutra, light or shadow, topic, intention, or
-            language. Each song has a
-            short paragraph on why it exists, and music you can play right here. Lyrics-only pieces live on{' '}
-            <Link to={canonicalPathForRoute('/words')}>Words</Link>.
+            language. Each song has a short paragraph on why it exists, and music you can play right here.
           </p>
         </div>
 
