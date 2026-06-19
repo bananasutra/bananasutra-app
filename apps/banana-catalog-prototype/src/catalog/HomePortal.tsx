@@ -32,6 +32,7 @@ import { canonicalPathForRoute } from './seoPaths'
 import { CATALOG_BROWSE_PATH, searchHasBrowseParams } from './urlState'
 import { PageMeta } from './PageMeta'
 import { websiteJsonLd } from '../seo/jsonLd'
+import { useHomeDeferredCatalog } from './useHomeDeferredCatalog'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import './CatalogApp.css'
 import './catalog-page-shell.css'
@@ -48,11 +49,12 @@ export function HomePortal() {
   const fullSearch = searchParams.toString()
 
   const [heroQuote] = useState(() => pickRandomHeroQuote(buildHeroQuotePool()))
+  const { trackCatalog, youtubeByLyrics, trackLoadError, youtubeLoadError } = useHomeDeferredCatalog()
   const latestSongs = useMemo(
     () => pickLatestSongsForListenLp(songCatalogBrowseJson as SongCatalogItem[], HOME_LATEST_DROPS_LIMIT),
     [],
   )
-  const listenerFavorites = useMemo(() => buildListenerFavorites(5), [])
+  const listenerFavorites = useMemo(() => buildListenerFavorites(trackCatalog, 5), [trackCatalog])
   const sutraSongCounts = useMemo(() => {
     const stats = buildSutraStats(songCatalogBrowseJson as SongCatalogItem[])
     return new Map([...stats.entries()].map(([key, row]) => [key, row.songs]))
@@ -60,8 +62,16 @@ export function HomePortal() {
   const [songbookCornerCards] = useState(() =>
     pickRandomHomeSongbookCorner((songbookCatalogJson as SongbookCatalogItem[]) ?? []),
   )
-  const [videoTeasers] = useState(() => pickRandomHomeVideoTeasers())
+  const videoTeasers = useMemo(
+    () => (youtubeByLyrics ? pickRandomHomeVideoTeasers(youtubeByLyrics) : []),
+    [youtubeByLyrics],
+  )
   const statsSummary = useMemo(() => buildHomeStatsSummary(), [])
+
+  const topTracksLoading = trackCatalog === null && trackLoadError === null
+  const videoTeasersLoading = youtubeByLyrics === null && youtubeLoadError === null
+  const showTopTracksSection = topTracksLoading || listenerFavorites.length > 0 || Boolean(trackLoadError)
+  const showVideoTeaserSection = videoTeasersLoading || videoTeasers.length > 0 || Boolean(youtubeLoadError)
 
   const [luckySeed, setLuckySeed] = useState(() => `${location.key}|${Date.now()}`)
   const coverStripTiles = useMemo(
@@ -119,9 +129,13 @@ export function HomePortal() {
             <HomeLatestDropsSection songs={latestSongs} />
           </ScrollRevealSection>
 
-          {listenerFavorites.length > 0 ? (
+          {showTopTracksSection ? (
             <ScrollRevealSection className="home-portal__section--listen-rail" aria-labelledby="home-have-a-bite-heading">
-              <HomeTopTracksSection favorites={listenerFavorites} />
+              <HomeTopTracksSection
+                favorites={listenerFavorites}
+                loading={topTracksLoading}
+                loadError={trackLoadError}
+              />
             </ScrollRevealSection>
           ) : null}
 
@@ -141,9 +155,9 @@ export function HomePortal() {
             </ScrollRevealSection>
           ) : null}
 
-          {videoTeasers.length > 0 ? (
+          {showVideoTeaserSection ? (
             <ScrollRevealSection aria-labelledby="home-video-teaser-heading">
-              <HomeVideoTeaser videos={videoTeasers} />
+              <HomeVideoTeaser videos={videoTeasers} loading={videoTeasersLoading} loadError={youtubeLoadError} />
             </ScrollRevealSection>
           ) : null}
 

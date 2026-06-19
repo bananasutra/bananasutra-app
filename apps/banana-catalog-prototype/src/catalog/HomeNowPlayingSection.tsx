@@ -22,9 +22,15 @@ export function HomeLatestDropsSection({ songs }: { songs: SongCatalogItem[] }) 
   )
 }
 
-export function HomeTopTracksSection({ favorites }: { favorites: HomeListenerFavorite[] }) {
-  if (!favorites.length) return null
-
+export function HomeTopTracksSection({
+  favorites,
+  loading = false,
+  loadError = null,
+}: {
+  favorites: HomeListenerFavorite[]
+  loading?: boolean
+  loadError?: string | null
+}) {
   return (
     <>
       <h2 id="home-have-a-bite-heading" className="catalog-section-title">
@@ -33,10 +39,22 @@ export function HomeTopTracksSection({ favorites }: { favorites: HomeListenerFav
       <p className="catalog-lp-section-intro">
         Press play. The five tracks listeners keep coming back to.
       </p>
-      <HomeHaveABitePlayer favorites={favorites} showBrowseCta={false} />
-      <Link className="catalog-section-cta" to={canonicalPathForRoute('/tracks')}>
-        Listen to all tracks →
-      </Link>
+      {loading ? (
+        <p className="home-portal__empty listen-lp__loading" aria-live="polite">
+          Loading top tracks…
+        </p>
+      ) : loadError ? (
+        <p className="home-portal__empty" role="status">
+          {loadError}
+        </p>
+      ) : favorites.length > 0 ? (
+        <>
+          <HomeHaveABitePlayer favorites={favorites} showBrowseCta={false} />
+          <Link className="catalog-section-cta" to={canonicalPathForRoute('/tracks')}>
+            Listen to all tracks →
+          </Link>
+        </>
+      ) : null}
     </>
   )
 }
