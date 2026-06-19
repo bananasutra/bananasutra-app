@@ -20,7 +20,7 @@ export function SongDetailBertrandEntry({ sutra }: Props) {
       <p id="song-bertrand-heading" className="song-detail-bertrand__headline">
         More like this? Ask Bertrand for the next song.{' '}
         <a className="song-detail-bertrand__cta" href="#bertrand" onClick={handleOpen}>
-          Open chat →
+          Ask Bertrand →
         </a>
       </p>
       {sutraTrimmed ? (

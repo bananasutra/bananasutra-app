@@ -22,7 +22,7 @@ export function WatchLpBertrandTail({ onOpenChat }: Props) {
         <p id="watch-lp-bertrand-heading" className="watch-lp__bertrand-headline">
           Not finding it? Describe what you&apos;re after.{' '}
           <a className="watch-lp__bertrand-cta" href="#bertrand" onClick={handleOpen}>
-            Open chat →
+            Ask Bertrand →
           </a>
         </p>
       </aside>
