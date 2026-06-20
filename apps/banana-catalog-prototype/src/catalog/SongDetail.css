@@ -7,6 +7,11 @@
   overflow-anchor: none;
 }
 
+/* W-055 breakout: negative margin-inline must not be clipped by the page shell. */
+.catalog.catalog-page--shell:has(.song-detail-breakout) {
+  overflow-x: visible;
+}
+
 .catalog.catalog-page > .song-detail {
   padding-top: 0;
 }
@@ -779,7 +784,6 @@
     grid-column: 1;
     grid-row: 1;
     min-width: 0;
-    overflow: hidden;
   }
 
   .song-detail-split--two-col .song-detail-media--video {
@@ -883,7 +887,7 @@
   margin-bottom: 0;
 }
 
-.song-detail-sister-grid {
+.song-thumb-grid.song-detail-sister-grid {
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
@@ -893,6 +897,7 @@
   list-style: none;
   margin: 0.35rem 0 0;
   padding-left: 0;
+  grid-template-columns: unset;
 }
 
 .song-detail-sister-grid .song-thumb-grid__cell {

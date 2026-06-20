@@ -558,6 +558,8 @@ function SongDetailLoaded({
   ).trim()
   const inAppPlayableTracks = orderedTracks.filter((t) => trackIsInApp(t) && t.sc_url.trim())
   const playAllDesktopAvailable = usePlayAllDesktopAvailable()
+  /** Multi-track Play All uses the persistent bar; single-track / catalog-export keeps inline SC beside lyrics. */
+  const showInlineScEmbed = !playAllDesktopAvailable || inAppPlayableTracks.length <= 1
   const { persistentScEmbedWrapRef, usePersistentPlayback } = usePlayerQueueRegistrar()
 
   const [audioListenTab, setAudioListenTab] = useState<AudioListenTab>('tracks')
@@ -1061,7 +1063,7 @@ function SongDetailLoaded({
                         Here&apos;s the SoundCloud version for this song.
                       </p>
                     ) : null}
-                    {!playAllDesktopAvailable ? (
+                    {showInlineScEmbed ? (
                       <div ref={playerWrapRef}>
                         <LazySoundCloudEmbed
                           scUrl={playingUrl}
@@ -1450,7 +1452,7 @@ function SongDetailLoaded({
                 <h2 id="song-related-heading" className="catalog-section-title">
                   Explore sister songs
                 </h2>
-                <ul className="song-thumb-grid song-thumb-grid--section song-detail-sister-grid">
+                <ul className="song-thumb-grid song-detail-sister-grid">
                   {orderedRelatedSongs.slice(0, 8).map((related) => {
                     const sutra = songCatalogByLyricsId.get(related.lyrics_id)?.sutra?.trim() ?? ''
                     return (
