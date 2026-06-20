@@ -903,6 +903,26 @@
   line-height: 1.55;
 }
 
+.learn-lp__faq-q:focus {
+  outline: none;
+}
+
+.learn-lp__faq-q:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-control, 2px);
+}
+
+/* Dark: hub tiles use warm link accent; FAQ open/chevron should match, not bright KNOW blue. */
+:root[data-theme='dark'] .learn-lp__faq-item[open] {
+  border-color: var(--learn-tile-accent);
+}
+
+:root[data-theme='dark'] .learn-lp__faq-q::before {
+  border-right-color: var(--learn-tile-accent);
+  border-bottom-color: var(--learn-tile-accent);
+}
+
 /* Mood entry — stagger mood buttons after section fade-up */
 .catalog-scroll-reveal.is-visible .learn-lp__mood-btn {
   animation: learn-lp-mood-reveal 0.45s ease backwards;
