@@ -53,10 +53,10 @@ function injectHtml(template, { headHtml, bodyHtml }) {
       .replace(/<script\s+type="application\/ld\+json"[\s\S]*?<\/script>\s*/gi, '')
     html = html.replace('</head>', `    ${headHtml}\n  </head>`)
   }
-  // Vite 8+ puts module scripts in <head>; match outer #root through its closing tag before </body>.
+  // Boot splash + dismiss script are siblings after #root (see index.html `bs-root-end` marker).
   html = html.replace(
-    /<div id="root">[\s\S]*<\/div>\s*(?=<\/body>)/,
-    '<div id="root">' + bodyHtml + '</div>\n  ',
+    /<div id="root">[\s\S]*?<\/div>\s*<!-- bs-root-end -->/,
+    '<div id="root">' + bodyHtml + '</div>\n    <!-- bs-root-end -->',
   )
   return html
 }
