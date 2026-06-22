@@ -17,6 +17,8 @@ const srcGen = path.join(root, 'src/data/generated')
 const distDir = path.join(root, 'dist')
 const seoPath = path.join(distDir, 'seo-metadata.json')
 const sitemapPath = path.join(distDir, 'sitemap.xml')
+const feedPath = path.join(distDir, 'feed.xml')
+const llmsPath = path.join(distDir, 'llms.txt')
 
 const SITE = 'BANANASUTRA'
 const SITE_URL = 'https://bananasutra.com'
@@ -169,6 +171,8 @@ function pathFromLoc(loc) {
 function main() {
   if (!fs.existsSync(seoPath)) fail(`missing ${seoPath} — run npm run build first`)
   if (!fs.existsSync(sitemapPath)) fail(`missing ${sitemapPath} — run npm run build first`)
+  if (!fs.existsSync(feedPath)) fail(`missing ${feedPath} — run npm run build first`)
+  if (!fs.existsSync(llmsPath)) fail(`missing ${llmsPath} — run npm run build first`)
 
   const songBrowse = readJson('song_catalog_browse.json')
   const songDetail = readJson('song_detail.json')
@@ -409,12 +413,32 @@ function main() {
     )
   }
 
+  const feedXml = fs.readFileSync(feedPath, 'utf8')
+  if (!feedXml.includes('xmlns="http://www.w3.org/2005/Atom"')) {
+    fail('feed.xml: missing Atom xmlns')
+  }
+  if (!feedXml.includes('<link href="https://bananasutra.com/feed.xml" rel="self"')) {
+    fail('feed.xml: missing self link')
+  }
+  const feedEntries = (feedXml.match(/<entry>/g) || []).length
+  if (feedEntries < 1) fail('feed.xml: expected at least one <entry>')
+  if (feedEntries > 50) fail(`feed.xml: expected at most 50 entries, got ${feedEntries}`)
+
+  const llmsTxt = fs.readFileSync(llmsPath, 'utf8')
+  if (!llmsTxt.startsWith('# BANANASUTRA\n')) fail('llms.txt: missing H1 title')
+  if (!llmsTxt.includes('> BANANASUTRA — songs for a world gone bananas.')) {
+    fail('llms.txt: missing site summary blockquote')
+  }
+  if (!llmsTxt.includes('## Machine-readable')) fail('llms.txt: missing Machine-readable section')
+  if (!llmsTxt.includes('/feed.xml')) fail('llms.txt: missing feed.xml reference')
+  if (!llmsTxt.includes('/sitemap.xml')) fail('llms.txt: missing sitemap.xml reference')
+
   // Spot-check: browse length ~ epic (informational)
   const nBrowse = songBrowse.filter((r) => (r.lyrics_id || '').trim()).length
   if (nBrowse < 300 || nBrowse > 500) warn(`song_catalog_browse row count ${nBrowse} outside typical 300–500 (epic ~387)`)
 
   console.log(
-    `verify-seo-artifacts: OK — seo-metadata ${Object.keys(routes).length} routes, sitemap ${locs.length} URLs, ${nBrowse} browse rows`,
+    `verify-seo-artifacts: OK — seo-metadata ${Object.keys(routes).length} routes, sitemap ${locs.length} URLs, feed ${feedEntries} entries, llms.txt present, ${nBrowse} browse rows`,
   )
 }
 

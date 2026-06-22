@@ -14,13 +14,14 @@ import './GlobalFooter.css'
 /*  Social links                                                       */
 /* ------------------------------------------------------------------ */
 
-const SOCIAL: readonly { id: FooterSocialId; href: string; label: string }[] = [
+const SOCIAL: readonly { id: FooterSocialId; href: string; label: string; external?: boolean }[] = [
   { id: 'soundcloud', href: 'https://soundcloud.com/bananasutra/sets', label: 'SoundCloud' },
   { id: 'youtube', href: 'https://www.youtube.com/@bananasutra', label: 'YouTube' },
   { id: 'instagram', href: 'https://www.instagram.com/itsbananasutra/', label: 'Instagram' },
   { id: 'suno', href: 'https://suno.com/@bananasutra', label: 'Suno' },
   { id: 'substack', href: 'https://substack.com/@bananasutra', label: 'Substack' },
   { id: 'github', href: 'https://github.com/bananasutra', label: 'GitHub' },
+  { id: 'rss', href: '/feed.xml', label: 'RSS feed (new songs)', external: false },
 ]
 
 /* ------------------------------------------------------------------ */
@@ -309,14 +310,14 @@ export function GlobalFooter() {
         {/* ---- Social icons ---- */}
         <nav className="catalog-footer__social" aria-label="Elsewhere on the web">
           <ul className="catalog-footer__social-list">
-            {SOCIAL.map(({ id, href, label }) => (
+            {SOCIAL.map(({ id, href, label, external = true }) => (
               <li key={href} className="catalog-footer__social-item">
                 <a
                   className="catalog-footer__social-link"
                   href={href}
-                  rel="me noreferrer noopener"
-                  target="_blank"
-                  aria-label={`${label} (opens in new tab)`}
+                  rel={external ? 'me noreferrer noopener' : undefined}
+                  target={external ? '_blank' : undefined}
+                  aria-label={external ? `${label} (opens in new tab)` : label}
                 >
                   <FooterSocialIcon id={id} className={`catalog-footer__social-icon catalog-footer__social-icon--${id}`} />
                 </a>

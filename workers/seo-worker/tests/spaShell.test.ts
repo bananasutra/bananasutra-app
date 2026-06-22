@@ -34,6 +34,9 @@ test("pathnameNeedsSpaShell: home and static exclusions", () => {
   assert.equal(pathnameNeedsSpaShell("/"), false);
   assert.equal(pathnameNeedsSpaShell("/assets/index-abc123.js"), false);
   assert.equal(pathnameNeedsSpaShell("/robots.txt"), false);
+  assert.equal(pathnameNeedsSpaShell("/feed.xml"), false);
+  assert.equal(pathnameNeedsSpaShell("/llms.txt"), false);
+  assert.equal(pathnameNeedsSpaShell("/sitemap.xml"), false);
   assert.equal(pathnameNeedsSpaShell("/seo-metadata.json"), false);
 });
 
