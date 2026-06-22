@@ -122,7 +122,7 @@ function main() {
     push(p, { changefreq: 'weekly', priority: '0.9', lastmod: BUILD_LASTMOD })
   }
 
-  for (const p of ['/about', '/sutras', '/muses', '/quotes', '/manifesto']) {
+  for (const p of ['/about', '/sutras', '/muses', '/quotes', '/manifesto', '/privacy']) {
     push(p, { changefreq: 'monthly', priority: '0.8', lastmod: BUILD_LASTMOD })
   }
 

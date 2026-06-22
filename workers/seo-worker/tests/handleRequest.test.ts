@@ -114,3 +114,36 @@ test("deep SPA: origin already 200 → unchanged (human)", async () => {
   assert.equal(res.status, 200);
   assert.equal(await res.text(), body);
 });
+
+test("static root feed.xml: passthrough with atom content-type (human)", async () => {
+  const fetcher: typeof fetch = async (input) => {
+    const req = input instanceof Request ? input : new Request(input);
+    assert.equal(new URL(req.url).pathname, "/feed.xml");
+    return new Response("<feed></feed>", {
+      status: 200,
+      headers: { "content-type": "application/xml" },
+    });
+  };
+  const res = await handleRequest(new Request("https://example.com/feed.xml"), {
+    fetcher,
+  });
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get("content-type"), "application/atom+xml; charset=utf-8");
+  assert.equal(await res.text(), "<feed></feed>");
+});
+
+test("static root feed.xml: bots skip HTML rewrite", async () => {
+  const fetcher: typeof fetch = async () =>
+    new Response("<feed></feed>", {
+      status: 200,
+      headers: { "content-type": "application/xml" },
+    });
+  const res = await handleRequest(
+    new Request("https://example.com/feed.xml", {
+      headers: { "user-agent": "Twitterbot/1.0" },
+    }),
+    { fetcher },
+  );
+  assert.equal(res.status, 200);
+  assert.equal(await res.text(), "<feed></feed>");
+});

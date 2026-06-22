@@ -65,6 +65,7 @@
     <meta name="twitter:title" content="BANANASUTRA · Songs for a World Gone Bananas" />
     <meta name="twitter:description" content="BANANASUTRA — songs for a world gone bananas." />
     <meta name="twitter:image" content="https://bananasutra.com/og/site.png" />
+    <link rel="alternate" type="application/atom+xml" title="BANANASUTRA — new songs" href="https://bananasutra.com/feed.xml" />
     <link rel="preload" href="/fonts/fraunces-400.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/archivo-black-400.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/sora-400.woff2" as="font" type="font/woff2" crossorigin />
@@ -120,6 +121,22 @@
         }
       }
     </style>
+    <!-- Consent Mode v2 defaults — must execute before gtag initialises.
+         Reads stored consent from localStorage; unset = granted (portfolio default).
+         Decline explicitly on /privacy/. -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      var _bsConsent = null;
+      try { _bsConsent = localStorage.getItem('bs-consent'); } catch(e) {}
+      gtag('consent', 'default', {
+        analytics_storage: _bsConsent === 'denied' ? 'denied' : 'granted',
+        ad_storage:           'denied',
+        ad_user_data:         'denied',
+        ad_personalization:   'denied',
+        wait_for_update:      500
+      });
+    </script>
     <!-- Google Analytics 4 — deferred until after load + idle (R31). -->
     <script>
       (function () {

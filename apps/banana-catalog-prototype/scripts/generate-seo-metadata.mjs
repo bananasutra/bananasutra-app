@@ -272,6 +272,14 @@ function main() {
     routeEntry('Sitemap', 'Full sitemap of BANANASUTRA — all pages, all sutras, all ways to explore.', '/sitemap'),
   )
   addRoute(
+    '/privacy',
+    routeEntry(
+      'Privacy',
+      'How BANANASUTRA uses analytics cookies, what Bertrand chat stores, and how to opt out or request deletion.',
+      '/privacy',
+    ),
+  )
+  addRoute(
     '/style-guide',
     routeEntry(
       'Style guide · Shell',

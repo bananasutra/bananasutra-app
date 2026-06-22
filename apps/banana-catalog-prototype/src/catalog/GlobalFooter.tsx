@@ -331,6 +331,10 @@ export function GlobalFooter() {
           <Link to={canonicalPathForRoute('/sitemap')} className="catalog-footer__sitemap-link">
             SITEMAP
           </Link>
+          <span className="catalog-footer__meta-sep" aria-hidden> · </span>
+          <Link to={canonicalPathForRoute('/privacy')} className="catalog-footer__sitemap-link">
+            PRIVACY
+          </Link>
           {CATALOG_SNAPSHOT_DATE ? (
             <>
               <span className="catalog-footer__meta-sep" aria-hidden> · </span>

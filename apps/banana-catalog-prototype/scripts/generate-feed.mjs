@@ -115,7 +115,7 @@ function main() {
     .map(
       (entry) => `  <entry>
     <title>${escapeXml(entry.title)}</title>
-    <link href="${escapeXml(entry.link)}" rel="alternate" />
+    <link href="${escapeXml(entry.link)}" rel="alternate" type="text/html" />
     <id>${escapeXml(entry.id)}</id>
     <published>${entry.published}</published>
     <updated>${entry.updated}</updated>

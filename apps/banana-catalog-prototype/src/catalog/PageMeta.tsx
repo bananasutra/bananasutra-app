@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async'
-import { DEFAULT_DESC, DEFAULT_OG_IMAGE_URL, SITE, SITE_URL, publicTitle, padMetaDescription } from './pageMetaConstants'
+import { ATOM_FEED_TITLE, ATOM_FEED_URL, DEFAULT_DESC, DEFAULT_OG_IMAGE_URL, SITE, SITE_URL, publicTitle, padMetaDescription } from './pageMetaConstants'
 
 export interface PageMetaProps {
   title: string
@@ -50,6 +50,7 @@ export function PageMeta({ title, description, image, path, publishedAt, jsonLd 
       <meta name="twitter:image" content={ogImage} />
       {canonical ? <meta property="og:url" content={canonical} /> : null}
       {canonical ? <link rel="canonical" href={canonical} /> : null}
+      <link rel="alternate" type="application/atom+xml" title={ATOM_FEED_TITLE} href={ATOM_FEED_URL} />
       {publishedIso ? <meta property="article:published_time" content={publishedIso} /> : null}
       {publishedIso ? <meta property="og:updated_time" content={publishedIso} /> : null}
       {ldBlocks.map((block, i) => (

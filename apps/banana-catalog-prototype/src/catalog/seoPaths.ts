@@ -19,6 +19,7 @@ export const STATIC_SSG_INDEX_PATHS = [
   '/quotes',
   '/manifesto',
   '/sitemap',
+  '/privacy',
 ] as const
 
 /** Path for PageMeta canonical, `<Link to>`, and navigate targets. */

@@ -32,6 +32,7 @@ const LearnLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) =>
 const ListenLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.ListenLpPage })))
 const WatchLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.WatchLpPage })))
 const ManifestoPage = lazy(() => import('./catalog/ManifestoPage').then((m) => ({ default: m.ManifestoPage })))
+const PrivacyPage = lazy(() => import('./catalog/PrivacyPage').then((m) => ({ default: m.PrivacyPage })))
 const GITHUB_PROJECT_BASENAME = '/bananasutra-app'
 const BBB_CHAT_ENABLED =
   (import.meta.env.VITE_BBB_CHAT_ENABLED?.trim().toLowerCase() ?? (import.meta.env.DEV ? 'true' : 'false')) === 'true'
@@ -317,6 +318,14 @@ export default function App() {
             element={
               <RouteBoundary>
                 <SitemapPage />
+              </RouteBoundary>
+            }
+          />
+          <Route
+            path="/privacy"
+            element={
+              <RouteBoundary>
+                <PrivacyPage />
               </RouteBoundary>
             }
           />

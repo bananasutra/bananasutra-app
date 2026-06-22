@@ -106,6 +106,7 @@ const REQUIRED_SEO_PATHS = [
   '/quotes',
   '/manifesto',
   '/sitemap',
+  '/privacy',
   '/style-guide',
 ]
 
@@ -423,6 +424,9 @@ function main() {
   const feedEntries = (feedXml.match(/<entry>/g) || []).length
   if (feedEntries < 1) fail('feed.xml: expected at least one <entry>')
   if (feedEntries > 50) fail(`feed.xml: expected at most 50 entries, got ${feedEntries}`)
+  if (!feedXml.includes('rel="alternate" type="text/html"')) {
+    fail('feed.xml: entry links should include type="text/html"')
+  }
 
   const llmsTxt = fs.readFileSync(llmsPath, 'utf8')
   if (!llmsTxt.startsWith('# BANANASUTRA\n')) fail('llms.txt: missing H1 title')

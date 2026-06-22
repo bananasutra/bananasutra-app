@@ -19,8 +19,9 @@ export function useAnalyticsPageView() {
       isFirst.current = false
     }
 
+    const normalizedPath = pathname.length > 1 ? pathname.replace(/\/$/, '') : pathname
     window.gtag?.('event', 'page_view', {
-      page_path: pathname + search,
+      page_path: normalizedPath + search,
       page_location: window.location.href,
     })
   }, [pathname, search])
