@@ -5,6 +5,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { canonicalPathForRoute } from './seo-canonical-path.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const srcGen = path.join(__dirname, '../src/data/generated')
@@ -43,7 +44,7 @@ function songbookSlugFromRow(row) {
   return base || 'songbook'
 }
 
-/** @returns {string[]} sorted unique pathnames */
+/** @returns {string[]} sorted unique pathnames (canonical trailing-slash form) */
 export function listPrerenderRoutes() {
   const staticRoutes = [
     '/',
@@ -61,6 +62,7 @@ export function listPrerenderRoutes() {
     '/quotes',
     '/manifesto',
     '/sitemap',
+    '/privacy',
     '/style-guide',
   ]
 
@@ -93,7 +95,7 @@ export function listPrerenderRoutes() {
     routes.add(`/songs/${pathSlug}`)
   }
 
-  return [...routes].sort((a, b) => a.localeCompare(b))
+  return [...routes].sort((a, b) => a.localeCompare(b)).map((route) => canonicalPathForRoute(route))
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

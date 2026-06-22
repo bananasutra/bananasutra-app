@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import './BbbChatWidget.css'
 import { loadSongCatalogBrowse } from '../catalog/generatedData'
 import { toBbbPageContextPathname } from './notFoundRouting'
+import { trackBertrandOpen } from '../lib/analytics'
 import { registerBbbOpenListener } from './openEvent'
 import { openFooterContactPanel, isFooterContactHref } from '../catalog/footerContactConstants'
 import { BbbFeedbackForm } from './BbbFeedbackForm'
@@ -247,7 +248,12 @@ export function BbbChatWidget() {
         aria-expanded={open}
         aria-controls="bbb-widget-panel"
         aria-label={open ? 'Close Bertrand chat widget' : 'Open Bertrand chat widget'}
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={() => {
+          setOpen((prev) => {
+            if (!prev) trackBertrandOpen({ surface: 'floating_button' })
+            return !prev
+          })
+        }}
       >
         {toggleLabel}
       </button>

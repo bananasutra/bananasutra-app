@@ -53,6 +53,7 @@ export const SITE_NAV_DRAWER: readonly DrawerNavItem[] = [
   { kind: 'link', to: canonicalPathForRoute('/videos'), label: 'Videos', match: 'exact' },
   { kind: 'separator' },
   { kind: 'link', to: canonicalPathForRoute('/sitemap'), label: 'Sitemap', match: 'exact', muted: true },
+  { kind: 'link', to: canonicalPathForRoute('/privacy'), label: 'Privacy', match: 'exact', muted: true },
   {
     kind: 'link',
     to: '/#footer-contact-panel',

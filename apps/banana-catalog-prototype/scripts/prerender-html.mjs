@@ -28,9 +28,16 @@ function fail(msg) {
   process.exit(1)
 }
 
+/** Strip trailing slash for filesystem paths and React Router matching (canonical URLs keep the slash). */
+function normalizeRoutePath(pathname) {
+  if (pathname === '/') return pathname
+  return pathname.replace(/\/$/, '')
+}
+
 function distPathForRoute(pathname) {
-  if (pathname === '/') return path.join(distDir, 'index.html')
-  const clean = pathname.replace(/^\//, '')
+  const normalized = normalizeRoutePath(pathname)
+  if (normalized === '/') return path.join(distDir, 'index.html')
+  const clean = normalized.replace(/^\//, '')
   return path.join(distDir, clean, 'index.html')
 }
 
@@ -68,15 +75,17 @@ async function mapPool(items, fn, limit) {
 }
 
 function cacheKeyForRoute(pathname) {
-  if (pathname === '/') return '_index.json'
-  return `${pathname.replace(/^\//, '').replace(/\//g, '__')}.json`
+  const normalized = normalizeRoutePath(pathname)
+  if (normalized === '/') return '_index.json'
+  return `${normalized.replace(/^\//, '').replace(/\//g, '__')}.json`
 }
 
 function renderAllRoutes(routes) {
   fs.rmSync(prerenderCacheDir, { recursive: true, force: true })
   fs.mkdirSync(prerenderCacheDir, { recursive: true })
   const routesFile = path.join(prerenderCacheDir, 'routes.json')
-  fs.writeFileSync(routesFile, JSON.stringify(routes), 'utf8')
+  const routerRoutes = routes.map((route) => normalizeRoutePath(route))
+  fs.writeFileSync(routesFile, JSON.stringify(routerRoutes), 'utf8')
   const viteNodeBin = path.join(root, 'node_modules', '.bin', 'vite-node')
   if (!fs.existsSync(viteNodeBin)) {
     fail('vite-node not installed — run npm install in apps/banana-catalog-prototype')
@@ -101,7 +110,7 @@ async function main() {
   }
   const template = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8')
   let routes = listPrerenderRoutes()
-  if (PILOT_ONLY) routes = routes.filter((r) => PILOT_ROUTES.has(r))
+  if (PILOT_ONLY) routes = routes.filter((r) => PILOT_ROUTES.has(normalizeRoutePath(r)))
 
   const started = Date.now()
   console.log(`prerender-html: rendering ${routes.length} routes (single vite-node batch)…`)
@@ -110,7 +119,8 @@ async function main() {
   await mapPool(
     routes,
     async (route) => {
-      const { headHtml, bodyHtml } = readRenderedRoute(route)
+      const routerRoute = normalizeRoutePath(route)
+      const { headHtml, bodyHtml } = readRenderedRoute(routerRoute)
       const outPath = distPathForRoute(route)
       fs.mkdirSync(path.dirname(outPath), { recursive: true })
       const html = injectHtml(template, { headHtml, bodyHtml })

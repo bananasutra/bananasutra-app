@@ -8,7 +8,9 @@ import {
   experienceLpActive,
   siteNavItemActive,
   type DrawerNavItem,
+  type ExperienceLp,
 } from './siteNav'
+import { trackModeChanged, type AnalyticsMode } from '../lib/analytics'
 import { isFooterContactHref, openFooterContactPanel } from './footerContactConstants'
 import { ThemeToggle } from './ThemeToggle'
 import './DiscoverySearch.css'
@@ -21,6 +23,12 @@ export type GlobalHeaderProps = {
 
 function experienceLinkClass(active: boolean): string {
   return `global-header-experience__link${active ? ' is-active' : ''}`
+}
+
+function experienceLpToAnalyticsMode(id: ExperienceLp): AnalyticsMode {
+  if (id === 'listen') return 'listen'
+  if (id === 'watch') return 'watch'
+  return 'read'
 }
 
 function drawerLinkClass(active: boolean, muted?: boolean): string {
@@ -150,6 +158,14 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
 
   const closeMenu = () => setMenuOpen(false)
 
+  const onExperienceNavClick = (target: ExperienceLp) => {
+    const fromMode = activeLp ? experienceLpToAnalyticsMode(activeLp) : 'read'
+    const toMode = experienceLpToAnalyticsMode(target)
+    if (fromMode !== toMode) {
+      trackModeChanged({ from: fromMode, to: toMode, surface: 'header_nav' })
+    }
+  }
+
   return (
     <header ref={setHeaderRef} className="catalog-header catalog-header--fixed global-header global-header--v3">
       <div className="catalog-header-inner global-header-inner global-header__bar">
@@ -179,6 +195,7 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
                     to={item.to}
                     className={experienceLinkClass(active)}
                     aria-current={active ? 'page' : undefined}
+                    onClick={() => onExperienceNavClick(item.id)}
                   >
                     {item.label}
                   </Link>

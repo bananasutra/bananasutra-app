@@ -18,6 +18,7 @@ import { SutraDetailPage } from '../catalog/SutraDetailPage'
 import { StyleGuidePage } from '../catalog/StyleGuidePage'
 import { SitemapPage } from '../catalog/SitemapPage'
 import { ManifestoPage } from '../catalog/ManifestoPage'
+import { PrivacyPage } from '../catalog/PrivacyPage'
 import { SearchRedirect } from '../catalog/SearchRedirect'
 import { LegacyAboutSutraDetailRedirect } from '../catalog/LegacyAboutSutraDetailRedirect'
 import { NotFoundRoute } from '../catalog/NotFoundRoute'
@@ -49,6 +50,7 @@ export function AppPrerender({ location }: { location: string }) {
               <Route path="/muses" element={<AboutMusesPage />} />
               <Route path="/quotes" element={<AboutQuotesPage />} />
               <Route path="/manifesto" element={<ManifestoPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/sutras/:slug" element={<SutraDetailPage />} />
               <Route path="/about/sutras" element={<Navigate to="/sutras/" replace />} />
               <Route path="/about/muses" element={<Navigate to="/muses/" replace />} />

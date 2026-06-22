@@ -19,6 +19,7 @@ export const STATIC_SSG_INDEX_PATHS = new Set([
   '/quotes',
   '/manifesto',
   '/sitemap',
+  '/privacy',
 ])
 
 /** Path for canonical, sitemap `<loc>`, and internal links (trailing slash where GH Pages serves a directory). */
