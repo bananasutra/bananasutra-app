@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { AnalyticsConsentPanel } from '../features/consent/AnalyticsConsentPanel'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { canonicalPathForRoute } from './seoPaths'
@@ -89,16 +90,19 @@ export function PrivacyPage() {
               </p>
             </section>
 
+            <AnalyticsConsentPanel />
+
             <section className="privacy-page__section" aria-labelledby="privacy-rights-heading">
               <h2 id="privacy-rights-heading" className="privacy-page__section-title">
                 Your rights
               </h2>
               <p>
-                To opt out or request deletion, email{' '}
+                To decline analytics cookies, use the preference above. To request deletion of data we hold,
+                email{' '}
                 <a className="privacy-page__link" href="mailto:itsbananasutra@gmail.com">
                   itsbananasutra@gmail.com
-                </a>{' '}
-                or click &ldquo;No thanks&rdquo; on the cookie banner when it appears.
+                </a>
+                .
               </p>
             </section>
 
@@ -121,8 +125,8 @@ export function PrivacyPage() {
             </section>
           </div>
         </main>
-        <GlobalFooter />
       </div>
+      <GlobalFooter />
     </div>
   )
 }

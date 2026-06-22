@@ -122,15 +122,15 @@
       }
     </style>
     <!-- Consent Mode v2 defaults — must execute before gtag initialises.
-         Reads stored consent from localStorage so returning visitors
-         who already accepted skip the 'denied' phase entirely. -->
+         Reads stored consent from localStorage; unset = granted (portfolio default).
+         Decline explicitly on /privacy/. -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       var _bsConsent = null;
       try { _bsConsent = localStorage.getItem('bs-consent'); } catch(e) {}
       gtag('consent', 'default', {
-        analytics_storage: _bsConsent === 'granted' ? 'granted' : 'denied',
+        analytics_storage: _bsConsent === 'denied' ? 'denied' : 'granted',
         ad_storage:           'denied',
         ad_user_data:         'denied',
         ad_personalization:   'denied',

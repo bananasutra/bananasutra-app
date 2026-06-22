@@ -12,7 +12,6 @@ import { BbbChatWidget } from './bbb/BbbChatWidget'
 import { PlayerQueueRoot } from './catalog/playerQueue/PlayerQueueRoot'
 import { NotFoundRoute } from './catalog/NotFoundRoute'
 import { LegacyAboutSutraDetailRedirect } from './catalog/LegacyAboutSutraDetailRedirect'
-import { CookieConsent } from './features/consent/CookieConsent'
 
 const HomePortal = lazy(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
 const AboutPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutPage })))
@@ -164,7 +163,6 @@ export default function App() {
         <BootPrefetch />
         <NavigationLoadingBridge />
         <ScrollToTopOnNavigate />
-        <CookieConsent />
         <Routes>
           <Route
             path="/"
