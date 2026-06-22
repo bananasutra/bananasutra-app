@@ -4,6 +4,9 @@ export const DEFAULT_DESC =
   'BANANASUTRA — songs for a world gone bananas. Explore the catalog: browse songs by sutra, topic, intention, and sound.'
 export const SITE_URL = 'https://bananasutra.com'
 export const DEFAULT_OG_IMAGE_URL = 'https://bananasutra.com/og/site.png'
+export const ATOM_FEED_PATH = '/feed.xml'
+export const ATOM_FEED_TITLE = 'BANANASUTRA — new songs'
+export const ATOM_FEED_URL = `${SITE_URL}${ATOM_FEED_PATH}`
 
 /** Google-friendly snippet floor — keep copy aligned with `scripts/generate-seo-metadata.mjs`. */
 export const META_DESC_MIN_LEN = 100
