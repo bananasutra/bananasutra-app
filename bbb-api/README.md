@@ -101,6 +101,25 @@ npm run deploy
 
 **R50 route flattening (W-074):** `bbb-api` changes for flat `/sutras`, `/muses`, `/quotes` ship with the **final R50 production launch** (`r50-overhaul` → `staging` → `main`), not via an early Track 1 deploy. Early deploy would make Bertrand link to URLs that do not exist on bananasutra.com yet. CI deploys automatically on push to `main` when `bbb-api/**` changes (`.github/workflows/deploy-bbb-api.yml`).
 
+### Catalog data refresh (Bertrand library)
+
+Bertrand's song/track/video/songbook knowledge is **not** read from the live site at runtime. It is baked into `src/library-data.ts` at build time.
+
+After any Airtable snapshot refresh:
+
+```bash
+# From repo root — preferred (also runs slug/genre audits)
+npm run catalog:data
+```
+
+Or only the Worker injects:
+
+```bash
+npm run build:library
+```
+
+**Data-release checklist:** include `bbb-api/src/library-data.ts` in the same commit as `apps/banana-catalog-prototype/src/data/generated/*`. After `main` push, confirm GitHub Actions **Deploy BBB API** is green, then smoke-test: ask Bertrand "what's new?" and check titles match the newest `published_at` songs in the catalog.
+
 ---
 
 ## Command reference (daily use)
