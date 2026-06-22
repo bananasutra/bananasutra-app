@@ -24,6 +24,9 @@ export const SPA_PATH_PREFIXES: readonly string[] = [
 
 const RESERVED_ROOT_FILES = new Set([
   "/robots.txt",
+  "/feed.xml",
+  "/llms.txt",
+  "/sitemap.xml",
   "/favicon.ico",
   "/seo-metadata.json",
   "/404.html",

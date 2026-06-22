@@ -360,6 +360,24 @@ export function SitemapPage() {
                   </div>
                   <p className="sitemap-page__desc">Crawl directives and XML sitemap reference.</p>
                 </li>
+                <li className="sitemap-page__item">
+                  <div className="sitemap-page__row">
+                    <a href="/feed.xml" className="sitemap-page__link">
+                      Atom feed
+                    </a>
+                    <span className="sitemap-page__path">/feed.xml</span>
+                  </div>
+                  <p className="sitemap-page__desc">Subscribe to new song pages as they publish.</p>
+                </li>
+                <li className="sitemap-page__item">
+                  <div className="sitemap-page__row">
+                    <a href="/llms.txt" className="sitemap-page__link">
+                      llms.txt
+                    </a>
+                    <span className="sitemap-page__path">/llms.txt</span>
+                  </div>
+                  <p className="sitemap-page__desc">AI-oriented reading list for crawlers and language models.</p>
+                </li>
               </ul>
               <p className="sitemap-page__section-back">
                 <a href="#sitemap-page-top" className="sitemap-page__section-back-link">
