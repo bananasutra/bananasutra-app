@@ -327,7 +327,7 @@ function main() {
   const prerenderSample = path.join(distDir, 'songs/ego-ain-t-your-amigo/index.html')
   if (fs.existsSync(prerenderSample)) {
     const sampleHtml = fs.readFileSync(prerenderSample, 'utf8')
-    const rootM = /<div id="root">([\s\S]*)<\/div>\s*<\/body>/.exec(sampleHtml)
+    const rootM = /<div id="root">([\s\S]*?)<\/div>\s*<!-- bs-root-end -->/.exec(sampleHtml)
     const rootBody = rootM ? rootM[1] : ''
     if (!rootBody.includes('song-detail-title')) {
       fail('prerender sample: #root missing song-detail body (run prerender-html after vite build)')

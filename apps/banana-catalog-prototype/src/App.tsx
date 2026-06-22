@@ -150,6 +150,7 @@ export default function App() {
       : undefined
 
   useLayoutEffect(() => {
+    // Production: inline boot script removes splash after stylesheets load; keep fallback for dev.
     document.getElementById('app-boot-splash')?.remove()
   }, [])
 

@@ -174,14 +174,43 @@
     </script>
   </head>
   <body>
-    <div id="root">
-      <div id="app-boot-splash" aria-live="polite" aria-busy="true">
-        <div class="app-boot-splash__inner">
-          <p class="app-boot-splash__title">BANANASUTRA</p>
-          <div class="app-boot-splash__spinner" aria-hidden="true"></div>
-        </div>
+    <div id="app-boot-splash" aria-live="polite" aria-busy="true">
+      <div class="app-boot-splash__inner">
+        <p class="app-boot-splash__title">BANANASUTRA</p>
+        <div class="app-boot-splash__spinner" aria-hidden="true"></div>
       </div>
     </div>
+    <div id="root"></div>
+    <!-- bs-root-end -->
+    <script>
+      ;(function () {
+        function removeSplash() {
+          var el = document.getElementById('app-boot-splash')
+          if (el) el.remove()
+        }
+        var links = Array.prototype.slice.call(document.querySelectorAll('link[rel="stylesheet"]'))
+        var pending = links.filter(function (link) {
+          try {
+            return !link.sheet
+          } catch (e) {
+            return true
+          }
+        })
+        if (pending.length === 0) {
+          removeSplash()
+          return
+        }
+        var remaining = pending.length
+        function oneDone() {
+          remaining -= 1
+          if (remaining <= 0) removeSplash()
+        }
+        pending.forEach(function (link) {
+          link.addEventListener('load', oneDone, { once: true })
+          link.addEventListener('error', oneDone, { once: true })
+        })
+      })()
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

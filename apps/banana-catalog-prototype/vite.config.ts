@@ -29,6 +29,7 @@ export default defineConfig({
     strictPort: true,
   },
   build: {
+    manifest: true,
     rolldownOptions: {
       output: {
         // Match production chunk layout: keep Vite's CSS preload helper in jsx-runtime
