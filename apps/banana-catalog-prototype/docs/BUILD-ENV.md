@@ -33,6 +33,8 @@ npm run build:data --prefix "apps/banana-catalog-prototype"
 
 **One-shot habit after refreshing snapshots:** `npm run catalog:data:dev` from repo root (regenerates catalog + BBB library, then starts dev).
 
+**Full data-release + git workflow:** `docs/DATA-RELEASE-WORKFLOW.md`.
+
 ## Production deploy (static hosting)
 
 Vite emits fingerprinted assets under `dist/assets/` (e.g. `song_catalog-*.json`, `index-*.js`). Configure your host or CDN to serve those files with **long-lived immutable caching** (`Cache-Control: public, max-age=31536000, immutable` or equivalent). HTML (`index.html`) should stay short-cache or no-cache so clients pick up new hashed filenames after each deploy.

@@ -1,5 +1,5 @@
 ---
-description: Branch naming, merge subjects, and staging→main promotion for numbered releases. Includes R50 dual-track overhaul model.
+description: Branch naming, merge subjects, and staging→main promotion for numbered releases. Includes R50 dual-track overhaul model and data-release agent git defaults.
 alwaysApply: true
 ---
 
@@ -95,6 +95,8 @@ git checkout staging && git pull origin staging
 
 ## Data releases — catalog + Bertrand (agents)
 
+**Canonical checklist:** `apps/banana-catalog-prototype/docs/DATA-RELEASE-WORKFLOW.md` (end-to-end steps, commit scope, post-ship verification).
+
 Track 1 snapshot/catalog refreshes must update **both** the static site JSON and Bertrand's Worker library.
 
 1. From repo root: `npm run catalog:data` (runs `build_artifacts.py`, then `bbb-api` `build:library`, then slug/genre audits).
@@ -103,6 +105,20 @@ Track 1 snapshot/catalog refreshes must update **both** the static site JSON and
 4. After `main` push: confirm **Deploy BBB API** Actions workflow is green; smoke-test Bertrand with "what's new?" against newest `published_at` songs.
 
 Bertrand does **not** fetch live catalog JSON at runtime; stale `library-data.ts` = wrong "latest drops" even when the site is current.
+
+### Agent git execution (Banana default)
+
+When Banana completes local QA and asks to **ship / push a data update live** (or equivalent), **agents run the full Track 1 git flow** unless she says otherwise:
+
+1. `feat/r##-<scope>` from pulled `staging`
+2. Stage and commit per DATA-RELEASE-WORKFLOW.md (catalog JSON + `library-data.ts` + snapshots/pipelines in scope)
+3. Merge to `staging`, push `staging` and feat branch
+4. Merge `staging` → `main` with subject `release: merge staging (R## …)`, push `main`
+5. End on pulled `staging`; report commit SHAs and remind her to check Pages + Deploy BBB API Actions
+
+**Do not** stop after local commits when she asked to push live. **Do** stop before `main` if she only asked to prepare a branch, or if promotion would violate R50 guardrails (W-074 early BBB route ship, etc.).
+
+For non-data work, follow the general rule: ask before `staging` → `main` unless she explicitly requested production ship.
 
 ## Merge into `staging` (from feat) — normal Track 1 flow
 
