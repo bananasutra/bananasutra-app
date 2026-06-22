@@ -112,6 +112,14 @@ export function AboutContent() {
               cover art and videos, and built this app. 400+ songs, 2,000+ tracks, in 2 years. Not bragging, just
               clarifying: this whole thing is homemade, end to end.
             </p>
+            <p>
+              How the music gets made: lyrics first (all mine), then Suno generates backing tracks from those words and
+              style prompts, then I dub my voice on top, then visuals last. The{' '}
+              <a className="about-page__text-link" href="#colophon">
+                colophon below
+              </a>{' '}
+              has the full breakdown (lyrics, Suno, voice, cover art, and this app).
+            </p>
           </div>
         </section>
 

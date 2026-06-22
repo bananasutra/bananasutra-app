@@ -4,6 +4,7 @@ import songCatalogBrowseJson from '../data/generated/song_catalog_browse.json'
 import type { SongCatalogItem, TrackCatalogItem, YouTubeCatalogVideo } from './types'
 import { songCatalogLinkTo } from './songPaths'
 import { dedupeYoutubeVideosByVideoId } from './youtubeCatalogFlat'
+import { youtubeFormatIsLandscape16x9 } from './youtubeAspectRatio'
 import { pickTopTracksForListenLp } from './listenLpData'
 import {
   SUTRA_CONTEXT,
@@ -339,7 +340,10 @@ export function pickRandomHomeVideoTeasers(
   limit = HOME_VIDEO_TEASER_LIMIT,
 ): HomeVideoTeaser[] {
   const rows = dedupeYoutubeVideosByVideoId(flattenYoutubeVideos(youtubeByLyrics)).filter(
-    (v) => (v.url_slug || '').trim() && (v.video_id || '').trim(),
+    (v) =>
+      (v.url_slug || '').trim() &&
+      (v.video_id || '').trim() &&
+      youtubeFormatIsLandscape16x9(v.format),
   )
   return shuffleHomeVideoPool(rows)
     .slice(0, limit)

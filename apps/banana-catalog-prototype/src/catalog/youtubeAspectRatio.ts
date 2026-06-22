@@ -21,3 +21,10 @@ export function youtubeAspectRatioFromFormat(format?: string): string {
   if (raw.includes('square')) return '1 / 1'
   return '16 / 9'
 }
+
+/** True only for explicit landscape 16:9 labels (homepage featured video pool). */
+export function youtubeFormatIsLandscape16x9(format?: string): boolean {
+  const raw = (format || '').trim().toLowerCase()
+  if (!raw || raw.includes('/')) return false
+  return raw === '16:9' || raw === '16x9'
+}
