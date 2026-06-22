@@ -94,11 +94,17 @@ play_count >= 300  OR  like_count >= 5  →  determines membership in AT-TRACKS-
                                                    Use for long-tail metadata, embed permalinks,
                                                    and artwork fallbacks when building the catalog app.
   pipelines/sc/outputs/AT-EPS-v4.csv             Airtable-ready EPS table (includes ep_featured,
-                                                   ep_description, ep_songbook_title passthrough from snapshot)
+                                                   ep_description, ep_songbook_title passthrough from snapshot;
+                                                   track_titles = comma-separated SoundCloud track titles per EP)
   pipelines/sc/outputs/AT-PLAYLISTS-v4.csv       Airtable-ready PLAYLISTS table (set covers from
-                                                   sc_playlist_art_api.json first — re-run export after SC artwork changes)
+                                                   sc_playlist_art_api.json first — re-run export after SC artwork changes;
+                                                   track_titles = comma-separated SoundCloud track titles per playlist)
   pipelines/sc/outputs/SC-NEW-TRACKS-QA.csv      QA file for new tracks (matcher_hints column)
   pipelines/sc/outputs/SC-SYNC-REPORT.csv        drift flags vs LYRICS snapshot
+  pipelines/sc/outputs/SC-PLAYLIST-MEMBERSHIP.csv  long-form track↔playlist rows from
+                                                   full scrape (for split-base / no linked records)
+  pipelines/sc/outputs/SC-PLAYLIST-GAPS.csv        high-traction tracks missing from sutra songbooks,
+                                                   genre / Best Of playlists (curation queue)
   pipelines/sc/outputs/archive/YYYY-MM-DD/       dated copies per run
 """
 
@@ -108,6 +114,7 @@ import csv
 import json
 import os
 import re
+import unicodedata
 from collections import Counter, defaultdict
 from datetime import date, datetime
 from rapidfuzz import fuzz
@@ -245,6 +252,8 @@ OUT_EP_QA           = os.path.join(OUT_DIR, 'SC-NEW-EPS-QA.csv')
 # would lose manual fixes for tracks not yet in Airtable SC TRACKS snapshot.
 OUT_TRACK_QA_PERSIST = os.path.join(OUT_DIR, 'SC-TRACK-QA-CORRECTIONS.csv')
 OUT_SYNC            = os.path.join(OUT_DIR, 'SC-SYNC-REPORT.csv')
+OUT_PLAYLIST_MEMBERSHIP = os.path.join(OUT_DIR, 'SC-PLAYLIST-MEMBERSHIP.csv')
+OUT_PLAYLIST_GAPS     = os.path.join(OUT_DIR, 'SC-PLAYLIST-GAPS.csv')
 OUT_TRACKS_DATED    = os.path.join(ARCHIVE_DIR, f'AT-TRACKS-{RUN_DATE}.csv')
 OUT_TRACKS_FULL_DATED = os.path.join(ARCHIVE_DIR, f'AT-TRACKS-FULL-{RUN_DATE}.csv')
 OUT_EPS_DATED       = os.path.join(ARCHIVE_DIR, f'AT-EPS-{RUN_DATE}.csv')
@@ -253,6 +262,52 @@ OUT_PLAYLISTS_DATED = os.path.join(ARCHIVE_DIR, f'AT-PLAYLISTS-{RUN_DATE}.csv')
 # Filter thresholds
 MIN_PLAYS = 300
 MIN_LIKES = 5
+
+# Substrings (ascii-folded ep+track blob) that suggest a track belongs in a core songbook.
+# Keyed by Airtable songbook_id; playlist-name theme tokens are added automatically.
+SONGBOOK_THEME_ALIASES: dict[str, list[str]] = {
+    'G-02-REVO': [
+        'revolt now', 'revolution ring', 'rebel romance', 'what dissent looks like',
+        'revolution s lit', 'spit back the lies', 'no fear my dear',
+        'question the nation', 'defy vol', 'bloom past doom vol',
+    ],
+    'G-02-EGO': [
+        'ego gone loco', 'ego ain t your amigo', 'secondhand smoke', 'arrogant hearts',
+        'hey creeps',
+    ],
+    'G-02-CENS': ['censored', 'if we had but', 'but t the truth'],
+    'G-02-APES': ['apes gone wrong', 'grifters', 'bloom past doom'],
+    'G-02-MAXA': ['maxa', 'mama b c', 'make america humane', 'make america mine', 'maha', 'mawa', 'masa'],
+    'G-02-DUC': ['duck', 'shady', 'idiocracy', 'pedo nation', 'trump derangement'],
+    'G-02-CIRC': ['fotus', 'circus'],
+    'G-01-BERT': ['bertrand', 'ethical paradox', 'two things darling', 'oxymoron maze'],
+    'G-01-PEAC': ['peace', 'love of a dove', 'letter to my friend', 'never again', 'peace matters'],
+    'G-01-WHY': ['but t why', 'kids learn', 'shades of fools', 'muddy the water'],
+    'G-01-TRUT': ['naked truth', 'tell the truth', 'everybody knows'],
+    'G-04-DARE': ['dare to care', 'this is my quest', 'zero sum', 'hello oh no'],
+    'G-04-GOD': ['god etc', 'atheist tango', 'sing your own gospel', 'seminal bollocks'],
+    'G-04-KIND': ['kindness', 'broken whole'],
+    'G-06-CLOU': ['rainbows in the cloud', 'rainbow'],
+    'G-06-POET': ['lucille clifton', 'kiss a pulse', 'poet'],
+    'G-05-FLY': ['fly like water', 'lightly my darling'],
+    'G-05-WET': ['wet my friend', 'wet peaches', 'prickly peaches'],
+    'G-07-DEAT': ['death is nothing', 'easy death'],
+    'G-07-DOGS': ['blessed be the dogs', 'thank dogs'],
+    'G-03-FOOL': ['shades of fools', 'fools'],
+    'G-03-BJ': ['banana jesters', 'banana banger'],
+    'G-03-FANA': ['fanana club', 'fanana'],
+    'G-lang-FR': ['french', 'oui oui', 'sacrebleu', 'en vrai'],
+    'G-lang-RU': ['russian', 'vladimir vysotsky', 'echo song'],
+    'G-lang-ES': ['spanish', 'span k'],
+    'G-02-SIDE': ['sideration', 'sideration s calling', 'sky stood still'],
+}
+
+SONGBOOK_STOPWORDS = frozenset({
+    'now', 'the', 'my', 'etc', 'not', 'war', 'is', 'for', 'in', 'a', 'an', 'of', 'to',
+    'and', 'or', 'like', 'if', 'you', 'we', 'it', 'on', 'at', 'with', 'from', 'by', 'as',
+    'be', 'but', 'mon', 'oui', 'water', 'friend', 'gone', 'etc', 'care', 'dogs', 'fly',
+    'wet', 'poet', 'poetry', 'truth', 'why', 'god', 'kind', 'kindness', 'death', 'duck',
+})
 
 
 def engagement_rate_str_from_counts(plays: int, likes: int) -> str:
@@ -979,6 +1034,399 @@ def _ep_curation_from_snapshot(conf: dict) -> dict[str, str]:
     }
 
 
+def _parse_ep_track_number(raw: str) -> int | None:
+    """Numeric ep_track_number for sort order; None when missing or non-numeric."""
+    s = (raw or '').strip()
+    if not s:
+        return None
+    try:
+        return int(s)
+    except ValueError:
+        return None
+
+
+def _sorted_ep_track_entries(track_entries: list[dict]) -> list[dict]:
+    """EP member tracks in ep_track_number order, then scrape order."""
+
+    def _sort_key(entry: dict) -> tuple:
+        num = entry.get('num')
+        if num is not None:
+            return (0, num, entry.get('order', 0))
+        return (1, entry.get('order', 0), (entry.get('title') or '').lower())
+
+    return sorted(track_entries, key=_sort_key)
+
+
+def _format_ep_track_titles(track_entries: list[dict]) -> str:
+    """Comma-separated SoundCloud track titles in EP track-number order."""
+    return ', '.join(
+        e['title'] for e in _sorted_ep_track_entries(track_entries)
+        if (e.get('title') or '').strip()
+    )
+
+
+def _format_ep_track_ids(track_entries: list[dict]) -> str:
+    """Comma-separated track_id values parallel to track_titles on AT-EPS rows."""
+    return ', '.join(
+        e['track_id'] for e in _sorted_ep_track_entries(track_entries)
+        if (e.get('track_id') or '').strip()
+    )
+
+
+def _format_track_titles(tracks: list[str]) -> str:
+    """Comma-separated track titles (playlist membership order)."""
+    return ', '.join(t for t in tracks if (t or '').strip())
+
+
+def _format_track_ids_from_entries(track_entries: list[dict]) -> str:
+    """Comma-separated track_id values parallel to track_titles on AT-PLAYLISTS rows."""
+    return ', '.join(
+        e['track_id'] for e in track_entries
+        if (e.get('track_id') or '').strip()
+    )
+
+
+def _build_playlist_membership_rows(
+    tracks: list[dict],
+    playlist_url_for_name,
+) -> list[dict]:
+    """One row per track↔playlist link from the full scrape; unassigned tracks get one row."""
+    rows: list[dict] = []
+    for t in tracks:
+        tid = str(t.get('track_id', '') or '').strip()
+        playlists = [p.strip() for p in (t.get('playlist_names_clean') or '').split(',') if p.strip()]
+        plays = int(t.get('play_count', 0) or 0)
+        likes = int(t.get('like_count', 0) or 0)
+        base = {
+            'track_id': tid,
+            'track_title': (t.get('track_title') or '').strip(),
+            'sc_url': (t.get('sc_url') or '').strip(),
+            'ep_title': (t.get('ep_title') or '').strip(),
+            'ep_url': (t.get('ep_url') or '').strip(),
+            'play_count': t.get('play_count', ''),
+            'like_count': t.get('like_count', ''),
+            'engagement_rate': t.get('engagement_rate', ''),
+            'sutra': (t.get('sutra') or '').strip(),
+            'lyrics_title': (t.get('lyrics_title') or '').strip(),
+            'lyrics_id': normalize_lid(t.get('lyrics_id') or ''),
+            'playlist_count': t.get('playlist_count', '') or str(len(playlists)),
+            'in_airtable_import_set': (
+                'yes' if plays >= MIN_PLAYS or likes >= MIN_LIKES else 'no'
+            ),
+        }
+        if not playlists:
+            rows.append({**base, 'playlist_name': '', 'playlist_url': ''})
+            continue
+        for pl_name in playlists:
+            rows.append({
+                **base,
+                'playlist_name': pl_name,
+                'playlist_url': playlist_url_for_name(pl_name),
+            })
+    rows.sort(key=lambda r: (
+        r.get('playlist_name', '').lower(),
+        r.get('track_title', '').lower(),
+        r.get('track_id', ''),
+    ))
+    return rows
+
+
+def _genre_tokens_from_cell(raw: str) -> set[str]:
+    """Standard-genre tokens from a comma-separated Airtable genre cell."""
+    out: set[str] = set()
+    for g in re.split(r'[,;/|]+', raw or ''):
+        token = g.strip().upper()
+        if token in STANDARD_GENRES:
+            out.add(token)
+    return out
+
+
+def _genres_for_gap_match(track: dict) -> set[str]:
+    """Curator primary/secondary genres first; extracted genres as fallback."""
+    out = _genre_tokens_from_cell(track.get('primary_genre', ''))
+    out |= _genre_tokens_from_cell(track.get('secondary_genre', ''))
+    if out:
+        return out
+    return _genre_tokens_from_cell(track.get('extracted_genre', ''))
+
+
+def _primary_genre_for_best_of(track: dict) -> str:
+    """Single genre used to suggest genre (best of) membership — avoids multi-tag noise."""
+    pg = (track.get('primary_genre') or '').strip().upper()
+    if pg in STANDARD_GENRES:
+        return pg
+    extracted = _genre_tokens_from_cell(track.get('extracted_genre', ''))
+    if len(extracted) == 1:
+        return next(iter(extracted))
+    raw = (track.get('extracted_genre') or '').strip()
+    if raw:
+        first = raw.split(',')[0].strip().upper()
+        if first in STANDARD_GENRES:
+            return first
+    return ''
+
+
+def _target_genre_from_playlist(pl: dict) -> str:
+    """Genre a genre (all) / genre (best of) playlist represents."""
+    gs = _genre_tokens_from_cell(pl.get('genres', ''))
+    if len(gs) == 1:
+        return next(iter(gs))
+    name = (pl.get('playlist_name') or '').strip()
+    for g in STANDARD_GENRES:
+        if name.upper().startswith(g):
+            return g
+    return ''
+
+
+def _track_qualifies_for_gap(track: dict) -> bool:
+    plays = int(track.get('play_count', 0) or 0)
+    likes = int(track.get('like_count', 0) or 0)
+    return plays >= MIN_PLAYS or likes >= MIN_LIKES
+
+
+def _track_playlist_sets(tracks: list[dict]) -> dict[str, set[str]]:
+    out: dict[str, set[str]] = {}
+    for t in tracks:
+        tid = str(t.get('track_id', '') or '').strip()
+        out[tid] = {
+            p.strip()
+            for p in (t.get('playlist_names_clean') or '').split(',')
+            if p.strip()
+        }
+    return out
+
+
+def _ascii_fold_lower(text: str) -> str:
+    folded = unicodedata.normalize('NFKD', text or '')
+    folded = folded.encode('ascii', 'ignore').decode().lower()
+    return re.sub(r'\s+', ' ', re.sub(r'[^a-z0-9 ]', ' ', folded)).strip()
+
+
+def _track_search_blob(track: dict) -> str:
+    return _ascii_fold_lower(
+        f"{track.get('ep_title', '')} {track.get('track_title', '')}"
+    )
+
+
+def _ep_key_for_sibling(track: dict) -> str:
+    """Stable EP identity for songbook sibling gaps; empty singles do not bucket together."""
+    url = (track.get('ep_url') or '').strip()
+    if url:
+        return f'url:{url}'
+    title = clean_ep_title((track.get('ep_title') or '').strip())
+    if title:
+        return f'title:{title}'
+    return ''
+
+
+def _theme_phrases_for_songbook(pl: dict) -> list[str]:
+    """Lowercase substring phrases used to match tracks to a core songbook theme."""
+    phrases: list[str] = []
+    sb = (pl.get('songbook_id') or '').strip()
+    if sb in SONGBOOK_THEME_ALIASES:
+        phrases.extend(SONGBOOK_THEME_ALIASES[sb])
+    m = re.match(r'^[^:]+:\s*(.+)$', (pl.get('playlist_name') or '').strip())
+    if m:
+        theme_raw = _ascii_fold_lower(m.group(1))
+        if theme_raw:
+            phrases.append(theme_raw)
+        for tok in theme_raw.split():
+            if len(tok) >= 4 and tok not in SONGBOOK_STOPWORDS:
+                phrases.append(tok)
+    seen: set[str] = set()
+    out: list[str] = []
+    for p in phrases:
+        p = p.strip()
+        if p and p not in seen:
+            seen.add(p)
+            out.append(p)
+    return out
+
+
+def _track_matches_songbook_theme(track: dict, phrases: list[str]) -> str:
+    if not phrases:
+        return ''
+    blob = _track_search_blob(track)
+    hits: list[str] = []
+    for p in phrases:
+        if len(p) < 6:
+            if re.search(r'\b' + re.escape(p) + r'\b', blob):
+                hits.append(p)
+        elif p in blob:
+            hits.append(p)
+    if not hits:
+        return ''
+    return 'theme: ' + ', '.join(hits[:3])
+
+
+def _songbook_member_ep_keys(
+    pl_name: str,
+    track_pls: dict[str, set[str]],
+    tracks_by_id: dict[str, dict],
+) -> tuple[set[str], Counter]:
+    """EP keys that already have ≥1 track in this songbook."""
+    ep_keys: set[str] = set()
+    counts: Counter = Counter()
+    for tid, pl_names in track_pls.items():
+        if pl_name not in pl_names:
+            continue
+        track = tracks_by_id.get(tid, {})
+        ep_key = _ep_key_for_sibling(track)
+        if not ep_key:
+            continue
+        ep_keys.add(ep_key)
+        counts[ep_key] += 1
+    return ep_keys, counts
+
+
+def _build_playlist_gap_rows(
+    tracks: list[dict],
+    playlists: list[dict],
+) -> list[dict]:
+    """Tracks with traction that belong in a songbook/genre playlist but aren't there yet."""
+    track_pls = _track_playlist_sets(tracks)
+    tracks_by_id = {
+        str(t.get('track_id', '') or '').strip(): t
+        for t in tracks
+        if (t.get('track_id') or '').strip()
+    }
+    rows: list[dict] = []
+
+    def _append(gap_type: str, track: dict, pl: dict, match_reason: str) -> None:
+        tid = str(track.get('track_id', '') or '').strip()
+        pl_name = (pl.get('playlist_name') or '').strip()
+        current = sorted(track_pls.get(tid, set()))
+        rows.append({
+            'gap_type': gap_type,
+            'target_playlist_name': pl_name,
+            'target_playlist_url': (pl.get('playlist_url') or '').strip(),
+            'target_playlist_type': (pl.get('sc_playlist_type') or '').strip(),
+            'songbook_id': (pl.get('songbook_id') or '').strip(),
+            'target_genre': _target_genre_from_playlist(pl),
+            'target_sutra': (pl.get('sutra') or '').strip(),
+            'track_id': tid,
+            'track_title': (track.get('track_title') or '').strip(),
+            'sc_url': (track.get('sc_url') or '').strip(),
+            'ep_title': (track.get('ep_title') or '').strip(),
+            'ep_url': (track.get('ep_url') or '').strip(),
+            'play_count': track.get('play_count', ''),
+            'like_count': track.get('like_count', ''),
+            'engagement_rate': track.get('engagement_rate', ''),
+            'sutra': (track.get('sutra') or '').strip(),
+            'primary_genre': (track.get('primary_genre') or '').strip(),
+            'secondary_genre': (track.get('secondary_genre') or '').strip(),
+            'current_playlist_count': str(len(current)),
+            'current_playlists': ', '.join(current),
+            'match_reason': match_reason,
+            'priority_score': int(track.get('play_count', 0) or 0),
+        })
+
+    empty_pl = {
+        'playlist_name': '', 'playlist_url': '', 'sc_playlist_type': '',
+        'songbook_id': '', 'genres': '', 'sutra': '',
+    }
+
+    for track in tracks:
+        if not _track_qualifies_for_gap(track):
+            continue
+        tid = str(track.get('track_id', '') or '').strip()
+        if not track_pls.get(tid):
+            _append('unassigned', track, empty_pl, 'track is in zero SC playlists')
+
+    for pl in playlists:
+        pl_type = (pl.get('sc_playlist_type') or '').strip()
+        pl_name = (pl.get('playlist_name') or '').strip()
+        if not pl_name:
+            continue
+
+        if pl_type == 'sutra (all)':
+            pl_sutra = (pl.get('sutra') or '').strip()
+            if not pl_sutra:
+                continue
+            for track in tracks:
+                if not _track_qualifies_for_gap(track):
+                    continue
+                tid = str(track.get('track_id', '') or '').strip()
+                if pl_name in track_pls.get(tid, set()):
+                    continue
+                if (track.get('sutra') or '').strip() == pl_sutra:
+                    _append(
+                        'sutra_all', track, pl,
+                        f'track sutra={pl_sutra} but missing from sutra (all) playlist',
+                    )
+            continue
+
+        if pl_type == 'sutra':
+            phrases = _theme_phrases_for_songbook(pl)
+            member_ep_keys, member_ep_counts = _songbook_member_ep_keys(
+                pl_name, track_pls, tracks_by_id)
+            pl_sutra = (pl.get('sutra') or '').strip()
+            for track in tracks:
+                if not _track_qualifies_for_gap(track):
+                    continue
+                tid = str(track.get('track_id', '') or '').strip()
+                if pl_name in track_pls.get(tid, set()):
+                    continue
+                theme_reason = _track_matches_songbook_theme(track, phrases)
+                ep_key = _ep_key_for_sibling(track)
+                ep_reason = ''
+                if ep_key and ep_key in member_ep_keys:
+                    ep_reason = (
+                        f'ep_sibling: {member_ep_counts[ep_key]} track(s) from same EP '
+                        f'already in songbook'
+                    )
+                if not theme_reason and not ep_reason:
+                    continue
+                track_sutra = (track.get('sutra') or '').strip()
+                if pl_sutra and track_sutra != pl_sutra and not theme_reason:
+                    # EP sibling only — allow (continuous play), but skip weak cross-sutra theme
+                    pass
+                reasons = [r for r in (theme_reason, ep_reason) if r]
+                _append(
+                    'sutra_songbook', track, pl,
+                    '; '.join(reasons),
+                )
+            continue
+
+        if pl_type not in ('genre (all)', 'genre (best of)'):
+            continue
+
+        target_genre = _target_genre_from_playlist(pl)
+        if not target_genre:
+            continue
+
+        for track in tracks:
+            if not _track_qualifies_for_gap(track):
+                continue
+            tid = str(track.get('track_id', '') or '').strip()
+            if pl_name in track_pls.get(tid, set()):
+                continue
+
+            if pl_type == 'genre (all)':
+                if target_genre not in _genres_for_gap_match(track):
+                    continue
+                _append(
+                    'genre_all', track, pl,
+                    f'track genres include {target_genre} but missing from genre (all) playlist',
+                )
+            else:
+                if _primary_genre_for_best_of(track) != target_genre:
+                    continue
+                _append(
+                    'genre_best_of', track, pl,
+                    f'primary genre {target_genre} + play≥{MIN_PLAYS}/like≥{MIN_LIKES} '
+                    f'but missing from Best Of playlist',
+                )
+
+    rows.sort(key=lambda r: (
+        -int(r.get('priority_score', 0) or 0),
+        r.get('gap_type', ''),
+        r.get('target_playlist_name', '').lower(),
+        r.get('track_title', '').lower(),
+    ))
+    return rows
+
+
 def _load_persisted_track_corrections(path: str) -> dict[str, dict]:
     if not os.path.exists(path):
         return {}
@@ -1671,7 +2119,7 @@ def main():
 
     ep_agg = defaultdict(lambda: {
         'ep_url': '', 'ep_created_at': '', 'ep_total_tracks': '',
-        'tracks': [], 'plays': 0, 'likes': 0, 'secs': 0,
+        'track_entries': [], 'plays': 0, 'likes': 0, 'secs': 0,
         'lyrics_ids': [], 'sutras': [], 'genres_std': [],
         'playlist_names': set(), 'artwork_url': '', 'artwork_lg_url': '',
     })
@@ -1702,7 +2150,15 @@ def main():
                 m, s = divmod(ds, 60)
                 dur = f"{m}:{s:02d}"
         d['secs'] += _duration_to_secs(dur)
-        d['tracks'].append(t.get('track_title', '') or raw.get('title', ''))
+        title = (t.get('track_title', '') or raw.get('title', '')).strip()
+        track_num = _parse_ep_track_number(
+            t.get('ep_track_number') or raw.get('ep_track_number') or '')
+        d['track_entries'].append({
+            'num': track_num,
+            'title': title,
+            'track_id': tid,
+            'order': len(d['track_entries']),
+        })
         pl_raw = clean_and_resolve_playlist_names(raw.get('playlist_names', ''))
         for pl in pl_raw.split(','):
             pl = pl.strip()
@@ -1719,15 +2175,15 @@ def main():
         if g:
             d['genres_std'].append(g)
 
-    # EP_HEADERS: 'TRACKs' linked-record column removed — Airtable linked
-    # record lookups are now the source of truth for EP → TRACK membership.
-    # lyrics_title added for at-a-glance scanning (looked up via lyrics_id
-    # against the canonicalized LYRICS snapshot).
+    # EP_HEADERS: linked-record TRACKs column removed — Airtable linked
+    # record lookups are the source of truth for EP → TRACK membership.
+    # track_titles / track_ids are comma-separated scrape manifests for split-base
+    # workflows where EP ↔ TRACK linked records are unavailable across bases.
     # ep_featured / ep_description / ep_songbook_title: passthrough from
     # clean/sc_eps snapshot so AT-EPS imports do not strip editorial curation.
     EP_HEADERS = [
         'ep_title', 'ep_url', 'ep_volume', 'ep_rating', 'sutra', 'genres', 'genres_full',
-        'ep_total_tracks', 'total_plays', 'total_likes', 'duration_total',
+        'ep_total_tracks', 'track_titles', 'track_ids', 'total_plays', 'total_likes', 'duration_total',
         'artwork_url', 'artwork_lg_url', 'lyrics_title', 'lyrics_id', 'ep_in_app',
         'ep_featured', 'ep_description', 'ep_songbook_title',
         'created_at', 'playlist_names_clean',
@@ -1798,7 +2254,9 @@ def main():
             'sutra':                final_sutra,
             'genres':               final_genres_std,
             'genres_full':          final_genres_full,
-            'ep_total_tracks':      d['ep_total_tracks'] or conf.get('ep_total_tracks') or str(len(d['tracks'])),
+            'ep_total_tracks':      d['ep_total_tracks'] or conf.get('ep_total_tracks') or str(len(d['track_entries'])),
+            'track_titles':         _format_ep_track_titles(d['track_entries']),
+            'track_ids':            _format_ep_track_ids(d['track_entries']),
             'total_plays':          d['plays'],
             'total_likes':          d['likes'],
             'duration_total':       _secs_to_hms(d['secs']),
@@ -1851,6 +2309,8 @@ def main():
                 'genres':               conf_data.get('genres', ''),
                 'genres_full':          conf_data.get('genres_full', conf_data.get('genres', '')),
                 'ep_total_tracks':      conf_data.get('ep_total_tracks', conf_data.get('track_count', '')),
+                'track_titles':         '',
+                'track_ids':            '',
                 'total_plays':          0,
                 'total_likes':          0,
                 'duration_total':       '0:00:00',
@@ -1901,7 +2361,7 @@ def main():
     print("\n[6] Building PLAYLISTS table...")
 
     pl_agg = defaultdict(lambda: {
-        'tracks': [], 'ep_titles': set(), 'plays': 0, 'likes': 0, 'secs': 0,
+        'track_entries': [], 'ep_titles': set(), 'plays': 0, 'likes': 0, 'secs': 0,
     })
 
     for t in out_tracks_full:
@@ -1910,7 +2370,10 @@ def main():
             if not pl:
                 continue
             d = pl_agg[pl]
-            d['tracks'].append(t.get('track_title', ''))
+            d['track_entries'].append({
+                'track_id': str(t.get('track_id', '') or '').strip(),
+                'title': (t.get('track_title') or '').strip(),
+            })
             ep = (t.get('ep_title') or '').strip()
             if ep:
                 d['ep_titles'].add(ep)
@@ -1918,12 +2381,14 @@ def main():
             d['likes'] += int(t.get('like_count', 0) or 0)
             d['secs']  += _duration_to_secs(t.get('duration', ''))
 
-    # PL_HEADERS: 'EPs' and 'TRACKs' linked-record columns removed — Airtable
-    # linked records are now the source of truth for PLAYLIST → EP/TRACK
-    # membership. Aggregates (track_count, total_plays, etc.) stay.
+    # PL_HEADERS: linked-record EPs/TRACKs columns removed — Airtable linked
+    # records are the source of truth for PLAYLIST → EP/TRACK membership.
+    # track_titles / track_ids are comma-separated scrape manifests for split-base
+    # workflows where PLAYLIST ↔ TRACK linked records are unavailable across bases.
+    # Aggregates (track_count, total_plays, etc.) stay.
     PL_HEADERS = [
         'playlist_name', 'playlist_url', 'sutra', 'genres',
-        'track_count', 'total_plays', 'total_likes', 'duration_total',
+        'track_count', 'track_titles', 'track_ids', 'total_plays', 'total_likes', 'duration_total',
         'artwork_url', 'artwork_lg_url', 'sc_playlist_type', 'scplaylist_in_app', 'songbook_id',
     ]
 
@@ -1976,7 +2441,10 @@ def main():
             'playlist_url':   pl_url,
             'sutra':          pl_sutra,
             'genres':         pl_genres,
-            'track_count':    len(d['tracks']),
+            'track_count':    len(d['track_entries']),
+            'track_titles':   _format_track_titles(
+                [e['title'] for e in d['track_entries']]),
+            'track_ids':      _format_track_ids_from_entries(d['track_entries']),
             'total_plays':    d['plays'],
             'total_likes':    d['likes'],
             'duration_total': _secs_to_hms(d['secs']),
@@ -1994,6 +2462,34 @@ def main():
         )
     else:
         print(f"  ✓ Playlists: {len(out_playlists)}")
+
+    def _playlist_url_for_name(pl_name: str) -> str:
+        conf = confirmed_playlists.get(pl_name, {})
+        return (
+            conf.get('playlist_url', '').strip()
+            or confirmed_playlists_by_url.get(pl_name, {}).get('playlist_url', '').strip()
+            or sc_name_to_url.get(pl_name, '')
+        )
+
+    membership_rows = _build_playlist_membership_rows(
+        out_tracks_full, _playlist_url_for_name)
+    n_unassigned = sum(1 for r in membership_rows if not (r.get('playlist_name') or '').strip())
+    n_links = len(membership_rows) - n_unassigned
+    print(
+        f"  ✓ Playlist membership: {n_links} track↔playlist links, "
+        f"{n_unassigned} tracks in no playlist"
+    )
+
+    gap_rows = _build_playlist_gap_rows(out_tracks_full, out_playlists)
+    gap_by_type = Counter(r['gap_type'] for r in gap_rows)
+    print(
+        f"  ✓ Playlist gaps: {len(gap_rows)} curation candidates "
+        f"(sutra_songbook={gap_by_type.get('sutra_songbook', 0)}, "
+        f"sutra_all={gap_by_type.get('sutra_all', 0)}, "
+        f"genre_all={gap_by_type.get('genre_all', 0)}, "
+        f"genre_best_of={gap_by_type.get('genre_best_of', 0)}, "
+        f"unassigned={gap_by_type.get('unassigned', 0)})"
+    )
 
     # ── 7. Write outputs ───────────────────────────────────────────────────────
     print("\n[7] Writing outputs...")
@@ -2027,6 +2523,32 @@ def main():
     _write_csv(OUT_PLAYLISTS_DATED, out_playlists, PL_HEADERS)
     print(f"  ✓ {os.path.basename(OUT_PLAYLISTS)}  ({len(out_playlists)} rows)")
     print(f"    + dated copy: {os.path.basename(OUT_PLAYLISTS_DATED)}")
+
+    MEMBERSHIP_HEADERS = [
+        'track_id', 'track_title', 'sc_url', 'ep_title', 'ep_url',
+        'play_count', 'like_count', 'engagement_rate', 'sutra',
+        'lyrics_title', 'lyrics_id', 'playlist_count', 'in_airtable_import_set',
+        'playlist_name', 'playlist_url',
+    ]
+    _write_csv(OUT_PLAYLIST_MEMBERSHIP, membership_rows, MEMBERSHIP_HEADERS)
+    print(
+        f"  ✓ {os.path.basename(OUT_PLAYLIST_MEMBERSHIP)}  "
+        f"({len(membership_rows)} rows — full scrape, do not import to Airtable)"
+    )
+
+    GAP_HEADERS = [
+        'gap_type', 'priority_score', 'target_playlist_name', 'target_playlist_url',
+        'target_playlist_type', 'songbook_id', 'target_genre', 'target_sutra',
+        'track_id', 'track_title', 'sc_url', 'ep_title', 'ep_url',
+        'play_count', 'like_count', 'engagement_rate',
+        'sutra', 'primary_genre', 'secondary_genre',
+        'current_playlist_count', 'current_playlists', 'match_reason',
+    ]
+    _write_csv(OUT_PLAYLIST_GAPS, gap_rows, GAP_HEADERS)
+    print(
+        f"  ✓ {os.path.basename(OUT_PLAYLIST_GAPS)}  "
+        f"({len(gap_rows)} rows — curation queue, do not import to Airtable)"
+    )
 
     if qa_out:
         QA_HEADERS = [
@@ -2154,6 +2676,8 @@ def main():
     if not (qa_needs_review or orphan_eps):
         print(f"  → Airtable import: AT-TRACKS-v4.csv (filtered tracks), AT-EPS-v4.csv, AT-PLAYLISTS-v4.csv")
         print(f"  → Keep AT-TRACKS-FULL-v4.csv out of Airtable — full scrape for app/catalog fallbacks only")
+        print(f"  → SC-PLAYLIST-MEMBERSHIP.csv — pivot/filter track↔playlist without linked records")
+        print(f"  → SC-PLAYLIST-GAPS.csv — filter gap_type=sutra_songbook for core songbook batch edits")
     print("=" * 60)
 
 
