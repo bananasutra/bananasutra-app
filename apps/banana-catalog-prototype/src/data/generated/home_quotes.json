@@ -1080,11 +1080,35 @@
     "quote_id": "Q-151"
   },
   {
+    "quote": "I’ll take the hope of a democratic future over the certainty of an authoritarian one, any day.",
+    "muse": "Banana Sutra",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "POOLITICS",
+    "quote_id": "Q-152"
+  },
+  {
     "quote": "Beauty will save the world.",
     "muse": "Fyodor Dostoyevski",
     "primary_sutra": "GROWsutra",
     "secondary_sutras": "GLOWsutra",
     "core_topic": "WISDOM",
     "quote_id": "Q-153"
+  },
+  {
+    "quote": "Improving things comes naturally to me.",
+    "muse": "\"Hedy Lamarr\n\"",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-154"
+  },
+  {
+    "quote": "Love is nothing but Joy with accompanying idea of external cause.",
+    "muse": "Baruch Spinoza",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-155"
   }
 ]

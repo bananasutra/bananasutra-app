@@ -1,4 +1,9 @@
 lyrics_id,lyrics_title,url_slug,lyrics_title_blank,slug_share_count
+L-425,Serial Blowers Vol.2,serial-blowers-vol2,0,1
+L-383,Seven Sutras Gone Banana,seven-sutras-gone-banana,0,1
+L-187,Please Pardon My French,please-pardon-my-french,0,1
+L-424,I Wanna Know,i-wanna-know,0,1
+L-321,Radio Static (The Dystopian Cabaret),radio-static-the-dystopian-cabaret,0,1
 L-423,Broken Whole (Encore),broken-whole-encore,0,1
 L-318,The Courage To Care,the-courage-to-care,0,1
 L-369,Camus Dit Oui,camus-dit-oui,0,1
@@ -11,7 +16,6 @@ L-390,"Lightly, My Darling",lightly-my-darling,0,1
 L-267,"Too Hard, My Friend",too-hard-my-friend,0,1
 L-359,"We’re Tiny Specks, Right?",we-re-tiny-specks-right,0,1
 L-90,Grifters,grifters,0,1
-L-420,Beautiful Things Don't Ask For Attention,beautiful-things-dont-ask-for-attention,0,1
 L-360,Lyrics Matter (FOOsutra) EDIT,lyrics-matter-foosutra-edit,0,1
 L-250,The Great Naked King,the-great-naked-king,0,1
 L-228,"So, What Is Racism?",so-what-is-racism,0,1
@@ -50,6 +54,7 @@ L-243,The Atheist Tango,the-atheist-tango,0,1
 L-177,Optics Of Cruelty (DEFY),optics-of-cruelty-defy,0,1
 L-219,Shameless (DEFY),shameless-defy,0,1
 L-275,Universal Currency,universal-currency,0,1
+L-420,Beautiful Things Don't Ask For Attention,beautiful-things-dont-ask-for-attention,0,1
 L-116,It's An Ethical Paradox,it-s-an-ethical-paradox,0,1
 L-227,Sing Your Own Gospel,sing-your-own-gospel,0,1
 L-274,"Two Things, Darling",two-things-darling,0,1
@@ -80,7 +85,6 @@ L-217,Shades of Fools (All I Know),shades-of-fools-all-i-know,0,1
 L-244,The Conquest of Happiness,the-conquest-of-happiness,0,1
 L-393,The Unhappiness Tango,the-unhappiness-tango,0,1
 L-282,We Live Not By Lies,we-live-not-by-lies,0,1
-L-321,Radio Static (The Dystopian Cabaret),radio-static-the-dystopian-cabaret,0,1
 L-212,Secret De Polichinelle,secret-de-polichinelle,0,1
 L-101,Hiding Secrets in Lies,hiding-secrets-in-lies,0,1
 L-268,Trauma Begets Trauma,trauma-begets-trauma,0,1
@@ -102,7 +106,6 @@ L-92,Hammy On Clyde,hammy-on-clyde,0,1
 L-332,Freedom To Lie Is The New Human Right,freedom-to-lie-is-the-new-human-right,0,1
 L-376,Maupassant,maupassant,0,1
 L-3,A Letter To My Friend (Never Again),a-letter-to-my-friend-never-again,0,1
-L-187,Please Pardon My French,please-pardon-my-french,0,1
 L-132,La Force Douce,la-force-douce,0,1
 L-307,WIN-WIN (Franglish Dub),win-win-dub,0,1
 L-252,The Love of A Dove,the-love-of-a-dove,0,1
@@ -156,6 +159,7 @@ L-300,Who Knows Where How Happiness Truly Grows,who-knows-where-how-happiness-tr
 L-96,"Hereby, I Cry",hereby-i-cry,0,1
 L-112,I Think I Need a Good Spank!ng (in Madrid),i-think-i-need-a-good-spank-ng-in-madrid,0,1
 L-75,F-BOMB,f-bomb-dub,0,1
+L-1,7 Dirty Words,7-dirty-words,0,1
 L-327,Love from the Future (The Hesse Song),love-from-the-future-the-hesse-song,0,1
 L-61,Do Panic Now,do-panic-now,0,1
 L-233,SS Means Sacred Sp3rm,ss-means-sacred-sp3rm,0,1
@@ -214,14 +218,14 @@ L-106,How Do Kids Learn Now?,how-do-kids-learn-now,0,1
 L-364,Bananasutra Cabaret,bananasutra-cabaret,0,1
 L-367,We Must Revolt,we-must-revolt,0,1
 L-370,Silent Followers,silent-followers,0,1
+L-371,Honest Is Best,honest-is-best,0,1
 L-378,This Is Not A Banana,this-is-not-a-banana,0,1
-L-383,The Seven Sutras of Banana,the-seven-sutras-of-banana,0,1
 L-385,Feel The Sway,feel-the-sway,0,1
 L-251,The Invisible Man In The Sky,the-invisible-man-in-the-sky,0,1
 L-222,Shush (How To Help A Bible Bro Grow Up),shush-how-to-help-a-bible-bro-grow-up,0,1
 L-357,Who Knows What Goes On?,who-knows-what-goes-on,0,1
 L-12,AI Fair Use Manifesto,ai-fair-use-manifesto,0,1
-L-144,Like A Criminal Strongman,like-a-criminal-strongman,0,1
+L-144,Like A Criminal Alien,like-a-criminal-alien,0,1
 L-39,"But Who Says ""Say My Name""",but-who-says-say-my-name,0,1
 L-145,Like A Dog In The Sky,like-a-dog-in-the-sky,0,1
 L-58,Dead Dogs Deets,dead-dogs-deets,0,1
@@ -248,7 +252,7 @@ L-343,Twatocracy (Encore et Encore),twatocracy-encore-et-encore,0,1
 L-422,STFU,stfu,0,1
 L-48,Creepy Con Meme,creepy-con-meme,0,1
 L-196,"Pro-life Means What, Honey?",pro-life-means-what-honey,0,1
-L-139,Learn The Signs,learn-the-signs,0,1
+L-139,Learn The Signs (Ego’s Masquerade),learn-the-signs,0,1
 L-15,Ain't No Kid,aint-no-kid,0,1
 L-272,Truth I Never Knew (Crushing on Bertrand),truth-i-never-knew-crushing-on-bertrand,0,1
 L-9,ABC Of Kindness,abc-of-kindness,0,1
@@ -297,7 +301,6 @@ L-358,Dream A Dog,dream-a-dog,0,1
 L-38,But Where Do Pigeons Go To Die?,but-where-do-pigeons-go-to-die,0,1
 L-402,The Sound of A Wondering Mind,the-sound-of-a-wondering-mind,0,1
 L-403,Suspended in Time,suspended-in-time,0,1
-L-1,7 Dirty Words,7-dirty-words,0,1
 L-235,Supreme Words (Whoop Whoop),supreme-words-whoop-whoop,0,1
 L-192,Poets Hats,poets-hats,0,1
 L-141,Let’s Play A Game Where We All Win! (If The Game Is Absurd),let-s-play-a-game-where-we-all-win-if-the-game-is-absurd,0,1
