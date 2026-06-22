@@ -10,7 +10,7 @@ Shared documentation lives in **tracked** paths (this file, **`apps/banana-catal
 
 ## Repo hygiene and safety
 
-- **Agents — git / releases:** **`.cursor/rules/r50-git-guardrails.mdc`** (always applied) — Track 1 (prod) vs Track 2 (redesign on `r50-overhaul` / stage.bananasutra.com); forbidden merges; ask before `main`. Commands and merge subjects: **`.cursor/rules/git-release-workflow.mdc`**. Production merges must use subject `release: merge staging (<scope>)` — not Git’s default `Merge branch 'staging'`.
+- **Agents — git / releases:** **`.cursor/rules/r50-git-guardrails.mdc`** (always applied) — Track 1 (prod) vs Track 2 (redesign on `r50-overhaul` / stage.bananasutra.com); forbidden merges; ask before `main`. Commands and merge subjects: **`.cursor/rules/git-release-workflow.mdc`**. **Data releases:** **`apps/banana-catalog-prototype/docs/DATA-RELEASE-WORKFLOW.md`** — agents handle branch/commit/push when Banana asks to ship live. Production merges must use subject `release: merge staging (<scope>)` — not Git’s default `Merge branch 'staging'`.
 - **Optional — paste into Cursor User Rules** (applies outside this repo too):  
   `BANANASUTRA: feat/r#-<scope>` branches; ask before `staging → main`; production merge subject must be `release: merge staging (<scope>)` (first line only — GitHub Actions); never `Merge branch 'staging'`.
 - Root `.gitignore` is the authoritative ignore policy for this workspace.
@@ -44,4 +44,4 @@ First-time install for the app:
 npm install --prefix "apps/banana-catalog-prototype"
 ```
 
-More detail: `apps/banana-catalog-prototype/README.md` and `apps/banana-catalog-prototype/docs/BUILD-ENV.md`.
+More detail: `apps/banana-catalog-prototype/README.md`, `apps/banana-catalog-prototype/docs/BUILD-ENV.md`, and **`apps/banana-catalog-prototype/docs/DATA-RELEASE-WORKFLOW.md`** (full data-release + git checklist for agents and humans).

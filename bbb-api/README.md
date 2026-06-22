@@ -112,6 +112,8 @@ After any Airtable snapshot refresh:
 npm run catalog:data
 ```
 
+**Full checklist (local QA through git ship):** `../apps/banana-catalog-prototype/docs/DATA-RELEASE-WORKFLOW.md`. Agents commit and push when Banana asks to ship live.
+
 Or only the Worker injects:
 
 ```bash

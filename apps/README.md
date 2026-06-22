@@ -11,12 +11,12 @@ This folder isolates app prototyping from Airtable snapshot/pipeline tooling.
 From **`BANANASUTRA-app`** (parent of `apps/`), the root `package.json` defines:
 
 ```bash
-npm run catalog:data      # regenerate JSON only
+npm run catalog:data      # catalog JSON + bbb-api library-data.ts + audits
 npm run catalog:dev       # Vite dev server only
 npm run catalog:data:dev  # data, then dev
 ```
 
-See `banana-catalog-prototype/README.md` for full notes (including that `build:data` does not keep `localhost` alive; only `dev` does).
+See `banana-catalog-prototype/docs/DATA-RELEASE-WORKFLOW.md` for the full snapshot → ship checklist (agents handle git when Banana asks to push live).
 
 ## Why This Layout
 

@@ -31,12 +31,13 @@ See:
 
 - `docs/PHASED-ROADMAP.md`
 - `docs/BUILD-ENV.md`
+- **`docs/DATA-RELEASE-WORKFLOW.md`** — snapshot → catalog → Bertrand → git ship (agents run commits/push when Banana asks to push live)
 
 ## Cheatsheet (from repo root)
 
 All commands below assume your shell’s current directory is **`BANANASUTRA-app`** (the repo root: the folder that contains `apps/` and the root `package.json`). They are shortcuts defined in that root `package.json`.
 
-**`build:data` only regenerates JSON** (from the latest Airtable snapshot CSVs). It does **not** start a web server.
+**`build:data` only regenerates JSON** (from the latest Airtable snapshot CSVs). Root **`npm run catalog:data`** also regenerates **`bbb-api/src/library-data.ts`** (Bertrand). It does **not** start a web server. Full ship checklist: **`docs/DATA-RELEASE-WORKFLOW.md`**.
 
 **SC catalog fallbacks** (no primary SC EP on the lyrics row): **`data/sc_catalog_listen_overrides.csv`** (optional) → **`pipelines/sc/outputs/AT-TRACKS-FULL-v4.csv`** → title match on **`pipelines/sc/raw/bananasutra_sc_export.csv`**. Re-scrape / rebuild pipelines when joins or SoundCloud titles change, then `npm run catalog:data`. (Optional local notes: `_docs/runbooks/CATALOG-DATA-CYCLE-CHEATSHEET.md` — that folder is gitignored; see repo root `README.md`.)
 
