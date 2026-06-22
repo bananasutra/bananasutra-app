@@ -27,9 +27,11 @@ import {
   persistentGesturePlayWindowActive,
 } from './persistentGesturePlay'
 import {
+  PERSISTENT_SC_PRIMER_URL,
   resetAndPrimePersistentSc,
   requestPersistentScLoad,
   requestPersistentScLoadSync,
+  shouldRemountPersistentScFromPrimer,
 } from './persistentScBootstrap'
 import type { PersistentScPlayerApi } from './persistentScPlayerContext'
 import { usePersistentScBootstrap } from './usePersistentScBootstrap'
@@ -255,7 +257,11 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
       void loadSoundCloudWidgetApi()
       if (autoPlay) markPersistentGesturePlayWindow()
 
-      if (remount) {
+      const leavingPrimer =
+        shouldRemountPersistentScFromPrimer(trimmed) ||
+        (bootstrapUrl === PERSISTENT_SC_PRIMER_URL && trimmed !== PERSISTENT_SC_PRIMER_URL)
+
+      if (remount || leavingPrimer) {
         widgetRefInternal.current = null
         widgetRef.current = null
         scRef.current = null
@@ -277,10 +283,11 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
       if (!iframeMounted || !widget) {
         loadedUrlRef.current = trimmed
         if (autoPlay) pendingGesturePlayRef.current = true
+        const needsRemount = leavingPrimer || (sameAsBootstrap && iframeMounted)
         if (autoPlay) {
-          requestPersistentScLoadSync(trimmed, { autoPlay, remount: sameAsBootstrap && iframeMounted })
+          requestPersistentScLoadSync(trimmed, { autoPlay, remount: needsRemount })
         } else {
-          requestPersistentScLoad(trimmed, { autoPlay, remount: sameAsBootstrap && iframeMounted })
+          requestPersistentScLoad(trimmed, { autoPlay, remount: needsRemount })
         }
         return
       }

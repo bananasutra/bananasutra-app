@@ -1,6 +1,7 @@
 import { useEffect, useMemo, type MutableRefObject, type ReactNode, type RefObject } from 'react'
 import type { PersistentScPlayerApi } from '../persistentPlayer/persistentScPlayerContext'
 import { primePersistentScIframe } from '../persistentPlayer/persistentScBootstrap'
+import { usePlaybackWakeLock } from '../persistentPlayer/usePlaybackWakeLock'
 import { loadSoundCloudWidgetApi } from '../soundcloudWidgetApi'
 import { PersistentPlayerShell } from '../persistentPlayer/PersistentPlayerShell'
 import type { SoundCloudWidget } from '../soundcloudWidgetApi'
@@ -42,6 +43,8 @@ export function PlayerQueueProvider({
     primePersistentScIframe()
     void loadSoundCloudWidgetApi()
   }, [usePersistentPlayback])
+
+  usePlaybackWakeLock(engine.state.playing, usePersistentPlayback)
 
   useWirePersistentPlayer(persistentApiRef, engine.wirePersistentPlayer, usePersistentPlayback)
 
