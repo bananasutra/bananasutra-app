@@ -1,2 +1,8 @@
 /*
   X-Robots-Tag: noindex, nofollow
+
+/feed.xml
+  Content-Type: application/atom+xml; charset=utf-8
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8

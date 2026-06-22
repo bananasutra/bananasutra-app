@@ -7,6 +7,7 @@ import { parseCdnCgiImageRequest } from "./cfImagePassThrough.ts";
 import { rewriteHtmlMetadata } from "./metaRewriter.ts";
 import { getRouteMeta, getSeoMetadata, normalizePathnameForLookup } from "./seoMetadata.ts";
 import { requestMayNeedSpaShell } from "./spaShell.ts";
+import { staticRootContentType } from "./staticRootFiles.ts";
 
 function isHtmlResponse(response: Response): boolean {
   const ct = response.headers.get("content-type") ?? "";
@@ -100,6 +101,21 @@ export async function handleRequest(
   }
 
   const botPattern = detectBotPattern(request.headers.get("user-agent"));
+  const staticCt = staticRootContentType(url.pathname);
+  if (staticCt && (request.method === "GET" || request.method === "HEAD")) {
+    const originResponse = await fetcher(request);
+    if (!originResponse.ok) {
+      return originResponse;
+    }
+    const headers = new Headers(originResponse.headers);
+    headers.set("content-type", staticCt);
+    return new Response(request.method === "HEAD" ? null : originResponse.body, {
+      status: originResponse.status,
+      statusText: originResponse.statusText,
+      headers,
+    });
+  }
+
   const tryShell = requestMayNeedSpaShell(request);
 
   if (!tryShell) {
