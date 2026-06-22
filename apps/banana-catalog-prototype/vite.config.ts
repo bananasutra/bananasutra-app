@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { catalogDataDevPlugin } from './vite.catalog-data-plugin'
+import { seoArtifactsDevPlugin } from './vite.seo-artifacts-dev-plugin'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const generatedDir = path.resolve(__dirname, 'src/data/generated')
@@ -14,7 +15,7 @@ export default defineConfig({
   // Custom-domain production deploy runs at origin root (https://bananasutra.com),
   // so deep-link recovery from 404.html requires absolute asset URLs.
   base: '/',
-  plugins: [react(), catalogDataDevPlugin(generatedDir)],
+  plugins: [react(), catalogDataDevPlugin(generatedDir), seoArtifactsDevPlugin(__dirname)],
   server: {
     // Listen on LAN (0.0.0.0), not only localhost — phones / other machines on the same network can open the dev URL.
     host: true,

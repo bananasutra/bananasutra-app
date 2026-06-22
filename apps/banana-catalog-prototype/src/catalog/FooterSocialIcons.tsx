@@ -23,16 +23,9 @@ const SUNO_D =
 const GITHUB_D =
   'M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z'
 
-// Standard RSS mark: dot + two quarter arcs (no background rect).
-function RssSvg(props: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" {...props} aria-hidden>
-      <circle cx="6.18" cy="17.82" r="2.18" />
-      <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83C19.56 11.85 11.15 3.44 4 3.44z" />
-      <path d="M4 10.1v2.83c3.4 0 6.15 2.76 6.15 6.15h2.83c0-4.96-4.02-8.98-8.98-8.98z" />
-    </svg>
-  )
-}
+// RSS path: Simple Icons (CC0), https://github.com/simple-icons/simple-icons — full 24×24 mark.
+const RSS_D =
+  'M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415a1.65 1.65 0 0 0 0 3.3 1.65 1.65 0 0 0 0-3.3zM15.909 24h-4.665c0-6.169 5.078-11.158 11.194-11.158V8.175c-8.007 0-14.5 6.494-14.5 14.5H15.91z'
 
 function BrandSvg({ viewBox, d, ...props }: { viewBox: string; d: string } & IconProps) {
   return (
@@ -57,7 +50,7 @@ export function FooterSocialIcon({ id, ...props }: { id: FooterSocialId } & Icon
     case 'github':
       return <BrandSvg viewBox="0 0 16 16" d={GITHUB_D} {...props} />
     case 'rss':
-      return <RssSvg {...props} />
+      return <BrandSvg viewBox="0 0 24 24" d={RSS_D} {...props} />
     default: {
       const _exhaustive: never = id
       return _exhaustive
