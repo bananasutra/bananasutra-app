@@ -29,9 +29,9 @@ or the explicit form:
 npm run build:data --prefix "apps/banana-catalog-prototype"
 ```
 
-`catalog:data` only writes JSON under `src/data/generated/`. It does **not** start the Vite dev server; use `npm run catalog:dev` (root) or `npm run dev --prefix "apps/banana-catalog-prototype"` when you want `localhost:5174` (or the port printed in the terminal if 5174 is taken).
+`catalog:data` writes JSON under `src/data/generated/` **and** regenerates Bertrand's embedded catalog in `bbb-api/src/library-data.ts` (`npm run build:library` in `bbb-api/`). Ship both when committing a data release so the Worker knows new songs, tracks, and latest drops. It does **not** start the Vite dev server; use `npm run catalog:dev` (root) or `npm run dev --prefix "apps/banana-catalog-prototype"` when you want `localhost:5174` (or the port printed in the terminal if 5174 is taken).
 
-**One-shot habit after refreshing snapshots:** `npm run catalog:data:dev` from repo root (regenerates data, then starts dev).
+**One-shot habit after refreshing snapshots:** `npm run catalog:data:dev` from repo root (regenerates catalog + BBB library, then starts dev).
 
 ## Production deploy (static hosting)
 
