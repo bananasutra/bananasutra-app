@@ -106,6 +106,7 @@ const REQUIRED_SEO_PATHS = [
   '/quotes',
   '/manifesto',
   '/sitemap',
+  '/privacy',
   '/style-guide',
 ]
 
