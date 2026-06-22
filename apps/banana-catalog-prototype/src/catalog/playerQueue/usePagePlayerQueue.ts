@@ -182,8 +182,8 @@ export function usePagePlayerQueue(
             const api = persistentApiRef.current
             const widgetReady = Boolean(api?.widgetRef.current)
             if (widgetReady && api) {
+              // beginWidgetLoad handles autoplay; syncPlayInGesture here would replay primer audio (#116).
               api.loadTrack(scUrl, { autoPlay: true, remount: false })
-              api.syncPlayInGesture()
             } else if (persistentScIframeIsWarm()) {
               requestPersistentScLoadSync(scUrl, { autoPlay: true, remount: false })
               api?.syncPlayInGesture()

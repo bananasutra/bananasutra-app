@@ -56,6 +56,18 @@ export function persistentScIframeIsWarm(): boolean {
   return bootstrapState.url != null
 }
 
+/** True while the hidden warm-up iframe still points at the catalog primer track. */
+export function persistentScBootstrapIsPrimer(): boolean {
+  return bootstrapState.url === PERSISTENT_SC_PRIMER_URL
+}
+
+/** First user track after primer warm-up must remount the iframe (R56 #116). */
+export function shouldRemountPersistentScFromPrimer(scUrl: string): boolean {
+  const trimmed = scUrl.trim()
+  if (!trimmed || trimmed === PERSISTENT_SC_PRIMER_URL) return false
+  return persistentScBootstrapIsPrimer()
+}
+
 /** Mount hidden SC iframe early so Play All can widget.load + play inside the click handler. */
 export function primePersistentScIframe(): void {
   if (bootstrapState.url != null) return
@@ -92,8 +104,12 @@ export function requestPersistentScLoad(scUrl: string, opts: PersistentScLoadReq
   const trimmed = scUrl.trim()
   if (!trimmed) return
   const autoPlay = opts.autoPlay ?? false
-  const remount = opts.remount ?? false
+  let remount = opts.remount ?? false
   const coldStart = bootstrapState.url == null
+
+  if (shouldRemountPersistentScFromPrimer(trimmed)) {
+    remount = true
+  }
 
   if (remount && !coldStart) {
     setPersistentScBootstrap(trimmed, autoPlay, true)

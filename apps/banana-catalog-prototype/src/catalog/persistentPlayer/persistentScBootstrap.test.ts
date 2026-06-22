@@ -2,12 +2,14 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import {
   getPersistentScBootstrapSnapshot,
+  persistentScBootstrapIsPrimer,
   primePersistentScIframe,
   persistentScIframeIsWarm,
   requestPersistentScLoad,
   requestPersistentScLoadSync,
   resetAndPrimePersistentSc,
   resetPersistentScBootstrap,
+  shouldRemountPersistentScFromPrimer,
   subscribePersistentScBootstrap,
 } from './persistentScBootstrap'
 
@@ -76,4 +78,16 @@ test('resetPersistentScBootstrap clears bootstrap for dismiss/stop', () => {
   assert.equal(snap.url, null)
   assert.equal(snap.autoPlay, false)
   assert.equal(snap.generation, 0)
+})
+
+test('requestPersistentScLoad from primer warm-up remounts iframe for first user track', () => {
+  resetPersistentScBootstrap()
+  primePersistentScIframe()
+  assert.equal(persistentScBootstrapIsPrimer(), true)
+  requestPersistentScLoad(SC_URL, { autoPlay: true, remount: false })
+  const snap = getPersistentScBootstrapSnapshot()
+  assert.equal(snap.url, SC_URL)
+  assert.equal(snap.autoPlay, true)
+  assert.equal(snap.generation, 1)
+  assert.equal(shouldRemountPersistentScFromPrimer(SC_URL), false)
 })
