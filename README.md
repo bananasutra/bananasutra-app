@@ -35,7 +35,7 @@ npm run dev
 npm run catalog:data:dev
 ```
 
-- **`catalog:data`** / **`build:data`** runs Python and writes JSON under `apps/banana-catalog-prototype/src/data/generated/`. It does **not** start a web server.
+- **`catalog:data`** / **`build:data`** runs Python, writes JSON under `apps/banana-catalog-prototype/src/data/generated/`, and regenerates **`bbb-api/src/library-data.ts`** (Bertrand's catalog injects). Commit both trees on data releases; `bbb-api` auto-deploys from `main` when that file changes. It does **not** start a web server.
 - **`dev`** / **`catalog:dev`** starts Vite on **http://localhost:5173**. Keep that terminal open while you use the site.
 
 First-time install for the app:

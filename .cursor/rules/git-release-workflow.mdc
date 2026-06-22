@@ -93,6 +93,17 @@ git checkout staging && git pull origin staging
 - Imperative subjects: `feat(scope): …`, `fix(scope): …`, `chore(scope): …`.
 - Never commit `_docs/`, `.env`, or secrets.
 
+## Data releases — catalog + Bertrand (agents)
+
+Track 1 snapshot/catalog refreshes must update **both** the static site JSON and Bertrand's Worker library.
+
+1. From repo root: `npm run catalog:data` (runs `build_artifacts.py`, then `bbb-api` `build:library`, then slug/genre audits).
+2. Commit `apps/banana-catalog-prototype/src/data/generated/*` **and** `bbb-api/src/library-data.ts` together.
+3. If only catalog JSON changed but `library-data.ts` did not, something is wrong — re-run `npm run build:library --prefix bbb-api`.
+4. After `main` push: confirm **Deploy BBB API** Actions workflow is green; smoke-test Bertrand with "what's new?" against newest `published_at` songs.
+
+Bertrand does **not** fetch live catalog JSON at runtime; stale `library-data.ts` = wrong "latest drops" even when the site is current.
+
 ## Merge into `staging` (from feat) — normal Track 1 flow
 
 ```bash
