@@ -114,7 +114,8 @@ export function AboutContent() {
             </p>
             <p>
               How the music gets made: lyrics first (all mine), then Suno generates backing tracks from those words and
-              style prompts, then I dub my voice on top, then visuals last. The{' '}
+              style prompts, then I dub my voice on top, then cover art for SoundCloud releases (sometimes extended for
+              YouTube; music videos add more graphics on top). The{' '}
               <a className="about-page__text-link" href="#colophon">
                 colophon below
               </a>{' '}
@@ -152,7 +153,8 @@ export function AboutContent() {
             <div className="about-page__colophon-row">
               <dt className="about-page__colophon-label">Cover art &amp; videos</dt>
               <dd className="about-page__colophon-value">
-                Made by me using a mix of AI image tools, video editors, and imagination.
+                Cover art for SoundCloud releases, made by me with AI image tools and imagination. That artwork is
+                sometimes reused or extended for YouTube; music videos add more graphics, editing, and layers on top.
               </dd>
             </div>
             <div className="about-page__colophon-row">
