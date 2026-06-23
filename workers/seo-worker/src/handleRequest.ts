@@ -2,6 +2,7 @@
  * Worker fetch handler: SPA shell fix for GitHub Pages 404s + bot metadata rewrite.
  */
 
+import { catalogRedirectResponse } from "./catalogRedirects.ts";
 import { detectBotPattern } from "./botDetection.ts";
 import { parseCdnCgiImageRequest } from "./cfImagePassThrough.ts";
 import { rewriteHtmlMetadata } from "./metaRewriter.ts";
@@ -91,6 +92,12 @@ export async function handleRequest(
 ): Promise<Response> {
   const { fetcher } = deps;
   const url = new URL(request.url);
+
+  const catalogRedirect = catalogRedirectResponse(request);
+  if (catalogRedirect) {
+    return catalogRedirect;
+  }
+
   const cdnImage = parseCdnCgiImageRequest(url);
   if (cdnImage) {
     // Workers types omit `format: auto` and other URL-transform values; runtime accepts them.

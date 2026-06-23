@@ -1,0 +1,10 @@
+{
+  "_doc": "Manual slug/path renames. Add { from, to, reason } entries when a public URL changes. from: old path (no trailing slash). to: canonical target (trailing slash on index/detail routes). Consumed by: client SPA guard, generate-route-redirects.mjs (static HTML), seo-worker (301).",
+  "redirects": [
+    {
+      "from": "/songs/the-seven-sutras-of-banana",
+      "to": "/songs/seven-sutras-gone-banana/",
+      "reason": "L-383 slug rename (Seven Sutras Gone Banana)"
+    }
+  ]
+}

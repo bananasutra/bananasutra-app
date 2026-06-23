@@ -58,6 +58,7 @@ import { buildBrowsePathForFacet, CATALOG_BROWSE_PATH } from './urlState'
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { songRecordingJsonLd } from '../seo/jsonLd'
 import { PageMeta } from './PageMeta'
+import { NotFoundRoute } from './NotFoundRoute'
 import { songOgImageUrl } from './pageMetaConstants'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { SongThumbCard } from './SongThumbCard'
@@ -156,30 +157,13 @@ export function SongDetail() {
   const { slug = '' } = useParams()
   const trimmed = slug.trim()
   if (!trimmed || trimmed === 'null' || trimmed === 'undefined') {
-    return <SongDetailInvalidSlug urlSlug={trimmed} />
+    return <NotFoundRoute />
   }
   const lyricsId = lyricsIdFromSongUrlSlug(trimmed)
   if (!lyricsId) {
-    return <SongDetailInvalidSlug urlSlug={trimmed} />
+    return <NotFoundRoute />
   }
   return <SongDetailInner key={lyricsId} lyricsId={lyricsId} urlSlug={trimmed} />
-}
-
-function SongDetailInvalidSlug({ urlSlug }: { urlSlug: string }) {
-  return (
-    <div className="catalog catalog-page catalog-page--shell">
-      <PageMeta title="Song not found" path={urlSlug ? songCatalogPath('', urlSlug) : undefined} />
-      <div className="catalog-page__main">
-        <main id="main-content" className="song-detail song-detail--missing catalog-layout-shell">
-          <p className="song-detail-missing-title">No song for this link.</p>
-          <p className="song-detail-missing-hint">The link may be outdated or not in the current snapshot.</p>
-          <Link to={CATALOG_BROWSE_PATH} className="song-detail-back">
-            ← Back to Songs
-          </Link>
-        </main>
-      </div>
-    </div>
-  )
 }
 
 /** Shell: canonical slug redirect, missing-song UI, and chrome sync — no hooks after `if (!detail)`. */
@@ -289,22 +273,7 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
   }
 
   if (!detail) {
-    return (
-      <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
-        {pageMeta}
-        <GlobalHeader ref={headerRef} />
-        <div className="catalog-page__main">
-          <main id="main-content" className="song-detail song-detail--missing catalog-layout-shell">
-            <p className="song-detail-missing-title">No song for this link.</p>
-            <p className="song-detail-missing-hint">The link may be outdated or not in the current snapshot.</p>
-            <Link to={listBreadcrumbHref} className="song-detail-back">
-              ← Back to {listBreadcrumbLabel}
-            </Link>
-          </main>
-        </div>
-        <GlobalFooter />
-      </div>
-    )
+    return <NotFoundRoute />
   }
 
   return (

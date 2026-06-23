@@ -13,6 +13,7 @@ import { emptyFilterState, type SongCatalogItem, type SongbookMemberSong } from 
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { musicAlbumJsonLd, songbookItemListJsonLd } from '../seo/jsonLd'
 import { renderPageMeta } from './usePageMeta'
+import { NotFoundRoute } from './NotFoundRoute'
 import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { SongThumbCard } from './SongThumbCard'
@@ -259,21 +260,16 @@ export function SongbookPage() {
     )
   }
 
+  if (!songbook) {
+    return <NotFoundRoute />
+  }
+
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
       {pageMeta}
       <GlobalHeader ref={headerRef} />
       <div className="catalog-page__main">
-        {!songbook ? (
-          <main id="main-content" className="songbooks-page songbooks-page--missing">
-            <p className="songbooks-page__missing-title">Songbook not found.</p>
-            <p className="songbooks-page__missing-sub">The link may be outdated or this songbook has not been generated yet.</p>
-            <Link to={canonicalPathForRoute('/songbooks')} className="songbooks-page__back-link">
-              ← Back to songbooks
-            </Link>
-          </main>
-        ) : (
-          <main id="main-content" className="songbooks-page songbooks-page--detail catalog-layout-shell">
+        <main id="main-content" className="songbooks-page songbooks-page--detail catalog-layout-shell">
             <nav className="catalog-breadcrumbs" aria-label="Breadcrumb">
               <Link to="/" className="catalog-breadcrumbs__link">
                 Home
@@ -468,7 +464,6 @@ export function SongbookPage() {
               </section>
             ) : null}
           </main>
-        )}
       </div>
       <GlobalFooter />
     </div>
