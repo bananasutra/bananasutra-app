@@ -3,6 +3,7 @@ import type { TrackSortMode, TrackCatalogItem, TracksFilterState } from '../type
 import {
   trackCatalogPlayAllStarted,
   trackCatalogPlayAllStopped,
+  trackCatalogPlayCompleted,
   trackCatalogPlayStarted,
   trackCatalogQueueAdvanced,
   trackCatalogQueueSkipped,
@@ -92,6 +93,11 @@ export function useTracksPagePlayerQueue(args: UseTracksPagePlayerQueueArgs): {
           direction,
           source: playAllActive ? 'tracks_filter' : 'single',
         })
+      },
+      onTrackCompleted: (track) => {
+        const row = findCatalogTrack(track.track_id)
+        if (!row) return
+        trackCatalogPlayCompleted(row, 'tracks_filter')
       },
     }),
     [findCatalogTrack, filtersRef],

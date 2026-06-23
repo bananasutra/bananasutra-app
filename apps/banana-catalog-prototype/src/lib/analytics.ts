@@ -28,6 +28,8 @@ export type AnalyticsEventName =
   | 'filter_applied'
   | 'filter_cleared'
   | 'collection_saved'
+  | 'form_submit'
+  | 'play_completed'
 
 export type AnalyticsMode = 'read' | 'listen' | 'watch'
 
@@ -221,6 +223,27 @@ export function trackBertrandOpen(p: {
   sutra?: string
 }): void {
   track('bertrand_open', {
+    ...p,
+    mode: p.mode ?? ANALYTICS_MODE_PRE_TOGGLE,
+  })
+}
+
+export function trackFormSubmit(p: {
+  intent_type: string
+  page_path?: string
+}): void {
+  track('form_submit', p)
+}
+
+export function trackPlayCompleted(p: {
+  track_id: string
+  song_id: string
+  sutra: string
+  primary_genre: string
+  source: QueueSource
+  mode?: AnalyticsMode
+}): void {
+  track('play_completed', {
     ...p,
     mode: p.mode ?? ANALYTICS_MODE_PRE_TOGGLE,
   })

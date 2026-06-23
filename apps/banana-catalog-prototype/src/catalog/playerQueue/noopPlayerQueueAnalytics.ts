@@ -6,4 +6,5 @@ export const noopPlayerQueueAnalytics: PagePlayerQueueAnalytics = {
   onPlayAllStopped: () => {},
   onQueueAdvanced: () => {},
   onQueueSkipped: () => {},
+  onTrackCompleted: () => {},
 }

@@ -3,6 +3,7 @@ import {
   findTrackByScUrl,
   trackSongDetailPlayAllStarted,
   trackSongDetailPlayAllStopped,
+  trackSongDetailPlayCompleted,
   trackSongDetailPlayStarted,
   trackSongDetailQueueAdvanced,
   trackSongDetailQueueSkipped,
@@ -77,6 +78,10 @@ export function useSongDetailTopTracksQueue(
         const toRow = findDetailTrack(to)
         if (!fromRow || !toRow) return
         trackSongDetailQueueSkipped({ from: fromRow, to: toRow, direction })
+      },
+      onTrackCompleted: (track) => {
+        const row = findDetailTrack(track)
+        if (row) trackSongDetailPlayCompleted(row)
       },
     }),
     [findDetailTrack],
