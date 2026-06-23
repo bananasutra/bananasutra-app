@@ -396,6 +396,14 @@ export function usePagePlayerQueue(
           bindSoundCloudWidgetPlayback(widget, SC, {
             onPlayingChange: setPlaying,
             onFinish: () => {
+              // Fire play_completed for every natural track finish, regardless of play-all mode.
+              const queue = resolveQueue()
+              const key = resolveCurrentKey()
+              const idx = findTrackIndex(queue, key, configRef.current.selectionMode)
+              const current = idx >= 0 ? queue[idx] : null
+              if (current) {
+                configRef.current.analytics.onTrackCompleted?.(current)
+              }
               if (!playAllActiveRef.current) return
               advanceRef.current()
             },
@@ -434,6 +442,14 @@ export function usePagePlayerQueue(
       setOnPlayingChange: (handler: ((playing: boolean) => void) | null) => void
     }) => {
       handlers.setOnFinish(() => {
+        // Fire play_completed for every natural track finish, regardless of play-all mode.
+        const queue = resolveQueue()
+        const key = resolveCurrentKey()
+        const idx = findTrackIndex(queue, key, configRef.current.selectionMode)
+        const current = idx >= 0 ? queue[idx] : null
+        if (current) {
+          configRef.current.analytics.onTrackCompleted?.(current)
+        }
         if (!playAllActiveRef.current) return
         advanceRef.current()
       })

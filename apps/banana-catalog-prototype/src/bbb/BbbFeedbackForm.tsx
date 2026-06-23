@@ -1,5 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { openFooterContactPanel } from '../catalog/footerContactConstants'
+import { trackFormSubmit } from '../lib/analytics'
 import { plainTextForFeedbackReview, type FeedbackIntentType } from './BbbChatUtils'
 type BbbPageContext = {
   pathname: string
@@ -133,6 +134,10 @@ export function BbbFeedbackForm({ intentType, initialMessage, conversationTail, 
         setState('error')
         return
       }
+      trackFormSubmit({
+        intent_type: intentType,
+        page_path: pageContext?.pathname,
+      })
       setState('sent')
     } catch {
       setError('Network error while sending feedback.')
