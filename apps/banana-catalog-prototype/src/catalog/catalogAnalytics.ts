@@ -7,6 +7,7 @@ import {
   trackFilterCleared,
   trackPlayAllStarted,
   trackPlayAllStopped,
+  trackPlayCompleted,
   trackPlayStarted,
   trackTrackAdvanced,
   trackTrackSkipped,
@@ -265,6 +266,31 @@ export function trackSongDetailQueueSkipped(p: {
     from_track_id: p.from.track_id,
     to_track_id: p.to.track_id,
     direction: p.direction,
+    source: 'song_variants',
+  })
+}
+
+export function trackCatalogPlayCompleted(
+  track: TrackCatalogItem,
+  source: QueueSource,
+  mode?: AnalyticsMode,
+): void {
+  trackPlayCompleted({
+    track_id: track.track_id,
+    song_id: track.lyrics_id,
+    sutra: track.sutra?.trim() || '',
+    primary_genre: track.primary_genre?.trim() || '',
+    source,
+    mode,
+  })
+}
+
+export function trackSongDetailPlayCompleted(track: SongDetailTrack): void {
+  trackPlayCompleted({
+    track_id: track.track_id,
+    song_id: track.lyrics_id,
+    sutra: track.sutra?.trim() || '',
+    primary_genre: track.primary_genre?.trim() || '',
     source: 'song_variants',
   })
 }

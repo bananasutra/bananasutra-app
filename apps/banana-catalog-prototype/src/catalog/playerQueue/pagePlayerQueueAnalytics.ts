@@ -14,4 +14,6 @@ export type PagePlayerQueueAnalytics = {
     direction: 'next' | 'previous',
     playAllActive: boolean,
   ) => void
+  /** Fired when a track plays to natural completion (FINISH event, not user-stopped). */
+  onTrackCompleted?: (track: PlayableTrack) => void
 }
