@@ -58,7 +58,7 @@ import { buildBrowsePathForFacet, CATALOG_BROWSE_PATH } from './urlState'
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { songRecordingJsonLd } from '../seo/jsonLd'
 import { PageMeta } from './PageMeta'
-import { NotFoundRoute } from './NotFoundRoute'
+import { CatalogNotFoundPage } from './CatalogNotFoundPage'
 import { songOgImageUrl } from './pageMetaConstants'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { SongThumbCard } from './SongThumbCard'
@@ -157,11 +157,11 @@ export function SongDetail() {
   const { slug = '' } = useParams()
   const trimmed = slug.trim()
   if (!trimmed || trimmed === 'null' || trimmed === 'undefined') {
-    return <NotFoundRoute />
+    return <CatalogNotFoundPage />
   }
   const lyricsId = lyricsIdFromSongUrlSlug(trimmed)
   if (!lyricsId) {
-    return <NotFoundRoute />
+    return <CatalogNotFoundPage />
   }
   return <SongDetailInner key={lyricsId} lyricsId={lyricsId} urlSlug={trimmed} />
 }
@@ -273,7 +273,7 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
   }
 
   if (!detail) {
-    return <NotFoundRoute />
+    return <CatalogNotFoundPage />
   }
 
   return (

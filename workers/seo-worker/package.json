@@ -6,6 +6,10 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
+    "sync:redirects": "node scripts/sync-catalog-redirects.mjs",
+    "pretypecheck": "npm run sync:redirects",
+    "pretest": "npm run sync:redirects",
+    "predeploy": "npm run sync:redirects",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "tail": "wrangler tail",

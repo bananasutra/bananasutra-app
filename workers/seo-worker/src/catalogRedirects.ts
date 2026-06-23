@@ -1,4 +1,4 @@
-import catalogRedirectsFile from "../../../apps/banana-catalog-prototype/catalog-redirects.json" with { type: "json" };
+import { CATALOG_REDIRECT_ENTRIES } from "./catalogRedirects.generated.ts";
 
 type CatalogRedirectEntry = {
   from: string;
@@ -16,7 +16,7 @@ export function normalizeRedirectPathname(pathname: string): string {
 }
 
 const REDIRECT_LOOKUP = new Map<string, string>(
-  (catalogRedirectsFile.redirects as CatalogRedirectEntry[]).map((entry) => [
+  (CATALOG_REDIRECT_ENTRIES as readonly CatalogRedirectEntry[]).map((entry) => [
     normalizeRedirectPathname(entry.from),
     entry.to,
   ]),

@@ -13,7 +13,7 @@ import { emptyFilterState, type SongCatalogItem, type SongbookMemberSong } from 
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { musicAlbumJsonLd, songbookItemListJsonLd } from '../seo/jsonLd'
 import { renderPageMeta } from './usePageMeta'
-import { NotFoundRoute } from './NotFoundRoute'
+import { CatalogNotFoundPage } from './CatalogNotFoundPage'
 import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { SongThumbCard } from './SongThumbCard'
@@ -261,7 +261,7 @@ export function SongbookPage() {
   }
 
   if (!songbook) {
-    return <NotFoundRoute />
+    return <CatalogNotFoundPage />
   }
 
   return (
