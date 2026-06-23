@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { trackFormSubmit } from '../lib/analytics'
 import {
   FOOTER_CONTACT_OPEN_EVENT,
   FOOTER_CONTACT_PANEL_HASH,
@@ -42,6 +43,7 @@ const EMPTY: FormFields = { name: '', email: '', message: '' }
 /* ------------------------------------------------------------------ */
 
 function FooterContactForm() {
+  const { pathname } = useLocation()
   const [open, setOpen] = useState(false)
   const [fields, setFields] = useState<FormFields>(EMPTY)
   const [status, setStatus] = useState<FormStatus>('idle')
@@ -130,6 +132,10 @@ function FooterContactForm() {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: params.toString(),
         })
+        trackFormSubmit({
+          intent_type: 'contact',
+          page_path: pathname.length > 1 ? pathname.replace(/\/$/, '') : pathname,
+        })
         sessionSubmitCount++
         setRequestedCopy(sendCopy)
         setFields(EMPTY)
@@ -140,7 +146,7 @@ function FooterContactForm() {
         setErrorMsg('Something went wrong — please try again or email me directly.')
       }
     },
-    [fields, honeypot, sendCopy],
+    [fields, honeypot, pathname, sendCopy],
   )
 
   const handleReset = useCallback(() => {
