@@ -15,7 +15,7 @@ import './GlobalFooter.css'
 /* ------------------------------------------------------------------ */
 
 const SOCIAL: readonly { id: FooterSocialId; href: string; label: string; external?: boolean }[] = [
-  { id: 'soundcloud', href: 'https://soundcloud.com/bananasutra/sets', label: 'SoundCloud' },
+  { id: 'soundcloud', href: 'https://soundcloud.com/bananasutra', label: 'SoundCloud' },
   { id: 'youtube', href: 'https://www.youtube.com/@bananasutra', label: 'YouTube' },
   { id: 'instagram', href: 'https://www.instagram.com/itsbananasutra/', label: 'Instagram' },
   { id: 'suno', href: 'https://suno.com/@bananasutra', label: 'Suno' },

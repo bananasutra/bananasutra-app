@@ -1028,7 +1028,7 @@ export const buildRecommendationContext = (
       ? "- Classify this ask as sound-led: explicit sound vocabulary is present. Lead with /tracks routes first; songs are optional examples after routes."
       : "- If no explicit sound vocabulary is present, do not force sound-led routing.",
     newnessAsk
-      ? "- Classify this ask as newness-led: lead with 1-3 latest drops from the injected LATEST_DROPS block, then include [Newest Songs](/songs/?sort=newest), [Newest Tracks](/tracks/?tsort=newest), and [Latest Words](/words), and invite following on SoundCloud + YouTube."
+      ? "- Classify this ask as newness-led: lead with 1-3 latest drops from the injected LATEST_DROPS block, then include [Newest Songs](/songs/?sort=newest), [Newest Tracks](/tracks/?tsort=newest), and [Latest Words](/words), and invite following on [SoundCloud](https://soundcloud.com/bananasutra) and [YouTube](https://www.youtube.com/@bananasutra)."
       : null,
     breadthLedIntent
       ? "- Classify this ask as breadth-led: lead with filtered /songs and /tracks routes first, then include sutra page plus a filtered /songbooks/?find=<keyword> route and 2-4 relevant songbook links, then offer narrowing."
