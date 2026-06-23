@@ -10,6 +10,7 @@ import { canonicalPathForRoute } from './seo-canonical-path.mjs'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const distDir = path.join(__dirname, '../dist')
 const sutraContextPath = path.join(__dirname, '../src/data/generated/sutra_context.json')
+const catalogRedirectsPath = path.join(__dirname, '../catalog-redirects.json')
 
 /** Legacy nested paths → flat canonical targets (D-043). */
 const LEGACY_ABOUT_HUB_REDIRECTS = [
@@ -17,6 +18,15 @@ const LEGACY_ABOUT_HUB_REDIRECTS = [
   { from: '/about/muses', to: canonicalPathForRoute('/muses') },
   { from: '/about/quotes', to: canonicalPathForRoute('/quotes') },
 ]
+
+function listCatalogSlugRedirects() {
+  if (!fs.existsSync(catalogRedirectsPath)) return []
+  const parsed = JSON.parse(fs.readFileSync(catalogRedirectsPath, 'utf8'))
+  const rows = Array.isArray(parsed?.redirects) ? parsed.redirects : []
+  return rows
+    .filter((entry) => typeof entry?.from === 'string' && typeof entry?.to === 'string')
+    .map((entry) => ({ from: entry.from.trim(), to: entry.to.trim() }))
+}
 
 function listLegacySutraDetailRedirects() {
   const sutraContext = JSON.parse(fs.readFileSync(sutraContextPath, 'utf8'))
@@ -49,7 +59,11 @@ function main() {
     process.exit(1)
   }
 
-  const redirects = [...LEGACY_ABOUT_HUB_REDIRECTS, ...listLegacySutraDetailRedirects()]
+  const redirects = [
+    ...LEGACY_ABOUT_HUB_REDIRECTS,
+    ...listLegacySutraDetailRedirects(),
+    ...listCatalogSlugRedirects(),
+  ]
 
   for (const { from, to } of redirects) {
     const outPath = distPathForRoute(from)
