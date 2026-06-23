@@ -21,6 +21,7 @@ import { ManifestoPage } from '../catalog/ManifestoPage'
 import { PrivacyPage } from '../catalog/PrivacyPage'
 import { SearchRedirect } from '../catalog/SearchRedirect'
 import { LegacyAboutSutraDetailRedirect } from '../catalog/LegacyAboutSutraDetailRedirect'
+import { CatalogRedirectGuard } from '../catalog/CatalogRedirectGuard'
 import { NotFoundRoute } from '../catalog/NotFoundRoute'
 import { PlayerQueueRoot } from '../catalog/playerQueue/PlayerQueueRoot'
 
@@ -37,6 +38,7 @@ export function AppPrerender({ location }: { location: string }) {
             <a href="#main-content" className="skip-link">
               Skip to main content
             </a>
+            <CatalogRedirectGuard>
             <Routes>
               <Route path="/" element={<HomePortal />} />
               <Route path="/learn" element={<LearnLpPage />} />
@@ -65,6 +67,7 @@ export function AppPrerender({ location }: { location: string }) {
               <Route path="/sitemap" element={<SitemapPage />} />
               <Route path="*" element={<NotFoundRoute />} />
             </Routes>
+            </CatalogRedirectGuard>
           </PlayerQueueRoot>
         </StaticRouter>
       </ThemeProvider>

@@ -11,6 +11,7 @@ import { useAnalyticsPageView } from './useAnalyticsPageView'
 import { BbbChatWidget } from './bbb/BbbChatWidget'
 import { PlayerQueueRoot } from './catalog/playerQueue/PlayerQueueRoot'
 import { NotFoundRoute } from './catalog/NotFoundRoute'
+import { CatalogRedirectGuard } from './catalog/CatalogRedirectGuard'
 import { LegacyAboutSutraDetailRedirect } from './catalog/LegacyAboutSutraDetailRedirect'
 
 const HomePortal = lazy(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
@@ -164,6 +165,7 @@ export default function App() {
         <BootPrefetch />
         <NavigationLoadingBridge />
         <ScrollToTopOnNavigate />
+        <CatalogRedirectGuard>
         <Routes>
           <Route
             path="/"
@@ -332,6 +334,7 @@ export default function App() {
           />
           <Route path="*" element={<NotFoundRoute />} />
         </Routes>
+        </CatalogRedirectGuard>
         {BBB_CHAT_ENABLED ? <BbbChatWidget /> : null}
         </PlayerQueueRoot>
       </BrowserRouter>

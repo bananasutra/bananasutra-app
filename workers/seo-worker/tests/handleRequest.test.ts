@@ -115,6 +115,21 @@ test("deep SPA: origin already 200 → unchanged (human)", async () => {
   assert.equal(await res.text(), body);
 });
 
+test("catalog slug rename: 301 before origin fetch", async () => {
+  const fetcher: typeof fetch = async () => {
+    throw new Error("origin fetch should not run for catalog redirect");
+  };
+  const res = await handleRequest(
+    new Request("https://example.com/songs/the-seven-sutras-of-banana/?section=audio"),
+    { fetcher },
+  );
+  assert.equal(res.status, 301);
+  assert.equal(
+    res.headers.get("location"),
+    "https://example.com/songs/seven-sutras-gone-banana/?section=audio",
+  );
+});
+
 test("static root feed.xml: passthrough with atom content-type (human)", async () => {
   const fetcher: typeof fetch = async (input) => {
     const req = input instanceof Request ? input : new Request(input);
