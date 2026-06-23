@@ -232,6 +232,8 @@ test("template includes attribution and identity guardrails", () => {
     /Canonical creation-process answer for "how is the music made\?", "how do you make the songs\?", "what's the creative process\?", or equivalent:/,
   );
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Backing tracks are generated with Suno AI from those lyrics plus detailed style prompts/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Cover art for SoundCloud releases is made by her with AI image tools and imagination/);
+  assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /music videos add more graphics, editing, and layers on top/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /mention the Colophon section for the full stack breakdown/);
   assert.match(BBB_SYSTEM_PROMPT_TEMPLATE, /Never imply you made the songs, lyrics, sutras, or site\./);
   assert.match(
