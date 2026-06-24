@@ -42,7 +42,7 @@ import {
   buildTracksBrowsePathFull,
   CATALOG_BROWSE_PATH,
 } from './urlState'
-import { DISCOVERY_SEARCH_OPEN_EVENT } from './discoverySearchConstants'
+import { DISCOVERY_SEARCH_OPEN_EVENT, HEADER_DESKTOP_SEARCH_FIELD_MQ } from './discoverySearchConstants'
 import './CatalogApp.css'
 import './DiscoverySearch.css'
 import { loadSongSearchDeep, loadYoutubeByLyricsId, useSongCatalogBrowse } from './generatedData'
@@ -225,6 +225,9 @@ export function DiscoverySearch({
   const [isNarrowViewport, setIsNarrowViewport] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
   )
+  const [headerDesktopFieldActive, setHeaderDesktopFieldActive] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(HEADER_DESKTOP_SEARCH_FIELD_MQ).matches,
+  )
   const [expandedFacet, setExpandedFacet] = useState<FacetGroupKey | null>(null)
   /** D-038: facet accordion hidden until "Filter by…" or typing (typed panel replaces browse). */
   const [filtersExpanded, setFiltersExpanded] = useState(false)
@@ -292,6 +295,14 @@ export function DiscoverySearch({
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)')
     const onMq = () => setIsNarrowViewport(mq.matches)
+    onMq()
+    mq.addEventListener('change', onMq)
+    return () => mq.removeEventListener('change', onMq)
+  }, [])
+
+  useEffect(() => {
+    const mq = window.matchMedia(HEADER_DESKTOP_SEARCH_FIELD_MQ)
+    const onMq = () => setHeaderDesktopFieldActive(mq.matches)
     onMq()
     mq.addEventListener('change', onMq)
     return () => mq.removeEventListener('change', onMq)
@@ -695,7 +706,13 @@ export function DiscoverySearch({
       : undefined
 
   const headerMobileOpen = variant === 'header' && open && isNarrowViewport
-  const shellClass = `discovery-search discovery-search--${variant}${open ? ' discovery-search--open' : ''}${headerMobileOpen ? ' discovery-search--header-mobile-open' : ''}`
+  const headerDesktopField = variant === 'header' && headerDesktopFieldActive
+  const headerFieldExpanded = variant !== 'header' || open || headerDesktopField
+  const shellClass =
+    `discovery-search discovery-search--${variant}` +
+    (open ? ' discovery-search--open' : '') +
+    (headerMobileOpen ? ' discovery-search--header-mobile-open' : '') +
+    (headerDesktopField ? ' discovery-search--header-desktop-field' : '')
 
   return (
     <div ref={rootRef} className={shellClass}>
@@ -705,9 +722,9 @@ export function DiscoverySearch({
       <form className="discovery-search__form" role="search" aria-label="Catalog discovery" onSubmit={onSubmit}>
         <div
           className="discovery-search__field"
-          onClick={variant === 'header' && !open ? openHeaderSearch : undefined}
+          onClick={variant === 'header' && !headerFieldExpanded ? openHeaderSearch : undefined}
           onKeyDown={
-            variant === 'header' && !open
+            variant === 'header' && !headerFieldExpanded
               ? (e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault()
@@ -716,9 +733,9 @@ export function DiscoverySearch({
                 }
               : undefined
           }
-          role={variant === 'header' && !open ? 'button' : undefined}
-          tabIndex={variant === 'header' && !open ? 0 : undefined}
-          aria-label={variant === 'header' && !open ? 'Open catalog search' : undefined}
+          role={variant === 'header' && !headerFieldExpanded ? 'button' : undefined}
+          tabIndex={variant === 'header' && !headerFieldExpanded ? 0 : undefined}
+          aria-label={variant === 'header' && !headerFieldExpanded ? 'Open catalog search' : undefined}
         >
           <span className="discovery-search__icon" aria-hidden>
             ⌕

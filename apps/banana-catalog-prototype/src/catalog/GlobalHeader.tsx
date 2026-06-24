@@ -185,43 +185,46 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
           {`${sutraCount} SUTRAS · ${songbookCount} SONGBOOKS · ${songCount} SONGS · ${topTrackCount} TOP TRACKS`}
         </p>
 
-        <nav className="global-header-experience" aria-label="Experience">
-          <ul className="global-header-experience__list">
-            {SITE_NAV_EXPERIENCE.map((item) => {
-              const active = activeLp === item.id
-              return (
-                <li key={item.id}>
-                  <Link
-                    to={item.to}
-                    className={experienceLinkClass(active)}
-                    aria-current={active ? 'page' : undefined}
-                    onClick={() => onExperienceNavClick(item.id)}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
-        </nav>
-
-        <div className="global-header__actions">
+        <div className="global-header__toolbar">
           <div className="global-header__search-slot">
             <DiscoverySearchLazy variant="header" />
           </div>
-          <button
-            type="button"
-            className="global-header-menu-toggle"
-            aria-expanded={menuOpen}
-            aria-controls={drawerId}
-            aria-label={menuLabel}
-            title={menuLabel}
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            <span className="global-header-menu-toggle__icon" aria-hidden="true" />
-            <span className="visually-hidden">{menuLabel}</span>
-          </button>
-          {right ? <div className="global-header__slot">{right}</div> : null}
+
+          <nav className="global-header-experience" aria-label="Experience">
+            <ul className="global-header-experience__list">
+              {SITE_NAV_EXPERIENCE.map((item) => {
+                const active = activeLp === item.id
+                return (
+                  <li key={item.id}>
+                    <Link
+                      to={item.to}
+                      className={experienceLinkClass(active)}
+                      aria-current={active ? 'page' : undefined}
+                      onClick={() => onExperienceNavClick(item.id)}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </nav>
+
+          <div className="global-header__actions">
+            <button
+              type="button"
+              className="global-header-menu-toggle"
+              aria-expanded={menuOpen}
+              aria-controls={drawerId}
+              aria-label={menuLabel}
+              title={menuLabel}
+              onClick={() => setMenuOpen((open) => !open)}
+            >
+              <span className="global-header-menu-toggle__icon" aria-hidden="true" />
+              <span className="visually-hidden">{menuLabel}</span>
+            </button>
+            {right ? <div className="global-header__slot">{right}</div> : null}
+          </div>
         </div>
       </div>
 

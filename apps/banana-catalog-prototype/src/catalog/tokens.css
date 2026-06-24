@@ -48,6 +48,9 @@
   --catalog-page-lede-line-height: 1.65;
   --catalog-page-lede-color: var(--color-text-muted);
 
+  /* Global header + filter bar control height (R64: slimmer pills/chips, aligned with search). */
+  --chrome-control-height: 2.35rem;
+
   /* Section subcopy under h2 — smaller than page intro lede. */
   --catalog-section-intro-font-size: 0.82rem;
   --catalog-section-intro-line-height: 1.5;

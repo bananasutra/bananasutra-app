@@ -1,16 +1,35 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import type { DiscoverySearchProps } from './DiscoverySearch'
-import { DISCOVERY_SEARCH_OPEN_EVENT } from './discoverySearchConstants'
+import { DISCOVERY_SEARCH_OPEN_EVENT, HEADER_DESKTOP_SEARCH_FIELD_MQ } from './discoverySearchConstants'
 
 const DiscoverySearchRoot = lazy(() =>
   import('./DiscoverySearch').then((m) => ({ default: m.DiscoverySearch })),
 )
 
-/** Header variant mounts on interaction to keep initial header height stable. */
+function headerSearchIsDesktop(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia(HEADER_DESKTOP_SEARCH_FIELD_MQ).matches
+}
+
+/** Header variant mounts on interaction to keep initial header height stable (mobile/tablet). */
 export function DiscoverySearchLazy(props: DiscoverySearchProps) {
-  const shouldDefer = props.variant === 'header'
+  const isHeader = props.variant === 'header'
+  const [isDesktopHeader, setIsDesktopHeader] = useState(() => isHeader && headerSearchIsDesktop())
+  const shouldDefer = isHeader && !isDesktopHeader
   const [mountSearch, setMountSearch] = useState(!shouldDefer)
   const [openOnMount, setOpenOnMount] = useState(false)
+
+  useEffect(() => {
+    if (!isHeader) return
+    const mq = window.matchMedia(HEADER_DESKTOP_SEARCH_FIELD_MQ)
+    const onMq = () => {
+      const desktop = mq.matches
+      setIsDesktopHeader(desktop)
+      if (desktop) setMountSearch(true)
+    }
+    onMq()
+    mq.addEventListener('change', onMq)
+    return () => mq.removeEventListener('change', onMq)
+  }, [isHeader])
 
   const mountFromIcon = () => {
     setOpenOnMount(true)

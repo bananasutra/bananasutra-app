@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type MutableRefObject } from 'react'
 import type { PersistentScPlayerApi } from '../persistentPlayer/persistentScPlayerContext'
-import { persistentScIframeIsWarm, requestPersistentScLoadSync } from '../persistentPlayer/persistentScBootstrap'
+import {
+  persistentScIframeIsWarm,
+  persistentScNeedsExplicitLoad,
+  requestPersistentScLoadSync,
+} from '../persistentPlayer/persistentScBootstrap'
 import { markPersistentGesturePlayWindow } from '../persistentPlayer/persistentGesturePlay'
 import type { PlaybackIntent } from '../catalogAnalytics'
 import { isPlayAllDesktopDevice } from '../playAllPlatform'
@@ -205,30 +209,31 @@ export function usePagePlayerQueue(
       }
 
       if (key && key === currentKey) {
-        const activeWidget = usePersistentPlayback
-          ? persistentApiRef.current?.widgetRef.current
-          : widgetRef.current
-        if (!activeWidget) {
-          if (usePersistentPlayback) {
-            const queue = resolveQueue()
-            const idx = findTrackIndex(queue, key, mode)
-            const queued = idx >= 0 ? queue[idx] : null
-            if (queued) {
-              playTrackSideEffect(queued, {
+        const targetUrl = track.sc_url.trim()
+        const persistentUrlDrift =
+          usePersistentPlayback && targetUrl && persistentScNeedsExplicitLoad(targetUrl)
+
+        if (persistentUrlDrift) {
+          // Fall through — load the requested track (never resume primer / stale iframe URL). R64 #129.
+        } else {
+          const activeWidget = usePersistentPlayback
+            ? persistentApiRef.current?.widgetRef.current
+            : widgetRef.current
+          if (!activeWidget) {
+            if (usePersistentPlayback) {
+              playTrackSideEffect(track, {
                 intent: playbackIntentRef.current,
                 keepPlayAll: playAllActiveRef.current,
               })
-            } else {
-              syncPlayInGesture()
+              return
             }
+          } else if (playingRef.current) {
+            pause()
+            return
+          } else {
+            resume()
             return
           }
-        } else if (playingRef.current) {
-          pause()
-          return
-        } else {
-          resume()
-          return
         }
       }
 

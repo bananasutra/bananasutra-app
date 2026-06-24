@@ -10,6 +10,7 @@ import {
   resetAndPrimePersistentSc,
   resetPersistentScBootstrap,
   shouldRemountPersistentScFromPrimer,
+  persistentScNeedsExplicitLoad,
   subscribePersistentScBootstrap,
 } from './persistentScBootstrap'
 
@@ -78,6 +79,18 @@ test('resetPersistentScBootstrap clears bootstrap for dismiss/stop', () => {
   assert.equal(snap.url, null)
   assert.equal(snap.autoPlay, false)
   assert.equal(snap.generation, 0)
+})
+
+test('persistentScNeedsExplicitLoad is true on primer and when bootstrap URL differs', () => {
+  resetPersistentScBootstrap()
+  primePersistentScIframe()
+  assert.equal(persistentScNeedsExplicitLoad(SC_URL), true)
+  requestPersistentScLoad(SC_URL, { autoPlay: true, remount: true })
+  assert.equal(persistentScNeedsExplicitLoad(SC_URL), false)
+  assert.equal(
+    persistentScNeedsExplicitLoad('https://soundcloud.com/bananasutra/other-track'),
+    true,
+  )
 })
 
 test('requestPersistentScLoad from primer warm-up remounts iframe for first user track', () => {

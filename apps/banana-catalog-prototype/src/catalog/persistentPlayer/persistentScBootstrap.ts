@@ -68,6 +68,14 @@ export function shouldRemountPersistentScFromPrimer(scUrl: string): boolean {
   return persistentScBootstrapIsPrimer()
 }
 
+/** True when the persistent iframe must load `scUrl` (primer warm-up or URL drift). R64 #129. */
+export function persistentScNeedsExplicitLoad(scUrl: string): boolean {
+  const trimmed = scUrl.trim()
+  if (!trimmed) return false
+  if (persistentScBootstrapIsPrimer()) return true
+  return getPersistentScBootstrapSnapshot().url !== trimmed
+}
+
 /** Mount hidden SC iframe early so Play All can widget.load + play inside the click handler. */
 export function primePersistentScIframe(): void {
   if (bootstrapState.url != null) return
