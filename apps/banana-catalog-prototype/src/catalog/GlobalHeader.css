@@ -16,14 +16,57 @@
   max-width: 100%;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 768px) {
   .catalog-header-inner.global-header__bar {
     grid-template-areas:
-      'brand search doors actions'
-      'stats stats stats stats';
-    grid-template-columns: minmax(0, auto) minmax(10rem, 14rem) auto auto;
+      'brand toolbar'
+      'stats stats';
+    grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
     row-gap: 0.28rem;
+    column-gap: 1rem;
     align-items: center;
+    justify-items: start;
+  }
+
+  .global-header-stats {
+    display: block;
+  }
+}
+
+/* Search + LP nav + hamburger — one left-aligned cluster on desktop; contents on mobile. */
+.global-header__toolbar {
+  min-width: 0;
+}
+
+@media (max-width: 767px) {
+  .global-header__toolbar {
+    display: contents;
+  }
+
+  .global-header__search-slot {
+    grid-area: search;
+  }
+
+  .global-header-experience {
+    grid-area: doors;
+  }
+
+  .global-header__actions {
+    grid-area: actions;
+  }
+}
+
+@media (min-width: 768px) {
+  .global-header__toolbar {
+    grid-area: toolbar;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.65rem;
+    width: 100%;
+    max-width: 100%;
   }
 }
 
@@ -91,15 +134,8 @@
   text-overflow: ellipsis;
 }
 
-@media (min-width: 720px) {
-  .global-header-stats {
-    display: block;
-  }
-}
-
 /* Experience doors — wireframe pills (2px radius) */
 .global-header-experience {
-  grid-area: doors;
   min-width: 0;
   align-self: center;
   flex-shrink: 0;
@@ -108,7 +144,7 @@
 .global-header-experience__list {
   display: flex;
   flex-wrap: nowrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 0.25rem;
   margin: 0;
   padding: 0;
@@ -188,10 +224,9 @@
 
 /* Actions: hamburger (+ optional right slot) */
 .global-header__actions {
-  grid-area: actions;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 0.15rem;
   min-width: 0;
   align-self: center;
@@ -199,11 +234,19 @@
 }
 
 .global-header__search-slot {
-  grid-area: search;
   flex: 0 0 var(--chrome-control-height, 2.35rem);
   width: var(--chrome-control-height, 2.35rem);
   min-width: var(--chrome-control-height, 2.35rem);
   transition: flex-basis 0.2s ease, width 0.2s ease, min-width 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .global-header__search-slot {
+    flex: 0 1 12rem;
+    width: auto;
+    min-width: 10rem;
+    max-width: 14rem;
+  }
 }
 
 .global-header__search-slot:has(.discovery-search--open),
@@ -218,15 +261,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--chrome-control-height, 2.35rem);
-  height: var(--chrome-control-height, 2.35rem);
-  padding: 0;
-  border: 0;
-  border-radius: 0.25rem;
-  background: transparent;
+  box-sizing: border-box;
+  min-width: var(--chrome-control-height, 2.35rem);
+  min-height: var(--chrome-control-height, 2.35rem);
+  height: auto;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control, 2px);
+  background: var(--color-bg-panel);
   color: var(--color-text-muted);
   cursor: pointer;
   flex-shrink: 0;
+}
+
+@media (min-width: 720px) {
+  .global-header-menu-toggle {
+    padding: 0.3rem 0.65rem;
+  }
 }
 
 .global-header-menu-toggle:hover {
@@ -353,13 +404,6 @@
 
 /* Desktop header search — metadata scale (smaller than LP nav pills) */
 @media (min-width: 768px) {
-  .global-header__search-slot {
-    flex: 1 1 11rem;
-    width: auto;
-    min-width: 11rem;
-    max-width: 14rem;
-  }
-
   .global-header__search-slot .discovery-search--header .discovery-search__input {
     font-size: 0.64rem;
     line-height: 1.3;
