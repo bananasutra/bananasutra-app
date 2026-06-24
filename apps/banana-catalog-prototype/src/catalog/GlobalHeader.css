@@ -2,10 +2,8 @@
 
 .catalog-header-inner.global-header__bar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  grid-template-areas:
-    'brand search actions'
-    'doors doors doors';
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  grid-template-areas: 'brand toolbar';
   align-items: center;
   column-gap: 0.5rem;
   row-gap: 0.35rem;
@@ -21,10 +19,8 @@
     grid-template-areas:
       'brand toolbar'
       'stats stats';
-    grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
     row-gap: 0.28rem;
     column-gap: 1rem;
-    align-items: center;
   }
 
   .global-header-stats {
@@ -32,12 +28,44 @@
   }
 }
 
-/* Search + LP nav + hamburger — one right-aligned cluster on desktop; contents on mobile. */
+/* Search + LP nav + hamburger — right-aligned cluster; single row tablet+ (≥480px). */
 .global-header__toolbar {
+  grid-area: toolbar;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  justify-self: end;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 100%;
   min-width: 0;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 480px) and (max-width: 767px) {
+  .global-header__toolbar {
+    flex-wrap: nowrap;
+    gap: 0.4rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .global-header__toolbar {
+    gap: 0.65rem;
+  }
+}
+
+/* Narrow phone only: stack LP doors on row 2; icon search + menu on row 1. */
+@media (max-width: 479px) {
+  .catalog-header-inner.global-header__bar {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      'brand search actions'
+      'doors doors doors';
+    row-gap: 0.5rem;
+  }
+
   .global-header__toolbar {
     display: contents;
   }
@@ -52,21 +80,6 @@
 
   .global-header__actions {
     grid-area: actions;
-  }
-}
-
-@media (min-width: 768px) {
-  .global-header__toolbar {
-    grid-area: toolbar;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    justify-self: end;
-    gap: 0.65rem;
-    width: 100%;
-    max-width: 100%;
   }
 }
 
@@ -730,14 +743,9 @@ body.global-header-menu-open {
   }
 }
 
-/* Small mobile (≤479px): brand + search + menu on row 1, LP doors full-width on row 2. */
+/* Small mobile (≤479px): LP doors full-width on row 2 — grid areas set above. */
 @media (max-width: 479px) {
   .catalog-header-inner.global-header__bar {
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    grid-template-areas:
-      'brand search actions'
-      'doors  doors doors';
-    row-gap: 0.5rem;
     padding-top: 0.62rem;
     padding-bottom: 0.62rem;
   }
