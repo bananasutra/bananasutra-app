@@ -3,6 +3,6 @@ export const CATALOG_REDIRECT_ENTRIES = [
   {
     "from": "/songs/the-seven-sutras-of-banana",
     "to": "/songs/seven-sutras-gone-banana/",
-    "reason": "L-383 slug rename (Seven Sutras Gone Banana)"
+    "reason": "L-383 rename"
   }
 ] as const
