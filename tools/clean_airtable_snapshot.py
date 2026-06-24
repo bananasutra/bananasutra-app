@@ -316,6 +316,20 @@ HEADER_MAP: dict[str, dict[str, str]] = {
         "Review notes": "review_notes",
         "sutra_id Rollup (from sutra)": "sutra_id_rollup",
         "sutra_id_rollup": "sutra_id_rollup",
+        "cover_art_ready": "cover_art_ready",
+        "Cover art ready": "cover_art_ready",
+    },
+    "301 REDIRECTS": {
+        "redirect_from": "redirect_from",
+        "Redirect from": "redirect_from",
+        "redirect_to": "redirect_to",
+        "Redirect to": "redirect_to",
+        "redirect_note": "redirect_note",
+        "Redirect note": "redirect_note",
+        "redirect_status": "redirect_status",
+        "Redirect status": "redirect_status",
+        "redirect_live": "redirect_live",
+        "Redirect live": "redirect_live",
     },
     "YTplaylists": {
         "playlist_name": "playlist_name",
@@ -545,6 +559,7 @@ FILE_PATTERNS: list[tuple[str, str, str]] = [
     ("SC TRACKs",               "SC TRACKs",      "sc_tracks"),
     ("SC EPs",                  "SC EPs",         "sc_eps"),
     ("SC Playlists",            "SC Playlists",   "sc_playlists"),
+    ("301 REDIRECTS",           "301 REDIRECTS",  "301_redirects"),
 ]
 
 # ══════════════════════════════════════════════════════════════════════════════
