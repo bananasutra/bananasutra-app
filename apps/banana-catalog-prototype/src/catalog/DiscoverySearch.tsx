@@ -42,7 +42,7 @@ import {
   buildTracksBrowsePathFull,
   CATALOG_BROWSE_PATH,
 } from './urlState'
-import { DISCOVERY_SEARCH_OPEN_EVENT } from './discoverySearchConstants'
+import { DISCOVERY_SEARCH_OPEN_EVENT, HEADER_DESKTOP_SEARCH_FIELD_MQ } from './discoverySearchConstants'
 import './CatalogApp.css'
 import './DiscoverySearch.css'
 import { loadSongSearchDeep, loadYoutubeByLyricsId, useSongCatalogBrowse } from './generatedData'
@@ -225,6 +225,9 @@ export function DiscoverySearch({
   const [isNarrowViewport, setIsNarrowViewport] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
   )
+  const [headerDesktopFieldActive, setHeaderDesktopFieldActive] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(HEADER_DESKTOP_SEARCH_FIELD_MQ).matches,
+  )
   const [expandedFacet, setExpandedFacet] = useState<FacetGroupKey | null>(null)
   /** D-038: facet accordion hidden until "Filter by…" or typing (typed panel replaces browse). */
   const [filtersExpanded, setFiltersExpanded] = useState(false)
@@ -292,6 +295,14 @@ export function DiscoverySearch({
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)')
     const onMq = () => setIsNarrowViewport(mq.matches)
+    onMq()
+    mq.addEventListener('change', onMq)
+    return () => mq.removeEventListener('change', onMq)
+  }, [])
+
+  useEffect(() => {
+    const mq = window.matchMedia(HEADER_DESKTOP_SEARCH_FIELD_MQ)
+    const onMq = () => setHeaderDesktopFieldActive(mq.matches)
     onMq()
     mq.addEventListener('change', onMq)
     return () => mq.removeEventListener('change', onMq)
@@ -695,7 +706,7 @@ export function DiscoverySearch({
       : undefined
 
   const headerMobileOpen = variant === 'header' && open && isNarrowViewport
-  const headerDesktopField = variant === 'header' && !isNarrowViewport
+  const headerDesktopField = variant === 'header' && headerDesktopFieldActive
   const headerFieldExpanded = variant !== 'header' || open || headerDesktopField
   const shellClass =
     `discovery-search discovery-search--${variant}` +

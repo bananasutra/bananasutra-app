@@ -1,13 +1,13 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import type { DiscoverySearchProps } from './DiscoverySearch'
-import { DISCOVERY_SEARCH_OPEN_EVENT } from './discoverySearchConstants'
+import { DISCOVERY_SEARCH_OPEN_EVENT, HEADER_DESKTOP_SEARCH_FIELD_MQ } from './discoverySearchConstants'
 
 const DiscoverySearchRoot = lazy(() =>
   import('./DiscoverySearch').then((m) => ({ default: m.DiscoverySearch })),
 )
 
 function headerSearchIsDesktop(): boolean {
-  return typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches
+  return typeof window !== 'undefined' && window.matchMedia(HEADER_DESKTOP_SEARCH_FIELD_MQ).matches
 }
 
 /** Header variant mounts on interaction to keep initial header height stable (mobile/tablet). */
@@ -20,7 +20,7 @@ export function DiscoverySearchLazy(props: DiscoverySearchProps) {
 
   useEffect(() => {
     if (!isHeader) return
-    const mq = window.matchMedia('(min-width: 768px)')
+    const mq = window.matchMedia(HEADER_DESKTOP_SEARCH_FIELD_MQ)
     const onMq = () => {
       const desktop = mq.matches
       setIsDesktopHeader(desktop)
