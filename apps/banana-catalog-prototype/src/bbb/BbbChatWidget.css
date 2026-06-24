@@ -46,6 +46,8 @@
   gap: 0.45rem;
   padding: 0.7rem 0.85rem 0.55rem;
   border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-panel);
+  flex-shrink: 0;
 }
 
 .bbb-widget__header-text {
@@ -319,18 +321,20 @@
   font-size: 0.78rem;
 }
 
-/* Desktop: right-edge tab + side panel */
+/* Desktop: right-edge tab + side panel (wireframe: tab flush on viewport edge, panel attaches left) */
 @media (hover: hover) and (pointer: fine) {
   .bbb-widget {
     position: fixed;
     right: 0;
     top: 40%;
     bottom: auto;
+    left: auto;
     transform: translateY(-50%);
     z-index: 450;
     display: flex;
     flex-direction: row-reverse;
-    align-items: flex-start;
+    align-items: center;
+    gap: 0;
   }
 
   .bbb-widget__toggle {
@@ -342,25 +346,50 @@
     padding: 0.85rem 0.45rem;
     font-size: 0.7rem;
     letter-spacing: 0.06em;
+    flex-shrink: 0;
+    align-self: center;
   }
 
   .bbb-widget__panel {
     width: min(85vw, 340px);
     max-height: calc(100vh - var(--bbb-panel-bottom-offset, 0px) - 2rem);
-    margin-top: 0;
+    margin: 0;
     border-radius: var(--radius-lg) 0 0 var(--radius-lg);
     border-right: 0;
+    box-shadow: -6px 0 24px rgb(0 0 0 / 14%);
     transform-origin: right center;
+    animation: bbb-widget-panel-in 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Desktop closes via tab toggle — no header × (wireframe) */
+  .bbb-widget__close {
+    display: none;
   }
 }
 
-/* Mobile/tablet: pill button + full-screen panel */
+@keyframes bbb-widget-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(0.75rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Mobile/tablet: pill button + bottom sheet panel */
 @media (hover: none) and (pointer: coarse) {
   .bbb-widget {
     position: fixed;
     right: 0.75rem;
     bottom: 0.75rem;
+    left: auto;
+    top: auto;
+    transform: none;
     z-index: 450;
+    display: block;
   }
 
   .bbb-widget__toggle {
@@ -368,10 +397,10 @@
     padding: 0.55rem 1rem 0.55rem 0.75rem;
     font-size: 0.8rem;
     font-weight: 700;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 10px rgb(0 0 0 / 20%);
   }
 
   .bbb-widget__toggle::before {
@@ -391,7 +420,18 @@
     width: 100%;
     max-height: 85svh;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    margin-top: 0;
+    margin: 0;
+    box-shadow: 0 -8px 28px rgb(0 0 0 / 18%);
+  }
+
+  .bbb-widget__header {
+    padding: 0.55rem 0.75rem 0.45rem;
+  }
+
+  .bbb-widget__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .bbb-widget.is-open .bbb-widget__toggle {
