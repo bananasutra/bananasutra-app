@@ -695,7 +695,13 @@ export function DiscoverySearch({
       : undefined
 
   const headerMobileOpen = variant === 'header' && open && isNarrowViewport
-  const shellClass = `discovery-search discovery-search--${variant}${open ? ' discovery-search--open' : ''}${headerMobileOpen ? ' discovery-search--header-mobile-open' : ''}`
+  const headerDesktopField = variant === 'header' && !isNarrowViewport
+  const headerFieldExpanded = variant !== 'header' || open || headerDesktopField
+  const shellClass =
+    `discovery-search discovery-search--${variant}` +
+    (open ? ' discovery-search--open' : '') +
+    (headerMobileOpen ? ' discovery-search--header-mobile-open' : '') +
+    (headerDesktopField ? ' discovery-search--header-desktop-field' : '')
 
   return (
     <div ref={rootRef} className={shellClass}>
@@ -705,9 +711,9 @@ export function DiscoverySearch({
       <form className="discovery-search__form" role="search" aria-label="Catalog discovery" onSubmit={onSubmit}>
         <div
           className="discovery-search__field"
-          onClick={variant === 'header' && !open ? openHeaderSearch : undefined}
+          onClick={variant === 'header' && !headerFieldExpanded ? openHeaderSearch : undefined}
           onKeyDown={
-            variant === 'header' && !open
+            variant === 'header' && !headerFieldExpanded
               ? (e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault()
@@ -716,9 +722,9 @@ export function DiscoverySearch({
                 }
               : undefined
           }
-          role={variant === 'header' && !open ? 'button' : undefined}
-          tabIndex={variant === 'header' && !open ? 0 : undefined}
-          aria-label={variant === 'header' && !open ? 'Open catalog search' : undefined}
+          role={variant === 'header' && !headerFieldExpanded ? 'button' : undefined}
+          tabIndex={variant === 'header' && !headerFieldExpanded ? 0 : undefined}
+          aria-label={variant === 'header' && !headerFieldExpanded ? 'Open catalog search' : undefined}
         >
           <span className="discovery-search__icon" aria-hidden>
             ⌕

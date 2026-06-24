@@ -185,6 +185,10 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
           {`${sutraCount} SUTRAS · ${songbookCount} SONGBOOKS · ${songCount} SONGS · ${topTrackCount} TOP TRACKS`}
         </p>
 
+        <div className="global-header__search-slot">
+          <DiscoverySearchLazy variant="header" />
+        </div>
+
         <nav className="global-header-experience" aria-label="Experience">
           <ul className="global-header-experience__list">
             {SITE_NAV_EXPERIENCE.map((item) => {
@@ -206,9 +210,6 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
         </nav>
 
         <div className="global-header__actions">
-          <div className="global-header__search-slot">
-            <DiscoverySearchLazy variant="header" />
-          </div>
           <button
             type="button"
             className="global-header-menu-toggle"
