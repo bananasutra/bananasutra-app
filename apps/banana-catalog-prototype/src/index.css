@@ -31,6 +31,10 @@ body {
   min-height: 100vh;
 }
 
+body.has-persistent-player {
+  padding-bottom: 44px;
+}
+
 #root {
   min-height: 100vh;
 }
