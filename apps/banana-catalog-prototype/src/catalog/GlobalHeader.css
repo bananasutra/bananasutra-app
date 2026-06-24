@@ -43,7 +43,7 @@
   min-width: 0;
 }
 
-@media (min-width: 480px) and (max-width: 767px) {
+@media (min-width: 480px) and (max-width: 1023px) {
   .global-header__toolbar {
     flex-wrap: nowrap;
     gap: 0.4rem;
@@ -253,8 +253,8 @@
   transition: flex-basis 0.2s ease, width 0.2s ease, min-width 0.2s ease;
 }
 
-@media (min-width: 768px) {
-  .global-header__search-slot {
+@media (min-width: 1024px) {
+  .global-header__search-slot:has(.discovery-search--header-desktop-field) {
     flex: 0 1 12rem;
     width: auto;
     min-width: 10rem;
@@ -262,9 +262,8 @@
   }
 }
 
-.global-header__search-slot:has(.discovery-search--open),
-.global-header__search-slot:has(.discovery-search--header-desktop-field) {
-  flex: 1 1 11rem;
+.global-header__search-slot:has(.discovery-search--open):not(:has(.discovery-search--header-desktop-field)) {
+  flex: 1 1 auto;
   width: auto;
   min-width: 9.5rem;
   max-width: 15rem;
@@ -463,7 +462,9 @@
   .global-header__search-slot .discovery-search--header .discovery-search__browse-value-link {
     font-size: 0.64rem;
   }
+}
 
+@media (min-width: 1024px) {
   .global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__panel,
   .global-header__search-slot .discovery-search--header.discovery-search--header-desktop-field .discovery-search__panel {
     left: 0;
@@ -474,14 +475,17 @@
   }
 }
 
-@media (max-width: 767px) {
-  .global-header__search-slot:has(.discovery-search--open) {
-    flex: 1 1 auto;
-    min-width: 0;
-    max-width: none;
-    width: auto;
+@media (min-width: 768px) and (max-width: 1023px) {
+  .global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__panel {
+    left: auto;
+    right: 0;
+    width: min(28rem, calc(100vw - 2rem));
+    min-width: min(16rem, calc(100vw - 2rem));
+    border-radius: var(--radius-control, 2px);
   }
+}
 
+@media (max-width: 767px) {
   .global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__panel {
     left: 0;
     right: 0;
