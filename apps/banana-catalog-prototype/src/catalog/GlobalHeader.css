@@ -25,7 +25,6 @@
     row-gap: 0.28rem;
     column-gap: 1rem;
     align-items: center;
-    justify-items: start;
   }
 
   .global-header-stats {
@@ -33,7 +32,7 @@
   }
 }
 
-/* Search + LP nav + hamburger — one left-aligned cluster on desktop; contents on mobile. */
+/* Search + LP nav + hamburger — one right-aligned cluster on desktop; contents on mobile. */
 .global-header__toolbar {
   min-width: 0;
 }
@@ -63,7 +62,8 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: flex-end;
+    justify-self: end;
     gap: 0.65rem;
     width: 100%;
     max-width: 100%;
