@@ -3,10 +3,12 @@
 .catalog-header-inner.global-header__bar {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
-  grid-template-areas: 'brand doors actions';
+  grid-template-areas:
+    'brand search actions'
+    'doors doors doors';
   align-items: center;
   column-gap: 0.5rem;
-  row-gap: 0;
+  row-gap: 0.35rem;
   padding-top: 0.55rem;
   padding-bottom: 0.55rem;
   padding-inline: max(1rem, env(safe-area-inset-left, 0px)) max(1rem, env(safe-area-inset-right, 0px));
@@ -17,8 +19,9 @@
 @media (min-width: 720px) {
   .catalog-header-inner.global-header__bar {
     grid-template-areas:
-      'brand doors actions'
-      'stats stats stats';
+      'brand search doors actions'
+      'stats stats stats stats';
+    grid-template-columns: minmax(0, auto) minmax(10rem, 14rem) auto auto;
     row-gap: 0.28rem;
     align-items: center;
   }
@@ -116,8 +119,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.75rem;
-  padding: 0.35rem 0.55rem;
+  min-height: var(--chrome-control-height, 2.35rem);
+  padding: 0.28rem 0.55rem;
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-control, 2px);
   text-decoration: none;
@@ -131,10 +134,15 @@
   white-space: nowrap;
 }
 
+@media (max-width: 767px) {
+  :root {
+    --chrome-control-height: 2.5rem;
+  }
+}
+
 @media (max-width: 719px) {
   .global-header-experience__link {
-    min-height: 2.25rem;
-    padding: 0.28rem 0.42rem;
+    padding: 0.24rem 0.42rem;
     font-size: 0.56rem;
   }
 }
@@ -146,8 +154,7 @@
   }
 
   .global-header-experience__link {
-    min-height: 2.4rem;
-    padding: 0.32rem 0.58rem;
+    padding: 0.28rem 0.58rem;
     font-size: 0.58rem;
   }
 }
@@ -158,8 +165,7 @@
   }
 
   .global-header-experience__link {
-    min-height: 2.85rem;
-    padding: 0.38rem 0.85rem;
+    padding: 0.3rem 0.85rem;
     font-size: 0.64rem;
     letter-spacing: 0.045em;
   }
@@ -180,7 +186,7 @@
   outline-offset: 2px;
 }
 
-/* Actions: search slot + hamburger */
+/* Actions: hamburger (+ optional right slot) */
 .global-header__actions {
   grid-area: actions;
   display: flex;
@@ -193,13 +199,15 @@
 }
 
 .global-header__search-slot {
-  flex: 0 0 2.75rem;
-  width: 2.75rem;
-  min-width: 2.75rem;
+  grid-area: search;
+  flex: 0 0 var(--chrome-control-height, 2.35rem);
+  width: var(--chrome-control-height, 2.35rem);
+  min-width: var(--chrome-control-height, 2.35rem);
   transition: flex-basis 0.2s ease, width 0.2s ease, min-width 0.2s ease;
 }
 
-.global-header__search-slot:has(.discovery-search--open) {
+.global-header__search-slot:has(.discovery-search--open),
+.global-header__search-slot:has(.discovery-search--header-desktop-field) {
   flex: 1 1 11rem;
   width: auto;
   min-width: 9.5rem;
@@ -210,8 +218,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: var(--chrome-control-height, 2.35rem);
+  height: var(--chrome-control-height, 2.35rem);
   padding: 0;
   border: 0;
   border-radius: 0.25rem;
@@ -269,7 +277,7 @@
   outline-offset: var(--focus-ring-offset);
 }
 
-/* Header search: icon stays put; field grows left when open */
+/* Header search: icon-only on mobile/tablet; desktop keeps an open field left of LP nav (R64 #127). */
 .global-header__search-slot .discovery-search--header {
   position: relative;
   width: 100%;
@@ -277,13 +285,13 @@
   max-width: none;
 }
 
-.global-header__search-slot .discovery-search--header:not(.discovery-search--open) .discovery-search__field {
+.global-header__search-slot .discovery-search--header:not(.discovery-search--open):not(.discovery-search--header-desktop-field) .discovery-search__field {
   border: 0;
   background: transparent;
   box-shadow: none;
   padding: 0;
-  min-height: 2.75rem;
-  width: 2.75rem;
+  min-height: var(--chrome-control-height, 2.35rem);
+  width: var(--chrome-control-height, 2.35rem);
   justify-content: center;
   gap: 0;
   cursor: pointer;
@@ -291,12 +299,25 @@
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
-.global-header__search-slot .discovery-search--header:not(.discovery-search--open) .discovery-search__field:hover,
-.global-header__search-slot .discovery-search--header:not(.discovery-search--open) .discovery-search__field:focus-within {
+.global-header__search-slot .discovery-search--header.discovery-search--header-desktop-field .discovery-search__field,
+.global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__field {
+  width: 100%;
+  min-height: var(--chrome-control-height, 2.35rem);
+  cursor: text;
+  color: inherit;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control, 2px);
+  box-shadow: none;
+  padding: 0.28rem 0.45rem;
+  background: var(--color-bg-panel);
+}
+
+.global-header__search-slot .discovery-search--header:not(.discovery-search--open):not(.discovery-search--header-desktop-field) .discovery-search__field:hover,
+.global-header__search-slot .discovery-search--header:not(.discovery-search--open):not(.discovery-search--header-desktop-field) .discovery-search__field:focus-within {
   color: var(--color-text-primary);
 }
 
-.global-header__search-slot .discovery-search--header:not(.discovery-search--open) .discovery-search__input {
+.global-header__search-slot .discovery-search--header:not(.discovery-search--open):not(.discovery-search--header-desktop-field) .discovery-search__input {
   width: 0;
   min-width: 0;
   flex: 0 0 auto;
@@ -306,34 +327,24 @@
   border: 0;
 }
 
-.global-header__search-slot .discovery-search--header:not(.discovery-search--open) .discovery-search__clear {
+.global-header__search-slot .discovery-search--header:not(.discovery-search--open):not(.discovery-search--header-desktop-field) .discovery-search__clear {
   display: none;
 }
 
-.global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__field {
-  width: 100%;
-  min-height: 2.75rem;
-  cursor: text;
-  color: inherit;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-control, 2px);
-  box-shadow: none;
-  padding: 0.35rem 0.5rem;
-  background: var(--color-bg-panel);
-}
-
-.global-header__search-slot .discovery-search--header:not(.discovery-search--open) .discovery-search__icon {
+.global-header__search-slot .discovery-search--header:not(.discovery-search--open):not(.discovery-search--header-desktop-field) .discovery-search__icon {
   font-size: 1.35rem;
   opacity: 0.78;
   line-height: 1;
 }
 
+.global-header__search-slot .discovery-search--header.discovery-search--header-desktop-field .discovery-search__icon,
 .global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__icon {
   opacity: 1;
   color: var(--color-text-strong);
   flex-shrink: 0;
 }
 
+.global-header__search-slot .discovery-search--header.discovery-search--header-desktop-field .discovery-search__panel,
 .global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__panel {
   border-width: 1px;
   border-radius: var(--radius-control, 2px);
@@ -342,9 +353,11 @@
 
 /* Desktop header search — metadata scale (smaller than LP nav pills) */
 @media (min-width: 768px) {
-  .global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__field {
-    min-height: 2.35rem;
-    padding: 0.28rem 0.45rem;
+  .global-header__search-slot {
+    flex: 1 1 11rem;
+    width: auto;
+    min-width: 11rem;
+    max-width: 14rem;
   }
 
   .global-header__search-slot .discovery-search--header .discovery-search__input {
@@ -394,17 +407,13 @@
     font-size: 0.64rem;
   }
 
-  .global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__panel {
-    right: 0;
-    left: auto;
+  .global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__panel,
+  .global-header__search-slot .discovery-search--header.discovery-search--header-desktop-field .discovery-search__panel {
+    left: 0;
+    right: auto;
     width: min(34rem, calc(var(--catalog-layout-max-width) - 1rem));
     min-width: min(28rem, calc(100vw - 2rem));
     border-radius: var(--radius-control, 2px);
-  }
-
-  .global-header__search-slot:has(.discovery-search--open) {
-    min-width: 11rem;
-    max-width: 15rem;
   }
 }
 
@@ -425,13 +434,13 @@
   }
 }
 
-.global-header__actions .global-header-discovery-fallback {
+.global-header__search-slot .global-header-discovery-fallback {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  min-height: 2.75rem;
+  width: var(--chrome-control-height, 2.35rem);
+  height: var(--chrome-control-height, 2.35rem);
+  min-height: var(--chrome-control-height, 2.35rem);
   padding: 0;
   border: 0;
   border-radius: 0.25rem;
@@ -440,16 +449,16 @@
   color: var(--color-text-muted);
 }
 
-.global-header__actions .global-header-discovery-fallback:hover {
+.global-header__search-slot .global-header-discovery-fallback:hover {
   color: var(--color-text-primary);
 }
 
-.global-header__actions .global-header-discovery-fallback__icon {
+.global-header__search-slot .global-header-discovery-fallback__icon {
   margin: 0;
   font-size: 1.35rem;
 }
 
-.global-header__actions .global-header-discovery-fallback__placeholder {
+.global-header__search-slot .global-header-discovery-fallback__placeholder {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -461,7 +470,7 @@
   border: 0;
 }
 
-.global-header__actions .global-header-discovery-fallback:focus-visible {
+.global-header__search-slot .global-header-discovery-fallback:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: var(--focus-ring-offset);
 }
@@ -474,11 +483,11 @@
   background: var(--color-bg-panel);
   color: var(--color-text-muted);
   border-radius: var(--radius-control, 2px);
-  padding: 0.32rem;
+  padding: 0.28rem;
   cursor: pointer;
   line-height: 1;
-  min-width: 2.75rem;
-  min-height: 2.75rem;
+  min-width: var(--chrome-control-height, 2.35rem);
+  min-height: var(--chrome-control-height, 2.35rem);
   box-sizing: border-box;
 }
 
@@ -677,14 +686,13 @@ body.global-header-menu-open {
   }
 }
 
-/* Small mobile (≤479px): brand+actions on row 1, LP doors full-width on row 2.
-   Prevents wordmark from overflowing into the experience chips at narrow widths. */
+/* Small mobile (≤479px): brand + search + menu on row 1, LP doors full-width on row 2. */
 @media (max-width: 479px) {
   .catalog-header-inner.global-header__bar {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     grid-template-areas:
-      'brand actions'
-      'doors  doors';
+      'brand search actions'
+      'doors  doors doors';
     row-gap: 0.5rem;
     padding-top: 0.62rem;
     padding-bottom: 0.62rem;
@@ -721,8 +729,7 @@ body.global-header-menu-open {
     flex: 1 1 auto;
     width: 100%;
     min-width: 0;
-    min-height: 2.5rem;
-    padding: 0.35rem 0.35rem;
+    padding: 0.3rem 0.35rem;
     font-size: 0.58rem;
   }
 }
