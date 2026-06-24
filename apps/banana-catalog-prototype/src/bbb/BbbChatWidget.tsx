@@ -56,7 +56,7 @@ export function BbbChatWidget() {
 
   const canSend = useMemo(() => input.trim().length > 0 && !isStreaming, [input, isStreaming])
   const actorId = useMemo(() => getOrCreateActorId(), [])
-  const toggleLabel = open ? 'Close' : 'Ask Bertrand'
+  const toggleLabel = 'Ask Bertrand'
 
   const closePanel = () => {
     setOpen(false)
