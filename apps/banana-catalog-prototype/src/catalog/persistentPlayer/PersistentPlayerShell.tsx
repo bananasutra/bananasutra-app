@@ -1,4 +1,4 @@
-import { useMemo, type CSSProperties, type MutableRefObject, type RefObject } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type MutableRefObject, type RefObject } from 'react'
 import { Link } from 'react-router-dom'
 import { queueContextLine } from '../playerQueue/queueContextLine'
 import {
@@ -13,6 +13,7 @@ import { currentQueueTrack } from '../playerQueue/types'
 import { sutraQuestionFromDisplay } from '../sutraContext'
 import { sutraClassName } from '../sutraTheme'
 import { PersistentSoundCloudPlayer } from './PersistentSoundCloudPlayer'
+import { PersistentPlayerLyricsPanel } from './PersistentPlayerLyricsPanel'
 import type { PersistentScPlayerApi } from './persistentScPlayerContext'
 import type { SoundCloudWidget } from '../soundcloudWidgetApi'
 import './PersistentPlayerBar.css'
@@ -41,6 +42,9 @@ function MetaSep() {
 export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: PersistentPlayerShellProps) {
   const { state, actions } = usePlayerQueue()
   const visible = barSessionActive(state)
+  const [scrubOpen, setScrubOpen] = useState(false)
+  const [lyricsOpen, setLyricsOpen] = useState(false)
+  const prevTrackIdRef = useRef<string | null>(null)
 
   const track = currentQueueTrack(state)
   const contextLine = useMemo(() => queueContextLine(state), [state])
@@ -49,6 +53,7 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
   const songLabel = track ? playableTrackSongLabel(track) : ''
   const sutraHref = track ? playableTrackSutraHref(track) : null
   const sutraLabel = track ? playableTrackSutraLabel(track) : ''
+  const hasLyrics = Boolean(track?.lyrics_id?.trim())
 
   const canGoPrevious = state.position > 0
   const canGoNext = state.position >= 0 && state.position < state.tracks.length - 1
@@ -56,13 +61,43 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
 
   const hasTrackMeta = Boolean(sutraHref || songLinkTo || genreDuration)
 
+  useEffect(() => {
+    if (visible) {
+      document.body.classList.add('has-persistent-player')
+      document.documentElement.style.setProperty('--bbb-panel-bottom-offset', '44px')
+    } else {
+      document.body.classList.remove('has-persistent-player')
+      document.documentElement.style.setProperty('--bbb-panel-bottom-offset', '0px')
+    }
+    return () => {
+      document.body.classList.remove('has-persistent-player')
+      document.documentElement.style.setProperty('--bbb-panel-bottom-offset', '0px')
+    }
+  }, [visible])
+
+  useEffect(() => {
+    setScrubOpen(false)
+  }, [track?.track_id])
+
+  useEffect(() => {
+    if (!track) return
+    const trackId = track.track_id
+    if (prevTrackIdRef.current !== trackId) {
+      setLyricsOpen(false)
+      prevTrackIdRef.current = trackId
+    }
+  }, [track])
+
   return (
     <div
       className={`persistent-player-shell${visible ? ' persistent-player-shell--visible' : ''}`}
       aria-hidden={!visible}
     >
+      {track && lyricsOpen ? (
+        <PersistentPlayerLyricsPanel track={track} open={lyricsOpen} />
+      ) : null}
       <aside
-        className="persistent-player-bar"
+        className={`persistent-player-bar${scrubOpen ? ' persistent-player-bar--scrub-open' : ''}`}
         aria-label="Now playing"
         style={{ '--persistent-sc-player-min-width': '480px' } as CSSProperties}
       >
@@ -146,6 +181,28 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
             </div>
             <button
               type="button"
+              className={`persistent-player-bar__scrub-btn${scrubOpen ? ' persistent-player-bar__scrub-btn--active' : ''}`}
+              onClick={() => setScrubOpen((prev) => !prev)}
+              aria-label={scrubOpen ? 'Hide waveform' : 'Show waveform scrubber'}
+              aria-pressed={scrubOpen}
+              aria-controls="persistent-player-embed"
+              aria-expanded={scrubOpen}
+            >
+              <span aria-hidden>≋</span> scrub
+            </button>
+            {hasLyrics ? (
+              <button
+                type="button"
+                className={`persistent-player-bar__lyrics-btn${lyricsOpen ? ' persistent-player-bar__lyrics-btn--active' : ''}`}
+                onClick={() => setLyricsOpen((prev) => !prev)}
+                aria-label={lyricsOpen ? 'Hide lyrics' : 'Show lyrics'}
+                aria-pressed={lyricsOpen}
+              >
+                <span aria-hidden>♪</span> lyrics
+              </button>
+            ) : null}
+            <button
+              type="button"
               className="persistent-player-bar__dismiss-btn"
               onClick={() => actions.stop()}
               aria-label={dismissLabel}
@@ -157,7 +214,7 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
             </button>
           </div>
         </div>
-        <div ref={embedWrapRef} className="persistent-player-bar__embed">
+        <div id="persistent-player-embed" ref={embedWrapRef} className="persistent-player-bar__embed">
           <PersistentSoundCloudPlayer apiRef={apiRef} widgetRef={widgetRef} />
         </div>
       </aside>

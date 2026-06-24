@@ -20,7 +20,8 @@
 .bbb-widget__toggle:focus-visible,
 .bbb-widget__send:focus-visible,
 .bbb-widget__stop:focus-visible,
-.bbb-widget__input:focus-visible {
+.bbb-widget__input:focus-visible,
+.bbb-widget__close:focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: var(--focus-ring-offset);
 }
@@ -39,8 +40,32 @@
 }
 
 .bbb-widget__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.45rem;
   padding: 0.7rem 0.85rem 0.55rem;
   border-bottom: 1px solid var(--color-border);
+}
+
+.bbb-widget__header-text {
+  min-width: 0;
+}
+
+.bbb-widget__close {
+  flex-shrink: 0;
+  font: inherit;
+  font-size: 1.125rem;
+  line-height: 1;
+  padding: 0.1rem 0.25rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.bbb-widget__close:hover {
+  color: var(--color-text-primary);
 }
 
 .bbb-widget__title,
@@ -294,32 +319,83 @@
   font-size: 0.78rem;
 }
 
-@media (max-width: 640px) {
+/* Desktop: right-edge tab + side panel */
+@media (hover: hover) and (pointer: fine) {
   .bbb-widget {
-    right: 0.5rem;
-    bottom: 0.65rem;
+    position: fixed;
+    right: 0;
+    top: 40%;
+    bottom: auto;
+    transform: translateY(-50%);
+    z-index: 450;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+  }
+
+  .bbb-widget__toggle {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    border-radius: var(--radius-control, 2px) 0 0 var(--radius-control, 2px);
+    border-right: 0;
+    padding: 0.85rem 0.45rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
   }
 
   .bbb-widget__panel {
-    width: min(84vw, 320px);
-    max-height: min(56svh, 440px);
+    width: min(85vw, 340px);
+    max-height: calc(100vh - var(--bbb-panel-bottom-offset, 0px) - 2rem);
+    margin-top: 0;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    border-right: 0;
+    transform-origin: right center;
+  }
+}
+
+/* Mobile/tablet: pill button + full-screen panel */
+@media (hover: none) and (pointer: coarse) {
+  .bbb-widget {
+    position: fixed;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    z-index: 450;
   }
 
-  .bbb-widget__header {
-    padding: 0.6rem 0.7rem 0.5rem;
+  .bbb-widget__toggle {
+    border-radius: 20px;
+    padding: 0.55rem 1rem 0.55rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   }
 
-  .bbb-widget__history {
-    padding: 0.55rem 0.65rem;
-    min-height: 110px;
+  .bbb-widget__toggle::before {
+    content: 'B';
+    font-size: 1rem;
+    font-weight: 900;
+    line-height: 1;
+    opacity: 0.8;
   }
 
-  .bbb-widget__composer {
-    padding: 0.55rem 0.65rem 0.65rem;
+  .bbb-widget__panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    max-height: 85svh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    margin-top: 0;
   }
 
-  .bbb-widget__hint {
-    font-size: 0.64rem;
+  .bbb-widget.is-open .bbb-widget__toggle {
+    display: none;
   }
 }
 

@@ -50,15 +50,29 @@ export function BbbChatWidget() {
   const abortRef = useRef<AbortController | null>(null)
   const historyRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLTextAreaElement | null>(null)
+  const toggleRef = useRef<HTMLButtonElement | null>(null)
+  const prevOpenRef = useRef(false)
   const openedFromNotFoundRef = useRef(false)
 
   const canSend = useMemo(() => input.trim().length > 0 && !isStreaming, [input, isStreaming])
   const actorId = useMemo(() => getOrCreateActorId(), [])
-  const toggleLabel = open ? 'Close Bertrand' : 'Ring Bertrand'
+  const toggleLabel = open ? 'Close' : 'Ask Bertrand'
+
+  const closePanel = () => {
+    setOpen(false)
+  }
 
   useEffect(() => {
     if (!open) return
     queueMicrotask(() => inputRef.current?.focus())
+  }, [open])
+
+  useEffect(() => {
+    const wasOpen = prevOpenRef.current
+    prevOpenRef.current = open
+    if (wasOpen && !open) {
+      queueMicrotask(() => toggleRef.current?.focus())
+    }
   }, [open])
 
   useEffect(() => {
@@ -244,10 +258,11 @@ export function BbbChatWidget() {
     <section className={`bbb-widget${open ? ' is-open' : ''}`} aria-label="Bertrand chat widget">
       <button
         type="button"
+        ref={toggleRef}
         className="bbb-widget__toggle"
         aria-expanded={open}
         aria-controls="bbb-widget-panel"
-        aria-label={open ? 'Close Bertrand chat widget' : 'Open Bertrand chat widget'}
+        aria-label={open ? 'Close Bertrand chat' : 'Open Bertrand chat'}
         onClick={() => {
           setOpen((prev) => {
             if (!prev) trackBertrandOpen({ surface: 'floating_button' })
@@ -260,8 +275,18 @@ export function BbbChatWidget() {
       {open ? (
         <div id="bbb-widget-panel" className="bbb-widget__panel">
           <header className="bbb-widget__header">
-            <p className="bbb-widget__title">Bertrand · Banana Butler</p>
-            <p className="bbb-widget__subtitle">At your service, one hidden gem at a time</p>
+            <div className="bbb-widget__header-text">
+              <p className="bbb-widget__title">Bertrand · Banana Butler</p>
+              <p className="bbb-widget__subtitle">At your service, one hidden gem at a time</p>
+            </div>
+            <button
+              type="button"
+              className="bbb-widget__close"
+              aria-label="Close Bertrand chat"
+              onClick={closePanel}
+            >
+              ×
+            </button>
           </header>
           {mode === 'feedback' ? (
             <BbbFeedbackForm

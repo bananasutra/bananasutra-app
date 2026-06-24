@@ -31,7 +31,7 @@ import {
 } from './urlState'
 import { coverImageUrl } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
-import { PLAY_ALL_HONEST_MOBILE_COPY, usePlayAllDesktopAvailable } from './playAllPlatform'
+import { usePlayAllDesktopAvailable } from './playAllPlatform'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { formatDurationDisplay } from './durationFormat'
@@ -774,9 +774,15 @@ export function TracksPage() {
                       </div>
                     ) : null}
                     {!playAllDesktopAvailable ? (
-                      <p className="tracks-page__play-all-note tracks-page__play-all-note--honest">
-                        {PLAY_ALL_HONEST_MOBILE_COPY}
-                      </p>
+                      <div className="tracks-page__mobile-listen-hint" role="note">
+                        <p className="tracks-page__mobile-listen-hint-text">
+                          Continuous listening works best on desktop. On mobile, open a songbook for
+                          uninterrupted play.{' '}
+                          <Link to="/songbooks/" className="tracks-page__mobile-listen-hint-link">
+                            Browse songbooks →
+                          </Link>
+                        </p>
+                      </div>
                     ) : null}
                   </div>
                 ) : null}
