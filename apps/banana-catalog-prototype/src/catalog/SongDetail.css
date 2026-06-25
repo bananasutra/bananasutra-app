@@ -307,19 +307,62 @@
   list-style: none;
 }
 
+.song-detail-hero-meta > .song-detail-secondary-meta + .song-detail-secondary-meta {
+  margin-top: 0.12rem;
+}
+
+.song-detail-hero-meta {
+  margin-top: 0.25rem;
+}
+
+.song-detail-hero-meta > .song-detail-secondary-meta {
+  margin-top: 0;
+}
+
+.song-detail-hero-meta > .song-detail-secondary-meta--muse:not(:first-child) {
+  margin-top: 0.35rem;
+}
+
+@media (max-width: 640px) {
+  .song-detail-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.55rem;
+    align-items: center;
+    margin-top: 0.25rem;
+  }
+
+  .song-detail-hero-meta .song-detail-secondary-meta {
+    display: contents;
+    margin: 0;
+  }
+
+  .song-detail-hero-meta .song-detail-secondary-meta--muse {
+    margin-top: 0;
+  }
+
+  .song-detail-hero-meta .song-detail-secondary-meta-item + .song-detail-secondary-meta-item::before {
+    content: none;
+  }
+}
+
 .song-detail-secondary-meta--sutra {
   flex-wrap: nowrap;
 }
 
 .song-detail-secondary-meta--muse {
-  margin-top: 0.35rem;
+  margin-top: 0;
 }
 
 .song-detail-secondary-meta + .song-detail-secondary-meta {
   margin-top: 0.12rem;
 }
 
-.song-detail-secondary-meta:last-child .song-detail-secondary-meta-item + .song-detail-secondary-meta-item::before {
+.song-detail-secondary-meta:last-child .song-detail-secondary-meta-item + .song-detail-secondary-meta-item::before,
+.song-detail-hero-meta
+  .song-detail-secondary-meta:not(.song-detail-secondary-meta--sutra):not(.song-detail-secondary-meta--muse)
+  .song-detail-secondary-meta-item
+  + .song-detail-secondary-meta-item::before {
   content: '·';
   margin-right: 0.7rem;
   color: var(--color-text-faint);
