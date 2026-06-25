@@ -29,6 +29,24 @@ const INITIAL_ASSISTANT_NOT_FOUND_TEXT =
 const INITIAL_ASSISTANT_BACK_ON_TRACK_TEXT =
   'Back on track. Want a quick recommendation, or would you rather browse by sutra, songbook, or vibe?'
 
+function BbbChatIcon() {
+  return (
+    <svg
+      className="bbb-widget__toggle-icon"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        fill="currentColor"
+        d="M3 2.5h10a1.5 1.5 0 0 1 1.5 1.5v5a1.5 1.5 0 0 1-1.5 1.5H7.2L4.4 12.1a.75.75 0 0 1-1.15-.64V9.5H3A1.5 1.5 0 0 1 1.5 8V4A1.5 1.5 0 0 1 3 2.5Z"
+      />
+    </svg>
+  )
+}
+
 const isDefaultIntroOnly = (messages: ChatMessage[]): boolean =>
   messages.length === 1 && messages[0]?.role === 'assistant' && messages[0]?.content === INITIAL_ASSISTANT_TEXT
 const isNotFoundIntroOnly = (messages: ChatMessage[]): boolean =>
@@ -56,7 +74,7 @@ export function BbbChatWidget() {
 
   const canSend = useMemo(() => input.trim().length > 0 && !isStreaming, [input, isStreaming])
   const actorId = useMemo(() => getOrCreateActorId(), [])
-  const toggleLabel = 'Ask Bertrand'
+  const toggleLabel = open ? 'Close Bertrand' : 'Ask Bertrand'
 
   const closePanel = () => {
     setOpen(false)
@@ -270,7 +288,8 @@ export function BbbChatWidget() {
           })
         }}
       >
-        {toggleLabel}
+        <BbbChatIcon />
+        <span className="bbb-widget__toggle-label">{toggleLabel}</span>
       </button>
       {open ? (
         <div id="bbb-widget-panel" className="bbb-widget__panel">
@@ -285,7 +304,7 @@ export function BbbChatWidget() {
               aria-label="Close Bertrand chat"
               onClick={closePanel}
             >
-              ×
+              Close
             </button>
           </header>
           {mode === 'feedback' ? (
