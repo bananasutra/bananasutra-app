@@ -14,6 +14,7 @@ import { GlobalFooter } from './GlobalFooter'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { SoundCloudPassthroughEmbed } from './SoundCloudPassthroughEmbed'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
+import { SongDetailPlayAllHonestHint } from './SongDetailPlayAllHonestHint'
 import { SongDetailAlsoPartOfCard } from './SongDetailAlsoPartOfCard'
 import { SongDetailBertrandEntry } from './SongDetailBertrandEntry'
 import {
@@ -26,7 +27,6 @@ import { CatalogVideoSpotlight, type CatalogVideoSpotlightItem } from './Catalog
 import { CatalogVideoSpotlightRailThumb } from './CatalogVideoSpotlightRailThumb'
 import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import {
-  songDetailPlayAllHonestMobileCopy,
   SONG_DETAIL_TWO_COL_MEDIA_QUERY,
   usePlayAllDesktopAvailable,
 } from './playAllPlatform'
@@ -48,7 +48,6 @@ import {
   catalogPathSlugFromTitleAndSlug,
   lyricsIdFromSongUrlSlug,
   browseRowHasAudioSection,
-  songCatalogLinkTo,
   songCatalogPath,
 } from './songPaths'
 import { songbookByName } from './songbooks'
@@ -62,7 +61,7 @@ import { PageMeta } from './PageMeta'
 import { CatalogNotFoundPage } from './CatalogNotFoundPage'
 import { songOgImageUrl } from './pageMetaConstants'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
-import { SongThumbCard } from './SongThumbCard'
+import { SongThumbDropsGrid } from './SongThumbDropsGrid'
 import { useSongCatalogAndDetail, loadYoutubeByLyricsId } from './generatedData'
 import './CatalogApp.css'
 import './CatalogVideoSpotlight.css'
@@ -665,11 +664,21 @@ function SongDetailLoaded({
   const displayedTopTracks = topTracksListExpanded
     ? orderedTracks
     : orderedTracks.slice(0, SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT)
-  const playAllHonestMobileCopy = songDetailPlayAllHonestMobileCopy({
-    hasFullEpListen: showEpEmbed,
-    hasFullEpTab: hasListenTabNav,
-    hasSongbookPlaylist: Boolean(songbookPlaylistUrl),
-  })
+  const playAllHonestHintVariant =
+    showEpEmbed && hasListenTabNav
+      ? ('full-ep-tab' as const)
+      : showEpEmbed
+        ? ('full-ep-only' as const)
+        : songbookPlaylistUrl
+          ? ('songbook' as const)
+          : ('generic' as const)
+
+  const switchToFullEpTab = useCallback(() => {
+    setAudioListenTab('ep')
+    window.requestAnimationFrame(() => {
+      document.getElementById('song-tab-ep')?.focus()
+    })
+  }, [])
 
   const songExclusivePlaybackEnabled = Boolean(showEpPanel || hasPlayableTrack || hasYoutubeVideos)
   const embeddableYoutubeCount = useMemo(
@@ -1180,9 +1189,10 @@ function SongDetailLoaded({
                         </div>
                       ) : null}
                       {!playAllDesktopAvailable ? (
-                        <p className="song-detail-audio-hint song-detail-audio-hint--honest">
-                          {playAllHonestMobileCopy}
-                        </p>
+                        <SongDetailPlayAllHonestHint
+                          variant={playAllHonestHintVariant}
+                          onSwitchToFullEp={playAllHonestHintVariant === 'full-ep-tab' ? switchToFullEpTab : undefined}
+                        />
                       ) : null}
                     </div>
                   ) : null}
@@ -1427,21 +1437,24 @@ function SongDetailLoaded({
                 <h2 id="song-related-heading" className="catalog-section-title">
                   Explore sister songs
                 </h2>
-                <ul className="song-thumb-grid song-detail-sister-grid">
-                  {orderedRelatedSongs.slice(0, 8).map((related) => {
-                    const sutra = songCatalogByLyricsId.get(related.lyrics_id)?.sutra?.trim() ?? ''
-                    return (
-                      <li key={related.lyrics_id} className="song-thumb-grid__cell">
-                        <SongThumbCard
-                          to={songCatalogLinkTo(related.lyrics_title, related.url_slug)}
-                          coverUrl={related.cover_image_url}
-                          title={related.lyrics_title}
-                          metaLabel={sutra || undefined}
-                        />
-                      </li>
-                    )
+                <SongThumbDropsGrid
+                  songs={orderedRelatedSongs.map((related) => {
+                    const catalog = songCatalogByLyricsId.get(related.lyrics_id)
+                    return {
+                      lyrics_id: related.lyrics_id,
+                      cover_image_url: related.cover_image_url,
+                      lyrics_title: related.lyrics_title,
+                      url_slug: related.url_slug,
+                      sutra: catalog?.sutra ?? '',
+                      published_at: catalog?.published_at,
+                      has_in_app_playback: related.has_in_app_playback,
+                      has_sc_catalog_listen: related.has_sc_catalog_listen,
+                      has_youtube_video: related.has_youtube_video,
+                      primary_ep_url: catalog?.primary_ep_url,
+                    }
                   })}
-                </ul>
+                  limit={4}
+                />
             </section>
           ) : null}
 

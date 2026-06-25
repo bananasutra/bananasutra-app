@@ -27,6 +27,40 @@ function normalizeRemoteImageSource(source: string): string {
   return source
 }
 
+/** Downgrade YouTube poster tier when maxresdefault is missing (common on Shorts). */
+export function youtubeThumbnailFallbackUrl(source: string, failedUrl?: string): string {
+  const trimmed = (source || '').trim()
+  if (!trimmed) return ''
+  try {
+    const u = new URL((failedUrl || trimmed).trim())
+    if (u.hostname !== 'i.ytimg.com') return ''
+    if (/\/maxresdefault\.jpg$/i.test(u.pathname)) {
+      u.pathname = u.pathname.replace(/maxresdefault\.jpg$/i, 'hqdefault.jpg')
+      return u.toString()
+    }
+    if (/\/hqdefault\.jpg$/i.test(u.pathname)) {
+      u.pathname = u.pathname.replace(/hqdefault\.jpg$/i, 'mqdefault.jpg')
+      return u.toString()
+    }
+  } catch {
+    return ''
+  }
+  return ''
+}
+
+/** Next URL to try after a cover `<img>` error (YouTube tiers, then origin). */
+export function coverImageFallbackUrl(source: string, failedUrl?: string): string {
+  const trimmed = (source || '').trim()
+  if (!trimmed) return ''
+  const yt = youtubeThumbnailFallbackUrl(trimmed, failedUrl)
+  if (yt) return yt
+  const normalized = normalizeRemoteImageSource(trimmed)
+  if (failedUrl?.includes('/cdn-cgi/image/') && normalized && normalized !== failedUrl) {
+    return normalized
+  }
+  return ''
+}
+
 /** Native pixel width for hosts that ship display-ready assets (no CF resize needed). */
 export function nativeImageMaxWidth(source: string): number | null {
   const normalized = normalizeRemoteImageSource(source.trim())

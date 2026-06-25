@@ -12,7 +12,6 @@ import {
   pickWordsSample,
   type LearnHubTileKey,
 } from './learnLpData'
-import { MANIFESTO_FRAMEWORK, MANIFESTO_LEARN_TEASER } from './manifestoContent'
 import { canonicalPathForRoute } from './seoPaths'
 import { songCatalogLinkTo, songCatalogPath } from './songPaths'
 import { SUTRA_CONTEXT, type SutraFamilyKey, sutraHrefForFamily } from './sutraContext'
@@ -99,6 +98,7 @@ function LearnHubSutrasPanel() {
   const intro = LEARN_HUB_STAGE_INTRO.sutras
   return (
     <LearnHubStagePanel
+      bodyClassName="learn-lp__panel-stage-body--sutras"
       footer={
         <Link className="learn-lp__panel-cta-btn" to={LEARN_HUB_LINKS.sutras}>
           Browse all sutras →
@@ -187,21 +187,28 @@ function LearnHubWordsPanel({ words }: { words: SongCatalogItem[] }) {
       <p className="learn-lp__panel-intro">{intro.lead}</p>
       <p className="learn-lp__panel-text">{intro.support}</p>
       <ul className="learn-lp__word-list">
-        {words.map((song) => (
-          <li key={song.lyrics_id}>
-            <Link
-              className="learn-lp__word-row"
-              to={songCatalogLinkTo(song.lyrics_title, song.url_slug)}
-            >
-              <span className="learn-lp__word-row-title">{song.lyrics_title}</span>
-              {song.sutra.trim() ? (
-                <span className={`learn-lp__word-row-meta catalog-sutra-word ${sutraClassName(song.sutra.trim())}`}>
-                  {song.sutra.trim()}
+        {words.map((song) => {
+          const sutra = song.sutra.trim()
+          const extract = (song.lyrics_extract || '').trim()
+          return (
+            <li key={song.lyrics_id}>
+              <Link
+                className="learn-lp__word-row"
+                to={songCatalogLinkTo(song.lyrics_title, song.url_slug)}
+              >
+                <span className="learn-lp__word-row-head">
+                  <span className="learn-lp__word-row-title">{song.lyrics_title}</span>
+                  {sutra ? (
+                    <span className={`learn-lp__word-row-meta catalog-sutra-word ${sutraClassName(sutra)}`}>
+                      {sutra}
+                    </span>
+                  ) : null}
                 </span>
-              ) : null}
-            </Link>
-          </li>
-        ))}
+                {extract ? <span className="learn-lp__word-row-extract">{extract}</span> : null}
+              </Link>
+            </li>
+          )
+        })}
       </ul>
     </LearnHubStagePanel>
   )
@@ -217,23 +224,18 @@ function LearnHubManifestoPanel() {
           <Link className="learn-lp__panel-cta-btn" to={LEARN_HUB_LINKS.manifesto}>
             Read the full manifesto →
           </Link>
-          <Link className="learn-lp__panel-secondary-btn learn-lp__manifesto-song-link" to={LEARN_HUB_LINKS.manifestoSong}>
-            Read the manifesto song →
+          <Link className="learn-lp__panel-secondary-btn" to={LEARN_HUB_LINKS.privacy}>
+            Privacy & transparency →
           </Link>
         </>
       }
     >
       <p className="learn-lp__panel-intro">{intro.lead}</p>
-      <blockquote className="learn-lp__manifesto-teaser-quote">{MANIFESTO_LEARN_TEASER.pullQuote}</blockquote>
-      <ul className="learn-lp__manifesto-pillar-strip">
-        {MANIFESTO_FRAMEWORK.map((pillar) => (
-          <li key={pillar.name} className="learn-lp__manifesto-pillar">
-            <span className="learn-lp__manifesto-pillar-name">{pillar.name}</span>
-            <span className="learn-lp__manifesto-pillar-sub">{pillar.sub}</span>
-          </li>
-        ))}
-      </ul>
       <p className="learn-lp__panel-text">{intro.support}</p>
+      <p className="learn-lp__panel-text">
+        The stance in one line: human authorship first, AI as instrument, consent and attribution non-negotiable.{' '}
+        <Link to={LEARN_HUB_LINKS.manifestoSong}>Read the manifesto song</Link> if you want the argument in lyric form.
+      </p>
     </LearnHubStagePanel>
   )
 }
