@@ -62,6 +62,8 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
   const scRef = useRef<SoundCloudWidgetGlobal | null>(null)
   const onFinishRef = useRef<(() => void) | null>(null)
   const onPlayingChangeRef = useRef<((playing: boolean) => void) | null>(null)
+  const onPlayProgressRef = useRef<((positionMs: number) => void) | null>(null)
+  const onWidgetReadyRef = useRef<(() => void) | null>(null)
   const pendingGesturePlayRef = useRef(false)
   const loadedUrlRef = useRef<string | null>(null)
   const advancedForCurrentTrackRef = useRef(false)
@@ -131,6 +133,7 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
       durationMsRef.current = ms > 0 ? ms : null
     })
     syncPlayingStateFromWidget(widget)
+    onWidgetReadyRef.current?.()
     if (pendingGesturePlayRef.current || persistentGesturePlayWindowActive()) {
       tryPlayWidget(widget)
     }
@@ -155,6 +158,7 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
         onReady: handleReady,
         onFinish: handleFinish,
         onPlayProgress: (positionMs) => {
+          onPlayProgressRef.current?.(positionMs)
           const durationMs = durationMsRef.current
           if (durationMs == null || advancedForCurrentTrackRef.current) return
           if (positionMs >= durationMs - SC_FINISH_FALLBACK_LEAD_MS) {
@@ -332,6 +336,12 @@ export function PersistentSoundCloudPlayer({ apiRef, widgetRef }: PersistentSoun
     }
     api.setOnPlayingChange = (handler) => {
       onPlayingChangeRef.current = handler
+    }
+    api.setOnPlayProgress = (handler) => {
+      onPlayProgressRef.current = handler
+    }
+    api.setOnWidgetReady = (handler) => {
+      onWidgetReadyRef.current = handler
     }
   }, [apiRef, dismiss, loadTrack, syncPlayInGesture])
 

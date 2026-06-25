@@ -30,6 +30,7 @@ import {
   SONG_DETAIL_TWO_COL_MEDIA_QUERY,
   usePlayAllDesktopAvailable,
 } from './playAllPlatform'
+import { persistentBarOwnsQueueChrome } from './playerQueue/pageQueueChrome'
 import { formatDurationDisplay } from './durationFormat'
 import {
   queueContextLine,
@@ -582,6 +583,7 @@ function SongDetailLoaded({
   const { state: queueState, actions: queueActions } = usePlayerQueue()
   const playAllTopTracksActive = queueState.playAllActive
   const isScPlaying = queueState.playing
+  const persistentBarOwnsQueue = persistentBarOwnsQueueChrome(playAllDesktopAvailable, playAllTopTracksActive)
   const playingTrackId = selectedTrackId(queueState)
   const sessionActive = queueSessionActive(queueState)
   const queueOwnsPage = queueSessionOwnsPage(queueState, 'song_detail')
@@ -1097,41 +1099,43 @@ function SongDetailLoaded({
                       ) : playAllDesktopAvailable || playAllTopTracksActive ? (
                         <div className="song-detail-audio-playall-row">
                           {playAllTopTracksActive ? (
-                            <>
-                              {isScPlaying ? (
+                            persistentBarOwnsQueue ? null : (
+                              <>
+                                {isScPlaying ? (
+                                  <button
+                                    type="button"
+                                    className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
+                                    onClick={() => queueActions.pause()}
+                                  >
+                                    <span className="song-detail-audio-action-btn__glyph" aria-hidden>
+                                      ❚❚
+                                    </span>
+                                    Pause
+                                  </button>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
+                                    onClick={() => queueActions.resume()}
+                                  >
+                                    <span className="song-detail-audio-action-btn__glyph" aria-hidden>
+                                      ▶
+                                    </span>
+                                    Resume
+                                  </button>
+                                )}
                                 <button
                                   type="button"
-                                  className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
-                                  onClick={() => queueActions.pause()}
+                                  className="song-detail-audio-action-btn song-detail-audio-action-btn--stop"
+                                  onClick={() => queueActions.stop()}
                                 >
                                   <span className="song-detail-audio-action-btn__glyph" aria-hidden>
-                                    ❚❚
+                                    ■
                                   </span>
-                                  Pause
+                                  Stop playing all
                                 </button>
-                              ) : (
-                                <button
-                                  type="button"
-                                  className="song-detail-audio-action-btn song-detail-audio-action-btn--primary"
-                                  onClick={() => queueActions.resume()}
-                                >
-                                  <span className="song-detail-audio-action-btn__glyph" aria-hidden>
-                                    ▶
-                                  </span>
-                                  Resume
-                                </button>
-                              )}
-                              <button
-                                type="button"
-                                className="song-detail-audio-action-btn song-detail-audio-action-btn--stop"
-                                onClick={() => queueActions.stop()}
-                              >
-                                <span className="song-detail-audio-action-btn__glyph" aria-hidden>
-                                  ■
-                                </span>
-                                Stop playing all
-                              </button>
-                            </>
+                              </>
+                            )
                           ) : playAllDesktopAvailable ? (
                             <button
                               type="button"
@@ -1146,24 +1150,26 @@ function SongDetailLoaded({
                           ) : null}
                           {playAllDesktopAvailable || playAllTopTracksActive ? (
                             <>
-                              <div className="song-detail-audio-controls" role="group" aria-label="Track queue navigation">
-                                <button
-                                  type="button"
-                                  className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
-                                  onClick={() => queueActions.jump(-1)}
-                                  disabled={!canGoPrevious}
-                                >
-                                  Previous
-                                </button>
-                                <button
-                                  type="button"
-                                  className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
-                                  onClick={() => queueActions.jump(1)}
-                                  disabled={!canGoNext}
-                                >
-                                  Next
-                                </button>
-                              </div>
+                              {persistentBarOwnsQueue ? null : (
+                                <div className="song-detail-audio-controls" role="group" aria-label="Track queue navigation">
+                                  <button
+                                    type="button"
+                                    className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
+                                    onClick={() => queueActions.jump(-1)}
+                                    disabled={!canGoPrevious}
+                                  >
+                                    Previous
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="song-detail-audio-action-btn song-detail-audio-action-btn--queue"
+                                    onClick={() => queueActions.jump(1)}
+                                    disabled={!canGoNext}
+                                  >
+                                    Next
+                                  </button>
+                                </div>
+                              )}
                               <span className="song-detail-audio-status" aria-live="polite">
                                 {queueIndex >= 0
                                   ? `Track ${queueIndex + 1} of ${queueStatusTotal}`
