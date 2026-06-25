@@ -222,9 +222,6 @@ export function DiscoverySearch({
   const [debounced, setDebounced] = useState(initialQuery.trim())
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<DiscoveryTab>('songbooks')
-  const [isNarrowViewport, setIsNarrowViewport] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches,
-  )
   const [headerDesktopFieldActive, setHeaderDesktopFieldActive] = useState(
     () => typeof window !== 'undefined' && window.matchMedia(HEADER_DESKTOP_SEARCH_FIELD_MQ).matches,
   )
@@ -291,14 +288,6 @@ export function DiscoverySearch({
       cancelled = true
     }
   }, [open, youtubeLoadStarted])
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
-    const onMq = () => setIsNarrowViewport(mq.matches)
-    onMq()
-    mq.addEventListener('change', onMq)
-    return () => mq.removeEventListener('change', onMq)
-  }, [])
 
   useEffect(() => {
     const mq = window.matchMedia(HEADER_DESKTOP_SEARCH_FIELD_MQ)
@@ -705,19 +694,19 @@ export function DiscoverySearch({
       ? `${optionPrefix}-${activeOptionIndex}`
       : undefined
 
-  const headerMobileOpen = variant === 'header' && open && isNarrowViewport
+  const headerCompactOpen = variant === 'header' && open && !headerDesktopFieldActive
   const headerDesktopField = variant === 'header' && headerDesktopFieldActive
   const headerFieldExpanded = variant !== 'header' || open || headerDesktopField
   const shellClass =
     `discovery-search discovery-search--${variant}` +
     (open ? ' discovery-search--open' : '') +
-    (headerMobileOpen ? ' discovery-search--header-mobile-open' : '') +
+    (headerCompactOpen ? ' discovery-search--header-compact-open' : '') +
     (headerDesktopField ? ' discovery-search--header-desktop-field' : '')
 
   return (
     <div ref={rootRef} className={shellClass}>
       <div
-        className={`discovery-search__mobile-sheet${headerMobileOpen ? ' discovery-search__mobile-sheet--mobile-open' : ''}`}
+        className={`discovery-search__mobile-sheet${headerCompactOpen ? ' discovery-search__mobile-sheet--compact-open' : ''}`}
       >
       <form className="discovery-search__form" role="search" aria-label="Catalog discovery" onSubmit={onSubmit}>
         <div
