@@ -66,14 +66,6 @@ export function PersistentPlayerLyricsPanel({ track, open, onClose }: LyricsPane
       aria-live="polite"
     >
       <div className="persistent-player-lyrics__header">
-        <div className="persistent-player-lyrics__header-main">
-          <p className="persistent-player-lyrics__title">{songLabel}</p>
-          {showSongPageLink && songLinkTo ? (
-            <Link to={songLinkTo} className="persistent-player-lyrics__song-link">
-              Full song page →
-            </Link>
-          ) : null}
-        </div>
         <button
           type="button"
           className="persistent-player-lyrics__close"
@@ -82,6 +74,14 @@ export function PersistentPlayerLyricsPanel({ track, open, onClose }: LyricsPane
         >
           <span aria-hidden>×</span>
         </button>
+        <div className="persistent-player-lyrics__header-main">
+          <p className="persistent-player-lyrics__title">{songLabel}</p>
+          {showSongPageLink && songLinkTo ? (
+            <Link to={songLinkTo} className="persistent-player-lyrics__song-link">
+              Full song page →
+            </Link>
+          ) : null}
+        </div>
       </div>
       <div className="persistent-player-lyrics__body">
         {loading ? (

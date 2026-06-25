@@ -32,6 +32,8 @@ import {
 import { coverImageUrl } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
 import { usePlayAllDesktopAvailable } from './playAllPlatform'
+import { persistentBarOwnsQueueChrome } from './playerQueue/pageQueueChrome'
+import { songbookHintForTracksFilters } from './tracksFilterSongbookHint'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { formatDurationDisplay } from './durationFormat'
@@ -330,6 +332,11 @@ export function TracksPage() {
   const { state: queueState, actions: queueActions } = usePlayerQueue()
   const playAllActive = queueState.playAllActive
   const isScPlaying = queueState.playing
+  const persistentBarOwnsQueue = persistentBarOwnsQueueChrome(playAllDesktopAvailable, playAllActive)
+  const mobileSongbookHint = useMemo(
+    () => songbookHintForTracksFilters(filters, urlFind),
+    [filters, urlFind],
+  )
   const playingTrackId = selectedTrackId(queueState)
   const sessionActive = queueSessionActive(queueState)
   const queueOwnsPage = queueSessionOwnsPage(queueState, 'tracks')
@@ -697,41 +704,43 @@ export function TracksPage() {
                     ) : playAllDesktopAvailable || playAllActive ? (
                       <div className="tracks-page__play-all-row">
                         {playAllActive ? (
-                          <>
-                            {isScPlaying ? (
+                          persistentBarOwnsQueue ? null : (
+                            <>
+                              {isScPlaying ? (
+                                <button
+                                  type="button"
+                                  className="tracks-page__play-all-btn"
+                                  onClick={() => queueActions.pause()}
+                                >
+                                  <span className="tracks-page__play-all-glyph" aria-hidden>
+                                    ❚❚
+                                  </span>
+                                  Pause
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  className="tracks-page__play-all-btn"
+                                  onClick={() => queueActions.resume()}
+                                >
+                                  <span className="tracks-page__play-all-glyph" aria-hidden>
+                                    ▶
+                                  </span>
+                                  Resume
+                                </button>
+                              )}
                               <button
                                 type="button"
-                                className="tracks-page__play-all-btn"
-                                onClick={() => queueActions.pause()}
+                                className="tracks-page__play-all-btn tracks-page__play-all-btn--stop"
+                                onClick={() => queueActions.stop()}
                               >
                                 <span className="tracks-page__play-all-glyph" aria-hidden>
-                                  ❚❚
+                                  ■
                                 </span>
-                                Pause
+                                Stop playing all
                               </button>
-                            ) : (
-                              <button
-                                type="button"
-                                className="tracks-page__play-all-btn"
-                                onClick={() => queueActions.resume()}
-                              >
-                                <span className="tracks-page__play-all-glyph" aria-hidden>
-                                  ▶
-                                </span>
-                                Resume
-                              </button>
-                            )}
-                            <button
-                              type="button"
-                              className="tracks-page__play-all-btn tracks-page__play-all-btn--stop"
-                              onClick={() => queueActions.stop()}
-                            >
-                              <span className="tracks-page__play-all-glyph" aria-hidden>
-                                ■
-                              </span>
-                              Stop playing all
-                            </button>
-                          </>
+                            </>
+                          )
                         ) : playAllDesktopAvailable && filtered.length > 1 ? (
                           <button
                             type="button"
@@ -746,24 +755,26 @@ export function TracksPage() {
                         ) : null}
                         {playAllDesktopAvailable || playAllActive ? (
                           <>
-                            <div className="tracks-page__queue-nav" role="group" aria-label="Track queue navigation">
-                              <button
-                                type="button"
-                                className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
-                                onClick={() => queueActions.jump(-1)}
-                                disabled={!canGoPrevious}
-                              >
-                                Previous
-                              </button>
-                              <button
-                                type="button"
-                                className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
-                                onClick={() => queueActions.jump(1)}
-                                disabled={!canGoNext}
-                              >
-                                Next
-                              </button>
-                            </div>
+                            {persistentBarOwnsQueue ? null : (
+                              <div className="tracks-page__queue-nav" role="group" aria-label="Track queue navigation">
+                                <button
+                                  type="button"
+                                  className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
+                                  onClick={() => queueActions.jump(-1)}
+                                  disabled={!canGoPrevious}
+                                >
+                                  Previous
+                                </button>
+                                <button
+                                  type="button"
+                                  className="tracks-page__play-all-btn tracks-page__play-all-btn--queue-nav"
+                                  onClick={() => queueActions.jump(1)}
+                                  disabled={!canGoNext}
+                                >
+                                  Next
+                                </button>
+                              </div>
+                            )}
                             <span className="tracks-page__play-all-status" aria-live="polite">
                               {queueIndex >= 0
                                 ? `Top track ${queueIndex + 1} of ${queueStatusTotal}`
@@ -778,8 +789,17 @@ export function TracksPage() {
                         <p className="tracks-page__mobile-listen-hint-text">
                           Continuous listening works best on desktop. On mobile, open a songbook for
                           uninterrupted play.{' '}
+                          {mobileSongbookHint ? (
+                            <>
+                              Try{' '}
+                              <Link to={mobileSongbookHint.href} className="tracks-page__mobile-listen-hint-link">
+                                {mobileSongbookHint.songbook}
+                              </Link>
+                              , or{' '}
+                            </>
+                          ) : null}
                           <Link to="/songbooks/" className="tracks-page__mobile-listen-hint-link">
-                            Browse songbooks →
+                            browse all songbooks →
                           </Link>
                         </p>
                       </div>

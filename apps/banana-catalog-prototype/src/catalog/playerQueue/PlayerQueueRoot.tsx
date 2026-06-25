@@ -58,6 +58,8 @@ export function PlayerQueueRoot({ children }: { children: ReactNode }) {
       syncPlayInGesture: () => {},
       setOnFinish: () => {},
       setOnPlayingChange: () => {},
+      setOnPlayProgress: () => {},
+      setOnWidgetReady: () => {},
       dismiss: () => resetAndPrimePersistentSc(),
     }
   } else if (!playAllDesktop) {
