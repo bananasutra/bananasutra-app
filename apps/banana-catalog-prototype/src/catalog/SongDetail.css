@@ -327,8 +327,12 @@
   .song-detail-hero-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.2rem 0.55rem;
-    align-items: center;
+    column-gap: 0.55rem;
+    row-gap: 0.45rem;
+    align-items: flex-start;
+    align-content: flex-start;
+    justify-content: flex-start;
+    width: 100%;
     margin-top: 0.25rem;
   }
 
@@ -341,8 +345,15 @@
     margin-top: 0;
   }
 
-  .song-detail-hero-meta .song-detail-secondary-meta-item + .song-detail-secondary-meta-item::before {
-    content: none;
+  .song-detail-hero-meta .song-detail-secondary-meta-item {
+    position: static;
+    display: flex;
+    max-width: 100%;
+  }
+
+  .song-detail-hero-meta .song-detail-secondary-link {
+    min-height: 2.75rem;
+    padding: 0.4rem 0.55rem;
   }
 }
 
@@ -367,6 +378,22 @@
   margin-right: 0.7rem;
   color: var(--color-text-faint);
   opacity: 0.5;
+}
+
+@media (max-width: 640px) {
+  /* After desktop dot rules — gap handles mobile chip spacing; kill pseudo margins that indent wrap rows. */
+  .song-detail-hero-meta .song-detail-secondary-meta-item::before,
+  .song-detail-hero-meta .song-detail-secondary-meta-item + .song-detail-secondary-meta-item::before,
+  .song-detail-hero-meta
+    .song-detail-secondary-meta:not(.song-detail-secondary-meta--sutra):not(.song-detail-secondary-meta--muse)
+    .song-detail-secondary-meta-item
+    + .song-detail-secondary-meta-item::before {
+    content: none;
+    display: none;
+    margin: 0;
+    padding: 0;
+    width: 0;
+  }
 }
 
 .song-detail-secondary-meta-item {
@@ -1388,6 +1415,14 @@ h3.song-detail-youtube-subheading,
 
   .song-detail-secondary-meta {
     gap: 0.2rem 0.55rem;
+  }
+
+  .song-detail-hero-meta {
+    row-gap: 0.5rem;
+  }
+
+  .song-detail-hero-meta .song-detail-secondary-link {
+    min-height: 2.75rem;
   }
 
   .song-detail-secondary-meta-item {
