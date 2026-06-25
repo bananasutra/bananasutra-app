@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { buildSrcset, coverImageUrl, nativeImageMaxWidth } from './imageUrl'
+import { buildSrcset, coverImageUrl, coverImageFallbackUrl, nativeImageMaxWidth, youtubeThumbnailFallbackUrl } from './imageUrl'
 
 const SC_T500 =
   'https://i1.sndcdn.com/artworks-6hfJ7MQsBYyjyhKs-VO8orw-t500x500.png'
@@ -49,4 +49,18 @@ test('coverImageUrl still uses CF transform for remotes without native size', ()
   const src = 'https://example.com/hero.png'
   const out = coverImageUrl(src, { width: 400 })
   assert.match(out, /\/cdn-cgi\/image\/width=400/)
+})
+
+test('youtubeThumbnailFallbackUrl downgrades maxresdefault to hqdefault', () => {
+  const src = 'https://i.ytimg.com/vi/abc123/maxresdefault.jpg'
+  const out = youtubeThumbnailFallbackUrl(src, src)
+  assert.match(out, /hqdefault\.jpg/)
+  assert.doesNotMatch(out, /maxresdefault/)
+})
+
+test('coverImageFallbackUrl returns origin when CF transform fails', () => {
+  const src = 'https://example.com/hero.png'
+  const failed = coverImageUrl(src, { width: 400 })
+  const out = coverImageFallbackUrl(src, failed)
+  assert.equal(out, src)
 })
