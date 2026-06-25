@@ -1,5 +1,6 @@
 import { Link, type To } from 'react-router-dom'
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
+import { CoverImage } from './CoverImage'
 import { formatPublishDate } from './formatPublishDate'
 import './songThumbCard.css'
 
@@ -14,11 +15,21 @@ export type SongThumbCardProps = {
   /** ISO publish date — shown on Latest drops when set */
   publishedAt?: string
   ariaLabel?: string
+  loading?: 'lazy' | 'eager'
 }
 
-export function SongThumbCard({ to, coverUrl, title, metaLabel, summary, publishedAt, ariaLabel }: SongThumbCardProps) {
-  const cover = coverImageUrl(coverUrl, { width: 400 })
-  const coverSrcSet = buildSrcset(coverUrl, [200, 400])
+export function SongThumbCard({
+  to,
+  coverUrl,
+  title,
+  metaLabel,
+  summary,
+  publishedAt,
+  ariaLabel,
+  loading = 'lazy',
+}: SongThumbCardProps) {
+  const cover = coverImageUrl(coverUrl, { width: 240 })
+  const coverSrcSet = buildSrcset(coverUrl, [120, 200, 240])
   const meta = (metaLabel || '').trim()
   const sum = (summary || '').trim()
   const pubLabel = formatPublishDate(publishedAt || '')
@@ -28,15 +39,16 @@ export function SongThumbCard({ to, coverUrl, title, metaLabel, summary, publish
   return (
     <Link className="song-thumb-card" to={to} aria-label={label}>
       {cover ? (
-        <img
+        <CoverImage
           className="song-thumb-card__cover"
-          src={cover}
+          source={coverUrl}
+          requestWidth={240}
           srcSet={coverSrcSet}
-          sizes="200px"
+          sizes="(max-width: 640px) 50vw, 25vw"
           alt=""
-          width={400}
-          height={400}
-          loading="lazy"
+          width={240}
+          height={240}
+          loading={loading}
           decoding="async"
         />
       ) : (

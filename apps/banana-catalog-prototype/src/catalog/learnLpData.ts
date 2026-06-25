@@ -231,8 +231,9 @@ export const LEARN_HUB_STAGE_INTRO = {
     support: 'Read the words on their own terms. No player required.',
   },
   manifesto: {
-    lead: 'Three principles. Nine commitments. One position.',
-    support: 'For skeptics, sharers, and anyone asked whether this counts as art.',
+    lead: 'Ethics before novelty. Transparency before polish.',
+    support:
+      'A position on AI in art: liberty for the maker, equality in credit and pay, fraternity with the community that trained the culture. Not a petition. A compass.',
   },
 } as const
 
@@ -335,5 +336,6 @@ export const LEARN_HUB_LINKS = {
   words: canonicalPathForRoute('/words'),
   manifesto: canonicalPathForRoute('/manifesto'),
   manifestoSong: songCatalogPath('AI Fair Use Manifesto', 'ai-fair-use-manifesto'),
+  privacy: canonicalPathForRoute('/privacy'),
   listen: canonicalPathForRoute('/listen'),
 } as const

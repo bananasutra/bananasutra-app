@@ -761,10 +761,6 @@
 }
 
 @media (max-width: 760px) {
-  .songbooks-page__sections {
-    min-height: 8220px;
-  }
-
   .songbooks-page__hero,
   .songbooks-page__hero--detail {
     grid-template-columns: 1fr;

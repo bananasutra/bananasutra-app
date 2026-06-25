@@ -23,9 +23,9 @@ export function isPlayAllDesktopDevice(): boolean {
 
 /** D-021 honest platform limits — mobile Play All does not work reliably. */
 export const PLAY_ALL_HONEST_MOBILE_COPY =
-  'Play All works best on desktop. On mobile, open a songbook for uninterrupted listening.'
+  'Mobile devices block autoplay. For a continuous listening experience, open a songbook.'
 
-/** Song page mobile hint — EP tab/stack beats songbook when both exist (e.g. song-specific EP remix grid). */
+/** @deprecated Prefer SongDetailPlayAllHonestHint — kept for non-React call sites. */
 export function songDetailPlayAllHonestMobileCopy({
   hasFullEpListen,
   hasFullEpTab,
@@ -36,13 +36,13 @@ export function songDetailPlayAllHonestMobileCopy({
   hasSongbookPlaylist: boolean
 }): string {
   if (hasFullEpListen && hasFullEpTab) {
-    return 'Play All works best on desktop. On mobile, switch to Full EP for uninterrupted listening.'
+    return 'Mobile devices block autoplay. For a continuous listening experience, switch to Full EP.'
   }
   if (hasFullEpListen) {
-    return 'Play All works best on desktop. On mobile, use Full EP for uninterrupted listening.'
+    return 'Mobile devices block autoplay. For a continuous listening experience, use Full EP.'
   }
   if (hasSongbookPlaylist) {
-    return 'Play All works best on desktop. On mobile, open a songbook for uninterrupted listening.'
+    return 'Mobile devices block autoplay. For a continuous listening experience, open a songbook.'
   }
   return PLAY_ALL_HONEST_MOBILE_COPY
 }
