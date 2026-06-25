@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { loadSongDetail } from '../generatedData'
-import { playableTrackSongLabel, playableTrackSongLinkTo } from '../playerQueue/playableTrackMetadata'
+import {
+  isOnPlayableTrackSongPage,
+  playableTrackSongLabel,
+  playableTrackSongLinkTo,
+} from '../playerQueue/playableTrackMetadata'
 import type { PlayableTrack } from '../playerQueue/types'
 import './PersistentPlayerLyricsPanel.css'
 
@@ -10,13 +14,16 @@ const lyricsCache = new Map<string, string | null>()
 type LyricsPanelProps = {
   track: PlayableTrack
   open: boolean
+  onClose: () => void
 }
 
-export function PersistentPlayerLyricsPanel({ track, open }: LyricsPanelProps) {
+export function PersistentPlayerLyricsPanel({ track, open, onClose }: LyricsPanelProps) {
+  const location = useLocation()
   const [lyrics, setLyrics] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const songLinkTo = playableTrackSongLinkTo(track)
   const songLabel = playableTrackSongLabel(track)
+  const showSongPageLink = Boolean(songLinkTo) && !isOnPlayableTrackSongPage(track, location.pathname)
   const lyricsId = track.lyrics_id?.trim()
 
   useEffect(() => {
@@ -59,12 +66,22 @@ export function PersistentPlayerLyricsPanel({ track, open }: LyricsPanelProps) {
       aria-live="polite"
     >
       <div className="persistent-player-lyrics__header">
-        <p className="persistent-player-lyrics__title">{songLabel}</p>
-        {songLinkTo ? (
-          <Link to={songLinkTo} className="persistent-player-lyrics__song-link">
-            Full song page →
-          </Link>
-        ) : null}
+        <div className="persistent-player-lyrics__header-main">
+          <p className="persistent-player-lyrics__title">{songLabel}</p>
+          {showSongPageLink && songLinkTo ? (
+            <Link to={songLinkTo} className="persistent-player-lyrics__song-link">
+              Full song page →
+            </Link>
+          ) : null}
+        </div>
+        <button
+          type="button"
+          className="persistent-player-lyrics__close"
+          aria-label="Close lyrics"
+          onClick={onClose}
+        >
+          <span aria-hidden>×</span>
+        </button>
       </div>
       <div className="persistent-player-lyrics__body">
         {loading ? (

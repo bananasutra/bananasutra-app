@@ -1,6 +1,6 @@
 import type { To } from 'react-router-dom'
 import { formatDurationDisplay } from '../durationFormat'
-import { songCatalogLinkTo } from '../songPaths'
+import { songCatalogLinkTo, songCatalogPath } from '../songPaths'
 import { sutraHrefFromSongSutraField } from '../sutraPageUtils'
 import type { PlayableTrack } from './types'
 
@@ -27,6 +27,24 @@ export function playableTrackSongLinkTo(track: PlayableTrack): To | null {
 
 export function playableTrackSongLabel(track: PlayableTrack): string {
   return (track.lyrics_title || track.track_title || '').trim()
+}
+
+/** Normalized `/songs/:slug` path for the track's song page (no query/hash). */
+export function playableTrackSongPagePath(track: PlayableTrack): string | null {
+  const title = playableTrackSongLabel(track)
+  if (!title || !track.lyrics_id?.trim()) return null
+  return songCatalogPath(title, track.url_slug).replace(/\/$/, '') || null
+}
+
+export function normalizeCatalogPathname(pathname: string): string {
+  return pathname.split('?')[0]?.split('#')[0]?.replace(/\/$/, '') || '/'
+}
+
+/** True when the app is already on this track's song detail page. */
+export function isOnPlayableTrackSongPage(track: PlayableTrack, pathname: string): boolean {
+  const songPath = playableTrackSongPagePath(track)
+  if (!songPath) return false
+  return normalizeCatalogPathname(pathname) === songPath
 }
 
 export function playableTrackSutraHref(track: PlayableTrack): string | null {
