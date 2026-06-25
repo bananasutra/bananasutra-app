@@ -645,6 +645,14 @@
 
 .song-detail-also {
   margin-bottom: 0;
+  /* Match one sister-song cell from song-thumb-grid--home-portal-drops below. */
+  --song-detail-thumb-cell: calc((100% - 1.65rem) / 4);
+}
+
+@media (max-width: 640px) {
+  .song-detail-also {
+    --song-detail-thumb-cell: calc((100% - 0.55rem) / 2);
+  }
 }
 
 .song-detail-also__card {
@@ -660,6 +668,7 @@
 .song-detail-also__art-link {
   flex-shrink: 0;
   display: block;
+  width: var(--song-detail-thumb-cell);
   line-height: 0;
   border-radius: var(--radius-thumb, var(--radius-control, 2px));
 }
@@ -670,11 +679,17 @@
 }
 
 .song-detail-also__art {
-  width: 6.75rem;
-  height: 6.75rem;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
   border-radius: var(--radius-thumb, var(--radius-control, 2px));
   object-fit: cover;
   display: block;
+}
+
+.song-detail-also__body {
+  flex: 1;
+  min-width: 0;
 }
 
 .song-detail-also__title {
