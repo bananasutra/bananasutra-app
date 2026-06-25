@@ -304,7 +304,7 @@ export function BbbChatWidget() {
               aria-label="Close Bertrand chat"
               onClick={closePanel}
             >
-              Close
+              <span aria-hidden>×</span>
             </button>
           </header>
           {mode === 'feedback' ? (
