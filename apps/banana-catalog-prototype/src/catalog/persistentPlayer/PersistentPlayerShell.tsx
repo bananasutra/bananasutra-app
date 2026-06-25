@@ -1,4 +1,4 @@
-import { useMemo, type CSSProperties, type MutableRefObject, type RefObject } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MutableRefObject, type RefObject } from 'react'
 import { Link } from 'react-router-dom'
 import { queueContextLine } from '../playerQueue/queueContextLine'
 import {
@@ -13,9 +13,14 @@ import { currentQueueTrack } from '../playerQueue/types'
 import { sutraQuestionFromDisplay } from '../sutraContext'
 import { sutraClassName } from '../sutraTheme'
 import { PersistentSoundCloudPlayer } from './PersistentSoundCloudPlayer'
+import { PersistentPlayerLyricsPanel } from './PersistentPlayerLyricsPanel'
+import { PERSISTENT_SC_PLAYER_HEIGHT_PX } from '../soundcloudPlayerUrl'
 import type { PersistentScPlayerApi } from './persistentScPlayerContext'
 import type { SoundCloudWidget } from '../soundcloudWidgetApi'
 import './PersistentPlayerBar.css'
+
+/** Scrub drawer shows the full SC compact embed (112px) — no iframe clipping. */
+const PERSISTENT_SC_SCRUB_DRAWER_HEIGHT_PX = PERSISTENT_SC_PLAYER_HEIGHT_PX
 
 export type PersistentPlayerShellProps = {
   apiRef: MutableRefObject<PersistentScPlayerApi | null>
@@ -41,6 +46,11 @@ function MetaSep() {
 export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: PersistentPlayerShellProps) {
   const { state, actions } = usePlayerQueue()
   const visible = barSessionActive(state)
+  const [scrubOpen, setScrubOpen] = useState(false)
+  const [lyricsOpen, setLyricsOpen] = useState(false)
+  const [bootingPlayback, setBootingPlayback] = useState(false)
+  const [enterInstant, setEnterInstant] = useState(false)
+  const prevTrackIdRef = useRef<string | null>(null)
 
   const track = currentQueueTrack(state)
   const contextLine = useMemo(() => queueContextLine(state), [state])
@@ -49,27 +59,120 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
   const songLabel = track ? playableTrackSongLabel(track) : ''
   const sutraHref = track ? playableTrackSutraHref(track) : null
   const sutraLabel = track ? playableTrackSutraLabel(track) : ''
+  const hasLyrics = Boolean(track?.lyrics_id?.trim())
 
   const canGoPrevious = state.position > 0
   const canGoNext = state.position >= 0 && state.position < state.tracks.length - 1
   const dismissLabel = state.playAllActive ? 'Close and stop playing all' : 'Close player'
 
   const hasTrackMeta = Boolean(sutraHref || songLinkTo || genreDuration)
+  const playerChromeHeightPx = 44 + (scrubOpen ? PERSISTENT_SC_SCRUB_DRAWER_HEIGHT_PX : 0)
+  const showPlaybackStarting = bootingPlayback && !state.playing && Boolean(track)
+
+  useEffect(() => {
+    if (visible) {
+      document.body.classList.add('has-persistent-player')
+      document.documentElement.style.setProperty('--bbb-panel-bottom-offset', '44px')
+      document.documentElement.style.setProperty(
+        '--persistent-player-chrome-height',
+        `${playerChromeHeightPx}px`,
+      )
+    } else {
+      document.body.classList.remove('has-persistent-player')
+      document.documentElement.style.setProperty('--bbb-panel-bottom-offset', '0px')
+      document.documentElement.style.setProperty('--persistent-player-chrome-height', '0px')
+    }
+    return () => {
+      document.body.classList.remove('has-persistent-player')
+      document.documentElement.style.setProperty('--bbb-panel-bottom-offset', '0px')
+      document.documentElement.style.setProperty('--persistent-player-chrome-height', '0px')
+    }
+  }, [visible, playerChromeHeightPx])
+
+  useEffect(() => {
+    if (!track?.track_id) {
+      setBootingPlayback(false)
+      return
+    }
+    setBootingPlayback(true)
+  }, [track?.track_id])
+
+  useEffect(() => {
+    if (state.playing) setBootingPlayback(false)
+  }, [state.playing])
+
+  useEffect(() => {
+    if (!visible) setLyricsOpen(false)
+  }, [visible])
+
+  useEffect(() => {
+    if (!scrubOpen) return
+    const frame = requestAnimationFrame(() => {
+      window.dispatchEvent(new Event('resize'))
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [scrubOpen, track?.track_id])
+
+  useEffect(() => {
+    if (!track) return
+    const trackId = track.track_id
+    if (prevTrackIdRef.current !== trackId) {
+      setLyricsOpen(false)
+      prevTrackIdRef.current = trackId
+    }
+  }, [track])
+
+  useLayoutEffect(() => {
+    if (!visible) {
+      setEnterInstant(false)
+      return
+    }
+    setEnterInstant(true)
+  }, [visible])
+
+  useEffect(() => {
+    if (!enterInstant) return
+    const frame = requestAnimationFrame(() => setEnterInstant(false))
+    return () => cancelAnimationFrame(frame)
+  }, [enterInstant])
 
   return (
     <div
-      className={`persistent-player-shell${visible ? ' persistent-player-shell--visible' : ''}`}
+      className={`persistent-player-shell${visible ? ' persistent-player-shell--visible' : ''}${enterInstant ? ' persistent-player-shell--instant' : ''}`}
       aria-hidden={!visible}
     >
+      {visible && track && lyricsOpen ? (
+        <PersistentPlayerLyricsPanel
+          track={track}
+          open={lyricsOpen}
+          onClose={() => setLyricsOpen(false)}
+        />
+      ) : null}
       <aside
-        className="persistent-player-bar"
+        className={`persistent-player-bar${scrubOpen ? ' persistent-player-bar--scrub-open' : ''}`}
         aria-label="Now playing"
-        style={{ '--persistent-sc-player-min-width': '480px' } as CSSProperties}
+        style={
+          {
+            '--persistent-sc-player-min-width': '480px',
+          } as CSSProperties
+        }
       >
         <div className="persistent-player-bar__toolbar">
           <div className="persistent-player-bar__meta">
             {contextLine ? (
-              <p className="persistent-player-bar__context">{contextLine}</p>
+              <p className="persistent-player-bar__context">
+                {contextLine}
+                {showPlaybackStarting ? (
+                  <span className="persistent-player-bar__starting" aria-live="polite">
+                    {' '}
+                    · Starting…
+                  </span>
+                ) : null}
+              </p>
+            ) : showPlaybackStarting ? (
+              <p className="persistent-player-bar__context" aria-live="polite">
+                Starting…
+              </p>
             ) : null}
             {track && hasTrackMeta ? (
               <p className="persistent-player-bar__track-meta">
@@ -146,6 +249,28 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
             </div>
             <button
               type="button"
+              className={`persistent-player-bar__scrub-btn${scrubOpen ? ' persistent-player-bar__scrub-btn--active' : ''}`}
+              onClick={() => setScrubOpen((prev) => !prev)}
+              aria-label={scrubOpen ? 'Hide waveform' : 'Show waveform scrubber'}
+              aria-pressed={scrubOpen}
+              aria-controls="persistent-player-embed"
+              aria-expanded={scrubOpen}
+            >
+              <span aria-hidden>≋</span> scrub
+            </button>
+            {hasLyrics ? (
+              <button
+                type="button"
+                className={`persistent-player-bar__lyrics-btn${lyricsOpen ? ' persistent-player-bar__lyrics-btn--active' : ''}`}
+                onClick={() => setLyricsOpen((prev) => !prev)}
+                aria-label={lyricsOpen ? 'Hide lyrics' : 'Show lyrics'}
+                aria-pressed={lyricsOpen}
+              >
+                <span aria-hidden>♪</span> lyrics
+              </button>
+            ) : null}
+            <button
+              type="button"
               className="persistent-player-bar__dismiss-btn"
               onClick={() => actions.stop()}
               aria-label={dismissLabel}
@@ -157,7 +282,7 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
             </button>
           </div>
         </div>
-        <div ref={embedWrapRef} className="persistent-player-bar__embed">
+        <div id="persistent-player-embed" ref={embedWrapRef} className="persistent-player-bar__embed">
           <PersistentSoundCloudPlayer apiRef={apiRef} widgetRef={widgetRef} />
         </div>
       </aside>

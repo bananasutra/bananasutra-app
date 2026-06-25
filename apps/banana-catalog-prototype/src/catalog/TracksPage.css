@@ -454,6 +454,31 @@
   border-radius: 0 var(--radius-sm, 8px) var(--radius-sm, 8px) 0;
 }
 
+.tracks-page__mobile-listen-hint {
+  background: var(--color-bg-panel, #fdf9ef);
+  border: 0.5px solid var(--color-border-warm, #d4a020);
+  border-radius: var(--radius-control, 2px);
+  padding: 0.5rem 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.tracks-page__mobile-listen-hint-text {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #6b635a);
+  line-height: 1.5;
+}
+
+.tracks-page__mobile-listen-hint-link {
+  color: var(--color-link, #524a40);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tracks-page__mobile-listen-hint-link:hover {
+  text-decoration: underline;
+}
+
 .tracks-page__play-all-btn {
   display: inline-flex;
   align-items: center;

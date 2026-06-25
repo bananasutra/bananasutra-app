@@ -29,6 +29,24 @@ const INITIAL_ASSISTANT_NOT_FOUND_TEXT =
 const INITIAL_ASSISTANT_BACK_ON_TRACK_TEXT =
   'Back on track. Want a quick recommendation, or would you rather browse by sutra, songbook, or vibe?'
 
+function BbbChatIcon() {
+  return (
+    <svg
+      className="bbb-widget__toggle-icon"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        fill="currentColor"
+        d="M3 2.5h10a1.5 1.5 0 0 1 1.5 1.5v5a1.5 1.5 0 0 1-1.5 1.5H7.2L4.4 12.1a.75.75 0 0 1-1.15-.64V9.5H3A1.5 1.5 0 0 1 1.5 8V4A1.5 1.5 0 0 1 3 2.5Z"
+      />
+    </svg>
+  )
+}
+
 const isDefaultIntroOnly = (messages: ChatMessage[]): boolean =>
   messages.length === 1 && messages[0]?.role === 'assistant' && messages[0]?.content === INITIAL_ASSISTANT_TEXT
 const isNotFoundIntroOnly = (messages: ChatMessage[]): boolean =>
@@ -50,15 +68,29 @@ export function BbbChatWidget() {
   const abortRef = useRef<AbortController | null>(null)
   const historyRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLTextAreaElement | null>(null)
+  const toggleRef = useRef<HTMLButtonElement | null>(null)
+  const prevOpenRef = useRef(false)
   const openedFromNotFoundRef = useRef(false)
 
   const canSend = useMemo(() => input.trim().length > 0 && !isStreaming, [input, isStreaming])
   const actorId = useMemo(() => getOrCreateActorId(), [])
-  const toggleLabel = open ? 'Close Bertrand' : 'Ring Bertrand'
+  const toggleLabel = open ? 'Close Bertrand' : 'Ask Bertrand'
+
+  const closePanel = () => {
+    setOpen(false)
+  }
 
   useEffect(() => {
     if (!open) return
     queueMicrotask(() => inputRef.current?.focus())
+  }, [open])
+
+  useEffect(() => {
+    const wasOpen = prevOpenRef.current
+    prevOpenRef.current = open
+    if (wasOpen && !open) {
+      queueMicrotask(() => toggleRef.current?.focus())
+    }
   }, [open])
 
   useEffect(() => {
@@ -244,10 +276,11 @@ export function BbbChatWidget() {
     <section className={`bbb-widget${open ? ' is-open' : ''}`} aria-label="Bertrand chat widget">
       <button
         type="button"
+        ref={toggleRef}
         className="bbb-widget__toggle"
         aria-expanded={open}
         aria-controls="bbb-widget-panel"
-        aria-label={open ? 'Close Bertrand chat widget' : 'Open Bertrand chat widget'}
+        aria-label={open ? 'Close Bertrand chat' : 'Open Bertrand chat'}
         onClick={() => {
           setOpen((prev) => {
             if (!prev) trackBertrandOpen({ surface: 'floating_button' })
@@ -255,13 +288,24 @@ export function BbbChatWidget() {
           })
         }}
       >
-        {toggleLabel}
+        <BbbChatIcon />
+        <span className="bbb-widget__toggle-label">{toggleLabel}</span>
       </button>
       {open ? (
         <div id="bbb-widget-panel" className="bbb-widget__panel">
           <header className="bbb-widget__header">
-            <p className="bbb-widget__title">Bertrand · Banana Butler</p>
-            <p className="bbb-widget__subtitle">At your service, one hidden gem at a time</p>
+            <div className="bbb-widget__header-text">
+              <p className="bbb-widget__title">Bertrand · Banana Butler</p>
+              <p className="bbb-widget__subtitle">At your service, one hidden gem at a time</p>
+            </div>
+            <button
+              type="button"
+              className="bbb-widget__close"
+              aria-label="Close Bertrand chat"
+              onClick={closePanel}
+            >
+              <span aria-hidden>×</span>
+            </button>
           </header>
           {mode === 'feedback' ? (
             <BbbFeedbackForm
