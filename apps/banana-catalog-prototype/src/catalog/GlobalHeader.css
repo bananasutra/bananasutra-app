@@ -476,7 +476,7 @@
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
-  .global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__panel {
+  .global-header__search-slot .discovery-search--header.discovery-search--open:not(.discovery-search--header-compact-open) .discovery-search__panel {
     left: auto;
     right: 0;
     width: min(28rem, calc(100vw - 2rem));
@@ -486,7 +486,7 @@
 }
 
 @media (max-width: 767px) {
-  .global-header__search-slot .discovery-search--header.discovery-search--open .discovery-search__panel {
+  .global-header__search-slot .discovery-search--header.discovery-search--open:not(.discovery-search--header-compact-open) .discovery-search__panel {
     left: 0;
     right: 0;
     width: 100%;
