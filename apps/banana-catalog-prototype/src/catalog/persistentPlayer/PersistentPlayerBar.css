@@ -58,9 +58,33 @@
   white-space: nowrap;
 }
 
-.persistent-player-bar__starting {
-  font-weight: 600;
-  color: var(--color-text-muted, #6b635a);
+.persistent-player-bar__context--loading {
+  color: var(--color-accent, #b8792a);
+}
+
+.persistent-player-bar--booting .persistent-player-bar__track-meta {
+  opacity: 0.55;
+}
+
+.persistent-player-bar--booting {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-elevated, #fff) 0%,
+    var(--color-accent-light, #faeeda) 50%,
+    var(--color-bg-elevated, #fff) 100%
+  );
+  background-size: 200% 100%;
+  animation: persistent-player-bar-booting 1.4s ease-in-out infinite;
+}
+
+@keyframes persistent-player-bar-booting {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
 }
 
 .persistent-player-bar__track-meta {
@@ -156,6 +180,28 @@
 .persistent-player-bar__transport-btn--play {
   min-width: 2.35rem;
   font-size: 0.875rem;
+}
+
+.persistent-player-bar__transport-btn--loading {
+  position: relative;
+  cursor: wait;
+  pointer-events: none;
+}
+
+.persistent-player-bar__transport-btn--loading span {
+  display: block;
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 2px solid var(--color-border, #d8d0c4);
+  border-top-color: var(--color-accent, #b8792a);
+  border-radius: 50%;
+  animation: persistent-player-spin 0.75s linear infinite;
+}
+
+@keyframes persistent-player-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .persistent-player-bar__scrub-btn,

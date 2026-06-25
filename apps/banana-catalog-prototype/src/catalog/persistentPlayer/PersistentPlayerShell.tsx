@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MutableRefObject, type RefObject } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MutableRefObject, type RefObject } from 'react'
 import { Link } from 'react-router-dom'
 import { queueContextLine } from '../playerQueue/queueContextLine'
 import {
@@ -13,6 +13,7 @@ import { currentQueueTrack } from '../playerQueue/types'
 import { sutraQuestionFromDisplay } from '../sutraContext'
 import { sutraClassName } from '../sutraTheme'
 import { PersistentSoundCloudPlayer } from './PersistentSoundCloudPlayer'
+import type { SoundCloudWidgetExtended } from './soundcloudWidgetExtended'
 import { PersistentPlayerLyricsPanel } from './PersistentPlayerLyricsPanel'
 import { PERSISTENT_SC_PLAYER_HEIGHT_PX } from '../soundcloudPlayerUrl'
 import type { PersistentScPlayerApi } from './persistentScPlayerContext'
@@ -67,7 +68,64 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
 
   const hasTrackMeta = Boolean(sutraHref || songLinkTo || genreDuration)
   const playerChromeHeightPx = 44 + (scrubOpen ? PERSISTENT_SC_SCRUB_DRAWER_HEIGHT_PX : 0)
-  const showPlaybackStarting = bootingPlayback && !state.playing && Boolean(track)
+  const showPlaybackStarting = bootingPlayback && Boolean(track)
+
+  const settleBooting = useCallback(() => {
+    setBootingPlayback(false)
+  }, [])
+
+  useEffect(() => {
+    if (!visible) {
+      setBootingPlayback(false)
+      return
+    }
+    if (!track?.track_id) {
+      setBootingPlayback(false)
+      return
+    }
+    setBootingPlayback(true)
+  }, [visible, track?.track_id])
+
+  useLayoutEffect(() => {
+    if (!visible || !track) return
+    let cancelled = false
+    let raf = 0
+
+    const tryWire = () => {
+      if (cancelled) return
+      const api = apiRef.current
+      if (!api?.setOnPlayProgress) {
+        raf = requestAnimationFrame(tryWire)
+        return
+      }
+
+      api.setOnPlayProgress((positionMs) => {
+        if (positionMs > 0) settleBooting()
+      })
+      api.setOnWidgetReady(() => {
+        const widget = api.widgetRef.current as SoundCloudWidgetExtended | null
+        if (!widget?.isPaused) return
+        widget.isPaused((paused: boolean) => {
+          if (paused) settleBooting()
+        })
+      })
+    }
+
+    tryWire()
+    return () => {
+      cancelled = true
+      cancelAnimationFrame(raf)
+      const api = apiRef.current
+      api?.setOnPlayProgress(null)
+      api?.setOnWidgetReady(null)
+    }
+  }, [apiRef, settleBooting, track?.track_id, visible])
+
+  useEffect(() => {
+    if (!bootingPlayback) return
+    const timeout = window.setTimeout(() => settleBooting(), 15000)
+    return () => window.clearTimeout(timeout)
+  }, [bootingPlayback, settleBooting, track?.track_id])
 
   useEffect(() => {
     if (visible) {
@@ -88,18 +146,6 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
       document.documentElement.style.setProperty('--persistent-player-chrome-height', '0px')
     }
   }, [visible, playerChromeHeightPx])
-
-  useEffect(() => {
-    if (!track?.track_id) {
-      setBootingPlayback(false)
-      return
-    }
-    setBootingPlayback(true)
-  }, [track?.track_id])
-
-  useEffect(() => {
-    if (state.playing) setBootingPlayback(false)
-  }, [state.playing])
 
   useEffect(() => {
     if (!visible) setLyricsOpen(false)
@@ -149,7 +195,7 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
         />
       ) : null}
       <aside
-        className={`persistent-player-bar${scrubOpen ? ' persistent-player-bar--scrub-open' : ''}`}
+        className={`persistent-player-bar${scrubOpen ? ' persistent-player-bar--scrub-open' : ''}${showPlaybackStarting ? ' persistent-player-bar--booting' : ''}`}
         aria-label="Now playing"
         style={
           {
@@ -159,20 +205,12 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
       >
         <div className="persistent-player-bar__toolbar">
           <div className="persistent-player-bar__meta">
-            {contextLine ? (
-              <p className="persistent-player-bar__context">
-                {contextLine}
-                {showPlaybackStarting ? (
-                  <span className="persistent-player-bar__starting" aria-live="polite">
-                    {' '}
-                    · Starting…
-                  </span>
-                ) : null}
+            {showPlaybackStarting ? (
+              <p className="persistent-player-bar__context persistent-player-bar__context--loading" aria-live="polite">
+                Loading track…
               </p>
-            ) : showPlaybackStarting ? (
-              <p className="persistent-player-bar__context" aria-live="polite">
-                Starting…
-              </p>
+            ) : contextLine ? (
+              <p className="persistent-player-bar__context">{contextLine}</p>
             ) : null}
             {track && hasTrackMeta ? (
               <p className="persistent-player-bar__track-meta">
@@ -218,7 +256,17 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
               >
                 <span aria-hidden>⏮</span>
               </button>
-              {state.playing ? (
+              {showPlaybackStarting ? (
+                <button
+                  type="button"
+                  className="persistent-player-bar__transport-btn persistent-player-bar__transport-btn--play persistent-player-bar__transport-btn--loading"
+                  aria-label="Loading track"
+                  aria-busy="true"
+                  disabled
+                >
+                  <span aria-hidden />
+                </button>
+              ) : state.playing ? (
                 <button
                   type="button"
                   className="persistent-player-bar__transport-btn persistent-player-bar__transport-btn--play"

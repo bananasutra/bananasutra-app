@@ -19,6 +19,7 @@ import { useSongCatalog } from './generatedData'
 import { SongThumbCard } from './SongThumbCard'
 import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
+import { primaryGenreTokenFromSongbookTitle } from './songbookGenreToken'
 import { youtubePlaylistForSongbook } from './songbookYoutubeMatch'
 import {
   buildYoutubePlaylistDurationByName,
@@ -52,17 +53,6 @@ function sortSongbookMembersByPopularity(rows: SongbookMemberSong[]): SongbookMe
     if (b.aggregate_like_count !== a.aggregate_like_count) return b.aggregate_like_count - a.aggregate_like_count
     return a.lyrics_title.localeCompare(b.lyrics_title)
   })
-}
-
-/**
- * Derive tracks `primary_genre` token from SONGBOOK titles like "ROCKsutra (Best Of)" → ROCK.
- * Matches deployed facet casing (uppercase tokens in facets.json).
- */
-function primaryGenreTokenFromSongbookTitle(title: string): string | null {
-  const m = /^(.+?)sutra\b/i.exec((title || '').trim())
-  if (!m) return null
-  const raw = (m[1] || '').trim().toUpperCase()
-  return raw || null
 }
 
 /** `/tracks` filtered by primary genre, sorted by likes (stable deep-link for genre best-of pages). */

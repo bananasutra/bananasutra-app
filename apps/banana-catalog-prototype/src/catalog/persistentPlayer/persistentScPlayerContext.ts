@@ -16,6 +16,10 @@ export type PersistentScPlayerApi = {
   /** Bind FINISH / near-end fallback to queue advance. */
   setOnFinish: (handler: (() => void) | null) => void
   setOnPlayingChange: (handler: ((playing: boolean) => void) | null) => void
+  /** Fired during playback with widget position (ms) — used for loading UI. */
+  setOnPlayProgress: (handler: ((positionMs: number) => void) | null) => void
+  /** Fired when SC widget READY fires after a load (autoplay-blocked vs playing). */
+  setOnWidgetReady: (handler: (() => void) | null) => void
   /** Tear down iframe and hide host (Stop / reset). */
   dismiss: () => void
 }
