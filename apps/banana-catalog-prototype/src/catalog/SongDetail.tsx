@@ -879,21 +879,22 @@ function SongDetailLoaded({
             <div className="song-detail-hero-text">
               <h1 className="song-detail-title song-title">{detail.lyrics_title}</h1>
               {detail.lyrics_summary ? <p className="song-detail-summary">{detail.lyrics_summary}</p> : null}
-              {detail.sutra ? (
-                <ul className="song-detail-secondary-meta song-detail-secondary-meta--sutra" aria-label="Sutra">
-                  <li className="song-detail-secondary-meta-item">
-                    <Link
-                      className="song-detail-secondary-link"
-                      to={sutraHrefFromSongSutraField(detail.sutra) ?? buildBrowsePathForFacet('sutra', detail.sutra)}
-                    >
-                      <span className={`catalog-facet-sutra-name ${sutraClassName(detail.sutra)}`}>{detail.sutra}</span>
-                    </Link>
-                  </li>
-                </ul>
-              ) : null}
-              {hasHeroFacetMeta ? (
-                <>
-                  <ul className="song-detail-secondary-meta" aria-label="Song metadata">
+              {detail.sutra || hasHeroFacetMeta || museName ? (
+                <div className="song-detail-hero-meta">
+                  {detail.sutra ? (
+                    <ul className="song-detail-secondary-meta song-detail-secondary-meta--sutra" aria-label="Sutra">
+                      <li className="song-detail-secondary-meta-item">
+                        <Link
+                          className="song-detail-secondary-link"
+                          to={sutraHrefFromSongSutraField(detail.sutra) ?? buildBrowsePathForFacet('sutra', detail.sutra)}
+                        >
+                          <span className={`catalog-facet-sutra-name ${sutraClassName(detail.sutra)}`}>{detail.sutra}</span>
+                        </Link>
+                      </li>
+                    </ul>
+                  ) : null}
+                  {hasHeroFacetMeta ? (
+                    <ul className="song-detail-secondary-meta" aria-label="Song metadata">
                       {detail.topic ? (
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={buildBrowsePathForFacet('topic', detail.topic)}>
@@ -910,7 +911,10 @@ function SongDetailLoaded({
                       ) : null}
                       {detail.light_shadow ? (
                         <li className="song-detail-secondary-meta-item">
-                          <Link className="song-detail-secondary-link" to={buildBrowsePathForFacet('light_shadow', detail.light_shadow)}>
+                          <Link
+                            className="song-detail-secondary-link"
+                            to={buildBrowsePathForFacet('light_shadow', detail.light_shadow)}
+                          >
                             {detail.light_shadow}
                           </Link>
                         </li>
@@ -930,16 +934,17 @@ function SongDetailLoaded({
                         </li>
                       ) : null}
                     </ul>
-                </>
-              ) : null}
-              {museName ? (
-                <ul className="song-detail-secondary-meta song-detail-secondary-meta--muse" aria-label="Muse">
-                  <li className="song-detail-secondary-meta-item">
-                    <Link className="song-detail-secondary-link" to={searchCatalogHref(museName)}>
-                      {museName}
-                    </Link>
-                  </li>
-                </ul>
+                  ) : null}
+                  {museName ? (
+                    <ul className="song-detail-secondary-meta song-detail-secondary-meta--muse" aria-label="Muse">
+                      <li className="song-detail-secondary-meta-item">
+                        <Link className="song-detail-secondary-link" to={searchCatalogHref(museName)}>
+                          {museName}
+                        </Link>
+                      </li>
+                    </ul>
+                  ) : null}
+                </div>
               ) : null}
             </div>
           </header>
