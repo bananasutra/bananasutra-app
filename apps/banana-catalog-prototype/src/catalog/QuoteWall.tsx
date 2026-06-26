@@ -12,6 +12,11 @@ import {
   type CatalogFilterBarActivePill,
   type CatalogFilterBarFacetGroup,
 } from './CatalogFilterBar'
+import { CatalogInfiniteScrollFooter } from './CatalogInfiniteScrollFooter'
+import {
+  catalogInfiniteScrollStorageKey,
+  useCatalogInfiniteScroll,
+} from './useCatalogInfiniteScroll'
 import './catalog-page-shell.css'
 
 function formatCount(n: number): string {
@@ -164,7 +169,22 @@ export function QuoteWall() {
     })
   }, [findQuote, rows, topicFilter])
   const sortedQuotes = useMemo(() => sortQuotes(filtered), [filtered])
-  const topicClusters = useMemo(() => buildTopicClusters(sortedQuotes), [sortedQuotes])
+  const quotesScrollResetKey = useMemo(
+    () => `${topicFilter}|${normalizeSearch(findQuote)}`,
+    [topicFilter, findQuote],
+  )
+  const {
+    visibleItems: visibleQuotes,
+    visibleCount: quotesVisibleCount,
+    totalCount: quotesTotalCount,
+    hasMore: quotesHasMore,
+    loadMore: loadMoreQuotes,
+  } = useCatalogInfiniteScroll({
+    items: sortedQuotes,
+    resetKey: quotesScrollResetKey,
+    storageKey: catalogInfiniteScrollStorageKey('/quotes', quotesScrollResetKey),
+  })
+  const topicClusters = useMemo(() => buildTopicClusters(visibleQuotes), [visibleQuotes])
   const showGrouped = !normalizeSearch(findQuote)
 
   const findQuery = findQuote.trim()
@@ -286,12 +306,23 @@ export function QuoteWall() {
             ))
           ) : (
             <div className="quote-cluster__items">
-              {sortedQuotes.map((item) => (
+              {visibleQuotes.map((item) => (
                 <QuoteItem key={item.quote_id || `${item.muse}-${item.quote}`} item={item} />
               ))}
             </div>
           )}
         </div>
+
+        {sortedQuotes.length > 0 ? (
+          <CatalogInfiniteScrollFooter
+            visibleCount={quotesVisibleCount}
+            totalCount={quotesTotalCount}
+            hasMore={quotesHasMore}
+            loadMore={loadMoreQuotes}
+            noun="quotes"
+            formatCount={formatCount}
+          />
+        ) : null}
 
         <Link className="catalog-section-cta about-quotes-crosslink" to={canonicalPathForRoute('/muses')}>
           Meet the muses →

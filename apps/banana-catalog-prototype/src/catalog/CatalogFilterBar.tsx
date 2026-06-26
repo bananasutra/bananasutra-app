@@ -264,7 +264,7 @@ export function CatalogFilterBar({
           aria-controls={panelId}
           onClick={() => setPanelExpanded(!expanded)}
         >
-          {expanded ? 'Hide filters' : 'Filters'}
+          {expanded ? 'Hide filters' : search ? 'Filter or search' : 'Filters'}
         </button>
 
         {showActiveStrip ? (

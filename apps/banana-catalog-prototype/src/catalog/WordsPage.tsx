@@ -430,7 +430,6 @@ export function WordsPage() {
             ariaLabel="Filter lyrics"
             panelId="words-filter-panel"
             resultSummary={contextSummary}
-            showResultSummary={false}
             activePills={wordsActivePills}
             onClearAll={clearAllFilters}
             facetGroups={wordsFacetGroups}
