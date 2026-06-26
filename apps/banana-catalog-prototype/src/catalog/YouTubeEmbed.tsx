@@ -184,7 +184,7 @@ export function YoutubeEmbeddedPlayer({
                 />
                 <div className="yt-embed-frame-host__loading-ring" aria-label="Loading video…" role="status">
                   <span className="yt-embed-facade__ring" aria-hidden>
-                    <span className="yt-embed-facade__glyph yt-embed-facade__glyph--loading">⏳</span>
+                    <span className="yt-embed-loading-spinner" />
                   </span>
                 </div>
               </>

@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import chromeStatsJson from '../data/generated/catalog_chrome_stats.json'
+import { CATALOG_CHROME_STATS } from './catalogChromeStats'
+import { formatHomeCount } from './homePortalData'
 import { DiscoverySearchLazy } from './DiscoverySearchLazy'
 import {
   SITE_NAV_DRAWER,
@@ -38,15 +39,16 @@ function drawerLinkClass(active: boolean, muted?: boolean): string {
   return parts.join(' ')
 }
 
-type CatalogChromeStats = {
-  sutraCount: number
-  songbookCount: number
-  songCount: number
-  topTrackCount?: number
-}
+const { sutraCount, songbookCount, songCount, topTrackCount, videoCount } = CATALOG_CHROME_STATS
 
-const chromeStats = chromeStatsJson as CatalogChromeStats
-const { sutraCount, songbookCount, songCount, topTrackCount = 0 } = chromeStats
+function CatalogScaleLine() {
+  return (
+    <p className="global-header-drawer__catalog-scale" aria-label="Catalog scale">
+      {formatHomeCount(sutraCount)} sutras · {formatHomeCount(songbookCount)} songbooks · {formatHomeCount(songCount)}{' '}
+      songs · {formatHomeCount(topTrackCount)} tracks · {formatHomeCount(videoCount)} videos
+    </p>
+  )
+}
 
 function DrawerNavEntry({
   item,
@@ -178,13 +180,6 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
           </p>
         </div>
 
-        <p
-          className="global-header-stats"
-          aria-label="Catalog scale: sutras, songbooks, songs, and top tracks"
-        >
-          {`${sutraCount} SUTRAS · ${songbookCount} SONGBOOKS · ${songCount} SONGS · ${topTrackCount} TOP TRACKS`}
-        </p>
-
         <div className="global-header__toolbar">
           <div className="global-header__search-slot">
             <DiscoverySearchLazy variant="header" />
@@ -255,6 +250,8 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
         </div>
 
         <div className="global-header-drawer__body">
+          <CatalogScaleLine />
+
           {SITE_NAV_DRAWER.map((item, index) => (
             <DrawerNavEntry key={`drawer-${index}`} item={item} pathname={pathname} onNavigate={closeMenu} />
           ))}

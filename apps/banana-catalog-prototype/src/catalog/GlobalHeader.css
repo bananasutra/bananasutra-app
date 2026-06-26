@@ -16,15 +16,7 @@
 
 @media (min-width: 768px) {
   .catalog-header-inner.global-header__bar {
-    grid-template-areas:
-      'brand toolbar'
-      'stats stats';
-    row-gap: 0.28rem;
     column-gap: 1rem;
-  }
-
-  .global-header-stats {
-    display: block;
   }
 }
 
@@ -131,20 +123,14 @@
   border-radius: var(--radius-control, 2px);
 }
 
-/* Stats — full-width row; unaffected when search slot expands */
-.global-header-stats {
-  display: none;
-  grid-area: stats;
-  margin: 0;
-  width: 100%;
-  font: 500 clamp(0.48rem, 1.25vw, 0.54rem) / 1.22 var(--font-ui);
-  letter-spacing: 0.055em;
-  text-transform: uppercase;
+.global-header-drawer__catalog-scale {
+  margin: 0 0 0.65rem;
+  padding: 0 0 0.65rem;
+  border-bottom: 1px solid var(--color-border);
+  font: 500 0.68rem/1.45 var(--font-ui);
+  letter-spacing: 0.04em;
   color: var(--color-text-faint);
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Experience doors — wireframe pills (2px radius) */
