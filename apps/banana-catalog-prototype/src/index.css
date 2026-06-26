@@ -359,18 +359,19 @@ a:focus-visible {
   pointer-events: none;
 }
 
-.yt-embed-facade__glyph--loading {
-  margin-left: 0;
-  animation: yt-embed-loading-pulse 1s ease-in-out infinite;
+.yt-embed-loading-spinner {
+  display: block;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: var(--color-accent, #b8792a);
+  border-radius: 50%;
+  animation: yt-embed-loading-spin 0.75s linear infinite;
 }
 
-@keyframes yt-embed-loading-pulse {
-  0%,
-  100% {
-    opacity: 0.55;
-  }
-  50% {
-    opacity: 1;
+@keyframes yt-embed-loading-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 

@@ -46,6 +46,8 @@ import { DISCOVERY_SEARCH_OPEN_EVENT, HEADER_DESKTOP_SEARCH_FIELD_MQ } from './d
 import './CatalogApp.css'
 import './DiscoverySearch.css'
 import { loadSongSearchDeep, loadYoutubeByLyricsId, useSongCatalogBrowse } from './generatedData'
+import { CATALOG_CHROME_STATS } from './catalogChromeStats'
+import { formatHomeCount } from './homePortalData'
 import { hasListenerCatalogMedia, isLyricsOnlySong } from './listenerCatalog'
 
 const facets = facetsJson as FacetsPayload
@@ -491,11 +493,14 @@ export function DiscoverySearch({
           ? typedTracksPreviewLength
           : tabPreview.length
 
-  const headerBrowseSongCount = songCatalog.length
-  const headerBrowseTrackCount = useMemo(
-    () => listenerSongCatalog.reduce((sum, s) => sum + (s.track_count_published ?? 0), 0),
-    [listenerSongCatalog],
-  )
+  const headerBrowseSongCount =
+    songCatalog.length > 0 ? songCatalog.length : CATALOG_CHROME_STATS.songCount
+  const headerBrowseTrackCount = useMemo(() => {
+    if (listenerSongCatalog.length > 0) {
+      return listenerSongCatalog.reduce((sum, s) => sum + (s.track_count_published ?? 0), 0)
+    }
+    return CATALOG_CHROME_STATS.topTrackCount
+  }, [listenerSongCatalog])
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- reset list highlight when query or tab surface changes
@@ -784,7 +789,7 @@ export function DiscoverySearch({
               <div className="discovery-search__browse-shortcuts" role="group" aria-label="Browse all">
                 <Link className="discovery-search__browse-all" to={CATALOG_BROWSE_PATH} onClick={() => setOpen(false)}>
                   <span className="discovery-search__browse-all-label">Browse all songs</span>
-                  <span className="discovery-search__browse-all-count">{headerBrowseSongCount}</span>
+                  <span className="discovery-search__browse-all-count">{formatHomeCount(headerBrowseSongCount)}</span>
                   <span className="discovery-search__browse-all-chev" aria-hidden>
                     →
                   </span>
@@ -795,7 +800,7 @@ export function DiscoverySearch({
                   onClick={() => setOpen(false)}
                 >
                   <span className="discovery-search__browse-all-label">Browse all tracks</span>
-                  <span className="discovery-search__browse-all-count">{headerBrowseTrackCount}</span>
+                  <span className="discovery-search__browse-all-count">{formatHomeCount(headerBrowseTrackCount)}</span>
                   <span className="discovery-search__browse-all-chev" aria-hidden>
                     →
                   </span>
