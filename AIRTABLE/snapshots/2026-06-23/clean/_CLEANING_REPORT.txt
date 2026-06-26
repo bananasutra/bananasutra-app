@@ -1,0 +1,13 @@
+AIRTABLE SNAPSHOT CLEANING REPORT — 2026-06-23
+======================================================================
+
+Per-file summary of invisible-character normalization.
+Columns not listed had no modifications.
+
+── SONGS (Lyrics)-2026-06-23.csv → lyrics-2026-06-23.csv (403 rows)
+    lyrics                               LINE-SEP×25
+    lyrics_extract                       LINE-SEP×3
+    song_muse_quote                      NBSP×29
+
+── 301 REDIRECTS-2026-06-23.csv → 301_redirects-2026-06-23.csv (3 rows)
+    (no cell modifications)
