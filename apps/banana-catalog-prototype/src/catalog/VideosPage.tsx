@@ -733,7 +733,6 @@ export function VideosPage() {
             ariaLabel="Filter videos"
             panelId="videos-filter-panel"
             resultSummary={videoContextSummary}
-            showResultSummary={false}
             activePills={videoActivePills}
             clearAllHref={clearAllVideosFiltersHref}
             facetGroups={videoFacetGroups}

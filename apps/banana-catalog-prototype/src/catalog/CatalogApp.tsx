@@ -532,7 +532,6 @@ export function CatalogApp() {
             ariaLabel="Filter songs"
             panelId="catalog-filter-panel"
             resultSummary={contextSummary}
-            showResultSummary={false}
             activePills={songActivePills}
             onClearAll={clearAllFilters}
             secondaryGroup={songMediaGroup}
