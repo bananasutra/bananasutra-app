@@ -20,7 +20,7 @@ export function NavigationLoadingBridge() {
 
   useEffect(() => {
     if (!routePending) return
-    const id = window.setTimeout(() => setRoutePending(false), 12_000)
+    const id = window.setTimeout(() => setRoutePending(false), 6_000)
     return () => window.clearTimeout(id)
   }, [routePending])
 

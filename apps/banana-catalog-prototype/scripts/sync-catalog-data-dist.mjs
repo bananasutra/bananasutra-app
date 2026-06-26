@@ -21,6 +21,8 @@ const FILES = [
   'track_catalog.json',
   'muses_catalog.json',
   'quotes_wall.json',
+  'songbook_catalog.json',
+  'home_quotes.json',
 ]
 
 if (!fs.existsSync(path.join(root, 'dist'))) {

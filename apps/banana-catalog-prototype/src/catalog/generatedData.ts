@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
-import type { MuseCatalogItem, QuoteWallItem, SongCatalogItem, SongDetailRecord, YouTubeCatalogVideo } from './types'
+import type { MuseCatalogItem, QuoteWallItem, SongCatalogItem, SongDetailRecord, SongbookCatalogItem, YouTubeCatalogVideo } from './types'
 
 let songCatalogResolved: SongCatalogItem[] | null = null
 let songCatalogPromise: Promise<SongCatalogItem[]> | null = null
@@ -12,6 +12,10 @@ let musesCatalogResolved: MuseCatalogItem[] | null = null
 let musesCatalogPromise: Promise<MuseCatalogItem[]> | null = null
 let quotesWallResolved: QuoteWallItem[] | null = null
 let quotesWallPromise: Promise<QuoteWallItem[]> | null = null
+let songbookCatalogResolved: SongbookCatalogItem[] | null = null
+let songbookCatalogPromise: Promise<SongbookCatalogItem[]> | null = null
+let homeQuotesResolved: QuoteWallItem[] | null = null
+let homeQuotesPromise: Promise<QuoteWallItem[]> | null = null
 
 let songDetailResolved: Record<string, SongDetailRecord> | null = null
 let songDetailPromise: Promise<Record<string, SongDetailRecord>> | null = null
@@ -191,6 +195,46 @@ export async function loadQuotesWall(): Promise<QuoteWallItem[]> {
   return quotesWallPromise
 }
 
+export async function loadSongbookCatalog(): Promise<SongbookCatalogItem[]> {
+  if (songbookCatalogResolved) return songbookCatalogResolved
+  if (!songbookCatalogPromise) {
+    songbookCatalogPromise = fetchCatalogData(catalogDataFileUrl('songbook_catalog.json'))
+      .then((r) => {
+        if (!r.ok) throw new Error(`songbook_catalog.json: HTTP ${r.status}`)
+        return r.json() as Promise<SongbookCatalogItem[]>
+      })
+      .then((rows) => {
+        songbookCatalogResolved = Array.isArray(rows) ? rows : []
+        return songbookCatalogResolved
+      })
+      .catch((e) => {
+        songbookCatalogPromise = null
+        throw e
+      })
+  }
+  return songbookCatalogPromise
+}
+
+export async function loadHomeQuotes(): Promise<QuoteWallItem[]> {
+  if (homeQuotesResolved) return homeQuotesResolved
+  if (!homeQuotesPromise) {
+    homeQuotesPromise = fetchCatalogData(catalogDataFileUrl('home_quotes.json'))
+      .then((r) => {
+        if (!r.ok) throw new Error(`home_quotes.json: HTTP ${r.status}`)
+        return r.json() as Promise<QuoteWallItem[]>
+      })
+      .then((rows) => {
+        homeQuotesResolved = Array.isArray(rows) ? rows : []
+        return homeQuotesResolved
+      })
+      .catch((e) => {
+        homeQuotesPromise = null
+        throw e
+      })
+  }
+  return homeQuotesPromise
+}
+
 /** Full lyrics/detail blobs — load only when needed (e.g. song detail route). */
 export async function loadSongDetail(): Promise<Record<string, SongDetailRecord>> {
   if (songDetailResolved) return songDetailResolved
@@ -226,6 +270,12 @@ export type MusesCatalogLoadState = {
 
 export type QuotesWallLoadState = {
   data: QuoteWallItem[] | null
+  error: string | null
+  loading: boolean
+}
+
+export type SongbookCatalogLoadState = {
+  data: SongbookCatalogItem[] | null
   error: string | null
   loading: boolean
 }
@@ -363,6 +413,82 @@ export function useQuotesWall(): QuotesWallLoadState {
     }
     let cancelled = false
     loadQuotesWall()
+      .then((rows) => {
+        if (!cancelled) {
+          setData(rows)
+          setError(null)
+          setLoading(false)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setData(null)
+          setError('Could not load quotes data.')
+          setLoading(false)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return { data, error, loading }
+}
+
+export function useSongbookCatalog(): SongbookCatalogLoadState {
+  const [data, setData] = useState<SongbookCatalogItem[] | null>(() => songbookCatalogResolved)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(() => !songbookCatalogResolved)
+
+  useEffect(() => {
+    if (songbookCatalogResolved) {
+      queueMicrotask(() => {
+        setData(songbookCatalogResolved)
+        setError(null)
+        setLoading(false)
+      })
+      return
+    }
+    let cancelled = false
+    loadSongbookCatalog()
+      .then((rows) => {
+        if (!cancelled) {
+          setData(rows)
+          setError(null)
+          setLoading(false)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setData(null)
+          setError('Could not load songbook catalog data.')
+          setLoading(false)
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  return { data, error, loading }
+}
+
+export function useHomeQuotes(): QuotesWallLoadState {
+  const [data, setData] = useState<QuoteWallItem[] | null>(() => homeQuotesResolved)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(() => !homeQuotesResolved)
+
+  useEffect(() => {
+    if (homeQuotesResolved) {
+      queueMicrotask(() => {
+        setData(homeQuotesResolved)
+        setError(null)
+        setLoading(false)
+      })
+      return
+    }
+    let cancelled = false
+    loadHomeQuotes()
       .then((rows) => {
         if (!cancelled) {
           setData(rows)

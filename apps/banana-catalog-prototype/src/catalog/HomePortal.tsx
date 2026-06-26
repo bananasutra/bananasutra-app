@@ -1,7 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { Link, Navigate, useLocation, useSearchParams } from 'react-router-dom'
-import songCatalogBrowseJson from '../data/generated/song_catalog_browse.json'
-import songbookCatalogJson from '../data/generated/songbook_catalog.json'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { HomeLatestDropsSection, HomeTopTracksSection } from './HomeNowPlayingSection'
@@ -27,7 +25,8 @@ import {
 import { pickRandomHomeSongbookCorner } from './homePortalUtils'
 import { pickLatestSongsForListenLp } from './listenLpData'
 import { buildSutraStats } from './sutraPageUtils'
-import type { SongCatalogItem, SongbookCatalogItem } from './types'
+import type { SutraFamilyKey } from './sutraContext'
+import { useSongCatalogBrowse, useSongbookCatalog } from './generatedData'
 import { canonicalPathForRoute } from './seoPaths'
 import { CATALOG_BROWSE_PATH, searchHasBrowseParams } from './urlState'
 import { PageMeta } from './PageMeta'
@@ -48,20 +47,36 @@ export function HomePortal() {
   const legacyRedirect = location.pathname === '/' && searchHasBrowseParams(location.search)
   const fullSearch = searchParams.toString()
 
-  const [heroQuote] = useState(() => pickRandomHeroQuote(buildHeroQuotePool()))
+  const { data: browseCatalog, loading: browseLoading } = useSongCatalogBrowse()
+  const { data: songbookCatalog } = useSongbookCatalog()
   const { trackCatalog, youtubeByLyrics, trackLoadError, youtubeLoadError } = useHomeDeferredCatalog()
+
+  const heroQuote = useMemo(() => {
+    if (!browseCatalog?.length) return null
+    return pickRandomHeroQuote(buildHeroQuotePool(browseCatalog))
+  }, [browseCatalog])
+
   const latestSongs = useMemo(
-    () => pickLatestSongsForListenLp(songCatalogBrowseJson as SongCatalogItem[], HOME_LATEST_DROPS_LIMIT),
-    [],
+    () => (browseCatalog ? pickLatestSongsForListenLp(browseCatalog, HOME_LATEST_DROPS_LIMIT) : []),
+    [browseCatalog],
   )
-  const listenerFavorites = useMemo(() => buildListenerFavorites(trackCatalog, 5), [trackCatalog])
+
+  const listenerFavorites = useMemo(
+    () => (browseCatalog ? buildListenerFavorites(trackCatalog, browseCatalog, 5) : []),
+    [trackCatalog, browseCatalog],
+  )
+
   const sutraSongCounts = useMemo(() => {
-    const stats = buildSutraStats(songCatalogBrowseJson as SongCatalogItem[])
+    if (!browseCatalog) return new Map<SutraFamilyKey, number>()
+    const stats = buildSutraStats(browseCatalog)
     return new Map([...stats.entries()].map(([key, row]) => [key, row.songs]))
-  }, [])
-  const [songbookCornerCards] = useState(() =>
-    pickRandomHomeSongbookCorner((songbookCatalogJson as SongbookCatalogItem[]) ?? []),
-  )
+  }, [browseCatalog])
+
+  const songbookCornerCards = useMemo(() => {
+    if (!songbookCatalog?.length) return []
+    return pickRandomHomeSongbookCorner(songbookCatalog)
+  }, [songbookCatalog])
+
   const videoTeasers = useMemo(
     () => (youtubeByLyrics ? pickRandomHomeVideoTeasers(youtubeByLyrics) : []),
     [youtubeByLyrics],
@@ -75,8 +90,11 @@ export function HomePortal() {
 
   const [luckySeed, setLuckySeed] = useState(() => `${location.key}|${Date.now()}`)
   const coverStripTiles = useMemo(
-    () => shuffleCoverStrip(buildCoverPool(), luckySeed, HOME_COVER_STRIP_COUNT),
-    [luckySeed],
+    () =>
+      browseCatalog
+        ? shuffleCoverStrip(buildCoverPool(browseCatalog), luckySeed, HOME_COVER_STRIP_COUNT)
+        : [],
+    [browseCatalog, luckySeed],
   )
   const reloadLuckyStrip = useCallback(() => {
     setLuckySeed(`${location.key}|${Date.now()}`)
@@ -126,7 +144,7 @@ export function HomePortal() {
           </ScrollRevealSection>
 
           <ScrollRevealSection className="home-portal__section--listen-rail" aria-labelledby="home-drops-heading">
-            <HomeLatestDropsSection songs={latestSongs} />
+            <HomeLatestDropsSection songs={latestSongs} loading={browseLoading} />
           </ScrollRevealSection>
 
           {showTopTracksSection ? (

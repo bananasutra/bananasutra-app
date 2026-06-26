@@ -72,6 +72,8 @@
   margin: 0.15rem 0 0;
   padding: 0;
   list-style: none;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
 }
 
 @media (min-width: 520px) {

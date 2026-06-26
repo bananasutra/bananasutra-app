@@ -83,8 +83,11 @@ export function nativeImageMaxWidth(source: string): number | null {
  * SoundCloud / YouTube thumbs are already sized for the UI. CF re-wrap adds cold-cache
  * latency (seconds) without quality gain — serve the origin URL and let the browser scale.
  */
-function shouldBypassCfTransform(source: string): boolean {
-  return nativeImageMaxWidth(source) != null
+function shouldBypassCfTransform(source: string, requestedWidth?: number): boolean {
+  const nativeMax = nativeImageMaxWidth(source)
+  if (nativeMax == null) return false
+  if (requestedWidth != null && requestedWidth < 200) return false
+  return true
 }
 
 /** Wrap remote cover URLs with Cloudflare Image Transformations. */
@@ -95,7 +98,7 @@ export function coverImageUrl(source: string | null | undefined, opts: CoverImag
   if (!isHttpUrl(trimmed)) return trimmed
 
   const normalized = normalizeRemoteImageSource(trimmed)
-  if (shouldBypassCfTransform(normalized)) return normalized
+  if (shouldBypassCfTransform(normalized, opts.width)) return normalized
 
   const width = opts.width ?? 400
   const format = opts.format ?? 'auto'

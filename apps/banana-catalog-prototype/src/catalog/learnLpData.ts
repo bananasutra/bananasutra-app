@@ -1,4 +1,3 @@
-import homeQuotesJson from '../data/generated/home_quotes.json'
 import type { MuseCatalogItem, QuoteWallItem, SongCatalogItem } from './types'
 import { canonicalPathForRoute } from './seoPaths'
 import { songCatalogPath } from './songPaths'
@@ -236,8 +235,6 @@ export const LEARN_HUB_STAGE_INTRO = {
       'A position on AI in art: liberty for the maker, equality in credit and pay, fraternity with the community that trained the culture. Not a petition. A compass.',
   },
 } as const
-
-export const LEARN_QUOTES: QuoteWallItem[] = homeQuotesJson as QuoteWallItem[]
 
 export function sutraDisplayNameForKey(key: SutraFamilyKey): string {
   return (SUTRA_CONTEXT[key]?.sutra || '').trim() || `${key}sutra`

@@ -11,5 +11,5 @@ export function HomeLatestDropsSpotlight({ songs }: Props) {
     return <p className="home-portal__empty">No recent drops.</p>
   }
 
-  return <SongThumbDropsGrid songs={songs} limit={4} eagerCount={4} />
+  return <SongThumbDropsGrid songs={songs} limit={4} eagerCount={2} />
 }

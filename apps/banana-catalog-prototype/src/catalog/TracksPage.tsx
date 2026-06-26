@@ -29,7 +29,7 @@ import {
   readTracksBrowseFromSearch,
   serializeTracksBrowseQuery,
 } from './urlState'
-import { coverImageUrl } from '../seo/imageUrl'
+import { coverImageUrl, buildSrcset } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
 import { usePlayAllDesktopAvailable } from './playAllPlatform'
 import { persistentBarOwnsQueueChrome } from './playerQueue/pageQueueChrome'
@@ -814,6 +814,7 @@ export function TracksPage() {
                       isScPlaying && playingTrackId != null && t.track_id === playingTrackId
                     const href = songCatalogPath(t.lyrics_title, t.url_slug)
                     const cover = coverImageUrl(thumbSrc(t.list_cover_url), { width: 200 })
+                    const coverSrcSet = buildSrcset(thumbSrc(t.list_cover_url, 'toriginal'), [100, 200])
                     const g = genreLine(t)
                     const genreSecondary = g.trim()
                     const sutraText = (t.sutra || '').trim()
@@ -882,7 +883,17 @@ export function TracksPage() {
                             className={`tracks-page__thumb-wrap${active ? ' tracks-page__thumb-wrap--active' : ''}`}
                           >
                             {cover ? (
-                              <img className="tracks-page__thumb" src={cover} alt="" loading="lazy" />
+                              <img
+                                className="tracks-page__thumb"
+                                src={cover}
+                                srcSet={coverSrcSet || undefined}
+                                sizes="48px"
+                                alt=""
+                                width={48}
+                                height={48}
+                                loading="lazy"
+                                decoding="async"
+                              />
                             ) : (
                               <span className="tracks-page__thumb tracks-page__thumb--empty" />
                             )}
