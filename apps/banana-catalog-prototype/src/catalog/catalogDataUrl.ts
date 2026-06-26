@@ -99,12 +99,14 @@ async function fallbackCatalogResponse(url: string): Promise<Response | null> {
 }
 
 /**
- * Default stays `no-store` for deploy freshness on stable `/catalog-data/*.json` paths.
- * Callers can override when route performance benefits from normal browser caching.
+ * Default: `no-store` in dev (stale JSON after port swaps). Production uses browser + CDN cache
+ * on immutable `/catalog-data/*.json` (see docs/BUILD-ENV.md).
  */
+const CATALOG_FETCH_CACHE: RequestCache = import.meta.env.PROD ? 'default' : 'no-store'
+
 export async function fetchCatalogData(url: string, init?: RequestInit): Promise<Response> {
   try {
-    const res = await fetch(url, { cache: 'no-store', ...init })
+    const res = await fetch(url, { cache: CATALOG_FETCH_CACHE, ...init })
     if (res.ok && !responseLooksLikeHtml(res)) return res
     const fallback = await fallbackCatalogResponse(url)
     return fallback ?? res

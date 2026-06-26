@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { coverImageUrl } from '../seo/imageUrl'
+import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import type { HomeCoverTile } from './homePortalData'
 
 type Props = {
@@ -27,12 +27,16 @@ export function HomePortalCoverStrip({ tiles, onReload }: Props) {
       <ul className="home-lucky-strip" aria-label="Random song covers">
         {tiles.map((tile) => {
           const art = (tile.art || '').trim()
+          const coverSrc = art ? coverImageUrl(art, { width: 160 }) : ''
+          const coverSrcSet = art ? buildSrcset(art, [80, 160, 240]) : ''
           return (
             <li key={tile.slug}>
               <Link className="home-lucky-strip__thumb" to={tile.href} aria-label={tile.title} title={tile.title}>
                 {art ? (
                   <img
-                    src={coverImageUrl(art, { width: 160 })}
+                    src={coverSrc}
+                    srcSet={coverSrcSet || undefined}
+                    sizes="(max-width: 720px) 9vw, 80px"
                     alt=""
                     width={80}
                     height={80}
