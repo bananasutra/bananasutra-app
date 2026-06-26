@@ -85,7 +85,12 @@ export function YoutubeEmbeddedPlayer({
   const id = videoId.trim()
   const clientMounted = useClientMounted()
   const [facadeReleased, setFacadeReleased] = useState(false)
+  const [iframeReady, setIframeReady] = useState(false)
   const showFacade = Boolean(facadeUntilClick && id && !facadeReleased)
+
+  useEffect(() => {
+    setIframeReady(false)
+  }, [id, facadeReleased])
 
   useEffect(() => {
     onPlayingChange?.(facadeReleased)
@@ -160,17 +165,31 @@ export function YoutubeEmbeddedPlayer({
             </span>
           </button>
         ) : (
-          <iframe
-            ref={iframeRef}
-            key={`${id}-${facadeReleased ? 'on' : 'off'}`}
-            className={iframeClass}
-            title={title}
-            src={iframeSrc}
-            loading={loading}
-            allow={YT_IFRAME_ALLOW}
-            allowFullScreen
-            onLoad={() => onIframeLoad?.()}
-          />
+          <div className="yt-embed-frame-host">
+            {!iframeReady && poster ? (
+              <img
+                src={poster}
+                alt=""
+                className="yt-embed-frame-host__poster"
+                decoding="async"
+                aria-hidden
+              />
+            ) : null}
+            <iframe
+              ref={iframeRef}
+              key={`${id}-${facadeReleased ? 'on' : 'off'}`}
+              className={`${iframeClass}${iframeReady ? ' yt-embed-frame--ready' : ''}`}
+              title={title}
+              src={iframeSrc}
+              loading={loading}
+              allow={YT_IFRAME_ALLOW}
+              allowFullScreen
+              onLoad={() => {
+                setIframeReady(true)
+                onIframeLoad?.()
+              }}
+            />
+          </div>
         )}
       </div>
       {outbound}

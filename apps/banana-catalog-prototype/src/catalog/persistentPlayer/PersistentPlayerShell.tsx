@@ -185,7 +185,7 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
   return (
     <div
       className={`persistent-player-shell${visible ? ' persistent-player-shell--visible' : ''}${enterInstant ? ' persistent-player-shell--instant' : ''}`}
-      aria-hidden={!visible}
+      {...(!visible ? { inert: true as const } : {})}
     >
       {visible && track && lyricsOpen ? (
         <PersistentPlayerLyricsPanel
