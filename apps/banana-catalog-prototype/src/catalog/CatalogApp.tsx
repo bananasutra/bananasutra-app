@@ -549,7 +549,7 @@ export function CatalogApp() {
             }}
             defaultExpanded={filterBarExpanded}
             onExpandedChange={setFilterBarExpanded}
-            panelFooter={
+            panelAfterSearch={
               <label className="songs-page__lyrics-only-toggle">
                 <input
                   type="checkbox"

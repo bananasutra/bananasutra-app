@@ -467,6 +467,11 @@ a.catalog-filter-bar__chip.is-active:visited {
   display: none;
 }
 
+.catalog-filter-bar__panel-after-search {
+  margin-top: -0.15rem;
+  padding-bottom: 0.1rem;
+}
+
 .catalog-filter-bar__panel-footer {
   margin-top: 0.15rem;
   padding-top: 0.55rem;
