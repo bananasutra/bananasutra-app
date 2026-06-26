@@ -90,7 +90,7 @@ function WatchLpPlaylistEmbedInner({
         <div className="catalog-video-spotlight__embed" style={{ aspectRatio: '16 / 9' }}>
           {!clientMounted ? (
             <div className="watch-lp__playlist-embed-placeholder" role="status" aria-label={`Loading playlist: ${title}`}>
-              {poster ? <img src={poster} alt="" className="watch-lp__playlist-embed-poster" decoding="async" /> : null}
+              {poster ? <img src={poster} alt="" className="watch-lp__playlist-embed-poster" decoding="async" width={640} height={360} /> : null}
             </div>
           ) : !facadeReleased ? (
             <button
@@ -103,7 +103,15 @@ function WatchLpPlaylistEmbedInner({
               }}
             >
               {poster ? (
-                <img src={poster} alt="" className="watch-lp__playlist-embed-poster" decoding="async" loading="lazy" />
+                <img
+                  src={poster}
+                  alt=""
+                  className="watch-lp__playlist-embed-poster"
+                  decoding="async"
+                  loading="lazy"
+                  width={640}
+                  height={360}
+                />
               ) : null}
               <span className="watch-lp__playlist-embed-play" aria-hidden>
                 ▶

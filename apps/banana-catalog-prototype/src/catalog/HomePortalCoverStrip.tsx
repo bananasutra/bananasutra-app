@@ -25,7 +25,7 @@ export function HomePortalCoverStrip({ tiles, onReload }: Props) {
         Tap a cover and see where it takes you. It&apos;s chill. It&apos;s fun. It&apos;s free. Woo.
       </p>
       <ul className="home-lucky-strip" aria-label="Random song covers">
-        {tiles.map((tile) => {
+        {tiles.map((tile, index) => {
           const art = (tile.art || '').trim()
           const coverSrc = art ? coverImageUrl(art, { width: 160 }) : ''
           const coverSrcSet = art ? buildSrcset(art, [80, 160, 240]) : ''
@@ -40,7 +40,8 @@ export function HomePortalCoverStrip({ tiles, onReload }: Props) {
                     alt=""
                     width={80}
                     height={80}
-                    loading="lazy"
+                    loading={index < 4 ? 'eager' : 'lazy'}
+                    fetchPriority={index === 0 ? 'high' : undefined}
                     decoding="async"
                   />
                 ) : (

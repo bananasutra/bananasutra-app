@@ -28,6 +28,8 @@
 }
 
 .home-portal__section--stats {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 120px;
   padding-top: calc(var(--catalog-shell-section-pad-y, 1.65rem) + 0.5rem);
   padding-bottom: calc(var(--catalog-shell-section-pad-y, 1.65rem) + 0.25rem);
 }

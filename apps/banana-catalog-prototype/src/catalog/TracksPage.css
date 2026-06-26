@@ -113,6 +113,8 @@
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 2000px;
 }
 
 .tracks-page__item {

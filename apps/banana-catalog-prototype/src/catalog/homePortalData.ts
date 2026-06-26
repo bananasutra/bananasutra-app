@@ -1,6 +1,5 @@
 import type { To } from 'react-router-dom'
 import chromeStatsJson from '../data/generated/catalog_chrome_stats.json'
-import songCatalogBrowseJson from '../data/generated/song_catalog_browse.json'
 import type { SongCatalogItem, TrackCatalogItem, YouTubeCatalogVideo } from './types'
 import { songCatalogLinkTo } from './songPaths'
 import { dedupeYoutubeVideosByVideoId } from './youtubeCatalogFlat'
@@ -41,9 +40,9 @@ export const HOME_LATEST_DROPS_LIMIT = 4
 /** Video teaser cards on home (wireframe §6). */
 export const HOME_VIDEO_TEASER_LIMIT = 3
 
-const HOME_BROWSE = songCatalogBrowseJson as SongCatalogItem[]
-
-const BROWSE_BY_SLUG = new Map(HOME_BROWSE.map((s) => [(s.url_slug || '').trim(), s]))
+function browseBySlug(browse: SongCatalogItem[]): Map<string, SongCatalogItem> {
+  return new Map(browse.map((s) => [(s.url_slug || '').trim(), s]))
+}
 
 export type HomeHeroQuote = {
   slug: string
@@ -164,8 +163,8 @@ function songHasAudioOrVideo(s: SongCatalogItem): boolean {
   return songHasReleasedListenerAudio(s) || songHasReleasedVideo(s)
 }
 
-function trimHeroQuote(slug: string): HomeHeroQuote | null {
-  const s = BROWSE_BY_SLUG.get(slug)
+function trimHeroQuote(slug: string, bySlug: Map<string, SongCatalogItem>): HomeHeroQuote | null {
+  const s = bySlug.get(slug)
   if (!s || !(s.lyrics_extract || '').trim()) return null
   return {
     slug,
@@ -176,8 +175,9 @@ function trimHeroQuote(slug: string): HomeHeroQuote | null {
   }
 }
 
-export function buildHeroQuotePool(): HomeHeroQuote[] {
-  return HERO_QUOTE_SLUGS.map(trimHeroQuote).filter((q): q is HomeHeroQuote => Boolean(q))
+export function buildHeroQuotePool(browse: SongCatalogItem[]): HomeHeroQuote[] {
+  const bySlug = browseBySlug(browse)
+  return HERO_QUOTE_SLUGS.map((slug) => trimHeroQuote(slug, bySlug)).filter((q): q is HomeHeroQuote => Boolean(q))
 }
 
 /** Day-hash pick — stable for a calendar day (legacy / non-home surfaces). */
@@ -195,10 +195,14 @@ export function pickRandomHeroQuote(quotes: HomeHeroQuote[]): HomeHeroQuote | nu
   return quotes[idx] ?? null
 }
 
-export function pickListenDoorPreview(catalog: TrackCatalogItem[] | null): HomeListenDoorPreview | null {
+export function pickListenDoorPreview(
+  catalog: TrackCatalogItem[] | null,
+  browse: SongCatalogItem[],
+): HomeListenDoorPreview | null {
+  const bySlug = browseBySlug(browse)
   const top = pickTopTracksForListenLp(catalog)[0]
   if (!top) return null
-  const song = BROWSE_BY_SLUG.get((top.url_slug || '').trim())
+  const song = bySlug.get((top.url_slug || '').trim())
   const art = (song?.cover_image_url || top.list_cover_url || '').trim()
   if (!art) return null
   return {
@@ -246,8 +250,8 @@ export function pickWatchDoorPreview(
   }
 }
 
-export function buildLatestDrops(limit = 3): HomeDropRow[] {
-  return [...HOME_BROWSE]
+export function buildLatestDrops(browse: SongCatalogItem[], limit = 3): HomeDropRow[] {
+  return [...browse]
     .filter((s) => s.url_slug && s.cover_image_url && songHasAudioOrVideo(s) && parsePublishedAt(s.published_at) > 0)
     .sort((a, b) => parsePublishedAt(b.published_at) - parsePublishedAt(a.published_at))
     .slice(0, limit)
@@ -262,8 +266,8 @@ export function buildLatestDrops(limit = 3): HomeDropRow[] {
     }))
 }
 
-export function buildCoverPool(): HomeCoverTile[] {
-  return HOME_BROWSE.filter((s) => s.url_slug && s.cover_image_url).map((s) => ({
+export function buildCoverPool(browse: SongCatalogItem[]): HomeCoverTile[] {
+  return browse.filter((s) => s.url_slug && s.cover_image_url).map((s) => ({
     title: s.lyrics_title,
     slug: s.url_slug,
     art: s.cover_image_url,
@@ -402,13 +406,15 @@ export function buildHomeStatsSummary(): HomeStatsSummaryItem[] {
 
 export function buildListenerFavorites(
   catalog: TrackCatalogItem[] | null,
+  browse: SongCatalogItem[],
   limit = 5,
 ): HomeListenerFavorite[] {
+  const bySlug = browseBySlug(browse)
   return pickTopTracksForListenLp(catalog)
     .slice(0, limit)
     .map((t, index) => {
       const slug = (t.url_slug || '').trim()
-      const song = BROWSE_BY_SLUG.get(slug)
+      const song = bySlug.get(slug)
       return {
         rank: index + 1,
         trackId: t.track_id,

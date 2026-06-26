@@ -350,6 +350,30 @@ a:focus-visible {
   pointer-events: none;
 }
 
+.yt-embed-frame-host__loading-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.yt-embed-facade__glyph--loading {
+  margin-left: 0;
+  animation: yt-embed-loading-pulse 1s ease-in-out infinite;
+}
+
+@keyframes yt-embed-loading-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 .yt-embed-frame-host .yt-embed-frame {
   position: relative;
   z-index: 1;

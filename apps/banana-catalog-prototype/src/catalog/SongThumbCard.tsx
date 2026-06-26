@@ -16,6 +16,7 @@ export type SongThumbCardProps = {
   publishedAt?: string
   ariaLabel?: string
   loading?: 'lazy' | 'eager'
+  fetchPriority?: 'high' | 'low' | 'auto'
 }
 
 export function SongThumbCard({
@@ -27,6 +28,7 @@ export function SongThumbCard({
   publishedAt,
   ariaLabel,
   loading = 'lazy',
+  fetchPriority,
 }: SongThumbCardProps) {
   const cover = coverImageUrl(coverUrl, { width: 240 })
   const coverSrcSet = buildSrcset(coverUrl, [120, 200, 240])
@@ -49,6 +51,7 @@ export function SongThumbCard({
           width={240}
           height={240}
           loading={loading}
+          fetchPriority={fetchPriority}
           decoding="async"
         />
       ) : (
