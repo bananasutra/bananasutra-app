@@ -464,13 +464,13 @@ export function ListenLpTopTracks({
           </div>
 
           {playerTab === 'tracks' && hasTracks ? (
-            <ol
+            <div
               id="listen-lp-panel-tracks"
               role="tabpanel"
               aria-labelledby="listen-lp-tab-tracks"
-              className="listen-lp__track-list"
               aria-live="polite"
             >
+              <ol className="listen-lp__track-list">
               {tracks.map((t, index) => {
                 const active = t.track_id === selectedTrack?.track_id
                 const showPlayingWave = active && isScPlaying
@@ -528,17 +528,18 @@ export function ListenLpTopTracks({
                   </li>
                 )
               })}
-            </ol>
+              </ol>
+            </div>
           ) : null}
 
           {playerTab === 'eps' && hasEps ? (
-            <ol
+            <div
               id="listen-lp-panel-eps"
               role="tabpanel"
               aria-labelledby="listen-lp-tab-eps"
-              className="listen-lp__track-list"
               aria-live="polite"
             >
+              <ol className="listen-lp__track-list">
               {eps.map((ep, index) => {
                 const active = ep.ep_url === selectedEp?.ep_url
                 const showPlayingWave = active && isScPlaying
@@ -597,6 +598,7 @@ export function ListenLpTopTracks({
                 )
               })}
             </ol>
+            </div>
           ) : null}
 
           {playerTab === 'eps' && !hasEps ? (

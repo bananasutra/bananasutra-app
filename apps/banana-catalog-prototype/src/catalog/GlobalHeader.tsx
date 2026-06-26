@@ -240,7 +240,7 @@ export const GlobalHeader = forwardRef<HTMLElement, GlobalHeaderProps>(function 
         id={drawerId}
         className={`global-header-drawer${menuOpen ? ' is-open' : ''}`}
         aria-label="Catalog menu"
-        aria-hidden={menuOpen ? undefined : true}
+        {...(!menuOpen ? { inert: true as const } : {})}
       >
         <div className="global-header-drawer__head">
           <h2 className="global-header-drawer__title">Menu</h2>

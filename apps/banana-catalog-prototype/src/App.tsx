@@ -2,7 +2,7 @@ import { Component, lazy, Suspense, type ReactNode, useEffect, useLayoutEffect, 
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { NavigationLoadingBridge } from './NavigationLoadingBridge'
-import { prefetchCatalogRoutesIdle } from './routePrefetch'
+import { installRoutePrefetchOnIntent } from './routePrefetch'
 import { SearchRedirect } from './catalog/SearchRedirect'
 import { useBfCacheEmbedTeardown } from './catalog/useBfCacheEmbedTeardown'
 import { useSyncPrintPageUrl } from './catalog/useSyncPrintPageUrl'
@@ -118,10 +118,7 @@ function RouteBoundary({ children }: { children: ReactNode }) {
 }
 
 function BootPrefetch() {
-  useEffect(() => {
-    // Route prefetch policy is centralized in routePrefetch.ts.
-    prefetchCatalogRoutesIdle()
-  }, [])
+  useEffect(() => installRoutePrefetchOnIntent(), [])
   return null
 }
 
