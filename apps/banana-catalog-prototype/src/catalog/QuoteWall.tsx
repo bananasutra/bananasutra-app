@@ -2,8 +2,14 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuotesWall } from './generatedData'
 import type { QuoteWallItem } from './types'
-import { sutraClassName } from './sutraTheme'
-import { SUTRA_CONTEXT, sutraHrefForFamily, type SutraFamilyKey } from './sutraContext'
+import { sutraClassName, sutraFilterChipClassName } from './sutraTheme'
+import {
+  SUTRA_CONTEXT,
+  sortSutraDisplayNames,
+  sutraHrefForFamily,
+  sutraQuestionFromDisplay,
+  type SutraFamilyKey,
+} from './sutraContext'
 import { songCatalogPath } from './songPaths'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
@@ -35,11 +41,63 @@ function sutraFamilyFromDisplay(displayName: string): SutraFamilyKey | null {
   return null
 }
 
-function quoteSutras(item: QuoteWallItem): string[] {
-  const values = [item.primary_sutra, ...item.secondary_sutras.split(',')]
+function secondarySutras(item: QuoteWallItem): string[] {
+  return item.secondary_sutras
+    .split(',')
     .map((value) => value.trim())
     .filter(Boolean)
+}
+
+function quoteSutras(item: QuoteWallItem): string[] {
+  const values = [item.primary_sutra, ...secondarySutras(item)].map((value) => value.trim()).filter(Boolean)
   return [...new Set(values)]
+}
+
+function quoteMatchesSearch(row: QuoteWallItem, query: string): boolean {
+  if (!query) return true
+  return [
+    row.quote,
+    row.muse,
+    row.primary_sutra,
+    row.secondary_sutras,
+    row.core_topic,
+    row.inspired_song?.title ?? '',
+  ].some((value) => normalizeSearch(value).includes(query))
+}
+
+function quoteMatchesFilters(
+  row: QuoteWallItem,
+  filters: {
+    topic: string
+    primarySutra: string
+    secondarySutra: string
+    query: string
+  },
+): boolean {
+  if (filters.topic !== 'all' && topicLabel(row.core_topic) !== filters.topic) return false
+  if (filters.primarySutra !== 'all' && row.primary_sutra.trim() !== filters.primarySutra) return false
+  if (filters.secondarySutra !== 'all' && !secondarySutras(row).includes(filters.secondarySutra)) return false
+  return quoteMatchesSearch(row, filters.query)
+}
+
+function sutraFacetChipOption(args: {
+  groupId: string
+  sutra: string
+  count: number
+  active: boolean
+  disabled: boolean
+  onClick: () => void
+}): CatalogFilterBarFacetGroup['options'][number] {
+  return {
+    id: `${args.groupId}-${args.sutra}`,
+    label: <span className={`catalog-facet-sutra-name ${sutraClassName(args.sutra)}`}>{args.sutra}</span>,
+    count: args.count,
+    active: args.active,
+    disabled: args.disabled,
+    onClick: args.onClick,
+    className: sutraFilterChipClassName(args.sutra),
+    title: `${sutraQuestionFromDisplay(args.sutra)} (${args.count} quotes)`,
+  }
 }
 
 function normalizeSearch(value: string): string {
@@ -118,14 +176,36 @@ export function QuoteWall() {
   const { data, error, loading } = useQuotesWall()
   const rows = useMemo(() => data ?? [], [data])
   const [topicFilter, setTopicFilter] = useState('all')
+  const [primarySutraFilter, setPrimarySutraFilter] = useState('all')
+  const [secondarySutraFilter, setSecondarySutraFilter] = useState('all')
   const [findQuote, setFindQuote] = useState('')
   const [filterBarExpanded, setFilterBarExpanded] = useState(false)
 
   const pageMeta = renderPageMeta({
     title: 'The Quotes',
-    description: 'Explore the quotes and ideas behind BANANASUTRA songs, grouped by theme.',
+    description:
+      'Explore the quotes and ideas behind BANANASUTRA songs. Filter by primary or secondary sutra, topic, or search.',
     path: canonicalPathForRoute('/quotes'),
   })
+
+  const primarySutraOptions = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const row of rows) {
+      const sutra = row.primary_sutra.trim()
+      if (sutra) counts.set(sutra, (counts.get(sutra) ?? 0) + 1)
+    }
+    return sortSutraDisplayNames([...counts.keys()]).map((sutra) => [sutra, counts.get(sutra) ?? 0] as const)
+  }, [rows])
+
+  const secondarySutraOptions = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const row of rows) {
+      for (const sutra of secondarySutras(row)) {
+        counts.set(sutra, (counts.get(sutra) ?? 0) + 1)
+      }
+    }
+    return sortSutraDisplayNames([...counts.keys()]).map((sutra) => [sutra, counts.get(sutra) ?? 0] as const)
+  }, [rows])
 
   const topicOptions = useMemo(() => {
     const counts = new Map<string, number>()
@@ -136,42 +216,63 @@ export function QuoteWall() {
     return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]))
   }, [rows])
 
-  const contextualTopicRows = useMemo(() => {
-    const query = normalizeSearch(findQuote)
-    return rows.filter((row) => {
-      if (!query) return true
-      return [
-        row.quote,
-        row.muse,
-        row.primary_sutra,
-        row.secondary_sutras,
-        row.core_topic,
-        row.inspired_song?.title ?? '',
-      ].some((value) => normalizeSearch(value).includes(query))
-    })
-  }, [rows, findQuote])
+  const normalizedFindQuery = useMemo(() => normalizeSearch(findQuote), [findQuote])
+  const activeQuoteFilters = useMemo(
+    () => ({
+      topic: topicFilter,
+      primarySutra: primarySutraFilter,
+      secondarySutra: secondarySutraFilter,
+      query: normalizedFindQuery,
+    }),
+    [topicFilter, primarySutraFilter, secondarySutraFilter, normalizedFindQuery],
+  )
 
-  const filtered = useMemo(() => {
-    const query = normalizeSearch(findQuote)
-    return rows.filter((row) => {
-      const topicOk = topicFilter === 'all' || topicLabel(row.core_topic) === topicFilter
-      const searchOk =
-        !query ||
-        [
-          row.quote,
-          row.muse,
-          row.primary_sutra,
-          row.secondary_sutras,
-          row.core_topic,
-          row.inspired_song?.title ?? '',
-        ].some((value) => normalizeSearch(value).includes(query))
-      return topicOk && searchOk
-    })
-  }, [findQuote, rows, topicFilter])
+  const contextualPrimarySutraRows = useMemo(
+    () =>
+      rows.filter((row) =>
+        quoteMatchesFilters(row, {
+          topic: topicFilter,
+          primarySutra: 'all',
+          secondarySutra: secondarySutraFilter,
+          query: normalizedFindQuery,
+        }),
+      ),
+    [rows, topicFilter, secondarySutraFilter, normalizedFindQuery],
+  )
+  const contextualSecondarySutraRows = useMemo(
+    () =>
+      rows.filter((row) =>
+        quoteMatchesFilters(row, {
+          topic: topicFilter,
+          primarySutra: primarySutraFilter,
+          secondarySutra: 'all',
+          query: normalizedFindQuery,
+        }),
+      ),
+    [rows, topicFilter, primarySutraFilter, normalizedFindQuery],
+  )
+  const contextualTopicRows = useMemo(
+    () =>
+      rows.filter((row) =>
+        quoteMatchesFilters(row, {
+          topic: 'all',
+          primarySutra: primarySutraFilter,
+          secondarySutra: secondarySutraFilter,
+          query: normalizedFindQuery,
+        }),
+      ),
+    [rows, primarySutraFilter, secondarySutraFilter, normalizedFindQuery],
+  )
+
+  const filtered = useMemo(
+    () => rows.filter((row) => quoteMatchesFilters(row, activeQuoteFilters)),
+    [rows, activeQuoteFilters],
+  )
   const sortedQuotes = useMemo(() => sortQuotes(filtered), [filtered])
   const quotesScrollResetKey = useMemo(
-    () => `${topicFilter}|${normalizeSearch(findQuote)}`,
-    [topicFilter, findQuote],
+    () =>
+      `${topicFilter}|${primarySutraFilter}|${secondarySutraFilter}|${normalizedFindQuery}`,
+    [topicFilter, primarySutraFilter, secondarySutraFilter, normalizedFindQuery],
   )
   const {
     visibleItems: visibleQuotes,
@@ -185,7 +286,7 @@ export function QuoteWall() {
     storageKey: catalogInfiniteScrollStorageKey('/quotes', quotesScrollResetKey),
   })
   const topicClusters = useMemo(() => buildTopicClusters(visibleQuotes), [visibleQuotes])
-  const showGrouped = !normalizeSearch(findQuote)
+  const showGrouped = !normalizedFindQuery
 
   const findQuery = findQuote.trim()
   const quoteActivePills: CatalogFilterBarActivePill[] = []
@@ -194,6 +295,34 @@ export function QuoteWall() {
       id: 'find',
       label: `Search: ${findQuery}`,
       onClick: () => setFindQuote(''),
+    })
+  }
+  if (primarySutraFilter !== 'all') {
+    quoteActivePills.push({
+      id: 'primary-sutra',
+      label: (
+        <>
+          Primary sutra:{' '}
+          <span className={`catalog-facet-sutra-name ${sutraClassName(primarySutraFilter)}`}>
+            {primarySutraFilter}
+          </span>
+        </>
+      ),
+      onClick: () => setPrimarySutraFilter('all'),
+    })
+  }
+  if (secondarySutraFilter !== 'all') {
+    quoteActivePills.push({
+      id: 'secondary-sutra',
+      label: (
+        <>
+          Secondary sutra:{' '}
+          <span className={`catalog-facet-sutra-name ${sutraClassName(secondarySutraFilter)}`}>
+            {secondarySutraFilter}
+          </span>
+        </>
+      ),
+      onClick: () => setSecondarySutraFilter('all'),
     })
   }
   if (topicFilter !== 'all') {
@@ -205,6 +334,42 @@ export function QuoteWall() {
   }
 
   const quoteFacetGroups: CatalogFilterBarFacetGroup[] = [
+    {
+      id: 'primary-sutra',
+      label: 'Primary sutra',
+      allLabel: 'All primary sutras',
+      allCount: contextualPrimarySutraRows.length,
+      onClearGroup: () => setPrimarySutraFilter('all'),
+      options: primarySutraOptions.map(([sutra]) => {
+        const count = contextualPrimarySutraRows.filter((row) => row.primary_sutra.trim() === sutra).length
+        return sutraFacetChipOption({
+          groupId: 'primary-sutra',
+          sutra,
+          count,
+          active: primarySutraFilter === sutra,
+          disabled: primarySutraFilter !== sutra && count === 0,
+          onClick: () => setPrimarySutraFilter(sutra),
+        })
+      }),
+    },
+    {
+      id: 'secondary-sutra',
+      label: 'Secondary sutra',
+      allLabel: 'All secondary sutras',
+      allCount: contextualSecondarySutraRows.length,
+      onClearGroup: () => setSecondarySutraFilter('all'),
+      options: secondarySutraOptions.map(([sutra]) => {
+        const count = contextualSecondarySutraRows.filter((row) => secondarySutras(row).includes(sutra)).length
+        return sutraFacetChipOption({
+          groupId: 'secondary-sutra',
+          sutra,
+          count,
+          active: secondarySutraFilter === sutra,
+          disabled: secondarySutraFilter !== sutra && count === 0,
+          onClick: () => setSecondarySutraFilter(sutra),
+        })
+      }),
+    },
     {
       id: 'topic',
       label: 'Topic',
@@ -228,6 +393,8 @@ export function QuoteWall() {
 
   const clearAllFilters = () => {
     setTopicFilter('all')
+    setPrimarySutraFilter('all')
+    setSecondarySutraFilter('all')
     setFindQuote('')
   }
 
@@ -255,8 +422,8 @@ export function QuoteWall() {
           The quotes
         </h2>
         <p className="catalog-lp-section-intro">
-          {formatCount(rows.length)} sparks that lit the songs. Grouped by what they&apos;re about. Filter by topic or
-          search when you want a narrower lane.
+          {formatCount(rows.length)} sparks that lit the songs. Grouped by what they&apos;re about. Filter by primary or
+          secondary sutra, topic, or search when you want a narrower lane.
         </p>
 
         <CatalogFilterBar
