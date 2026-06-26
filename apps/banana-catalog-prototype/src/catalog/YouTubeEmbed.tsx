@@ -107,6 +107,7 @@ export function YoutubeEmbeddedPlayer({
   if (!id) return null
   const iframeClass = ['yt-embed-frame', iframeClassName].filter(Boolean).join(' ')
   const poster = coverImageUrl(youtubePosterThumbnailUrl(id), { width: posterWidth })
+  const posterHeight = Math.round(posterWidth * 9 / 16)
 
   const outbound = showOutboundFooter ? <YoutubeEmbedOutboundFooter videoId={id} /> : null
 
@@ -128,6 +129,8 @@ export function YoutubeEmbeddedPlayer({
                 decoding="async"
                 loading={facadePosterEager ? 'eager' : 'lazy'}
                 fetchPriority={facadePosterEager ? 'high' : undefined}
+                width={posterWidth}
+                height={posterHeight}
               />
             ) : null}
           </div>
@@ -158,6 +161,8 @@ export function YoutubeEmbeddedPlayer({
                 decoding="async"
                 loading={facadePosterEager ? 'eager' : 'lazy'}
                 fetchPriority={facadePosterEager ? 'high' : undefined}
+                width={posterWidth}
+                height={posterHeight}
               />
             ) : null}
             <span className="yt-embed-facade__ring" aria-hidden>
@@ -167,13 +172,22 @@ export function YoutubeEmbeddedPlayer({
         ) : (
           <div className="yt-embed-frame-host">
             {!iframeReady && poster ? (
-              <img
-                src={poster}
-                alt=""
-                className="yt-embed-frame-host__poster"
-                decoding="async"
-                aria-hidden
-              />
+              <>
+                <img
+                  src={poster}
+                  alt=""
+                  className="yt-embed-frame-host__poster"
+                  decoding="async"
+                  aria-hidden
+                  width={posterWidth}
+                  height={posterHeight}
+                />
+                <div className="yt-embed-frame-host__loading-ring" aria-label="Loading video…" role="status">
+                  <span className="yt-embed-facade__ring" aria-hidden>
+                    <span className="yt-embed-loading-spinner" />
+                  </span>
+                </div>
+              </>
             ) : null}
             <iframe
               ref={iframeRef}
@@ -181,7 +195,7 @@ export function YoutubeEmbeddedPlayer({
               className={`${iframeClass}${iframeReady ? ' yt-embed-frame--ready' : ''}`}
               title={title}
               src={iframeSrc}
-              loading={loading}
+              loading={facadeReleased ? 'eager' : loading}
               allow={YT_IFRAME_ALLOW}
               allowFullScreen
               onLoad={() => {

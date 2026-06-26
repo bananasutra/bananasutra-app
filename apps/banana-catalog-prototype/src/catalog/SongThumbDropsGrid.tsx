@@ -16,10 +16,12 @@ type Props = {
   className?: string
   /** First N covers load eagerly for above-the-fold rows. */
   eagerCount?: number
+  /** First card gets high fetch priority when eager. */
+  highPriorityFirst?: boolean
 }
 
 /** Shared 4-up desktop / 2-up mobile cover grid (homepage latest drops pattern). */
-export function SongThumbDropsGrid({ songs, limit = 4, className, eagerCount = 0 }: Props) {
+export function SongThumbDropsGrid({ songs, limit = 4, className, eagerCount = 0, highPriorityFirst = true }: Props) {
   const visible = songs.slice(0, limit)
   if (!visible.length) return null
 
@@ -36,6 +38,7 @@ export function SongThumbDropsGrid({ songs, limit = 4, className, eagerCount = 0
             metaLabel={song.sutra?.trim() || undefined}
             publishedAt={song.published_at}
             loading={index < eagerCount ? 'eager' : 'lazy'}
+            fetchPriority={highPriorityFirst && index === 0 && index < eagerCount ? 'high' : undefined}
           />
         </li>
       ))}

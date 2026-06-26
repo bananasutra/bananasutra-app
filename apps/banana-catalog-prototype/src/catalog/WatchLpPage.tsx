@@ -92,30 +92,38 @@ export function WatchLpPage() {
 
   useEffect(() => {
     let cancelled = false
-    const load = async () => {
-      try {
-        const [videosResult, playlistsResult] = await Promise.all([
-          flattenYoutubeCatalogVideos(),
-          fetchCatalogData(catalogDataFileUrl('youtube_playlists_catalog.json')).then(async (r) => {
-            if (!r.ok) throw new Error(`HTTP ${r.status}`)
-            const rows = (await r.json()) as unknown
-            if (!Array.isArray(rows)) throw new Error('Invalid playlist catalog payload')
-            return rows as YouTubePlaylistCatalogItem[]
-          }),
-        ])
+
+    void flattenYoutubeCatalogVideos()
+      .then((videosResult) => {
         if (cancelled) return
-        setCatalogLoadError(null)
         setYoutubeVideos(dedupeYoutubeVideosByVideoId(Array.isArray(videosResult) ? videosResult : []))
-        setPlaylists(dedupeWatchPlaylists(Array.isArray(playlistsResult) ? playlistsResult : []))
-      } catch {
+      })
+      .catch(() => {
         if (!cancelled) {
           setYoutubeVideos(null)
+          setCatalogLoadError('Could not load watch catalog data.')
+        }
+      })
+
+    void fetchCatalogData(catalogDataFileUrl('youtube_playlists_catalog.json'))
+      .then(async (r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        const rows = (await r.json()) as unknown
+        if (!Array.isArray(rows)) throw new Error('Invalid playlist catalog payload')
+        return rows as YouTubePlaylistCatalogItem[]
+      })
+      .then((playlistsResult) => {
+        if (cancelled) return
+        setCatalogLoadError(null)
+        setPlaylists(dedupeWatchPlaylists(Array.isArray(playlistsResult) ? playlistsResult : []))
+      })
+      .catch(() => {
+        if (!cancelled) {
           setPlaylists(null)
           setCatalogLoadError('Could not load watch catalog data.')
         }
-      }
-    }
-    void load()
+      })
+
     return () => {
       cancelled = true
     }

@@ -169,9 +169,18 @@ export const LazySoundCloudEmbed = forwardRef<HTMLDivElement, Props>(function La
           style={{ minHeight: height }}
           aria-hidden
         >
-          {activation === 'interaction_or_autoplay'
-            ? 'SoundCloud playlist (tap to load player)'
-            : 'SoundCloud playlist (loads when in view)'}
+          <div className="catalog-lazy-sc-embed__skeleton">
+            <div className="catalog-lazy-sc-embed__skeleton-art" />
+            <div className="catalog-lazy-sc-embed__skeleton-lines">
+              <div className="catalog-lazy-sc-embed__skeleton-line catalog-lazy-sc-embed__skeleton-line--title" />
+              <div className="catalog-lazy-sc-embed__skeleton-line catalog-lazy-sc-embed__skeleton-line--meta" />
+            </div>
+          </div>
+          {activation === 'interaction_or_autoplay' ? (
+            <div className="catalog-lazy-sc-embed__tap-hint" aria-hidden>
+              Tap to load player
+            </div>
+          ) : null}
         </div>
       )}
     </div>

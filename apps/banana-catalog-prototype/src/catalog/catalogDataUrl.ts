@@ -14,6 +14,8 @@ const CATALOG_FILENAMES: readonly CatalogDataFilename[] = [
   'track_catalog.json',
   'muses_catalog.json',
   'quotes_wall.json',
+  'songbook_catalog.json',
+  'home_quotes.json',
 ]
 
 const CATALOG_FILENAME_SET = new Set<string>(CATALOG_FILENAMES)
@@ -28,6 +30,8 @@ const fallbackCatalogLoaders: Record<CatalogDataFilename, () => Promise<CatalogJ
   'track_catalog.json': () => import('../data/generated/track_catalog.json'),
   'muses_catalog.json': () => import('../data/generated/muses_catalog.json'),
   'quotes_wall.json': () => import('../data/generated/quotes_wall.json'),
+  'songbook_catalog.json': () => import('../data/generated/songbook_catalog.json'),
+  'home_quotes.json': () => import('../data/generated/home_quotes.json'),
 }
 
 const fallbackCatalogCache = new Map<CatalogDataFilename, unknown>()

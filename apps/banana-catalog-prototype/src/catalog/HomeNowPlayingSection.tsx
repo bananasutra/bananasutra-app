@@ -5,7 +5,13 @@ import type { HomeListenerFavorite } from './homePortalData'
 import type { SongCatalogItem } from './types'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 
-export function HomeLatestDropsSection({ songs }: { songs: SongCatalogItem[] }) {
+export function HomeLatestDropsSection({
+  songs,
+  loading = false,
+}: {
+  songs: SongCatalogItem[]
+  loading?: boolean
+}) {
   return (
     <>
       <h2 id="home-drops-heading" className="catalog-section-title">
@@ -14,7 +20,13 @@ export function HomeLatestDropsSection({ songs }: { songs: SongCatalogItem[] }) 
       <p className="catalog-lp-section-intro">
         Fresh in the catalog. The newest songs, ready when you are.
       </p>
-      <HomeLatestDropsSpotlight songs={songs} />
+      {loading ? (
+        <p className="home-portal__empty listen-lp__loading" aria-live="polite">
+          Loading latest drops…
+        </p>
+      ) : (
+        <HomeLatestDropsSpotlight songs={songs} />
+      )}
       <Link className="catalog-section-cta" to={browsePathWithQuery('/songs', 'sort=newest')}>
         Browse newest songs →
       </Link>

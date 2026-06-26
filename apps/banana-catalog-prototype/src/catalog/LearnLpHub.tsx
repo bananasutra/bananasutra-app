@@ -5,7 +5,6 @@ import {
   LEARN_HUB_LINKS,
   LEARN_HUB_STAGE_INTRO,
   LEARN_HUB_TILES,
-  LEARN_QUOTES,
   coreSutraRowsForHub,
   pickQuoteAtIndex,
   pickQuoteSample,
@@ -16,6 +15,7 @@ import { canonicalPathForRoute } from './seoPaths'
 import { songCatalogLinkTo, songCatalogPath } from './songPaths'
 import { SUTRA_CONTEXT, type SutraFamilyKey, sutraHrefForFamily } from './sutraContext'
 import { sutraClassName } from './sutraTheme'
+import { useHomeQuotes } from './generatedData'
 import { ScrollRevealSection } from './ScrollRevealSection'
 import type { QuoteWallItem, SongCatalogItem } from './types'
 
@@ -273,7 +273,8 @@ export function LearnLpHub({ songCatalog }: Props) {
     () => typeof window !== 'undefined' && window.matchMedia(SPLIT_MQ).matches,
   )
 
-  const quotePool = LEARN_QUOTES
+  const { data: homeQuotes } = useHomeQuotes()
+  const quotePool = homeQuotes ?? []
   const wordsSample = useMemo(() => pickWordsSample(songCatalog, 3), [songCatalog])
 
   useEffect(() => {

@@ -350,6 +350,31 @@ a:focus-visible {
   pointer-events: none;
 }
 
+.yt-embed-frame-host__loading-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.yt-embed-loading-spinner {
+  display: block;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: var(--color-accent, #b8792a);
+  border-radius: 50%;
+  animation: yt-embed-loading-spin 0.75s linear infinite;
+}
+
+@keyframes yt-embed-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .yt-embed-frame-host .yt-embed-frame {
   position: relative;
   z-index: 1;

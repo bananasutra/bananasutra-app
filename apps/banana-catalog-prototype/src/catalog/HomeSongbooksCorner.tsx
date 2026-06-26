@@ -22,7 +22,7 @@ export function HomeSongbooksCorner({ cards }: Props) {
         This is where we settle in. Songbooks are the long-play option for the curious.
       </p>
       <ul className="home-songbooks-corner">
-        {cards.map(({ slot, book }) => {
+        {cards.map(({ slot, book }, index) => {
           const art = (book.playlist_artwork_url || book.songbook_art_url || '').trim()
           const rawDesc = (book.description || '').replace(/\s+/g, ' ').trim()
           const description = rawDesc.length > 96 ? `${rawDesc.slice(0, 93)}…` : rawDesc
@@ -38,7 +38,8 @@ export function HomeSongbooksCorner({ cards }: Props) {
                     alt=""
                     width={160}
                     height={160}
-                    loading="lazy"
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    fetchPriority={index === 0 ? 'high' : undefined}
                     decoding="async"
                   />
                 ) : (

@@ -9,3 +9,5 @@ export type CatalogDataFilename =
   | 'track_catalog.json'
   | 'muses_catalog.json'
   | 'quotes_wall.json'
+  | 'songbook_catalog.json'
+  | 'home_quotes.json'
