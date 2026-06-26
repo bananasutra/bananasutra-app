@@ -76,6 +76,8 @@ type CatalogFilterBarProps = {
   showResultSummary?: boolean
   /** Right side of toolbar row (e.g. sort dropdown). */
   toolbarEnd?: ReactNode
+  /** Optional row directly under search, before facet groups. */
+  panelAfterSearch?: ReactNode
   /** Optional row at bottom of expanded filter panel (e.g. opt-in checkboxes). */
   panelFooter?: ReactNode
 }
@@ -97,6 +99,7 @@ export function CatalogFilterBar({
   onExpandedChange,
   showResultSummary = true,
   toolbarEnd,
+  panelAfterSearch,
   panelFooter,
 }: CatalogFilterBarProps) {
   const autoPanelId = useId()
@@ -264,7 +267,7 @@ export function CatalogFilterBar({
           aria-controls={panelId}
           onClick={() => setPanelExpanded(!expanded)}
         >
-          {expanded ? 'Hide filters' : 'Filters'}
+          {expanded ? 'Hide filters' : search ? 'Filter or search' : 'Filters'}
         </button>
 
         {showActiveStrip ? (
@@ -316,6 +319,10 @@ export function CatalogFilterBar({
               />
             </div>
           </div>
+        ) : null}
+
+        {panelAfterSearch ? (
+          <div className="catalog-filter-bar__panel-after-search">{panelAfterSearch}</div>
         ) : null}
 
         {secondaryGroupPosition === 'before-facets' ? renderSecondaryGroup() : null}

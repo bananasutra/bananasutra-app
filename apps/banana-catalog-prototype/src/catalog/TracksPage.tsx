@@ -610,7 +610,6 @@ export function TracksPage() {
                 ariaLabel="Filter top tracks"
                 panelId="tracks-filter-panel"
                 resultSummary={contextSummary}
-                showResultSummary={false}
                 activePills={trackActivePills}
                 onClearAll={clearAllFilters}
                 facetGroups={trackFacetGroups}

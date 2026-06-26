@@ -532,7 +532,6 @@ export function CatalogApp() {
             ariaLabel="Filter songs"
             panelId="catalog-filter-panel"
             resultSummary={contextSummary}
-            showResultSummary={false}
             activePills={songActivePills}
             onClearAll={clearAllFilters}
             secondaryGroup={songMediaGroup}
@@ -550,7 +549,7 @@ export function CatalogApp() {
             }}
             defaultExpanded={filterBarExpanded}
             onExpandedChange={setFilterBarExpanded}
-            panelFooter={
+            panelAfterSearch={
               <label className="songs-page__lyrics-only-toggle">
                 <input
                   type="checkbox"

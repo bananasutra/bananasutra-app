@@ -642,7 +642,13 @@
   background: var(--color-bg-panel) !important;
   overflow: clip;
   min-height: 7.25rem;
+  height: 100%;
   transition: border-color 0.16s ease, background 0.16s ease;
+}
+
+.muse-card.is-expanded {
+  display: flex;
+  flex-direction: column;
 }
 
 .muse-card:hover,
@@ -727,6 +733,13 @@
   color: var(--color-text-muted);
 }
 
+.muse-card.is-expanded .muse-card__details {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .muse-card__notes,
 .muse-card__meta {
   margin: 0;
@@ -751,7 +764,7 @@
 
 .muse-card__detail-list div {
   display: grid;
-  grid-template-columns: 5.4rem minmax(0, 1fr);
+  grid-template-columns: minmax(4.5rem, 30%) minmax(0, 1fr);
   gap: 0.65rem;
   align-items: baseline;
 }
@@ -782,6 +795,11 @@
   font: 700 0.64rem/1.35 var(--font-ui);
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+.muse-card.is-expanded .muse-card__links {
+  margin-top: auto;
+  padding-top: 0.75rem;
 }
 
 .muse-card__links a {

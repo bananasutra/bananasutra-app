@@ -483,7 +483,6 @@ export function MuseCardGrid() {
           ariaLabel="Filter muses"
           panelId="muses-filter-panel"
           resultSummary={contextSummary}
-          showResultSummary={false}
           activePills={museActivePills}
           onClearAll={clearAllFilters}
           facetGroups={museFacetGroups}
