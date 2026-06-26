@@ -307,23 +307,93 @@
   list-style: none;
 }
 
+.song-detail-hero-meta > .song-detail-secondary-meta + .song-detail-secondary-meta {
+  margin-top: 0.12rem;
+}
+
+.song-detail-hero-meta {
+  margin-top: 0.25rem;
+}
+
+.song-detail-hero-meta > .song-detail-secondary-meta {
+  margin-top: 0;
+}
+
+.song-detail-hero-meta > .song-detail-secondary-meta--muse:not(:first-child) {
+  margin-top: 0.35rem;
+}
+
+@media (max-width: 640px) {
+  .song-detail-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.55rem;
+    row-gap: 0.45rem;
+    align-items: flex-start;
+    align-content: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 0.25rem;
+  }
+
+  .song-detail-hero-meta .song-detail-secondary-meta {
+    display: contents;
+    margin: 0;
+  }
+
+  .song-detail-hero-meta .song-detail-secondary-meta--muse {
+    margin-top: 0;
+  }
+
+  .song-detail-hero-meta .song-detail-secondary-meta-item {
+    position: static;
+    display: flex;
+    max-width: 100%;
+  }
+
+  .song-detail-hero-meta .song-detail-secondary-link {
+    min-height: 2.75rem;
+    padding: 0.4rem 0.55rem;
+  }
+}
+
 .song-detail-secondary-meta--sutra {
   flex-wrap: nowrap;
 }
 
 .song-detail-secondary-meta--muse {
-  margin-top: 0.35rem;
+  margin-top: 0;
 }
 
 .song-detail-secondary-meta + .song-detail-secondary-meta {
   margin-top: 0.12rem;
 }
 
-.song-detail-secondary-meta:last-child .song-detail-secondary-meta-item + .song-detail-secondary-meta-item::before {
+.song-detail-secondary-meta:last-child .song-detail-secondary-meta-item + .song-detail-secondary-meta-item::before,
+.song-detail-hero-meta
+  .song-detail-secondary-meta:not(.song-detail-secondary-meta--sutra):not(.song-detail-secondary-meta--muse)
+  .song-detail-secondary-meta-item
+  + .song-detail-secondary-meta-item::before {
   content: '·';
   margin-right: 0.7rem;
   color: var(--color-text-faint);
   opacity: 0.5;
+}
+
+@media (max-width: 640px) {
+  /* After desktop dot rules — gap handles mobile chip spacing; kill pseudo margins that indent wrap rows. */
+  .song-detail-hero-meta .song-detail-secondary-meta-item::before,
+  .song-detail-hero-meta .song-detail-secondary-meta-item + .song-detail-secondary-meta-item::before,
+  .song-detail-hero-meta
+    .song-detail-secondary-meta:not(.song-detail-secondary-meta--sutra):not(.song-detail-secondary-meta--muse)
+    .song-detail-secondary-meta-item
+    + .song-detail-secondary-meta-item::before {
+    content: none;
+    display: none;
+    margin: 0;
+    padding: 0;
+    width: 0;
+  }
 }
 
 .song-detail-secondary-meta-item {
@@ -645,6 +715,14 @@
 
 .song-detail-also {
   margin-bottom: 0;
+  /* Match one sister-song cell from song-thumb-grid--home-portal-drops below. */
+  --song-detail-thumb-cell: calc((100% - 1.65rem) / 4);
+}
+
+@media (max-width: 640px) {
+  .song-detail-also {
+    --song-detail-thumb-cell: calc((100% - 0.55rem) / 2);
+  }
 }
 
 .song-detail-also__card {
@@ -660,6 +738,7 @@
 .song-detail-also__art-link {
   flex-shrink: 0;
   display: block;
+  width: var(--song-detail-thumb-cell);
   line-height: 0;
   border-radius: var(--radius-thumb, var(--radius-control, 2px));
 }
@@ -670,11 +749,17 @@
 }
 
 .song-detail-also__art {
-  width: 6.75rem;
-  height: 6.75rem;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
   border-radius: var(--radius-thumb, var(--radius-control, 2px));
   object-fit: cover;
   display: block;
+}
+
+.song-detail-also__body {
+  flex: 1;
+  min-width: 0;
 }
 
 .song-detail-also__title {
@@ -1330,6 +1415,14 @@ h3.song-detail-youtube-subheading,
 
   .song-detail-secondary-meta {
     gap: 0.2rem 0.55rem;
+  }
+
+  .song-detail-hero-meta {
+    row-gap: 0.5rem;
+  }
+
+  .song-detail-hero-meta .song-detail-secondary-link {
+    min-height: 2.75rem;
   }
 
   .song-detail-secondary-meta-item {

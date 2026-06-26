@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { SongbookCatalogItem } from './types'
-import { coverImageUrl } from '../seo/imageUrl'
+import { buildSrcset } from '../seo/imageUrl'
+import { CoverImage } from './CoverImage'
 import { songbookHrefFromCatalogItem } from './homePortalUtils'
 import { sutraClassName } from './sutraTheme'
 
@@ -54,12 +55,15 @@ export function SongDetailAlsoPartOfCard({ book, lyricsId, isLyricsOnly = false 
             to={songbookHrefFromCatalogItem(book)}
             aria-label={`Listen to ${book.songbook}`}
           >
-            <img
+            <CoverImage
               className="song-detail-also__art"
-              src={coverImageUrl(art, { width: 192 })}
+              source={art}
+              requestWidth={400}
+              srcSet={buildSrcset(art, [200, 400])}
+              sizes="(max-width: 640px) 50vw, 25vw"
               alt=""
-              width={96}
-              height={96}
+              width={400}
+              height={400}
               loading="lazy"
               decoding="async"
             />
