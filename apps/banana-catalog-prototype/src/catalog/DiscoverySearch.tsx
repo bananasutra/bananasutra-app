@@ -787,7 +787,12 @@ export function DiscoverySearch({
               aria-label="Browse the catalog"
             >
               <div className="discovery-search__browse-shortcuts" role="group" aria-label="Browse all">
-                <Link className="discovery-search__browse-all" to={CATALOG_BROWSE_PATH} onClick={() => setOpen(false)}>
+                <Link
+                  className="discovery-search__browse-all"
+                  to={CATALOG_BROWSE_PATH}
+                  aria-label={`Browse all songs (${formatHomeCount(headerBrowseSongCount)})`}
+                  onClick={() => setOpen(false)}
+                >
                   <span className="discovery-search__browse-all-label">Browse all songs</span>
                   <span className="discovery-search__browse-all-count">{formatHomeCount(headerBrowseSongCount)}</span>
                   <span className="discovery-search__browse-all-chev" aria-hidden>
@@ -797,6 +802,7 @@ export function DiscoverySearch({
                 <Link
                   className="discovery-search__browse-all discovery-search__browse-all--tracks"
                   to={canonicalPathForRoute('/tracks')}
+                  aria-label={`Browse all tracks (${formatHomeCount(headerBrowseTrackCount)})`}
                   onClick={() => setOpen(false)}
                 >
                   <span className="discovery-search__browse-all-label">Browse all tracks</span>
