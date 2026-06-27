@@ -1,4 +1,5 @@
-import { Component, lazy, Suspense, type ReactNode, useEffect, useLayoutEffect, useState } from 'react'
+import { Component, Suspense, type ReactNode, useEffect, useLayoutEffect, useState } from 'react'
+import { lazyWithRetry } from './lazyWithRetry'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { NavigationLoadingBridge } from './NavigationLoadingBridge'
@@ -14,26 +15,26 @@ import { NotFoundRoute } from './catalog/NotFoundRoute'
 import { CatalogRedirectGuard } from './catalog/CatalogRedirectGuard'
 import { LegacyAboutSutraDetailRedirect } from './catalog/LegacyAboutSutraDetailRedirect'
 
-const HomePortal = lazy(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
-const AboutPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutPage })))
-const AboutSutrasPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutSutrasPage })))
-const AboutMusesPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutMusesPage })))
-const AboutQuotesPage = lazy(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutQuotesPage })))
-const CatalogApp = lazy(() => import('./catalog/CatalogApp').then((m) => ({ default: m.CatalogApp })))
-const SongbookPage = lazy(() => import('./catalog/SongbookPage').then((m) => ({ default: m.SongbookPage })))
-const SongbooksPage = lazy(() => import('./catalog/SongbooksPage').then((m) => ({ default: m.SongbooksPage })))
-const SongDetail = lazy(() => import('./catalog/SongDetail').then((m) => ({ default: m.SongDetail })))
-const TracksPage = lazy(() => import('./catalog/TracksPage').then((m) => ({ default: m.TracksPage })))
-const VideosPage = lazy(() => import('./catalog/VideosPage').then((m) => ({ default: m.VideosPage })))
-const WordsPage = lazy(() => import('./catalog/WordsPage').then((m) => ({ default: m.WordsPage })))
-const SutraDetailPage = lazy(() => import('./catalog/SutraDetailPage').then((m) => ({ default: m.SutraDetailPage })))
-const StyleGuidePage = lazy(() => import('./catalog/StyleGuidePage').then((m) => ({ default: m.StyleGuidePage })))
-const SitemapPage = lazy(() => import('./catalog/SitemapPage').then((m) => ({ default: m.SitemapPage })))
-const LearnLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.LearnLpPage })))
-const ListenLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.ListenLpPage })))
-const WatchLpPage = lazy(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.WatchLpPage })))
-const ManifestoPage = lazy(() => import('./catalog/ManifestoPage').then((m) => ({ default: m.ManifestoPage })))
-const PrivacyPage = lazy(() => import('./catalog/PrivacyPage').then((m) => ({ default: m.PrivacyPage })))
+const HomePortal = lazyWithRetry(() => import('./catalog/HomePortal').then((m) => ({ default: m.HomePortal })))
+const AboutPage = lazyWithRetry(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutPage })))
+const AboutSutrasPage = lazyWithRetry(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutSutrasPage })))
+const AboutMusesPage = lazyWithRetry(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutMusesPage })))
+const AboutQuotesPage = lazyWithRetry(() => import('./catalog/AboutPage').then((m) => ({ default: m.AboutQuotesPage })))
+const CatalogApp = lazyWithRetry(() => import('./catalog/CatalogApp').then((m) => ({ default: m.CatalogApp })))
+const SongbookPage = lazyWithRetry(() => import('./catalog/SongbookPage').then((m) => ({ default: m.SongbookPage })))
+const SongbooksPage = lazyWithRetry(() => import('./catalog/SongbooksPage').then((m) => ({ default: m.SongbooksPage })))
+const SongDetail = lazyWithRetry(() => import('./catalog/SongDetail').then((m) => ({ default: m.SongDetail })))
+const TracksPage = lazyWithRetry(() => import('./catalog/TracksPage').then((m) => ({ default: m.TracksPage })))
+const VideosPage = lazyWithRetry(() => import('./catalog/VideosPage').then((m) => ({ default: m.VideosPage })))
+const WordsPage = lazyWithRetry(() => import('./catalog/WordsPage').then((m) => ({ default: m.WordsPage })))
+const SutraDetailPage = lazyWithRetry(() => import('./catalog/SutraDetailPage').then((m) => ({ default: m.SutraDetailPage })))
+const StyleGuidePage = lazyWithRetry(() => import('./catalog/StyleGuidePage').then((m) => ({ default: m.StyleGuidePage })))
+const SitemapPage = lazyWithRetry(() => import('./catalog/SitemapPage').then((m) => ({ default: m.SitemapPage })))
+const LearnLpPage = lazyWithRetry(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.LearnLpPage })))
+const ListenLpPage = lazyWithRetry(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.ListenLpPage })))
+const WatchLpPage = lazyWithRetry(() => import('./catalog/ExperienceLpPages').then((m) => ({ default: m.WatchLpPage })))
+const ManifestoPage = lazyWithRetry(() => import('./catalog/ManifestoPage').then((m) => ({ default: m.ManifestoPage })))
+const PrivacyPage = lazyWithRetry(() => import('./catalog/PrivacyPage').then((m) => ({ default: m.PrivacyPage })))
 const GITHUB_PROJECT_BASENAME = '/bananasutra-app'
 const BBB_CHAT_ENABLED =
   (import.meta.env.VITE_BBB_CHAT_ENABLED?.trim().toLowerCase() ?? (import.meta.env.DEV ? 'true' : 'false')) === 'true'
@@ -45,21 +46,28 @@ function CatalogBrowseRoute() {
 }
 
 function AppRouteFallback() {
-  const [showSlowFallback, setShowSlowFallback] = useState(false)
+  const [loadPhase, setLoadPhase] = useState<'initial' | 'waiting' | 'slow'>('initial')
   useEffect(() => {
-    const id = window.setTimeout(() => setShowSlowFallback(true), 12000)
-    return () => window.clearTimeout(id)
+    const waitingId = window.setTimeout(() => setLoadPhase('waiting'), 4500)
+    const slowId = window.setTimeout(() => setLoadPhase('slow'), 12000)
+    return () => {
+      window.clearTimeout(waitingId)
+      window.clearTimeout(slowId)
+    }
   }, [])
   return (
     <div className="app-route-fallback" role="status" aria-live="polite" aria-busy="true">
       <span className="app-route-fallback__spinner" aria-hidden />
       <p className="app-route-fallback__label">Loading…</p>
-      {showSlowFallback ? (
+      {loadPhase === 'waiting' ? (
+        <p className="app-route-fallback__hint">Still loading this page. Hang tight.</p>
+      ) : null}
+      {loadPhase === 'slow' ? (
         <p className="app-route-fallback__hint">
-          This is taking longer than usual. If needed, you can retry this page.
+          This is taking longer than usual. You can keep waiting or retry this page.
         </p>
       ) : null}
-      {showSlowFallback ? (
+      {loadPhase === 'slow' ? (
         <button type="button" className="app-route-fallback__retry" onClick={() => window.location.reload()}>
           Retry page load
         </button>
@@ -71,9 +79,9 @@ function AppRouteFallback() {
 function RouteLoadErrorFallback({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="app-route-fallback" role="alert" aria-live="assertive" aria-busy="false">
-      <p className="app-route-fallback__label">Couldn&apos;t load this page yet.</p>
+      <p className="app-route-fallback__label">Page load stalled.</p>
       <p className="app-route-fallback__hint">
-        Your connection may have dropped for a moment. Retry and we&apos;ll keep your URL.
+        This page took too long to finish loading. Retry and we&apos;ll keep your URL.
       </p>
       <div className="app-route-fallback__actions">
         <button type="button" className="app-route-fallback__retry" onClick={onRetry}>
