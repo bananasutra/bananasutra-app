@@ -57,12 +57,16 @@ function findEntryIndexBundle(files) {
   return matches[0]
 }
 
-/** Lazy factories look like: lazy)(()=>i(()=>import(`./HomePortal-HASH.js`) */
+/** Lazy factories (lazy / lazyWithRetry) compile to ()=>i(()=>import(`./Chunk-HASH.js`). */
 function lazyRouteChunkBasenames(indexSource) {
   const names = new Set()
-  const re = /lazy\)\(\(\)=>[a-z]\(\(\)=>import\(`\.\/([^`]+\.js)`\)/g
+  const re = /\(\(\)=>import\(`\.\/([^`]+\.js)`\)/g
   for (const match of indexSource.matchAll(re)) {
     names.add(match[1])
+  }
+  const nonRouteStems = new Set(['exclusive-yt-embeds-playback'])
+  for (const basename of [...names]) {
+    if (nonRouteStems.has(chunkStem(basename))) names.delete(basename)
   }
   if (names.size === 0) {
     fail('no lazy route imports found in entry bundle — update verify-build-chunks.mjs if App.tsx lazy pattern changed')

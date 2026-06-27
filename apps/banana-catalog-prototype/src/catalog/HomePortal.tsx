@@ -159,7 +159,7 @@ export function HomePortal() {
 
           {coverStripTiles.length > 0 ? (
             <ScrollRevealSection className="home-portal__section--lucky" aria-labelledby="home-cover-strip-heading">
-              <HomePortalCoverStrip tiles={coverStripTiles} onReload={reloadLuckyStrip} />
+              <HomePortalCoverStrip tiles={coverStripTiles} stripKey={luckySeed} onReload={reloadLuckyStrip} />
               <HomePortalBbbNudge />
             </ScrollRevealSection>
           ) : null}
