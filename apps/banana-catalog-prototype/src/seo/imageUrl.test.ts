@@ -10,8 +10,23 @@ test('nativeImageMaxWidth reads SoundCloud -tWxH from path', () => {
 })
 
 test('coverImageUrl bypasses CF for SoundCloud t500 at any display width', () => {
+  assert.equal(coverImageUrl(SC_T500, { width: 100 }), SC_T500)
   assert.equal(coverImageUrl(SC_T500, { width: 400 }), SC_T500)
   assert.equal(coverImageUrl(SC_T500, { width: 640 }), SC_T500)
+})
+
+test('coverImageUrl normalizes SoundCloud toriginal to t200 and bypasses CF', () => {
+  const src = 'https://i1.sndcdn.com/artworks-abc-iC67zQ-toriginal.png'
+  const out = coverImageUrl(src, { width: 100 })
+  assert.match(out, /-t200x200\.png$/)
+  assert.doesNotMatch(out, /\/cdn-cgi\/image\//)
+})
+
+test('buildSrcset never emits CF URLs for SoundCloud thumbs at small widths', () => {
+  const src = 'https://i1.sndcdn.com/artworks-abc-iC67zQ-toriginal.png'
+  const set = buildSrcset(src, [100, 200])
+  assert.doesNotMatch(set, /\/cdn-cgi\/image\//)
+  assert.doesNotMatch(set, /toriginal/)
 })
 
 test('buildSrcset drops widths above native SoundCloud art (no 640w CF)', () => {
