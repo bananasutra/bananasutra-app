@@ -62,6 +62,8 @@ import { CatalogNotFoundPage } from './CatalogNotFoundPage'
 import { songOgImageUrl } from './pageMetaConstants'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { SongThumbDropsGrid } from './SongThumbDropsGrid'
+import { ShareButton } from './ShareButton'
+import { songShareUrl, trackShareUrl } from './shareUrl'
 import { useSongCatalogAndDetail, loadYoutubeByLyricsId } from './generatedData'
 import './CatalogApp.css'
 import './CatalogVideoSpotlight.css'
@@ -317,6 +319,7 @@ function SongDetailLoaded({
   const [searchParams] = useSearchParams()
   const activeTrackGenre = searchParams.get('tg')?.trim() ?? ''
   const requestedSection = (searchParams.get('section') ?? '').trim().toLowerCase()
+  const requestedTrackId = (searchParams.get('t') ?? '').trim()
 
   const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[]>([])
   const [youtubeVideosLoaded, setYoutubeVideosLoaded] = useState(false)
@@ -623,6 +626,7 @@ function SongDetailLoaded({
   }, [bindWidgetOnLoad])
 
   const writtenYear = (detail.written_year ?? '').trim()
+  const songPageShareUrl = songShareUrl(detail.lyrics_title, detail.url_slug)
   const museName = (detail.muse ?? '').trim()
   const hasHeroFacetMeta =
     Boolean(detail.topic) ||
@@ -755,12 +759,25 @@ function SongDetailLoaded({
   useEffect(() => {
     queueMicrotask(() => {
       setLyricsExpanded(false)
-      setTopTracksExpanded(false)
+      if (!requestedTrackId) {
+        setTopTracksExpanded(false)
+      }
       const defaultListenTab: AudioListenTab =
-        showEpEmbed && !hasTopTracksListenUi && !hasYoutubeVideos ? 'ep' : 'tracks'
+        requestedSection === 'audio' || requestedTrackId
+          ? 'tracks'
+          : showEpEmbed && !hasTopTracksListenUi && !hasYoutubeVideos
+            ? 'ep'
+            : 'tracks'
       setAudioListenTab(defaultListenTab)
     })
-  }, [detail.lyrics_id, hasTopTracksListenUi, hasYoutubeVideos, showEpEmbed])
+  }, [
+    detail.lyrics_id,
+    hasTopTracksListenUi,
+    hasYoutubeVideos,
+    requestedSection,
+    requestedTrackId,
+    showEpEmbed,
+  ])
 
   useEffect(() => {
     if (!topTracksHasOverflow || topTracksExpanded) return
@@ -828,6 +845,39 @@ function SongDetailLoaded({
     return () => observer.disconnect()
   }, [hasYoutubeVideos, detail.lyrics_id])
 
+  // Deep-link: ?t=:track_id → select + play that track on the audio tab.
+  useEffect(() => {
+    if (!requestedTrackId) return
+    if (inAppPlayableTracks.length === 0) return
+
+    const target =
+      inAppPlayableTracks.find((t) => t.track_id === requestedTrackId) ??
+      orderedTracks.find((t) => t.track_id === requestedTrackId && trackIsInApp(t))
+    if (!target?.sc_url.trim()) return
+
+    if (requestedSection === 'audio' || requestedTrackId) {
+      setAudioListenTab('tracks')
+    }
+
+    const idx = orderedTracks.findIndex((t) => t.track_id === requestedTrackId)
+    if (topTracksHasOverflow && idx >= SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT) {
+      setTopTracksExpanded(true)
+    }
+
+    const url = target.sc_url.trim()
+    // pickTopTrack before syncPlayingUrl so queue key differs from default (avoids toggle branch).
+    pickTopTrack(url)
+    syncPlayingUrl(url)
+  }, [
+    inAppPlayableTracks,
+    orderedTracks,
+    pickTopTrack,
+    requestedSection,
+    requestedTrackId,
+    syncPlayingUrl,
+    topTracksHasOverflow,
+  ])
+
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
       <GlobalHeader ref={headerRef} />
@@ -878,6 +928,14 @@ function SongDetailLoaded({
             ) : null}
             <div className="song-detail-hero-text">
               <h1 className="song-detail-title song-title">{detail.lyrics_title}</h1>
+              <div className="song-detail-hero-share">
+                <ShareButton
+                  variant="chip"
+                  url={songPageShareUrl}
+                  title={detail.lyrics_title}
+                  text={`Listen to "${detail.lyrics_title}" on Bananasutra`}
+                />
+              </div>
               {detail.lyrics_summary ? <p className="song-detail-summary">{detail.lyrics_summary}</p> : null}
               {detail.sutra || hasHeroFacetMeta || museName ? (
                 <div className="song-detail-hero-meta">
@@ -1209,33 +1267,57 @@ function SongDetailLoaded({
                   <ul className="song-detail-track-list" id="song-top-tracks-list">
                     {displayedTopTracks.map((t) => {
                       const url = t.sc_url.trim()
-                      const active =
-                        playingTrackId != null && queueOwnsPage
+                      const explicitUrl = (selectedUrl ?? '').trim()
+                      const active = explicitUrl
+                        ? Boolean(url && url === explicitUrl)
+                        : playingTrackId != null && queueOwnsPage
                           ? t.track_id === playingTrackId
                           : Boolean(url && playingUrl && url === playingUrl)
                       const hidden = !trackIsInApp(t)
+                      const trackShareLink = trackShareUrl(detail.lyrics_title, detail.url_slug, t.track_id)
                       return (
                         <li key={t.track_id} className="song-detail-track-row">
-                          <button
-                            type="button"
-                            className={`song-detail-track${active ? ' is-active' : ''}${hidden ? ' is-hidden' : ''}`}
-                            disabled={!url || hidden}
-                          onClick={() => {
-                            if (!url || hidden) return
-                            pickTopTrack(url)
-                          }}
+                          <div
+                            className={`song-detail-track${active ? ' is-active' : ''}${hidden ? ' is-hidden' : ''}${!url || hidden ? ' is-disabled' : ''}`}
                           >
-                            <span className="song-detail-track-main">
-                              <span className="song-detail-track-title">{t.track_title}</span>
-                              {t.fav_track ? <span className="song-detail-fav">★ pick</span> : null}
-                              {hidden ? <span className="song-detail-off">out of app</span> : null}
-                            </span>
-                            <span className="song-detail-track-meta">
-                              <span>{formatDurationDisplay(t.duration_raw) || '—'}</span>
-                              <span>{t.play_count.toLocaleString()} plays</span>
-                              <span>{t.like_count.toLocaleString()} likes</span>
-                            </span>
-                          </button>
+                            <div
+                              role="button"
+                              tabIndex={!url || hidden ? -1 : 0}
+                              className="song-detail-track-hit"
+                              aria-disabled={!url || hidden}
+                              onClick={() => {
+                                if (!url || hidden) return
+                                pickTopTrack(url)
+                              }}
+                              onKeyDown={(e) => {
+                                if (!url || hidden) return
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault()
+                                  pickTopTrack(url)
+                                }
+                              }}
+                            >
+                              <span className="song-detail-track-main">
+                                <span className="song-detail-track-title">{t.track_title}</span>
+                                {t.fav_track ? <span className="song-detail-fav">★ pick</span> : null}
+                                {hidden ? <span className="song-detail-off">out of app</span> : null}
+                              </span>
+                              <span className="song-detail-track-meta">
+                                <span>{formatDurationDisplay(t.duration_raw) || '—'}</span>
+                                <span>{t.play_count.toLocaleString()} plays</span>
+                                <span>{t.like_count.toLocaleString()} likes</span>
+                              </span>
+                            </div>
+                            {!hidden ? (
+                              <ShareButton
+                                variant="icon"
+                                className="song-detail-track-share"
+                                url={trackShareLink}
+                                title={t.track_title}
+                                text="Listen on Bananasutra"
+                              />
+                            ) : null}
+                          </div>
                         </li>
                       )
                     })}

@@ -466,8 +466,9 @@
   letter-spacing: normal;
 }
 
-.songbooks-page__hero-text--detail .song-detail-secondary-meta {
+.songbooks-page__hero-text--detail .songbooks-page__hero-meta {
   margin-top: 0.42rem;
+  flex-wrap: nowrap;
 }
 
 .songbooks-page__section-playlist-meta {
@@ -772,6 +773,10 @@
 
   .songbooks-page__hero--detail .songbooks-page__hero-title {
     font-size: clamp(1.35rem, 6.2vw, 1.85rem);
+  }
+
+  .songbooks-page__hero-text--detail .songbooks-page__hero-meta {
+    flex-wrap: wrap;
   }
 
   .songbooks-page__playlist .catalog-lazy-sc-embed,

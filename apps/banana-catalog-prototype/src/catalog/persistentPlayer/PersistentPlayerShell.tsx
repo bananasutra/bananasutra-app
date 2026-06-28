@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MutableRefObject, type RefObject } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MutableRefObject, type RefObject } from 'react'
 import { Link } from 'react-router-dom'
 import { queueContextLine } from '../playerQueue/queueContextLine'
 import {
@@ -19,6 +19,8 @@ import { PERSISTENT_SC_PLAYER_HEIGHT_PX } from '../soundcloudPlayerUrl'
 import type { PersistentScPlayerApi } from './persistentScPlayerContext'
 import type { SoundCloudWidget } from '../soundcloudWidgetApi'
 import './PersistentPlayerBar.css'
+
+const LazyShareButton = lazy(() => import('../ShareButton').then((m) => ({ default: m.ShareButton })))
 
 /** Scrub drawer shows the full SC compact embed (112px) — no iframe clipping. */
 const PERSISTENT_SC_SCRUB_DRAWER_HEIGHT_PX = PERSISTENT_SC_PLAYER_HEIGHT_PX
@@ -57,6 +59,12 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
   const contextLine = useMemo(() => queueContextLine(state), [state])
   const genreDuration = useMemo(() => (track ? playableTrackGenreDuration(track) : ''), [track])
   const songLinkTo = track ? playableTrackSongLinkTo(track) : null
+  const shareUrl =
+    track && songLinkTo
+      ? `${typeof window !== 'undefined' ? window.location.origin : 'https://bananasutra.com'}${
+          typeof songLinkTo === 'string' ? songLinkTo : songLinkTo.pathname
+        }?section=audio&t=${encodeURIComponent(track.track_id)}`
+      : null
   const songLabel = track ? playableTrackSongLabel(track) : ''
   const sutraHref = track ? playableTrackSutraHref(track) : null
   const sutraLabel = track ? playableTrackSutraLabel(track) : ''
@@ -304,7 +312,8 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
               aria-controls="persistent-player-embed"
               aria-expanded={scrubOpen}
             >
-              <span aria-hidden>≋</span> scrub
+              <span aria-hidden>≋</span>
+              <span className="persistent-player-bar__chip-label">scrub</span>
             </button>
             {hasLyrics ? (
               <button
@@ -314,8 +323,19 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
                 aria-label={lyricsOpen ? 'Hide lyrics' : 'Show lyrics'}
                 aria-pressed={lyricsOpen}
               >
-                <span aria-hidden>♪</span> lyrics
+                <span aria-hidden>♪</span>
+                <span className="persistent-player-bar__chip-label">lyrics</span>
               </button>
+            ) : null}
+            {shareUrl ? (
+              <Suspense fallback={null}>
+                <LazyShareButton
+                  variant="chip"
+                  url={shareUrl}
+                  title={track?.track_title}
+                  text="Listen on Bananasutra"
+                />
+              </Suspense>
             ) : null}
             <button
               type="button"

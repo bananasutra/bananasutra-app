@@ -4,6 +4,8 @@ import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { hasListenerCatalogMedia } from './listenerCatalog'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
+import { ShareButton } from './ShareButton'
+import { songbookShareUrl } from './shareUrl'
 import { songCatalogPath, songbookCatalogPath } from './songPaths'
 import { songbookBySlug } from './songbooks'
 import { SoundCloudPassthroughEmbed } from './SoundCloudPassthroughEmbed'
@@ -304,9 +306,17 @@ export function SongbookPage() {
               </div>
               <div className="song-detail-hero-text songbooks-page__hero-text--detail">
                 <h1 className="catalog-page-h1 songbooks-page__hero-title">{songbook.songbook}</h1>
+                <div className="song-detail-hero-share">
+                  <ShareButton
+                    variant="chip"
+                    url={songbookShareUrl(trimmedSlug)}
+                    title={songbook.songbook}
+                    text={`Listen to "${songbook.songbook}" on Bananasutra`}
+                  />
+                </div>
                 {songbook.description ? <p className="songbooks-page__hero-description">{songbook.description}</p> : null}
-                {sutraTokens.length ? (
-                  <ul className="song-detail-secondary-meta song-detail-secondary-meta--sutra" aria-label="Sutra">
+                {sutraTokens.length > 0 || heroFacetTopics.length > 0 ? (
+                  <ul className="song-detail-secondary-meta songbooks-page__hero-meta" aria-label="Songbook metadata">
                     {sutraTokens.map((sutra) => (
                       <li key={`sutra-${sutra}`} className="song-detail-secondary-meta-item">
                         <Link
@@ -317,10 +327,6 @@ export function SongbookPage() {
                         </Link>
                       </li>
                     ))}
-                  </ul>
-                ) : null}
-                {heroFacetTopics.length ? (
-                  <ul className="song-detail-secondary-meta" aria-label="Songbook metadata">
                     {heroFacetTopics.map((facet) => (
                       <li key={facet.key} className="song-detail-secondary-meta-item">
                         <Link className="song-detail-secondary-link" to={facet.href}>

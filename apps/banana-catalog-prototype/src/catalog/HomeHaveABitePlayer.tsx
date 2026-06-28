@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { KeyboardEvent, MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { CompactTopTrackRow } from './CompactTopTrackRow'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { formatDurationDisplay } from './durationFormat'
 import type { HomeListenerFavorite } from './homePortalData'
 import { canonicalPathForRoute } from './seoPaths'
-import { sutraClassName } from './sutraTheme'
+import { trackShareUrl } from './shareUrl'
 
 type Props = {
   favorites: HomeListenerFavorite[]
@@ -66,13 +67,13 @@ export function HomeHaveABitePlayer({ favorites, showBrowseCta = true }: Props) 
     setEmbedKey((k) => k + 1)
   }
 
-  const rowActivate = (e: MouseEvent | KeyboardEvent, row: HomeListenerFavorite) => {
-    if ((e.target as HTMLElement).closest('a')) return
+  const rowActivate = (e: MouseEvent, row: HomeListenerFavorite) => {
+    if ((e.target as HTMLElement).closest('a, button')) return
     pickTrack(row.trackId, row.scUrl)
   }
 
   const rowKeyDown = (e: KeyboardEvent<HTMLDivElement>, row: HomeListenerFavorite) => {
-    if ((e.target as HTMLElement).closest('a')) return
+    if ((e.target as HTMLElement).closest('a, button')) return
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       pickTrack(row.trackId, row.scUrl)
@@ -105,39 +106,23 @@ export function HomeHaveABitePlayer({ favorites, showBrowseCta = true }: Props) 
           {favorites.map((row) => {
             const active = row.trackId === selectedTrackId
             const disabled = !(row.scUrl || '').trim()
-            const genreText = (row.genre || '').trim()
-            const durationLabel = formatDurationDisplay(row.duration)
-            const sutraText = (row.sutra || '').trim()
             return (
-              <li key={row.trackId} className="listen-lp__track-item">
-                <div
-                  className={`listen-lp__track-row listen-lp__track-row--compact home-bite-player__row${active ? ' listen-lp__track-row--active' : ''}${disabled ? ' home-bite-player__row--disabled' : ''}`}
-                  role="button"
-                  tabIndex={disabled ? -1 : 0}
-                  aria-current={active ? 'true' : undefined}
-                  onClick={(e) => rowActivate(e, row)}
-                  onKeyDown={(e) => rowKeyDown(e, row)}
-                >
-                  <div className="listen-lp__track-body home-bite-player__body">
-                    <p className="listen-lp__track-title home-bite-player__title-line">
-                      <Link className="home-bite-player__title-link" to={row.href} onClick={(e) => e.stopPropagation()}>
-                        {row.title}
-                      </Link>
-                      {sutraText ? (
-                        <span className={`home-bite-player__inline-sutra catalog-facet-sutra-name ${sutraClassName(sutraText)}`.trim()}>
-                          {' · '}
-                          {sutraText}
-                        </span>
-                      ) : null}
-                      {genreText ? <span className="home-bite-player__inline-genre"> · {genreText}</span> : null}
-                    </p>
-                  </div>
-                  {durationLabel ? <span className="listen-lp__track-duration">{durationLabel}</span> : null}
-                  <span className="listen-lp__track-play" aria-hidden>
-                    ▶
-                  </span>
-                </div>
-              </li>
+              <CompactTopTrackRow
+                key={row.trackId}
+                rank={row.rank}
+                active={active}
+                disabled={disabled}
+                coverUrl={row.art}
+                title={row.title}
+                songLinkTo={row.href}
+                shareUrl={trackShareUrl(row.title, row.slug, row.trackId)}
+                sutraText={row.sutra}
+                genreText={row.genre}
+                durationLabel={formatDurationDisplay(row.duration)}
+                rowClassName={disabled ? 'home-bite-player__row--disabled' : ''}
+                onActivate={(e) => rowActivate(e, row)}
+                onKeyDown={(e) => rowKeyDown(e, row)}
+              />
             )
           })}
         </ol>
