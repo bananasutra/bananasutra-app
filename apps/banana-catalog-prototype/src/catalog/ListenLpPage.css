@@ -447,7 +447,7 @@
   font-size: 0.62rem;
   color: var(--color-text-muted, #666);
   font-variant-numeric: tabular-nums;
-  min-width: 2.25rem;
+  min-width: 5.25rem;
   text-align: right;
 }
 
