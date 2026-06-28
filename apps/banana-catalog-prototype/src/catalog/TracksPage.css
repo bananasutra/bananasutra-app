@@ -254,6 +254,34 @@
   white-space: nowrap;
 }
 
+/* R74: title is now a link — preserve truncation, suppress default link underline at rest */
+.tracks-page__title--link {
+  display: block;
+  color: var(--color-text-strong);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tracks-page__title--link:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.14em;
+}
+
+.tracks-page__title--link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 1px;
+  border-radius: var(--radius-control, 2px);
+}
+
+/* R74: "share this list" chip — sits at end of play-all row */
+.tracks-page__share-list-btn {
+  margin-left: auto;
+}
+
 .tracks-page__rail-meta {
   margin: 0;
   display: flex;

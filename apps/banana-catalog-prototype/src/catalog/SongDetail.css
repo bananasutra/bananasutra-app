@@ -247,6 +247,11 @@
   width: 100%;
 }
 
+/* R74: share button placement in song hero */
+.song-detail-hero-share {
+  margin-top: 0;
+}
+
 /* No cover column: summary can use full line length (all breakpoints). */
 .song-detail-hero--lyrics-only {
   grid-template-columns: 1fr;

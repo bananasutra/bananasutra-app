@@ -62,6 +62,8 @@ import { CatalogNotFoundPage } from './CatalogNotFoundPage'
 import { songOgImageUrl } from './pageMetaConstants'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { SongThumbDropsGrid } from './SongThumbDropsGrid'
+import { ShareButton } from './ShareButton'
+import { songShareUrl } from './shareUrl'
 import { useSongCatalogAndDetail, loadYoutubeByLyricsId } from './generatedData'
 import './CatalogApp.css'
 import './CatalogVideoSpotlight.css'
@@ -317,6 +319,7 @@ function SongDetailLoaded({
   const [searchParams] = useSearchParams()
   const activeTrackGenre = searchParams.get('tg')?.trim() ?? ''
   const requestedSection = (searchParams.get('section') ?? '').trim().toLowerCase()
+  const requestedTrackId = (searchParams.get('t') ?? '').trim()
 
   const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[]>([])
   const [youtubeVideosLoaded, setYoutubeVideosLoaded] = useState(false)
@@ -623,6 +626,7 @@ function SongDetailLoaded({
   }, [bindWidgetOnLoad])
 
   const writtenYear = (detail.written_year ?? '').trim()
+  const songPageShareUrl = songShareUrl(detail.lyrics_title, detail.url_slug)
   const museName = (detail.muse ?? '').trim()
   const hasHeroFacetMeta =
     Boolean(detail.topic) ||
@@ -828,6 +832,16 @@ function SongDetailLoaded({
     return () => observer.disconnect()
   }, [hasYoutubeVideos, detail.lyrics_id])
 
+  // Deep-link: ?t=:track_id → auto-select and play that specific track on audio tab.
+  useEffect(() => {
+    if (!requestedTrackId) return
+    if (orderedTracks.length === 0) return
+    const target = orderedTracks.find((t) => t.track_id === requestedTrackId)
+    if (!target || !target.sc_url.trim()) return
+    pickTopTrack(target.sc_url.trim())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requestedTrackId, orderedTracks.length])
+
   return (
     <div ref={pageRef} className="catalog catalog-page catalog-page--shell">
       <GlobalHeader ref={headerRef} />
@@ -878,6 +892,14 @@ function SongDetailLoaded({
             ) : null}
             <div className="song-detail-hero-text">
               <h1 className="song-detail-title song-title">{detail.lyrics_title}</h1>
+              <div className="song-detail-hero-share">
+                <ShareButton
+                  variant="chip"
+                  url={songPageShareUrl}
+                  title={detail.lyrics_title}
+                  text={`Listen to "${detail.lyrics_title}" on Bananasutra`}
+                />
+              </div>
               {detail.lyrics_summary ? <p className="song-detail-summary">{detail.lyrics_summary}</p> : null}
               {detail.sutra || hasHeroFacetMeta || museName ? (
                 <div className="song-detail-hero-meta">
