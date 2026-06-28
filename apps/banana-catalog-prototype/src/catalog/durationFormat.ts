@@ -1,6 +1,7 @@
 /**
  * Canonical duration display for tracks, songbooks, EP sets, and playlist metadata.
  * Clock inputs: `M:SS` or `H:MM:SS`. Output: explicit units (`4 min 31 sec`, `1 hr 13 min 46 sec`).
+ * Seconds are zero-padded (`09 sec`) so fixed-width row chrome stays aligned.
  */
 
 /** Parse clock duration (`M:SS` or `H:MM:SS`) to seconds. */
@@ -23,7 +24,7 @@ export function formatDurationFromSeconds(totalSeconds: number): string {
   const parts: string[] = []
   if (hours > 0) parts.push(`${hours} hr`)
   if (minutes > 0) parts.push(`${minutes} min`)
-  if (seconds > 0 || !parts.length) parts.push(`${seconds} sec`)
+  if (seconds > 0 || !parts.length) parts.push(`${String(seconds).padStart(2, '0')} sec`)
   return parts.join(' ')
 }
 
@@ -35,14 +36,14 @@ function formatDurationFromClockSegments(text: string): string {
     const parts: string[] = []
     if (hours > 0) parts.push(`${hours} hr`)
     if (minutes > 0) parts.push(`${minutes} min`)
-    if (seconds > 0 || !parts.length) parts.push(`${seconds} sec`)
+    if (seconds > 0 || !parts.length) parts.push(`${String(seconds).padStart(2, '0')} sec`)
     return parts.join(' ')
   }
   if (segments.length === 2) {
     const [minutes, seconds] = segments
     const parts: string[] = []
     if (minutes > 0) parts.push(`${minutes} min`)
-    if (seconds > 0 || !parts.length) parts.push(`${seconds} sec`)
+    if (seconds > 0 || !parts.length) parts.push(`${String(seconds).padStart(2, '0')} sec`)
     return parts.join(' ')
   }
   return text
