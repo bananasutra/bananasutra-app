@@ -13,6 +13,8 @@
   font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition:
     background var(--dur-fast, 150ms) ease,
     color var(--dur-fast, 150ms) ease,
@@ -23,6 +25,12 @@
 .share-btn--chip {
   font-size: 0.6875rem;
   padding: 0.2rem 0.45rem;
+}
+
+.share-btn--chip .share-btn__label {
+  font-family: var(--font-ui, inherit);
+  letter-spacing: var(--catalog-section-cta-tracking, 0.06em);
+  text-transform: uppercase;
 }
 
 /* Icon-only variant — used in tight track rows */
@@ -45,8 +53,14 @@
 
 /* Copied confirmation state — brief green-ish tint using existing accent */
 .share-btn--copied {
-  color: var(--color-text-primary);
-  border-color: var(--color-border-strong);
+  color: var(--color-link);
+  border-color: var(--color-link);
+}
+
+.share-btn__copied-hint {
+  font-size: 0.65rem;
+  line-height: 1;
+  color: var(--color-link);
 }
 
 .share-btn__icon {

@@ -315,8 +315,8 @@ export function SongbookPage() {
                   />
                 </div>
                 {songbook.description ? <p className="songbooks-page__hero-description">{songbook.description}</p> : null}
-                {sutraTokens.length ? (
-                  <ul className="song-detail-secondary-meta song-detail-secondary-meta--sutra" aria-label="Sutra">
+                {sutraTokens.length > 0 || heroFacetTopics.length > 0 ? (
+                  <ul className="song-detail-secondary-meta songbooks-page__hero-meta" aria-label="Songbook metadata">
                     {sutraTokens.map((sutra) => (
                       <li key={`sutra-${sutra}`} className="song-detail-secondary-meta-item">
                         <Link
@@ -327,10 +327,6 @@ export function SongbookPage() {
                         </Link>
                       </li>
                     ))}
-                  </ul>
-                ) : null}
-                {heroFacetTopics.length ? (
-                  <ul className="song-detail-secondary-meta" aria-label="Songbook metadata">
                     {heroFacetTopics.map((facet) => (
                       <li key={facet.key} className="song-detail-secondary-meta-item">
                         <Link className="song-detail-secondary-link" to={facet.href}>

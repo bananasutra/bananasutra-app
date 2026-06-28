@@ -312,7 +312,8 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
               aria-controls="persistent-player-embed"
               aria-expanded={scrubOpen}
             >
-              <span aria-hidden>≋</span> scrub
+              <span aria-hidden>≋</span>
+              <span className="persistent-player-bar__chip-label">scrub</span>
             </button>
             {hasLyrics ? (
               <button
@@ -322,7 +323,8 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
                 aria-label={lyricsOpen ? 'Hide lyrics' : 'Show lyrics'}
                 aria-pressed={lyricsOpen}
               >
-                <span aria-hidden>♪</span> lyrics
+                <span aria-hidden>♪</span>
+                <span className="persistent-player-bar__chip-label">lyrics</span>
               </button>
             ) : null}
             {shareUrl ? (
