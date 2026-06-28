@@ -137,6 +137,10 @@ export default defineConfig({
           if (id.includes('/catalog/persistentPlayer/persistentScPlayerContext')) {
             return 'persistent-sc-context'
           }
+          // R74 — shareUrl helpers consumed by lazy routes; keep out of entry index.
+          if (id.includes('/catalog/shareUrl')) {
+            return 'catalog-share-url'
+          }
         },
       },
     },

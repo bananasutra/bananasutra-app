@@ -57,44 +57,6 @@ html {
   margin-top: 0.65rem;
 }
 
-.catalog-song-page-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  flex: 0 0 auto;
-  margin: 0;
-  padding: 0.26rem 0.55rem;
-  border: 1px solid var(--color-border-strong, #a8b0a2);
-  border-radius: var(--radius-control, 2px);
-  background: var(--color-bg-inset, rgba(0, 0, 0, 0.03));
-  font-family: inherit;
-  font-size: inherit;
-  line-height: 1.2;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: var(--color-text-primary, #2d3a1f);
-  white-space: nowrap;
-  transition:
-    border-color 0.12s ease,
-    color 0.12s ease,
-    background 0.12s ease;
-}
-
-.catalog-song-page-cta:hover {
-  border-color: color-mix(in srgb, var(--color-link, #5c4a1a) 55%, var(--color-border, #cfcac0));
-  color: var(--color-link, #5c4a1a);
-  background: var(--color-bg-panel, #fff);
-  text-decoration: none;
-}
-
-.catalog-song-page-cta:focus-visible {
-  outline: 2px solid var(--color-focus, #7f652d);
-  outline-offset: 2px;
-}
-
 /* Sticky footer pattern: main grows so footer sits at bottom on short pages. */
 .catalog.catalog-page.catalog-page--shell {
   min-height: 100dvh;

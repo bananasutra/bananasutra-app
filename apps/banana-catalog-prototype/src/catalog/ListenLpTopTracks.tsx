@@ -10,6 +10,8 @@ import {
   type PlaybackIntent,
 } from './catalogAnalytics'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
+import { ShareButton } from './ShareButton'
+import { songShareUrl, trackShareUrl } from './shareUrl'
 import { ScrollRevealSection } from './ScrollRevealSection'
 import { isPlayAllDesktopDevice, usePlayAllDesktopAvailable } from './playAllPlatform'
 import { songCatalogPath } from './songPaths'
@@ -507,7 +509,13 @@ export function ListenLpTopTracks({
                         <span className="listen-lp__track-art listen-lp__track-art--empty listen-lp__track-art--sm" aria-hidden />
                       )}
                       <div className="listen-lp__track-body">
-                        <p className="listen-lp__track-title">{songTitle}</p>
+                        <Link
+                          className="listen-lp__track-title listen-lp__track-title--link"
+                          to={href}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {songTitle}
+                        </Link>
                         {sutraText || genreText ? (
                           <p className="listen-lp__track-meta">
                             {sutraText ? (
@@ -521,9 +529,12 @@ export function ListenLpTopTracks({
                         {active && isScPlaying ? '❚❚' : '▶'}
                       </span>
                       {durationLabel ? <span className="listen-lp__track-duration">{durationLabel}</span> : null}
-                      <Link className="listen-lp__track-song-link catalog-song-page-cta" to={href} onClick={(e) => e.stopPropagation()}>
-                        Song page
-                      </Link>
+                      <ShareButton
+                        variant="icon"
+                        url={trackShareUrl(t.lyrics_title, t.url_slug, t.track_id)}
+                        title={songTitle}
+                        text="Listen on Bananasutra"
+                      />
                     </div>
                   </li>
                 )
@@ -576,7 +587,13 @@ export function ListenLpTopTracks({
                         <span className="listen-lp__track-art listen-lp__track-art--empty listen-lp__track-art--sm" aria-hidden />
                       )}
                       <div className="listen-lp__track-body">
-                        <p className="listen-lp__track-title">{ep.ep_title}</p>
+                        <Link
+                          className="listen-lp__track-title listen-lp__track-title--link"
+                          to={href}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {ep.ep_title}
+                        </Link>
                         {sutraText || genreText ? (
                           <p className="listen-lp__track-meta">
                             {sutraText ? (
@@ -590,9 +607,12 @@ export function ListenLpTopTracks({
                         {active && isScPlaying ? '❚❚' : '▶'}
                       </span>
                       {durationLabel ? <span className="listen-lp__track-duration">{durationLabel}</span> : null}
-                      <Link className="listen-lp__track-song-link catalog-song-page-cta" to={href} onClick={(e) => e.stopPropagation()}>
-                        Song page
-                      </Link>
+                      <ShareButton
+                        variant="icon"
+                        url={songShareUrl(ep.lyrics_title, ep.url_slug)}
+                        title={ep.ep_title}
+                        text="Listen on Bananasutra"
+                      />
                     </div>
                   </li>
                 )

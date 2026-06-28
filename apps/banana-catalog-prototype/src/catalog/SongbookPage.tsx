@@ -4,6 +4,8 @@ import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { hasListenerCatalogMedia } from './listenerCatalog'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
+import { ShareButton } from './ShareButton'
+import { songbookShareUrl } from './shareUrl'
 import { songCatalogPath, songbookCatalogPath } from './songPaths'
 import { songbookBySlug } from './songbooks'
 import { SoundCloudPassthroughEmbed } from './SoundCloudPassthroughEmbed'
@@ -304,6 +306,14 @@ export function SongbookPage() {
               </div>
               <div className="song-detail-hero-text songbooks-page__hero-text--detail">
                 <h1 className="catalog-page-h1 songbooks-page__hero-title">{songbook.songbook}</h1>
+                <div className="song-detail-hero-share">
+                  <ShareButton
+                    variant="chip"
+                    url={songbookShareUrl(trimmedSlug)}
+                    title={songbook.songbook}
+                    text={`Listen to "${songbook.songbook}" on Bananasutra`}
+                  />
+                </div>
                 {songbook.description ? <p className="songbooks-page__hero-description">{songbook.description}</p> : null}
                 {sutraTokens.length ? (
                   <ul className="song-detail-secondary-meta song-detail-secondary-meta--sutra" aria-label="Sutra">

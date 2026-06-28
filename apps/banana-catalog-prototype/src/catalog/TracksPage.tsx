@@ -21,6 +21,8 @@ import { facetEntriesToToggleChips } from './catalogFilterBarBuilders'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
+import { ShareButton } from './ShareButton'
+import { currentPageShareUrl, trackShareUrl } from './shareUrl'
 import { songCatalogPath } from './songPaths'
 import type { FacetEntry, TrackCatalogItem, TrackSortMode, TracksFacetFilterKey, TracksFilterState } from './types'
 import { emptyTracksFilterState } from './types'
@@ -801,6 +803,26 @@ export function TracksPage() {
                             </span>
                           </>
                         ) : null}
+                        {hasActiveContext ? (
+                          <ShareButton
+                            variant="chip"
+                            url={currentPageShareUrl()}
+                            title="Bananasutra – filtered track list"
+                            text="Listen to this track selection on Bananasutra"
+                            className="tracks-page__share-list-btn"
+                          />
+                        ) : null}
+                      </div>
+                    ) : null}
+                    {hasActiveContext && !(playAllDesktopAvailable || playAllActive) ? (
+                      <div className="tracks-page__play-all-row">
+                        <ShareButton
+                          variant="chip"
+                          url={currentPageShareUrl()}
+                          title="Bananasutra – filtered track list"
+                          text="Listen to this track selection on Bananasutra"
+                          className="tracks-page__share-list-btn"
+                        />
                       </div>
                     ) : null}
                     {!playAllDesktopAvailable ? (
@@ -862,9 +884,14 @@ export function TracksPage() {
                           <div className="tracks-page__row-main">
                             <div className="tracks-page__text-stack">
                               <div className="tracks-page__body">
-                                <h3 className="tracks-page__title" title={t.track_title}>
+                                <Link
+                                  className="tracks-page__title tracks-page__title--link"
+                                  to={href}
+                                  title={t.track_title}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
                                   {t.track_title}
-                                </h3>
+                                </Link>
                               </div>
                               <div className="tracks-page__rail">
                                 {showRailMeta ? (
@@ -888,13 +915,12 @@ export function TracksPage() {
                                   <span className="tracks-page__stat" title={statLine}>
                                     {statLine}
                                   </span>
-                                  <Link
-                                    className="catalog-song-page-cta"
-                                    to={href}
-                                    onClick={(e) => e.stopPropagation()}
-                                  >
-                                    Song page
-                                  </Link>
+                                  <ShareButton
+                                    variant="icon"
+                                    url={trackShareUrl(t.lyrics_title, t.url_slug, t.track_id)}
+                                    title={t.track_title}
+                                    text="Listen on Bananasutra"
+                                  />
                                 </div>
                               </div>
                             </div>
