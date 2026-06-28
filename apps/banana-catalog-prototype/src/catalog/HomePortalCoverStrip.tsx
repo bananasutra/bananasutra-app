@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import type { HomeCoverTile } from './homePortalData'
+import { ThumbShimmer } from './ThumbShimmer'
 
 type Props = {
   tiles: HomeCoverTile[]
@@ -39,9 +40,7 @@ function LuckyCoverThumb({
       <Link className="home-lucky-strip__thumb" to={tile.href} aria-label={tile.title} title={tile.title}>
         {art ? (
           <>
-            {showShimmer ? (
-              <span className="home-lucky-strip__shimmer" aria-hidden />
-            ) : null}
+            {showShimmer ? <ThumbShimmer /> : null}
             <img
               ref={imgRef}
               src={coverSrc}

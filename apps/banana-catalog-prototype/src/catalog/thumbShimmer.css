@@ -1,0 +1,44 @@
+/* Shared thumb / tile loading shimmer — single keyframe for catalog skeletons, cover art, embed placeholders. */
+
+.thumb-shimmer {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--color-text-faint) 12%, var(--color-bg-panel));
+  overflow: hidden;
+}
+
+.thumb-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-bg-shell) 55%, transparent) 45%,
+    transparent 100%
+  );
+  animation: thumb-shimmer 1.25s ease-in-out infinite;
+}
+
+@keyframes thumb-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumb-shimmer::after {
+    animation: none;
+    transform: none;
+    opacity: 0;
+  }
+
+  .catalog-skeleton-block::after,
+  .catalog-lazy-sc-embed__skeleton-art::after,
+  .catalog-lazy-sc-embed__skeleton-line::after {
+    animation: none;
+    transform: none;
+    opacity: 0;
+  }
+}

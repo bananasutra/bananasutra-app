@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { HomeSongbookCornerCard } from './homePortalUtils'
 import { homeSongbookCornerKicker, songbookHrefFromCatalogItem } from './homePortalUtils'
-import { coverImageUrl } from '../seo/imageUrl'
+import { CoverImage } from './CoverImage'
 import { formatSongbookScPlaylistMeta } from './songbookPlaylistMeta'
 import { canonicalPathForRoute } from './seoPaths'
 
@@ -32,15 +32,17 @@ export function HomeSongbooksCorner({ cards }: Props) {
             <li key={book.songbook_id || book.songbook}>
               <Link className="home-songbooks-corner__card" to={href}>
                 {art ? (
-                  <img
+                  <CoverImage
                     className="home-songbooks-corner__art"
-                    src={coverImageUrl(art, { width: 320 })}
+                    source={art}
+                    requestWidth={320}
                     alt=""
                     width={160}
                     height={160}
                     loading={index === 0 ? 'eager' : 'lazy'}
                     fetchPriority={index === 0 ? 'high' : undefined}
                     decoding="async"
+                    showShimmer
                   />
                 ) : (
                   <div className="home-songbooks-corner__art home-songbooks-corner__art--fallback" aria-hidden />

@@ -3,6 +3,7 @@
 @import "./catalog/catalogLayout.css";
 @import "./catalog/CatalogBreadcrumbs.css";
 @import "./catalog/catalog-page-shell.css";
+@import "./catalog/thumbShimmer.css";
 
 :root {
   font-family: var(--font-ui);

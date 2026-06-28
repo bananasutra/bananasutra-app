@@ -591,8 +591,27 @@ export function TracksPage() {
             <p className="about-page__p">Try refreshing the page. If this persists, the catalog asset may be missing from the build.</p>
           </article>
         ) : trackCatalog === null ? (
-          <article className="about-page catalog-layout-shell tracks-page__loading-shell" id="main-content">
-            <p className="about-page__p">Loading track catalog…</p>
+          <article
+            className="about-page catalog-layout-shell tracks-page__loading-shell"
+            id="main-content"
+            aria-busy="true"
+            aria-label="Loading track catalog"
+          >
+            <p className="visually-hidden">Loading track catalog…</p>
+            <ul className="tracks-page__list tracks-page__list--skeleton" aria-hidden>
+              {Array.from({ length: 8 }, (_, i) => (
+                <li key={i} className="tracks-page__item">
+                  <div className="tracks-page__row tracks-page__row--skeleton">
+                    <div className="tracks-page__row-main tracks-page__row-main--skeleton">
+                      <span className="catalog-skeleton-block catalog-skeleton-line catalog-skeleton-line--title" />
+                      <span className="catalog-skeleton-block catalog-skeleton-line" />
+                      <span className="catalog-skeleton-block catalog-skeleton-line catalog-skeleton-line--short" />
+                    </div>
+                    <div className="tracks-page__thumb-wrap catalog-skeleton-block" />
+                  </div>
+                </li>
+              ))}
+            </ul>
           </article>
         ) : total === 0 ? (
           <article className="about-page catalog-layout-shell" id="main-content">
@@ -895,6 +914,7 @@ export function TracksPage() {
                                 height={48}
                                 loading="lazy"
                                 decoding="async"
+                                showShimmer
                               />
                             ) : (
                               <span className="tracks-page__thumb tracks-page__thumb--empty" />
