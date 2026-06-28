@@ -53,6 +53,7 @@ export function SongThumbCard({
           loading={loading}
           fetchPriority={fetchPriority}
           decoding="async"
+          showShimmer
         />
       ) : (
         <div className="song-thumb-card__cover song-thumb-card__cover--fallback" aria-hidden>

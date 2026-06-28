@@ -20,8 +20,8 @@ import {
 import type { SutraFamilyKey } from './sutraContext'
 import { ScrollRail } from './ScrollRail'
 import { SongThumbCard } from './SongThumbCard'
+import { CoverImage } from './CoverImage'
 import { browseRowHasAudioSection, songCatalogLinkTo, songCatalogPath, sutraDetailPath } from './songPaths'
-import { coverImageUrl } from '../seo/imageUrl'
 import { sutraCreativeWorkJsonLd } from '../seo/jsonLd'
 import { renderPageMeta } from './usePageMeta'
 import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
@@ -681,13 +681,15 @@ export function SutraDetailPage() {
                   <Link key={b.songbook} className="songbooks-page__card" to={songbookHref(b.songbook)}>
                     <div className="songbooks-page__media">
                       {b.playlist_artwork_url ? (
-                        <img
+                        <CoverImage
                           className="songbooks-page__art"
-                          src={coverImageUrl(b.playlist_artwork_url, { width: 200 })}
+                          source={b.playlist_artwork_url}
+                          requestWidth={200}
                           alt=""
                           width={280}
                           height={280}
                           loading="lazy"
+                          showShimmer
                         />
                       ) : (
                         <div className="songbooks-page__art songbooks-page__art--fallback" aria-hidden>

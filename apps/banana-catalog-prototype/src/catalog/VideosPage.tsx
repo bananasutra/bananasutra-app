@@ -23,7 +23,7 @@ import {
   videoLinkedSongHasSC,
   type VideosUrlFilters,
 } from './videosFiltersCore'
-import { coverImageUrl } from '../seo/imageUrl'
+import { CoverImage } from './CoverImage'
 import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { ScrollRail } from './ScrollRail'
@@ -137,14 +137,16 @@ function VideoCardBody({
     <>
       <div className="videos-page__card-media">
         {v.thumbnail_url ? (
-          <img
+          <CoverImage
             className="videos-page__card-thumb"
-            src={coverImageUrl(v.thumbnail_url, { width: 640 })}
+            source={v.thumbnail_url}
+            requestWidth={640}
             alt=""
             width={640}
             height={360}
             loading={posterEager ? 'eager' : 'lazy'}
             decoding="async"
+            showShimmer
           />
         ) : (
           <span className="videos-page__card-thumb videos-page__card-thumb--fallback" aria-hidden>

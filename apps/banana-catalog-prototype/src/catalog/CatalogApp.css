@@ -1069,7 +1069,7 @@ a.catalog-facet-chip.is-active:visited {
     color-mix(in srgb, var(--color-bg-shell) 55%, transparent) 45%,
     transparent 100%
   );
-  animation: catalog-skeleton-shimmer 1.25s ease-in-out infinite;
+  animation: thumb-shimmer 1.25s ease-in-out infinite;
 }
 
 .catalog-skeleton-line {
@@ -1085,12 +1085,6 @@ a.catalog-facet-chip.is-active:visited {
 
 .catalog-skeleton-line--short {
   width: 58%;
-}
-
-@keyframes catalog-skeleton-shimmer {
-  to {
-    transform: translateX(100%);
-  }
 }
 
 .catalog-card-art {

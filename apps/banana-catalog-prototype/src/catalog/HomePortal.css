@@ -508,33 +508,6 @@
   opacity: 1;
 }
 
-.home-lucky-strip__shimmer {
-  position: absolute;
-  inset: 0;
-  background: color-mix(in srgb, var(--color-text-faint) 12%, var(--color-bg-panel));
-  overflow: hidden;
-}
-
-.home-lucky-strip__shimmer::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    color-mix(in srgb, var(--color-bg-shell) 55%, transparent) 45%,
-    transparent 100%
-  );
-  animation: home-lucky-shimmer 1.25s ease-in-out infinite;
-}
-
-@keyframes home-lucky-shimmer {
-  to {
-    transform: translateX(100%);
-  }
-}
-
 .home-lucky-strip__placeholder {
   display: block;
   width: 100%;
