@@ -16,12 +16,30 @@
 }
 
 .tracks-page__loading-shell {
-  min-height: 3200px;
+  min-height: 0;
+}
+
+.tracks-page__list--skeleton {
+  margin-top: 1rem;
+}
+
+.tracks-page__row--skeleton {
+  pointer-events: none;
+  cursor: default;
+}
+
+.tracks-page__row-main--skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.75rem 0.85rem;
+  justify-content: center;
+  min-width: 0;
 }
 
 @media (min-width: 900px) {
   .tracks-page__loading-shell {
-    min-height: 3600px;
+    min-height: 0;
   }
 }
 

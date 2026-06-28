@@ -59,7 +59,7 @@
     color-mix(in srgb, var(--color-border) 55%, transparent),
     transparent
   );
-  animation: catalog-lazy-sc-shimmer 1.25s ease-in-out infinite;
+  animation: thumb-shimmer 1.25s ease-in-out infinite;
 }
 
 .catalog-lazy-sc-embed__skeleton-lines {
@@ -94,8 +94,3 @@
   text-align: center;
 }
 
-@keyframes catalog-lazy-sc-shimmer {
-  100% {
-    transform: translateX(100%);
-  }
-}

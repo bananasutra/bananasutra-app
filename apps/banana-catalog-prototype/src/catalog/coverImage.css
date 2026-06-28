@@ -1,0 +1,47 @@
+.cover-image.cover-image--fill {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.cover-image__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cover-image__img.is-loading {
+  opacity: 0;
+}
+
+.cover-image__img.is-loaded {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.cover-image__shimmer {
+  z-index: 0;
+}
+
+.cover-image__img {
+  position: relative;
+  z-index: 1;
+}
+
+.cover-image__fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, var(--color-bg-panel) 0%, var(--color-bg-inset) 100%);
+}
+
+.cover-image__fallback-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--color-text-faint);
+  opacity: 0.65;
+}
