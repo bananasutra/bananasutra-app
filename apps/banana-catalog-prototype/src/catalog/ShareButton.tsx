@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, type PointerEvent, type MouseEvent } from 'react'
+import { copyTextToClipboardAsync, isShareAbortError } from './copyText'
 import './ShareButton.css'
 
 export type ShareButtonProps = {
@@ -43,31 +44,41 @@ const SHARE_ICON = (
   </svg>
 )
 
+function stopRowActivation(e: MouseEvent | PointerEvent): void {
+  e.stopPropagation()
+}
+
 export function ShareButton({ url, title, text, className = '', variant = 'chip' }: ShareButtonProps) {
   const [copied, setCopied] = useState(false)
 
-  const handleShare = useCallback(
-    async (e: React.MouseEvent) => {
-      e.stopPropagation()
+  const markCopied = useCallback(() => {
+    setCopied(true)
+    window.setTimeout(() => setCopied(false), 1500)
+  }, [])
 
-      if (navigator.share) {
-        try {
-          await navigator.share({ url, title, text })
-          return
-        } catch {
-          // User cancelled or API unavailable — fall through to clipboard
+  const handleShare = useCallback(
+    async (e: MouseEvent) => {
+      stopRowActivation(e)
+
+      const sharePayload = { url, title, text }
+      if (typeof navigator.share === 'function') {
+        const canShare = typeof navigator.canShare !== 'function' || navigator.canShare(sharePayload)
+        if (canShare) {
+          try {
+            await navigator.share(sharePayload)
+            return
+          } catch (err) {
+            if (isShareAbortError(err)) return
+          }
         }
       }
 
-      try {
-        await navigator.clipboard.writeText(url)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 1500)
-      } catch {
-        // Clipboard blocked — silent fail
+      const didCopy = await copyTextToClipboardAsync(url)
+      if (didCopy) {
+        markCopied()
       }
     },
-    [url, title, text],
+    [markCopied, text, title, url],
   )
 
   const isIcon = variant === 'icon'
@@ -79,11 +90,17 @@ export function ShareButton({ url, title, text, className = '', variant = 'chip'
       type="button"
       className={`share-btn share-btn--${variant}${copied ? ' share-btn--copied' : ''} ${className}`.trim()}
       onClick={handleShare}
+      onPointerDown={stopRowActivation}
       aria-label={isIcon ? ariaLabel : undefined}
-      title={isIcon ? ariaLabel : undefined}
+      title={ariaLabel}
     >
       {SHARE_ICON}
-      {!isIcon && <span className="share-btn__label">{label}</span>}
+      {!isIcon ? <span className="share-btn__label">{label}</span> : null}
+      {isIcon && copied ? (
+        <span className="share-btn__copied-hint" aria-hidden>
+          ✓
+        </span>
+      ) : null}
     </button>
   )
 }

@@ -10,6 +10,7 @@ import {
   type PlaybackIntent,
 } from './catalogAnalytics'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
+import { CompactTopTrackRow, trackListThumbSrc } from './CompactTopTrackRow'
 import { ShareButton } from './ShareButton'
 import { songShareUrl, trackShareUrl } from './shareUrl'
 import { ScrollRevealSection } from './ScrollRevealSection'
@@ -29,12 +30,6 @@ const QUEUE_SOURCE = 'listen_lp' as const
 const SC_EMBED_HEIGHT_EP_PLAYLIST = 420
 
 type PlayerTab = 'tracks' | 'eps'
-
-function thumbSrc(url: string): string {
-  const u = url.trim()
-  if (!u) return ''
-  return u.replace(/-t\d+x\d+\./i, '-t200x200.').replace(/-toriginal\./i, '-t200x200.')
-}
 
 type Props = {
   tracks: TrackCatalogItem[]
@@ -315,12 +310,12 @@ export function ListenLpTopTracks({
   }
 
   const rowActivate = (e: MouseEvent | KeyboardEvent, t: TrackCatalogItem) => {
-    if ((e.target as HTMLElement).closest('a')) return
+    if ((e.target as HTMLElement).closest('a, button')) return
     pickTrack(t)
   }
 
   const rowKeyDown = (e: KeyboardEvent<HTMLDivElement>, t: TrackCatalogItem) => {
-    if ((e.target as HTMLElement).closest('a')) return
+    if ((e.target as HTMLElement).closest('a, button')) return
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       pickTrack(t)
@@ -328,12 +323,12 @@ export function ListenLpTopTracks({
   }
 
   const epRowActivate = (e: MouseEvent | KeyboardEvent, ep: ListenLpEpPick) => {
-    if ((e.target as HTMLElement).closest('a')) return
+    if ((e.target as HTMLElement).closest('a, button')) return
     pickEp(ep)
   }
 
   const epRowKeyDown = (e: KeyboardEvent<HTMLDivElement>, ep: ListenLpEpPick) => {
-    if ((e.target as HTMLElement).closest('a')) return
+    if ((e.target as HTMLElement).closest('a, button')) return
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       pickEp(ep)
@@ -475,68 +470,23 @@ export function ListenLpTopTracks({
               <ol className="listen-lp__track-list">
               {tracks.map((t, index) => {
                 const active = t.track_id === selectedTrack?.track_id
-                const showPlayingWave = active && isScPlaying
-                const href = songCatalogPath(t.lyrics_title, t.url_slug)
-                const cover = coverImageUrl(thumbSrc(t.list_cover_url), { width: 200 })
                 const songTitle = (t.lyrics_title || t.track_title || '').trim()
-                const sutraText = (t.sutra || '').trim()
-                const genreText = (t.primary_genre || '').trim()
-                const durationLabel = formatDurationDisplay(t.duration_raw)
                 return (
-                  <li key={t.track_id} className="listen-lp__track-item">
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      className={`listen-lp__track-row listen-lp__track-row--compact${active ? ' listen-lp__track-row--active' : ''}`}
-                      onClick={(e) => rowActivate(e, t)}
-                      onKeyDown={(e) => rowKeyDown(e, t)}
-                      aria-current={active ? 'true' : undefined}
-                    >
-                      <span className="listen-lp__track-rank">{index + 1}</span>
-                      {cover ? (
-                        <span className="listen-lp__track-art-wrap listen-lp__track-art-wrap--sm">
-                          <img className="listen-lp__track-art" src={cover} alt="" loading="lazy" />
-                          {showPlayingWave ? (
-                            <span className="listen-lp__track-wave" aria-hidden>
-                              <span className="listen-lp__track-wave-bar" />
-                              <span className="listen-lp__track-wave-bar" />
-                              <span className="listen-lp__track-wave-bar" />
-                              <span className="listen-lp__track-wave-bar" />
-                            </span>
-                          ) : null}
-                        </span>
-                      ) : (
-                        <span className="listen-lp__track-art listen-lp__track-art--empty listen-lp__track-art--sm" aria-hidden />
-                      )}
-                      <div className="listen-lp__track-body">
-                        <Link
-                          className="listen-lp__track-title listen-lp__track-title--link"
-                          to={href}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {songTitle}
-                        </Link>
-                        {sutraText || genreText ? (
-                          <p className="listen-lp__track-meta">
-                            {sutraText ? (
-                              <span className={`catalog-sutra-word ${sutraClassName(sutraText)}`}>{sutraText}</span>
-                            ) : null}
-                            {genreText ? <span>{sutraText ? ` · ${genreText}` : genreText}</span> : null}
-                          </p>
-                        ) : null}
-                      </div>
-                      <span className="listen-lp__track-play" aria-hidden>
-                        {active && isScPlaying ? '❚❚' : '▶'}
-                      </span>
-                      {durationLabel ? <span className="listen-lp__track-duration">{durationLabel}</span> : null}
-                      <ShareButton
-                        variant="icon"
-                        url={trackShareUrl(t.lyrics_title, t.url_slug, t.track_id)}
-                        title={songTitle}
-                        text="Listen on Bananasutra"
-                      />
-                    </div>
-                  </li>
+                  <CompactTopTrackRow
+                    key={t.track_id}
+                    rank={index + 1}
+                    active={active}
+                    coverUrl={t.list_cover_url}
+                    title={songTitle}
+                    songLinkTo={songCatalogPath(t.lyrics_title, t.url_slug)}
+                    shareUrl={trackShareUrl(t.lyrics_title, t.url_slug, t.track_id)}
+                    sutraText={t.sutra}
+                    genreText={t.primary_genre}
+                    durationLabel={formatDurationDisplay(t.duration_raw)}
+                    showPlayingWave={active && isScPlaying}
+                    onActivate={(e) => rowActivate(e, t)}
+                    onKeyDown={(e) => rowKeyDown(e, t)}
+                  />
                 )
               })}
               </ol>
@@ -555,7 +505,7 @@ export function ListenLpTopTracks({
                 const active = ep.ep_url === selectedEp?.ep_url
                 const showPlayingWave = active && isScPlaying
                 const href = songCatalogPath(ep.lyrics_title, ep.url_slug)
-                const cover = coverImageUrl(thumbSrc(ep.cover_url), { width: 200 })
+                const cover = coverImageUrl(trackListThumbSrc(ep.cover_url), { width: 200 })
                 const epUrl = (ep.ep_url || '').trim()
                 const sutraText = (ep.sutra || '').trim()
                 const genreText = epGenresByUrl?.get(epUrl) ?? ''
