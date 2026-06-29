@@ -14,8 +14,10 @@ type Props = {
   ctaLabel?: string
   /** BEM block modifier, e.g. `listen-lp__featured` */
   className?: string
-  /** split = embed + copy side-by-side (768px+); stacked = full-width embed then copy below */
+  /** split = embed + copy side-by-side (768px+); stacked = copy above embed */
   layout?: 'split' | 'stacked'
+  /** listen-lp: no kicker, section CTA below embed (title + description stay above player). */
+  stackedVariant?: 'default' | 'listen-lp'
 }
 
 /**
@@ -29,17 +31,21 @@ export function FeaturedSongbookSpotlight({
   ctaLabel = 'Open songbook →',
   className = '',
   layout = 'split',
+  stackedVariant = 'default',
 }: Props) {
+  const listenLpStacked = layout === 'stacked' && stackedVariant === 'listen-lp'
   const copy = (
     <CatalogFeaturedEmbedCopy
-      meta={songbookFeaturedKickerLabel(book)}
+      meta={listenLpStacked ? undefined : songbookFeaturedKickerLabel(book)}
       title={book.songbook}
       titleMeta={formatSongbookScPlaylistMeta(book)}
       description={book.description}
     >
-      <Link className="catalog-featured-embed-copy__cta" to={ctaTo}>
-        {ctaLabel}
-      </Link>
+      {listenLpStacked ? null : (
+        <Link className="catalog-featured-embed-copy__cta" to={ctaTo}>
+          {ctaLabel}
+        </Link>
+      )}
     </CatalogFeaturedEmbedCopy>
   )
 
@@ -48,6 +54,11 @@ export function FeaturedSongbookSpotlight({
       <div className={['catalog-featured-songbook', 'catalog-featured-songbook--stacked', className].filter(Boolean).join(' ')}>
         <div className="catalog-featured-songbook__stacked-copy">{copy}</div>
         <div className="catalog-featured-songbook__embed">{embed}</div>
+        {listenLpStacked ? (
+          <Link className="catalog-section-cta" to={ctaTo}>
+            {ctaLabel}
+          </Link>
+        ) : null}
       </div>
     )
   }
