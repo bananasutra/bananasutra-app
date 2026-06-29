@@ -22,6 +22,7 @@ export type CompactTopTrackRowProps = {
   genreText?: string
   durationLabel?: string
   showPlayingWave?: boolean
+  showPlayLoading?: boolean
   rowClassName?: string
   onActivate: (e: MouseEvent) => void
   onKeyDown: (e: KeyboardEvent<HTMLDivElement>) => void
@@ -40,6 +41,7 @@ export function CompactTopTrackRow({
   genreText = '',
   durationLabel = '',
   showPlayingWave = false,
+  showPlayLoading = false,
   rowClassName = '',
   onActivate,
   onKeyDown,
@@ -91,8 +93,18 @@ export function CompactTopTrackRow({
             </p>
           ) : null}
         </div>
-        <span className="listen-lp__track-play" aria-hidden>
-          {active && showPlayingWave ? '❚❚' : '▶'}
+        <span
+          className={`listen-lp__track-play${showPlayLoading ? ' listen-lp__track-play--loading' : ''}`}
+          aria-hidden={!showPlayLoading}
+          aria-busy={showPlayLoading || undefined}
+        >
+          {showPlayLoading ? (
+            <span className="listen-lp__track-play-spinner" aria-hidden />
+          ) : active && showPlayingWave ? (
+            '❚❚'
+          ) : (
+            '▶'
+          )}
         </span>
         {durationLabel ? <span className="listen-lp__track-duration">{durationLabel}</span> : null}
         <ShareButton variant="icon" url={shareUrl} title={title} text="Listen on Bananasutra" />
