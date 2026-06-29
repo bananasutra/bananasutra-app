@@ -82,6 +82,15 @@ export function BbbChatWidget() {
 
   useEffect(() => {
     if (!open) return
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') closePanel()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
     queueMicrotask(() => inputRef.current?.focus())
   }, [open])
 
@@ -292,7 +301,15 @@ export function BbbChatWidget() {
         <span className="bbb-widget__toggle-label">{toggleLabel}</span>
       </button>
       {open ? (
-        <div id="bbb-widget-panel" className="bbb-widget__panel">
+        <>
+          <button
+            type="button"
+            className="bbb-widget__backdrop"
+            aria-label="Close Bertrand chat"
+            tabIndex={-1}
+            onClick={closePanel}
+          />
+          <div id="bbb-widget-panel" className="bbb-widget__panel">
           <header className="bbb-widget__header">
             <div className="bbb-widget__header-text">
               <p className="bbb-widget__title">Bertrand · Banana Butler</p>
@@ -399,6 +416,7 @@ export function BbbChatWidget() {
             </>
           )}
         </div>
+        </>
       ) : null}
     </section>
   )
