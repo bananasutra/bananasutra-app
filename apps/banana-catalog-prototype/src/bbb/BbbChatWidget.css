@@ -111,8 +111,8 @@
   padding: 0.65rem 0.75rem;
   overflow: auto;
   overflow-x: hidden;
-  flex: 1;
-  min-height: 130px;
+  flex: 0 1 auto;
+  min-height: 0;
   min-width: 0;
   display: grid;
   gap: 0.45rem;
@@ -170,6 +170,7 @@
   color: #9b1c1c;
   background: #ffe4e4;
   border-top: 1px solid #f6b2b2;
+  flex-shrink: 0;
 }
 
 .bbb-widget__composer {
@@ -177,6 +178,7 @@
   display: grid;
   gap: 0.45rem;
   min-width: 0;
+  flex-shrink: 0;
 }
 
 .bbb-widget__input {
@@ -232,6 +234,8 @@
   display: grid;
   gap: 0.55rem;
   overflow: auto;
+  flex: 0 1 auto;
+  min-height: 0;
   background: var(--color-bg-inset);
 }
 
@@ -347,6 +351,17 @@
   font-size: 0.78rem;
 }
 
+.bbb-widget__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
 /* Desktop: right-edge tab + side panel (wireframe: tab flush on viewport edge, panel attaches left) */
 @media (hover: hover) and (pointer: fine) {
   .bbb-widget {
@@ -361,6 +376,14 @@
     flex-direction: row-reverse;
     align-items: center;
     gap: 0;
+  }
+
+  /* Open: vertically centered side panel — content-sized, capped so header stays on-screen. */
+  .bbb-widget.is-open {
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    align-items: center;
   }
 
   .bbb-widget__toggle {
@@ -393,7 +416,8 @@
 
   .bbb-widget__panel {
     width: min(85vw, 340px);
-    max-height: calc(100vh - var(--bbb-panel-bottom-offset, 0px) - 2rem);
+    height: auto;
+    max-height: min(520px, calc(100svh - 2rem - var(--bbb-panel-bottom-offset, 0px)));
     margin: 0;
     border-radius: var(--radius-lg) 0 0 var(--radius-lg);
     border-right: 0;
@@ -452,6 +476,12 @@
     box-shadow: 0 -8px 28px rgb(0 0 0 / 18%);
     overflow-x: hidden;
     padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .bbb-widget__history,
+  .bbb-feedback {
+    flex: 1 1 auto;
+    min-height: 0;
   }
 
   .bbb-widget__header {
