@@ -29,6 +29,7 @@ export function HomeHaveABitePlayer({ favorites, showBrowseCta = true }: Props) 
   const [isScPlaying, setIsScPlaying] = useState(false)
   const playerWrapRef = useRef<HTMLDivElement>(null)
   const scWidgetRef = useRef<SoundCloudWidget | null>(null)
+  const skipPlaybackResetOnNextSelectionChange = useRef(false)
   const { playbackStarting, markPlaybackStarting, clearPlaybackStarting } = usePlaybackStarting()
 
   useEffect(() => {
@@ -57,6 +58,10 @@ export function HomeHaveABitePlayer({ favorites, showBrowseCta = true }: Props) 
   }, [favorites])
 
   useEffect(() => {
+    if (skipPlaybackResetOnNextSelectionChange.current) {
+      skipPlaybackResetOnNextSelectionChange.current = false
+      return
+    }
     clearPlaybackStarting()
     setIsScPlaying(false)
   }, [clearPlaybackStarting, selectedTrackId])
@@ -104,6 +109,7 @@ export function HomeHaveABitePlayer({ favorites, showBrowseCta = true }: Props) 
         return
       }
       markPlaybackStarting()
+      skipPlaybackResetOnNextSelectionChange.current = true
       try {
         scWidgetRef.current.play()
         setScAutoplay(true)
@@ -114,6 +120,7 @@ export function HomeHaveABitePlayer({ favorites, showBrowseCta = true }: Props) 
       return
     }
     markPlaybackStarting()
+    skipPlaybackResetOnNextSelectionChange.current = true
     setSelectedTrackId(trackId)
     setScAutoplay(true)
     setEmbedKey((k) => k + 1)

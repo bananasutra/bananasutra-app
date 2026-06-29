@@ -15,6 +15,7 @@ import { ScrollRevealSection } from './ScrollRevealSection'
 import { SongThumbCard } from './SongThumbCard'
 import { allSongbooks } from './songbooks'
 import { songbookHrefFromCatalogItem } from './homePortalUtils'
+import { sutraClassName } from './sutraTheme'
 import {
   LISTEN_LP_SONGBOOK_GRID_INITIAL,
   pickExploreSongbooksForListenLp,
@@ -42,6 +43,10 @@ import './ListenLpPage.css'
 
 /** List-mode SC height for featured songbook playlist (track list, not cover art). */
 const LISTEN_LP_FEATURED_SONGBOOK_SC_HEIGHT = 450
+
+function listenLpFeaturedSutraLabel(sutras: string): string {
+  return (sutras || '').split(',')[0]?.trim() ?? ''
+}
 
 const LISTEN_LP_META = {
   title: 'Listen',
@@ -88,6 +93,7 @@ export function ListenLpPage() {
 
   const songbooks = useMemo(() => [...allSongbooks()], [])
   const [featuredSongbook] = useState(() => pickFeaturedListenSongbook([...allSongbooks()]))
+  const featuredSpotlightSutra = featuredSongbook ? listenLpFeaturedSutraLabel(featuredSongbook.sutras) : ''
   const topTracks = useMemo(() => pickTopTracksForListenLp(trackCatalog), [trackCatalog])
   const topEps = useMemo(() => pickTopEpsForListenLp(songCatalogRows), [songCatalogRows])
   const epDurationByUrl = useMemo(() => buildEpDurationByUrl(trackCatalog), [trackCatalog])
@@ -214,14 +220,20 @@ export function ListenLpPage() {
             >
               <h2 id="listen-lp-featured-heading" className="catalog-section-title">
                 Songbook spotlight
+                {featuredSpotlightSutra ? (
+                  <>
+                    {' : '}
+                    <span className={`catalog-sutra-word ${sutraClassName(featuredSpotlightSutra)}`}>
+                      {featuredSpotlightSutra}
+                    </span>
+                  </>
+                ) : null}
               </h2>
-              <p className="catalog-lp-section-intro">
-                A curated playlist, organized around a single theme. Full lyrics on the song page.
-              </p>
               <FeaturedSongbookSpotlight
                 book={featuredSongbook}
                 className="listen-lp__featured-spotlight"
                 layout="stacked"
+                stackedVariant="listen-lp"
                 ctaTo={songbookHrefFromCatalogItem(featuredSongbook)}
                 embed={
                   <LazySoundCloudEmbed
