@@ -23,7 +23,7 @@
 }
 
 .catalog-featured-songbook--stacked .catalog-featured-songbook__stacked-copy {
-  margin-top: var(--catalog-featured-embed-copy-gap-top);
+  margin-bottom: var(--catalog-featured-embed-copy-gap-top);
 }
 
 .catalog-featured-songbook--stacked .catalog-featured-embed-copy {
