@@ -32,6 +32,7 @@ import {
 } from './playAllPlatform'
 import { persistentBarOwnsQueueChrome } from './playerQueue/pageQueueChrome'
 import { formatDurationDisplay } from './durationFormat'
+import { useTypewriterText } from './useTypewriterText'
 import {
   queueContextLine,
   queueSessionActive,
@@ -520,6 +521,7 @@ function SongDetailLoaded({
   }, [detail, epUrlNorm, primaryEpUrl, showEpEmbed])
 
   const lyricsExtract = useMemo(() => (detail.lyrics_extract || '').trim(), [detail.lyrics_extract])
+  const typedLyricsExtract = useTypewriterText(lyricsExtract)
 
   const playingUrl = (
     selectedUrl?.trim() ||
@@ -1010,7 +1012,7 @@ function SongDetailLoaded({
           {lyricsExtract ? (
             <section className="sutra-detail__section sutra-detail__pull song-detail-extract" aria-label="Lyric extract">
               <blockquote className="sutra-detail__pull-quote">
-                <span className="sutra-detail__pull-quote-text">{lyricsExtract}</span>
+                <span className="sutra-detail__pull-quote-text">{typedLyricsExtract}</span>
                 <span className="sutra-detail__pull-quote-caret" aria-hidden />
               </blockquote>
             </section>
