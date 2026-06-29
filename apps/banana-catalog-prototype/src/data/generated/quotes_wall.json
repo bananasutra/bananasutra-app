@@ -288,20 +288,20 @@
     "quote_id": "Q-38"
   },
   {
-    "quote": "If voting mattered, they wouldn't let us do it.",
-    "muse": "Ernest Miller Hemingway",
-    "primary_sutra": "BLOWsutra",
-    "secondary_sutras": "SHOWsutra",
-    "core_topic": "INJUSTICE",
-    "quote_id": "Q-39"
-  },
-  {
     "quote": "It is not the answer that enlightens, but the question.",
     "muse": "Eugene Ionesco",
     "primary_sutra": "KNOWsutra",
     "secondary_sutras": "BOWsutra",
     "core_topic": "TRUTH",
     "quote_id": "Q-40"
+  },
+  {
+    "quote": "The duende… Through the empty arch comes a wind, a mental breeze blowing insistently over the heads of the dead, in search of new landscapes and unknown accents.",
+    "muse": "Federico Garcia Lorca",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-41"
   },
   {
     "quote": "Don’t be afraid to look silly. It might free you.",
@@ -342,6 +342,14 @@
     "secondary_sutras": "BOWsutra",
     "core_topic": "PEACE",
     "quote_id": "Q-46"
+  },
+  {
+    "quote": "Life does not cease to be funny when people die any more than it ceases to be serious when people laugh.",
+    "muse": "George Bernard Shaw",
+    "primary_sutra": "BOWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-47"
   },
   {
     "quote": "I think it’s the duty of the comedian to find out where the line is drawn and cross it deliberately.",
