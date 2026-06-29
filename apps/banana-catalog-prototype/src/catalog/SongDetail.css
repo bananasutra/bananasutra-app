@@ -7,8 +7,9 @@
   overflow-anchor: none;
 }
 
-/* W-055 breakout: negative margin-inline must not be clipped by the page shell. */
-.catalog.catalog-page--shell:has(.song-detail-breakout) {
+/* W-055 breakout: negative margin-inline must not be clipped by page shell or main column (R77 moved overflow-x: clip to .catalog-page__main for footer bleed). */
+.catalog.catalog-page--shell:has(.song-detail-breakout),
+.catalog-page__main:has(.song-detail-breakout) {
   overflow-x: visible;
 }
 
