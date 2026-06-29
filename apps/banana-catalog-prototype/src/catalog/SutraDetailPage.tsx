@@ -41,6 +41,7 @@ import {
   songbookHrefFromCatalogItem,
 } from './homePortalUtils'
 import { formatDurationDisplay } from './durationFormat'
+import { useTypewriterText } from './useTypewriterText'
 import { CatalogFeaturedEmbedCopy } from './CatalogFeaturedEmbedCopy'
 import { formatSongbookScPlaylistMeta } from './songbookPlaylistMeta'
 import type { YouTubeCatalogVideo } from './types'
@@ -166,9 +167,7 @@ export function SutraDetailPage() {
   const exclusivePlaybackRef = useRef<ExclusiveYoutubeSoundcloudControls | null>(null)
   const { persistentScEmbedWrapRef, usePersistentPlayback } = usePlayerQueueRegistrar()
   const [youtubeIframeGen, setYoutubeIframeGen] = useState(0)
-  const pullTypingIntervalRef = useRef<number | undefined>(undefined)
   const { data: songCatalogRows, error: catalogError, loading: catalogLoading } = useSongCatalog()
-  const [typedPullQuote, setTypedPullQuote] = useState('')
   const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[]>([])
 
   const resolved = useMemo(() => {
@@ -206,38 +205,7 @@ export function SutraDetailPage() {
     return pickRandomQuoteSong(songCatalogRows, familyKey)
   }, [familyKey, songCatalogRows, routeVisitKey])
 
-  useEffect(() => {
-    const full = (quoteSong?.lyrics_extract || '').trim()
-    if (pullTypingIntervalRef.current !== undefined) {
-      window.clearInterval(pullTypingIntervalRef.current)
-      pullTypingIntervalRef.current = undefined
-    }
-    if (!full) {
-      queueMicrotask(() => setTypedPullQuote(''))
-      return
-    }
-    const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reducedMotion) {
-      queueMicrotask(() => setTypedPullQuote(full))
-      return
-    }
-    queueMicrotask(() => setTypedPullQuote(''))
-    let idx = 0
-    pullTypingIntervalRef.current = window.setInterval(() => {
-      idx += 1
-      setTypedPullQuote(full.slice(0, idx))
-      if (idx >= full.length && pullTypingIntervalRef.current !== undefined) {
-        window.clearInterval(pullTypingIntervalRef.current)
-        pullTypingIntervalRef.current = undefined
-      }
-    }, 20)
-    return () => {
-      if (pullTypingIntervalRef.current !== undefined) {
-        window.clearInterval(pullTypingIntervalRef.current)
-        pullTypingIntervalRef.current = undefined
-      }
-    }
-  }, [quoteSong?.lyrics_extract])
+  const typedPullQuote = useTypewriterText((quoteSong?.lyrics_extract || '').trim())
 
   useEffect(() => {
     let cancelled = false
