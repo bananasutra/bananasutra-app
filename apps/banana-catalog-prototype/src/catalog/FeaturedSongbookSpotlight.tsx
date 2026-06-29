@@ -46,8 +46,8 @@ export function FeaturedSongbookSpotlight({
   if (layout === 'stacked') {
     return (
       <div className={['catalog-featured-songbook', 'catalog-featured-songbook--stacked', className].filter(Boolean).join(' ')}>
-        <div className="catalog-featured-songbook__embed">{embed}</div>
         <div className="catalog-featured-songbook__stacked-copy">{copy}</div>
+        <div className="catalog-featured-songbook__embed">{embed}</div>
       </div>
     )
   }

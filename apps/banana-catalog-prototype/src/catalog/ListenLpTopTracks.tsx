@@ -20,6 +20,7 @@ import { coverImageUrl } from '../seo/imageUrl'
 import { bindSoundCloudWidgetPlayback } from './soundCloudWidgetPlayback'
 import { formatDurationDisplay } from './durationFormat'
 import { sutraClassName } from './sutraTheme'
+import { usePlaybackStarting } from './usePlaybackStarting'
 import type { ListenLpEpPick } from './listenLpData'
 import type { TrackCatalogItem } from './types'
 import { type SoundCloudWidget } from './soundcloudWidgetApi'
@@ -55,6 +56,7 @@ export function ListenLpTopTracks({
   const [isScPlaying, setIsScPlaying] = useState(false)
   const [playAllActive, setPlayAllActive] = useState(false)
   const [embedHeight, setEmbedHeight] = useState(180)
+  const { playbackStarting, markPlaybackStarting, clearPlaybackStarting } = usePlaybackStarting()
 
   const playAllActiveRef = useRef(false)
   const isScPlayingRef = useRef(false)
@@ -135,7 +137,8 @@ export function ListenLpTopTracks({
     }
     setScAutoplay(false)
     setIsScPlaying(false)
-  }, [selectedTrackId, selectedEpUrl, playerTab])
+    clearPlaybackStarting()
+  }, [clearPlaybackStarting, selectedTrackId, selectedEpUrl, playerTab])
 
   const queueIndex =
     playerTab === 'tracks' && selectedTrack?.track_id
@@ -148,17 +151,19 @@ export function ListenLpTopTracks({
     } catch {
       // Ignore widget pause failures.
     }
+    clearPlaybackStarting()
     setIsScPlaying(false)
-  }, [])
+  }, [clearPlaybackStarting])
 
   const resumePlayback = useCallback(() => {
+    markPlaybackStarting()
     try {
       scWidgetRef.current?.play()
       setScAutoplay(true)
     } catch {
       // Ignore widget play failures.
     }
-  }, [])
+  }, [markPlaybackStarting])
 
   const pickTrack = useCallback(
     (t: TrackCatalogItem, { keepPlayAll = false }: { keepPlayAll?: boolean } = {}) => {
@@ -181,6 +186,7 @@ export function ListenLpTopTracks({
       trackCatalogPlayStarted(t, source, playbackIntentRef.current, LISTEN_MODE)
       playbackIntentRef.current = 'user_pick'
       skipScAutoplayOffOnNextSelectionChange.current = true
+      markPlaybackStarting()
       setScAutoplay(true)
       if (t.track_id === selectedTrackIdRef.current) {
         setEmbedReloadKey((k) => k + 1)
@@ -189,7 +195,7 @@ export function ListenLpTopTracks({
       setSelectedTrackId(t.track_id)
       setEmbedReloadKey((k) => k + 1)
     },
-    [pausePlayback, resumePlayback],
+    [markPlaybackStarting, pausePlayback, resumePlayback],
   )
 
   const pickEp = useCallback(
@@ -204,6 +210,7 @@ export function ListenLpTopTracks({
       }
       setPlayAllActive(false)
       skipScAutoplayOffOnNextSelectionChange.current = true
+      markPlaybackStarting()
       setScAutoplay(true)
       if (ep.ep_url === selectedEpUrl) {
         setEmbedReloadKey((k) => k + 1)
@@ -212,7 +219,7 @@ export function ListenLpTopTracks({
       setSelectedEpUrl(ep.ep_url)
       setEmbedReloadKey((k) => k + 1)
     },
-    [pausePlayback, resumePlayback, selectedEpUrl],
+    [markPlaybackStarting, pausePlayback, resumePlayback, selectedEpUrl],
   )
 
   const advanceToNextInQueue = useCallback(() => {
@@ -291,7 +298,10 @@ export function ListenLpTopTracks({
         const widget = SC.Widget(iframe)
         scWidgetRef.current = widget
         bindSoundCloudWidgetPlayback(widget, SC, {
-          onPlayingChange: setIsScPlaying,
+          onPlayingChange: (playing) => {
+            setIsScPlaying(playing)
+            if (playing) clearPlaybackStarting()
+          },
           onFinish: () => {
             if (!playAllActiveRef.current || playerTab !== 'tracks') return
             advanceToNextInQueueRef.current()
@@ -301,7 +311,7 @@ export function ListenLpTopTracks({
       .catch(() => {
         // Widget API failed to load; Play All becomes manual.
       })
-  }, [playerTab])
+  }, [clearPlaybackStarting, playerTab])
 
   const switchTab = (tab: PlayerTab) => {
     setPlayAllActive(false)
@@ -484,6 +494,7 @@ export function ListenLpTopTracks({
                     genreText={t.primary_genre}
                     durationLabel={formatDurationDisplay(t.duration_raw)}
                     showPlayingWave={active && isScPlaying}
+                    showPlayLoading={active && playbackStarting}
                     onActivate={(e) => rowActivate(e, t)}
                     onKeyDown={(e) => rowKeyDown(e, t)}
                   />
@@ -553,8 +564,18 @@ export function ListenLpTopTracks({
                           </p>
                         ) : null}
                       </div>
-                      <span className="listen-lp__track-play" aria-hidden>
-                        {active && isScPlaying ? '❚❚' : '▶'}
+                      <span
+                        className={`listen-lp__track-play${active && playbackStarting ? ' listen-lp__track-play--loading' : ''}`}
+                        aria-hidden={!(active && playbackStarting)}
+                        aria-busy={active && playbackStarting ? true : undefined}
+                      >
+                        {active && playbackStarting ? (
+                          <span className="listen-lp__track-play-spinner" aria-hidden />
+                        ) : active && isScPlaying ? (
+                          '❚❚'
+                        ) : (
+                          '▶'
+                        )}
                       </span>
                       {durationLabel ? <span className="listen-lp__track-duration">{durationLabel}</span> : null}
                       <ShareButton

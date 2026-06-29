@@ -8,6 +8,7 @@ import { formatPublishDate } from './formatPublishDate'
 import type { ListenLpWhatsNewPick } from './listenLpWhatsNewData'
 import { bindSoundCloudWidgetPlayback } from './soundCloudWidgetPlayback'
 import type { SoundCloudWidget } from './soundcloudWidgetApi'
+import { usePlaybackStarting } from './usePlaybackStarting'
 
 const LISTEN_MODE: AnalyticsMode = 'listen'
 const SC_EMBED_HEIGHT = 120
@@ -20,6 +21,7 @@ type SampleCardProps = {
   pick: ListenLpWhatsNewPick
   isActive: boolean
   isPlaying: boolean
+  isPlayLoading: boolean
   embedKey: number
   onPlay: () => void
   onPlayingChange: (playing: boolean) => void
@@ -30,6 +32,7 @@ function ListenLpSampleCard({
   pick,
   isActive,
   isPlaying,
+  isPlayLoading,
   embedKey,
   onPlay,
   onPlayingChange,
@@ -41,7 +44,11 @@ function ListenLpSampleCard({
   const pubLabel = formatPublishDate(pick.song.published_at || '')
   const pubIso = (pick.song.published_at || '').trim().slice(0, 10)
   const sutraText = (pick.song.sutra || '').trim()
-  const playLabel = isActive && isPlaying ? `Pause ${pick.song.lyrics_title}` : `Play ${pick.song.lyrics_title}`
+  const playLabel = isPlayLoading
+    ? `Loading ${pick.song.lyrics_title}`
+    : isActive && isPlaying
+      ? `Pause ${pick.song.lyrics_title}`
+      : `Play ${pick.song.lyrics_title}`
 
   const handleEmbedLoad = useCallback(() => {
     const wrap = mediaRef.current
@@ -101,9 +108,22 @@ function ListenLpSampleCard({
             ♪
           </span>
         )}
-        <button type="button" className="listen-lp__sample-card__play" aria-label={playLabel} onClick={handlePlayClick}>
-          <span className="listen-lp__sample-card__play-ring" aria-hidden>
-            <span className="listen-lp__sample-card__play-glyph">{isActive && isPlaying ? '❚❚' : '▶'}</span>
+        <button
+          type="button"
+          className="listen-lp__sample-card__play"
+          aria-label={playLabel}
+          aria-busy={isPlayLoading || undefined}
+          onClick={handlePlayClick}
+        >
+          <span
+            className={`listen-lp__sample-card__play-ring${isPlayLoading ? ' listen-lp__sample-card__play-ring--loading' : ''}`}
+            aria-hidden
+          >
+            {isPlayLoading ? (
+              <span className="listen-lp__sample-card__play-spinner" aria-hidden />
+            ) : (
+              <span className="listen-lp__sample-card__play-glyph">{isActive && isPlaying ? '❚❚' : '▶'}</span>
+            )}
           </span>
         </button>
       </div>
@@ -128,6 +148,7 @@ export function ListenLpWhatsNewSamples({ picks }: Props) {
   const [playingById, setPlayingById] = useState<Record<string, boolean>>({})
   const widgetRef = useRef<SoundCloudWidget | null>(null)
   const activeLyricsIdRef = useRef<string | null>(null)
+  const { playbackStarting, markPlaybackStarting, clearPlaybackStarting } = usePlaybackStarting()
 
   useEffect(() => {
     activeLyricsIdRef.current = activeLyricsId
@@ -138,8 +159,9 @@ export function ListenLpWhatsNewSamples({ picks }: Props) {
       setActiveLyricsId(null)
       setPlayingById({})
       widgetRef.current = null
+      clearPlaybackStarting()
     }
-  }, [picks])
+  }, [clearPlaybackStarting, picks])
 
   const bumpEmbedKey = useCallback((lyricsId: string) => {
     setEmbedKeys((prev) => ({ ...prev, [lyricsId]: (prev[lyricsId] ?? 0) + 1 }))
@@ -152,6 +174,7 @@ export function ListenLpWhatsNewSamples({ picks }: Props) {
 
       if (sameCard) {
         if (!widgetRef.current) {
+          markPlaybackStarting()
           bumpEmbedKey(lyricsId)
           return
         }
@@ -159,10 +182,13 @@ export function ListenLpWhatsNewSamples({ picks }: Props) {
         try {
           if (playing) {
             widgetRef.current.pause()
+            clearPlaybackStarting()
           } else {
+            markPlaybackStarting()
             widgetRef.current.play()
           }
         } catch {
+          markPlaybackStarting()
           bumpEmbedKey(lyricsId)
         }
         return
@@ -171,19 +197,24 @@ export function ListenLpWhatsNewSamples({ picks }: Props) {
       widgetRef.current = null
       setPlayingById({})
       setActiveLyricsId(lyricsId)
+      markPlaybackStarting()
       bumpEmbedKey(lyricsId)
 
       if (pick.catalogTrack) {
         trackCatalogPlayStarted(pick.catalogTrack, 'single', 'user_pick', LISTEN_MODE)
       }
     },
-    [bumpEmbedKey, playingById],
+    [bumpEmbedKey, clearPlaybackStarting, markPlaybackStarting, playingById],
   )
 
-  const handlePlayingChange = useCallback((lyricsId: string, playing: boolean) => {
-    if (activeLyricsIdRef.current !== lyricsId) return
-    setPlayingById((prev) => ({ ...prev, [lyricsId]: playing }))
-  }, [])
+  const handlePlayingChange = useCallback(
+    (lyricsId: string, playing: boolean) => {
+      if (activeLyricsIdRef.current !== lyricsId) return
+      setPlayingById((prev) => ({ ...prev, [lyricsId]: playing }))
+      if (playing) clearPlaybackStarting()
+    },
+    [clearPlaybackStarting],
+  )
 
   const handleWidgetReady = useCallback((lyricsId: string, widget: SoundCloudWidget | null) => {
     if (activeLyricsIdRef.current !== lyricsId) return
@@ -197,12 +228,14 @@ export function ListenLpWhatsNewSamples({ picks }: Props) {
       {picks.map((pick) => {
         const isActive = pick.lyricsId === activeLyricsId
         const isPlaying = Boolean(playingById[pick.lyricsId])
+        const isPlayLoading = isActive && playbackStarting
         return (
           <li key={pick.lyricsId} className="listen-lp__whats-new-grid__cell">
             <ListenLpSampleCard
               pick={pick}
               isActive={isActive}
               isPlaying={isPlaying}
+              isPlayLoading={isPlayLoading}
               embedKey={embedKeys[pick.lyricsId] ?? 0}
               onPlay={() => handlePlay(pick)}
               onPlayingChange={(playing) => handlePlayingChange(pick.lyricsId, playing)}
