@@ -977,6 +977,68 @@ def normalize_track_row(row: dict[str, str]) -> dict[str, Any]:
     }
 
 
+def sc_ep_row_meta(row: dict[str, str]) -> dict[str, Any]:
+    return {
+        "ep_title": row.get("ep_title", "").strip(),
+        "ep_url": row.get("ep_url", "").strip(),
+        "ep_volume": parse_int(row.get("ep_volume")),
+        "ep_rating": str(row.get("ep_rating") or "").strip(),
+        "created_at": parse_datetime(row.get("created_at")),
+        "artwork_url": row.get("artwork_url", "").strip(),
+        "total_plays": parse_int(row.get("total_plays")),
+        "total_likes": parse_int(row.get("total_likes")),
+        "duration_total": row.get("duration_total", "").strip(),
+    }
+
+
+def build_eps_by_lyrics_id(
+    sc_eps_rows: list[dict[str, str]],
+) -> tuple[dict[str, dict[str, Any]], dict[str, list[dict[str, Any]]]]:
+    """All SC EP rows per lyrics_id; primary = highest ep_volume (tie: newest created_at)."""
+    raw_by_lid: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in sc_eps_rows:
+        keys = split_multi(row.get("lyrics_id"))
+        if not keys:
+            continue
+        meta = sc_ep_row_meta(row)
+        for key in keys:
+            raw_by_lid[key].append(meta)
+
+    eps_index: dict[str, dict[str, Any]] = {}
+    ep_volumes_by_lid: dict[str, list[dict[str, Any]]] = {}
+
+    for lid, rows in raw_by_lid.items():
+        by_url: dict[str, dict[str, Any]] = {}
+        for r in rows:
+            nk = _norm_soundcloud_url(r["ep_url"])
+            if not nk:
+                continue
+            existing = by_url.get(nk)
+            if not existing or (
+                r["ep_volume"] > existing["ep_volume"]
+                or (
+                    r["ep_volume"] == existing["ep_volume"]
+                    and str(r["created_at"]) > str(existing["created_at"])
+                )
+            ):
+                by_url[nk] = r
+        deduped = sorted(by_url.values(), key=lambda x: (x["ep_volume"], str(x["created_at"])))
+        ep_volumes_by_lid[lid] = [
+            {
+                "ep_volume": r["ep_volume"],
+                "ep_url": r["ep_url"],
+                "ep_title": r["ep_title"],
+                "ep_rating": r["ep_rating"],
+            }
+            for r in deduped
+        ]
+        if deduped:
+            primary = max(deduped, key=lambda r: (r["ep_volume"], str(r["created_at"])))
+            eps_index[lid] = {**primary, "lyrics_id": lid}
+
+    return eps_index, ep_volumes_by_lid
+
+
 def choose_artwork(
     lyrics_id: str,
     all_tracks: list[dict[str, Any]],
@@ -2080,28 +2142,7 @@ def main() -> None:
         lid = row.get("lyrics_id", "").strip()
         if lid:
             lyrics_index[lid] = row
-    eps_index: dict[str, dict[str, Any]] = {}
-    for row in sc_eps_rows:
-        keys = split_multi(row.get("lyrics_id"))
-        if not keys:
-            continue
-        current_created = parse_datetime(row.get("created_at"))
-        for key in keys:
-            existing = eps_index.get(key)
-            # Keep the newest by created date when duplicates exist.
-            if not existing or current_created > str(existing.get("created_at", "")):
-                eps_index[key] = {
-                    "lyrics_id": key,
-                    "ep_title": row.get("ep_title", "").strip(),
-                    "ep_url": row.get("ep_url", "").strip(),
-                    "ep_volume": parse_int(row.get("ep_volume")),
-                    "ep_rating": str(row.get("ep_rating") or "").strip(),
-                    "created_at": current_created,
-                    "artwork_url": row.get("artwork_url", "").strip(),
-                    "total_plays": parse_int(row.get("total_plays")),
-                    "total_likes": parse_int(row.get("total_likes")),
-                    "duration_total": row.get("duration_total", "").strip(),
-                }
+    eps_index, ep_volumes_by_lid = build_eps_by_lyrics_id(sc_eps_rows)
 
     tracks_by_lyrics: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in sc_tracks_rows:
@@ -2324,6 +2365,7 @@ def main() -> None:
             "primary_ep_rating": primary_ep_rating,
             "primary_ep_url": ep_url_from_row,
             "primary_ep_title": ep_title_from_row,
+            "ep_volumes": ep_volumes_by_lid.get(lyrics_id, []),
             "has_fav_track": any(bool(t["fav_track"]) for t in published_tracks),
             "songbook": display_songbook,
             "muse": str(lyric.get("muse") or "").strip(),
@@ -2378,6 +2420,7 @@ def main() -> None:
             "primary_ep_rating": primary_ep_rating,
             "primary_ep_url": ep_url_from_row,
             "primary_ep_title": ep_title_from_row,
+            "ep_volumes": ep_volumes_by_lid.get(lyrics_id, []),
             "fallback_sc_url": fallback_sc_url,
             "has_sc_catalog_listen": has_sc_catalog_listen,
             "sc_catalog_listen_url": sc_catalog_listen_url,
