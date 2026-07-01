@@ -55,6 +55,7 @@ function normalizeBrowseSongRow(row: Partial<SongCatalogItem>): SongCatalogItem 
     primary_ep_title: String(row.primary_ep_title ?? ''),
     primary_ep_volume: Number(row.primary_ep_volume ?? 0),
     primary_ep_rating: String(row.primary_ep_rating ?? ''),
+    ep_volumes: Array.isArray(row.ep_volumes) ? row.ep_volumes : [],
     has_fav_track: Boolean(row.has_fav_track),
     songbook: String(row.songbook ?? ''),
     muse: String(row.muse ?? ''),

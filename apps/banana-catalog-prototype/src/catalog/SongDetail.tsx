@@ -53,7 +53,7 @@ import {
 } from './songPaths'
 import { songbookByName } from './songbooks'
 import { sutraClassName } from './sutraTheme'
-import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, YouTubeCatalogVideo } from './types'
+import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, SongEpVolume, YouTubeCatalogVideo } from './types'
 import { sutraHrefFromSongSutraField } from './sutraPageUtils'
 import { buildBrowsePathForFacet, CATALOG_BROWSE_PATH } from './urlState'
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
@@ -71,7 +71,25 @@ import './CatalogVideoSpotlight.css'
 import './SutrasPages.css'
 import './SongDetail.css'
 
-type AudioListenTab = 'tracks' | 'ep'
+type AudioListenTab = 'tracks' | `ep:${number}`
+
+function epListenTabId(volume: number): AudioListenTab {
+  return `ep:${volume}`
+}
+
+function parseEpListenTab(tab: string): number | null {
+  if (!tab.startsWith('ep:')) return null
+  const n = Number(tab.slice(3))
+  return Number.isFinite(n) ? n : null
+}
+
+function epVolumeTabLabel(volume: number): string {
+  return volume > 0 ? `Full EP · vol ${volume}` : 'Full EP'
+}
+
+function isEpListenTab(tab: string): tab is `ep:${number}` {
+  return parseEpListenTab(tab) != null
+}
 
 const SONG_VIDEO_SECTION_TITLE = 'Picture the song'
 
@@ -504,21 +522,69 @@ function SongDetailLoaded({
   const catalogListenUrl = (detail.sc_catalog_listen_url ?? '').trim()
   const primaryEpUrl = (detail.primary_ep_url ?? '').trim()
   const primaryEpTitle = (detail.primary_ep_title ?? '').trim()
-  const epUrlNorm = normSoundcloudUrl(primaryEpUrl)
   const songbookPlaylistUrl = (songbookRecord?.playlist_url ?? '').trim()
   const songbookUrlNorm = normSoundcloudUrl(songbookPlaylistUrl)
-  const showEpEmbed = Boolean(primaryEpUrl.includes('/sets/') && epUrlNorm && epUrlNorm !== songbookUrlNorm)
 
-  const primaryEpListenMeta = useMemo(() => {
-    if (!showEpEmbed) return ''
-    const epTrack = detail.tracks.find((t) => normSoundcloudUrl(t.ep_url) === epUrlNorm)
+  const listenEpVolumes = useMemo((): SongEpVolume[] => {
+    const fromData = (detail.ep_volumes ?? []).filter((v) => {
+      const url = v.ep_url.trim()
+      if (!url.includes('/sets/')) return false
+      const norm = normSoundcloudUrl(url)
+      return Boolean(norm && norm !== songbookUrlNorm)
+    })
+    if (fromData.length > 0) return fromData
+    const epUrlNorm = normSoundcloudUrl(primaryEpUrl)
+    if (primaryEpUrl.includes('/sets/') && epUrlNorm && epUrlNorm !== songbookUrlNorm) {
+      return [
+        {
+          ep_volume: detail.primary_ep_volume ?? 0,
+          ep_url: primaryEpUrl,
+          ep_title: primaryEpTitle,
+          ep_rating: detail.primary_ep_rating ?? '',
+        },
+      ]
+    }
+    return []
+  }, [
+    detail.ep_volumes,
+    detail.primary_ep_rating,
+    detail.primary_ep_volume,
+    primaryEpTitle,
+    primaryEpUrl,
+    songbookUrlNorm,
+  ])
+
+  const primaryListenEpVolume = listenEpVolumes[listenEpVolumes.length - 1] ?? null
+  const primaryListenEpTab = primaryListenEpVolume
+    ? epListenTabId(primaryListenEpVolume.ep_volume)
+    : ('tracks' as const)
+
+  const [audioListenTab, setAudioListenTab] = useState<AudioListenTab>('tracks')
+
+  const activeListenEpVolume = useMemo(() => {
+    const vol = parseEpListenTab(audioListenTab)
+    if (vol != null) {
+      const hit = listenEpVolumes.find((e) => e.ep_volume === vol)
+      if (hit) return hit
+    }
+    return primaryListenEpVolume
+  }, [audioListenTab, listenEpVolumes, primaryListenEpVolume])
+
+  const activeEpUrl = (activeListenEpVolume?.ep_url ?? '').trim()
+  const activeEpTitle = (activeListenEpVolume?.ep_title ?? '').trim()
+  const activeEpUrlNorm = normSoundcloudUrl(activeEpUrl)
+  const showEpEmbed = listenEpVolumes.length > 0
+
+  const activeEpListenMeta = useMemo(() => {
+    if (!showEpEmbed || !activeListenEpVolume) return ''
+    const epTrack = detail.tracks.find((t) => normSoundcloudUrl(t.ep_url) === activeEpUrlNorm)
     const trackCount = epTrack?.ep_total_tracks ?? 0
     const duration =
-      detail.sc_ep_set_duration_totals?.[primaryEpUrl] ??
-      detail.sc_ep_set_duration_totals?.[epUrlNorm] ??
+      detail.sc_ep_set_duration_totals?.[activeEpUrl] ??
+      detail.sc_ep_set_duration_totals?.[activeEpUrlNorm] ??
       ''
     return formatEpListenMeta(trackCount, duration)
-  }, [detail, epUrlNorm, primaryEpUrl, showEpEmbed])
+  }, [activeEpUrl, activeEpUrlNorm, activeListenEpVolume, detail, showEpEmbed])
 
   const lyricsExtract = useMemo(() => (detail.lyrics_extract || '').trim(), [detail.lyrics_extract])
   const typedLyricsExtract = useTypewriterText(lyricsExtract)
@@ -536,7 +602,6 @@ function SongDetailLoaded({
   const showInlineScEmbed = !playAllDesktopAvailable || inAppPlayableTracks.length <= 1
   const { persistentScEmbedWrapRef, usePersistentPlayback } = usePlayerQueueRegistrar()
 
-  const [audioListenTab, setAudioListenTab] = useState<AudioListenTab>('tracks')
   const [topTracksExpanded, setTopTracksExpanded] = useState(false)
   const playerWrapRef = useRef<HTMLDivElement | null>(null)
   const inAppPlayableTracksRef = useRef<SongDetailTrack[]>(inAppPlayableTracks)
@@ -660,10 +725,14 @@ function SongDetailLoaded({
   const useLyricsMediaSplit = hasLyrics && hasMediaColumnForSplit
   /** Listen | Full EP tabs when video or top-tracks competes with EP — not for EP-only rows. */
   const hasListenTabNav =
-    useLyricsMediaSplit && showEpEmbed && (hasTopTracksListenUi || showVideoInColumn)
+    useLyricsMediaSplit &&
+    listenEpVolumes.length > 0 &&
+    (hasTopTracksListenUi || showVideoInColumn || listenEpVolumes.length > 1)
   const showTracksPanel =
     hasTopTracksListenUi && (!hasListenTabNav || audioListenTab === 'tracks')
-  const showEpPanel = Boolean(showEpEmbed && (!hasListenTabNav || audioListenTab === 'ep'))
+  const showEpPanel = Boolean(
+    listenEpVolumes.length > 0 && (!hasListenTabNav || isEpListenTab(audioListenTab)),
+  )
   const tracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Top tracks'
   const topTracksHasOverflow = orderedTracks.length > SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT
   const topTracksListExpanded = topTracksExpanded || !topTracksHasOverflow
@@ -680,11 +749,11 @@ function SongDetailLoaded({
           : ('generic' as const)
 
   const switchToFullEpTab = useCallback(() => {
-    setAudioListenTab('ep')
+    setAudioListenTab(primaryListenEpTab)
     window.requestAnimationFrame(() => {
-      document.getElementById('song-tab-ep')?.focus()
+      document.getElementById(`song-tab-${primaryListenEpTab}`)?.focus()
     })
-  }, [])
+  }, [primaryListenEpTab])
 
   const songExclusivePlaybackEnabled = Boolean(showEpPanel || hasPlayableTrack || hasYoutubeVideos)
   const embeddableYoutubeCount = useMemo(
@@ -699,7 +768,7 @@ function SongDetailLoaded({
     persistentScWrapRef: usePersistentPlayback ? persistentScEmbedWrapRef : undefined,
     enabled: songExclusivePlaybackEnabled,
     controlsRef: exclusivePlaybackRef,
-    syncKey: `${lyricsId}|ep:${primaryEpUrl}|tr:${playingUrl}|tab:${audioListenTab}|yt:${effectiveYoutubeVideoId}`,
+    syncKey: `${lyricsId}|ep:${activeEpUrl}|tr:${playingUrl}|tab:${audioListenTab}|yt:${effectiveYoutubeVideoId}`,
   })
 
   useExclusiveYoutubeEmbedsPlayback(songYtYtExclusivityEnabled)
@@ -768,7 +837,7 @@ function SongDetailLoaded({
         requestedSection === 'audio' || requestedTrackId
           ? 'tracks'
           : showEpEmbed && !hasTopTracksListenUi && !hasYoutubeVideos
-            ? 'ep'
+            ? primaryListenEpTab
             : 'tracks'
       setAudioListenTab(defaultListenTab)
     })
@@ -779,6 +848,7 @@ function SongDetailLoaded({
     requestedSection,
     requestedTrackId,
     showEpEmbed,
+    primaryListenEpTab,
   ])
 
   useEffect(() => {
@@ -1032,60 +1102,83 @@ function SongDetailLoaded({
                   <div ref={mediaColumnRef} className="song-detail-split__media">
                     {hasListenTabNav ? (
                       <div className="song-detail-tabs" role="tablist" aria-label="Listen options">
-                        <button
-                          type="button"
-                          role="tab"
-                          id="song-tab-tracks"
-                          aria-selected={audioListenTab === 'tracks'}
-                          aria-controls="song-panel-tracks"
-                          className={`song-detail-tab${audioListenTab === 'tracks' ? ' is-active' : ''}`}
-                          onClick={() => setAudioListenTab('tracks')}
-                        >
-                          {tracksTabLabel}
-                        </button>
-                        <button
-                          type="button"
-                          role="tab"
-                          id="song-tab-ep"
-                          aria-selected={audioListenTab === 'ep'}
-                          aria-controls="song-panel-ep"
-                          className={`song-detail-tab${audioListenTab === 'ep' ? ' is-active' : ''}`}
-                          onClick={() => setAudioListenTab('ep')}
-                        >
-                          Full EP
-                        </button>
+                        {hasTopTracksListenUi ? (
+                          <button
+                            type="button"
+                            role="tab"
+                            id="song-tab-tracks"
+                            aria-selected={audioListenTab === 'tracks'}
+                            aria-controls="song-panel-tracks"
+                            className={`song-detail-tab${audioListenTab === 'tracks' ? ' is-active' : ''}`}
+                            onClick={() => setAudioListenTab('tracks')}
+                          >
+                            {tracksTabLabel}
+                          </button>
+                        ) : null}
+                        {listenEpVolumes.map((epVolume) => {
+                          const tabId = epListenTabId(epVolume.ep_volume)
+                          const tabDomId = `song-tab-${tabId}`
+                          return (
+                            <button
+                              key={tabId}
+                              type="button"
+                              role="tab"
+                              id={tabDomId}
+                              aria-selected={audioListenTab === tabId}
+                              aria-controls={`song-panel-${tabId}`}
+                              className={`song-detail-tab${audioListenTab === tabId ? ' is-active' : ''}`}
+                              onClick={() => setAudioListenTab(tabId)}
+                            >
+                              {epVolumeTabLabel(epVolume.ep_volume)}
+                            </button>
+                          )
+                        })}
                       </div>
                     ) : null}
 
                     {showEpPanel ? (
                       <section
                         className="song-detail-listen-block"
-                        aria-labelledby={hasListenTabNav ? 'song-tab-ep' : 'song-ep-heading'}
+                        aria-labelledby={
+                          hasListenTabNav && activeListenEpVolume
+                            ? `song-tab-${epListenTabId(activeListenEpVolume.ep_volume)}`
+                            : 'song-ep-heading'
+                        }
                         role={hasListenTabNav ? 'tabpanel' : undefined}
-                        id={hasListenTabNav ? 'song-panel-ep' : undefined}
+                        id={
+                          hasListenTabNav && activeListenEpVolume
+                            ? `song-panel-${epListenTabId(activeListenEpVolume.ep_volume)}`
+                            : undefined
+                        }
                       >
                         {!hasListenTabNav ? (
                           <h2 id="song-ep-heading" className="catalog-section-title">
-                            Full EP
+                            {activeListenEpVolume
+                              ? epVolumeTabLabel(activeListenEpVolume.ep_volume)
+                              : 'Full EP'}
                           </h2>
                         ) : null}
                         <SoundCloudPassthroughEmbed
                           ref={epEmbedWrapRef}
-                          scUrl={primaryEpUrl}
-                          title={primaryEpTitle ? `SoundCloud: ${primaryEpTitle}` : `SoundCloud EP · ${detail.lyrics_title}`}
+                          scUrl={activeEpUrl}
+                          title={
+                            activeEpTitle
+                              ? `SoundCloud: ${activeEpTitle}`
+                              : `SoundCloud EP · ${detail.lyrics_title}`
+                          }
                           mode="list"
                           height={SC_EMBED_HEIGHT_SET_PLAYLIST}
                           loading={hasListenTabNav ? 'lazy' : 'eager'}
                         />
-                        {primaryEpListenMeta || primaryEpTitle ? (
+                        {activeEpListenMeta || activeEpTitle ? (
                           <div className="song-detail-listen-block__footer">
-                            {primaryEpListenMeta ? (
+                            {activeEpListenMeta ? (
                               <p className="song-detail-listen-block__meta song-detail-listen-block__meta--stats">
-                                {primaryEpListenMeta}
+                                {activeEpListenMeta}
                               </p>
                             ) : null}
-                            {primaryEpTitle ? (
-                              <p className="song-detail-listen-block__title">{primaryEpTitle}</p>
+                            {activeEpTitle ? (
+                              <p className="song-detail-listen-block__title">{activeEpTitle}</p>
                             ) : null}
                           </div>
                         ) : null}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
-import type { MuseCatalogItem, QuoteWallItem, SongCatalogItem, SongDetailRecord, SongbookCatalogItem, YouTubeCatalogVideo } from './types'
+import type { MuseCatalogItem, QuoteWallItem, SongCatalogItem, SongDetailRecord, SongbookCatalogItem, SongEpVolume, YouTubeCatalogVideo } from './types'
 
 let songCatalogResolved: SongCatalogItem[] | null = null
 let songCatalogPromise: Promise<SongCatalogItem[]> | null = null
@@ -19,6 +19,25 @@ let homeQuotesPromise: Promise<QuoteWallItem[]> | null = null
 
 let songDetailResolved: Record<string, SongDetailRecord> | null = null
 let songDetailPromise: Promise<Record<string, SongDetailRecord>> | null = null
+
+function normalizeEpVolumes(raw: unknown): SongEpVolume[] {
+  if (!Array.isArray(raw)) return []
+  return raw
+    .map((row) => ({
+      ep_volume: Number((row as SongEpVolume).ep_volume ?? 0),
+      ep_url: String((row as SongEpVolume).ep_url ?? ''),
+      ep_title: String((row as SongEpVolume).ep_title ?? ''),
+      ep_rating: String((row as SongEpVolume).ep_rating ?? ''),
+    }))
+    .filter((v) => v.ep_url.trim())
+}
+
+function normalizeSongDetailRecord(row: SongDetailRecord): SongDetailRecord {
+  return {
+    ...row,
+    ep_volumes: normalizeEpVolumes(row.ep_volumes),
+  }
+}
 
 /** One fetch + parse per session; parallel callers share the same promise. */
 export async function loadSongCatalog(): Promise<SongCatalogItem[]> {
@@ -95,6 +114,7 @@ function normalizeBrowseSongRow(row: Partial<SongCatalogItem>): SongCatalogItem 
     primary_ep_title: String(row.primary_ep_title ?? ''),
     primary_ep_volume: Number(row.primary_ep_volume ?? 0),
     primary_ep_rating: String(row.primary_ep_rating ?? ''),
+    ep_volumes: normalizeEpVolumes(row.ep_volumes),
     has_fav_track: Boolean(row.has_fav_track),
     songbook: String(row.songbook ?? ''),
     muse: String(row.muse ?? ''),
@@ -245,7 +265,10 @@ export async function loadSongDetail(): Promise<Record<string, SongDetailRecord>
         return r.json() as Promise<Record<string, SongDetailRecord>>
       })
       .then((obj) => {
-        songDetailResolved = obj && typeof obj === 'object' ? obj : {}
+        const raw = obj && typeof obj === 'object' ? obj : {}
+        songDetailResolved = Object.fromEntries(
+          Object.entries(raw).map(([id, row]) => [id, normalizeSongDetailRecord(row as SongDetailRecord)]),
+        )
         return songDetailResolved
       })
       .catch((e) => {

@@ -478,11 +478,13 @@
   padding: 0 0.1rem;
   border-bottom: 1px solid var(--color-border);
   background: transparent;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .song-detail-tab {
   flex: 1 1 auto;
-  min-width: 0;
+  min-width: max(5.5rem, fit-content);
   min-height: 2.5rem;
   padding: 0.5rem 0.35rem;
   border: none;
