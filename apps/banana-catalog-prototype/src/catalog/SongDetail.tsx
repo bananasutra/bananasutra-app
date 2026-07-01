@@ -87,6 +87,40 @@ function epVolumeTabLabel(volume: number): string {
   return volume > 0 ? `Full EP · vol ${volume}` : 'Full EP'
 }
 
+function EpVolumeTabLabel({ volume }: { volume: number }) {
+  if (volume <= 0) {
+    return (
+      <>
+        <span className="song-detail-tab__label song-detail-tab__label--full">Full EP</span>
+        <span className="song-detail-tab__label song-detail-tab__label--short">EP</span>
+      </>
+    )
+  }
+  return (
+    <>
+      <span className="song-detail-tab__label song-detail-tab__label--full">
+        Full EP · vol {volume}
+      </span>
+      <span className="song-detail-tab__label song-detail-tab__label--short">Vol {volume}</span>
+    </>
+  )
+}
+
+function ListenTracksTabLabel({
+  tracksTabLabel,
+  compactTracksLabel,
+}: {
+  tracksTabLabel: string
+  compactTracksLabel: string
+}) {
+  return (
+    <>
+      <span className="song-detail-tab__label song-detail-tab__label--full">{tracksTabLabel}</span>
+      <span className="song-detail-tab__label song-detail-tab__label--short">{compactTracksLabel}</span>
+    </>
+  )
+}
+
 function isEpListenTab(tab: string): tab is `ep:${number}` {
   return parseEpListenTab(tab) != null
 }
@@ -734,6 +768,7 @@ function SongDetailLoaded({
     listenEpVolumes.length > 0 && (!hasListenTabNav || isEpListenTab(audioListenTab)),
   )
   const tracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Top tracks'
+  const compactTracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Tracks'
   const topTracksHasOverflow = orderedTracks.length > SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT
   const topTracksListExpanded = topTracksExpanded || !topTracksHasOverflow
   const displayedTopTracks = topTracksListExpanded
@@ -1112,7 +1147,10 @@ function SongDetailLoaded({
                             className={`song-detail-tab${audioListenTab === 'tracks' ? ' is-active' : ''}`}
                             onClick={() => setAudioListenTab('tracks')}
                           >
-                            {tracksTabLabel}
+                            <ListenTracksTabLabel
+                              tracksTabLabel={tracksTabLabel}
+                              compactTracksLabel={compactTracksTabLabel}
+                            />
                           </button>
                         ) : null}
                         {listenEpVolumes.map((epVolume) => {
@@ -1129,7 +1167,7 @@ function SongDetailLoaded({
                               className={`song-detail-tab${audioListenTab === tabId ? ' is-active' : ''}`}
                               onClick={() => setAudioListenTab(tabId)}
                             >
-                              {epVolumeTabLabel(epVolume.ep_volume)}
+                              <EpVolumeTabLabel volume={epVolume.ep_volume} />
                             </button>
                           )
                         })}
@@ -1234,10 +1272,15 @@ function SongDetailLoaded({
               </section>
 
               {shouldShowTracksList ? (
-                <section className="song-detail-tracks" aria-labelledby="song-tracks-heading">
-                  <h2 id="song-tracks-heading" className="catalog-section-title">
-                    {inAppPlayableTracks.length > 1 ? 'Top tracks' : 'Track picks'}
-                  </h2>
+                <section
+                  className={`song-detail-tracks${hasListenTabNav ? ' song-detail-tracks--tabbed' : ''}`}
+                  aria-labelledby={hasListenTabNav ? 'song-tab-tracks' : 'song-tracks-heading'}
+                >
+                  {hasListenTabNav ? null : (
+                    <h2 id="song-tracks-heading" className="catalog-section-title">
+                      {inAppPlayableTracks.length > 1 ? 'Top tracks' : 'Track picks'}
+                    </h2>
+                  )}
                   {inAppPlayableTracks.length > 1 ? (
                     <div
                       className="song-detail-audio-playall"
@@ -1505,7 +1548,10 @@ function SongDetailLoaded({
                     }
                     aria-labelledby="song-lyrics-heading"
                   >
-                    <h2 id="song-lyrics-heading" className="catalog-section-title">
+                    <h2
+                      id="song-lyrics-heading"
+                      className={hasListenTabNav ? 'song-detail-chrome-label' : 'catalog-section-title'}
+                    >
                       Lyrics
                     </h2>
                     <div

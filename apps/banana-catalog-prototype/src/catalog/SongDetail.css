@@ -3,6 +3,11 @@
   color: var(--color-text-primary);
   padding: 0 0 2.5rem;
   --song-detail-narrow-col: minmax(200px, min(28vw, 280px));
+  /* Chrome row labels (tabs, column headers): match “Show full lyrics” scale. */
+  --song-detail-chrome-label-size: 0.72rem;
+  --song-detail-chrome-label-weight: 700;
+  --song-detail-chrome-label-leading: 1.35;
+  --song-detail-chrome-label-tracking: 0.07em;
   /* Reduce jumps when hero / iframes embeds resolve height after first paint (browser scroll anchoring). */
   overflow-anchor: none;
 }
@@ -473,28 +478,50 @@
   z-index: auto;
   display: flex;
   flex-wrap: nowrap;
+  align-items: stretch;
   gap: 0;
-  margin: 0 0 0.85rem;
+  margin: 0 0 0.65rem;
   padding: 0 0.1rem;
   border-bottom: 1px solid var(--color-border);
   background: transparent;
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.song-detail-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.song-detail-split__media {
+  container-type: inline-size;
+  container-name: song-detail-media;
+}
+
+.song-detail-tab__label--short {
+  display: none;
 }
 
 .song-detail-tab {
-  flex: 1 1 auto;
-  min-width: max(5.5rem, fit-content);
-  min-height: 2.5rem;
-  padding: 0.5rem 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 0;
+  min-height: 2.25rem;
+  padding: 0.45rem 0.5rem;
   border: none;
   border-bottom: var(--catalog-tab-active-rule-width) solid transparent;
   margin-bottom: -1px;
   background: transparent;
   color: var(--color-text-faint);
-  font: var(--catalog-shell-section-label-weight) var(--catalog-shell-section-label-size) / 1 var(--font-ui);
-  letter-spacing: var(--catalog-shell-section-label-tracking);
+  font: var(--song-detail-chrome-label-weight) var(--song-detail-chrome-label-size) /
+    var(--song-detail-chrome-label-leading) var(--font-ui);
+  letter-spacing: var(--song-detail-chrome-label-tracking);
   text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -510,6 +537,36 @@
 .song-detail-tab:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
+}
+
+/* Narrow media column (small tablet two-col): shorter tab copy + fluid type scale. */
+@container song-detail-media (max-width: 28rem) {
+  .song-detail-tab {
+    font-size: clamp(0.62rem, 2.6cqi, 0.7rem);
+    padding-inline: 0.38rem;
+  }
+
+  .song-detail-tab__label--full {
+    display: none;
+  }
+
+  .song-detail-tab__label--short {
+    display: inline;
+  }
+}
+
+.song-detail-chrome-label {
+  font: var(--song-detail-chrome-label-weight) var(--song-detail-chrome-label-size) /
+    var(--song-detail-chrome-label-leading) var(--font-ui);
+  letter-spacing: var(--song-detail-chrome-label-tracking);
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+@container song-detail-media (max-width: 28rem) {
+  .song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-chrome-label {
+    font-size: clamp(0.62rem, 2.6cqi, 0.7rem);
+  }
 }
 
 .song-detail .catalog-section-title {
@@ -646,20 +703,21 @@
   outline-offset: var(--focus-ring-offset);
 }
 
-/* Lyrics column heading beside Audio/Video tabs: type scale + horizontal inset (stacked / non–two-col). */
-.song-detail-split--tabbed .song-detail-split__lyrics > .catalog-section-title {
-  margin: 0 0 0.8rem;
+/* Lyrics column heading beside listen tabs: same chrome scale as tab row (not full section title). */
+.song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-chrome-label,
+.song-detail-split--tabbed .song-detail-split__lyrics > .song-detail-chrome-label {
+  margin: 0 0 0.65rem;
   padding-left: var(--space-5);
   padding-right: var(--space-5);
   box-sizing: border-box;
   width: 100%;
-  min-height: 2.5rem;
+  min-height: 2.25rem;
   display: flex;
   align-items: center;
-  font: 700 0.78rem/1 var(--font-ui);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-faint);
+}
+
+.song-detail-split--tabbed .song-detail-tracks--tabbed {
+  margin-top: 0;
 }
 
 /* Lyrics + media: stacked on small screens; DOM keeps media first for mobile reading order. */
@@ -869,10 +927,10 @@
     align-items: start;
   }
 
-  .song-detail-split--two-col.song-detail-split--tabbed .song-detail-split__lyrics-col > .catalog-section-title {
-    margin: 0 0 0.85rem;
-    padding: 0.5rem var(--space-5);
-    min-height: 2.5rem;
+  .song-detail-split--two-col.song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-chrome-label {
+    margin: 0 0 0.65rem;
+    padding: 0.45rem var(--space-5);
+    min-height: 2.25rem;
     border-bottom: 1px solid var(--color-border);
     box-sizing: border-box;
   }
@@ -1425,6 +1483,23 @@ h3.song-detail-youtube-subheading,
     grid-template-columns: minmax(168px, 240px) 1fr;
     gap: 1.45rem;
   }
+
+  .song-detail-split--two-col.song-detail-split--tabbed .song-detail-tab {
+    font-size: clamp(0.62rem, 1.1vw, 0.7rem);
+    padding-inline: 0.36rem;
+  }
+
+  .song-detail-split--two-col.song-detail-split--tabbed .song-detail-tab__label--full {
+    display: none;
+  }
+
+  .song-detail-split--two-col.song-detail-split--tabbed .song-detail-tab__label--short {
+    display: inline;
+  }
+
+  .song-detail-split--two-col.song-detail-split--tabbed .song-detail-chrome-label {
+    font-size: clamp(0.62rem, 1.1vw, 0.7rem);
+  }
 }
 
 @media (min-width: 700px) {
@@ -1516,20 +1591,28 @@ h3.song-detail-youtube-subheading,
 
   .song-detail-tabs {
     padding: 0;
-    margin-bottom: 0.72rem;
+    margin-bottom: 0.6rem;
   }
 
   .song-detail-tab {
-    font-size: 0.71rem;
-    min-height: 2.25rem;
-    padding: 0.44rem 0.18rem;
+    min-height: 2.15rem;
+    padding: 0.4rem 0.42rem;
+    font-size: clamp(0.64rem, 2.8vw, 0.72rem);
   }
 
-  .song-detail-split--tabbed .song-detail-split__lyrics > .catalog-section-title {
+  .song-detail-tab__label--full {
+    display: none;
+  }
+
+  .song-detail-tab__label--short {
+    display: inline;
+  }
+
+  .song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-chrome-label,
+  .song-detail-split--tabbed .song-detail-split__lyrics > .song-detail-chrome-label {
     padding-left: 0.88rem;
     padding-right: 0.88rem;
-    font-size: 0.71rem;
-    min-height: 2.25rem;
+    min-height: 2.15rem;
   }
 
   .song-detail-subsection-title {
@@ -1605,7 +1688,7 @@ h3.song-detail-youtube-subheading,
 
   .song-detail-tab {
     font-size: 0.68rem;
-    min-height: 2.15rem;
+    min-height: 2.1rem;
   }
 }
 
