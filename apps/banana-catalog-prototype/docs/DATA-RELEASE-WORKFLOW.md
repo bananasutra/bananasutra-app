@@ -144,6 +144,18 @@ git checkout staging && git pull origin staging
 
 ---
 
+## Multi-volume SoundCloud EPs (R80)
+
+Songs with multiple `sc_eps` rows (different `ep_volume` values) publish as:
+
+- `ep_volumes[]` in catalog JSON (one entry per volume, sorted ascending by `ep_volume`)
+- `primary_ep_*` and hero cover art from the **highest** `ep_volume` row (not newest `created_at` alone)
+- Song detail: **Top tracks** (combined across volumes, unchanged) plus one **Full EP · vol N** tab per `ep_volumes[]` entry
+
+**Editorial:** when adding a new volume in Airtable, link the same `lyrics_id` on a new `sc_eps` row with the next `ep_volume` and a distinct `ep_url`. Re-run `npm run catalog:data` before ship so JSON, browse cards, and Bertrand library stay aligned.
+
+---
+
 ## Related docs
 
 - `.cursor/rules/git-release-workflow.mdc` — merge subjects, R50 dual-track, agent data-release rules

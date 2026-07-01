@@ -48,6 +48,7 @@ function makeSong(overrides: Partial<SongCatalogItem> = {}): SongCatalogItem {
     primary_ep_title: '',
     primary_ep_volume: 0,
     primary_ep_rating: '',
+    ep_volumes: [],
     has_fav_track: false,
     songbook: '',
     muse: '',

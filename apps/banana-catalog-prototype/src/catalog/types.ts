@@ -14,6 +14,13 @@ export type SongDetailNavState = {
   wordsListReturn?: string
 }
 
+export type SongEpVolume = {
+  ep_volume: number
+  ep_url: string
+  ep_title: string
+  ep_rating: string
+}
+
 export type SongCatalogItem = {
   lyrics_id: string
   lyrics_title: string
@@ -65,6 +72,8 @@ export type SongCatalogItem = {
   primary_ep_title: string
   primary_ep_volume: number
   primary_ep_rating: string
+  /** All SoundCloud EP volumes for this song (sorted ascending by ep_volume). */
+  ep_volumes: SongEpVolume[]
   has_fav_track: boolean
   /** Songbook / playlist-style subcategory from lyrics (e.g. "Speak: DUCK (shady)"). */
   songbook: string
@@ -267,6 +276,8 @@ export type SongDetailRecord = {
   primary_ep_url: string
   primary_ep_title: string
   primary_ep_rating: string
+  /** All SoundCloud EP volumes for this song (sorted ascending by ep_volume). */
+  ep_volumes?: SongEpVolume[]
   /** Normalized SoundCloud `/sets/` URL → `duration_total` from sc_eps CSV (e.g. `"1:51:06"`). */
   sc_ep_set_duration_totals?: Record<string, string>
   fallback_sc_url?: string
