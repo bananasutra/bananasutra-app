@@ -326,6 +326,17 @@
   margin-top: 0.12rem;
 }
 
+@media (min-width: 641px) {
+  /* R81 #162 — sutra row to facet tags: restore readable vertical rhythm without touching mobile flex gap. */
+  .song-detail-hero-meta > .song-detail-secondary-meta + .song-detail-secondary-meta {
+    margin-top: 0.45rem;
+  }
+
+  .song-detail-hero-meta > .song-detail-secondary-meta--sutra + .song-detail-secondary-meta {
+    margin-top: 0.5rem;
+  }
+}
+
 .song-detail-hero-meta {
   margin-top: 0.25rem;
 }
