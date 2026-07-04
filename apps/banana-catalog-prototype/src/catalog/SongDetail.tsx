@@ -1046,20 +1046,33 @@ function SongDetailLoaded({
               {detail.lyrics_summary ? <p className="song-detail-summary">{detail.lyrics_summary}</p> : null}
               {detail.sutra || hasHeroFacetMeta || museName ? (
                 <div className="song-detail-hero-meta">
-                  {detail.sutra ? (
-                    <ul className="song-detail-secondary-meta song-detail-secondary-meta--sutra" aria-label="Sutra">
-                      <li className="song-detail-secondary-meta-item">
-                        <Link
-                          className="song-detail-secondary-link"
-                          to={sutraHrefFromSongSutraField(detail.sutra) ?? buildBrowsePathForFacet('sutra', detail.sutra)}
-                        >
-                          <span className={`catalog-facet-sutra-name ${sutraClassName(detail.sutra)}`}>{detail.sutra}</span>
-                        </Link>
-                      </li>
-                    </ul>
+                  {detail.sutra || museName ? (
+                    <div className="song-detail-hero-meta__identity">
+                      {detail.sutra ? (
+                        <ul className="song-detail-secondary-meta song-detail-secondary-meta--sutra" aria-label="Sutra">
+                          <li className="song-detail-secondary-meta-item">
+                            <Link
+                              className="song-detail-secondary-link"
+                              to={sutraHrefFromSongSutraField(detail.sutra) ?? buildBrowsePathForFacet('sutra', detail.sutra)}
+                            >
+                              <span className={`catalog-facet-sutra-name ${sutraClassName(detail.sutra)}`}>{detail.sutra}</span>
+                            </Link>
+                          </li>
+                        </ul>
+                      ) : null}
+                      {museName ? (
+                        <ul className="song-detail-secondary-meta song-detail-secondary-meta--muse" aria-label="Muse">
+                          <li className="song-detail-secondary-meta-item">
+                            <Link className="song-detail-secondary-link" to={searchCatalogHref(museName)}>
+                              {museName}
+                            </Link>
+                          </li>
+                        </ul>
+                      ) : null}
+                    </div>
                   ) : null}
                   {hasHeroFacetMeta ? (
-                    <ul className="song-detail-secondary-meta" aria-label="Song metadata">
+                    <ul className="song-detail-secondary-meta song-detail-secondary-meta--facets" aria-label="Song metadata">
                       {detail.topic ? (
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={buildBrowsePathForFacet('topic', detail.topic)}>
@@ -1098,15 +1111,6 @@ function SongDetailLoaded({
                           </Link>
                         </li>
                       ) : null}
-                    </ul>
-                  ) : null}
-                  {museName ? (
-                    <ul className="song-detail-secondary-meta song-detail-secondary-meta--muse" aria-label="Muse">
-                      <li className="song-detail-secondary-meta-item">
-                        <Link className="song-detail-secondary-link" to={searchCatalogHref(museName)}>
-                          {museName}
-                        </Link>
-                      </li>
                     </ul>
                   ) : null}
                 </div>
