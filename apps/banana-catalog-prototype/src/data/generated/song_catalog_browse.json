@@ -227,11 +227,11 @@
     "song_muse_quote": ""
   },
   {
-    "lyrics_id": "L-425",
-    "lyrics_title": "Serial Blowers Vol.2",
-    "url_slug": "serial-blowers-vol2",
+    "lyrics_id": "L-216",
+    "lyrics_title": "Serial Blowers",
+    "url_slug": "serial-blowers",
     "summary_short": "Power. Gender. Color. Favors. Why are we still asking the same questions?",
-    "lyrics_extract": "Don’t wanna be too simplistic, / Game theory’s no vain dialectic.",
+    "lyrics_extract": "Too cowardly to dare / To fight for what is fair.",
     "sutra": "BLOWsutra",
     "topic": "POOLITICS",
     "intention": "beWOKE",
@@ -239,18 +239,23 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-06-20T12:17:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-5TQSmV5yKqLtxWvG-YoTiqQ-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-L6YErpavAldzq4cD-HRzVlg-t500x500.png",
     "track_genres": [
+      "BLUES",
       "LOFI"
     ],
     "track_secondary_genres": [
+      "DUB",
+      "FOLK",
       "GIPSY",
       "INDIE"
     ],
     "track_instruments": [
-      "BASS"
+      "BASS",
+      "GUITAR"
     ],
     "track_moods": [
+      "NERDY",
       "PUNKY",
       "RAINY"
     ],
@@ -258,11 +263,11 @@
       "LOWBEAT",
       "MIDBEAT"
     ],
-    "discovery_top_track_genres": "LOFI, INDIE",
-    "track_count_published": 3,
-    "aggregate_play_count": 925,
-    "aggregate_like_count": 23,
-    "aggregate_engagement_rate": 2.4864864864864864,
+    "discovery_top_track_genres": "BLUES, INDIE, FOLK, DUB",
+    "track_count_published": 4,
+    "aggregate_play_count": 1255,
+    "aggregate_like_count": 28,
+    "aggregate_engagement_rate": 2.2310756972111556,
     "peak_play_count": 344,
     "peak_like_count": 10,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/serial-blowers-vol2-epx7",
@@ -427,9 +432,9 @@
     "song_muse_quote": ""
   },
   {
-    "lyrics_id": "L-423",
-    "lyrics_title": "Broken Whole (Encore)",
-    "url_slug": "broken-whole-encore",
+    "lyrics_id": "L-346",
+    "lyrics_title": "Broken Whole",
+    "url_slug": "broken-whole",
     "summary_short": "How do we find meaning in a world that seems broken? When words fall apart, can love still be spoken? #GROWcore",
     "lyrics_extract": "When absurdity calls, do we laugh or we cry? / Could the meaning we seek be in how we ask why?",
     "sutra": "GROWsutra",
@@ -475,8 +480,8 @@
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/broken-whole-growsutra-vol2-epx16",
     "has_in_app_playback": true,
     "has_sc_catalog_listen": false,
-    "has_youtube_video": false,
-    "has_youtube_embed": false,
+    "has_youtube_video": true,
+    "has_youtube_embed": true,
     "songbook": "Dare: DARE (to care)",
     "muse": "Anonymous Anonymous",
     "song_muse_quote": "GROWcore"
@@ -1241,7 +1246,7 @@
     "lang": "EN",
     "written_year": "2026",
     "published_at": "2026-03-16T18:54:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-RvPg90tJzDpSlPKh-ns1cUw-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-qhqHRqMMeCjATzsp-RQ8fQQ-t500x500.png",
     "track_genres": [
       "DUB",
       "INDIE",
@@ -1276,7 +1281,7 @@
     "aggregate_engagement_rate": 0.720495415029177,
     "peak_play_count": 2808,
     "peak_like_count": 27,
-    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/my-quest-glowsutra-jacques-brel-epx7",
+    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/this-is-my-quest-growsutra-epx19",
     "has_in_app_playback": true,
     "has_sc_catalog_listen": false,
     "has_youtube_video": false,
@@ -1325,9 +1330,9 @@
     "aggregate_engagement_rate": 0.5793226381461676,
     "peak_play_count": 1752,
     "peak_like_count": 9,
-    "primary_ep_url": "",
+    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/my-quest-glowsutra-jacques-brel-epx7",
     "has_in_app_playback": true,
-    "has_sc_catalog_listen": true,
+    "has_sc_catalog_listen": false,
     "has_youtube_video": false,
     "has_youtube_embed": false,
     "songbook": "Bless: POET(ry)",
@@ -1761,7 +1766,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-02-23T04:45:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-qfOVhmHG1WJJqjc9-k1w2VA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-szfTJZOpu6ZHpfwu-WpjZbA-t500x500.png",
     "track_genres": [
       "BLUES",
       "BURLESQUE",
@@ -2021,7 +2026,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-02-11T23:37:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
     "track_genres": [
       "BURLESQUE",
       "FOLK",
@@ -2312,7 +2317,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-01-24T05:17:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-OuzjTqyXc8wz8Uv9-0cXu0Q-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-o3ecSGQbfuMzeugT-gCBEIQ-t500x500.jpg",
     "track_genres": [
       "BLUES",
       "DUB",
@@ -2762,7 +2767,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-01-08T07:26:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-ZOzjbG3qBNgMzOWS-9LnxjQ-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-YZdPzrWX9SlHjJ6q-GKzInQ-t500x500.png",
     "track_genres": [
       "JAZZ",
       "LOFI"
@@ -3108,7 +3113,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-01-01T22:37:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-zGBEcizIyyXPbSgu-fuTgSg-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-arUtRqgFTtrbCyLv-f6mbwA-t500x500.png",
     "track_genres": [
       "BLUES",
       "DUB",
@@ -3212,7 +3217,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-12-26T06:19:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-WZTqldC4Qw8BIhVK-eZYyAA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-q37xEnqpYSi9JjNM-xhFyxw-t500x500.jpg",
     "track_genres": [
       "BURLESQUE",
       "DUB",
@@ -4061,7 +4066,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-11-22T01:27:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-3Pm91yJCMrEECvrj-EP3ozg-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-VSIOpVwJmhA6bZS8-8e34OQ-t500x500.jpg",
     "track_genres": [
       "DUB",
       "FOLK",
@@ -4732,7 +4737,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-11-03T04:34:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-WS97VCa9dwPRoGyv-ajY3dQ-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-hzl8IkFwQtcZGHmA-kwFITw-t500x500.jpg",
     "track_genres": [
       "BLUES",
       "INDIE"
@@ -4782,7 +4787,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-11-02T04:28:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-64Uv99JMUudNjTVz-iC67zQ-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-NzTq5hA2IEawEnrG-I0hthg-t500x500.jpg",
     "track_genres": [
       "BLUES",
       "ROCK"
@@ -5069,6 +5074,41 @@
     "has_youtube_embed": false,
     "songbook": "Speak: REVOLT (now)",
     "muse": "Vladimir Vysotsky",
+    "song_muse_quote": ""
+  },
+  {
+    "lyrics_id": "L-428",
+    "lyrics_title": "Predators (FOTUS Edition)",
+    "url_slug": "predators-fotus-edition",
+    "summary_short": "Contempt replaced consent, preying replaced praying, and \nand authoritarian-apologists sheeples howl along...",
+    "lyrics_extract": "Predators… some are fool on molesters, / Grin like saints but(t) sin like haters.",
+    "sutra": "QUACKsutra",
+    "topic": "POOLITICS",
+    "intention": "beWOKE",
+    "light_shadow": "SHADOW",
+    "lang": "EN",
+    "written_year": "2025",
+    "published_at": "2025-10-25T00:00:00",
+    "cover_image_url": "",
+    "track_genres": [],
+    "track_secondary_genres": [],
+    "track_instruments": [],
+    "track_moods": [],
+    "track_tempo_feels": [],
+    "discovery_top_track_genres": "",
+    "track_count_published": 0,
+    "aggregate_play_count": 0,
+    "aggregate_like_count": 0,
+    "aggregate_engagement_rate": 0.0,
+    "peak_play_count": 0,
+    "peak_like_count": 0,
+    "primary_ep_url": "",
+    "has_in_app_playback": false,
+    "has_sc_catalog_listen": false,
+    "has_youtube_video": false,
+    "has_youtube_embed": false,
+    "songbook": "Quack: DUCK (shady)",
+    "muse": "",
     "song_muse_quote": ""
   },
   {
@@ -6401,7 +6441,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-09-04T19:56:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-LHMRQArJDO3UAyuX-tkyzjg-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-nMqZKsyaPrkeqrcw-6Z1nNw-t500x500.jpg",
     "track_genres": [
       "BLUES",
       "LOFI"
@@ -6555,7 +6595,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-08-29T12:11:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-XirUpSPl2GiR23bD-IUcZyA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-R1VSZuTOo6JhJtf2-Ej51OA-t500x500.jpg",
     "track_genres": [
       "DUB"
     ],
@@ -6956,7 +6996,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-08-15T01:39:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-naxN1Ew2hxBmEiva-OlsMuQ-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-kAEVcohylwIZch0q-ThHu4Q-t500x500.png",
     "track_genres": [
       "ROCK"
     ],
@@ -7287,7 +7327,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-08-01T08:24:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-8zXPkONAqcbxOwwP-p3Wifg-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-VcrWGV2nXlm4wmot-F9BtcQ-t500x500.jpg",
     "track_genres": [
       "FOLK",
       "ROCK"
@@ -9312,7 +9352,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-05-21T02:07:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-TISJ7mgoFUnIyF3o-Nc2YDg-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-44IaWyIDQ4KPbMKz-LMbmBg-t500x500.png",
     "track_genres": [
       "BURLESQUE",
       "JAZZ"
@@ -9559,7 +9599,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-05-02T01:18:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-60rWtzt0Ur5yDsl8-lcLgjQ-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-ycTSJc8nDWdlUg15-s4wo8Q-t500x500.jpg",
     "track_genres": [
       "INDIE",
       "JAZZ"
@@ -9918,7 +9958,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-04-22T19:11:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-MnjuWCHszuAJt8sg-DJvk4g-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-05lBUNaaLWFvjxoy-wgz7xg-t500x500.png",
     "track_genres": [
       "DUB"
     ],
@@ -9966,7 +10006,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-04-22T03:58:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-RDHQvbzOVwhs5g5O-y1W0yw-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-l7sAfiVzurLf3gI7-fzJ0xQ-t500x500.jpg",
     "track_genres": [
       "FOLK",
       "JAZZ"
@@ -11236,7 +11276,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-04-02T05:42:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-CzCzt9mTlZWzjTqp-8FLR4g-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-EbCkPt5OXsQDVEWJ-qwqVYw-t500x500.jpg",
     "track_genres": [
       "DUB"
     ],
@@ -11351,7 +11391,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-03-30T10:30:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-9mKo23b9tXJzWs5t-yMjheA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-vO0k3rhIFff0YYyx-2A2mWw-t500x500.jpg",
     "track_genres": [
       "BURLESQUE",
       "FOLK"
@@ -11405,7 +11445,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-03-28T03:19:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-ohldLp0ezWMHuexZ-Z1TUbg-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-zExgoTtl1OfIO5ej-7iahlg-t500x500.png",
     "track_genres": [
       "BLUES"
     ],
@@ -12025,7 +12065,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-02-08T23:13:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-y6GNuYSUFwSvEtI4-VH6lnQ-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-RAzwB4AnKcyRKbyO-wrGX6g-t500x500.jpg",
     "track_genres": [
       "BLUES",
       "DUB"
@@ -12093,53 +12133,6 @@
     "has_youtube_embed": true,
     "songbook": "Quack: DUCK (shady)",
     "muse": "",
-    "song_muse_quote": ""
-  },
-  {
-    "lyrics_id": "L-216",
-    "lyrics_title": "Serial Blowers",
-    "url_slug": "serial-blowers",
-    "summary_short": "Power. Gender. Color. Favors. Why are we still asking the same questions?",
-    "lyrics_extract": "Too cowardly to dare / To fight for what is fair.",
-    "sutra": "BLOWsutra",
-    "topic": "POOLITICS",
-    "intention": "beWOKE",
-    "light_shadow": "SHADOW",
-    "lang": "EN",
-    "written_year": "2025",
-    "published_at": "2025-01-31T13:03:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-L6YErpavAldzq4cD-HRzVlg-t500x500.png",
-    "track_genres": [
-      "BLUES"
-    ],
-    "track_secondary_genres": [
-      "DUB",
-      "FOLK",
-      "INDIE"
-    ],
-    "track_instruments": [
-      "GUITAR"
-    ],
-    "track_moods": [
-      "NERDY"
-    ],
-    "track_tempo_feels": [
-      "LOWBEAT"
-    ],
-    "discovery_top_track_genres": "BLUES, INDIE, FOLK, DUB",
-    "track_count_published": 1,
-    "aggregate_play_count": 330,
-    "aggregate_like_count": 5,
-    "aggregate_engagement_rate": 1.5151515151515151,
-    "peak_play_count": 330,
-    "peak_like_count": 5,
-    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/serial-blowerrr",
-    "has_in_app_playback": true,
-    "has_sc_catalog_listen": false,
-    "has_youtube_video": true,
-    "has_youtube_embed": true,
-    "songbook": "Speak: APES (gone wrong)",
-    "muse": "Anonymous Anonymous",
     "song_muse_quote": ""
   },
   {
@@ -12488,7 +12481,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-01-14T09:27:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-P78u62myC8kQzJcZ-qk1VzQ-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-iz10EkL30RyLGlJE-veziSw-t500x500.png",
     "track_genres": [
       "BLUES"
     ],
@@ -13911,7 +13904,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2024-11-19T17:54:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-N2bJW7Tqp3S7Ldn6-PMk8kA-t500x500.jpg",
+    "cover_image_url": "",
     "track_genres": [],
     "track_secondary_genres": [],
     "track_instruments": [],
@@ -13946,7 +13939,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2024-11-19T17:54:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-N2bJW7Tqp3S7Ldn6-PMk8kA-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-u8iAw6H7T6q62hoh-MHNyYA-t500x500.jpg",
     "track_genres": [],
     "track_secondary_genres": [],
     "track_instruments": [],
@@ -14016,7 +14009,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2024-11-19T17:52:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-VkDI20lCoNvB6yuu-kEiBRg-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-MUczyriJJynEtTlz-1FbfYA-t500x500.jpg",
     "track_genres": [
       "FOLK"
     ],
@@ -14858,41 +14851,6 @@
     "songbook": "Speak: APES (gone wrong)",
     "muse": "Anonymous Anonymous",
     "song_muse_quote": "The ABC"
-  },
-  {
-    "lyrics_id": "L-346",
-    "lyrics_title": "Broken Whole",
-    "url_slug": "broken-whole",
-    "summary_short": "How do we find meaning in a world that seems broken? When words fall apart, can love still be spoken? #GROWcore",
-    "lyrics_extract": "When absurdity calls, do we laugh or we cry? / Could the meaning we seek be in how we ask why?",
-    "sutra": "GROWsutra",
-    "topic": "WISDOM",
-    "intention": "beCURIOUS",
-    "light_shadow": "LIGHT",
-    "lang": "EN",
-    "written_year": "2024",
-    "published_at": "2024-10-20T00:00:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-vaVbBNrFA5Fzr2Kn-Zl2s2A-t500x500.jpg",
-    "track_genres": [],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "track_tempo_feels": [],
-    "discovery_top_track_genres": "",
-    "track_count_published": 0,
-    "aggregate_play_count": 0,
-    "aggregate_like_count": 0,
-    "aggregate_engagement_rate": 0.0,
-    "peak_play_count": 0,
-    "peak_like_count": 0,
-    "primary_ep_url": "",
-    "has_in_app_playback": false,
-    "has_sc_catalog_listen": true,
-    "has_youtube_video": true,
-    "has_youtube_embed": true,
-    "songbook": "Dare: DARE (to care)",
-    "muse": "Anonymous Anonymous",
-    "song_muse_quote": "GROWcore"
   },
   {
     "lyrics_id": "L-83",
@@ -16190,6 +16148,41 @@
     "song_muse_quote": ""
   },
   {
+    "lyrics_id": "L-427",
+    "lyrics_title": "Syncopated Patriarchy",
+    "url_slug": "syncopated-patriarchy",
+    "summary_short": "",
+    "lyrics_extract": "",
+    "sutra": "BLOWsutra",
+    "topic": "INJUSTICE",
+    "intention": "beYOU",
+    "light_shadow": "SHADOW",
+    "lang": "EN",
+    "written_year": "2024",
+    "published_at": "2024-08-13T00:00:00",
+    "cover_image_url": "",
+    "track_genres": [],
+    "track_secondary_genres": [],
+    "track_instruments": [],
+    "track_moods": [],
+    "track_tempo_feels": [],
+    "discovery_top_track_genres": "",
+    "track_count_published": 0,
+    "aggregate_play_count": 0,
+    "aggregate_like_count": 0,
+    "aggregate_engagement_rate": 0.0,
+    "peak_play_count": 0,
+    "peak_like_count": 0,
+    "primary_ep_url": "",
+    "has_in_app_playback": false,
+    "has_sc_catalog_listen": false,
+    "has_youtube_video": false,
+    "has_youtube_embed": false,
+    "songbook": "Speak: REVOLT (now)",
+    "muse": "Anonymous Anonymous",
+    "song_muse_quote": ""
+  },
+  {
     "lyrics_id": "L-123",
     "lyrics_title": "Kamala's Roots of Resilience",
     "url_slug": "kamala-s-roots-of-resilience",
@@ -16272,7 +16265,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2024-08-10T00:00:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-2zgnIx8miwTWEq1e-YVPWpg-t1080x1080.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-2zgnIx8miwTWEq1e-YVPWpg-t500x500.jpg",
     "track_genres": [],
     "track_secondary_genres": [],
     "track_instruments": [],
@@ -17133,40 +17126,5 @@
     "songbook": "Play: (Be) The Fool",
     "muse": "Anonymous Anonymous",
     "song_muse_quote": "\"Fools don't care about why\" (wrong)"
-  },
-  {
-    "lyrics_id": "L-427",
-    "lyrics_title": "Syncopated Patriarchy",
-    "url_slug": "syncopated-patriarchy",
-    "summary_short": "",
-    "lyrics_extract": "",
-    "sutra": "BLOWsutra",
-    "topic": "INJUSTICE",
-    "intention": "beYOU",
-    "light_shadow": "SHADOW",
-    "lang": "EN",
-    "written_year": "",
-    "published_at": "",
-    "cover_image_url": "",
-    "track_genres": [],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "track_tempo_feels": [],
-    "discovery_top_track_genres": "",
-    "track_count_published": 0,
-    "aggregate_play_count": 0,
-    "aggregate_like_count": 0,
-    "aggregate_engagement_rate": 0.0,
-    "peak_play_count": 0,
-    "peak_like_count": 0,
-    "primary_ep_url": "",
-    "has_in_app_playback": false,
-    "has_sc_catalog_listen": false,
-    "has_youtube_video": false,
-    "has_youtube_embed": false,
-    "songbook": "Speak: REVOLT (now)",
-    "muse": "Anonymous Anonymous",
-    "song_muse_quote": ""
   }
 ]

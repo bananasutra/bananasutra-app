@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { trackFormSubmit } from '../lib/analytics'
 import {
@@ -9,6 +9,8 @@ import {
 import { CATALOG_SNAPSHOT_DATE, formatCatalogSnapshotDate } from './catalogSnapshotMeta'
 import { canonicalPathForRoute } from './seoPaths'
 import { FooterSocialIcon, type FooterSocialId } from './FooterSocialIcons'
+import { HomeStatsSummary } from './HomeStatsSummary'
+import { buildHomeStatsSummary } from './homePortalData'
 import './GlobalFooter.css'
 
 /* ------------------------------------------------------------------ */
@@ -306,12 +308,16 @@ function FooterContactForm() {
 
 export function GlobalFooter() {
   const y = new Date().getFullYear()
+  const statsSummary = useMemo(() => buildHomeStatsSummary(), [])
 
   return (
     <footer className="catalog-footer" role="contentinfo">
       <div className="catalog-footer__inner">
         {/* ---- Contact form (collapsible) ---- */}
         <FooterContactForm />
+
+        {/* ---- Catalog scale stats (homepage parity) ---- */}
+        <HomeStatsSummary items={statsSummary} />
 
         {/* ---- Social icons ---- */}
         <nav className="catalog-footer__social" aria-label="Elsewhere on the web">

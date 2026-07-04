@@ -1044,20 +1044,175 @@ def choose_artwork(
     all_tracks: list[dict[str, Any]],
     ordered_tracks: list[dict[str, Any]],
     ep_index: dict[str, dict[str, Any]],
+    full_v4_hit: dict[str, str] | None = None,
 ) -> str:
     ep = ep_index.get(lyrics_id)
     has_ep_backed_track = any(str(t.get("ep_url") or "").strip() for t in all_tracks)
-    # When tracks link to an EP, prefer EP artwork (single vs EP cover mismatch).
-    if ep and ep.get("artwork_url") and has_ep_backed_track:
-        return str(ep["artwork_url"])
     for track in ordered_tracks:
         if track.get("artwork_url"):
             return str(track["artwork_url"])
+    # No in-app tracks: prefer the primary FULL v4 single artwork over a shared EP compilation cover.
+    if not all_tracks and full_v4_hit and str(full_v4_hit.get("artwork_url") or "").strip():
+        return str(full_v4_hit["artwork_url"])
+    # When tracks link to an EP, prefer EP artwork (single vs EP cover mismatch).
+    if ep and ep.get("artwork_url") and has_ep_backed_track:
+        return str(ep["artwork_url"])
     # No usable track art: still use SC EP row art when linked (e.g. lyrics featured but
     # no rows in filtered SC TRACKs export — cover still exists on the EP).
     if ep and ep.get("artwork_url"):
         return str(ep["artwork_url"])
     return ""
+
+
+def merge_full_v4_listen_volumes(
+    ep_volumes_by_lid: dict[str, list[dict[str, Any]]],
+    full_v4_rows: list[dict[str, str]],
+    sc_eps_rows: list[dict[str, str]],
+    lyrics_titles_by_lid: dict[str, str],
+    sc_tracks_snapshot: list[dict[str, str]] | None = None,
+) -> dict[str, list[dict[str, Any]]]:
+    """
+    Add per-track SoundCloud listen URLs from FULL v4 so song pages can tab between
+    vol 1 singles and vol 2 EP sets (R82). Replaces redundant compilation /sets/ rows when
+    the lid already has two or more member singles on that EP.
+    """
+    if not full_v4_rows:
+        return ep_volumes_by_lid
+
+    snap_tid: dict[str, str | None] = {}
+    snap_url: dict[str, str | None] = {}
+    if sc_tracks_snapshot:
+        snap_tid, snap_url = build_snapshot_sc_track_lyrics_id_lookup(sc_tracks_snapshot)
+
+    lids_by_ep_set: dict[str, list[str]] = defaultdict(list)
+    for row in sc_eps_rows:
+        ep_url = _norm_soundcloud_url(row.get("ep_url") or "")
+        if not ep_url:
+            continue
+        for lid in split_multi(row.get("lyrics_id")):
+            norm = norm_lyrics_id_for_join(lid)
+            if norm.startswith("L-") and norm not in lids_by_ep_set[ep_url]:
+                lids_by_ep_set[ep_url].append(norm)
+
+    merged: dict[str, list[dict[str, Any]]] = {
+        lid: list(volumes) for lid, volumes in ep_volumes_by_lid.items()
+    }
+
+    def existing_url_norms(lid: str) -> set[str]:
+        norms: set[str] = set()
+        for vol in merged.get(lid, []):
+            nk = _norm_soundcloud_url(str(vol.get("ep_url") or ""))
+            if nk:
+                norms.add(nk)
+        return norms
+
+    def append_volume(lid: str, volume: int, sc_url: str, title: str) -> None:
+        nk = _norm_soundcloud_url(sc_url)
+        if not lid.startswith("L-") or not nk or nk in existing_url_norms(lid):
+            return
+        merged.setdefault(lid, []).append(
+            {
+                "ep_volume": volume,
+                "ep_url": sc_url.strip(),
+                "ep_title": title.strip(),
+                "ep_rating": "",
+            }
+        )
+
+    def resolve_lid(row: dict[str, str]) -> str:
+        if sc_tracks_snapshot:
+            return effective_full_v4_lyrics_id(row, snap_tid, snap_url)
+        return norm_lyrics_id_for_join(row.get("lyrics_id"))
+
+    def orphan_track_lid(row: dict[str, str]) -> str:
+        ep_set = _norm_soundcloud_url(row.get("ep_url") or "")
+        if not ep_set:
+            return ""
+        lids = lids_by_ep_set.get(ep_set, [])
+        if not lids:
+            return ""
+        if len(lids) == 1:
+            return lids[0]
+        title = normalize_title_for_match(str(row.get("lyrics_title") or row.get("track_title") or ""))
+        if "criminels" in title:
+            return "L-53" if "L-53" in lids else ""
+        if "criminal" in title or "crrriminals" in title:
+            return "L-52" if "L-52" in lids else ""
+        best_lid = ""
+        best_score = 0
+        for lid in lids:
+            song_title = normalize_title_for_match(lyrics_titles_by_lid.get(lid, ""))
+            score = title_match_score(song_title, title) if song_title else 0
+            if score > best_score:
+                best_score = score
+                best_lid = lid
+        return best_lid if best_score >= 85 else ""
+
+    for row in full_v4_rows:
+        sc_url = str(row.get("sc_url") or "").strip()
+        if not sc_url or "/sets/" in sc_url:
+            continue
+        lid = resolve_lid(row)
+        if not lid.startswith("L-"):
+            lid = orphan_track_lid(row)
+        if not lid.startswith("L-"):
+            continue
+
+        ep_set = _norm_soundcloud_url(str(row.get("ep_url") or ""))
+        track_num = parse_int(row.get("ep_track_number"))
+        if ep_set and track_num > 0:
+            volume = track_num
+        else:
+            volume = 1
+            used = {int(v.get("ep_volume") or 0) for v in merged.get(lid, [])}
+            while volume in used:
+                volume += 1
+
+        append_volume(lid, volume, sc_url, str(row.get("track_title") or row.get("lyrics_title") or ""))
+
+    standalone_url_norms_by_lid: dict[str, set[str]] = defaultdict(set)
+    for row in full_v4_rows:
+        sc_url = str(row.get("sc_url") or "").strip()
+        if not sc_url or "/sets/" in sc_url:
+            continue
+        if _norm_soundcloud_url(str(row.get("ep_url") or "")):
+            continue
+        lid = resolve_lid(row)
+        if not lid.startswith("L-"):
+            lid = orphan_track_lid(row)
+        if lid.startswith("L-"):
+            standalone_url_norms_by_lid[lid].add(_norm_soundcloud_url(sc_url))
+
+    for lid, volumes in list(merged.items()):
+        sets = [v for v in volumes if "/sets/" in str(v.get("ep_url") or "")]
+        singles = [v for v in volumes if "/sets/" not in str(v.get("ep_url") or "")]
+        standalone_norms = standalone_url_norms_by_lid.get(lid, set())
+
+        if sets and standalone_norms:
+            keep_singles = [
+                s
+                for s in singles
+                if _norm_soundcloud_url(str(s.get("ep_url") or "")) in standalone_norms
+            ]
+            keep_singles = sorted(
+                keep_singles, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or ""))
+            )
+            ordered_sets = sorted(sets, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")))
+            for idx, single in enumerate(keep_singles, start=1):
+                single["ep_volume"] = idx
+            for idx, ep_set_row in enumerate(ordered_sets, start=len(keep_singles) + 1):
+                ep_set_row["ep_volume"] = idx
+            merged[lid] = ordered_sets + keep_singles
+            merged[lid] = sorted(
+                merged[lid],
+                key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")),
+            )
+        elif len(singles) >= 2 and sets:
+            merged[lid] = sorted(singles, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")))
+        else:
+            merged[lid] = sorted(volumes, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")))
+
+    return merged
 
 
 def _norm_soundcloud_url(url: str) -> str:
@@ -1751,9 +1906,12 @@ def load_sc_cover_art_overrides(
     by_ep_url: dict[str, str] = {}
     for row in rows:
         cover = str(row.get("cover_image_url") or "").strip()
+        lid = norm_lyrics_id_for_join(row.get("lyrics_id"))
+        if lid.startswith("L-") and parse_bool(row.get("suppress")):
+            by_lyrics_id[lid] = ""
+            continue
         if not cover:
             continue
-        lid = norm_lyrics_id_for_join(row.get("lyrics_id"))
         if lid.startswith("L-"):
             by_lyrics_id[lid] = cover
         ep_norm = _norm_soundcloud_url(str(row.get("ep_url") or ""))
@@ -2143,6 +2301,19 @@ def main() -> None:
         if lid:
             lyrics_index[lid] = row
     eps_index, ep_volumes_by_lid = build_eps_by_lyrics_id(sc_eps_rows)
+    lyrics_titles_by_lid = {
+        lid: str(row.get("song_title") or row.get("lyrics_title") or "").strip()
+        for lid, row in lyrics_index.items()
+        if lid.startswith("L-")
+    }
+    full_v4_rows = read_csv(SC_TRACKS_FULL_V4) if SC_TRACKS_FULL_V4.is_file() else []
+    ep_volumes_by_lid = merge_full_v4_listen_volumes(
+        ep_volumes_by_lid,
+        full_v4_rows,
+        sc_eps_rows,
+        lyrics_titles_by_lid,
+        sc_tracks_raw,
+    )
 
     tracks_by_lyrics: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in sc_tracks_rows:
@@ -2234,7 +2405,8 @@ def main() -> None:
             {str(t["soundcloud_genre"]) for t in published_tracks if t.get("soundcloud_genre")}
         )
 
-        artwork_url = choose_artwork(lyrics_id, tracks, detail_tracks, eps_index)
+        full_v4_hit = full_v4_by_lid.get(lyrics_id)
+        artwork_url = choose_artwork(lyrics_id, tracks, detail_tracks, eps_index, full_v4_hit)
         if not artwork_url:
             artwork_url = str(lyric.get("fallback_cover_art") or "").strip()
         ep_meta = eps_index.get(lyrics_id)
