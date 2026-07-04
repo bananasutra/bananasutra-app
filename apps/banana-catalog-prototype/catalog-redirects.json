@@ -2,6 +2,16 @@
   "_doc": "Manual slug/path renames. Rows with redirect_status=final in the Airtable 301 REDIRECTS table are synced here by tools/sync_redirects_from_snapshot.py. from: old path (no trailing slash). to: canonical target (trailing slash on index/detail routes). Consumed by: client SPA guard, generate-route-redirects.mjs (static HTML), seo-worker (301).",
   "redirects": [
     {
+      "from": "/songs/broken-whole-encore",
+      "to": "/songs/broken-whole",
+      "reason": "L-423 to L-346"
+    },
+    {
+      "from": "/songs/serial-blowers-vol2",
+      "to": "/songs/serial-blowers",
+      "reason": "L-425 to L-216"
+    },
+    {
       "from": "/songs/the-seven-sutras-of-banana",
       "to": "/songs/seven-sutras-gone-banana/",
       "reason": "L-383 rename"

@@ -1,13 +1,13 @@
 {
-  "snapshot_date": "2026-07-03",
+  "snapshot_date": "2026-07-04",
   "rows": {
-    "lyrics": 405,
+    "lyrics": 407,
     "sc_tracks": 725,
     "sc_eps": 247
   },
   "light_shadow_values": {
-    "LIGHT": 217,
-    "SHADOW": 188
+    "LIGHT": 218,
+    "SHADOW": 189
   },
   "errors": [],
   "warnings": [

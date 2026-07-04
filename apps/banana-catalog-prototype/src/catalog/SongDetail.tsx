@@ -83,23 +83,44 @@ function parseEpListenTab(tab: string): number | null {
   return Number.isFinite(n) ? n : null
 }
 
-function epVolumeTabLabel(volume: number): string {
-  return volume > 0 ? `Full EP · vol ${volume}` : 'Full EP'
+function epVolumeTabLabel(volume: number, listenUrl: string): string {
+  if (listenUrl.includes('/sets/')) {
+    return volume > 0 ? `Full EP · vol ${volume}` : 'Full EP'
+  }
+  return volume > 0 ? `Listen · vol ${volume}` : 'Listen'
 }
 
-function EpVolumeTabLabel({ volume }: { volume: number }) {
+function EpVolumeTabLabel({ volume, listenUrl }: { volume: number; listenUrl: string }) {
+  if (listenUrl.includes('/sets/')) {
+    if (volume <= 0) {
+      return (
+        <>
+          <span className="song-detail-tab__label song-detail-tab__label--full">Full EP</span>
+          <span className="song-detail-tab__label song-detail-tab__label--short">EP</span>
+        </>
+      )
+    }
+    return (
+      <>
+        <span className="song-detail-tab__label song-detail-tab__label--full">
+          Full EP · vol {volume}
+        </span>
+        <span className="song-detail-tab__label song-detail-tab__label--short">Vol {volume}</span>
+      </>
+    )
+  }
   if (volume <= 0) {
     return (
       <>
-        <span className="song-detail-tab__label song-detail-tab__label--full">Full EP</span>
-        <span className="song-detail-tab__label song-detail-tab__label--short">EP</span>
+        <span className="song-detail-tab__label song-detail-tab__label--full">Listen</span>
+        <span className="song-detail-tab__label song-detail-tab__label--short">Listen</span>
       </>
     )
   }
   return (
     <>
       <span className="song-detail-tab__label song-detail-tab__label--full">
-        Full EP · vol {volume}
+        Listen · vol {volume}
       </span>
       <span className="song-detail-tab__label song-detail-tab__label--short">Vol {volume}</span>
     </>
@@ -562,13 +583,13 @@ function SongDetailLoaded({
   const listenEpVolumes = useMemo((): SongEpVolume[] => {
     const fromData = (detail.ep_volumes ?? []).filter((v) => {
       const url = v.ep_url.trim()
-      if (!url.includes('/sets/')) return false
+      if (!url) return false
       const norm = normSoundcloudUrl(url)
       return Boolean(norm && norm !== songbookUrlNorm)
     })
     if (fromData.length > 0) return fromData
     const epUrlNorm = normSoundcloudUrl(primaryEpUrl)
-    if (primaryEpUrl.includes('/sets/') && epUrlNorm && epUrlNorm !== songbookUrlNorm) {
+    if (primaryEpUrl.trim() && epUrlNorm && epUrlNorm !== songbookUrlNorm) {
       return [
         {
           ep_volume: detail.primary_ep_volume ?? 0,
@@ -746,9 +767,10 @@ function SongDetailLoaded({
     hasScCatalogListen && !defaultTrack && !fallbackScUrl && !(selectedUrl?.trim())
   /** Multi-track list or catalog-export listen — not “video replaces listen slot” UX (D-013). */
   const hasTopTracksListenUi = shouldShowTracksList || hasScCatalogListen
+  const hasInlineListenEmbed = showEpEmbed || hasScCatalogListen || (hasPlayableTrack && !shouldShowTracksList)
   const hasAudioContent =
     hasPlayableTrack || hasEpFallback || hasAnyTrackUrls || shouldShowTracksList || hasScCatalogListen
-  const showVideoInColumn = hasYoutubeVideos && !hasTopTracksListenUi
+  const showVideoInColumn = hasYoutubeVideos && !hasTopTracksListenUi && !hasInlineListenEmbed
   const showVideoBelow = hasYoutubeVideos && hasTopTracksListenUi
   const showAudioSection = hasAudioContent
   const showVideoSection = showVideoInColumn
@@ -1171,7 +1193,7 @@ function SongDetailLoaded({
                               className={`song-detail-tab${audioListenTab === tabId ? ' is-active' : ''}`}
                               onClick={() => setAudioListenTab(tabId)}
                             >
-                              <EpVolumeTabLabel volume={epVolume.ep_volume} />
+                              <EpVolumeTabLabel volume={epVolume.ep_volume} listenUrl={epVolume.ep_url} />
                             </button>
                           )
                         })}
@@ -1196,8 +1218,11 @@ function SongDetailLoaded({
                         {!hasListenTabNav ? (
                           <h2 id="song-ep-heading" className="catalog-section-title">
                             {activeListenEpVolume
-                              ? epVolumeTabLabel(activeListenEpVolume.ep_volume)
-                              : 'Full EP'}
+                              ? epVolumeTabLabel(
+                                  activeListenEpVolume.ep_volume,
+                                  activeListenEpVolume.ep_url,
+                                )
+                              : 'Listen'}
                           </h2>
                         ) : null}
                         <SoundCloudPassthroughEmbed
@@ -1208,8 +1233,12 @@ function SongDetailLoaded({
                               ? `SoundCloud: ${activeEpTitle}`
                               : `SoundCloud EP · ${detail.lyrics_title}`
                           }
-                          mode="list"
-                          height={SC_EMBED_HEIGHT_SET_PLAYLIST}
+                          mode={activeEpUrl.includes('/sets/') ? 'list' : 'visual'}
+                          height={
+                            activeEpUrl.includes('/sets/')
+                              ? SC_EMBED_HEIGHT_SET_PLAYLIST
+                              : SC_EMBED_HEIGHT_TRACK_LIST
+                          }
                           loading={hasListenTabNav ? 'lazy' : 'eager'}
                         />
                         {activeEpListenMeta || activeEpTitle ? (
