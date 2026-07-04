@@ -1148,6 +1148,20 @@ def merge_full_v4_listen_volumes(
                 best_lid = lid
         return best_lid if best_score >= 85 else ""
 
+    def set_norms_for_lid(lid: str) -> set[str]:
+        norms: set[str] = set()
+        for vol in merged.get(lid, []):
+            url = str(vol.get("ep_url") or "")
+            if "/sets/" not in url:
+                continue
+            nk = _norm_soundcloud_url(url)
+            if nk:
+                norms.add(nk)
+        return norms
+
+    def is_compilation_ep_set(ep_set_norm: str) -> bool:
+        return len(lids_by_ep_set.get(ep_set_norm, [])) > 1
+
     for row in full_v4_rows:
         sc_url = str(row.get("sc_url") or "").strip()
         if not sc_url or "/sets/" in sc_url:
@@ -1159,6 +1173,10 @@ def merge_full_v4_listen_volumes(
             continue
 
         ep_set = _norm_soundcloud_url(str(row.get("ep_url") or ""))
+        if ep_set and ep_set in set_norms_for_lid(lid) and not is_compilation_ep_set(ep_set):
+            # Single-song EP: the /sets/ row already covers member tracks + top-tracks UI.
+            continue
+
         track_num = parse_int(row.get("ep_track_number"))
         if ep_set and track_num > 0:
             volume = track_num
@@ -1207,8 +1225,15 @@ def merge_full_v4_listen_volumes(
                 merged[lid],
                 key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")),
             )
-        elif len(singles) >= 2 and sets:
+        elif len(singles) >= 2 and sets and any(
+            is_compilation_ep_set(_norm_soundcloud_url(str(s.get("ep_url") or ""))) for s in sets
+        ):
             merged[lid] = sorted(singles, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")))
+        elif sets and singles and not any(
+            is_compilation_ep_set(_norm_soundcloud_url(str(s.get("ep_url") or ""))) for s in sets
+        ):
+            # Stray member singles on a single-song EP — keep the set row only.
+            merged[lid] = sorted(sets, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")))
         else:
             merged[lid] = sorted(volumes, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")))
 
