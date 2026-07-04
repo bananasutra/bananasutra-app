@@ -1118,5 +1118,61 @@
     "secondary_sutras": "GROWsutra",
     "core_topic": "BEAUTY",
     "quote_id": "Q-155"
+  },
+  {
+    "quote": "Écrire, c'est aussi ne pas parler. C'est se taire. C'est hurler sans bruit.",
+    "muse": "Marguerite Duras",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-156"
+  },
+  {
+    "quote": "L'alcool ne console pas. Il remplace le manque de Dieu.",
+    "muse": "Marguerite Duras",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "SHOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-157"
+  },
+  {
+    "quote": "Europe has memories, America has t-shirts.",
+    "muse": "Jean-Luc Godard",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "BLOWsutra",
+    "core_topic": "FOOLERY",
+    "quote_id": "Q-158"
+  },
+  {
+    "quote": "I don't believe in God, and I'm not an atheist.",
+    "muse": "Albert Camus",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "RELIGION",
+    "quote_id": "Q-159"
+  },
+  {
+    "quote": "And those who were seen dancing were thought to be insane by those who could not hear the music.",
+    "muse": "Friedrich Nietzsche",
+    "primary_sutra": "SHOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "",
+    "quote_id": "Q-160"
+  },
+  {
+    "quote": "It is only with the heart that one can see rightly; what is essential is invisible to the eye.",
+    "muse": "Antoine de Saint-Exupéry",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-161"
+  },
+  {
+    "quote": "Do not fear to be eccentric in opinion, for every opinion now accepted was once eccentric.",
+    "muse": "Bertrand Russell",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-163"
   }
 ]

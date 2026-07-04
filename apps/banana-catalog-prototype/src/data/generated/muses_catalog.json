@@ -220,6 +220,26 @@
     "song_count": 0
   },
   {
+    "muse": "Björk",
+    "first_name": "Björk",
+    "last_name": "",
+    "muse_id": "M-192",
+    "gender_pronoun": "She",
+    "type_category": "Musician",
+    "country": "IS",
+    "era": "Contemporary",
+    "birth_year": "1965",
+    "death_year": "",
+    "famous_works": "So Broken",
+    "core_sutra": "GLOWsutra",
+    "secondary_sutras": "",
+    "themes": "",
+    "notes": "",
+    "quote_excerpt": "",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Bj%C3%B6rk",
+    "song_count": 1
+  },
+  {
     "muse": "William Blake",
     "first_name": "William",
     "last_name": "Blake",
@@ -820,6 +840,26 @@
     "song_count": 0
   },
   {
+    "muse": "Simone De Beauvoir",
+    "first_name": "Simone",
+    "last_name": "De Beauvoir",
+    "muse_id": "M-191",
+    "gender_pronoun": "She",
+    "type_category": "Author,Philosopher,Feminist Theorist",
+    "country": "FR",
+    "era": "Mid 20th C",
+    "birth_year": "1908",
+    "death_year": "1986",
+    "famous_works": "The Second Sex (1949)",
+    "core_sutra": "",
+    "secondary_sutras": "",
+    "themes": "",
+    "notes": "",
+    "quote_excerpt": "",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Simone_de_Beauvoir",
+    "song_count": 0
+  },
+  {
     "muse": "Guy de Maupassant",
     "first_name": "Guy",
     "last_name": "de Maupassant",
@@ -875,7 +915,7 @@
     "secondary_sutras": "GLOWsutra,BLOWsutra",
     "themes": "philosophy,poetry/language,love/kindness,spirituality/agnosticism",
     "notes": "",
-    "quote_excerpt": "",
+    "quote_excerpt": "It is only with the heart that one can see rightly; what is essential is invisible to the eye.,\"To be a man is, precisely, to be responsible.\"",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Antoine_de_Saint-Exup%C3%A9ry",
     "song_count": 0
   },
@@ -1338,6 +1378,26 @@
     "quote_excerpt": "\"America, when will you be angelic? When will you take off your clothes?\"",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Allen_Ginsberg",
     "song_count": 5
+  },
+  {
+    "muse": "Jean-Luc Godard",
+    "first_name": "Jean-Luc",
+    "last_name": "Godard",
+    "muse_id": "M-190",
+    "gender_pronoun": "He",
+    "type_category": "Screenwriter,Visionary,Critic",
+    "country": "FR",
+    "era": "Late 20th C",
+    "birth_year": "1930",
+    "death_year": "2022",
+    "famous_works": "Breathless, Contempt, Vivre sa vie",
+    "core_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "themes": "",
+    "notes": "",
+    "quote_excerpt": "\"Europe has memories, America has t-shirts.\"",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Jean-Luc_Godard",
+    "song_count": 0
   },
   {
     "muse": "Jane Goodall",
@@ -2435,7 +2495,7 @@
     "secondary_sutras": "",
     "themes": "philosophy,truth-telling,creativity,resistance,existentialism",
     "notes": "Inspired the 'Nietzsche's Gift (Muddy Waters)' song cycles.",
-    "quote_excerpt": "He who has a why to live can bear almost any how.,\"In heaven, all the interesting people are missing.\",They muddy the waters to make it seem deep.",
+    "quote_excerpt": "He who has a why to live can bear almost any how.,\"In heaven, all the interesting people are missing.\",They muddy the waters to make it seem deep.,And those who were seen...",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Friedrich_Nietzsche",
     "song_count": 1
   },
@@ -2955,7 +3015,7 @@
     "secondary_sutras": "GROWsutra",
     "themes": "philosophy,truth-telling,love/kindness,spirituality/agnosticism,humor/satire",
     "notes": "My wise dead daddy. He gave me the two simplest and most radical instructions: get the facts right, keep love in sight. 'Two Things,...",
-    "quote_excerpt": "The trouble with the world is that the stupid are cocksure and the intelligent are full of doubt.,To be without some of the things you want is an indispensable part of happiness.",
+    "quote_excerpt": "The trouble with the world is that the stupid are cocksure and the intelligent are full of doubt.,To be without some of the things you want is an indispensable part of...",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Bertrand_Russell",
     "song_count": 11
   },

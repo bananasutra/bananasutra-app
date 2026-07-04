@@ -122,6 +122,13 @@
   display: block;
 }
 
+/* R73 CoverImage shimmer wrapper — `.cover-image--fill` sets position:relative and hid the footer overlay (R81 #163, #165). */
+.song-thumb-card > .cover-image.song-thumb-card__cover {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
 .song-thumb-card__cover--fallback {
   display: grid;
   place-items: center;
@@ -140,6 +147,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 1;
   padding: 1.35rem 0.55rem 0.5rem;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.35) 55%, transparent 100%);
   display: flex;
