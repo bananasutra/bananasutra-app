@@ -1,10 +1,10 @@
 {
   "snapshot_date": "2026-07-04",
-  "songs": 399,
-  "details": 399,
-  "featured_with_in_app_playback": 199,
-  "featured_with_sc_catalog_listen": 27,
-  "featured_lyrics_only": 200,
+  "songs": 400,
+  "details": 400,
+  "featured_with_in_app_playback": 195,
+  "featured_with_sc_catalog_listen": 22,
+  "featured_lyrics_only": 205,
   "facet_keys": [
     "sutra",
     "light_shadow",
@@ -31,7 +31,7 @@
   "muses_catalog": 186,
   "quotes_wall": 147,
   "track_catalog_rows": 725,
-  "related_song_links_written": 2451,
+  "related_song_links_written": 2455,
   "edition_rows_missing_links_count": 1,
   "edition_rows_missing_links": [
     {
@@ -50,15 +50,15 @@
   "sc_cover_art_overrides_lyrics_ids": 2,
   "sc_cover_art_overrides_ep_urls": 1,
   "sc_catalog_automatch_review_csv": "apps/banana-catalog-prototype/src/data/generated/sc_catalog_listen_automatch_review.csv",
-  "sc_catalog_automatch_rows": 27,
+  "sc_catalog_automatch_rows": 22,
   "sc_catalog_automatch_source_counts": {
-    "export_title": 5,
-    "full_v4": 22
+    "export_title": 7,
+    "full_v4": 15
   },
   "inputs": {
     "lyrics": {
       "path": "AIRTABLE/snapshots/2026-07-04/clean/lyrics-2026-07-04.csv",
-      "sha256": "484dd126b5ddcf580aa1d08c773d9b314cb840edfb778e05d494364e0f824900",
+      "sha256": "68890d9016ba4b58c3f56a872696b1c939a4ae2a117168a6d554030364956be0",
       "rows": 407
     },
     "sc_tracks": {

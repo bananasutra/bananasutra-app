@@ -1,5 +1,40 @@
 [
   {
+    "lyrics_id": "L-429",
+    "lyrics_title": "La Vie Sera Belle",
+    "url_slug": "la-vie-sera-belle",
+    "summary_short": "Paris, 1940, in the dark where no light fell… Five schoolboys knew freedom begins with “No.” C'est la vie. True story.",
+    "lyrics_extract": "One final breath, one final line, / No sound of fear left to define.",
+    "sutra": "BLOWsutra",
+    "topic": "PEACE",
+    "intention": "seeHIStory",
+    "light_shadow": "LIGHT",
+    "lang": "EN",
+    "written_year": "2026",
+    "published_at": "2026-07-04T00:00:00",
+    "cover_image_url": "",
+    "track_genres": [],
+    "track_secondary_genres": [],
+    "track_instruments": [],
+    "track_moods": [],
+    "track_tempo_feels": [],
+    "discovery_top_track_genres": "",
+    "track_count_published": 0,
+    "aggregate_play_count": 0,
+    "aggregate_like_count": 0,
+    "aggregate_engagement_rate": 0.0,
+    "peak_play_count": 0,
+    "peak_like_count": 0,
+    "primary_ep_url": "",
+    "has_in_app_playback": false,
+    "has_sc_catalog_listen": false,
+    "has_youtube_video": false,
+    "has_youtube_embed": false,
+    "songbook": "Speak: REVOLT (now)",
+    "muse": "",
+    "song_muse_quote": ""
+  },
+  {
     "lyrics_id": "L-424",
     "lyrics_title": "I Wanna Know",
     "url_slug": "i-wanna-know",
@@ -239,7 +274,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-06-20T12:17:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-L6YErpavAldzq4cD-HRzVlg-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-5TQSmV5yKqLtxWvG-YoTiqQ-t500x500.png",
     "track_genres": [
       "BLUES",
       "LOFI"
@@ -1195,6 +1230,7 @@
       "FOLK",
       "GIPSY",
       "INDIE",
+      "JAZZ",
       "MOTORIK",
       "RAGGA",
       "TECHNO"
@@ -1218,10 +1254,10 @@
       "UPBEAT"
     ],
     "discovery_top_track_genres": "BURLESQUE, DUB",
-    "track_count_published": 11,
-    "aggregate_play_count": 20498,
-    "aggregate_like_count": 222,
-    "aggregate_engagement_rate": 1.083032490974729,
+    "track_count_published": 12,
+    "aggregate_play_count": 23610,
+    "aggregate_like_count": 259,
+    "aggregate_engagement_rate": 1.0969927996611606,
     "peak_play_count": 3349,
     "peak_like_count": 44,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/zero-sum-growsutra-epx22",
@@ -1665,20 +1701,17 @@
     "cover_image_url": "https://i1.sndcdn.com/artworks-X8yzz8V1uH0GpZZw-fED3yQ-t500x500.png",
     "track_genres": [
       "DUB",
-      "JAZZ",
-      "LOFI"
+      "JAZZ"
     ],
     "track_secondary_genres": [
       "BLUES",
       "FLAMENCO",
       "FOLK",
       "INDIE",
-      "JAZZ",
       "TANGO"
     ],
     "track_instruments": [
       "BANJO",
-      "BASS",
       "GUITAR"
     ],
     "track_moods": [
@@ -1692,10 +1725,10 @@
       "MIDBEAT"
     ],
     "discovery_top_track_genres": "DUB, BLUES",
-    "track_count_published": 6,
-    "aggregate_play_count": 13159,
-    "aggregate_like_count": 142,
-    "aggregate_engagement_rate": 1.0791093548141955,
+    "track_count_published": 5,
+    "aggregate_play_count": 10047,
+    "aggregate_like_count": 105,
+    "aggregate_engagement_rate": 1.0450880859958196,
     "peak_play_count": 3430,
     "peak_like_count": 40,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/hello-oh-no-growsutra-psychedelic-epx16",
@@ -1766,7 +1799,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-02-23T04:45:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-szfTJZOpu6ZHpfwu-WpjZbA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-qfOVhmHG1WJJqjc9-k1w2VA-t500x500.png",
     "track_genres": [
       "BLUES",
       "BURLESQUE",
@@ -2026,7 +2059,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-02-11T23:37:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
     "track_genres": [
       "BURLESQUE",
       "FOLK",
@@ -2252,7 +2285,6 @@
     "published_at": "2026-01-25T23:52:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-1InxeLQ1c3LnQwmz-u75GhQ-t500x500.png",
     "track_genres": [
-      "BLUES",
       "BURLESQUE",
       "DUB",
       "FOLK",
@@ -2260,11 +2292,9 @@
     ],
     "track_secondary_genres": [
       "BLUES",
-      "DUB",
       "FOLK",
       "HIP HOP",
       "INDIE",
-      "MANTRA",
       "RAGGA",
       "ROCK"
     ],
@@ -2280,7 +2310,6 @@
       "KINDLY",
       "NERDY",
       "PUNKY",
-      "RAINY",
       "TRIPPY"
     ],
     "track_tempo_feels": [
@@ -2289,10 +2318,10 @@
       "UPBEAT"
     ],
     "discovery_top_track_genres": "DUB, RAGGA",
-    "track_count_published": 10,
-    "aggregate_play_count": 12508,
-    "aggregate_like_count": 90,
-    "aggregate_engagement_rate": 0.7195394947233771,
+    "track_count_published": 9,
+    "aggregate_play_count": 12261,
+    "aggregate_like_count": 85,
+    "aggregate_engagement_rate": 0.6932550362939401,
     "peak_play_count": 2881,
     "peak_like_count": 26,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/if-we-had-butt-the-truth-vol-2-epx22-blowsutra-censored-epstein-etcetera-soundtrack",
@@ -2317,7 +2346,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-01-24T05:17:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-o3ecSGQbfuMzeugT-gCBEIQ-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-OuzjTqyXc8wz8Uv9-0cXu0Q-t500x500.png",
     "track_genres": [
       "BLUES",
       "DUB",
@@ -2445,51 +2474,6 @@
     "song_muse_quote": "All jazz songs à la Broadway musical, written and composed by the Gershwin brothers between the late 1920s and early 1930s—i.e. so long ago, lyrics are now in the Public Domain #timeless #enjoy \n\n\"I Got Rhythm\" is a piece composed by George Gershwin with lyrics by Ira Gershwin and published in 1930, which became a jazz standard.\n\n\"By Strauss\" is a 1936 song composed by George Gershwin, with lyrics by Ira Gershwin. It pays homage to the music of Johann Strauss, Sr. and Johann Strauss, Jr.\n\n\"Nice Work If You Can Get It\" is a popular song and jazz standard composed by George Gershwin with lyrics by Ira Gershwin.\n\n\"Embraceable You\" is a jazz standard song with music by George Gershwin and lyrics by Ira Gershwin. \n\n\"Tra-la-la\" is a song composed by George and Ira Gershwin for the 1922 Broadway show For Goodness Sake, produced by frequent Gershwin collaborator Alex A. Aarons."
   },
   {
-    "lyrics_id": "L-207",
-    "lyrics_title": "Revolution's Lit",
-    "url_slug": "revolution-s-lit",
-    "summary_short": "Just a girl, a guitar, and the audacity to call it a revolution.",
-    "lyrics_extract": "Let’s bloom brighter than doom, / Shine wilder than gloom.",
-    "sutra": "BLOWsutra",
-    "topic": "INJUSTICE",
-    "intention": "beBRAVE",
-    "light_shadow": "SHADOW",
-    "lang": "EN",
-    "written_year": "2025",
-    "published_at": "2026-01-16T04:36:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-UsXPQkqEgN2gCzJ6-0lSKCQ-t500x500.png",
-    "track_genres": [
-      "FOLK"
-    ],
-    "track_secondary_genres": [
-      "BLUES"
-    ],
-    "track_instruments": [
-      "BANJO"
-    ],
-    "track_moods": [
-      "PUNKY"
-    ],
-    "track_tempo_feels": [
-      "UPBEAT"
-    ],
-    "discovery_top_track_genres": "FOLK, BLUES",
-    "track_count_published": 1,
-    "aggregate_play_count": 346,
-    "aggregate_like_count": 4,
-    "aggregate_engagement_rate": 1.1560693641618496,
-    "peak_play_count": 346,
-    "peak_like_count": 4,
-    "primary_ep_url": "",
-    "has_in_app_playback": true,
-    "has_sc_catalog_listen": true,
-    "has_youtube_video": true,
-    "has_youtube_embed": true,
-    "songbook": "Speak: REVOLT (now)",
-    "muse": "Anonymous Anonymous",
-    "song_muse_quote": ""
-  },
-  {
     "lyrics_id": "L-36",
     "lyrics_title": "Bloom Past Doom",
     "url_slug": "bloom-past-doom",
@@ -2504,127 +2488,47 @@
     "published_at": "2026-01-16T04:36:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-UsXPQkqEgN2gCzJ6-0lSKCQ-t500x500.png",
     "track_genres": [
+      "BURLESQUE",
       "DUB",
+      "FOLK",
+      "INDIE",
       "JAZZ"
     ],
     "track_secondary_genres": [
+      "BLUES",
       "BURLESQUE",
-      "LOFI"
+      "JAZZ",
+      "LOFI",
+      "TANGO"
     ],
     "track_instruments": [
+      "BANJO",
       "BASS",
       "CELLO"
     ],
     "track_moods": [
       "NERDY",
+      "PUNKY",
       "TRIPPY"
     ],
     "track_tempo_feels": [
-      "LOWBEAT"
+      "LOWBEAT",
+      "MIDBEAT",
+      "UPBEAT"
     ],
     "discovery_top_track_genres": "DUB, LOFI",
-    "track_count_published": 2,
-    "aggregate_play_count": 2622,
-    "aggregate_like_count": 25,
-    "aggregate_engagement_rate": 0.9534706331045004,
-    "peak_play_count": 1997,
-    "peak_like_count": 14,
+    "track_count_published": 5,
+    "aggregate_play_count": 8322,
+    "aggregate_like_count": 97,
+    "aggregate_engagement_rate": 1.1655851958663783,
+    "peak_play_count": 3010,
+    "peak_like_count": 38,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/bloom-past-doom-vol-2-2-songs-epx7-blowsutra-revolution-ring-series-fusion-jazz",
     "has_in_app_playback": true,
     "has_sc_catalog_listen": false,
     "has_youtube_video": true,
     "has_youtube_embed": true,
     "songbook": "Speak: REVOLT (now)",
-    "muse": "Anonymous Anonymous",
-    "song_muse_quote": ""
-  },
-  {
-    "lyrics_id": "L-396",
-    "lyrics_title": "This Ain't Fiction (Bloom Past Doom)",
-    "url_slug": "this-aint-fiction-bloom-past-doom",
-    "summary_short": "This ain't fiction. It's dystopian truth broadcast in booths. Let's read the constitution and imagine the revolution.",
-    "lyrics_extract": "Let’s read the constitution / Imagine the revolution.",
-    "sutra": "BLOWsutra",
-    "topic": "POOLITICS",
-    "intention": "beWOKE",
-    "light_shadow": "SHADOW",
-    "lang": "EN",
-    "written_year": "2025",
-    "published_at": "2026-01-16T04:36:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-UsXPQkqEgN2gCzJ6-0lSKCQ-t500x500.png",
-    "track_genres": [
-      "INDIE"
-    ],
-    "track_secondary_genres": [
-      "JAZZ"
-    ],
-    "track_instruments": [
-      "CELLO"
-    ],
-    "track_moods": [
-      "NERDY"
-    ],
-    "track_tempo_feels": [
-      "LOWBEAT"
-    ],
-    "discovery_top_track_genres": "INDIE, JAZZ",
-    "track_count_published": 1,
-    "aggregate_play_count": 2344,
-    "aggregate_like_count": 38,
-    "aggregate_engagement_rate": 1.621160409556314,
-    "peak_play_count": 2344,
-    "peak_like_count": 38,
-    "primary_ep_url": "",
-    "has_in_app_playback": true,
-    "has_sc_catalog_listen": true,
-    "has_youtube_video": false,
-    "has_youtube_embed": false,
-    "songbook": "Speak: REVOLT (now)",
-    "muse": "Anonymous Anonymous",
-    "song_muse_quote": ""
-  },
-  {
-    "lyrics_id": "L-406",
-    "lyrics_title": "Apes Gone Wrong (Bloom Past Doom)",
-    "url_slug": "apes-gone-wrong",
-    "summary_short": "The apes went wrong. No crown, no law — just clowns with claws, and we're done being polite about it.",
-    "lyrics_extract": "I can't see no valid cause, / For clowns to rule with fake-ass laws.",
-    "sutra": "BLOWsutra",
-    "topic": "INJUSTICE",
-    "intention": "beBRAVE",
-    "light_shadow": "SHADOW",
-    "lang": "EN",
-    "written_year": "2025",
-    "published_at": "2026-01-15T07:26:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-NfNdCTLZ9C9HupPU-ETvEcw-t500x500.png",
-    "track_genres": [
-      "BURLESQUE"
-    ],
-    "track_secondary_genres": [
-      "TANGO"
-    ],
-    "track_instruments": [
-      "CELLO"
-    ],
-    "track_moods": [
-      "PUNKY"
-    ],
-    "track_tempo_feels": [
-      "MIDBEAT"
-    ],
-    "discovery_top_track_genres": "BURLESQUE, TANGO",
-    "track_count_published": 1,
-    "aggregate_play_count": 3010,
-    "aggregate_like_count": 30,
-    "aggregate_engagement_rate": 0.9966777408637874,
-    "peak_play_count": 3010,
-    "peak_like_count": 30,
-    "primary_ep_url": "",
-    "has_in_app_playback": true,
-    "has_sc_catalog_listen": true,
-    "has_youtube_video": false,
-    "has_youtube_embed": false,
-    "songbook": "Speak: APES (gone wrong)",
     "muse": "Anonymous Anonymous",
     "song_muse_quote": ""
   },
@@ -2767,7 +2671,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-01-08T07:26:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-YZdPzrWX9SlHjJ6q-GKzInQ-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-ZOzjbG3qBNgMzOWS-9LnxjQ-t500x500.png",
     "track_genres": [
       "JAZZ",
       "LOFI"
@@ -3066,6 +2970,7 @@
     "track_secondary_genres": [
       "DUB",
       "FLAMENCO",
+      "FOLK",
       "GIPSY",
       "INDIE",
       "LOFI",
@@ -3084,11 +2989,11 @@
     "track_tempo_feels": [
       "LOWBEAT"
     ],
-    "discovery_top_track_genres": "DUB, INDIE, FLAMENCO",
-    "track_count_published": 5,
-    "aggregate_play_count": 6332,
-    "aggregate_like_count": 56,
-    "aggregate_engagement_rate": 0.8843967150979154,
+    "discovery_top_track_genres": "BLUES, FOLK",
+    "track_count_published": 6,
+    "aggregate_play_count": 7490,
+    "aggregate_like_count": 67,
+    "aggregate_engagement_rate": 0.8945260347129506,
     "peak_play_count": 3138,
     "peak_like_count": 33,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/two-things-darling-epx11-knowsutra-bertrand-conscious-gipsy-lofi-blues-indie",
@@ -3098,60 +3003,6 @@
     "has_youtube_embed": true,
     "songbook": "Ask: BERTRAND (knows)",
     "muse": "Bertrand Russell",
-    "song_muse_quote": ""
-  },
-  {
-    "lyrics_id": "L-326",
-    "lyrics_title": "MASA (Make America Safe Again)",
-    "url_slug": "masa-make-america-safe-again",
-    "summary_short": "Make America Safe? Start with books, not boys in blue. Every dollar spent on school cuts down crime. That's it. That's the whole plan.",
-    "lyrics_extract": "Give the kids a safer plan, / Not just guns, but books in hand.",
-    "sutra": "QUACKsutra",
-    "topic": "INJUSTICE",
-    "intention": "beWOKE",
-    "light_shadow": "LIGHT",
-    "lang": "EN",
-    "written_year": "2025",
-    "published_at": "2026-01-01T22:37:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-arUtRqgFTtrbCyLv-f6mbwA-t500x500.png",
-    "track_genres": [
-      "BLUES",
-      "DUB",
-      "FOLK"
-    ],
-    "track_secondary_genres": [
-      "BURLESQUE",
-      "FOLK",
-      "MANTRA"
-    ],
-    "track_instruments": [
-      "BANJO",
-      "HARMONICA"
-    ],
-    "track_moods": [
-      "CHEEKY",
-      "HOLY",
-      "KINDLY",
-      "TRIPPY"
-    ],
-    "track_tempo_feels": [
-      "LOWBEAT",
-      "MIDBEAT"
-    ],
-    "discovery_top_track_genres": "BLUES, FOLK",
-    "track_count_published": 5,
-    "aggregate_play_count": 5126,
-    "aggregate_like_count": 35,
-    "aggregate_engagement_rate": 0.6827936012485368,
-    "peak_play_count": 1504,
-    "peak_like_count": 11,
-    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/masa-make-america-safe-again-epx12-quacksutra-psychedelic-banjo",
-    "has_in_app_playback": true,
-    "has_sc_catalog_listen": false,
-    "has_youtube_video": true,
-    "has_youtube_embed": true,
-    "songbook": "Quack: MAxxxA Saga",
-    "muse": "Anonymous Anonymous",
     "song_muse_quote": ""
   },
   {
@@ -3217,7 +3068,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-12-26T06:19:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-q37xEnqpYSi9JjNM-xhFyxw-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-WZTqldC4Qw8BIhVK-eZYyAA-t500x500.png",
     "track_genres": [
       "BURLESQUE",
       "DUB",
@@ -3578,6 +3429,41 @@
     "primary_ep_url": "",
     "has_in_app_playback": false,
     "has_sc_catalog_listen": true,
+    "has_youtube_video": false,
+    "has_youtube_embed": false,
+    "songbook": "Speak: REVOLT (now)",
+    "muse": "Anonymous Anonymous",
+    "song_muse_quote": ""
+  },
+  {
+    "lyrics_id": "L-396",
+    "lyrics_title": "This Ain't Fiction (Bloom Past Doom)",
+    "url_slug": "this-aint-fiction-bloom-past-doom",
+    "summary_short": "This ain't fiction. It's dystopian truth broadcast in booths. Let's read the constitution and imagine the revolution.",
+    "lyrics_extract": "Let’s read the constitution / Imagine the revolution.",
+    "sutra": "BLOWsutra",
+    "topic": "POOLITICS",
+    "intention": "beWOKE",
+    "light_shadow": "SHADOW",
+    "lang": "EN",
+    "written_year": "2025",
+    "published_at": "2025-12-06T00:00:00",
+    "cover_image_url": "",
+    "track_genres": [],
+    "track_secondary_genres": [],
+    "track_instruments": [],
+    "track_moods": [],
+    "track_tempo_feels": [],
+    "discovery_top_track_genres": "",
+    "track_count_published": 0,
+    "aggregate_play_count": 0,
+    "aggregate_like_count": 0,
+    "aggregate_engagement_rate": 0.0,
+    "peak_play_count": 0,
+    "peak_like_count": 0,
+    "primary_ep_url": "",
+    "has_in_app_playback": false,
+    "has_sc_catalog_listen": false,
     "has_youtube_video": false,
     "has_youtube_embed": false,
     "songbook": "Speak: REVOLT (now)",
@@ -4066,7 +3952,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-11-22T01:27:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-VSIOpVwJmhA6bZS8-8e34OQ-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-3Pm91yJCMrEECvrj-EP3ozg-t500x500.png",
     "track_genres": [
       "DUB",
       "FOLK",
@@ -4121,15 +4007,19 @@
     "published_at": "2025-11-20T22:24:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-f5X1h7BNCNHQw6au-Qj1DyQ-t500x500.png",
     "track_genres": [
+      "BLUES",
       "BURLESQUE",
       "JAZZ"
     ],
     "track_secondary_genres": [
       "BLUES",
-      "JAZZ"
+      "DUB",
+      "JAZZ",
+      "MANTRA"
     ],
     "track_instruments": [
       "BANJO",
+      "BASS",
       "PIANO"
     ],
     "track_moods": [
@@ -4140,10 +4030,10 @@
       "LOWBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, BLUES",
-    "track_count_published": 4,
-    "aggregate_play_count": 4649,
-    "aggregate_like_count": 69,
-    "aggregate_engagement_rate": 1.484190148419015,
+    "track_count_published": 5,
+    "aggregate_play_count": 4896,
+    "aggregate_like_count": 74,
+    "aggregate_engagement_rate": 1.511437908496732,
     "peak_play_count": 1508,
     "peak_like_count": 24,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/what-its-about-vol-02-epx6-blowsutra-revolution-ring",
@@ -4426,6 +4316,60 @@
     "has_youtube_embed": false,
     "songbook": "Dare: DARE (to care)",
     "muse": "Aleksandr Solzhenitsyn",
+    "song_muse_quote": ""
+  },
+  {
+    "lyrics_id": "L-326",
+    "lyrics_title": "MASA (Make America Safe Again)",
+    "url_slug": "masa-make-america-safe-again",
+    "summary_short": "Make America Safe? Start with books, not boys in blue. Every dollar spent on school cuts down crime. That's it. That's the whole plan.",
+    "lyrics_extract": "Give the kids a safer plan, / Not just guns, but books in hand.",
+    "sutra": "QUACKsutra",
+    "topic": "INJUSTICE",
+    "intention": "beWOKE",
+    "light_shadow": "LIGHT",
+    "lang": "EN",
+    "written_year": "2025",
+    "published_at": "2025-11-12T10:23:00",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-zGBEcizIyyXPbSgu-fuTgSg-t500x500.png",
+    "track_genres": [
+      "BLUES",
+      "DUB",
+      "FOLK"
+    ],
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "FOLK",
+      "MANTRA"
+    ],
+    "track_instruments": [
+      "BANJO",
+      "HARMONICA"
+    ],
+    "track_moods": [
+      "CHEEKY",
+      "HOLY",
+      "KINDLY",
+      "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "MIDBEAT"
+    ],
+    "discovery_top_track_genres": "FOLK, BURLESQUE",
+    "track_count_published": 4,
+    "aggregate_play_count": 3968,
+    "aggregate_like_count": 24,
+    "aggregate_engagement_rate": 0.6048387096774194,
+    "peak_play_count": 1504,
+    "peak_like_count": 7,
+    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/masa-make-america-safe-again-epx12-quacksutra-psychedelic-banjo",
+    "has_in_app_playback": true,
+    "has_sc_catalog_listen": false,
+    "has_youtube_video": true,
+    "has_youtube_embed": true,
+    "songbook": "Quack: MAxxxA Saga",
+    "muse": "Anonymous Anonymous",
     "song_muse_quote": ""
   },
   {
@@ -4737,7 +4681,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-11-03T04:34:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-hzl8IkFwQtcZGHmA-kwFITw-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-WS97VCa9dwPRoGyv-ajY3dQ-t500x500.png",
     "track_genres": [
       "BLUES",
       "INDIE"
@@ -4787,7 +4731,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-11-02T04:28:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-NzTq5hA2IEawEnrG-I0hthg-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-64Uv99JMUudNjTVz-iC67zQ-t500x500.png",
     "track_genres": [
       "BLUES",
       "ROCK"
@@ -5445,6 +5389,41 @@
     "song_muse_quote": ""
   },
   {
+    "lyrics_id": "L-207",
+    "lyrics_title": "Revolution's Lit",
+    "url_slug": "revolution-s-lit",
+    "summary_short": "Just a girl, a guitar, and the audacity to call it a revolution.",
+    "lyrics_extract": "Let’s bloom brighter than doom, / Shine wilder than gloom.",
+    "sutra": "BLOWsutra",
+    "topic": "INJUSTICE",
+    "intention": "beBRAVE",
+    "light_shadow": "SHADOW",
+    "lang": "EN",
+    "written_year": "2025",
+    "published_at": "2025-10-12T00:00:00",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-UsXPQkqEgN2gCzJ6-0lSKCQ-t500x500.png",
+    "track_genres": [],
+    "track_secondary_genres": [],
+    "track_instruments": [],
+    "track_moods": [],
+    "track_tempo_feels": [],
+    "discovery_top_track_genres": "",
+    "track_count_published": 0,
+    "aggregate_play_count": 0,
+    "aggregate_like_count": 0,
+    "aggregate_engagement_rate": 0.0,
+    "peak_play_count": 0,
+    "peak_like_count": 0,
+    "primary_ep_url": "",
+    "has_in_app_playback": false,
+    "has_sc_catalog_listen": true,
+    "has_youtube_video": true,
+    "has_youtube_embed": true,
+    "songbook": "Speak: REVOLT (now)",
+    "muse": "Anonymous Anonymous",
+    "song_muse_quote": ""
+  },
+  {
     "lyrics_id": "L-3",
     "lyrics_title": "A Letter To My Friend (Never Again)",
     "url_slug": "a-letter-to-my-friend-never-again",
@@ -5735,6 +5714,41 @@
     "has_youtube_embed": true,
     "songbook": "Speak: REVOLT (now)",
     "muse": "",
+    "song_muse_quote": ""
+  },
+  {
+    "lyrics_id": "L-406",
+    "lyrics_title": "Apes Gone Wrong (Bloom Past Doom)",
+    "url_slug": "apes-gone-wrong",
+    "summary_short": "The apes went wrong. No crown, no law — just clowns with claws, and we're done being polite about it.",
+    "lyrics_extract": "I can't see no valid cause, / For clowns to rule with fake-ass laws.",
+    "sutra": "BLOWsutra",
+    "topic": "INJUSTICE",
+    "intention": "beBRAVE",
+    "light_shadow": "SHADOW",
+    "lang": "EN",
+    "written_year": "2025",
+    "published_at": "2025-10-03T00:00:00",
+    "cover_image_url": "",
+    "track_genres": [],
+    "track_secondary_genres": [],
+    "track_instruments": [],
+    "track_moods": [],
+    "track_tempo_feels": [],
+    "discovery_top_track_genres": "",
+    "track_count_published": 0,
+    "aggregate_play_count": 0,
+    "aggregate_like_count": 0,
+    "aggregate_engagement_rate": 0.0,
+    "peak_play_count": 0,
+    "peak_like_count": 0,
+    "primary_ep_url": "",
+    "has_in_app_playback": false,
+    "has_sc_catalog_listen": false,
+    "has_youtube_video": false,
+    "has_youtube_embed": false,
+    "songbook": "Speak: APES (gone wrong)",
+    "muse": "Anonymous Anonymous",
     "song_muse_quote": ""
   },
   {
@@ -6441,7 +6455,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-09-04T19:56:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-nMqZKsyaPrkeqrcw-6Z1nNw-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-LHMRQArJDO3UAyuX-tkyzjg-t500x500.png",
     "track_genres": [
       "BLUES",
       "LOFI"
@@ -6595,7 +6609,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-08-29T12:11:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-R1VSZuTOo6JhJtf2-Ej51OA-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-XirUpSPl2GiR23bD-IUcZyA-t500x500.png",
     "track_genres": [
       "DUB"
     ],
@@ -6962,41 +6976,6 @@
     "written_year": "2025",
     "published_at": "2025-08-15T01:39:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-kAEVcohylwIZch0q-ThHu4Q-t500x500.png",
-    "track_genres": [],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "track_tempo_feels": [],
-    "discovery_top_track_genres": "",
-    "track_count_published": 0,
-    "aggregate_play_count": 0,
-    "aggregate_like_count": 0,
-    "aggregate_engagement_rate": 0.0,
-    "peak_play_count": 0,
-    "peak_like_count": 0,
-    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/blessed-be-the-dogs-showsutra-epx9-post-punk-burlesque-rock",
-    "has_in_app_playback": false,
-    "has_sc_catalog_listen": false,
-    "has_youtube_video": true,
-    "has_youtube_embed": true,
-    "songbook": "Play: FANANA (party)",
-    "muse": "Anonymous Anonymous",
-    "song_muse_quote": ""
-  },
-  {
-    "lyrics_id": "L-33",
-    "lyrics_title": "Blessed Be The Dogs",
-    "url_slug": "blessed-be-the-dogs",
-    "summary_short": "With all due respects to cringy parrots... there's nothing like a puppy belly rub in the warm morning light.",
-    "lyrics_extract": "They give us patience, they show us trust, / They teach us to sniff before making a fuss.",
-    "sutra": "BOWsutra",
-    "topic": "BEAUTY",
-    "intention": "beGRATEFUL",
-    "light_shadow": "LIGHT",
-    "lang": "EN",
-    "written_year": "2025",
-    "published_at": "2025-08-15T01:39:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-kAEVcohylwIZch0q-ThHu4Q-t500x500.png",
     "track_genres": [
       "ROCK"
     ],
@@ -7021,14 +7000,14 @@
     "aggregate_engagement_rate": 1.6646848989298455,
     "peak_play_count": 531,
     "peak_like_count": 7,
-    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/best-teacher-award-in-love-death-indie-lofi-epx3-vol-1-bowsutra",
+    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/blessed-be-the-dogs-showsutra-epx9-post-punk-burlesque-rock",
     "has_in_app_playback": true,
     "has_sc_catalog_listen": false,
-    "has_youtube_video": false,
-    "has_youtube_embed": false,
-    "songbook": "Bow: (Thank) Dogs",
-    "muse": "Morissey Morissey",
-    "song_muse_quote": "A parody of \"I Know It's Over\" by The Smiths / Morrissey—reimagined as a soulful, cheeky, psychedelic ode to the wisdom of dogs."
+    "has_youtube_video": true,
+    "has_youtube_embed": true,
+    "songbook": "Play: FANANA (party)",
+    "muse": "Anonymous Anonymous",
+    "song_muse_quote": ""
   },
   {
     "lyrics_id": "L-382",
@@ -7327,7 +7306,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-08-01T08:24:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-VcrWGV2nXlm4wmot-F9BtcQ-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-8zXPkONAqcbxOwwP-p3Wifg-t500x500.png",
     "track_genres": [
       "FOLK",
       "ROCK"
@@ -8774,13 +8753,16 @@
     "cover_image_url": "https://i1.sndcdn.com/artworks-DQAHMhBcDTcoVFfl-BTKWAA-t500x500.png",
     "track_genres": [
       "DUB",
+      "INDIE",
       "JAZZ"
     ],
     "track_secondary_genres": [
+      "BURLESQUE",
       "FOLK",
       "INDIE"
     ],
     "track_instruments": [
+      "ACCORDION",
       "GUITAR"
     ],
     "track_moods": [
@@ -8791,10 +8773,10 @@
       "LOWBEAT"
     ],
     "discovery_top_track_genres": "JAZZ, INDIE",
-    "track_count_published": 2,
-    "aggregate_play_count": 1257,
-    "aggregate_like_count": 17,
-    "aggregate_engagement_rate": 1.352426412092283,
+    "track_count_published": 3,
+    "aggregate_play_count": 1557,
+    "aggregate_like_count": 19,
+    "aggregate_engagement_rate": 1.220295439948619,
     "peak_play_count": 940,
     "peak_like_count": 9,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/la-poesia-importa-epx7-vol01-bananasutra-en-espanol",
@@ -8818,7 +8800,7 @@
     "light_shadow": "LIGHT",
     "lang": "ES",
     "written_year": "2025",
-    "published_at": "2025-05-27T13:16:00",
+    "published_at": "2025-05-27T13:06:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-HYGREko4IUXdrDm0-LliGgA-t500x500.png",
     "track_genres": [
       "BURLESQUE",
@@ -8826,7 +8808,6 @@
       "INDIE"
     ],
     "track_secondary_genres": [
-      "BURLESQUE",
       "GIPSY",
       "INDIE",
       "JAZZ",
@@ -8848,10 +8829,10 @@
       "LOWBEAT"
     ],
     "discovery_top_track_genres": "INDIE, GIPSY",
-    "track_count_published": 6,
-    "aggregate_play_count": 4147,
-    "aggregate_like_count": 40,
-    "aggregate_engagement_rate": 0.9645526886906197,
+    "track_count_published": 5,
+    "aggregate_play_count": 3847,
+    "aggregate_like_count": 38,
+    "aggregate_engagement_rate": 0.9877826878086822,
     "peak_play_count": 1044,
     "peak_like_count": 15,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/creo-la-poesia-epx10-vol01-bananasutra-en-espanol",
@@ -9206,105 +9187,6 @@
     "song_muse_quote": ""
   },
   {
-    "lyrics_id": "L-349",
-    "lyrics_title": "FOTUS Circus: Step right up, My Dearest Souls",
-    "url_slug": "fotus-circus-step-right-up-my-dearest-souls",
-    "summary_short": "Step right up, My Dearest Souls Step right up, my dearest souls. The felon reigns. The blind applaud. The saints have been banned. Welcome to the show.",
-    "lyrics_extract": "Ooooh, step right up, don’t be shy, bro, / Truth is a wow show, hear the lie, yo...",
-    "sutra": "QUACKsutra",
-    "topic": "POOLITICS",
-    "intention": "beWOKE",
-    "light_shadow": "SHADOW",
-    "lang": "EN",
-    "written_year": "2025",
-    "published_at": "2025-05-21T02:12:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-hEoexhjMEJaTLs2Y-y53BjQ-t500x500.png",
-    "track_genres": [
-      "BURLESQUE",
-      "DUB"
-    ],
-    "track_secondary_genres": [
-      "BURLESQUE",
-      "FOLK"
-    ],
-    "track_instruments": [
-      "BASS",
-      "GUITAR"
-    ],
-    "track_moods": [
-      "TRIPPY"
-    ],
-    "track_tempo_feels": [
-      "LOWBEAT"
-    ],
-    "discovery_top_track_genres": "DUB, BURLESQUE",
-    "track_count_published": 2,
-    "aggregate_play_count": 1388,
-    "aggregate_like_count": 7,
-    "aggregate_engagement_rate": 0.5043227665706052,
-    "peak_play_count": 921,
-    "peak_like_count": 5,
-    "primary_ep_url": "",
-    "has_in_app_playback": true,
-    "has_sc_catalog_listen": true,
-    "has_youtube_video": false,
-    "has_youtube_embed": false,
-    "songbook": "Quack: FOTUS Circus",
-    "muse": "Allen Ginsberg",
-    "song_muse_quote": ""
-  },
-  {
-    "lyrics_id": "L-404",
-    "lyrics_title": "FOTUS Circus: Step Right Up, Murica Freaks",
-    "url_slug": "fotus-circus-step-right-up-murica-freaks",
-    "summary_short": "Step right up, Murica freaks. The carnival MC introduces the golden grin show where stolen dreams can't go bust.",
-    "lyrics_extract": "Kindness lost, the truth is sore,\n/ Step inside, the circus roars!",
-    "sutra": "QUACKsutra",
-    "topic": "POOLITICS",
-    "intention": "seeHIStory",
-    "light_shadow": "SHADOW",
-    "lang": "EN",
-    "written_year": "2024",
-    "published_at": "2025-05-21T02:12:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-hEoexhjMEJaTLs2Y-y53BjQ-t500x500.png",
-    "track_genres": [
-      "BURLESQUE",
-      "DUB"
-    ],
-    "track_secondary_genres": [
-      "BURLESQUE",
-      "CIRCUS"
-    ],
-    "track_instruments": [
-      "ACCORDION",
-      "BANJO",
-      "DRUM"
-    ],
-    "track_moods": [
-      "PUNKY",
-      "TRIPPY"
-    ],
-    "track_tempo_feels": [
-      "LOWBEAT",
-      "UPBEAT"
-    ],
-    "discovery_top_track_genres": "DUB, CIRCUS, BURLESQUE",
-    "track_count_published": 2,
-    "aggregate_play_count": 1768,
-    "aggregate_like_count": 13,
-    "aggregate_engagement_rate": 0.7352941176470588,
-    "peak_play_count": 936,
-    "peak_like_count": 10,
-    "primary_ep_url": "",
-    "has_in_app_playback": true,
-    "has_sc_catalog_listen": true,
-    "has_youtube_video": false,
-    "has_youtube_embed": false,
-    "songbook": "Quack: FOTUS Circus",
-    "muse": "",
-    "song_muse_quote": ""
-  },
-  {
     "lyrics_id": "L-81",
     "lyrics_title": "FOTUS Circus: Angels Eyes",
     "url_slug": "fotus-circus-angels-eyes",
@@ -9318,20 +9200,39 @@
     "written_year": "2025",
     "published_at": "2025-05-21T02:12:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-hEoexhjMEJaTLs2Y-y53BjQ-t500x500.png",
-    "track_genres": [],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "track_tempo_feels": [],
-    "discovery_top_track_genres": "",
-    "track_count_published": 0,
-    "aggregate_play_count": 0,
-    "aggregate_like_count": 0,
-    "aggregate_engagement_rate": 0.0,
-    "peak_play_count": 0,
-    "peak_like_count": 0,
+    "track_genres": [
+      "BURLESQUE",
+      "DUB"
+    ],
+    "track_secondary_genres": [
+      "BURLESQUE",
+      "CIRCUS",
+      "FOLK"
+    ],
+    "track_instruments": [
+      "ACCORDION",
+      "BANJO",
+      "BASS",
+      "DRUM",
+      "GUITAR"
+    ],
+    "track_moods": [
+      "PUNKY",
+      "TRIPPY"
+    ],
+    "track_tempo_feels": [
+      "LOWBEAT",
+      "UPBEAT"
+    ],
+    "discovery_top_track_genres": "DUB, CIRCUS, BURLESQUE",
+    "track_count_published": 4,
+    "aggregate_play_count": 3156,
+    "aggregate_like_count": 20,
+    "aggregate_engagement_rate": 0.6337135614702154,
+    "peak_play_count": 936,
+    "peak_like_count": 10,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/fotus-circus-vol4-epx9-burlesquesutra",
-    "has_in_app_playback": false,
+    "has_in_app_playback": true,
     "has_sc_catalog_listen": false,
     "has_youtube_video": true,
     "has_youtube_embed": true,
@@ -9352,7 +9253,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-05-21T02:07:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-44IaWyIDQ4KPbMKz-LMbmBg-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-TISJ7mgoFUnIyF3o-Nc2YDg-t500x500.png",
     "track_genres": [
       "BURLESQUE",
       "JAZZ"
@@ -9599,7 +9500,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-05-02T01:18:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-ycTSJc8nDWdlUg15-s4wo8Q-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-60rWtzt0Ur5yDsl8-lcLgjQ-t500x500.jpg",
     "track_genres": [
       "INDIE",
       "JAZZ"
@@ -9958,7 +9859,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-04-22T19:11:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-05lBUNaaLWFvjxoy-wgz7xg-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-MnjuWCHszuAJt8sg-DJvk4g-t500x500.png",
     "track_genres": [
       "DUB"
     ],
@@ -10006,7 +9907,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-04-22T03:58:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-l7sAfiVzurLf3gI7-fzJ0xQ-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-RDHQvbzOVwhs5g5O-y1W0yw-t500x500.png",
     "track_genres": [
       "FOLK",
       "JAZZ"
@@ -10851,6 +10752,41 @@
     "song_muse_quote": "\"Like A BIRD ON A WIRE\""
   },
   {
+    "lyrics_id": "L-33",
+    "lyrics_title": "Blessed Be The Dogs",
+    "url_slug": "blessed-be-the-dogs",
+    "summary_short": "With all due respects to cringy parrots... there's nothing like a puppy belly rub in the warm morning light.",
+    "lyrics_extract": "They give us patience, they show us trust, / They teach us to sniff before making a fuss.",
+    "sutra": "BOWsutra",
+    "topic": "BEAUTY",
+    "intention": "beGRATEFUL",
+    "light_shadow": "LIGHT",
+    "lang": "EN",
+    "written_year": "2025",
+    "published_at": "2025-04-09T11:15:00",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-naxN1Ew2hxBmEiva-OlsMuQ-t500x500.png",
+    "track_genres": [],
+    "track_secondary_genres": [],
+    "track_instruments": [],
+    "track_moods": [],
+    "track_tempo_feels": [],
+    "discovery_top_track_genres": "",
+    "track_count_published": 0,
+    "aggregate_play_count": 0,
+    "aggregate_like_count": 0,
+    "aggregate_engagement_rate": 0.0,
+    "peak_play_count": 0,
+    "peak_like_count": 0,
+    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/best-teacher-award-in-love-death-indie-lofi-epx3-vol-1-bowsutra",
+    "has_in_app_playback": false,
+    "has_sc_catalog_listen": false,
+    "has_youtube_video": false,
+    "has_youtube_embed": false,
+    "songbook": "Bow: (Thank) Dogs",
+    "muse": "Morissey Morissey",
+    "song_muse_quote": "A parody of \"I Know It's Over\" by The Smiths / Morrissey—reimagined as a soulful, cheeky, psychedelic ode to the wisdom of dogs."
+  },
+  {
     "lyrics_id": "L-58",
     "lyrics_title": "Dead Dogs Deets",
     "url_slug": "dead-dogs-deets",
@@ -11098,14 +11034,14 @@
     "song_muse_quote": "“Make your Own Bible. Select and collect all the words and sentences that in all your readings have been to you like the blast of a trumpet.”--Ralph Waldo Emerson"
   },
   {
-    "lyrics_id": "L-280",
-    "lyrics_title": "Waldo's Atheist Tango",
-    "url_slug": "waldo-s-atheist-tango",
-    "summary_short": "Waldo danced the atheist tango. Nobody found him. He was fine.",
-    "lyrics_extract": "Spin the atheist tango, twirl on the floor, / Who needs heaven? I’ve opened the door.",
+    "lyrics_id": "L-281",
+    "lyrics_title": "Waldo's Fascist Tango (Down We Go)",
+    "url_slug": "waldo-s-fascist-tango-down-we-go",
+    "summary_short": "The ballroom is lit. The leaders are waltzing. Down we go.",
+    "lyrics_extract": "Their smiles fade, their masks fall slow,  / As we dance this tango, down we go.",
     "sutra": "GROWsutra",
-    "topic": "RELIGION",
-    "intention": "beGODless",
+    "topic": "INJUSTICE",
+    "intention": "seeHIStory",
     "light_shadow": "SHADOW",
     "lang": "EN",
     "written_year": "2024",
@@ -11135,29 +11071,29 @@
     "aggregate_engagement_rate": 1.2618296529968454,
     "peak_play_count": 317,
     "peak_like_count": 4,
-    "primary_ep_url": "",
+    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/waldos-fascist-tango-epx3-vol-1-blowsutra-burlesque",
     "has_in_app_playback": true,
-    "has_sc_catalog_listen": true,
-    "has_youtube_video": false,
-    "has_youtube_embed": false,
+    "has_sc_catalog_listen": false,
+    "has_youtube_video": true,
+    "has_youtube_embed": true,
     "songbook": "Dare: GOD (etc.)",
     "muse": "Ralph Waldo Emerson",
     "song_muse_quote": "Religious Paradox"
   },
   {
-    "lyrics_id": "L-281",
-    "lyrics_title": "Waldo's Fascist Tango (Down We Go)",
-    "url_slug": "waldo-s-fascist-tango-down-we-go",
-    "summary_short": "The ballroom is lit. The leaders are waltzing. Down we go.",
-    "lyrics_extract": "Their smiles fade, their masks fall slow,  / As we dance this tango, down we go.",
+    "lyrics_id": "L-280",
+    "lyrics_title": "Waldo's Atheist Tango",
+    "url_slug": "waldo-s-atheist-tango",
+    "summary_short": "Waldo danced the atheist tango. Nobody found him. He was fine.",
+    "lyrics_extract": "Spin the atheist tango, twirl on the floor, / Who needs heaven? I’ve opened the door.",
     "sutra": "GROWsutra",
-    "topic": "INJUSTICE",
-    "intention": "seeHIStory",
+    "topic": "RELIGION",
+    "intention": "beGODless",
     "light_shadow": "SHADOW",
     "lang": "EN",
     "written_year": "2024",
-    "published_at": "2025-04-06T01:10:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-c3L1ZrA7GdTEUNpD-srMlmg-t500x500.png",
+    "published_at": "2025-04-06T00:00:00",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-zGmZBF6E6J0dpCF7-7ObUQQ-t500x500.png",
     "track_genres": [],
     "track_secondary_genres": [],
     "track_instruments": [],
@@ -11170,11 +11106,11 @@
     "aggregate_engagement_rate": 0.0,
     "peak_play_count": 0,
     "peak_like_count": 0,
-    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/waldos-fascist-tango-epx3-vol-1-blowsutra-burlesque",
+    "primary_ep_url": "",
     "has_in_app_playback": false,
-    "has_sc_catalog_listen": false,
-    "has_youtube_video": true,
-    "has_youtube_embed": true,
+    "has_sc_catalog_listen": true,
+    "has_youtube_video": false,
+    "has_youtube_embed": false,
     "songbook": "Dare: GOD (etc.)",
     "muse": "Ralph Waldo Emerson",
     "song_muse_quote": "Religious Paradox"
@@ -11276,7 +11212,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-04-02T05:42:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-EbCkPt5OXsQDVEWJ-qwqVYw-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-CzCzt9mTlZWzjTqp-8FLR4g-t500x500.png",
     "track_genres": [
       "DUB"
     ],
@@ -11391,36 +11327,31 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-03-30T10:30:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-vO0k3rhIFff0YYyx-2A2mWw-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-9mKo23b9tXJzWs5t-yMjheA-t500x500.png",
     "track_genres": [
-      "BURLESQUE",
       "FOLK"
     ],
     "track_secondary_genres": [
       "BLUES",
-      "INDIE",
-      "MANTRA"
+      "INDIE"
     ],
     "track_instruments": [
-      "ACCORDION",
       "BANJO",
-      "CELLO",
       "GUITAR"
     ],
     "track_moods": [
       "KINDLY",
-      "PUNKY",
-      "TRIPPY"
+      "PUNKY"
     ],
     "track_tempo_feels": [
       "LOWBEAT",
       "MIDBEAT"
     ],
     "discovery_top_track_genres": "FOLK, INDIE",
-    "track_count_published": 3,
-    "aggregate_play_count": 1564,
-    "aggregate_like_count": 17,
-    "aggregate_engagement_rate": 1.0869565217391304,
+    "track_count_published": 2,
+    "aggregate_play_count": 1249,
+    "aggregate_like_count": 15,
+    "aggregate_engagement_rate": 1.200960768614892,
     "peak_play_count": 1002,
     "peak_like_count": 8,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/maka-maka-epx7-maxa-series-vol-4",
@@ -11445,27 +11376,33 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-03-28T03:19:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-zExgoTtl1OfIO5ej-7iahlg-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-ohldLp0ezWMHuexZ-Z1TUbg-t500x500.png",
     "track_genres": [
-      "BLUES"
+      "BLUES",
+      "BURLESQUE"
     ],
     "track_secondary_genres": [
-      "FOLK"
+      "FOLK",
+      "MANTRA"
     ],
     "track_instruments": [
-      "BANJO"
+      "ACCORDION",
+      "BANJO",
+      "CELLO"
     ],
     "track_moods": [
-      "CHEEKY"
+      "CHEEKY",
+      "TRIPPY"
     ],
     "track_tempo_feels": [
+      "MIDBEAT",
       "UPBEAT"
     ],
     "discovery_top_track_genres": "BLUES, FOLK",
-    "track_count_published": 1,
-    "aggregate_play_count": 468,
-    "aggregate_like_count": 4,
-    "aggregate_engagement_rate": 0.8547008547008548,
+    "track_count_published": 2,
+    "aggregate_play_count": 783,
+    "aggregate_like_count": 6,
+    "aggregate_engagement_rate": 0.7662835249042145,
     "peak_play_count": 468,
     "peak_like_count": 4,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/mawa-mawa-epx2-maxa-series-vol-2",
@@ -11510,6 +11447,41 @@
     "has_youtube_embed": false,
     "songbook": "Play: FANANA (party)",
     "muse": "Anonymous Anonymous",
+    "song_muse_quote": ""
+  },
+  {
+    "lyrics_id": "L-349",
+    "lyrics_title": "FOTUS Circus: Step right up, My Dearest Souls",
+    "url_slug": "fotus-circus-step-right-up-my-dearest-souls",
+    "summary_short": "Step right up, My Dearest Souls Step right up, my dearest souls. The felon reigns. The blind applaud. The saints have been banned. Welcome to the show.",
+    "lyrics_extract": "Ooooh, step right up, don’t be shy, bro, / Truth is a wow show, hear the lie, yo...",
+    "sutra": "QUACKsutra",
+    "topic": "POOLITICS",
+    "intention": "beWOKE",
+    "light_shadow": "SHADOW",
+    "lang": "EN",
+    "written_year": "2025",
+    "published_at": "2025-03-09T00:00:00",
+    "cover_image_url": "",
+    "track_genres": [],
+    "track_secondary_genres": [],
+    "track_instruments": [],
+    "track_moods": [],
+    "track_tempo_feels": [],
+    "discovery_top_track_genres": "",
+    "track_count_published": 0,
+    "aggregate_play_count": 0,
+    "aggregate_like_count": 0,
+    "aggregate_engagement_rate": 0.0,
+    "peak_play_count": 0,
+    "peak_like_count": 0,
+    "primary_ep_url": "",
+    "has_in_app_playback": false,
+    "has_sc_catalog_listen": false,
+    "has_youtube_video": false,
+    "has_youtube_embed": false,
+    "songbook": "Quack: FOTUS Circus",
+    "muse": "Allen Ginsberg",
     "song_muse_quote": ""
   },
   {
@@ -12065,7 +12037,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2025-02-08T23:13:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-RAzwB4AnKcyRKbyO-wrGX6g-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-y6GNuYSUFwSvEtI4-VH6lnQ-t500x500.jpg",
     "track_genres": [
       "BLUES",
       "DUB"
@@ -12481,7 +12453,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2025-01-14T09:27:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-iz10EkL30RyLGlJE-veziSw-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-P78u62myC8kQzJcZ-qk1VzQ-t500x500.png",
     "track_genres": [
       "BLUES"
     ],
@@ -12937,7 +12909,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2024-12-21T00:00:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-1QKzz4xNQaa8y2oX-Ru7mWg-t500x500.jpg",
+    "cover_image_url": "https://i.ytimg.com/vi/UAO1I-UsCpM/maxresdefault.jpg",
     "track_genres": [],
     "track_secondary_genres": [],
     "track_instruments": [],
@@ -12952,7 +12924,7 @@
     "peak_like_count": 0,
     "primary_ep_url": "",
     "has_in_app_playback": false,
-    "has_sc_catalog_listen": true,
+    "has_sc_catalog_listen": false,
     "has_youtube_video": true,
     "has_youtube_embed": true,
     "songbook": "Play: (Be) The Fool",
@@ -14009,7 +13981,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2024-11-19T17:52:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-MUczyriJJynEtTlz-1FbfYA-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-VkDI20lCoNvB6yuu-kEiBRg-t500x500.jpg",
     "track_genres": [
       "FOLK"
     ],
@@ -15320,7 +15292,7 @@
     "lang": "EN",
     "written_year": "2024",
     "published_at": "2024-09-25T00:00:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-OWRInG4UzoJJhhFd-ho8qyg-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-G6KTvCCSI5Q3MN9y-Hvwwrw-t500x500.jpg",
     "track_genres": [],
     "track_secondary_genres": [],
     "track_instruments": [],
@@ -16810,6 +16782,41 @@
     "has_youtube_embed": false,
     "songbook": "Ask: PEACE (not war)",
     "muse": "Anonymous Anonymous",
+    "song_muse_quote": ""
+  },
+  {
+    "lyrics_id": "L-404",
+    "lyrics_title": "FOTUS Circus: Step Right Up, Murica Freaks",
+    "url_slug": "fotus-circus-step-right-up-murica-freaks",
+    "summary_short": "Step right up, Murica freaks. The carnival MC introduces the golden grin show where stolen dreams can't go bust.",
+    "lyrics_extract": "Kindness lost, the truth is sore,\n/ Step inside, the circus roars!",
+    "sutra": "QUACKsutra",
+    "topic": "POOLITICS",
+    "intention": "seeHIStory",
+    "light_shadow": "SHADOW",
+    "lang": "EN",
+    "written_year": "2024",
+    "published_at": "2024-06-03T00:00:00",
+    "cover_image_url": "",
+    "track_genres": [],
+    "track_secondary_genres": [],
+    "track_instruments": [],
+    "track_moods": [],
+    "track_tempo_feels": [],
+    "discovery_top_track_genres": "",
+    "track_count_published": 0,
+    "aggregate_play_count": 0,
+    "aggregate_like_count": 0,
+    "aggregate_engagement_rate": 0.0,
+    "peak_play_count": 0,
+    "peak_like_count": 0,
+    "primary_ep_url": "",
+    "has_in_app_playback": false,
+    "has_sc_catalog_listen": false,
+    "has_youtube_video": false,
+    "has_youtube_embed": false,
+    "songbook": "Quack: FOTUS Circus",
+    "muse": "",
     "song_muse_quote": ""
   },
   {

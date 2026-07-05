@@ -955,7 +955,7 @@
   },
   {
     "track_id": "2274175532",
-    "lyrics_id": "L-95",
+    "lyrics_id": "L-312",
     "track_title": "[07] Hello, Oh No • GROWsutra Psychedelic Gipsy Fusion LOFI",
     "lyrics_title": "Hello, Oh No",
     "sc_url": "https://soundcloud.com/bananasutra/07-hello-oh-no-growsutra-psychedelic-gipsy-fusion-lofi-7",
@@ -995,9 +995,9 @@
     "curation_rating": "3",
     "sutra": "GROWsutra",
     "light_shadow": "SHADOW",
-    "url_slug": "hello-oh-no",
+    "url_slug": "zero-sum-zero-sean",
     "list_cover_url": "https://i1.sndcdn.com/artworks-X8yzz8V1uH0GpZZw-fED3yQ-t500x500.png",
-    "song_published_at": "2026-02-26T22:16:00",
+    "song_published_at": "2026-03-19T06:42:00",
     "popularity_score": 4592
   },
   {
@@ -1319,7 +1319,7 @@
   },
   {
     "track_id": "2247770564",
-    "lyrics_id": "L-406",
+    "lyrics_id": "L-36",
     "track_title": "[03] Bloom Past Doom - BLOWsutra (Revolt Now) Cello Circus Chanson Cabaret BURLESQUE",
     "lyrics_title": "Apes Gone Wrong (Bloom Past Doom)",
     "sc_url": "https://soundcloud.com/bananasutra/03-bloom-past-doom-apes-gone-wrong-blowsutra-revolt-now-cello-circus-chanson-cabaret-burlesque-4",
@@ -1357,9 +1357,9 @@
     "curation_rating": "4",
     "sutra": "BLOWsutra",
     "light_shadow": "SHADOW",
-    "url_slug": "apes-gone-wrong",
+    "url_slug": "bloom-past-doom",
     "list_cover_url": "https://i1.sndcdn.com/artworks-NfNdCTLZ9C9HupPU-ETvEcw-t500x500.png",
-    "song_published_at": "2026-01-15T07:26:00",
+    "song_published_at": "2026-01-16T04:36:00",
     "popularity_score": 4210
   },
   {
@@ -1912,7 +1912,7 @@
   },
   {
     "track_id": "2248438649",
-    "lyrics_id": "L-396",
+    "lyrics_id": "L-36",
     "track_title": "Side B [05] Revolution's Lit (This Ain't Fiction) - BLOWsutra Revolt Now Jazzy INDIE",
     "lyrics_title": "This Ain't Fiction (Bloom Past Doom)",
     "sc_url": "https://soundcloud.com/bananasutra/side-b-05-revolutions-lit-this-aint-fiction-blowsutra-revolt-now-jazzy-indie-5",
@@ -1950,7 +1950,7 @@
     "curation_rating": "5",
     "sutra": "BLOWsutra",
     "light_shadow": "SHADOW",
-    "url_slug": "this-aint-fiction-bloom-past-doom",
+    "url_slug": "bloom-past-doom",
     "list_cover_url": "https://i1.sndcdn.com/artworks-UsXPQkqEgN2gCzJ6-0lSKCQ-t500x500.png",
     "song_published_at": "2026-01-16T04:36:00",
     "popularity_score": 3864
@@ -12833,7 +12833,7 @@
     "light_shadow": "LIGHT",
     "url_slug": "masa-make-america-safe-again",
     "list_cover_url": "https://i1.sndcdn.com/artworks-zGBEcizIyyXPbSgu-fuTgSg-t500x500.png",
-    "song_published_at": "2026-01-01T22:37:00",
+    "song_published_at": "2025-11-12T10:23:00",
     "popularity_score": 1784
   },
   {
@@ -14190,7 +14190,7 @@
     "light_shadow": "LIGHT",
     "url_slug": "creo-la-poesia",
     "list_cover_url": "https://i1.sndcdn.com/artworks-HYGREko4IUXdrDm0-LliGgA-t500x500.png",
-    "song_published_at": "2025-05-27T13:16:00",
+    "song_published_at": "2025-05-27T13:06:00",
     "popularity_score": 1644
   },
   {
@@ -14466,7 +14466,7 @@
   },
   {
     "track_id": "2240112746",
-    "lyrics_id": "L-326",
+    "lyrics_id": "L-274",
     "track_title": "[11] Two Things, Darling • KNOWsutra Bertrand (Knows) Psychedelic Destiny Banjo BLUES",
     "lyrics_title": "MASA (Make America Safe Again)",
     "sc_url": "https://soundcloud.com/bananasutra/11-two-things-darling-knowsutra-bertrand-knows-psychedelic-destiny-banjo-blues-11",
@@ -14504,7 +14504,7 @@
     "curation_rating": "5",
     "sutra": "QUACKsutra",
     "light_shadow": "LIGHT",
-    "url_slug": "masa-make-america-safe-again",
+    "url_slug": "two-things-darling",
     "list_cover_url": "https://i1.sndcdn.com/artworks-arUtRqgFTtrbCyLv-f6mbwA-t500x500.png",
     "song_published_at": "2026-01-01T22:37:00",
     "popularity_score": 1598
@@ -16418,7 +16418,7 @@
   },
   {
     "track_id": "2099429883",
-    "lyrics_id": "L-404",
+    "lyrics_id": "L-81",
     "track_title": "[08] FOTUS Circus VOL. 04 • Step Right Up, Murica Freaks (paper straws) • DUB QUACKsutra",
     "lyrics_title": "FOTUS Circus: Step Right Up, Murica Freaks",
     "sc_url": "https://soundcloud.com/bananasutra/08-fotus-circus-vol-04-step-right-up-murica-freaks-paper-staws-dub-quacksutra-8",
@@ -16458,7 +16458,7 @@
     "curation_rating": "4",
     "sutra": "QUACKsutra",
     "light_shadow": "SHADOW",
-    "url_slug": "fotus-circus-step-right-up-murica-freaks",
+    "url_slug": "fotus-circus-angels-eyes",
     "list_cover_url": "https://i1.sndcdn.com/artworks-hEoexhjMEJaTLs2Y-y53BjQ-t500x500.png",
     "song_published_at": "2025-05-21T02:12:00",
     "popularity_score": 1232
@@ -16508,7 +16508,7 @@
     "light_shadow": "LIGHT",
     "url_slug": "creo-la-poesia",
     "list_cover_url": "https://i1.sndcdn.com/artworks-HYGREko4IUXdrDm0-LliGgA-t500x500.png",
-    "song_published_at": "2025-05-27T13:16:00",
+    "song_published_at": "2025-05-27T13:06:00",
     "popularity_score": 1227
   },
   {
@@ -16827,7 +16827,7 @@
     "light_shadow": "LIGHT",
     "url_slug": "masa-make-america-safe-again",
     "list_cover_url": "https://i1.sndcdn.com/artworks-zGBEcizIyyXPbSgu-fuTgSg-t500x500.png",
-    "song_published_at": "2026-01-01T22:37:00",
+    "song_published_at": "2025-11-12T10:23:00",
     "popularity_score": 1159
   },
   {
@@ -16924,7 +16924,7 @@
   },
   {
     "track_id": "2099429877",
-    "lyrics_id": "L-349",
+    "lyrics_id": "L-81",
     "track_title": "[09] FOTUS Circus VOL. 04 • Step Right Up, My Dearest Souls • DUB QUACKsutra",
     "lyrics_title": "FOTUS Circus: Step right up, My Dearest Souls",
     "sc_url": "https://soundcloud.com/bananasutra/09-fotus-circus-vol-04-step-right-up-my-dearest-souls-dub-quacksutra-9",
@@ -16962,7 +16962,7 @@
     "curation_rating": "4",
     "sutra": "QUACKsutra",
     "light_shadow": "SHADOW",
-    "url_slug": "fotus-circus-step-right-up-my-dearest-souls",
+    "url_slug": "fotus-circus-angels-eyes",
     "list_cover_url": "https://i1.sndcdn.com/artworks-hEoexhjMEJaTLs2Y-y53BjQ-t500x500.png",
     "song_published_at": "2025-05-21T02:12:00",
     "popularity_score": 1121
@@ -17427,7 +17427,7 @@
   },
   {
     "track_id": "2099429868",
-    "lyrics_id": "L-404",
+    "lyrics_id": "L-81",
     "track_title": "[06] FOTUS Circus VOL. 04 • Step Right Up, for Plastic Straws • Banjo QUACKsutra",
     "lyrics_title": "FOTUS Circus: Step Right Up, Murica Freaks",
     "sc_url": "https://soundcloud.com/bananasutra/06-fotus-circus-vol-04-step-right-up-for-plastic-straws-banjo-quacksutra-6",
@@ -17466,7 +17466,7 @@
     "curation_rating": "3",
     "sutra": "QUACKsutra",
     "light_shadow": "SHADOW",
-    "url_slug": "fotus-circus-step-right-up-murica-freaks",
+    "url_slug": "fotus-circus-angels-eyes",
     "list_cover_url": "https://i1.sndcdn.com/artworks-hEoexhjMEJaTLs2Y-y53BjQ-t500x500.png",
     "song_published_at": "2025-05-21T02:12:00",
     "popularity_score": 1056
@@ -17605,7 +17605,7 @@
     "light_shadow": "LIGHT",
     "url_slug": "creo-la-poesia",
     "list_cover_url": "https://i1.sndcdn.com/artworks-HYGREko4IUXdrDm0-LliGgA-t500x500.png",
-    "song_published_at": "2025-05-27T13:16:00",
+    "song_published_at": "2025-05-27T13:06:00",
     "popularity_score": 1034
   },
   {
@@ -17785,7 +17785,7 @@
     "light_shadow": "LIGHT",
     "url_slug": "masa-make-america-safe-again",
     "list_cover_url": "https://i1.sndcdn.com/artworks-zGBEcizIyyXPbSgu-fuTgSg-t500x500.png",
-    "song_published_at": "2026-01-01T22:37:00",
+    "song_published_at": "2025-11-12T10:23:00",
     "popularity_score": 1014
   },
   {
@@ -18286,7 +18286,7 @@
     "light_shadow": "LIGHT",
     "url_slug": "masa-make-america-safe-again",
     "list_cover_url": "https://i1.sndcdn.com/artworks-zGBEcizIyyXPbSgu-fuTgSg-t500x500.png",
-    "song_published_at": "2026-01-01T22:37:00",
+    "song_published_at": "2025-11-12T10:23:00",
     "popularity_score": 971
   },
   {
@@ -19522,7 +19522,7 @@
     "light_shadow": "LIGHT",
     "url_slug": "creo-la-poesia",
     "list_cover_url": "https://i1.sndcdn.com/artworks-HYGREko4IUXdrDm0-LliGgA-t500x500.png",
-    "song_published_at": "2025-05-27T13:16:00",
+    "song_published_at": "2025-05-27T13:06:00",
     "popularity_score": 847
   },
   {
@@ -19798,7 +19798,7 @@
   },
   {
     "track_id": "2153509272",
-    "lyrics_id": "L-33",
+    "lyrics_id": "L-146",
     "track_title": "[01] Blessed Be The Dogs • SHOWsutra Post-Punk Burlesque ROCK",
     "lyrics_title": "Blessed Be The Dogs",
     "sc_url": "https://soundcloud.com/bananasutra/01-blessed-be-the-dogs-showsutra-post-punk-burlesque-rock-1",
@@ -19836,7 +19836,7 @@
     "curation_rating": "5",
     "sutra": "BOWsutra",
     "light_shadow": "LIGHT",
-    "url_slug": "blessed-be-the-dogs",
+    "url_slug": "blessed-be-the-dogs-showsutra-edition",
     "list_cover_url": "https://i1.sndcdn.com/artworks-kAEVcohylwIZch0q-ThHu4Q-t500x500.png",
     "song_published_at": "2025-08-15T01:39:00",
     "popularity_score": 811
@@ -23537,7 +23537,7 @@
     "light_shadow": "LIGHT",
     "url_slug": "creo-la-poesia",
     "list_cover_url": "https://i1.sndcdn.com/artworks-HYGREko4IUXdrDm0-LliGgA-t500x500.png",
-    "song_published_at": "2025-05-27T13:16:00",
+    "song_published_at": "2025-05-27T13:06:00",
     "popularity_score": 615
   },
   {
@@ -24086,7 +24086,7 @@
   },
   {
     "track_id": "2153509263",
-    "lyrics_id": "L-33",
+    "lyrics_id": "L-146",
     "track_title": "[05] Blessed Be The Dogs • SHOWsutra Post-Punk Burlesque ROCK",
     "lyrics_title": "Blessed Be The Dogs",
     "sc_url": "https://soundcloud.com/bananasutra/05-blessed-be-the-dogs-showsutra-post-punk-burlesque-rock-5",
@@ -24124,7 +24124,7 @@
     "curation_rating": "4",
     "sutra": "BOWsutra",
     "light_shadow": "LIGHT",
-    "url_slug": "blessed-be-the-dogs",
+    "url_slug": "blessed-be-the-dogs-showsutra-edition",
     "list_cover_url": "https://i1.sndcdn.com/artworks-kAEVcohylwIZch0q-ThHu4Q-t500x500.png",
     "song_published_at": "2025-08-15T01:39:00",
     "popularity_score": 590
@@ -25541,7 +25541,7 @@
   },
   {
     "track_id": "2099429862",
-    "lyrics_id": "L-349",
+    "lyrics_id": "L-81",
     "track_title": "[01] FOTUS Circus VOL. 04 • Step Right Up my Dearest Souls • Burlesque QUACKsutra",
     "lyrics_title": "FOTUS Circus: Step right up, My Dearest Souls",
     "sc_url": "https://soundcloud.com/bananasutra/01-fotus-circus-vol-04-step-right-up-my-dearest-souls-burlesque-quacksutra-1",
@@ -25579,7 +25579,7 @@
     "curation_rating": "4",
     "sutra": "QUACKsutra",
     "light_shadow": "SHADOW",
-    "url_slug": "fotus-circus-step-right-up-my-dearest-souls",
+    "url_slug": "fotus-circus-angels-eyes",
     "list_cover_url": "https://i1.sndcdn.com/artworks-hEoexhjMEJaTLs2Y-y53BjQ-t500x500.png",
     "song_published_at": "2025-05-21T02:12:00",
     "popularity_score": 547
@@ -27278,7 +27278,7 @@
   },
   {
     "track_id": "2248438640",
-    "lyrics_id": "L-207",
+    "lyrics_id": "L-36",
     "track_title": "Side B [07] Revolution's Lit (This Ain't Fiction) - BLOWsutra Revolt Now Bluesy Psychedelic Americana Banjo FOLK",
     "lyrics_title": "Revolution's Lit",
     "sc_url": "https://soundcloud.com/bananasutra/side-b-07-revolutions-lit-this-aint-fiction-blowsutra-revolt-now-bluesy-psychedelic-americana-banjo-folk-7",
@@ -27316,7 +27316,7 @@
     "curation_rating": "4",
     "sutra": "BLOWsutra",
     "light_shadow": "SHADOW",
-    "url_slug": "revolution-s-lit",
+    "url_slug": "bloom-past-doom",
     "list_cover_url": "https://i1.sndcdn.com/artworks-UsXPQkqEgN2gCzJ6-0lSKCQ-t500x500.png",
     "song_published_at": "2026-01-16T04:36:00",
     "popularity_score": 506
@@ -28417,7 +28417,7 @@
   },
   {
     "track_id": "2071884160",
-    "lyrics_id": "L-280",
+    "lyrics_id": "L-281",
     "track_title": "[2] Waldo's Fascist Tango - HATjazz BURLESQUE",
     "lyrics_title": "Waldo's Atheist Tango",
     "sc_url": "https://soundcloud.com/bananasutra/2-waldos-fascist-tango-hatjazz-burlesque-2",
@@ -28458,7 +28458,7 @@
     "curation_rating": "4",
     "sutra": "GROWsutra",
     "light_shadow": "SHADOW",
-    "url_slug": "waldo-s-atheist-tango",
+    "url_slug": "waldo-s-fascist-tango-down-we-go",
     "list_cover_url": "https://i1.sndcdn.com/artworks-c3L1ZrA7GdTEUNpD-srMlmg-t500x500.png",
     "song_published_at": "2025-04-06T01:10:00",
     "popularity_score": 477
@@ -29506,7 +29506,7 @@
   },
   {
     "track_id": "2107318959",
-    "lyrics_id": "L-114",
+    "lyrics_id": "L-288",
     "track_title": "[02] What It's About - BLUESsutra",
     "lyrics_title": "If We Had But(t) The Truth",
     "sc_url": "https://soundcloud.com/bananasutra/02-what-its-about-bluessutra-2",
@@ -29545,10 +29545,10 @@
     "tempo_feel": "LOWBEAT",
     "curation_rating": "3",
     "sutra": "BLOWsutra",
-    "light_shadow": "SHADOW",
-    "url_slug": "if-we-had-but-t-the-truth",
+    "light_shadow": "LIGHT",
+    "url_slug": "what-it-s-about",
     "list_cover_url": "https://i1.sndcdn.com/artworks-GLU0pK07IFyP9sOF-R4l6cg-t500x500.jpg",
-    "song_published_at": "2026-01-25T23:52:00",
+    "song_published_at": "2025-11-20T22:24:00",
     "popularity_score": 447
   },
   {
@@ -32196,7 +32196,7 @@
   },
   {
     "track_id": "2065185448",
-    "lyrics_id": "L-150",
+    "lyrics_id": "L-158",
     "track_title": "MAWA MAWA • Make America Woke Again • Accordion Cello Lament BURLESQUEsutra",
     "lyrics_title": "MAKA (Make America Kind Again)",
     "sc_url": "https://soundcloud.com/bananasutra/mawa-mawa-make-america-woke-again-accordion-cello-lament-burlesquesutra-1",
@@ -32235,9 +32235,9 @@
     "curation_rating": "",
     "sutra": "QUACKsutra",
     "light_shadow": "LIGHT",
-    "url_slug": "maka-make-america-kind-again",
+    "url_slug": "mawa-make-america-woke-again",
     "list_cover_url": "https://i1.sndcdn.com/artworks-ohldLp0ezWMHuexZ-Z1TUbg-t500x500.png",
-    "song_published_at": "2025-03-30T10:30:00",
+    "song_published_at": "2025-03-28T03:19:00",
     "popularity_score": 395
   },
   {
@@ -32694,7 +32694,7 @@
   },
   {
     "track_id": "2103061767",
-    "lyrics_id": "L-51",
+    "lyrics_id": "L-133",
     "track_title": "[07] La Poesia Importa - Oh Boy Accordion BURLESQUEsutra",
     "lyrics_title": "Creo (La Poesia)",
     "sc_url": "https://soundcloud.com/bananasutra/07-la-poesia-importa-oh-boy-accordion-burlesquesutra-7",
@@ -32732,7 +32732,7 @@
     "curation_rating": "",
     "sutra": "GLOWsutra",
     "light_shadow": "LIGHT",
-    "url_slug": "creo-la-poesia",
+    "url_slug": "la-poesia-importa",
     "list_cover_url": "https://i1.sndcdn.com/artworks-DQAHMhBcDTcoVFfl-BTKWAA-t500x500.png",
     "song_published_at": "2025-05-27T13:16:00",
     "popularity_score": 380
