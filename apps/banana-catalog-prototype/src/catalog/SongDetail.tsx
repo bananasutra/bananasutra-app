@@ -85,17 +85,18 @@ function parseEpListenTab(tab: string): number | null {
 
 function epVolumeTabLabel(volume: number, listenUrl: string): string {
   if (listenUrl.includes('/sets/')) {
-    return volume > 0 ? `Full EP · vol ${volume}` : 'Full EP'
+    return volume > 0 ? `EP · vol ${volume}` : 'EP'
   }
-  return volume > 0 ? `Listen · vol ${volume}` : 'Listen'
+  return volume > 0 ? `Single · vol ${volume}` : 'Single'
 }
 
 function EpVolumeTabLabel({ volume, listenUrl }: { volume: number; listenUrl: string }) {
-  if (listenUrl.includes('/sets/')) {
+  const isSet = listenUrl.includes('/sets/')
+  if (isSet) {
     if (volume <= 0) {
       return (
         <>
-          <span className="song-detail-tab__label song-detail-tab__label--full">Full EP</span>
+          <span className="song-detail-tab__label song-detail-tab__label--full">EP</span>
           <span className="song-detail-tab__label song-detail-tab__label--short">EP</span>
         </>
       )
@@ -103,26 +104,26 @@ function EpVolumeTabLabel({ volume, listenUrl }: { volume: number; listenUrl: st
     return (
       <>
         <span className="song-detail-tab__label song-detail-tab__label--full">
-          Full EP · vol {volume}
+          EP · vol {volume}
         </span>
-        <span className="song-detail-tab__label song-detail-tab__label--short">Vol {volume}</span>
+        <span className="song-detail-tab__label song-detail-tab__label--short">EP {volume}</span>
       </>
     )
   }
   if (volume <= 0) {
     return (
       <>
-        <span className="song-detail-tab__label song-detail-tab__label--full">Listen</span>
-        <span className="song-detail-tab__label song-detail-tab__label--short">Listen</span>
+        <span className="song-detail-tab__label song-detail-tab__label--full">Single</span>
+        <span className="song-detail-tab__label song-detail-tab__label--short">Single</span>
       </>
     )
   }
   return (
     <>
       <span className="song-detail-tab__label song-detail-tab__label--full">
-        Listen · vol {volume}
+        Single · vol {volume}
       </span>
-      <span className="song-detail-tab__label song-detail-tab__label--short">Vol {volume}</span>
+      <span className="song-detail-tab__label song-detail-tab__label--short">Single {volume}</span>
     </>
   )
 }
@@ -779,16 +780,17 @@ function SongDetailLoaded({
   const isLyricsOnlyNoCoverHero =
     !(detail.cover_image_url || '').trim() && !hasAudioContent && !hasYoutubeVideos
   const useLyricsMediaSplit = hasLyrics && hasMediaColumnForSplit
-  /** Listen | Full EP tabs when video or top-tracks competes with EP — not for EP-only rows. */
+  /** Top tracks / catalog listen vs EP vol tabs when video or multi-volume listen competes. */
   const hasListenTabNav =
     useLyricsMediaSplit &&
     listenEpVolumes.length > 0 &&
     (hasTopTracksListenUi || showVideoInColumn || listenEpVolumes.length > 1)
-  const showTracksPanel =
-    hasTopTracksListenUi && (!hasListenTabNav || audioListenTab === 'tracks')
   const showEpPanel = Boolean(
     listenEpVolumes.length > 0 && (!hasListenTabNav || isEpListenTab(audioListenTab)),
   )
+  const showTracksPanel =
+    hasTopTracksListenUi && (!hasListenTabNav || audioListenTab === 'tracks')
+  const hasActiveMediaPanel = showEpPanel || (showTracksPanel && showAudioSection) || showVideoSection
   const tracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Top tracks'
   const compactTracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Tracks'
   const topTracksHasOverflow = orderedTracks.length > SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT
@@ -850,7 +852,7 @@ function SongDetailLoaded({
   const requestedMode = (searchParams.get('mode') ?? '').trim().toLowerCase()
   const isSongDetailTwoColDesktop = useSongDetailLyricsClampViewport()
   /** Collapse long lyrics only on desktop two-column layout — tablet/mobile and lyrics-only pages show full text. */
-  const lyricsClampEnabled = useLyricsMediaSplit && isSongDetailTwoColDesktop
+  const lyricsClampEnabled = useLyricsMediaSplit && isSongDetailTwoColDesktop && hasActiveMediaPanel
 
   const measureLyricsClamp = useCallback(() => {
     const pre = lyricsPreRef.current
@@ -892,7 +894,11 @@ function SongDetailLoaded({
       }
       const defaultListenTab: AudioListenTab =
         requestedSection === 'audio' || requestedTrackId
-          ? 'tracks'
+          ? hasTopTracksListenUi
+            ? 'tracks'
+            : showEpEmbed
+              ? primaryListenEpTab
+              : 'tracks'
           : showEpEmbed && !hasTopTracksListenUi && !hasYoutubeVideos
             ? primaryListenEpTab
             : 'tracks'
@@ -1233,13 +1239,13 @@ function SongDetailLoaded({
                               ? `SoundCloud: ${activeEpTitle}`
                               : `SoundCloud EP · ${detail.lyrics_title}`
                           }
-                          mode={activeEpUrl.includes('/sets/') ? 'list' : 'visual'}
+                          mode="list"
                           height={
                             activeEpUrl.includes('/sets/')
                               ? SC_EMBED_HEIGHT_SET_PLAYLIST
                               : SC_EMBED_HEIGHT_TRACK_LIST
                           }
-                          loading={hasListenTabNav ? 'lazy' : 'eager'}
+                          loading={showEpPanel ? 'eager' : 'lazy'}
                         />
                         {activeEpListenMeta || activeEpTitle ? (
                           <div className="song-detail-listen-block__footer">

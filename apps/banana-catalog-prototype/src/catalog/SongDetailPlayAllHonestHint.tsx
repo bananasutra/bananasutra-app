@@ -9,7 +9,7 @@ export function SongDetailPlayAllHonestHint({ variant, onSwitchToFullEp }: Props
       <p className="song-detail-audio-hint song-detail-audio-hint--honest">
         Mobile devices block autoplay. For a continuous listening experience,{' '}
         <button type="button" className="song-detail-audio-hint__action" onClick={onSwitchToFullEp}>
-          switch to Full EP
+          switch to an EP tab
         </button>
         .
       </p>
@@ -19,7 +19,7 @@ export function SongDetailPlayAllHonestHint({ variant, onSwitchToFullEp }: Props
   if (variant === 'full-ep-only') {
     return (
       <p className="song-detail-audio-hint song-detail-audio-hint--honest">
-        Mobile devices block autoplay. For a continuous listening experience, use Full EP.
+        Mobile devices block autoplay. For a continuous listening experience, use an EP tab.
       </p>
     )
   }

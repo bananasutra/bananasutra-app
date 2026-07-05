@@ -1048,15 +1048,15 @@ def choose_artwork(
 ) -> str:
     ep = ep_index.get(lyrics_id)
     has_ep_backed_track = any(str(t.get("ep_url") or "").strip() for t in all_tracks)
-    for track in ordered_tracks:
-        if track.get("artwork_url"):
-            return str(track["artwork_url"])
     # No in-app tracks: prefer the primary FULL v4 single artwork over a shared EP compilation cover.
     if not all_tracks and full_v4_hit and str(full_v4_hit.get("artwork_url") or "").strip():
         return str(full_v4_hit["artwork_url"])
-    # When tracks link to an EP, prefer EP artwork (single vs EP cover mismatch).
+    # Default catalog hero: EP artwork when tracks link to an EP (shared compilation cover).
     if ep and ep.get("artwork_url") and has_ep_backed_track:
         return str(ep["artwork_url"])
+    for track in ordered_tracks:
+        if track.get("artwork_url"):
+            return str(track["artwork_url"])
     # No usable track art: still use SC EP row art when linked (e.g. lyrics featured but
     # no rows in filtered SC TRACKs export — cover still exists on the EP).
     if ep and ep.get("artwork_url"):
@@ -1084,15 +1084,7 @@ def merge_full_v4_listen_volumes(
     if sc_tracks_snapshot:
         snap_tid, snap_url = build_snapshot_sc_track_lyrics_id_lookup(sc_tracks_snapshot)
 
-    lids_by_ep_set: dict[str, list[str]] = defaultdict(list)
-    for row in sc_eps_rows:
-        ep_url = _norm_soundcloud_url(row.get("ep_url") or "")
-        if not ep_url:
-            continue
-        for lid in split_multi(row.get("lyrics_id")):
-            norm = norm_lyrics_id_for_join(lid)
-            if norm.startswith("L-") and norm not in lids_by_ep_set[ep_url]:
-                lids_by_ep_set[ep_url].append(norm)
+    lids_by_ep_set = build_lids_by_ep_set(sc_eps_rows)
 
     merged: dict[str, list[dict[str, Any]]] = {
         lid: list(volumes) for lid, volumes in ep_volumes_by_lid.items()
@@ -1121,32 +1113,15 @@ def merge_full_v4_listen_volumes(
 
     def resolve_lid(row: dict[str, str]) -> str:
         if sc_tracks_snapshot:
-            return effective_full_v4_lyrics_id(row, snap_tid, snap_url)
-        return norm_lyrics_id_for_join(row.get("lyrics_id"))
+            declared = effective_full_v4_lyrics_id(row, snap_tid, snap_url)
+        else:
+            declared = norm_lyrics_id_for_join(row.get("lyrics_id"))
+        if not declared.startswith("L-"):
+            declared = orphan_track_lid(row)
+        return canonical_lyrics_id_from_ep_row(row, declared, lids_by_ep_set, lyrics_titles_by_lid) or declared
 
     def orphan_track_lid(row: dict[str, str]) -> str:
-        ep_set = _norm_soundcloud_url(row.get("ep_url") or "")
-        if not ep_set:
-            return ""
-        lids = lids_by_ep_set.get(ep_set, [])
-        if not lids:
-            return ""
-        if len(lids) == 1:
-            return lids[0]
-        title = normalize_title_for_match(str(row.get("lyrics_title") or row.get("track_title") or ""))
-        if "criminels" in title:
-            return "L-53" if "L-53" in lids else ""
-        if "criminal" in title or "crrriminals" in title:
-            return "L-52" if "L-52" in lids else ""
-        best_lid = ""
-        best_score = 0
-        for lid in lids:
-            song_title = normalize_title_for_match(lyrics_titles_by_lid.get(lid, ""))
-            score = title_match_score(song_title, title) if song_title else 0
-            if score > best_score:
-                best_score = score
-                best_lid = lid
-        return best_lid if best_score >= 85 else ""
+        return canonical_lyrics_id_from_ep_row(row, "", lids_by_ep_set, lyrics_titles_by_lid)
 
     def set_norms_for_lid(lid: str) -> set[str]:
         norms: set[str] = set()
@@ -1237,6 +1212,15 @@ def merge_full_v4_listen_volumes(
         else:
             merged[lid] = sorted(volumes, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")))
 
+    # Standalone-only rows (no /sets/) are track-player URLs, not EP tabs — except when there
+    # are two or more singles (vol 1 / vol 2 single tabs, e.g. Criminals).
+    for lid, volumes in list(merged.items()):
+        if any("/sets/" in str(v.get("ep_url") or "") for v in volumes):
+            continue
+        singles = [v for v in volumes if "/sets/" not in str(v.get("ep_url") or "")]
+        if len(singles) <= 1:
+            merged[lid] = []
+
     return merged
 
 
@@ -1278,6 +1262,57 @@ def title_match_score(target: str, candidate: str) -> int:
     if candidate.startswith(target + " ") or candidate.endswith(" " + target):
         return 85
     return 0
+
+
+def build_lids_by_ep_set(sc_eps_rows: list[dict[str, str]]) -> dict[str, list[str]]:
+    lids_by_ep_set: dict[str, list[str]] = defaultdict(list)
+    for row in sc_eps_rows:
+        ep_url = _norm_soundcloud_url(row.get("ep_url") or "")
+        if not ep_url:
+            continue
+        for lid in split_multi(row.get("lyrics_id")):
+            norm = norm_lyrics_id_for_join(lid)
+            if norm.startswith("L-") and norm not in lids_by_ep_set[ep_url]:
+                lids_by_ep_set[ep_url].append(norm)
+    return dict(lids_by_ep_set)
+
+
+def canonical_lyrics_id_from_ep_row(
+    row: dict[str, str],
+    declared_lid: str,
+    lids_by_ep_set: dict[str, list[str]],
+    lyrics_titles_by_lid: dict[str, str],
+) -> str:
+    """
+    Prefer sc_eps EP ownership over stale track lyrics_id (e.g. Blessed Be The Dogs L-33 vs L-146).
+    Single-song EPs always win; compilation EPs keep declared lid when valid, else title-match.
+    """
+    ep_set = _norm_soundcloud_url(str(row.get("ep_url") or ""))
+    if not ep_set:
+        return declared_lid if declared_lid.startswith("L-") else ""
+    lids = lids_by_ep_set.get(ep_set, [])
+    if not lids:
+        return declared_lid if declared_lid.startswith("L-") else ""
+    if len(lids) == 1:
+        return lids[0]
+    if declared_lid in lids:
+        return declared_lid
+    title = normalize_title_for_match(str(row.get("lyrics_title") or row.get("track_title") or ""))
+    if "criminels" in title:
+        return "L-53" if "L-53" in lids else declared_lid
+    if "criminal" in title or "crrriminals" in title:
+        return "L-52" if "L-52" in lids else declared_lid
+    best_lid = ""
+    best_score = 0
+    for lid in lids:
+        song_title = normalize_title_for_match(lyrics_titles_by_lid.get(lid, ""))
+        score = title_match_score(song_title, title) if song_title else 0
+        if score > best_score:
+            best_score = score
+            best_lid = lid
+    if best_score >= 85 and best_lid:
+        return best_lid
+    return declared_lid if declared_lid.startswith("L-") else ""
 
 
 def title_lead_bonus(target: str, track_title_norm: str) -> int:
@@ -1993,6 +2028,8 @@ def effective_full_v4_lyrics_id(
 def build_sc_tracks_full_v4_indexes(
     path: Path,
     sc_tracks_snapshot: list[dict[str, str]] | None = None,
+    lids_by_ep_set: dict[str, list[str]] | None = None,
+    lyrics_titles_by_lid: dict[str, str] | None = None,
 ) -> tuple[dict[str, dict[str, str]], dict[str, dict[str, str]]]:
     """
     Read ``AT-TRACKS-FULL-v4.csv`` for catalog SC listen (with raw-export + overrides) and SC
@@ -2036,6 +2073,10 @@ def build_sc_tracks_full_v4_indexes(
             if sc_tracks_snapshot
             else norm_lyrics_id_for_join(row.get("lyrics_id"))
         )
+        if lids_by_ep_set is not None and lyrics_titles_by_lid is not None:
+            canon = canonical_lyrics_id_from_ep_row(row, lid, lids_by_ep_set, lyrics_titles_by_lid)
+            if canon.startswith("L-"):
+                lid = canon
         if not lid.startswith("L-"):
             continue
         url = (row.get("sc_url") or "").strip()
@@ -2332,6 +2373,7 @@ def main() -> None:
         if lid.startswith("L-")
     }
     full_v4_rows = read_csv(SC_TRACKS_FULL_V4) if SC_TRACKS_FULL_V4.is_file() else []
+    lids_by_ep_set = build_lids_by_ep_set(sc_eps_rows)
     ep_volumes_by_lid = merge_full_v4_listen_volumes(
         ep_volumes_by_lid,
         full_v4_rows,
@@ -2342,12 +2384,22 @@ def main() -> None:
 
     tracks_by_lyrics: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in sc_tracks_rows:
+        declared = norm_lyrics_id_for_join(str(row.get("lyrics_id") or ""))
+        row_for_ep = {k: str(v) for k, v in row.items()}
+        canon = canonical_lyrics_id_from_ep_row(
+            row_for_ep, declared, lids_by_ep_set, lyrics_titles_by_lid
+        )
+        if canon.startswith("L-"):
+            row["lyrics_id"] = canon
         lyrics_id = row.get("lyrics_id", "")
         if lyrics_id:
             tracks_by_lyrics[lyrics_id].append(row)
 
     full_v4_by_lid, full_v4_by_url = build_sc_tracks_full_v4_indexes(
-        SC_TRACKS_FULL_V4, sc_tracks_raw
+        SC_TRACKS_FULL_V4,
+        sc_tracks_raw,
+        lids_by_ep_set,
+        lyrics_titles_by_lid,
     )
     listen_overrides = load_sc_catalog_listen_overrides(SC_CATALOG_LISTEN_OVERRIDES)
     cover_overrides_by_lid, cover_overrides_by_ep = load_sc_cover_art_overrides(

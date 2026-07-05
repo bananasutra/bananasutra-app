@@ -306,18 +306,28 @@ function FooterContactForm() {
 /*  GlobalFooter                                                       */
 /* ------------------------------------------------------------------ */
 
+function isHomePortalPath(pathname: string): boolean {
+  const normalized = pathname.replace(/\/+$/, '') || '/'
+  return normalized === '/'
+}
+
 export function GlobalFooter() {
+  const { pathname } = useLocation()
   const y = new Date().getFullYear()
   const statsSummary = useMemo(() => buildHomeStatsSummary(), [])
+  const showFooterStats = !isHomePortalPath(pathname) && statsSummary.length > 0
 
   return (
     <footer className="catalog-footer" role="contentinfo">
+      {showFooterStats ? (
+        <div className="catalog-footer-stats">
+          <HomeStatsSummary items={statsSummary} variant="footer" />
+        </div>
+      ) : null}
+
       <div className="catalog-footer__inner">
         {/* ---- Contact form (collapsible) ---- */}
         <FooterContactForm />
-
-        {/* ---- Catalog scale stats (homepage parity) ---- */}
-        <HomeStatsSummary items={statsSummary} />
 
         {/* ---- Social icons ---- */}
         <nav className="catalog-footer__social" aria-label="Elsewhere on the web">
