@@ -1,0 +1,6 @@
+﻿redirect_from,redirect_to,redirect_note,redirect_status,redirect_live
+"/songs/old-slug (old path, no trailing slash)",/songs/new-slug/ (new canonical path (trailing slash on detail/index routes),"""Optional note for future-you (e.g. L-383 rename)"" no extra steps; generate-route-redirects.mjs picks it up automatically update: apps/banana-catalog-prototype/catalog-redirects.json",draft,
+/songs/the-seven-sutras-of-banana,/songs/seven-sutras-gone-banana/, L-383 rename,final,checked
+/songs/serial-blowers-vol2,/songs/serial-blowers,"L-425 to L-216
+",final,
+/songs/broken-whole-encore,/songs/broken-whole,L-423 to L-346,final,

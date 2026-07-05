@@ -367,8 +367,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 6332,
-        "aggregate_like_count": 56
+        "aggregate_play_count": 7490,
+        "aggregate_like_count": 67
       },
       {
         "lyrics_id": "L-241",
@@ -453,7 +453,7 @@
         "lyrics_title": "Criminals (Bertrand Edition)",
         "url_slug": "criminals-bertrand-edition",
         "summary_short": "\"Life is nothing but a competition to be the criminal rather than the victim.\"—Bertrand Russel",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-N2bJW7Tqp3S7Ldn6-PMk8kA-t500x500.jpg",
+        "cover_image_url": "",
         "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
@@ -594,7 +594,7 @@
         "lyrics_title": "Why Are Kids Allowed To Die? (Why War?)",
         "url_slug": "why-are-kids-allowed-to-die-why-war",
         "summary_short": "Nobody asks why. Nobody dares. Kids still die for greed, for pride. And the questions outlast the history.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-OWRInG4UzoJJhhFd-ho8qyg-t500x500.jpg",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-G6KTvCCSI5Q3MN9y-Hvwwrw-t500x500.jpg",
         "has_in_app_playback": false,
         "has_sc_catalog_listen": true,
         "has_youtube_video": true,
@@ -690,8 +690,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4649,
-        "aggregate_like_count": 69
+        "aggregate_play_count": 4896,
+        "aggregate_like_count": 74
       },
       {
         "lyrics_id": "L-268",
@@ -1002,7 +1002,7 @@
         "summary_short": "\"La Quête\" remade 6 ways, from lullaby to blues, because some songs need to be chased like an impossible star. Volume 2 of a lifelong quest.",
         "cover_image_url": "https://i1.sndcdn.com/artworks-RvPg90tJzDpSlPKh-ns1cUw-t500x500.png",
         "has_in_app_playback": true,
-        "has_sc_catalog_listen": true,
+        "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
         "aggregate_play_count": 2244,
@@ -1083,8 +1083,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 1257,
-        "aggregate_like_count": 17
+        "aggregate_play_count": 1557,
+        "aggregate_like_count": 19
       },
       {
         "lyrics_id": "L-51",
@@ -1096,8 +1096,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 4147,
-        "aggregate_like_count": 40
+        "aggregate_play_count": 3847,
+        "aggregate_like_count": 38
       },
       {
         "lyrics_id": "L-254",
@@ -1226,7 +1226,7 @@
         "lyrics_title": "This Is My Quest",
         "url_slug": "this-is-my-quest",
         "summary_short": "Born with a fire that silence could not tame. This is the quest.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-RvPg90tJzDpSlPKh-ns1cUw-t500x500.png",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-qhqHRqMMeCjATzsp-RQ8fQQ-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
@@ -1455,26 +1455,13 @@
     "playlist_track_count": 10,
     "playlist_duration_total": "0:34:33",
     "song_count": 3,
-    "songs_with_in_app_playback": 1,
+    "songs_with_in_app_playback": 0,
     "member_lyrics_ids": [
-      "L-33",
       "L-145",
+      "L-33",
       "L-58"
     ],
     "member_songs": [
-      {
-        "lyrics_id": "L-33",
-        "lyrics_title": "Blessed Be The Dogs",
-        "url_slug": "blessed-be-the-dogs",
-        "summary_short": "With all due respects to cringy parrots... there's nothing like a puppy belly rub in the warm morning light.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-naxN1Ew2hxBmEiva-OlsMuQ-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 841,
-        "aggregate_like_count": 14
-      },
       {
         "lyrics_id": "L-145",
         "lyrics_title": "Like A Dog In The Sky",
@@ -1485,6 +1472,19 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
+      {
+        "lyrics_id": "L-33",
+        "lyrics_title": "Blessed Be The Dogs",
+        "url_slug": "blessed-be-the-dogs",
+        "summary_short": "With all due respects to cringy parrots... there's nothing like a puppy belly rub in the warm morning light.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-naxN1Ew2hxBmEiva-OlsMuQ-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
       },
@@ -1678,11 +1678,11 @@
     "playlist_total_likes": 153,
     "playlist_track_count": 18,
     "playlist_duration_total": "0:58:50",
-    "song_count": 26,
+    "song_count": 25,
     "songs_with_in_app_playback": 13,
     "member_lyrics_ids": [
       "L-34",
-      "L-423",
+      "L-346",
       "L-312",
       "L-95",
       "L-175",
@@ -1700,7 +1700,6 @@
       "L-141",
       "L-102",
       "L-179",
-      "L-346",
       "L-62",
       "L-400",
       "L-291",
@@ -1723,15 +1722,15 @@
         "aggregate_like_count": 30
       },
       {
-        "lyrics_id": "L-423",
-        "lyrics_title": "Broken Whole (Encore)",
-        "url_slug": "broken-whole-encore",
+        "lyrics_id": "L-346",
+        "lyrics_title": "Broken Whole",
+        "url_slug": "broken-whole",
         "summary_short": "How do we find meaning in a world that seems broken? When words fall apart, can love still be spoken? #GROWcore",
         "cover_image_url": "https://i1.sndcdn.com/artworks-z8cA6ydBGgr5F4Jp-zISI5w-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
         "aggregate_play_count": 14500,
         "aggregate_like_count": 131
       },
@@ -1745,8 +1744,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 20498,
-        "aggregate_like_count": 222
+        "aggregate_play_count": 23610,
+        "aggregate_like_count": 259
       },
       {
         "lyrics_id": "L-95",
@@ -1758,8 +1757,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 13159,
-        "aggregate_like_count": 142
+        "aggregate_play_count": 10047,
+        "aggregate_like_count": 105
       },
       {
         "lyrics_id": "L-175",
@@ -1957,19 +1956,6 @@
         "aggregate_like_count": 0
       },
       {
-        "lyrics_id": "L-346",
-        "lyrics_title": "Broken Whole",
-        "url_slug": "broken-whole",
-        "summary_short": "How do we find meaning in a world that seems broken? When words fall apart, can love still be spoken? #GROWcore",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-vaVbBNrFA5Fzr2Kn-Zl2s2A-t500x500.jpg",
-        "has_in_app_playback": false,
-        "has_sc_catalog_listen": true,
-        "has_youtube_video": true,
-        "has_youtube_embed": true,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
-      },
-      {
         "lyrics_id": "L-62",
         "lyrics_title": "Do You Ever Wonder?",
         "url_slug": "do-you-ever-wonder",
@@ -2085,8 +2071,8 @@
       "L-251",
       "L-222",
       "L-152",
-      "L-280",
       "L-281",
+      "L-280",
       "L-196",
       "L-276"
     ],
@@ -2235,28 +2221,28 @@
         "aggregate_like_count": 3
       },
       {
-        "lyrics_id": "L-280",
-        "lyrics_title": "Waldo's Atheist Tango",
-        "url_slug": "waldo-s-atheist-tango",
-        "summary_short": "Waldo danced the atheist tango. Nobody found him. He was fine.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-c3L1ZrA7GdTEUNpD-srMlmg-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": true,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 317,
-        "aggregate_like_count": 4
-      },
-      {
         "lyrics_id": "L-281",
         "lyrics_title": "Waldo's Fascist Tango (Down We Go)",
         "url_slug": "waldo-s-fascist-tango-down-we-go",
         "summary_short": "The ballroom is lit. The leaders are waltzing. Down we go.",
         "cover_image_url": "https://i1.sndcdn.com/artworks-c3L1ZrA7GdTEUNpD-srMlmg-t500x500.png",
-        "has_in_app_playback": false,
+        "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
+        "aggregate_play_count": 317,
+        "aggregate_like_count": 4
+      },
+      {
+        "lyrics_id": "L-280",
+        "lyrics_title": "Waldo's Atheist Tango",
+        "url_slug": "waldo-s-atheist-tango",
+        "summary_short": "Waldo danced the atheist tango. Nobody found him. He was fine.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-zGmZBF6E6J0dpCF7-7ObUQQ-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
       },
@@ -2912,9 +2898,9 @@
         "lyrics_title": "Bee The Fool (Perfection Is A Lie)",
         "url_slug": "be-the-fool-perfection-is-a-lie",
         "summary_short": "Perfection is a lie. Now you know. Carry on, beyoutiful.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-1QKzz4xNQaa8y2oX-Ru7mWg-t500x500.jpg",
+        "cover_image_url": "https://i.ytimg.com/vi/UAO1I-UsCpM/maxresdefault.jpg",
         "has_in_app_playback": false,
-        "has_sc_catalog_listen": true,
+        "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
         "aggregate_play_count": 0,
@@ -3170,7 +3156,7 @@
         "lyrics_title": "Banana Jokes Making Us Laugh",
         "url_slug": "banana-jokes-making-us-laugh",
         "summary_short": "He walked in with a banana. And the rest is history. Same old joke.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-2zgnIx8miwTWEq1e-YVPWpg-t1080x1080.jpg",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-2zgnIx8miwTWEq1e-YVPWpg-t500x500.jpg",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": true,
         "has_youtube_video": false,
@@ -3203,7 +3189,7 @@
     "playlist_track_count": 24,
     "playlist_duration_total": "1:20:41",
     "song_count": 24,
-    "songs_with_in_app_playback": 9,
+    "songs_with_in_app_playback": 10,
     "member_lyrics_ids": [
       "L-37",
       "L-323",
@@ -3380,12 +3366,12 @@
         "url_slug": "blessed-be-the-dogs-showsutra-edition",
         "summary_short": "Running free, running wild, loyal to the end. Like a dog in the sky.",
         "cover_image_url": "https://i1.sndcdn.com/artworks-kAEVcohylwIZch0q-ThHu4Q-t500x500.png",
-        "has_in_app_playback": false,
+        "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
+        "aggregate_play_count": 841,
+        "aggregate_like_count": 14
       },
       {
         "lyrics_id": "L-382",
@@ -3567,10 +3553,11 @@
     "playlist_total_likes": 140,
     "playlist_track_count": 31,
     "playlist_duration_total": "1:40:31",
-    "song_count": 40,
+    "song_count": 41,
     "songs_with_in_app_playback": 14,
     "member_lyrics_ids": [
       "L-375",
+      "L-428",
       "L-329",
       "L-302",
       "L-117",
@@ -3617,6 +3604,19 @@
         "lyrics_title": "Syndrome Nom Nom",
         "url_slug": "syndrome-nom-nom",
         "summary_short": "Public health alert: chronic exposure to idiocracy may cause history-coughing, crypto-crowing, and acute democracy wanking.",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
+      {
+        "lyrics_id": "L-428",
+        "lyrics_title": "Predators (FOTUS Edition)",
+        "url_slug": "predators-fotus-edition",
+        "summary_short": "Contempt replaced consent, preying replaced praying, and \nand authoritarian-apologists sheeples howl along...",
         "cover_image_url": "",
         "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
@@ -4157,18 +4157,18 @@
     "playlist_track_count": 15,
     "playlist_duration_total": "0:45:21",
     "song_count": 11,
-    "songs_with_in_app_playback": 4,
+    "songs_with_in_app_playback": 3,
     "member_lyrics_ids": [
       "L-321",
-      "L-349",
-      "L-404",
       "L-81",
       "L-82",
       "L-381",
       "L-144",
+      "L-349",
       "L-350",
       "L-41",
       "L-242",
+      "L-404",
       "L-405"
     ],
     "member_songs": [
@@ -4186,43 +4186,17 @@
         "aggregate_like_count": 24
       },
       {
-        "lyrics_id": "L-349",
-        "lyrics_title": "FOTUS Circus: Step right up, My Dearest Souls",
-        "url_slug": "fotus-circus-step-right-up-my-dearest-souls",
-        "summary_short": "Step right up, My Dearest Souls Step right up, my dearest souls. The felon reigns. The blind applaud. The saints have been banned. Welcome to the show.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-hEoexhjMEJaTLs2Y-y53BjQ-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": true,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 1388,
-        "aggregate_like_count": 7
-      },
-      {
-        "lyrics_id": "L-404",
-        "lyrics_title": "FOTUS Circus: Step Right Up, Murica Freaks",
-        "url_slug": "fotus-circus-step-right-up-murica-freaks",
-        "summary_short": "Step right up, Murica freaks. The carnival MC introduces the golden grin show where stolen dreams can't go bust.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-hEoexhjMEJaTLs2Y-y53BjQ-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": true,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 1768,
-        "aggregate_like_count": 13
-      },
-      {
         "lyrics_id": "L-81",
         "lyrics_title": "FOTUS Circus: Angels Eyes",
         "url_slug": "fotus-circus-angels-eyes",
         "summary_short": "America. It's high time you start being a little more angelic.",
         "cover_image_url": "https://i1.sndcdn.com/artworks-hEoexhjMEJaTLs2Y-y53BjQ-t500x500.png",
-        "has_in_app_playback": false,
+        "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
+        "aggregate_play_count": 3156,
+        "aggregate_like_count": 20
       },
       {
         "lyrics_id": "L-82",
@@ -4264,6 +4238,19 @@
         "aggregate_like_count": 0
       },
       {
+        "lyrics_id": "L-349",
+        "lyrics_title": "FOTUS Circus: Step right up, My Dearest Souls",
+        "url_slug": "fotus-circus-step-right-up-my-dearest-souls",
+        "summary_short": "Step right up, My Dearest Souls Step right up, my dearest souls. The felon reigns. The blind applaud. The saints have been banned. Welcome to the show.",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
+      {
         "lyrics_id": "L-350",
         "lyrics_title": "FOTUS Circus: Step Inside, Don’t Mind The Crime",
         "url_slug": "fotus-circus-step-inside-don-t-mind-the-crime",
@@ -4295,6 +4282,19 @@
         "url_slug": "the-accordion-of-ignorance",
         "summary_short": "The accordion of ignorance plays itself louder the more you pull it open.",
         "cover_image_url": "https://i1.sndcdn.com/artworks-ppd320RXiIyfcazy-2Vw1DA-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
+      {
+        "lyrics_id": "L-404",
+        "lyrics_title": "FOTUS Circus: Step Right Up, Murica Freaks",
+        "url_slug": "fotus-circus-step-right-up-murica-freaks",
+        "summary_short": "Step right up, Murica freaks. The carnival MC introduces the golden grin show where stolen dreams can't go bust.",
+        "cover_image_url": "",
         "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
@@ -4386,8 +4386,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5126,
-        "aggregate_like_count": 35
+        "aggregate_play_count": 3968,
+        "aggregate_like_count": 24
       },
       {
         "lyrics_id": "L-151",
@@ -4412,8 +4412,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1564,
-        "aggregate_like_count": 17
+        "aggregate_play_count": 1249,
+        "aggregate_like_count": 15
       },
       {
         "lyrics_id": "L-158",
@@ -4425,8 +4425,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 468,
-        "aggregate_like_count": 4
+        "aggregate_play_count": 783,
+        "aggregate_like_count": 6
       }
     ]
   },
@@ -4479,24 +4479,23 @@
     "playlist_total_likes": 205,
     "playlist_track_count": 32,
     "playlist_duration_total": "1:48:53",
-    "song_count": 21,
-    "songs_with_in_app_playback": 14,
+    "song_count": 20,
+    "songs_with_in_app_playback": 12,
     "member_lyrics_ids": [
       "L-391",
-      "L-425",
+      "L-216",
       "L-169",
       "L-90",
-      "L-406",
       "L-134",
       "L-417",
       "L-332",
+      "L-406",
       "L-113",
       "L-208",
       "L-115",
       "L-159",
       "L-174",
       "L-270",
-      "L-216",
       "L-418",
       "L-52",
       "L-53",
@@ -4519,17 +4518,17 @@
         "aggregate_like_count": 12
       },
       {
-        "lyrics_id": "L-425",
-        "lyrics_title": "Serial Blowers Vol.2",
-        "url_slug": "serial-blowers-vol2",
+        "lyrics_id": "L-216",
+        "lyrics_title": "Serial Blowers",
+        "url_slug": "serial-blowers",
         "summary_short": "Power. Gender. Color. Favors. Why are we still asking the same questions?",
         "cover_image_url": "https://i1.sndcdn.com/artworks-5TQSmV5yKqLtxWvG-YoTiqQ-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 925,
-        "aggregate_like_count": 23
+        "aggregate_play_count": 1255,
+        "aggregate_like_count": 28
       },
       {
         "lyrics_id": "L-169",
@@ -4556,19 +4555,6 @@
         "has_youtube_embed": true,
         "aggregate_play_count": 4057,
         "aggregate_like_count": 47
-      },
-      {
-        "lyrics_id": "L-406",
-        "lyrics_title": "Apes Gone Wrong (Bloom Past Doom)",
-        "url_slug": "apes-gone-wrong",
-        "summary_short": "The apes went wrong. No crown, no law — just clowns with claws, and we're done being polite about it.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-NfNdCTLZ9C9HupPU-ETvEcw-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": true,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 3010,
-        "aggregate_like_count": 30
       },
       {
         "lyrics_id": "L-134",
@@ -4606,6 +4592,19 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
+      {
+        "lyrics_id": "L-406",
+        "lyrics_title": "Apes Gone Wrong (Bloom Past Doom)",
+        "url_slug": "apes-gone-wrong",
+        "summary_short": "The apes went wrong. No crown, no law — just clowns with claws, and we're done being polite about it.",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
       },
@@ -4688,19 +4687,6 @@
         "aggregate_like_count": 9
       },
       {
-        "lyrics_id": "L-216",
-        "lyrics_title": "Serial Blowers",
-        "url_slug": "serial-blowers",
-        "summary_short": "Power. Gender. Color. Favors. Why are we still asking the same questions?",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-L6YErpavAldzq4cD-HRzVlg-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": true,
-        "has_youtube_embed": true,
-        "aggregate_play_count": 330,
-        "aggregate_like_count": 5
-      },
-      {
         "lyrics_id": "L-418",
         "lyrics_title": "People or Property",
         "url_slug": "people-or-property",
@@ -4718,7 +4704,7 @@
         "lyrics_title": "Criminals",
         "url_slug": "criminals",
         "summary_short": "When the rules shift, who decides who the criminal is?",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-N2bJW7Tqp3S7Ldn6-PMk8kA-t500x500.jpg",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-u8iAw6H7T6q62hoh-MHNyYA-t500x500.jpg",
         "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
@@ -4829,8 +4815,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 12508,
-        "aggregate_like_count": 90
+        "aggregate_play_count": 12261,
+        "aggregate_like_count": 85
       },
       {
         "lyrics_id": "L-212",
@@ -5420,26 +5406,27 @@
     "playlist_total_likes": 360,
     "playlist_track_count": 43,
     "playlist_duration_total": "2:21:55",
-    "song_count": 35,
-    "songs_with_in_app_playback": 25,
+    "song_count": 36,
+    "songs_with_in_app_playback": 23,
     "member_lyrics_ids": [
+      "L-429",
       "L-232",
       "L-265",
       "L-209",
       "L-200",
       "L-286",
-      "L-207",
       "L-36",
-      "L-396",
       "L-177",
       "L-219",
       "L-275",
       "L-395",
+      "L-396",
       "L-262",
       "L-166",
       "L-419",
       "L-247",
       "L-392",
+      "L-207",
       "L-180",
       "L-379",
       "L-287",
@@ -5455,11 +5442,24 @@
       "L-143",
       "L-172",
       "L-356",
+      "L-427",
       "L-123",
-      "L-308",
-      "L-427"
+      "L-308"
     ],
     "member_songs": [
+      {
+        "lyrics_id": "L-429",
+        "lyrics_title": "La Vie Sera Belle",
+        "url_slug": "la-vie-sera-belle",
+        "summary_short": "Paris, 1940, in the dark where no light fell… Five schoolboys knew freedom begins with “No.” C'est la vie. True story.",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
       {
         "lyrics_id": "L-232",
         "lyrics_title": "Spit Back the Lies",
@@ -5526,19 +5526,6 @@
         "aggregate_like_count": 138
       },
       {
-        "lyrics_id": "L-207",
-        "lyrics_title": "Revolution's Lit",
-        "url_slug": "revolution-s-lit",
-        "summary_short": "Just a girl, a guitar, and the audacity to call it a revolution.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-UsXPQkqEgN2gCzJ6-0lSKCQ-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": true,
-        "has_youtube_video": true,
-        "has_youtube_embed": true,
-        "aggregate_play_count": 346,
-        "aggregate_like_count": 4
-      },
-      {
         "lyrics_id": "L-36",
         "lyrics_title": "Bloom Past Doom",
         "url_slug": "bloom-past-doom",
@@ -5548,21 +5535,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2622,
-        "aggregate_like_count": 25
-      },
-      {
-        "lyrics_id": "L-396",
-        "lyrics_title": "This Ain't Fiction (Bloom Past Doom)",
-        "url_slug": "this-aint-fiction-bloom-past-doom",
-        "summary_short": "This ain't fiction. It's dystopian truth broadcast in booths. Let's read the constitution and imagine the revolution.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-UsXPQkqEgN2gCzJ6-0lSKCQ-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": true,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 2344,
-        "aggregate_like_count": 38
+        "aggregate_play_count": 8322,
+        "aggregate_like_count": 97
       },
       {
         "lyrics_id": "L-177",
@@ -5611,6 +5585,19 @@
         "cover_image_url": "https://i1.sndcdn.com/artworks-if82lONCI5YhLq5y-CMulEA-t500x500.png",
         "has_in_app_playback": false,
         "has_sc_catalog_listen": true,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
+      {
+        "lyrics_id": "L-396",
+        "lyrics_title": "This Ain't Fiction (Bloom Past Doom)",
+        "url_slug": "this-aint-fiction-bloom-past-doom",
+        "summary_short": "This ain't fiction. It's dystopian truth broadcast in booths. Let's read the constitution and imagine the revolution.",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
         "aggregate_play_count": 0,
@@ -5680,6 +5667,19 @@
         "has_youtube_embed": false,
         "aggregate_play_count": 2851,
         "aggregate_like_count": 34
+      },
+      {
+        "lyrics_id": "L-207",
+        "lyrics_title": "Revolution's Lit",
+        "url_slug": "revolution-s-lit",
+        "summary_short": "Just a girl, a guitar, and the audacity to call it a revolution.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-UsXPQkqEgN2gCzJ6-0lSKCQ-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-180",
@@ -5877,6 +5877,19 @@
         "aggregate_like_count": 0
       },
       {
+        "lyrics_id": "L-427",
+        "lyrics_title": "Syncopated Patriarchy",
+        "url_slug": "syncopated-patriarchy",
+        "summary_short": "",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
+      {
         "lyrics_id": "L-123",
         "lyrics_title": "Kamala's Roots of Resilience",
         "url_slug": "kamala-s-roots-of-resilience",
@@ -5897,19 +5910,6 @@
         "cover_image_url": "https://i1.sndcdn.com/artworks-wDMgg4w7JMBFRNiK-XcY8qQ-t500x500.jpg",
         "has_in_app_playback": false,
         "has_sc_catalog_listen": true,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
-      },
-      {
-        "lyrics_id": "L-427",
-        "lyrics_title": "Syncopated Patriarchy",
-        "url_slug": "syncopated-patriarchy",
-        "summary_short": "",
-        "cover_image_url": "",
-        "has_in_app_playback": false,
-        "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
         "aggregate_play_count": 0,
@@ -6912,8 +6912,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 1257,
-        "aggregate_like_count": 17
+        "aggregate_play_count": 1557,
+        "aggregate_like_count": 19
       },
       {
         "lyrics_id": "L-77",

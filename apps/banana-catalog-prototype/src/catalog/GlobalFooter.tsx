@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { trackFormSubmit } from '../lib/analytics'
 import {
@@ -9,6 +9,8 @@ import {
 import { CATALOG_SNAPSHOT_DATE, formatCatalogSnapshotDate } from './catalogSnapshotMeta'
 import { canonicalPathForRoute } from './seoPaths'
 import { FooterSocialIcon, type FooterSocialId } from './FooterSocialIcons'
+import { HomeStatsSummary } from './HomeStatsSummary'
+import { buildHomeStatsSummary } from './homePortalData'
 import './GlobalFooter.css'
 
 /* ------------------------------------------------------------------ */
@@ -304,11 +306,25 @@ function FooterContactForm() {
 /*  GlobalFooter                                                       */
 /* ------------------------------------------------------------------ */
 
+function isHomePortalPath(pathname: string): boolean {
+  const normalized = pathname.replace(/\/+$/, '') || '/'
+  return normalized === '/'
+}
+
 export function GlobalFooter() {
+  const { pathname } = useLocation()
   const y = new Date().getFullYear()
+  const statsSummary = useMemo(() => buildHomeStatsSummary(), [])
+  const showFooterStats = !isHomePortalPath(pathname) && statsSummary.length > 0
 
   return (
     <footer className="catalog-footer" role="contentinfo">
+      {showFooterStats ? (
+        <div className="catalog-footer-stats">
+          <HomeStatsSummary items={statsSummary} variant="footer" />
+        </div>
+      ) : null}
+
       <div className="catalog-footer__inner">
         {/* ---- Contact form (collapsible) ---- */}
         <FooterContactForm />

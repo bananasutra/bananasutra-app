@@ -36,10 +36,10 @@ export function songDetailPlayAllHonestMobileCopy({
   hasSongbookPlaylist: boolean
 }): string {
   if (hasFullEpListen && hasFullEpTab) {
-    return 'Mobile devices block autoplay. For a continuous listening experience, switch to Full EP.'
+    return 'Mobile devices block autoplay. For a continuous listening experience, switch to an EP tab.'
   }
   if (hasFullEpListen) {
-    return 'Mobile devices block autoplay. For a continuous listening experience, use Full EP.'
+    return 'Mobile devices block autoplay. For a continuous listening experience, use an EP tab.'
   }
   if (hasSongbookPlaylist) {
     return 'Mobile devices block autoplay. For a continuous listening experience, open a songbook.'
