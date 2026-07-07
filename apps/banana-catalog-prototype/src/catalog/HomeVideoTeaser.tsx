@@ -55,7 +55,7 @@ export function HomeVideoTeaser({ videos, loading = false, loadError = null }: P
               </li>
             ))}
           </ul>
-          <Link className="catalog-section-cta" to={canonicalPathForRoute('/videos')}>
+          <Link className="catalog-section-cta" to={canonicalPathForRoute('/watch')}>
             Watch all videos →
           </Link>
         </>

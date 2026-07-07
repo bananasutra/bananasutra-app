@@ -535,26 +535,6 @@ export function SongbooksPage() {
         </div>
 
         <main id="main-content" className="songbooks-page songbooks-page__stacked">
-          <CatalogFilterBar
-            ariaLabel="Filter songbooks"
-            panelId="songbooks-filter-panel"
-            resultSummary={songbookContextSummary}
-            activePills={songbookActivePills}
-            clearAllHref={clearAllSongbookFiltersHref}
-            facetGroups={songbookFacetGroups}
-            search={{
-              id: 'songbooks-find-input',
-              label: 'Search',
-              ariaLabel: 'Search songbooks by title, member songs, or catalog summary',
-              value: findDraft,
-              onChange: setFindDraft,
-              inputName: 'songbooks_find',
-            }}
-            combineHelpText="Filters combine across groups (AND). One active value per group."
-            defaultExpanded={filterBarExpanded}
-            onExpandedChange={setFilterBarExpanded}
-          />
-
           {featuredSongbook ? (
               <section className="songbooks-page__featured-rotator" aria-labelledby="songbooks-featured-songbook-heading">
                 <h2 id="songbooks-featured-songbook-heading" className="catalog-section-title">
@@ -571,6 +551,28 @@ export function SongbooksPage() {
                 />
               </section>
             ) : null}
+
+          <div className="songbooks-page__filters-stacked">
+            <CatalogFilterBar
+              ariaLabel="Filter songbooks"
+              panelId="songbooks-filter-panel"
+              resultSummary={songbookContextSummary}
+              activePills={songbookActivePills}
+              clearAllHref={clearAllSongbookFiltersHref}
+              facetGroups={songbookFacetGroups}
+              search={{
+                id: 'songbooks-find-input',
+                label: 'Search',
+                ariaLabel: 'Search songbooks by title, member songs, or catalog summary',
+                value: findDraft,
+                onChange: setFindDraft,
+                inputName: 'songbooks_find',
+              }}
+              combineHelpText="Filters combine across groups (AND). One active value per group."
+              defaultExpanded={filterBarExpanded}
+              onExpandedChange={setFilterBarExpanded}
+            />
+          </div>
 
             <div className="songbooks-page__sections" aria-label="Songbook sections by type">
               {sections.length === 0 ? (

@@ -51,6 +51,22 @@ html {
   color: var(--catalog-section-cta-hover-color);
 }
 
+/* Inline Bertrand CTA — same small-caps styling as .catalog-section-cta */
+.catalog-bertrand-cta {
+  display: inline;
+  font: var(--catalog-section-cta-weight) var(--catalog-section-cta-size) / 1.35 var(--font-ui);
+  letter-spacing: var(--catalog-section-cta-tracking);
+  text-transform: uppercase;
+  color: var(--catalog-section-cta-color);
+  text-decoration: none;
+  border-bottom: none;
+  white-space: nowrap;
+}
+
+.catalog-bertrand-cta:hover {
+  color: var(--catalog-section-cta-hover-color);
+}
+
 /* Meaning-first exit — compact pill shared by Tracks rows + featured YouTube blocks */
 .catalog-featured-video-song-row {
   margin-top: 0.65rem;
@@ -334,28 +350,57 @@ html {
   font-size: 0.76rem;
 }
 
+.songs-page__lyrics-only-filter {
+  display: grid;
+  grid-template-columns: minmax(3.5rem, 4.25rem) minmax(0, 1fr);
+  gap: 0.25rem 0.55rem;
+  align-items: center;
+  margin-top: -0.05rem;
+  padding: 0.2rem 0 0.5rem;
+}
+
 .songs-page__lyrics-only-toggle {
-  display: inline-flex;
-  align-items: flex-start;
-  gap: 0.45rem;
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
   margin: 0;
-  font: 500 0.72rem/1.4 var(--font-body);
-  color: var(--color-text-muted, #666);
+  min-height: 2.25rem;
   cursor: pointer;
 }
 
 .songs-page__lyrics-only-toggle input {
-  margin-top: 0.12rem;
+  margin: 0;
   flex-shrink: 0;
-  width: 0.9rem;
-  height: 0.9rem;
+  width: 1rem;
+  height: 1rem;
   accent-color: var(--color-link);
   cursor: pointer;
 }
 
-.songs-page__lyrics-only-toggle-hint {
+.songs-page__lyrics-only-toggle-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.5rem;
+  min-width: 0;
+}
+
+.songs-page__lyrics-only-toggle-label {
+  font: 600 0.72rem/1.35 var(--font-ui);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.songs-page__lyrics-only-toggle-count {
+  font: 600 0.68rem/1.2 var(--font-ui);
+  letter-spacing: 0.03em;
   color: var(--color-text-muted);
-  font-weight: 400;
+  padding: 0.12rem 0.4rem;
+  border-radius: 999px;
+  background: var(--color-bg-inset);
+  border: 1px solid var(--color-border-light);
 }
 
 .catalog-layout {

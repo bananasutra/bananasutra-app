@@ -28,7 +28,7 @@ export function HomeLatestDropsSection({
         <HomeLatestDropsSpotlight songs={songs} />
       )}
       <Link className="catalog-section-cta" to={browsePathWithQuery('/songs', 'sort=newest')}>
-        Browse newest songs →
+        Explore the full songs collection →
       </Link>
     </>
   )
@@ -63,7 +63,7 @@ export function HomeTopTracksSection({
         <>
           <HomeHaveABitePlayer favorites={favorites} showBrowseCta={false} />
           <Link className="catalog-section-cta" to={canonicalPathForRoute('/tracks')}>
-            Listen to all tracks →
+            Listen to all top tracks →
           </Link>
         </>
       ) : null}

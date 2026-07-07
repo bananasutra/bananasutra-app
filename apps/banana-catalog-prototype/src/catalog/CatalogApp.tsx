@@ -550,20 +550,19 @@ export function CatalogApp() {
             defaultExpanded={filterBarExpanded}
             onExpandedChange={setFilterBarExpanded}
             panelAfterSearch={
-              <label className="songs-page__lyrics-only-toggle">
-                <input
-                  type="checkbox"
-                  checked={includeLyricsOnly}
-                  onChange={(e) => setIncludeLyricsOnlyAndSync(e.target.checked)}
-                />
-                <span className="songs-page__lyrics-only-toggle-label">
-                  Include lyrics-only songs
-                  <span className="songs-page__lyrics-only-toggle-hint" aria-hidden>
-                    {' '}
-                    (+{lyricsOnlySongCount})
+              <div className="songs-page__lyrics-only-filter">
+                <label className="songs-page__lyrics-only-toggle">
+                  <input
+                    type="checkbox"
+                    checked={includeLyricsOnly}
+                    onChange={(e) => setIncludeLyricsOnlyAndSync(e.target.checked)}
+                  />
+                  <span className="songs-page__lyrics-only-toggle-text">
+                    <span className="songs-page__lyrics-only-toggle-label">Include lyrics-only songs</span>
+                    <span className="songs-page__lyrics-only-toggle-count">+{lyricsOnlySongCount}</span>
                   </span>
-                </span>
-              </label>
+                </label>
+              </div>
             }
             toolbarEnd={
               <div

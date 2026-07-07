@@ -581,7 +581,7 @@ function SongDetailLoaded({
   const songbookPlaylistUrl = (songbookRecord?.playlist_url ?? '').trim()
   const songbookUrlNorm = normSoundcloudUrl(songbookPlaylistUrl)
 
-  const listenEpVolumes = useMemo((): SongEpVolume[] => {
+  const catalogEpVolumes = useMemo((): SongEpVolume[] => {
     const fromData = (detail.ep_volumes ?? []).filter((v) => {
       const url = v.ep_url.trim()
       if (!url) return false
@@ -608,6 +608,36 @@ function SongDetailLoaded({
     primaryEpTitle,
     primaryEpUrl,
     songbookUrlNorm,
+  ])
+
+  const inAppPlayableTracks = useMemo(
+    () => orderedTracks.filter((t) => trackIsInApp(t) && t.sc_url.trim()),
+    [orderedTracks],
+  )
+
+  /** One listen path only: single track row, catalog-export URL, or both pointing at the same lone SC link. */
+  const isLoneSingleSong =
+    catalogEpVolumes.length === 0 &&
+    orderedTracks.length <= 1 &&
+    inAppPlayableTracks.length <= 1
+
+  const listenEpVolumes = useMemo((): SongEpVolume[] => {
+    if (catalogEpVolumes.length > 0) return catalogEpVolumes
+    if (!isLoneSingleSong) return []
+    const loneUrl = (inAppPlayableTracks[0]?.sc_url || catalogListenUrl || '').trim()
+    if (!loneUrl) return []
+    const loneTitle =
+      (detail.sc_catalog_track_title || '').trim() ||
+      (inAppPlayableTracks[0]?.track_title || '').trim() ||
+      detail.lyrics_title
+    return [{ ep_volume: 0, ep_url: loneUrl, ep_title: loneTitle, ep_rating: '' }]
+  }, [
+    catalogEpVolumes,
+    catalogListenUrl,
+    detail.lyrics_title,
+    detail.sc_catalog_track_title,
+    inAppPlayableTracks,
+    isLoneSingleSong,
   ])
 
   const primaryListenEpVolume = listenEpVolumes[listenEpVolumes.length - 1] ?? null
@@ -652,7 +682,6 @@ function SongDetailLoaded({
     catalogListenUrl ||
     ''
   ).trim()
-  const inAppPlayableTracks = orderedTracks.filter((t) => trackIsInApp(t) && t.sc_url.trim())
   const playAllDesktopAvailable = usePlayAllDesktopAvailable()
   /** Multi-track Play All uses the persistent bar; single-track / catalog-export keeps inline SC beside lyrics. */
   const showInlineScEmbed = !playAllDesktopAvailable || inAppPlayableTracks.length <= 1
@@ -762,12 +791,18 @@ function SongDetailLoaded({
   const hasPlayableTrack = Boolean(playingUrl)
   const hasEpFallback = Boolean(primaryEpUrl)
   const hasAnyTrackUrls = detail.tracks.some((t) => t.sc_url.trim())
-  const shouldShowTracksList = orderedTracks.length > 1 || Boolean(activeTrackGenre)
+  const shouldShowTracksList =
+    !isLoneSingleSong &&
+    (inAppPlayableTracks.length >= 2 ||
+      orderedTracks.length > 1 ||
+      Boolean(activeTrackGenre) ||
+      (inAppPlayableTracks.length === 1 && catalogEpVolumes.length > 0))
+  const showTrackListInPanel = shouldShowTracksList && inAppPlayableTracks.length > 1
   const hasScCatalogListen = Boolean(catalogListenUrl)
   const defaultingToCatalogExport =
     hasScCatalogListen && !defaultTrack && !fallbackScUrl && !(selectedUrl?.trim())
   /** Multi-track list or catalog-export listen — not “video replaces listen slot” UX (D-013). */
-  const hasTopTracksListenUi = shouldShowTracksList || hasScCatalogListen
+  const hasTopTracksListenUi = shouldShowTracksList
   const hasInlineListenEmbed = showEpEmbed || hasScCatalogListen || (hasPlayableTrack && !shouldShowTracksList)
   const hasAudioContent =
     hasPlayableTrack || hasEpFallback || hasAnyTrackUrls || shouldShowTracksList || hasScCatalogListen
@@ -783,17 +818,15 @@ function SongDetailLoaded({
   const useLyricsMediaSplit = hasLyrics && hasMediaColumnForSplit
   /** Top tracks / catalog listen vs EP vol tabs when video or multi-volume listen competes. */
   const hasListenTabNav =
-    useLyricsMediaSplit &&
-    listenEpVolumes.length > 0 &&
-    (hasTopTracksListenUi || showVideoInColumn || listenEpVolumes.length > 1)
+    useLyricsMediaSplit && (hasTopTracksListenUi || listenEpVolumes.length > 0)
   const showEpPanel = Boolean(
     listenEpVolumes.length > 0 && (!hasListenTabNav || isEpListenTab(audioListenTab)),
   )
   const showTracksPanel =
     hasTopTracksListenUi && (!hasListenTabNav || audioListenTab === 'tracks')
   const hasActiveMediaPanel = showEpPanel || (showTracksPanel && showAudioSection) || showVideoSection
-  const tracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Top tracks'
-  const compactTracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Tracks'
+  const tracksTabLabel = inAppPlayableTracks.length === 1 ? 'Top track' : 'Top tracks'
+  const compactTracksTabLabel = tracksTabLabel
   const topTracksHasOverflow = orderedTracks.length > SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT
   const topTracksListExpanded = topTracksExpanded || !topTracksHasOverflow
   const displayedTopTracks = topTracksListExpanded
@@ -1311,14 +1344,14 @@ function SongDetailLoaded({
                 )}
               </section>
 
-              {shouldShowTracksList ? (
+              {showTrackListInPanel ? (
                 <section
                   className={`song-detail-tracks${hasListenTabNav ? ' song-detail-tracks--tabbed' : ''}`}
                   aria-labelledby={hasListenTabNav ? 'song-tab-tracks' : 'song-tracks-heading'}
                 >
                   {hasListenTabNav ? null : (
                     <h2 id="song-tracks-heading" className="catalog-section-title">
-                      {inAppPlayableTracks.length > 1 ? 'Top tracks' : 'Track picks'}
+                      {inAppPlayableTracks.length === 1 ? 'Top track' : 'Top tracks'}
                     </h2>
                   )}
                   {inAppPlayableTracks.length > 1 ? (

@@ -21,7 +21,7 @@ export function ListenLpBertrandTail({ onOpenChat }: Props) {
       <aside className="listen-lp__bertrand-tail" aria-labelledby="listen-lp-bertrand-heading">
         <p id="listen-lp-bertrand-heading" className="listen-lp__bertrand-headline">
           Or, tell Bertrand how you&apos;re feeling. He understands…{' '}
-          <a className="listen-lp__bertrand-cta" href="#bertrand" onClick={handleOpen}>
+          <a className="catalog-bertrand-cta listen-lp__bertrand-cta" href="#bertrand" onClick={handleOpen}>
             Ask Bertrand →
           </a>
         </p>

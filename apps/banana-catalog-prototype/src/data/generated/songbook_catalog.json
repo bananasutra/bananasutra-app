@@ -438,8 +438,8 @@
       },
       {
         "lyrics_id": "L-109",
-        "lyrics_title": "I Ain't No Christian (Like Bertrand)",
-        "url_slug": "i-ain-t-no-christian-like-bertrand",
+        "lyrics_title": "I Ain't No Christian",
+        "url_slug": "i-ain-t-no-christian",
         "summary_short": "I looked for peace and logic. I found Bertrand Russell. Close enough.",
         "cover_image_url": "https://i1.sndcdn.com/artworks-FXu0T1aNuzRuPyMB-olhCZA-t500x500.png",
         "has_in_app_playback": false,
@@ -1706,7 +1706,7 @@
     "playlist_total_likes": 153,
     "playlist_track_count": 18,
     "playlist_duration_total": "0:58:50",
-    "song_count": 24,
+    "song_count": 23,
     "songs_with_in_app_playback": 13,
     "member_lyrics_ids": [
       "L-34",
@@ -1723,7 +1723,6 @@
       "L-46",
       "L-296",
       "L-64",
-      "L-107",
       "L-141",
       "L-102",
       "L-179",
@@ -1916,19 +1915,6 @@
         "has_youtube_embed": true,
         "aggregate_play_count": 277,
         "aggregate_like_count": 6
-      },
-      {
-        "lyrics_id": "L-107",
-        "lyrics_title": "How Do We Find Meaning?",
-        "url_slug": "how-do-we-find-meaning",
-        "summary_short": "Life is absurd. Also: how do we find meaning?",
-        "cover_image_url": "",
-        "has_in_app_playback": false,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-141",
@@ -2336,8 +2322,8 @@
     "member_songs": [
       {
         "lyrics_id": "L-338",
-        "lyrics_title": "Can You Play Win-Win Or No?",
-        "url_slug": "can-you-play-win-win-or-no",
+        "lyrics_title": "Can You Play Win-Win Games Or No?",
+        "url_slug": "can-you-play-win-win-games-or-no",
         "summary_short": "Can you play win-win, or do you just blow-blow? Hot tip: Kindness is free, and the only entry fee to the glorious win-win States of United Trust.",
         "cover_image_url": "https://i1.sndcdn.com/artworks-LXS4HZIEsUbZZwUX-FATSmQ-t500x500.png",
         "has_in_app_playback": false,
@@ -4062,11 +4048,11 @@
         "lyrics_title": "Bully",
         "url_slug": "bully",
         "summary_short": "Why do we choose the broken men?... Asking for a friend.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-Gpeeqzc8b4frhVCd-pyGbug-t500x500.png",
+        "cover_image_url": "https://i.ytimg.com/vi/uvjQ4g73qcM/maxresdefault.jpg",
         "has_in_app_playback": false,
-        "has_sc_catalog_listen": true,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
       },
@@ -6257,7 +6243,7 @@
       },
       {
         "lyrics_id": "L-401",
-        "lyrics_title": "Feel the ryhthm",
+        "lyrics_title": "Feel The Ryhthm",
         "url_slug": "feel-the-rhythm",
         "summary_short": "Catch the beat, let the questions grow. A loop-driven meditation on rhythm as philosophy.",
         "cover_image_url": "",
