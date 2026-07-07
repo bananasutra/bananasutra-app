@@ -21,7 +21,7 @@ export function WatchLpBertrandTail({ onOpenChat }: Props) {
       <aside className="watch-lp__bertrand-tail" aria-labelledby="watch-lp-bertrand-heading">
         <p id="watch-lp-bertrand-heading" className="watch-lp__bertrand-headline">
           Not finding it? Describe what you&apos;re after.{' '}
-          <a className="watch-lp__bertrand-cta" href="#bertrand" onClick={handleOpen}>
+          <a className="catalog-bertrand-cta watch-lp__bertrand-cta" href="#bertrand" onClick={handleOpen}>
             Ask Bertrand →
           </a>
         </p>

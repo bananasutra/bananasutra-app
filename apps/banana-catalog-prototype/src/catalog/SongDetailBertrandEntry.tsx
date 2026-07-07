@@ -1,5 +1,9 @@
 import type { MouseEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { trackBertrandOpen } from '../lib/analytics'
+import { sutraClassName } from './sutraTheme'
+import { sutraHrefFromSongSutraField } from './sutraPageUtils'
+import { buildBrowsePathForFacet } from './urlState'
 
 type Props = {
   sutra?: string
@@ -19,12 +23,21 @@ export function SongDetailBertrandEntry({ sutra }: Props) {
     <aside className="song-detail-bertrand" aria-labelledby="song-bertrand-heading">
       <p id="song-bertrand-heading" className="song-detail-bertrand__headline">
         More like this? Ask Bertrand for the next song.{' '}
-        <a className="song-detail-bertrand__cta" href="#bertrand" onClick={handleOpen}>
+        <a className="catalog-bertrand-cta song-detail-bertrand__cta" href="#bertrand" onClick={handleOpen}>
           Ask Bertrand →
         </a>
       </p>
       {sutraTrimmed ? (
-        <p className="song-detail-bertrand__sub">Stay in {sutraTrimmed}, or drift somewhere else.</p>
+        <p className="song-detail-bertrand__sub">
+          Stay in{' '}
+          <Link
+            className="song-detail-bertrand__sutra-link"
+            to={sutraHrefFromSongSutraField(sutraTrimmed) ?? buildBrowsePathForFacet('sutra', sutraTrimmed)}
+          >
+            <span className={`catalog-facet-sutra-name ${sutraClassName(sutraTrimmed)}`}>{sutraTrimmed}</span>
+          </Link>
+          , or drift somewhere else.
+        </p>
       ) : null}
     </aside>
   )

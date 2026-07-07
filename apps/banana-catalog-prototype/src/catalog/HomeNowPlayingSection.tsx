@@ -28,7 +28,7 @@ export function HomeLatestDropsSection({
         <HomeLatestDropsSpotlight songs={songs} />
       )}
       <Link className="catalog-section-cta" to={browsePathWithQuery('/songs', 'sort=newest')}>
-        Browse newest songs →
+        Explore the full catalog →
       </Link>
     </>
   )

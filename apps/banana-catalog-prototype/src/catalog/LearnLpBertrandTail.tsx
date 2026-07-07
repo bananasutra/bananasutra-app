@@ -21,7 +21,7 @@ export function LearnLpBertrandTail({ onOpenChat }: Props) {
       <aside className="learn-lp__bertrand-tail" aria-labelledby="learn-lp-bertrand-heading">
         <p id="learn-lp-bertrand-heading" className="learn-lp__bertrand-headline">
           Still not sure where to start? He knows the whole story.{' '}
-          <a className="learn-lp__bertrand-cta" href="#bertrand" onClick={handleOpen}>
+          <a className="catalog-bertrand-cta learn-lp__bertrand-cta" href="#bertrand" onClick={handleOpen}>
             Ask Bertrand →
           </a>
         </p>

@@ -762,7 +762,8 @@ function SongDetailLoaded({
   const hasPlayableTrack = Boolean(playingUrl)
   const hasEpFallback = Boolean(primaryEpUrl)
   const hasAnyTrackUrls = detail.tracks.some((t) => t.sc_url.trim())
-  const shouldShowTracksList = orderedTracks.length > 1 || Boolean(activeTrackGenre)
+  const shouldShowTracksList =
+    inAppPlayableTracks.length >= 1 || orderedTracks.length > 1 || Boolean(activeTrackGenre)
   const hasScCatalogListen = Boolean(catalogListenUrl)
   const defaultingToCatalogExport =
     hasScCatalogListen && !defaultTrack && !fallbackScUrl && !(selectedUrl?.trim())
@@ -792,8 +793,8 @@ function SongDetailLoaded({
   const showTracksPanel =
     hasTopTracksListenUi && (!hasListenTabNav || audioListenTab === 'tracks')
   const hasActiveMediaPanel = showEpPanel || (showTracksPanel && showAudioSection) || showVideoSection
-  const tracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Top tracks'
-  const compactTracksTabLabel = inAppPlayableTracks.length <= 1 ? 'Listen' : 'Tracks'
+  const tracksTabLabel = inAppPlayableTracks.length === 1 ? 'Top track' : 'Top tracks'
+  const compactTracksTabLabel = tracksTabLabel
   const topTracksHasOverflow = orderedTracks.length > SONG_DETAIL_TOP_TRACKS_COLLAPSED_COUNT
   const topTracksListExpanded = topTracksExpanded || !topTracksHasOverflow
   const displayedTopTracks = topTracksListExpanded
@@ -1318,7 +1319,7 @@ function SongDetailLoaded({
                 >
                   {hasListenTabNav ? null : (
                     <h2 id="song-tracks-heading" className="catalog-section-title">
-                      {inAppPlayableTracks.length > 1 ? 'Top tracks' : 'Track picks'}
+                      {inAppPlayableTracks.length === 1 ? 'Top track' : 'Top tracks'}
                     </h2>
                   )}
                   {inAppPlayableTracks.length > 1 ? (

@@ -731,26 +731,6 @@ export function VideosPage() {
         </div>
 
         <div className="videos-page__content">
-          <CatalogFilterBar
-            ariaLabel="Filter videos"
-            panelId="videos-filter-panel"
-            resultSummary={videoContextSummary}
-            activePills={videoActivePills}
-            clearAllHref={clearAllVideosFiltersHref}
-            facetGroups={videoFacetGroups}
-            secondaryGroup={videoSecondaryGroup}
-            search={{
-              id: 'videos-find-input',
-              label: 'Search',
-              ariaLabel: 'Search videos by title or catalog info',
-              value: findDraft,
-              onChange: setFindDraft,
-              inputName: 'videos_find',
-            }}
-            defaultExpanded={filterBarExpanded}
-            onExpandedChange={setFilterBarExpanded}
-          />
-
           <main id="main-content" className="catalog-main videos-page__main">
             {!youtubeCatalogReady || featuredVideoHero ? (
               <section
@@ -808,6 +788,29 @@ export function VideosPage() {
                 ) : null}
               </section>
             ) : null}
+
+            <div className="videos-page__filters-below-featured">
+              <CatalogFilterBar
+                ariaLabel="Filter videos"
+                panelId="videos-filter-panel"
+                resultSummary={videoContextSummary}
+                activePills={videoActivePills}
+                clearAllHref={clearAllVideosFiltersHref}
+                facetGroups={videoFacetGroups}
+                secondaryGroup={videoSecondaryGroup}
+                search={{
+                  id: 'videos-find-input',
+                  label: 'Search',
+                  ariaLabel: 'Search videos by title or catalog info',
+                  value: findDraft,
+                  onChange: setFindDraft,
+                  inputName: 'videos_find',
+                }}
+                defaultExpanded={filterBarExpanded}
+                onExpandedChange={setFilterBarExpanded}
+              />
+            </div>
+
             {listSection}
             {youtubeCatalogReady && shownVideos.length > 0 ? (
               <Link

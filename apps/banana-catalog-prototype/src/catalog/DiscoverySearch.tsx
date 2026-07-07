@@ -49,6 +49,7 @@ import { loadSongSearchDeep, loadYoutubeByLyricsId, useSongCatalogBrowse } from 
 import { CATALOG_CHROME_STATS } from './catalogChromeStats'
 import { formatHomeCount } from './homePortalData'
 import { hasListenerCatalogMedia, isLyricsOnlySong } from './listenerCatalog'
+import { coverImageUrl } from '../seo/imageUrl'
 
 const facets = facetsJson as FacetsPayload
 const DEBOUNCE_MS = 300
@@ -164,13 +165,10 @@ function topTracksRowGenreLabel(song: SongCatalogItem): string {
   return (song.discovery_top_track_genres ?? '').trim() || 'SoundCloud'
 }
 
-function thumbnailSrc(rawUrl: string, size = 't120x120'): string {
-  const url = rawUrl.trim()
-  if (!url) return ''
-  // SoundCloud artwork URLs usually include a `-t<size>.` token.
-  return url
-    .replace(/-t\d+x\d+\./i, `-${size}.`)
-    .replace(/-toriginal\./i, `-${size}.`)
+const DISCOVERY_THUMB_WIDTH = 84
+
+function discoveryThumbSrc(rawUrl: string): string {
+  return coverImageUrl(rawUrl, { width: DISCOVERY_THUMB_WIDTH })
 }
 
 const HEADER_OTHER_FACET_CHIP_CAP = 18
@@ -1139,7 +1137,7 @@ function TypedYoutubeSongGroupList({
               {g.videos.map((v) =>
                 v.thumbnail_url ? (
                   <span key={v.video_id} className="discovery-search__yt-thumb-wrap">
-                    <img className="discovery-search__yt-thumb" src={v.thumbnail_url} alt="" width={80} height={45} loading="lazy" />
+                    <img className="discovery-search__yt-thumb" src={coverImageUrl(v.thumbnail_url, { width: 160 })} alt="" width={80} height={45} loading="eager" decoding="async" />
                   </span>
                 ) : (
                   <span key={v.video_id} className="discovery-search__yt-thumb-wrap discovery-search__yt-thumb-wrap--fallback">
@@ -1206,7 +1204,7 @@ function TypedTrackList({
   return (
     <ul id={listboxId} className="discovery-search__results" role="listbox" aria-label="Matching SoundCloud tracks">
       {slice.map((t, i) => {
-        const cover = thumbnailSrc((t.list_cover_url || t.artwork_url || '').trim())
+        const cover = discoveryThumbSrc((t.list_cover_url || t.artwork_url || '').trim())
         const sub = genreLineDiscoveryTrack(t) || (t.soundcloud_genre || '').trim() || 'SoundCloud'
         return (
           <li
@@ -1230,7 +1228,7 @@ function TypedTrackList({
           >
             <div className="discovery-search__result-main">
               {cover ? (
-                <img className="discovery-search__result-thumb" src={cover} alt="" width={42} height={42} loading="lazy" />
+                <img className="discovery-search__result-thumb" src={cover} alt="" width={42} height={42} loading="eager" decoding="async" />
               ) : (
                 <span className="discovery-search__result-thumb discovery-search__result-thumb--fallback" aria-hidden>
                   🍌
@@ -1314,14 +1312,15 @@ function TypedSongList({
           }}
         >
           <div className="discovery-search__result-main">
-            {thumbnailSrc(song.cover_image_url) ? (
+            {discoveryThumbSrc(song.cover_image_url) ? (
               <img
                 className="discovery-search__result-thumb"
-                src={thumbnailSrc(song.cover_image_url)}
+                src={discoveryThumbSrc(song.cover_image_url)}
                 alt=""
                 width={42}
                 height={42}
-                loading="lazy"
+                loading="eager"
+                decoding="async"
               />
             ) : isLyricsOnlySong(song) ? (
               <span
@@ -1420,14 +1419,15 @@ function TypedSongbookList({
           }}
         >
           <div className="discovery-search__result-main">
-            {thumbnailSrc(group.artworkUrl) ? (
+            {discoveryThumbSrc(group.artworkUrl) ? (
               <img
                 className="discovery-search__result-thumb"
-                src={thumbnailSrc(group.artworkUrl)}
+                src={discoveryThumbSrc(group.artworkUrl)}
                 alt=""
                 width={42}
                 height={42}
-                loading="lazy"
+                loading="eager"
+                decoding="async"
               />
             ) : (
               <span className="discovery-search__result-thumb discovery-search__result-thumb--fallback" aria-hidden>
