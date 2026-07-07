@@ -3,12 +3,22 @@ export const CATALOG_REDIRECT_ENTRIES = [
   {
     "from": "/songs/broken-whole-encore",
     "to": "/songs/broken-whole",
-    "reason": "L-423 to L-346"
+    "reason": "L-423 to L-346 (consolidate vols)"
+  },
+  {
+    "from": "/songs/like-a-criminal-strong-man",
+    "to": "/songs/like-a-criminal-alien",
+    "reason": "song rename"
   },
   {
     "from": "/songs/serial-blowers-vol2",
     "to": "/songs/serial-blowers",
-    "reason": "L-425 to L-216"
+    "reason": "L-425 to L-216 (consolidate vols)"
+  },
+  {
+    "from": "/songs/stfu",
+    "to": "/songs/shush",
+    "reason": "song rename"
   },
   {
     "from": "/songs/the-seven-sutras-of-banana",

@@ -7,59 +7,30 @@
   font-style: italic;
 }
 
+/* Facade shell + play glyph use global `.yt-embed-facade` / `.yt-embed-client-placeholder` tokens. */
 .watch-lp__playlist-embed-facade,
 .watch-lp__playlist-embed-placeholder {
   position: absolute;
   inset: 0;
-  display: block;
   width: 100%;
   height: 100%;
   min-height: 0;
-  padding: 0;
-  border: 0;
-  background: #1a1a1a;
-  cursor: pointer;
-  text-align: left;
-  font: inherit;
-  color: inherit;
 }
 
 .watch-lp__playlist-embed-placeholder {
   cursor: default;
 }
 
-.watch-lp__playlist-embed-facade:focus-visible {
-  outline: 2px solid var(--color-link, #524a40);
-  outline-offset: 2px;
+.watch-lp__playlist-embed-facade .yt-embed-facade__poster {
+  opacity: 0.55;
 }
 
-.watch-lp__playlist-embed-poster {
+.watch-lp__playlist-embed-frame-host {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  opacity: 0.55;
-}
-
-.watch-lp__playlist-embed-play {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.55);
-  border: 2px solid rgba(255, 255, 255, 0.85);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  padding-left: 0.15rem;
-  z-index: 1;
-  pointer-events: none;
+  min-height: 0;
 }
 
 .watch-lp__playlist-embed-overlay {
@@ -86,16 +57,6 @@
   display: block;
   font-size: 0.58rem;
   opacity: 0.92;
-}
-
-.watch-lp__playlist-embed-iframe {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  border: 0;
 }
 
 .watch-lp__playlist-embed.is-playing .catalog-video-spotlight__embed {

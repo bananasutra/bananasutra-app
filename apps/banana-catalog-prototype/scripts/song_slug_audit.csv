@@ -1,4 +1,8 @@
 lyrics_id,lyrics_title,url_slug,lyrics_title_blank,slug_share_count
+L-338,Can You Play Win-Win Or No?,can-you-play-win-win-or-no,0,1
+L-38,But(t) Where Do Pigeons Go To Die?,but-where-do-pigeons-go-to-die,0,1
+L-431,Ideas We Can Feel,ideas-we-can-feel,0,1
+L-429,La Vie Sera Belle,la-vie-sera-belle,0,1
 L-424,I Wanna Know,i-wanna-know,0,1
 L-426,So Woken,so-woken,0,1
 L-34,Blessed Be Your Voice,blessed-be-your-voice,0,1
@@ -47,10 +51,7 @@ L-114,If We Had But(t) The Truth,if-we-had-but-t-the-truth,0,1
 L-202,Rainbows in the Clouds,rainbows-in-the-clouds,0,1
 L-335,Come Waddle With Me,come-waddle-with-me,0,1
 L-17,An American in Paris (Public Domain),an-american-in-paris-public-domain,0,1
-L-207,Revolution's Lit,revolution-s-lit,0,1
 L-36,Bloom Past Doom,bloom-past-doom,0,1
-L-396,This Ain't Fiction (Bloom Past Doom),this-aint-fiction-bloom-past-doom,0,1
-L-406,Apes Gone Wrong (Bloom Past Doom),apes-gone-wrong,0,1
 L-375,Syndrome Nom Nom,syndrome-nom-nom,0,1
 L-193,Possum Scrotum,possum-scrotum,0,1
 L-243,The Atheist Tango,the-atheist-tango,0,1
@@ -61,7 +62,6 @@ L-420,Beautiful Things Don't Ask For Attention,beautiful-things-dont-ask-for-att
 L-116,It's An Ethical Paradox,it-s-an-ethical-paradox,0,1
 L-227,Sing Your Own Gospel,sing-your-own-gospel,0,1
 L-274,"Two Things, Darling",two-things-darling,0,1
-L-326,MASA (Make America Safe Again),masa-make-america-safe-again,0,1
 L-21,Awe Is Mighty,awe-is-mighty,0,1
 L-214,Seminal Bollocks,seminal-bollocks,0,1
 L-110,I Did The Math (Everything is Stupid),i-did-the-math-everything-is-stupid-absurd-and-divine,0,1
@@ -71,6 +71,7 @@ L-148,Lyrics Matter (FOOsutra),lyrics-matter-foosutra,0,1
 L-63,Donkeys Years,donkeys-years,0,1
 L-185,Peel Me Kindly,peel-me-kindly,0,1
 L-395,We Ain't Ghouls,we-aint-ghouls,0,1
+L-396,This Ain't Fiction (Bloom Past Doom),this-aint-fiction-bloom-past-doom,0,1
 L-262,"They Call It Freedom (Oh Hi, Sweet Honey Bun)",they-call-it-freedom-oh-hi-sweet-honey-bun,0,1
 L-124,Kids Are Asking,kids-are-asking,0,1
 L-304,Why We Can't Be Brave?,why-we-can-t-be-brave,0,1
@@ -88,6 +89,7 @@ L-217,Shades of Fools (All I Know),shades-of-fools-all-i-know,0,1
 L-244,The Conquest of Happiness,the-conquest-of-happiness,0,1
 L-393,The Unhappiness Tango,the-unhappiness-tango,0,1
 L-282,We Live Not By Lies,we-live-not-by-lies,0,1
+L-326,MASA (Make America Safe Again),masa-make-america-safe-again,0,1
 L-212,Secret De Polichinelle,secret-de-polichinelle,0,1
 L-101,Hiding Secrets in Lies,hiding-secrets-in-lies,0,1
 L-268,Trauma Begets Trauma,trauma-begets-trauma,0,1
@@ -102,6 +104,7 @@ L-247,The Echo Song,the-echo-song,0,1
 L-417,Masss ShoooTING,masss-shoooting,0,1
 L-392,The Echo Song (Russian Edition),the-echo-song-russian-edition,0,1
 L-428,Predators (FOTUS Edition),predators-fotus-edition,0,1
+L-430,Let's Sing,let-s-sing,0,1
 L-173,"Oh, Martine",oh-martine,0,1
 L-49,Creepy Pasta (What The Hella),creepy-pasta-what-the-hella,0,1
 L-203,Read Me Harder (BB is for Banned Books),read-me-harder-bb-is-for-banned-books,0,1
@@ -109,12 +112,14 @@ L-99,"Hi, My Name Is (Not Celine Dion)",hi-my-name-is-not-celine-dion,0,1
 L-92,Hammy On Clyde,hammy-on-clyde,0,1
 L-332,Freedom To Lie Is The New Human Right,freedom-to-lie-is-the-new-human-right,0,1
 L-376,Maupassant,maupassant,0,1
+L-207,Revolution's Lit,revolution-s-lit,0,1
 L-3,A Letter To My Friend (Never Again),a-letter-to-my-friend-never-again,0,1
 L-132,La Force Douce,la-force-douce,0,1
 L-307,WIN-WIN (Franglish Dub),win-win-dub,0,1
 L-252,The Love of A Dove,the-love-of-a-dove,0,1
 L-329,Ignoramus Divine,ignoramus-divine,0,1
 L-180,"Oy, We Care",oy-we-care,0,1
+L-406,Apes Gone Wrong (Bloom Past Doom),apes-gone-wrong,0,1
 L-84,"Freee, La Fille",freee-la-fille,0,1
 L-113,Planet Idiocracy,planet-idiocracy,0,1
 L-131,L’Embobinage,l-embobinage,0,1
@@ -144,7 +149,6 @@ L-271,Truth Don't Care,truth-don-t-care,0,1
 L-31,Blaise's Tale,blaise-s-tale,0,1
 L-287,What If -Ism,what-if-ism,0,1
 L-146,Blessed Be The Dogs (SHOWsutra Edition),blessed-be-the-dogs-showsutra-edition,0,1
-L-33,Blessed Be The Dogs,blessed-be-the-dogs,0,1
 L-382,Skanking Pickles,skanking-pickles,0,1
 L-293,When Did Seduction Become so Untrue?,when-did-seduction-become-so-untrue,0,1
 L-22,Banana Alleluia,banana-alleluia,0,1
@@ -194,8 +198,6 @@ L-224,Sidération (The Sky Stood Still),sideration-the-sky-stood-still,0,1
 L-223,Sidération,sideration,0,1
 L-46,"Courage, care, and coconuts",courage-care-and-coconuts,0,1
 L-89,Glitter On A Turd,glitter-on-a-turd,0,1
-L-349,"FOTUS Circus: Step right up, My Dearest Souls",fotus-circus-step-right-up-my-dearest-souls,0,1
-L-404,"FOTUS Circus: Step Right Up, Murica Freaks",fotus-circus-step-right-up-murica-freaks,0,1
 L-81,FOTUS Circus: Angels Eyes,fotus-circus-angels-eyes,0,1
 L-82,FOTUS Circus: Ginsberg Hollow (Horror) Show,fotus-circus-ginsberg-hollow-horror-show,0,1
 L-77,Fluye (como el mar),fluye-como-el-mar,0,1
@@ -233,14 +235,14 @@ L-12,AI Fair Use Manifesto,ai-fair-use-manifesto,0,1
 L-144,Like A Criminal Alien,like-a-criminal-alien,0,1
 L-39,"But Who Says ""Say My Name""",but-who-says-say-my-name,0,1
 L-145,Like A Dog In The Sky,like-a-dog-in-the-sky,0,1
+L-33,Blessed Be The Dogs,blessed-be-the-dogs,0,1
 L-58,Dead Dogs Deets,dead-dogs-deets,0,1
 L-301,Who Needs A Big D?,who-needs-a-big-d,0,1
 L-421,Let Me Tell You (This Is My Truth),let-me-tell-you-this-is-my-truth,0,1
-L-338,Can You Play Win-Win Or No?,can-you-play-win-win-or-no,0,1
 L-65,Dressed In (Nothing Butt) Wonder,dressed-in-nothing-butt-wonder,0,1
 L-152,Make your Own Bible,make-your-own-bible,0,1
-L-280,Waldo's Atheist Tango,waldo-s-atheist-tango,0,1
 L-281,Waldo's Fascist Tango (Down We Go),waldo-s-fascist-tango-down-we-go,0,1
+L-280,Waldo's Atheist Tango,waldo-s-atheist-tango,0,1
 L-270,Trust No One,trust-no-one,0,1
 L-292,What's F-A-S-C-I-S-T?,what-s-f-a-s-c-i-s-t,0,1
 L-64,Double Standards,double-standards,0,1
@@ -249,12 +251,13 @@ L-7,A Stroll Down History’s Lane,a-stroll-down-history-s-lane,0,1
 L-150,MAKA (Make America Kind Again),maka-make-america-kind-again,0,1
 L-158,MAWA (Make America Woke Again),mawa-make-america-woke-again,0,1
 L-347,Acousticophilia,acousticophilia,0,1
+L-349,"FOTUS Circus: Step right up, My Dearest Souls",fotus-circus-step-right-up-my-dearest-souls,0,1
 L-350,"FOTUS Circus: Step Inside, Don’t Mind The Crime",fotus-circus-step-inside-don-t-mind-the-crime,0,1
 L-147,Linguistic Weaponry,linguistic-weaponry,0,1
 L-305,Why You Lie (To The People's Face)?,why-you-lie-to-the-people-s-face,0,1
 L-337,Chuck-A-Dick,chuck-a-dick,0,1
 L-343,Twatocracy (Encore et Encore),twatocracy-encore-et-encore,0,1
-L-422,STFU,stfu,0,1
+L-422,Shush,shush,0,1
 L-48,Creepy Con Meme,creepy-con-meme,0,1
 L-196,"Pro-life Means What, Honey?",pro-life-means-what-honey,0,1
 L-139,Learn The Signs (Ego’s Masquerade),learn-the-signs,0,1
@@ -301,7 +304,6 @@ L-162,More Than A Plate (Anthony Bourdain <3),more-than-a-plate-anthony-bourdain
 L-43,Chuck Ain't Woke,chuck-ain-t-woke,0,1
 L-356,Weary Blues,weary-blues,0,1
 L-358,Dream A Dog,dream-a-dog,0,1
-L-38,But Where Do Pigeons Go To Die?,but-where-do-pigeons-go-to-die,0,1
 L-402,The Sound of A Wondering Mind,the-sound-of-a-wondering-mind,0,1
 L-403,Suspended in Time,suspended-in-time,0,1
 L-235,Supreme Words (Whoop Whoop),supreme-words-whoop-whoop,0,1
@@ -390,6 +392,7 @@ L-19,Authentic Innovation Manifesto,authentic-innovation-manifesto,0,1
 L-105,How Deep Is Your Shade?,how-deep-is-your-shade,0,1
 L-201,Rachel Barks,rachel-barks,0,1
 L-6,A New Historical Era,a-new-historical-era,0,1
+L-404,"FOTUS Circus: Step Right Up, Murica Freaks",fotus-circus-step-right-up-murica-freaks,0,1
 L-405,FOTUS Circus: Round And Round,fotus-circus-round-and-round,0,1
 L-59,Dear Edward (The Snowden Song),dear-edward-the-snowden-song,0,1
 L-408,Let Me Tell You About Heartache,let-me-tell-you-about-heartache,0,1

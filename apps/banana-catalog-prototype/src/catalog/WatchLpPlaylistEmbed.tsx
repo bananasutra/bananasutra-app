@@ -58,7 +58,12 @@ function WatchLpPlaylistEmbedInner({
 }) {
   const clientMounted = useClientMounted()
   const [facadeReleased, setFacadeReleased] = useState(false)
+  const [iframeReady, setIframeReady] = useState(false)
   const playlistId = (playlist.playlist_id || '').trim()
+
+  useEffect(() => {
+    setIframeReady(false)
+  }, [playlistId, facadeReleased])
 
   useEffect(() => {
     onPlayingChange?.(facadeReleased)
@@ -89,13 +94,26 @@ function WatchLpPlaylistEmbedInner({
       <article className="catalog-video-spotlight__hero">
         <div className="catalog-video-spotlight__embed" style={{ aspectRatio: '16 / 9' }}>
           {!clientMounted ? (
-            <div className="watch-lp__playlist-embed-placeholder" role="status" aria-label={`Loading playlist: ${title}`}>
-              {poster ? <img src={poster} alt="" className="watch-lp__playlist-embed-poster" decoding="async" width={640} height={360} /> : null}
+            <div
+              className="yt-embed-client-placeholder watch-lp__playlist-embed-placeholder"
+              role="status"
+              aria-label={`Loading playlist: ${title}`}
+            >
+              {poster ? (
+                <img
+                  src={poster}
+                  alt=""
+                  className="yt-embed-client-placeholder__poster"
+                  decoding="async"
+                  width={640}
+                  height={360}
+                />
+              ) : null}
             </div>
           ) : !facadeReleased ? (
             <button
               type="button"
-              className="watch-lp__playlist-embed-facade"
+              className="yt-embed-facade watch-lp__playlist-embed-facade"
               aria-label={`Load playlist player: ${title}`}
               onClick={() => {
                 onBeforePlay?.()
@@ -106,15 +124,15 @@ function WatchLpPlaylistEmbedInner({
                 <img
                   src={poster}
                   alt=""
-                  className="watch-lp__playlist-embed-poster"
+                  className="yt-embed-facade__poster"
                   decoding="async"
                   loading="lazy"
                   width={640}
                   height={360}
                 />
               ) : null}
-              <span className="watch-lp__playlist-embed-play" aria-hidden>
-                ▶
+              <span className="yt-embed-facade__ring" aria-hidden>
+                <span className="yt-embed-facade__glyph">▶</span>
               </span>
               <span className="watch-lp__playlist-embed-overlay">
                 <span className="watch-lp__playlist-embed-overlay-title">{title}</span>
@@ -124,16 +142,37 @@ function WatchLpPlaylistEmbedInner({
               </span>
             </button>
           ) : (
-            <iframe
-              key={playlistId}
-              ref={iframeRef}
-              className="watch-lp__playlist-embed-iframe yt-embed-frame catalog-video-spotlight__iframe"
-              title={title}
-              src={iframeSrc}
-              loading="lazy"
-              allow={YT_IFRAME_ALLOW}
-              allowFullScreen
-            />
+            <div className="yt-embed-frame-host watch-lp__playlist-embed-frame-host">
+              {!iframeReady && poster ? (
+                <>
+                  <img
+                    src={poster}
+                    alt=""
+                    className="yt-embed-frame-host__poster"
+                    decoding="async"
+                    aria-hidden
+                    width={640}
+                    height={360}
+                  />
+                  <div className="yt-embed-frame-host__loading-ring" aria-label="Loading playlist…" role="status">
+                    <span className="yt-embed-facade__ring" aria-hidden>
+                      <span className="yt-embed-loading-spinner" />
+                    </span>
+                  </div>
+                </>
+              ) : null}
+              <iframe
+                key={playlistId}
+                ref={iframeRef}
+                className={`yt-embed-frame catalog-video-spotlight__iframe${iframeReady ? ' yt-embed-frame--ready' : ''}`}
+                title={title}
+                src={iframeSrc}
+                loading="eager"
+                allow={YT_IFRAME_ALLOW}
+                allowFullScreen
+                onLoad={() => setIframeReady(true)}
+              />
+            </div>
           )}
         </div>
         <CatalogFeaturedEmbedCopy

@@ -95,6 +95,7 @@ play_count >= 300  OR  like_count >= 5  →  determines membership in AT-TRACKS-
                                                    and artwork fallbacks when building the catalog app.
   pipelines/sc/outputs/AT-EPS-v4.csv             Airtable-ready EPS table (includes ep_featured,
                                                    ep_description, ep_songbook_title passthrough from snapshot;
+                                                   vid_exist / vid_ytplaylist / vid_yturl internal tracking passthrough;
                                                    track_titles = comma-separated SoundCloud track titles per EP)
   pipelines/sc/outputs/AT-PLAYLISTS-v4.csv       Airtable-ready PLAYLISTS table (set covers from
                                                    sc_playlist_art_api.json first — re-run export after SC artwork changes;
@@ -1024,13 +1025,23 @@ def _ep_lyrics_resolved(ep: dict, id_to_title: dict[str, str]) -> bool:
 
 
 def _ep_curation_from_snapshot(conf: dict) -> dict[str, str]:
-    """Editorial EP fields from clean/sc_eps only — not derived from the scrape."""
+    """Snapshot-only EP fields from clean/sc_eps — not derived from the scrape."""
     if not conf:
-        return {"ep_featured": "", "ep_description": "", "ep_songbook_title": ""}
+        return {
+            "ep_featured": "",
+            "ep_description": "",
+            "ep_songbook_title": "",
+            "vid_exist": "",
+            "vid_ytplaylist": "",
+            "vid_yturl": "",
+        }
     return {
         "ep_featured": (conf.get("ep_featured") or "").strip(),
         "ep_description": (conf.get("ep_description") or "").strip(),
         "ep_songbook_title": (conf.get("ep_songbook_title") or "").strip(),
+        "vid_exist": (conf.get("vid_exist") or "").strip(),
+        "vid_ytplaylist": (conf.get("vid_ytplaylist") or "").strip(),
+        "vid_yturl": (conf.get("vid_yturl") or "").strip(),
     }
 
 
@@ -2179,13 +2190,14 @@ def main():
     # record lookups are the source of truth for EP → TRACK membership.
     # track_titles / track_ids are comma-separated scrape manifests for split-base
     # workflows where EP ↔ TRACK linked records are unavailable across bases.
-    # ep_featured / ep_description / ep_songbook_title: passthrough from
-    # clean/sc_eps snapshot so AT-EPS imports do not strip editorial curation.
+    # ep_featured / ep_description / ep_songbook_title / vid_*: passthrough from
+    # clean/sc_eps snapshot so AT-EPS imports do not strip editorial or internal tracking.
     EP_HEADERS = [
         'ep_title', 'ep_url', 'ep_volume', 'ep_rating', 'sutra', 'genres', 'genres_full',
         'ep_total_tracks', 'track_titles', 'track_ids', 'total_plays', 'total_likes', 'duration_total',
         'artwork_url', 'artwork_lg_url', 'lyrics_title', 'lyrics_id', 'ep_in_app',
         'ep_featured', 'ep_description', 'ep_songbook_title',
+        'vid_exist', 'vid_ytplaylist', 'vid_yturl',
         'created_at', 'playlist_names_clean',
     ]
 
@@ -2327,6 +2339,37 @@ def main():
 
     out_eps.sort(key=lambda x: x['ep_title'].lower())
     print(f"  ✓ EPs: {len(out_eps)} (all EPs included regardless of track filter)")
+
+    raw_scrape_ep_urls = {
+        (r.get('ep_url') or '').strip()
+        for r in raw_rows
+        if clean_ep_title((r.get('ep_title') or '').strip()) and (r.get('ep_url') or '').strip()
+    }
+    out_ep_urls = {
+        (ep.get('ep_url') or '').strip() for ep in out_eps if (ep.get('ep_url') or '').strip()
+    }
+    scrape_missing_from_output = raw_scrape_ep_urls - out_ep_urls
+    if scrape_missing_from_output:
+        print(f"  ⚠  {len(scrape_missing_from_output)} EP(s) in raw scrape missing from AT-EPS output:")
+        for url in sorted(scrape_missing_from_output)[:10]:
+            print(f"      · {url}")
+        if len(scrape_missing_from_output) > 10:
+            print(f"      ... and {len(scrape_missing_from_output) - 10} more")
+
+    scrape_only_eps = [
+        ep for ep in out_eps
+        if (ep.get('ep_url') or '').strip()
+        and (ep.get('ep_url') or '').strip() not in confirmed_eps_by_url
+    ]
+    if scrape_only_eps:
+        print(
+            f"  ℹ  {len(scrape_only_eps)} EP(s) in output from SC scrape but not yet in Airtable snapshot "
+            f"({len(confirmed_eps)} confirmed):"
+        )
+        for ep in sorted(scrape_only_eps, key=lambda x: x.get('created_at', ''), reverse=True)[:10]:
+            print(f"      · {ep.get('created_at', '')}  {(ep.get('ep_title') or '')[:72]}")
+        if len(scrape_only_eps) > 10:
+            print(f"      ... and {len(scrape_only_eps) - 10} more")
 
     orphan_eps = [ep for ep in out_eps if not _ep_lyrics_resolved(ep, id_to_title)]
     ep_qa_out = []
