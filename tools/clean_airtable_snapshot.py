@@ -318,6 +318,11 @@ HEADER_MAP: dict[str, dict[str, str]] = {
         "sutra_id_rollup": "sutra_id_rollup",
         "cover_art_ready": "cover_art_ready",
         "Cover art ready": "cover_art_ready",
+        # Internal tracking (not consumed by catalog pipeline)
+        "vid_exist": "vid_exist",
+        "vid_yturls": "vid_yturls",
+        "vid_ytplaylists": "vid_ytplaylists",
+        "r_rated": "r_rated",
     },
     "301 REDIRECTS": {
         "redirect_from": "redirect_from",
@@ -514,6 +519,10 @@ HEADER_MAP: dict[str, dict[str, str]] = {
         "EP description": "ep_description",
         "ep_songbook_title": "ep_songbook_title",
         "EP songbook title": "ep_songbook_title",
+        # Internal tracking (not consumed by catalog pipeline)
+        "vid_exist": "vid_exist",
+        "vid_ytplaylist": "vid_ytplaylist",
+        "vid_yturl": "vid_yturl",
     },
     # SC Playlists — linked-record columns may reappear on Airtable grid export;
     # map to snake_case; catalog build may ignore.

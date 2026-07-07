@@ -432,6 +432,7 @@ def build_track_catalog_flat(
         pub_at = str(card.get("published_at") or "")
         cover = str(detail.get("cover_image_url") or "")
         slug = str(detail.get("url_slug") or "").strip()
+        song_title = str(detail.get("lyrics_title") or card.get("lyrics_title") or "").strip()
         for t in detail.get("tracks") or []:
             if not t.get("track_in_app"):
                 continue
@@ -441,6 +442,8 @@ def build_track_catalog_flat(
             score = score_track(t, like_weight)
             art = str(t.get("artwork_url") or "").strip()
             row = dict(t)
+            if song_title:
+                row["lyrics_title"] = song_title
             # Carry semantic lens from parent song so `/tracks` can filter by LIGHT/SHADOW.
             row["light_shadow"] = str(card.get("light_shadow") or "").strip()
             row["url_slug"] = slug

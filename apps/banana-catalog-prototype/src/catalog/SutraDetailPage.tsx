@@ -12,7 +12,6 @@ import {
   buildSutraStats,
   pickPivotTargetFamily,
   pickRandomQuoteSong,
-  primarySutraKeyForSongbook,
   songbookPoolForSutraPageRotation,
   songbooksForSutraDetail,
   sutraFamilyKeyFromSongField,
@@ -20,7 +19,7 @@ import {
 import type { SutraFamilyKey } from './sutraContext'
 import { ScrollRail } from './ScrollRail'
 import { SongThumbCard } from './SongThumbCard'
-import { CoverImage } from './CoverImage'
+import { ListenLpSongbookThumb } from './ListenLpSongbookThumb'
 import { browseRowHasAudioSection, songCatalogLinkTo, songCatalogPath, sutraDetailPath } from './songPaths'
 import { sutraCreativeWorkJsonLd } from '../seo/jsonLd'
 import { renderPageMeta } from './usePageMeta'
@@ -223,11 +222,10 @@ export function SutraDetailPage() {
     }
   }, [])
 
-  const sortedSongbooks = useMemo(() => {
+  const sortedSongbooks = useMemo((): ReturnType<typeof allSongbooks> => {
     if (!familyKey) return []
-    return songbooksForSutraDetail(familyKey, allSongbooks())
+    return songbooksForSutraDetail(familyKey, allSongbooks()) as ReturnType<typeof allSongbooks>
   }, [familyKey])
-
   const featuredSongbookFallback = useMemo(() => {
     return sortedSongbooks.find((b) => (b.playlist_url || '').includes('/sets/')) ?? null
   }, [sortedSongbooks])
@@ -644,38 +642,13 @@ export function SutraDetailPage() {
               All {entry.sutra} songbooks
             </h2>
             {sortedSongbooks.length ? (
-              <div className="songbooks-page__grid songbooks-page__grid--sutra sutra-detail__booklist">
+              <ul className="listen-lp__songbook-grid sutra-detail__booklist" aria-label={`All ${entry.sutra} songbooks`}>
                 {sortedSongbooks.map((b) => (
-                  <Link key={b.songbook} className="songbooks-page__card" to={songbookHref(b.songbook)}>
-                    <div className="songbooks-page__media">
-                      {b.playlist_artwork_url ? (
-                        <CoverImage
-                          className="songbooks-page__art"
-                          source={b.playlist_artwork_url}
-                          requestWidth={200}
-                          alt=""
-                          width={280}
-                          height={280}
-                          loading="lazy"
-                          showShimmer
-                        />
-                      ) : (
-                        <div className="songbooks-page__art songbooks-page__art--fallback" aria-hidden>
-                          🍌
-                        </div>
-                      )}
-                    </div>
-                    <div className="songbooks-page__body">
-                      <div className="sutra-detail__book-kicker">SUTRA · {primarySutraKeyForSongbook(b)}</div>
-                      <h3 className="songbooks-page__title">{b.songbook}</h3>
-                      {b.description ? <p className="songbooks-page__desc">{b.description}</p> : null}
-                      <p className="songbooks-page__desc sutra-detail__songbook-meta">
-                        {formatCount(b.playlist_total_plays)} plays · {b.song_count} songs
-                      </p>
-                    </div>
-                  </Link>
+                  <li key={b.songbook} className="listen-lp__songbook-grid-cell">
+                    <ListenLpSongbookThumb book={b} />
+                  </li>
                 ))}
-              </div>
+              </ul>
             ) : (
               <p className="sutra-detail__empty">No songbooks grouped under this sutra in the catalog.</p>
             )}
