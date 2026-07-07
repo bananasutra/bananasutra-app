@@ -89,13 +89,26 @@ function WatchLpPlaylistEmbedInner({
       <article className="catalog-video-spotlight__hero">
         <div className="catalog-video-spotlight__embed" style={{ aspectRatio: '16 / 9' }}>
           {!clientMounted ? (
-            <div className="watch-lp__playlist-embed-placeholder" role="status" aria-label={`Loading playlist: ${title}`}>
-              {poster ? <img src={poster} alt="" className="watch-lp__playlist-embed-poster" decoding="async" width={640} height={360} /> : null}
+            <div
+              className="yt-embed-client-placeholder watch-lp__playlist-embed-placeholder"
+              role="status"
+              aria-label={`Loading playlist: ${title}`}
+            >
+              {poster ? (
+                <img
+                  src={poster}
+                  alt=""
+                  className="yt-embed-client-placeholder__poster"
+                  decoding="async"
+                  width={640}
+                  height={360}
+                />
+              ) : null}
             </div>
           ) : !facadeReleased ? (
             <button
               type="button"
-              className="watch-lp__playlist-embed-facade"
+              className="yt-embed-facade watch-lp__playlist-embed-facade"
               aria-label={`Load playlist player: ${title}`}
               onClick={() => {
                 onBeforePlay?.()
@@ -106,15 +119,15 @@ function WatchLpPlaylistEmbedInner({
                 <img
                   src={poster}
                   alt=""
-                  className="watch-lp__playlist-embed-poster"
+                  className="yt-embed-facade__poster"
                   decoding="async"
                   loading="lazy"
                   width={640}
                   height={360}
                 />
               ) : null}
-              <span className="watch-lp__playlist-embed-play" aria-hidden>
-                ▶
+              <span className="yt-embed-facade__ring" aria-hidden>
+                <span className="yt-embed-facade__glyph">▶</span>
               </span>
               <span className="watch-lp__playlist-embed-overlay">
                 <span className="watch-lp__playlist-embed-overlay-title">{title}</span>

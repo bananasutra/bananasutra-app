@@ -312,6 +312,10 @@
   margin-top: 0.35rem;
 }
 
+.sutra-detail__booklist.listen-lp__songbook-grid {
+  margin-top: 0.35rem;
+}
+
 .sutra-detail__book {
   display: block;
   padding: 0.85rem 0.95rem;

@@ -21,9 +21,10 @@
     "playlist_total_likes": 454,
     "playlist_track_count": 27,
     "playlist_duration_total": "1:34:52",
-    "song_count": 20,
+    "song_count": 21,
     "songs_with_in_app_playback": 10,
     "member_lyrics_ids": [
+      "L-431",
       "L-228",
       "L-186",
       "L-217",
@@ -47,6 +48,19 @@
     ],
     "member_songs": [
       {
+        "lyrics_id": "L-431",
+        "lyrics_title": "Ideas We Can Feel",
+        "url_slug": "ideas-we-can-feel",
+        "summary_short": "Nietzsche probably did not write \"And those who were seen dancing were thought to be insane by those who could not hear the music\"... but(t), what do I know?",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
+      {
         "lyrics_id": "L-228",
         "lyrics_title": "So, What Is Racism?",
         "url_slug": "so-what-is-racism",
@@ -56,7 +70,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 22206,
+        "aggregate_play_count": 22236,
         "aggregate_like_count": 233
       },
       {
@@ -82,7 +96,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1240,
+        "aggregate_play_count": 1241,
         "aggregate_like_count": 8
       },
       {
@@ -95,7 +109,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 11037,
+        "aggregate_play_count": 11054,
         "aggregate_like_count": 202
       },
       {
@@ -134,7 +148,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 422,
+        "aggregate_play_count": 424,
         "aggregate_like_count": 6
       },
       {
@@ -147,7 +161,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 797,
+        "aggregate_play_count": 799,
         "aggregate_like_count": 16
       },
       {
@@ -160,7 +174,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 673,
+        "aggregate_play_count": 674,
         "aggregate_like_count": 12
       },
       {
@@ -225,7 +239,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1427,
+        "aggregate_play_count": 1430,
         "aggregate_like_count": 8
       },
       {
@@ -264,7 +278,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4573,
+        "aggregate_play_count": 4574,
         "aggregate_like_count": 45
       },
       {
@@ -354,7 +368,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 21435,
+        "aggregate_play_count": 21470,
         "aggregate_like_count": 263
       },
       {
@@ -367,7 +381,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 7490,
+        "aggregate_play_count": 7493,
         "aggregate_like_count": 67
       },
       {
@@ -393,7 +407,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 823,
+        "aggregate_play_count": 824,
         "aggregate_like_count": 14
       },
       {
@@ -419,7 +433,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 6484,
+        "aggregate_play_count": 6486,
         "aggregate_like_count": 60
       },
       {
@@ -508,8 +522,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 24571,
-        "aggregate_like_count": 229
+        "aggregate_play_count": 24767,
+        "aggregate_like_count": 231
       },
       {
         "lyrics_id": "L-40",
@@ -521,7 +535,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3087,
+        "aggregate_play_count": 3089,
         "aggregate_like_count": 11
       },
       {
@@ -560,7 +574,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1352,
+        "aggregate_play_count": 1359,
         "aggregate_like_count": 20
       },
       {
@@ -626,8 +640,8 @@
     "playlist_total_likes": 556,
     "playlist_track_count": 39,
     "playlist_duration_total": "2:19:53",
-    "song_count": 23,
-    "songs_with_in_app_playback": 11,
+    "song_count": 24,
+    "songs_with_in_app_playback": 12,
     "member_lyrics_ids": [
       "L-424",
       "L-80",
@@ -642,6 +656,7 @@
       "L-42",
       "L-340",
       "L-27",
+      "L-357",
       "L-7",
       "L-71",
       "L-194",
@@ -660,12 +675,12 @@
         "url_slug": "i-wanna-know",
         "summary_short": "Some songs burn like hope born out of questions in oblivion...",
         "cover_image_url": "https://i1.sndcdn.com/artworks-fzTZbjfewlDJyO9P-ej4G4A-t500x500.png",
-        "has_in_app_playback": false,
+        "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 496,
+        "aggregate_like_count": 13
       },
       {
         "lyrics_id": "L-80",
@@ -690,7 +705,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4896,
+        "aggregate_play_count": 4898,
         "aggregate_like_count": 74
       },
       {
@@ -703,7 +718,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3847,
+        "aggregate_play_count": 3849,
         "aggregate_like_count": 31
       },
       {
@@ -716,7 +731,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 8205,
+        "aggregate_play_count": 8207,
         "aggregate_like_count": 76
       },
       {
@@ -729,8 +744,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 7082,
-        "aggregate_like_count": 128
+        "aggregate_play_count": 7097,
+        "aggregate_like_count": 129
       },
       {
         "lyrics_id": "L-3",
@@ -742,7 +757,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 22736,
+        "aggregate_play_count": 22748,
         "aggregate_like_count": 196
       },
       {
@@ -755,7 +770,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 11592,
+        "aggregate_play_count": 11602,
         "aggregate_like_count": 146
       },
       {
@@ -824,6 +839,19 @@
         "aggregate_like_count": 18
       },
       {
+        "lyrics_id": "L-357",
+        "lyrics_title": "Who Knows What Goes On?",
+        "url_slug": "who-knows-what-goes-on",
+        "summary_short": "Snoopy and Bertrand Russell walked into a Morrissey song and asked all the questions nobody wants to answer. Do socks dream of shoes? Does the moon write haikus? Who knows what goes on?",
+        "cover_image_url": "https://i.ytimg.com/vi/eSVsHkccwwE/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
+      {
         "lyrics_id": "L-7",
         "lyrics_title": "A Stroll Down History’s Lane",
         "url_slug": "a-stroll-down-history-s-lane",
@@ -859,7 +887,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1077,
+        "aggregate_play_count": 1080,
         "aggregate_like_count": 21
       },
       {
@@ -1018,7 +1046,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 708,
+        "aggregate_play_count": 709,
         "aggregate_like_count": 12
       },
       {
@@ -1031,7 +1059,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3565,
+        "aggregate_play_count": 3571,
         "aggregate_like_count": 42
       },
       {
@@ -1057,7 +1085,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3813,
+        "aggregate_play_count": 3814,
         "aggregate_like_count": 35
       },
       {
@@ -1070,7 +1098,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 2712,
+        "aggregate_play_count": 2713,
         "aggregate_like_count": 31
       },
       {
@@ -1083,7 +1111,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 1557,
+        "aggregate_play_count": 1558,
         "aggregate_like_count": 19
       },
       {
@@ -1096,7 +1124,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3847,
+        "aggregate_play_count": 3852,
         "aggregate_like_count": 38
       },
       {
@@ -1135,7 +1163,7 @@
         "has_sc_catalog_listen": true,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 272,
+        "aggregate_play_count": 274,
         "aggregate_like_count": 7
       },
       {
@@ -1218,7 +1246,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 4312,
+        "aggregate_play_count": 4322,
         "aggregate_like_count": 48
       },
       {
@@ -1231,7 +1259,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 16794,
+        "aggregate_play_count": 16813,
         "aggregate_like_count": 121
       },
       {
@@ -1244,7 +1272,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 15759,
+        "aggregate_play_count": 15770,
         "aggregate_like_count": 180
       },
       {
@@ -1257,7 +1285,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8835,
+        "aggregate_play_count": 8839,
         "aggregate_like_count": 81
       },
       {
@@ -1528,13 +1556,26 @@
     "song_count": 5,
     "songs_with_in_app_playback": 3,
     "member_lyrics_ids": [
+      "L-38",
       "L-173",
       "L-67",
       "L-317",
-      "L-38",
       "L-57"
     ],
     "member_songs": [
+      {
+        "lyrics_id": "L-38",
+        "lyrics_title": "But(t) Where Do Pigeons Go To Die?",
+        "url_slug": "but-where-do-pigeons-go-to-die",
+        "summary_short": "BOWcity's best-kept secret, one question (and pigeon) at a time... PS: I mean, do you know?",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-FAjIdovnpd1Pj0yG-8cj3HQ-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
       {
         "lyrics_id": "L-173",
         "lyrics_title": "Oh, Martine",
@@ -1545,7 +1586,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 7581,
+        "aggregate_play_count": 7590,
         "aggregate_like_count": 75
       },
       {
@@ -1558,7 +1599,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 660,
+        "aggregate_play_count": 662,
         "aggregate_like_count": 11
       },
       {
@@ -1571,19 +1612,6 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
-      },
-      {
-        "lyrics_id": "L-38",
-        "lyrics_title": "But Where Do Pigeons Go To Die?",
-        "url_slug": "but-where-do-pigeons-go-to-die",
-        "summary_short": "BOWcity's best-kept secret, one question (and pigeon) at a time.",
-        "cover_image_url": "",
-        "has_in_app_playback": false,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
       },
@@ -1678,7 +1706,7 @@
     "playlist_total_likes": 153,
     "playlist_track_count": 18,
     "playlist_duration_total": "0:58:50",
-    "song_count": 25,
+    "song_count": 24,
     "songs_with_in_app_playback": 13,
     "member_lyrics_ids": [
       "L-34",
@@ -1694,7 +1722,6 @@
       "L-283",
       "L-46",
       "L-296",
-      "L-338",
       "L-64",
       "L-107",
       "L-141",
@@ -1718,8 +1745,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1933,
-        "aggregate_like_count": 30
+        "aggregate_play_count": 4123,
+        "aggregate_like_count": 56
       },
       {
         "lyrics_id": "L-346",
@@ -1731,7 +1758,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 14500,
+        "aggregate_play_count": 14622,
         "aggregate_like_count": 131
       },
       {
@@ -1744,8 +1771,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 23610,
-        "aggregate_like_count": 259
+        "aggregate_play_count": 23658,
+        "aggregate_like_count": 258
       },
       {
         "lyrics_id": "L-95",
@@ -1757,8 +1784,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 10047,
-        "aggregate_like_count": 105
+        "aggregate_play_count": 10084,
+        "aggregate_like_count": 106
       },
       {
         "lyrics_id": "L-175",
@@ -1809,7 +1836,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5463,
+        "aggregate_play_count": 5469,
         "aggregate_like_count": 61
       },
       {
@@ -1822,7 +1849,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 10116,
+        "aggregate_play_count": 10122,
         "aggregate_like_count": 95
       },
       {
@@ -1835,7 +1862,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1004,
+        "aggregate_play_count": 1010,
         "aggregate_like_count": 16
       },
       {
@@ -1848,7 +1875,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 1358,
+        "aggregate_play_count": 1370,
         "aggregate_like_count": 36
       },
       {
@@ -1874,21 +1901,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 2143,
+        "aggregate_play_count": 2149,
         "aggregate_like_count": 18
-      },
-      {
-        "lyrics_id": "L-338",
-        "lyrics_title": "Can You Play Win-Win Or No?",
-        "url_slug": "can-you-play-win-win-or-no",
-        "summary_short": "Can you play win-win, or do you just blow-blow? Hot tip: Kindness is free, and the only entry fee to the glorious win-win States of Trust.",
-        "cover_image_url": "https://i.ytimg.com/vi/vrX1iXZnIGs/maxresdefault.jpg",
-        "has_in_app_playback": false,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": true,
-        "has_youtube_embed": true,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-64",
@@ -1939,7 +1953,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4394,
+        "aggregate_play_count": 4400,
         "aggregate_like_count": 21
       },
       {
@@ -2087,7 +2101,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 13697,
+        "aggregate_play_count": 13710,
         "aggregate_like_count": 147
       },
       {
@@ -2100,7 +2114,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 6017,
+        "aggregate_play_count": 6027,
         "aggregate_like_count": 89
       },
       {
@@ -2113,7 +2127,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8641,
+        "aggregate_play_count": 8668,
         "aggregate_like_count": 83
       },
       {
@@ -2178,7 +2192,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 306,
+        "aggregate_play_count": 307,
         "aggregate_like_count": 2
       },
       {
@@ -2296,9 +2310,10 @@
     "playlist_total_likes": 113,
     "playlist_track_count": 17,
     "playlist_duration_total": "0:55:24",
-    "song_count": 18,
+    "song_count": 19,
     "songs_with_in_app_playback": 12,
     "member_lyrics_ids": [
+      "L-338",
       "L-426",
       "L-318",
       "L-185",
@@ -2319,6 +2334,19 @@
       "L-408"
     ],
     "member_songs": [
+      {
+        "lyrics_id": "L-338",
+        "lyrics_title": "Can You Play Win-Win Or No?",
+        "url_slug": "can-you-play-win-win-or-no",
+        "summary_short": "Can you play win-win, or do you just blow-blow? Hot tip: Kindness is free, and the only entry fee to the glorious win-win States of United Trust.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-LXS4HZIEsUbZZwUX-FATSmQ-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
       {
         "lyrics_id": "L-426",
         "lyrics_title": "So Woken",
@@ -2342,7 +2370,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 817,
+        "aggregate_play_count": 830,
         "aggregate_like_count": 13
       },
       {
@@ -2355,7 +2383,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4650,
+        "aggregate_play_count": 4653,
         "aggregate_like_count": 59
       },
       {
@@ -2368,7 +2396,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5140,
+        "aggregate_play_count": 5145,
         "aggregate_like_count": 35
       },
       {
@@ -2446,7 +2474,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 1312,
+        "aggregate_play_count": 1315,
         "aggregate_like_count": 11
       },
       {
@@ -2459,7 +2487,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1960,
+        "aggregate_play_count": 1965,
         "aggregate_like_count": 21
       },
       {
@@ -2472,7 +2500,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 2323,
+        "aggregate_play_count": 2325,
         "aggregate_like_count": 26
       },
       {
@@ -2485,7 +2513,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3193,
+        "aggregate_play_count": 3196,
         "aggregate_like_count": 22
       },
       {
@@ -2799,8 +2827,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 7828,
-        "aggregate_like_count": 74
+        "aggregate_play_count": 10879,
+        "aggregate_like_count": 86
       },
       {
         "lyrics_id": "L-250",
@@ -2812,8 +2840,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 24701,
-        "aggregate_like_count": 284
+        "aggregate_play_count": 24852,
+        "aggregate_like_count": 288
       },
       {
         "lyrics_id": "L-92",
@@ -3068,10 +3096,10 @@
         "cover_image_url": "https://i1.sndcdn.com/artworks-VyOrYXDzwztuP7zE-yboeOg-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 4090,
-        "aggregate_like_count": 34
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 6108,
+        "aggregate_like_count": 55
       },
       {
         "lyrics_id": "L-360",
@@ -3188,7 +3216,7 @@
     "playlist_total_likes": 173,
     "playlist_track_count": 24,
     "playlist_duration_total": "1:20:41",
-    "song_count": 24,
+    "song_count": 25,
     "songs_with_in_app_playback": 10,
     "member_lyrics_ids": [
       "L-37",
@@ -3199,6 +3227,7 @@
       "L-110",
       "L-237",
       "L-88",
+      "L-430",
       "L-49",
       "L-99",
       "L-339",
@@ -3227,7 +3256,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2664,
+        "aggregate_play_count": 2673,
         "aggregate_like_count": 30
       },
       {
@@ -3292,7 +3321,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 9638,
+        "aggregate_play_count": 9647,
         "aggregate_like_count": 98
       },
       {
@@ -3305,7 +3334,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1758,
+        "aggregate_play_count": 1774,
         "aggregate_like_count": 22
       },
       {
@@ -3318,8 +3347,21 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5777,
+        "aggregate_play_count": 5780,
         "aggregate_like_count": 56
+      },
+      {
+        "lyrics_id": "L-430",
+        "lyrics_title": "Let's Sing",
+        "url_slug": "let-s-sing",
+        "summary_short": "David Bowie, a playfool drummer, and my shiny red shoes walked into the goddamn white gilded ballroom house, and the rest is yet another song...",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-49",
@@ -3331,7 +3373,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 4120,
+        "aggregate_play_count": 4122,
         "aggregate_like_count": 29
       },
       {
@@ -3370,7 +3412,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 841,
+        "aggregate_play_count": 843,
         "aggregate_like_count": 14
       },
       {
@@ -3396,7 +3438,7 @@
         "has_sc_catalog_listen": true,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 283,
+        "aggregate_play_count": 290,
         "aggregate_like_count": 6
       },
       {
@@ -3648,7 +3690,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1461,
+        "aggregate_play_count": 1462,
         "aggregate_like_count": 20
       },
       {
@@ -3739,7 +3781,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1375,
+        "aggregate_play_count": 1376,
         "aggregate_like_count": 9
       },
       {
@@ -3765,7 +3807,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 6691,
+        "aggregate_play_count": 6692,
         "aggregate_like_count": 62
       },
       {
@@ -3791,7 +3833,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 634,
+        "aggregate_play_count": 638,
         "aggregate_like_count": 9
       },
       {
@@ -3856,7 +3898,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 419,
+        "aggregate_play_count": 424,
         "aggregate_like_count": 3
       },
       {
@@ -3934,7 +3976,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 640,
+        "aggregate_play_count": 648,
         "aggregate_like_count": 3
       },
       {
@@ -4182,8 +4224,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2689,
-        "aggregate_like_count": 24
+        "aggregate_play_count": 2721,
+        "aggregate_like_count": 25
       },
       {
         "lyrics_id": "L-81",
@@ -4208,7 +4250,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1501,
+        "aggregate_play_count": 1503,
         "aggregate_like_count": 15
       },
       {
@@ -4360,7 +4402,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 7045,
+        "aggregate_play_count": 7051,
         "aggregate_like_count": 41
       },
       {
@@ -4373,7 +4415,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 11872,
+        "aggregate_play_count": 11878,
         "aggregate_like_count": 92
       },
       {
@@ -4386,7 +4428,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3968,
+        "aggregate_play_count": 3969,
         "aggregate_like_count": 24
       },
       {
@@ -4399,7 +4441,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5003,
+        "aggregate_play_count": 5006,
         "aggregate_like_count": 56
       },
       {
@@ -4412,7 +4454,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1249,
+        "aggregate_play_count": 1250,
         "aggregate_like_count": 15
       },
       {
@@ -4425,7 +4467,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 783,
+        "aggregate_play_count": 784,
         "aggregate_like_count": 6
       }
     ]
@@ -4514,7 +4556,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 565,
+        "aggregate_play_count": 583,
         "aggregate_like_count": 12
       },
       {
@@ -4527,7 +4569,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1255,
+        "aggregate_play_count": 1278,
         "aggregate_like_count": 28
       },
       {
@@ -4540,7 +4582,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 12986,
+        "aggregate_play_count": 13074,
         "aggregate_like_count": 120
       },
       {
@@ -4553,7 +4595,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4057,
+        "aggregate_play_count": 4083,
         "aggregate_like_count": 47
       },
       {
@@ -4566,7 +4608,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8410,
+        "aggregate_play_count": 8413,
         "aggregate_like_count": 90
       },
       {
@@ -4618,7 +4660,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 469,
+        "aggregate_play_count": 472,
         "aggregate_like_count": 7
       },
       {
@@ -4657,7 +4699,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2319,
+        "aggregate_play_count": 2322,
         "aggregate_like_count": 24
       },
       {
@@ -4748,7 +4790,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3930,
+        "aggregate_play_count": 3933,
         "aggregate_like_count": 51
       },
       {
@@ -4815,7 +4857,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 12261,
+        "aggregate_play_count": 12270,
         "aggregate_like_count": 85
       },
       {
@@ -4828,7 +4870,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4360,
+        "aggregate_play_count": 4362,
         "aggregate_like_count": 46
       },
       {
@@ -4867,7 +4909,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 10668,
+        "aggregate_play_count": 10686,
         "aggregate_like_count": 108
       },
       {
@@ -4893,7 +4935,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1797,
+        "aggregate_play_count": 1799,
         "aggregate_like_count": 10
       },
       {
@@ -5028,8 +5070,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 29080,
-        "aggregate_like_count": 306
+        "aggregate_play_count": 29130,
+        "aggregate_like_count": 307
       },
       {
         "lyrics_id": "L-365",
@@ -5054,7 +5096,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8377,
+        "aggregate_play_count": 8386,
         "aggregate_like_count": 68
       },
       {
@@ -5080,7 +5122,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2263,
+        "aggregate_play_count": 2264,
         "aggregate_like_count": 34
       },
       {
@@ -5093,7 +5135,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 271,
+        "aggregate_play_count": 272,
         "aggregate_like_count": 7
       },
       {
@@ -5106,7 +5148,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 619,
+        "aggregate_play_count": 621,
         "aggregate_like_count": 4
       },
       {
@@ -5197,7 +5239,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2083,
+        "aggregate_play_count": 2089,
         "aggregate_like_count": 12
       },
       {
@@ -5451,7 +5493,7 @@
         "lyrics_id": "L-429",
         "lyrics_title": "La Vie Sera Belle",
         "url_slug": "la-vie-sera-belle",
-        "summary_short": "Paris, 1940, in the dark where no light fell… Five schoolboys knew freedom begins with “No.” C'est la vie. True story.",
+        "summary_short": "Paris, 1940, in the dark where no light fell… Five schoolboys knew freedom begins with “No.” C'est la vie. C'est leur mort. True story.",
         "cover_image_url": "",
         "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
@@ -5470,7 +5512,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 13263,
+        "aggregate_play_count": 13302,
         "aggregate_like_count": 134
       },
       {
@@ -5483,7 +5525,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 10361,
+        "aggregate_play_count": 10374,
         "aggregate_like_count": 87
       },
       {
@@ -5509,7 +5551,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2494,
+        "aggregate_play_count": 2496,
         "aggregate_like_count": 34
       },
       {
@@ -5522,7 +5564,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 16433,
+        "aggregate_play_count": 16444,
         "aggregate_like_count": 138
       },
       {
@@ -5535,8 +5577,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8322,
-        "aggregate_like_count": 97
+        "aggregate_play_count": 8343,
+        "aggregate_like_count": 96
       },
       {
         "lyrics_id": "L-177",
@@ -5548,7 +5590,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 2205,
+        "aggregate_play_count": 2212,
         "aggregate_like_count": 19
       },
       {
@@ -5561,7 +5603,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3169,
+        "aggregate_play_count": 3172,
         "aggregate_like_count": 19
       },
       {
@@ -5613,7 +5655,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5659,
+        "aggregate_play_count": 5663,
         "aggregate_like_count": 66
       },
       {
@@ -5626,7 +5668,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 13600,
+        "aggregate_play_count": 13611,
         "aggregate_like_count": 139
       },
       {
@@ -5665,7 +5707,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 2851,
+        "aggregate_play_count": 2868,
         "aggregate_like_count": 34
       },
       {
@@ -5782,7 +5824,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2675,
+        "aggregate_play_count": 2676,
         "aggregate_like_count": 22
       },
       {
@@ -5795,7 +5837,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1434,
+        "aggregate_play_count": 1436,
         "aggregate_like_count": 17
       },
       {
@@ -5880,7 +5922,7 @@
         "lyrics_id": "L-427",
         "lyrics_title": "Syncopated Patriarchy",
         "url_slug": "syncopated-patriarchy",
-        "summary_short": "",
+        "summary_short": "“Whores deserve to be shut up,” they say, with delightfool glee... that, mon cher ami, is an ancient true story!",
         "cover_image_url": "",
         "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
@@ -5976,8 +6018,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4123,
-        "aggregate_like_count": 41
+        "aggregate_play_count": 5057,
+        "aggregate_like_count": 51
       },
       {
         "lyrics_id": "L-369",
@@ -5989,7 +6031,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 14999,
+        "aggregate_play_count": 15101,
         "aggregate_like_count": 136
       },
       {
@@ -6002,7 +6044,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3693,
+        "aggregate_play_count": 3718,
         "aggregate_like_count": 32
       },
       {
@@ -6028,7 +6070,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3029,
+        "aggregate_play_count": 3030,
         "aggregate_like_count": 32
       },
       {
@@ -6080,7 +6122,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3665,
+        "aggregate_play_count": 3672,
         "aggregate_like_count": 29
       },
       {
@@ -6119,8 +6161,8 @@
         "has_sc_catalog_listen": true,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1427,
-        "aggregate_like_count": 47
+        "aggregate_play_count": 1462,
+        "aggregate_like_count": 48
       },
       {
         "lyrics_id": "L-402",
@@ -6158,7 +6200,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 4967,
+        "aggregate_play_count": 4969,
         "aggregate_like_count": 42
       },
       {
@@ -6308,8 +6350,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5518,
-        "aggregate_like_count": 75
+        "aggregate_play_count": 5565,
+        "aggregate_like_count": 76
       },
       {
         "lyrics_id": "L-54",
@@ -6321,7 +6363,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 7607,
+        "aggregate_play_count": 7623,
         "aggregate_like_count": 60
       },
       {
@@ -6347,7 +6389,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 15851,
+        "aggregate_play_count": 15886,
         "aggregate_like_count": 176
       },
       {
@@ -6425,7 +6467,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1080,
+        "aggregate_play_count": 1085,
         "aggregate_like_count": 10
       },
       {
@@ -6451,7 +6493,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 937,
+        "aggregate_play_count": 956,
         "aggregate_like_count": 19
       },
       {
@@ -6464,7 +6506,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 960,
+        "aggregate_play_count": 965,
         "aggregate_like_count": 14
       },
       {
@@ -6477,7 +6519,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 186,
+        "aggregate_play_count": 187,
         "aggregate_like_count": 5
       },
       {
@@ -6578,7 +6620,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 14999,
+        "aggregate_play_count": 15101,
         "aggregate_like_count": 136
       },
       {
@@ -6604,7 +6646,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4360,
+        "aggregate_play_count": 4362,
         "aggregate_like_count": 46
       },
       {
@@ -6617,7 +6659,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8410,
+        "aggregate_play_count": 8413,
         "aggregate_like_count": 90
       },
       {
@@ -6630,7 +6672,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 7581,
+        "aggregate_play_count": 7590,
         "aggregate_like_count": 75
       },
       {
@@ -6656,7 +6698,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5140,
+        "aggregate_play_count": 5145,
         "aggregate_like_count": 35
       },
       {
@@ -6695,7 +6737,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 10668,
+        "aggregate_play_count": 10686,
         "aggregate_like_count": 108
       },
       {
@@ -6773,7 +6815,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 640,
+        "aggregate_play_count": 648,
         "aggregate_like_count": 3
       },
       {
@@ -6812,7 +6854,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3930,
+        "aggregate_play_count": 3933,
         "aggregate_like_count": 51
       },
       {
@@ -6868,7 +6910,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 2851,
+        "aggregate_play_count": 2868,
         "aggregate_like_count": 34
       }
     ]
@@ -6912,7 +6954,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 1557,
+        "aggregate_play_count": 1558,
         "aggregate_like_count": 19
       },
       {
@@ -6925,7 +6967,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3665,
+        "aggregate_play_count": 3672,
         "aggregate_like_count": 29
       }
     ]
