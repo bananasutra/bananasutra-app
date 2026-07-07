@@ -193,7 +193,7 @@ export function ListenLpPage() {
               <p className="listen-lp__empty">No songs in the catalog right now.</p>
             )}
             <Link className="catalog-section-cta" to="/songs/?sort=newest">
-              Explore the fool catalog →
+              Explore the full catalog →
             </Link>
           </ScrollRevealSection>
 

@@ -904,9 +904,13 @@
   line-height: 1.45;
 }
 
-.song-detail-bertrand__cta {
-  font-weight: 700;
-  color: var(--color-link);
+.song-detail-bertrand__sutra-link {
+  text-decoration: none;
+  border-bottom: none;
+}
+
+.song-detail-bertrand__sutra-link:hover {
+  text-decoration: underline;
 }
 
 .song-detail-bertrand__sub {
