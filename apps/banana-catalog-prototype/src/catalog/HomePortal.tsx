@@ -139,7 +139,7 @@ export function HomePortal() {
             </p>
             <HomePortalSutraGrid songCounts={sutraSongCounts} />
             <Link className="catalog-section-cta" to={canonicalPathForRoute('/sutras')}>
-              Explore sutras →
+              Learn more about the sutras →
             </Link>
           </ScrollRevealSection>
 

@@ -70,7 +70,7 @@ export function LearnLpWaysToExplore() {
         </li>
         <li className="about-page__how-cell">
           <Link className="about-page__how-card" to={CATALOG_BROWSE_PATH}>
-            <span className="about-page__how-label">Explore the full catalog →</span>
+            <span className="about-page__how-label">Explore the fool catalog →</span>
             <span className="about-page__how-stat">
               {`${formatCount(songsBrowseGridCount)} songs · meaning-first`}
             </span>

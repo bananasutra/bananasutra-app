@@ -3,7 +3,7 @@
   "songs": 401,
   "details": 401,
   "featured_with_in_app_playback": 196,
-  "featured_with_sc_catalog_listen": 23,
+  "featured_with_sc_catalog_listen": 22,
   "featured_lyrics_only": 205,
   "facet_keys": [
     "sutra",
@@ -21,7 +21,7 @@
   "songbooks": 37,
   "top_tracks_per_song": 4,
   "like_weight": 40,
-  "youtube_lyrics_ids": 208,
+  "youtube_lyrics_ids": 209,
   "youtube_video_rows": 483,
   "youtube_rows_missing_lyrics_id": 17,
   "youtube_playlists_catalog": 40,
@@ -50,9 +50,9 @@
   "sc_cover_art_overrides_lyrics_ids": 2,
   "sc_cover_art_overrides_ep_urls": 1,
   "sc_catalog_automatch_review_csv": "apps/banana-catalog-prototype/src/data/generated/sc_catalog_listen_automatch_review.csv",
-  "sc_catalog_automatch_rows": 23,
+  "sc_catalog_automatch_rows": 22,
   "sc_catalog_automatch_source_counts": {
-    "export_title": 8,
+    "export_title": 7,
     "full_v4": 15
   },
   "inputs": {
@@ -98,7 +98,7 @@
     },
     "yt_videos": {
       "path": "AIRTABLE/snapshots/2026-07-07/clean/yt_videos-2026-07-07.csv",
-      "sha256": "634e849b9d2447cfe86027e15a40499333d3fea6d50d9989a9c98c55d81a2ad1",
+      "sha256": "552d5c304abb9d6fc86da8e05a73f2c3660bafb8eaba18b3a37a68a8dcfea1d5",
       "rows": 488
     },
     "yt_playlists": {

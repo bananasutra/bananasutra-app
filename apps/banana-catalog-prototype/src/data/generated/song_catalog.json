@@ -26488,7 +26488,7 @@
     "song_in_app": true,
     "fav": false,
     "published_at": "2024-10-16T00:00:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-Gpeeqzc8b4frhVCd-pyGbug-t500x500.png",
+    "cover_image_url": "https://i.ytimg.com/vi/uvjQ4g73qcM/maxresdefault.jpg",
     "track_genres": [],
     "track_secondary_genres": [],
     "track_instruments": [],
@@ -26520,13 +26520,13 @@
     "lyrics_head_search": "[Verse 1]\nWhy does this land of liberty\nBow down to arrogant tyranny?\nWe cheer for the brash, the cruel, the loud,\nA bully’s roar draws in the crowd.\n\nBut strength ain’t loud, it don’t demean,\nTrue leaders build, they don’t tear clean.\nInstead, we crown the broken kings,\nTheir hollow hearts, their fragile strings.\n\n[Pre-Chorus]\nInsecure minds, selfish hearts,\nBuilt their towers to hide their scars.\nTheir dominance? A shallow ploy,\nA feeble act to destroy joy.\n\n[Chorus]\nAmerica, why love a bully’s game?\nLiberty’s turned to a hollow name.\nNo empathy, no morality,\nA winner with no integrity.\n\n[Verse 2]\nLow self-esteem breeds the cruelest thirst,\nBullies rise, but they’re dying first.\nTheir conquests? Just a house of sand,\nBuilt by the weakest of trembling hands.\n\nYet we adore the bravado, the sneer,\nAs if strength’s found in another’s fear.\nWhy do we choose the broken men?\nElected lies, again, again.\n\n[Pre-Chorus]\nProjecting pain, they claim control,\nBut the bully’s mask can’t hide the hole.\nBehind the roar, there’s nothing to see,\nA coward’s soul, a travesty.\n\n[Chorus]\nAmerica, why love a bully’s game?\nLiberty’s turned to a hollow name.\nNo empathy, no morality,\nA winner with no integ",
     "fallback_sc_url": "",
     "has_in_app_playback": false,
-    "has_sc_catalog_listen": true,
-    "sc_catalog_listen_url": "https://soundcloud.com/bananasutra/project-2-0-2-5-o-bully",
-    "sc_catalog_track_title": "Project 2-0-2-5 • Bully FOLKsutra",
-    "sc_catalog_listen_source": "export_title",
+    "has_sc_catalog_listen": false,
+    "sc_catalog_listen_url": "",
+    "sc_catalog_track_title": "",
+    "sc_catalog_listen_source": "",
     "lyrics_pipeline_status": "LANDR READY",
-    "has_youtube_video": false,
-    "has_youtube_embed": false
+    "has_youtube_video": true,
+    "has_youtube_embed": true
   },
   {
     "lyrics_id": "L-10",

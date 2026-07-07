@@ -12,8 +12,8 @@ export function HomePortalBbbNudge() {
   return (
     <p className="home-bbb-nudge home-portal__bbb home-portal__bbb--lucky">
       <span className="home-bbb-nudge__text">Not sure where to start?</span>{' '}
-      <button type="button" className="home-bbb-nudge__cta" onClick={handleOpen}>
-        Ask Bertrand (he knows)
+      <button type="button" className="catalog-bertrand-cta home-bbb-nudge__cta" onClick={handleOpen}>
+        Ask Bertrand →
       </button>
     </p>
   )

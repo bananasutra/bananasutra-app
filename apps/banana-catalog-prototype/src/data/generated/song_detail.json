@@ -6811,7 +6811,7 @@
     "written_year": "2024",
     "song_in_app": true,
     "fav": false,
-    "cover_image_url": "https://i1.sndcdn.com/artworks-Gpeeqzc8b4frhVCd-pyGbug-t500x500.png",
+    "cover_image_url": "https://i.ytimg.com/vi/uvjQ4g73qcM/maxresdefault.jpg",
     "songbook": "Quack: DUCK (shady)",
     "muse": "",
     "primary_ep_volume": 0,
@@ -6820,10 +6820,10 @@
     "primary_ep_title": "",
     "ep_volumes": [],
     "fallback_sc_url": "",
-    "has_sc_catalog_listen": true,
-    "sc_catalog_listen_url": "https://soundcloud.com/bananasutra/project-2-0-2-5-o-bully",
-    "sc_catalog_track_title": "Project 2-0-2-5 • Bully FOLKsutra",
-    "sc_catalog_listen_source": "export_title",
+    "has_sc_catalog_listen": false,
+    "sc_catalog_listen_url": "",
+    "sc_catalog_track_title": "",
+    "sc_catalog_listen_source": "",
     "related_songs": [
       {
         "lyrics_id": "L-257",
@@ -57358,10 +57358,10 @@
         "lyrics_id": "L-415",
         "lyrics_title": "Bully",
         "url_slug": "bully",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-Gpeeqzc8b4frhVCd-pyGbug-t500x500.png",
+        "cover_image_url": "https://i.ytimg.com/vi/uvjQ4g73qcM/maxresdefault.jpg",
         "has_in_app_playback": false,
-        "has_sc_catalog_listen": true,
-        "has_youtube_video": false
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true
       },
       {
         "lyrics_id": "L-117",

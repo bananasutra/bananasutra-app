@@ -892,16 +892,26 @@
 
 .song-detail-bertrand {
   margin-top: 1.25rem;
-  padding: 0.65rem 0.75rem;
+  padding: 0.85rem 0.9rem;
   border: 1px solid var(--color-border-light);
   border-radius: var(--radius-sm, 8px);
   background: var(--color-bg-inset);
 }
 
+.song-detail-bertrand__option {
+  padding: 0.1rem 0;
+}
+
 .song-detail-bertrand__headline {
   margin: 0;
   font-size: 0.88rem;
-  line-height: 1.45;
+  line-height: 1.5;
+}
+
+.song-detail-bertrand__divider {
+  margin: 0.7rem 0;
+  border: 0;
+  border-top: 1px solid var(--color-border-light);
 }
 
 .song-detail-bertrand__sutra-link {
@@ -914,8 +924,10 @@
 }
 
 .song-detail-bertrand__sub {
-  margin: 0.35rem 0 0;
+  margin: 0;
+  padding: 0.1rem 0 0.05rem;
   font-size: 0.78rem;
+  line-height: 1.5;
   color: var(--color-text-muted);
 }
 
