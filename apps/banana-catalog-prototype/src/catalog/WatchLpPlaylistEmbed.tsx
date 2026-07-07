@@ -58,7 +58,12 @@ function WatchLpPlaylistEmbedInner({
 }) {
   const clientMounted = useClientMounted()
   const [facadeReleased, setFacadeReleased] = useState(false)
+  const [iframeReady, setIframeReady] = useState(false)
   const playlistId = (playlist.playlist_id || '').trim()
+
+  useEffect(() => {
+    setIframeReady(false)
+  }, [playlistId, facadeReleased])
 
   useEffect(() => {
     onPlayingChange?.(facadeReleased)
@@ -137,16 +142,37 @@ function WatchLpPlaylistEmbedInner({
               </span>
             </button>
           ) : (
-            <iframe
-              key={playlistId}
-              ref={iframeRef}
-              className="watch-lp__playlist-embed-iframe yt-embed-frame catalog-video-spotlight__iframe"
-              title={title}
-              src={iframeSrc}
-              loading="lazy"
-              allow={YT_IFRAME_ALLOW}
-              allowFullScreen
-            />
+            <div className="yt-embed-frame-host watch-lp__playlist-embed-frame-host">
+              {!iframeReady && poster ? (
+                <>
+                  <img
+                    src={poster}
+                    alt=""
+                    className="yt-embed-frame-host__poster"
+                    decoding="async"
+                    aria-hidden
+                    width={640}
+                    height={360}
+                  />
+                  <div className="yt-embed-frame-host__loading-ring" aria-label="Loading playlist…" role="status">
+                    <span className="yt-embed-facade__ring" aria-hidden>
+                      <span className="yt-embed-loading-spinner" />
+                    </span>
+                  </div>
+                </>
+              ) : null}
+              <iframe
+                key={playlistId}
+                ref={iframeRef}
+                className={`yt-embed-frame catalog-video-spotlight__iframe${iframeReady ? ' yt-embed-frame--ready' : ''}`}
+                title={title}
+                src={iframeSrc}
+                loading="eager"
+                allow={YT_IFRAME_ALLOW}
+                allowFullScreen
+                onLoad={() => setIframeReady(true)}
+              />
+            </div>
           )}
         </div>
         <CatalogFeaturedEmbedCopy
