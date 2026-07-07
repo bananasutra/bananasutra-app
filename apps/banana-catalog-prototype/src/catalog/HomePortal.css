@@ -252,21 +252,13 @@
 .home-bbb-nudge__cta {
   margin: 0;
   padding: 0;
-  font: inherit;
-  font-style: italic;
-  color: var(--color-text-strong);
   background: none;
   border: 0;
   cursor: pointer;
-  text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--color-link) 55%, transparent);
-  text-underline-offset: 0.16em;
-  transition: color 0.14s ease, text-decoration-color 0.14s ease;
 }
 
 .home-bbb-nudge__cta:hover {
-  color: var(--color-link);
-  text-decoration-color: var(--color-link);
+  color: var(--catalog-section-cta-hover-color);
 }
 
 .home-bbb-nudge__cta:focus-visible {

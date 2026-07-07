@@ -11474,31 +11474,6 @@
       "song_intention": "seeHIStory",
       "lyrics_summary": "Is it hopeless? Is it gone? Where the duck did hope go? A song asking the question nobody wants to answer.",
       "url_slug": "felon-nation"
-    },
-    {
-      "video_id": "uvjQ4g73qcM",
-      "title": "But(t) El Bully doesn’t believe in music therapy, nor cares for #FelonNation or #celloshorts—do you?",
-      "lyrics_title": "Felon Nation",
-      "lyrics_id": "L-333",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "QUACKsutra",
-      "genre_primary": "INDIE",
-      "genre_secondary": "BURLESQUE",
-      "instruments": "Cello",
-      "yt_url": "https://www.youtube.com/watch?v=uvjQ4g73qcM",
-      "thumbnail_url": "https://i.ytimg.com/vi/uvjQ4g73qcM/maxresdefault.jpg",
-      "duration": "0:41",
-      "publish_date": "2025-02-07",
-      "playlist_names": "BLOWsutra, BURLESQUEsutra, SHORTsutra Bananas Matter",
-      "content_type": "Short/Reel",
-      "format": "9:16",
-      "topic_categories": "Independent music, Music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "seeHIStory",
-      "lyrics_summary": "Is it hopeless? Is it gone? Where the duck did hope go? A song asking the question nobody wants to answer.",
-      "url_slug": "felon-nation"
     }
   ],
   "L-154": [
@@ -11863,6 +11838,33 @@
       "song_intention": "seeHIStory",
       "lyrics_summary": "The ballroom is lit. The leaders are waltzing. Down we go.",
       "url_slug": "waldo-s-fascist-tango-down-we-go"
+    }
+  ],
+  "L-415": [
+    {
+      "video_id": "uvjQ4g73qcM",
+      "title": "But(t) El Bully doesn’t believe in music therapy, nor cares for #FelonNation or #celloshorts—do you?",
+      "lyrics_title": "Bully",
+      "lyrics_id": "L-415",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "QUACKsutra",
+      "genre_primary": "INDIE",
+      "genre_secondary": "BURLESQUE",
+      "instruments": "Cello",
+      "yt_url": "https://www.youtube.com/watch?v=uvjQ4g73qcM",
+      "thumbnail_url": "https://i.ytimg.com/vi/uvjQ4g73qcM/maxresdefault.jpg",
+      "duration": "0:41",
+      "publish_date": "2025-02-07",
+      "playlist_names": "BLOWsutra, BURLESQUEsutra, SHORTsutra Bananas Matter",
+      "content_type": "Short/Reel",
+      "format": "9:16",
+      "topic_categories": "Independent music, Music",
+      "can_embed": true,
+      "song_topic": "INJUSTICE",
+      "song_intention": "seeEGO",
+      "lyrics_summary": "Why do we choose the broken men?... Asking for a friend.",
+      "url_slug": "bully"
     }
   ],
   "L-26": [
