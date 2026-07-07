@@ -772,7 +772,8 @@ function SongDetailLoaded({
   const hasAudioContent =
     hasPlayableTrack || hasEpFallback || hasAnyTrackUrls || shouldShowTracksList || hasScCatalogListen
   const showVideoInColumn = hasYoutubeVideos && !hasTopTracksListenUi && !hasInlineListenEmbed
-  const showVideoBelow = hasYoutubeVideos && hasTopTracksListenUi
+  /** Below the listen block whenever column video is suppressed (EP tab, top tracks, or catalog listen). */
+  const showVideoBelow = hasYoutubeVideos && !showVideoInColumn
   const showAudioSection = hasAudioContent
   const showVideoSection = showVideoInColumn
   const hasMediaColumnForSplit = showAudioSection || showVideoInColumn
