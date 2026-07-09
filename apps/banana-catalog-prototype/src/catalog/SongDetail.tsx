@@ -34,7 +34,6 @@ import { persistentBarOwnsQueueChrome } from './playerQueue/pageQueueChrome'
 import { formatDurationDisplay } from './durationFormat'
 import { useTypewriterText } from './useTypewriterText'
 import {
-  queueContextLine,
   queueSessionActive,
   queueSessionOwnsPage,
   selectedTrackId,
@@ -741,12 +740,9 @@ function SongDetailLoaded({
   const playingTrackId = selectedTrackId(queueState)
   const sessionActive = queueSessionActive(queueState)
   const queueOwnsPage = queueSessionOwnsPage(queueState, 'song_detail')
-  const foreignSessionActive = sessionActive && !queueOwnsPage
-  const foreignPlaybackNote = useMemo(() => {
-    const line = queueContextLine(queueState).trim()
-    if (!line) return 'Playing in mini player below. Use the bar for controls.'
-    return `${line}. Use the mini player for controls.`
-  }, [queueState])
+  const foreignSessionActive =
+    sessionActive && !queueOwnsPage && queueState.source?.type !== 'single'
+  const foreignPlaybackNote = 'Playing in mini player below. Use the bar for controls.'
 
   const queueIndex =
     queueOwnsPage && playAllTopTracksActive
@@ -840,6 +836,11 @@ function SongDetailLoaded({
         : songbookPlaylistUrl
           ? ('songbook' as const)
           : ('generic' as const)
+
+  useEffect(() => {
+    if (!hasListenTabNav || hasTopTracksListenUi || listenEpVolumes.length === 0) return
+    setAudioListenTab(primaryListenEpTab)
+  }, [hasListenTabNav, hasTopTracksListenUi, listenEpVolumes.length, primaryListenEpTab, lyricsId])
 
   const switchToFullEpTab = useCallback(() => {
     setAudioListenTab(primaryListenEpTab)

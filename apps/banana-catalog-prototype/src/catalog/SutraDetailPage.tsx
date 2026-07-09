@@ -63,7 +63,7 @@ function soundcloudListEmbedHeight(scUrl: string, kind: 'ep' | 'songbook'): numb
 /** Per-sutra "what's next" copy for the bottom pivot section. */
 const WHATS_NEXT: Record<SutraFamilyKey, { label: string; body: string }> = {
   KNOW: {
-    label: "What's next",
+    label: 'Now what?',
     body: "You’ve asked Is it true? and grounded yourself in logic. The next step? Do something with it. GROW is where clarity becomes courage, the dare to care out loud.",
   },
   BLOW: {
@@ -75,23 +75,23 @@ const WHATS_NEXT: Record<SutraFamilyKey, { label: string; body: string }> = {
     body: "You’ve named the ducks and documented the circus. Sharp medicine taken, now pivot before it becomes a permanent address. SHOW lets you laugh at the naked king; BLOW channels the outrage into principled resistance.",
   },
   SHOW: {
-    label: "What's next",
+    label: 'Now what?',
     body: "The laughter has done its work and the heaviness has lifted. Now you’ve got enough light to look at the harder questions. GROW is where joy becomes courage, empathy in an apathetic world.",
   },
   GROW: {
-    label: "What's next",
+    label: 'Now what?',
     body: "You’ve found your coconuts, the courage to care. Now stop gripping so tight. FLOW is where you learn to trust the rhythm and let the river carry what you’ve built.",
   },
   FLOW: {
-    label: "What's next",
+    label: 'Now what?',
     body: "You’ve dropped the baggage and learned to be water. The river that flows long enough starts to shimmer. GLOW is where you notice what’s already here, gratitude as a practice.",
   },
   GLOW: {
-    label: "What's next",
+    label: 'Now what?',
     body: "You’ve found the rainbows in the clouds and the poetry of being alive. Gratitude deep enough becomes awe. BOW is where you surrender to the mystery and let grace meet gravity.",
   },
   BOW: {
-    label: "What's next",
+    label: 'Now what?',
     body: "You’ve bowed to the mystery and made peace with the stars. And then the cycle starts over, because all we really know is that the unexamined life is not worth living. Back to KNOW, where it all begins again.",
   },
 }
@@ -508,7 +508,7 @@ export function SutraDetailPage() {
 
           <section className="sutra-detail__section" aria-labelledby="sutra-featured-heading">
             <h2 id="sutra-featured-heading" className="catalog-section-title">
-              Featured {entry.sutra} video
+              {entry.sutra} video spotlight
             </h2>
             {featuredSutraVideo ? (
               <>
@@ -526,7 +526,7 @@ export function SutraDetailPage() {
                     title={
                       featuredSutraVideo.lyrics_title ||
                       featuredSutraVideo.title ||
-                      `${entry.sutra} featured video`
+                      `${entry.sutra} video spotlight`
                     }
                     enableJsApi={sutraExclusivePlaybackEnabled}
                     iframeRef={youtubeExclusiveRef}
@@ -553,7 +553,7 @@ export function SutraDetailPage() {
 
           <section className="sutra-detail__section" aria-labelledby="sutra-featured-ep-heading">
             <h2 id="sutra-featured-ep-heading" className="catalog-section-title">
-              Featured {entry.sutra} EP
+              {entry.sutra} EP spotlight
             </h2>
             {featuredEp?.ep_url && featuredEp.ep_url.includes('soundcloud.com') ? (
               <>
@@ -623,7 +623,6 @@ export function SutraDetailPage() {
               </h2>
               <CatalogFeaturedEmbedCopy
                 className="sutra-detail__media-block-copy sutra-detail__media-block-copy--above-embed"
-                meta={songbookFeaturedKickerLabel(sutraSpotlightSongbook)}
                 title={sutraSpotlightSongbook.songbook}
                 titleMeta={formatSongbookScPlaylistMeta(sutraSpotlightSongbook)}
                 description={sutraSpotlightSongbook.description}
@@ -666,7 +665,7 @@ export function SutraDetailPage() {
 
           <section className="sutra-detail__section sutra-detail__section--pivot" aria-labelledby="sutra-pivot-heading">
             <h2 id="sutra-pivot-heading" className="catalog-section-title sutra-detail__pivot-title">
-              {WHATS_NEXT[familyKey]?.label ?? "What's next"}
+              {WHATS_NEXT[familyKey]?.label ?? 'Now what?'}
             </h2>
             <div className="sutra-detail__pivot-block">
               <p className="sutra-detail__pivot-body">{WHATS_NEXT[familyKey]?.body ?? entry.mental_health_pivot}</p>

@@ -37,14 +37,18 @@
   gap: 0;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1rem;
-  min-height: 52px;
+  padding: 0.4rem 1rem;
+  min-height: 48px;
   height: auto;
 }
 
 .persistent-player-bar__meta {
   flex: 1 1 auto;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.08rem;
 }
 
 .persistent-player-bar__context {
@@ -113,10 +117,7 @@
 }
 
 .persistent-player-bar__song-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 0.15rem 0;
+  display: inline;
   color: var(--color-link, #524a40);
   font-weight: 600;
   text-decoration: none;
@@ -147,6 +148,8 @@
 .persistent-player-bar__transport {
   display: inline-flex;
   align-items: stretch;
+  height: 2rem;
+  box-sizing: border-box;
   border: 1px solid var(--color-border, #d8d0c4);
   border-radius: var(--radius-control, 2px);
   overflow: hidden;
@@ -159,7 +162,9 @@
   align-items: center;
   justify-content: center;
   min-width: 2rem;
-  padding: 0.3rem 0.45rem;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 0.45rem;
   border: 0;
   border-right: 1px solid var(--color-border, #d8d0c4);
   background: transparent;
@@ -217,8 +222,11 @@
   align-items: center;
   justify-content: center;
   gap: 0.16rem;
+  height: 2rem;
+  box-sizing: border-box;
   min-height: 2rem;
-  padding: 0.3rem 0.45rem;
+  max-height: 2rem;
+  padding: 0 0.45rem;
   border: 1px solid var(--color-border, #d8d0c4);
   border-radius: var(--radius-control, 2px);
   background: transparent;
