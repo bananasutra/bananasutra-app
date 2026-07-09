@@ -143,6 +143,27 @@
   min-width: 0;
 }
 
+.sutra-detail__media-block-copy--above-embed {
+  margin: 0 0 1.2rem;
+}
+
+.sutra-detail__media-block-cta {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.sutra-detail__media-block-cta .catalog-media-outbound {
+  margin-top: 0;
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
 .sutra-detail__media-block-embed .catalog-lazy-sc-embed,
 .sutra-detail__media-block-embed .catalog-lazy-sc-embed__placeholder,
 .sutra-detail__media-block-embed .catalog-sc-passthrough-embed,

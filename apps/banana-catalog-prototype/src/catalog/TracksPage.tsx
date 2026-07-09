@@ -42,7 +42,6 @@ import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { formatDurationDisplay } from './durationFormat'
 import {
   trackCatalogItemToPlayable,
-  queueContextLine,
   queueSessionActive,
   queueSessionOwnsPage,
   selectedTrackId,
@@ -343,12 +342,9 @@ export function TracksPage() {
   const playingTrackId = selectedTrackId(queueState)
   const sessionActive = queueSessionActive(queueState)
   const queueOwnsPage = queueSessionOwnsPage(queueState, 'tracks')
-  const foreignSessionActive = sessionActive && !queueOwnsPage
-  const foreignPlaybackNote = useMemo(() => {
-    const line = queueContextLine(queueState).trim()
-    if (!line) return 'Playing in mini player below. Use the bar for controls.'
-    return `${line}. Use the mini player for controls.`
-  }, [queueState])
+  const foreignSessionActive =
+    sessionActive && !queueOwnsPage && queueState.source?.type !== 'single'
+  const foreignPlaybackNote = 'Playing in mini player below. Use the bar for controls.'
 
   useEffect(() => {
     if (!listRows.length) {
@@ -915,15 +911,17 @@ export function TracksPage() {
                                   <span className="tracks-page__stat" title={statLine}>
                                     {statLine}
                                   </span>
-                                  <ShareButton
-                                    variant="icon"
-                                    url={trackShareUrl(t.lyrics_title, t.url_slug, t.track_id)}
-                                    title={t.track_title}
-                                    text="Listen on Bananasutra"
-                                  />
                                 </div>
                               </div>
                             </div>
+                            <span className="tracks-page__row-share" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+                              <ShareButton
+                                variant="icon"
+                                url={trackShareUrl(t.lyrics_title, t.url_slug, t.track_id)}
+                                title={t.track_title}
+                                text="Listen on Bananasutra"
+                              />
+                            </span>
                           </div>
                           <div
                             className={`tracks-page__thumb-wrap${active ? ' tracks-page__thumb-wrap--active' : ''}`}
