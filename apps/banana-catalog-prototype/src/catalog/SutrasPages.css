@@ -143,8 +143,14 @@
   min-width: 0;
 }
 
-.sutra-detail__media-block-copy--above-embed {
-  margin: 0 0 1.2rem;
+/* Copy-above-embed: gap via sibling margin (immune to margin-collapse with inner title/desc). */
+.sutra-detail__section .catalog-featured-embed-copy.sutra-detail__media-block-copy--above-embed,
+.sutra-detail__section .sutra-detail__media-block-copy.sutra-detail__media-block-copy--above-embed {
+  margin: 0;
+}
+
+.sutra-detail__section .sutra-detail__media-block-copy--above-embed + .sutra-detail__media-block-embed {
+  margin-top: 1.5rem;
 }
 
 .sutra-detail__media-block-cta {
