@@ -4555,8 +4555,8 @@
       "L-418",
       "L-52",
       "L-53",
-      "L-136",
       "L-137",
+      "L-136",
       "L-135"
     ],
     "member_songs": [
@@ -4782,19 +4782,6 @@
         "aggregate_like_count": 0
       },
       {
-        "lyrics_id": "L-136",
-        "lyrics_title": "Manu, P’tit Roi",
-        "url_slug": "manu-ptit-roi",
-        "summary_short": "Manu, p'tit roi, grandes ambitions, petite vérité.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-5bgKJmvCXOs9jvio-ky1CkQ-t500x500.png",
-        "has_in_app_playback": false,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
-      },
-      {
         "lyrics_id": "L-137",
         "lyrics_title": "Le Système",
         "url_slug": "le-systeme",
@@ -4806,6 +4793,19 @@
         "has_youtube_embed": true,
         "aggregate_play_count": 3933,
         "aggregate_like_count": 51
+      },
+      {
+        "lyrics_id": "L-136",
+        "lyrics_title": "Manu, P’tit Roi",
+        "url_slug": "manu-ptit-roi",
+        "summary_short": "Manu, p'tit roi, grandes ambitions, petite vérité.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-5bgKJmvCXOs9jvio-ky1CkQ-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-135",
@@ -5998,6 +5998,7 @@
     "song_count": 24,
     "songs_with_in_app_playback": 9,
     "member_lyrics_ids": [
+      "L-153",
       "L-397",
       "L-369",
       "L-390",
@@ -6010,7 +6011,6 @@
       "L-77",
       "L-385",
       "L-320",
-      "L-153",
       "L-402",
       "L-403",
       "L-121",
@@ -6024,6 +6024,19 @@
       "L-183"
     ],
     "member_songs": [
+      {
+        "lyrics_id": "L-153",
+        "lyrics_title": "Making Songs Like...",
+        "url_slug": "making-songs-like",
+        "summary_short": "Some people meditate. Some pray. I make songs. Same thing, different noise.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-yFu7z79boWM74g0U-gNvzig-t500x500.jpg",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": true,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 1485,
+        "aggregate_like_count": 48
+      },
       {
         "lyrics_id": "L-397",
         "lyrics_title": "Drop Di Baggage",
@@ -6179,19 +6192,6 @@
         "has_youtube_embed": true,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
-      },
-      {
-        "lyrics_id": "L-153",
-        "lyrics_title": "Making Songs Like...",
-        "url_slug": "making-songs-like",
-        "summary_short": "Some people meditate. Some pray. I make songs. Same thing, different noise.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-yFu7z79boWM74g0U-gNvzig-t500x500.jpg",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": true,
-        "has_youtube_video": true,
-        "has_youtube_embed": true,
-        "aggregate_play_count": 1485,
-        "aggregate_like_count": 48
       },
       {
         "lyrics_id": "L-402",
@@ -6647,8 +6647,8 @@
       "L-45",
       "L-130",
       "L-53",
-      "L-136",
       "L-137",
+      "L-136",
       "L-135"
     ],
     "member_songs": [
@@ -6874,19 +6874,6 @@
         "aggregate_like_count": 0
       },
       {
-        "lyrics_id": "L-136",
-        "lyrics_title": "Manu, P’tit Roi",
-        "url_slug": "manu-ptit-roi",
-        "summary_short": "Manu, p'tit roi, grandes ambitions, petite vérité.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-5bgKJmvCXOs9jvio-ky1CkQ-t500x500.png",
-        "has_in_app_playback": false,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
-      },
-      {
         "lyrics_id": "L-137",
         "lyrics_title": "Le Système",
         "url_slug": "le-systeme",
@@ -6898,6 +6885,19 @@
         "has_youtube_embed": true,
         "aggregate_play_count": 3933,
         "aggregate_like_count": 51
+      },
+      {
+        "lyrics_id": "L-136",
+        "lyrics_title": "Manu, P’tit Roi",
+        "url_slug": "manu-ptit-roi",
+        "summary_short": "Manu, p'tit roi, grandes ambitions, petite vérité.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-5bgKJmvCXOs9jvio-ky1CkQ-t500x500.png",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-135",

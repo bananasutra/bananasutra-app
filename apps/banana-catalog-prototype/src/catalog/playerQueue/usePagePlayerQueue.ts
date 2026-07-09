@@ -220,13 +220,14 @@ export function usePagePlayerQueue(
             ? persistentApiRef.current?.widgetRef.current
             : widgetRef.current
           if (!activeWidget) {
-            if (usePersistentPlayback) {
+            if (!usePersistentPlayback) {
               playTrackSideEffect(track, {
                 intent: playbackIntentRef.current,
                 keepPlayAll: playAllActiveRef.current,
               })
               return
             }
+            // Persistent + no widget yet: fall through — first click must bootstrap + set source.
           } else if (playingRef.current) {
             pause()
             return
@@ -255,6 +256,22 @@ export function usePagePlayerQueue(
       setActiveTrackKey(key)
       if (!keepPlayAll || !playAllActiveRef.current) {
         setSource({ type: 'single', track_id: track.track_id })
+      }
+      if (usePersistentPlayback && !fromPlayAllStart) {
+        const scUrl = track.sc_url.trim()
+        if (scUrl) {
+          markPersistentGesturePlayWindow()
+          const api = persistentApiRef.current
+          if (api?.widgetRef.current) {
+            api.loadTrack(scUrl, { autoPlay: true, remount: false })
+          } else if (persistentScIframeIsWarm()) {
+            requestPersistentScLoadSync(scUrl, { autoPlay: true, remount: false })
+            api?.syncPlayInGesture()
+          } else {
+            requestPersistentScLoadSync(scUrl, { autoPlay: true, remount: true })
+            api?.syncPlayInGesture()
+          }
+        }
       }
       playTrackSideEffect(track, { intent: playbackIntentRef.current, keepPlayAll })
     },

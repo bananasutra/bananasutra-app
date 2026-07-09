@@ -56,7 +56,10 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
   const prevTrackIdRef = useRef<string | null>(null)
 
   const track = currentQueueTrack(state)
-  const contextLine = useMemo(() => queueContextLine(state), [state])
+  const contextLine = useMemo(() => {
+    if (!state.source || state.source.type === 'single') return ''
+    return queueContextLine(state)
+  }, [state])
   const genreDuration = useMemo(() => (track ? playableTrackGenreDuration(track) : ''), [track])
   const songLinkTo = track ? playableTrackSongLinkTo(track) : null
   const shareUrl =
@@ -75,7 +78,7 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
   const dismissLabel = state.playAllActive ? 'Close and stop playing all' : 'Close player'
 
   const hasTrackMeta = Boolean(sutraHref || songLinkTo || genreDuration)
-  const playerChromeHeightPx = 52 + (scrubOpen ? PERSISTENT_SC_SCRUB_DRAWER_HEIGHT_PX : 0)
+  const playerChromeHeightPx = 48 + (scrubOpen ? PERSISTENT_SC_SCRUB_DRAWER_HEIGHT_PX : 0)
   const showPlaybackStarting = bootingPlayback && Boolean(track)
 
   const settleBooting = useCallback(() => {
@@ -138,7 +141,7 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
   useEffect(() => {
     if (visible) {
       document.body.classList.add('has-persistent-player')
-      document.documentElement.style.setProperty('--bbb-panel-bottom-offset', '52px')
+      document.documentElement.style.setProperty('--bbb-panel-bottom-offset', '48px')
       document.documentElement.style.setProperty(
         '--persistent-player-chrome-height',
         `${playerChromeHeightPx}px`,

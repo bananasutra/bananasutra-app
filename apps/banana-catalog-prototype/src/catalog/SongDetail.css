@@ -1370,7 +1370,9 @@
 .song-detail-track-share {
   position: absolute;
   right: 0.78rem;
-  bottom: 0.72rem;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
   z-index: 2;
   touch-action: manipulation;
 }
@@ -1407,14 +1409,16 @@
 }
 
 .song-detail-track-main {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.4rem 0.55rem;
+  display: block;
+  min-width: 0;
+  padding-right: 2.75rem;
 }
 
 .song-detail-track-title {
-  font-size: 0.92rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .song-detail-track-meta {
@@ -1422,7 +1426,7 @@
   flex-wrap: wrap;
   gap: 0.5rem 0.75rem;
   font-size: 0.75rem;
-  padding-right: 1.75rem;
+  padding-right: 0;
 }
 
 .song-detail-youtube-list {

@@ -369,6 +369,19 @@ def parse_datetime(value: str | None) -> str:
     return text
 
 
+def max_iso_datetimes(*values: str) -> str:
+    """Return the latest parseable ISO-ish timestamp among values."""
+    best = ""
+    for raw in values:
+        text = (raw or "").strip()
+        if not text:
+            continue
+        candidate = parse_datetime(text) or text
+        if candidate > best:
+            best = candidate
+    return best
+
+
 def latest_track_created_at(tracks: list[dict[str, Any]], *, published_only: bool) -> str:
     """Latest `created_at` among tracks (SoundCloud row time). Empty if none parseable."""
     best = ""
@@ -397,10 +410,58 @@ def soundcloud_catalog_sort_at(ep_created_at: str, tracks: list[dict[str, Any]])
     """
     ep = (ep_created_at or "").strip()
     pub = latest_track_created_at(tracks, published_only=True)
-    primary = max([s for s in (ep, pub) if s], default="")
+    primary = max_iso_datetimes(ep, pub)
     if primary:
         return primary
     return latest_track_created_at(tracks, published_only=False)
+
+
+def catalog_published_at(
+    ep_created_at: str,
+    tracks: list[dict[str, Any]],
+    ep_volumes: list[dict[str, Any]],
+    sc_listen_by_norm_url: dict[str, dict[str, str]],
+) -> str:
+    """
+    Catalog "newest" timestamp for a song — includes every listen release on the page.
+
+    A new vol-2 single on an old song must bump `published_at` even when the only in-app
+    track row is still the original upload (multi-volume / re-release use case).
+    """
+    base = soundcloud_catalog_sort_at(ep_created_at, tracks)
+    volume_dates: list[str] = []
+    for vol in ep_volumes:
+        nk = _norm_soundcloud_url(str(vol.get("ep_url") or ""))
+        if not nk:
+            continue
+        hit = sc_listen_by_norm_url.get(nk)
+        if not hit:
+            continue
+        raw = str(hit.get("created_at") or "").strip()
+        if raw:
+            volume_dates.append(parse_datetime(raw) or raw)
+    return max_iso_datetimes(base, *volume_dates)
+
+
+def build_sc_release_dates_by_norm_url(
+    full_v4_by_url: dict[str, dict[str, str]],
+    sc_eps_rows: list[dict[str, str]],
+) -> dict[str, dict[str, str]]:
+    """Norm SC URL -> release metadata (track FULL v4 rows + EP set rows)."""
+    merged: dict[str, dict[str, str]] = {nk: dict(payload) for nk, payload in full_v4_by_url.items()}
+    for row in sc_eps_rows:
+        nk = _norm_soundcloud_url(str(row.get("ep_url") or ""))
+        if not nk:
+            continue
+        raw = str(row.get("created_at") or "").strip()
+        created = parse_datetime(raw) or raw
+        if not created:
+            continue
+        hit = merged.setdefault(nk, {})
+        prev = str(hit.get("created_at") or "")
+        if created > prev:
+            hit["created_at"] = created
+    return merged
 
 
 def lyrics_fallback_catalog_at(lyric: dict[str, str]) -> str:
@@ -1067,6 +1128,47 @@ def choose_artwork(
     return ""
 
 
+def build_release_at_by_norm_url_from_pipeline(
+    full_v4_rows: list[dict[str, str]],
+    sc_eps_rows: list[dict[str, str]],
+) -> dict[str, str]:
+    """Normalized SC URL -> ISO `created_at` (latest row wins per URL)."""
+    out: dict[str, str] = {}
+
+    def note(url: str, raw: str) -> None:
+        nk = _norm_soundcloud_url(url)
+        if not nk:
+            return
+        created = parse_datetime(raw) or str(raw or "").strip()
+        if created and created > out.get(nk, ""):
+            out[nk] = created
+
+    for row in full_v4_rows:
+        note(str(row.get("sc_url") or ""), str(row.get("created_at") or ""))
+    for row in sc_eps_rows:
+        note(str(row.get("ep_url") or ""), str(row.get("created_at") or ""))
+    return out
+
+
+def renumber_ep_volumes_chronologically(
+    volumes: list[dict[str, Any]],
+    release_at_by_norm_url: dict[str, str],
+) -> list[dict[str, Any]]:
+    """Oldest listen release = vol 1; newest = highest vol (tabs + primary EP)."""
+    if len(volumes) < 2:
+        return volumes
+
+    def release_at(vol: dict[str, Any]) -> str:
+        nk = _norm_soundcloud_url(str(vol.get("ep_url") or ""))
+        return release_at_by_norm_url.get(nk, "")
+
+    ordered = sorted(
+        volumes,
+        key=lambda vol: (release_at(vol), str(vol.get("ep_url") or "")),
+    )
+    return [{**vol, "ep_volume": idx} for idx, vol in enumerate(ordered, start=1)]
+
+
 def merge_full_v4_listen_volumes(
     ep_volumes_by_lid: dict[str, list[dict[str, Any]]],
     full_v4_rows: list[dict[str, str]],
@@ -1121,6 +1223,15 @@ def merge_full_v4_listen_volumes(
             declared = norm_lyrics_id_for_join(row.get("lyrics_id"))
         if not declared.startswith("L-"):
             declared = orphan_track_lid(row)
+        if not declared.startswith("L-"):
+            title_norm = normalize_title_for_match(
+                str(row.get("lyrics_title") or row.get("track_title") or "")
+            )
+            if title_norm.startswith("making songs like"):
+                for cand_lid, song_title in lyrics_titles_by_lid.items():
+                    if normalize_title_for_match(song_title).startswith("making songs like"):
+                        declared = cand_lid
+                        break
         return canonical_lyrics_id_from_ep_row(row, declared, lids_by_ep_set, lyrics_titles_by_lid) or declared
 
     def orphan_track_lid(row: dict[str, str]) -> str:
@@ -1223,6 +1334,11 @@ def merge_full_v4_listen_volumes(
         singles = [v for v in volumes if "/sets/" not in str(v.get("ep_url") or "")]
         if len(singles) <= 1:
             merged[lid] = []
+
+    release_at_by_norm_url = build_release_at_by_norm_url_from_pipeline(full_v4_rows, sc_eps_rows)
+    for lid, volumes in list(merged.items()):
+        if len(volumes) >= 2:
+            merged[lid] = renumber_ep_volumes_chronologically(volumes, release_at_by_norm_url)
 
     return merged
 
@@ -2071,6 +2187,23 @@ def build_sc_tracks_full_v4_indexes(
         )
 
     for row in rows:
+        url = (row.get("sc_url") or "").strip()
+        if not url or "/sets/" in url:
+            pass
+        else:
+            nu = _norm_soundcloud_url(url)
+            if nu:
+                created = parse_datetime(row.get("created_at")) or str(row.get("created_at") or "").strip()
+                prev = by_norm_url.get(nu)
+                prev_created = str((prev or {}).get("created_at") or "")
+                if not prev or created > prev_created:
+                    by_norm_url[nu] = {
+                        "sc_url": url,
+                        "track_title": (row.get("track_title") or "").strip(),
+                        "artwork_url": (row.get("artwork_url") or "").strip(),
+                        "created_at": created,
+                    }
+
         lid = (
             effective_full_v4_lyrics_id(row, snap_tid, snap_url)
             if sc_tracks_snapshot
@@ -2082,17 +2215,9 @@ def build_sc_tracks_full_v4_indexes(
                 lid = canon
         if not lid.startswith("L-"):
             continue
-        url = (row.get("sc_url") or "").strip()
         if not url or "/sets/" in url:
             continue
         buckets[lid].append(row)
-        nu = _norm_soundcloud_url(url)
-        if nu:
-            by_norm_url[nu] = {
-                "sc_url": url,
-                "track_title": (row.get("track_title") or "").strip(),
-                "artwork_url": (row.get("artwork_url") or "").strip(),
-            }
 
     by_lyrics_id: dict[str, dict[str, str]] = {}
     for lid, group in buckets.items():
@@ -2404,6 +2529,7 @@ def main() -> None:
         lids_by_ep_set,
         lyrics_titles_by_lid,
     )
+    sc_release_by_url = build_sc_release_dates_by_norm_url(full_v4_by_url, sc_eps_rows)
     listen_overrides = load_sc_catalog_listen_overrides(SC_CATALOG_LISTEN_OVERRIDES)
     cover_overrides_by_lid, cover_overrides_by_ep = load_sc_cover_art_overrides(
         SC_COVER_ART_OVERRIDES
@@ -2540,9 +2666,12 @@ def main() -> None:
                         sc_catalog_track_title = str(url_hit.get("track_title") or "").strip()
                         sc_catalog_listen_source = "full_v4_url"
         has_sc_catalog_listen = bool(sc_catalog_listen_url)
-        # Catalog "newest" timestamp: SC tracks if present, else SC EP date if present, else lyrics.
-        if tracks:
-            primary_published_at = soundcloud_catalog_sort_at(ep_created, tracks)
+        ep_volumes = ep_volumes_by_lid.get(lyrics_id, [])
+        # Catalog "newest" timestamp: SC tracks + EP rows + every listen-volume release date.
+        if tracks or ep_volumes:
+            primary_published_at = catalog_published_at(
+                ep_created, tracks, ep_volumes, sc_release_by_url
+            )
         elif ep_created:
             primary_published_at = ep_created
         else:
