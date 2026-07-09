@@ -2,7 +2,7 @@
   "sutra": [
     {
       "value": "BLOWsutra",
-      "count": 96
+      "count": 95
     },
     {
       "value": "KNOWsutra",
@@ -14,7 +14,7 @@
     },
     {
       "value": "GROWsutra",
-      "count": 57
+      "count": 58
     },
     {
       "value": "SHOWsutra",
@@ -22,11 +22,11 @@
     },
     {
       "value": "FLOWsutra",
-      "count": 35
+      "count": 37
     },
     {
       "value": "GLOWsutra",
-      "count": 29
+      "count": 30
     },
     {
       "value": "BOWsutra",
@@ -36,7 +36,7 @@
   "light_shadow": [
     {
       "value": "LIGHT",
-      "count": 217
+      "count": 220
     },
     {
       "value": "SHADOW",
@@ -46,15 +46,15 @@
   "topic": [
     {
       "value": "POOLITICS",
-      "count": 84
+      "count": 86
     },
     {
       "value": "BEAUTY",
-      "count": 62
+      "count": 63
     },
     {
       "value": "INJUSTICE",
-      "count": 62
+      "count": 61
     },
     {
       "value": "WISDOM",
@@ -66,7 +66,7 @@
     },
     {
       "value": "PEACE",
-      "count": 33
+      "count": 34
     },
     {
       "value": "FOOLERY",
@@ -84,15 +84,15 @@
   "intention": [
     {
       "value": "beWOKE",
-      "count": 54
+      "count": 55
     },
     {
       "value": "beBRAVE",
-      "count": 38
+      "count": 39
     },
     {
       "value": "seeEGO",
-      "count": 35
+      "count": 34
     },
     {
       "value": "beFAIR",
@@ -115,20 +115,20 @@
       "count": 23
     },
     {
+      "value": "beYOU",
+      "count": 23
+    },
+    {
       "value": "beWONDROUS",
       "count": 22
     },
     {
-      "value": "beYOU",
-      "count": 22
+      "value": "beFOOL",
+      "count": 21
     },
     {
       "value": "beKIND",
       "count": 21
-    },
-    {
-      "value": "beFOOL",
-      "count": 20
     },
     {
       "value": "beBRIGHT",
@@ -154,15 +154,15 @@
   "written_year": [
     {
       "value": "2025",
-      "count": 214
+      "count": 215
     },
     {
       "value": "2024",
-      "count": 155
+      "count": 156
     },
     {
       "value": "2026",
-      "count": 32
+      "count": 33
     }
   ],
   "track_genre": [
@@ -179,20 +179,20 @@
       "count": 61
     },
     {
+      "value": "INDIE",
+      "count": 58
+    },
+    {
       "value": "BURLESQUE",
       "count": 57
     },
     {
-      "value": "INDIE",
-      "count": 56
+      "value": "FOLK",
+      "count": 46
     },
     {
       "value": "BLUES",
       "count": 45
-    },
-    {
-      "value": "FOLK",
-      "count": 44
     },
     {
       "value": "MANTRA",
@@ -218,11 +218,11 @@
     },
     {
       "value": "BURLESQUE",
-      "count": 56
+      "count": 57
     },
     {
       "value": "BLUES",
-      "count": 43
+      "count": 44
     },
     {
       "value": "LOFI",
@@ -234,11 +234,11 @@
     },
     {
       "value": "GIPSY",
-      "count": 32
+      "count": 33
     },
     {
       "value": "DUB",
-      "count": 31
+      "count": 32
     },
     {
       "value": "RAGGA",
@@ -288,11 +288,11 @@
   "track_instrument": [
     {
       "value": "BASS",
-      "count": 131
+      "count": 132
     },
     {
       "value": "GUITAR",
-      "count": 82
+      "count": 83
     },
     {
       "value": "CELLO",
@@ -300,7 +300,7 @@
     },
     {
       "value": "BANJO",
-      "count": 57
+      "count": 58
     },
     {
       "value": "PIANO",
@@ -308,11 +308,11 @@
     },
     {
       "value": "ACCORDION",
-      "count": 34
+      "count": 35
     },
     {
       "value": "DRUM",
-      "count": 30
+      "count": 31
     },
     {
       "value": "BRASS",
@@ -346,7 +346,7 @@
     },
     {
       "value": "NERDY",
-      "count": 69
+      "count": 70
     },
     {
       "value": "KINDLY",
@@ -362,7 +362,7 @@
     },
     {
       "value": "RAINY",
-      "count": 39
+      "count": 40
     },
     {
       "value": "HOLY",
@@ -380,11 +380,11 @@
   "track_tempo_feel": [
     {
       "value": "LOWBEAT",
-      "count": 179
+      "count": 181
     },
     {
       "value": "MIDBEAT",
-      "count": 75
+      "count": 76
     },
     {
       "value": "UPBEAT",
@@ -394,7 +394,7 @@
   "lang": [
     {
       "value": "EN",
-      "count": 374
+      "count": 377
     },
     {
       "value": "FR",
