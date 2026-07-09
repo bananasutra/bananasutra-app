@@ -89,7 +89,7 @@ test('queueContextLine formats songbook', () => {
   assert.equal(line, 'Playing top track 1 of 1 from Best of KNOWsutra')
 })
 
-test('queueContextLine uses lyrics_extract for single track', () => {
+test('queueContextLine uses sutra and genre for single track', () => {
   const line = queueContextLine(
     state({
       source: { type: 'single', track_id: '1' },
@@ -98,7 +98,7 @@ test('queueContextLine uses lyrics_extract for single track', () => {
       playAllActive: false,
     }),
   )
-  assert.equal(line, 'Lies wear suits')
+  assert.equal(line, 'KNOW · BLUES')
 })
 
 test('queueResumeContextLine formats m:ss resume cue', () => {

@@ -527,7 +527,7 @@
 
 .discovery-search__tabs--keyword .discovery-search__tab {
   flex: 1 1 0;
-  min-width: 0;
+  min-width: 3.25rem;
   margin-bottom: -1px;
   padding: 0.5rem 0.35rem;
   text-align: center;
@@ -537,6 +537,7 @@
   align-items: baseline;
   justify-content: center;
   gap: 0.3rem;
+  white-space: nowrap;
 }
 
 .discovery-search__tabs--keyword .discovery-search__tab-count {

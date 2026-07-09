@@ -52,8 +52,6 @@ function tracksFilterContextLine(
 }
 
 function singleTrackContextLine(track: PlayableTrack): string {
-  const excerpt = track.lyrics_extract?.trim()
-  if (excerpt) return excerpt
   const sutra = track.sutra?.trim()
   const genre = track.primary_genre?.trim()
   if (sutra && genre) return `${sutra} · ${genre}`

@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { hasListenerCatalogMedia } from './listenerCatalog'
+import { hasListenerCatalogMedia, isLyricsOnlySong } from './listenerCatalog'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { ShareButton } from './ShareButton'
 import { songbookShareUrl } from './shareUrl'
@@ -121,6 +121,14 @@ export function SongbookPage() {
       }),
     [sortedMemberSongs, songCatalogByLyricsId],
   )
+  const lyricsOnlyMemberSongs = useMemo(
+    () =>
+      sortedMemberSongs.filter((song) => {
+        const row = songCatalogByLyricsId.get(song.lyrics_id)
+        return row ? isLyricsOnlySong(row) : false
+      }),
+    [sortedMemberSongs, songCatalogByLyricsId],
+  )
   const playlistIsSet = (songbook?.playlist_url ?? '').includes('/sets/')
 
   const songbookTypeKey = (songbook?.songbook_type ?? '').trim().toLowerCase()
@@ -171,7 +179,10 @@ export function SongbookPage() {
   )
 
   const relatedCount = playbackMemberSongs.length
+  const lyricsOnlyCount = lyricsOnlyMemberSongs.length
   const relatedSongsHeading = relatedCount === 1 ? '1 related song' : `${relatedCount} related songs`
+  const lyricsOnlyHeading =
+    lyricsOnlyCount === 1 ? '1 lyrics-only song' : `${lyricsOnlyCount} lyrics-only songs`
   const hideEmptyGenreOrCollectionRelated =
     (songbookTypeKey === 'genre' || songbookTypeKey === 'collection') && relatedCount === 0
   const genrePrimaryToken =
@@ -442,6 +453,40 @@ export function SongbookPage() {
                 ) : (
                   <ul className="song-thumb-grid song-thumb-grid--home">
                     {playbackMemberSongs.map((song) => {
+                      const cat = songCatalogByLyricsId.get(song.lyrics_id)
+                      const sutra = cat?.sutra?.trim() ?? ''
+                      return (
+                        <li key={song.lyrics_id} className="song-thumb-grid__cell">
+                          <SongThumbCard
+                            to={songCatalogPath(song.lyrics_title, song.url_slug)}
+                            coverUrl={song.cover_image_url}
+                            title={song.lyrics_title}
+                            metaLabel={sutra || undefined}
+                          />
+                        </li>
+                      )
+                    })}
+                  </ul>
+                )}
+              </section>
+            ) : null}
+
+            {!hideEmptyGenreOrCollectionRelated && lyricsOnlyCount > 0 ? (
+              <section
+                className="catalog-page-shell__section songbooks-page__lyrics-only-songs"
+                aria-labelledby="songbook-lyrics-only-heading"
+              >
+                <h2 id="songbook-lyrics-only-heading" className="catalog-section-title">
+                  {catalogLoading ? 'Lyrics-only songs' : lyricsOnlyHeading}
+                </h2>
+                <p className="catalog-lp-section-intro">
+                  Songs in this songbook with lyrics on file, no audio or video linked yet.
+                </p>
+                {catalogLoading ? (
+                  <p className="songbooks-page__playback-empty">Loading song catalog…</p>
+                ) : (
+                  <ul className="song-thumb-grid song-thumb-grid--home">
+                    {lyricsOnlyMemberSongs.map((song) => {
                       const cat = songCatalogByLyricsId.get(song.lyrics_id)
                       const sutra = cat?.sutra?.trim() ?? ''
                       return (
