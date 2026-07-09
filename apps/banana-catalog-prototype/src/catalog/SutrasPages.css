@@ -143,6 +143,22 @@
   min-width: 0;
 }
 
+.sutra-detail__media-block-copy--above-embed {
+  margin: 0 0 0.65rem;
+}
+
+.sutra-detail__media-block-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.sutra-detail__media-block-cta .catalog-media-outbound {
+  margin-top: 0;
+}
+
 .sutra-detail__media-block-embed .catalog-lazy-sc-embed,
 .sutra-detail__media-block-embed .catalog-lazy-sc-embed__placeholder,
 .sutra-detail__media-block-embed .catalog-sc-passthrough-embed,

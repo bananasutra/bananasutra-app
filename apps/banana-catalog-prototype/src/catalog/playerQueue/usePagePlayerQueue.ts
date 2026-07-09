@@ -253,6 +253,9 @@ export function usePagePlayerQueue(
       pageAnalytics.onPlayStarted(track, playbackIntentRef.current, playAllActiveRef.current)
       playbackIntentRef.current = 'user_pick'
       setActiveTrackKey(key)
+      if (!keepPlayAll || !playAllActiveRef.current) {
+        setSource({ type: 'single', track_id: track.track_id })
+      }
       playTrackSideEffect(track, { intent: playbackIntentRef.current, keepPlayAll })
     },
     [pause, persistentApiRef, resolveCurrentKey, resolveQueue, resume, syncPlayInGesture, usePersistentPlayback, widgetRef],

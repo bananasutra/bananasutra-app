@@ -256,7 +256,10 @@
 
 /* R74: title is now a link — preserve truncation, suppress default link underline at rest */
 .tracks-page__title--link {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.35rem 0;
   color: var(--color-text-strong);
   text-decoration: none;
   overflow: hidden;

@@ -2157,7 +2157,7 @@
     "notes": "Inspired the track 'Gladys in Sonderland'.",
     "quote_excerpt": "\"Humility is not thinking less of yourself, it’s thinking of yourself less.\"",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Lewis_Carroll",
-    "song_count": 0
+    "song_count": 1
   },
   {
     "muse": "Ada Limón",
@@ -2760,8 +2760,8 @@
     "song_count": 2
   },
   {
-    "muse": "Portishead Portishead",
-    "first_name": "Portishead",
+    "muse": "Portishead",
+    "first_name": "",
     "last_name": "Portishead",
     "muse_id": "M-136",
     "gender_pronoun": "They",

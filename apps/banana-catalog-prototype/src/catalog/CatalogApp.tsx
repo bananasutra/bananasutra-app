@@ -329,7 +329,7 @@ export function CatalogApp() {
       }${media !== 'all' ? ' · media filter' : ''}${includeLyricsOnly ? ' · lyrics-only included' : ''}${
         findQuery ? ' · discovery filter' : ''
       }${showDeepRefiningHint ? ' · refining lyrics…' : ''}`
-    : `${browsePoolSongs.length} songs`
+    : `${browsePoolSongs.length} songs with audio`
 
   const clearAllFilters = () => {
     const cleared = emptyFilterState()

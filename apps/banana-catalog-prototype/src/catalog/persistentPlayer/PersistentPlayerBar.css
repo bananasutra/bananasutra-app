@@ -38,7 +38,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
-  height: 44px;
+  min-height: 52px;
+  height: auto;
 }
 
 .persistent-player-bar__meta {
@@ -112,6 +113,10 @@
 }
 
 .persistent-player-bar__song-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.15rem 0;
   color: var(--color-link, #524a40);
   font-weight: 600;
   text-decoration: none;
@@ -210,8 +215,10 @@
   font-family: var(--font-ui, inherit);
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.16rem;
-  padding: 0.14rem 0.36rem;
+  min-height: 2rem;
+  padding: 0.3rem 0.45rem;
   border: 1px solid var(--color-border, #d8d0c4);
   border-radius: var(--radius-control, 2px);
   background: transparent;

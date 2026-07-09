@@ -481,8 +481,8 @@
   .global-header__search-slot .discovery-search--header.discovery-search--header-desktop-field .discovery-search__panel {
     left: 0;
     right: auto;
-    width: min(34rem, calc(var(--catalog-layout-max-width) - 1rem));
-    min-width: min(28rem, calc(100vw - 2rem));
+    width: min(38rem, calc(var(--catalog-layout-max-width) - 1rem));
+    min-width: min(32rem, calc(100vw - 2rem));
     border-radius: var(--radius-control, 2px);
   }
 }

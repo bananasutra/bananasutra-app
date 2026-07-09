@@ -75,7 +75,7 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
   const dismissLabel = state.playAllActive ? 'Close and stop playing all' : 'Close player'
 
   const hasTrackMeta = Boolean(sutraHref || songLinkTo || genreDuration)
-  const playerChromeHeightPx = 44 + (scrubOpen ? PERSISTENT_SC_SCRUB_DRAWER_HEIGHT_PX : 0)
+  const playerChromeHeightPx = 52 + (scrubOpen ? PERSISTENT_SC_SCRUB_DRAWER_HEIGHT_PX : 0)
   const showPlaybackStarting = bootingPlayback && Boolean(track)
 
   const settleBooting = useCallback(() => {
@@ -138,7 +138,7 @@ export function PersistentPlayerShell({ apiRef, widgetRef, embedWrapRef }: Persi
   useEffect(() => {
     if (visible) {
       document.body.classList.add('has-persistent-player')
-      document.documentElement.style.setProperty('--bbb-panel-bottom-offset', '44px')
+      document.documentElement.style.setProperty('--bbb-panel-bottom-offset', '52px')
       document.documentElement.style.setProperty(
         '--persistent-player-chrome-height',
         `${playerChromeHeightPx}px`,
