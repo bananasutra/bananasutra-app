@@ -21,8 +21,8 @@
   "songbooks": 37,
   "top_tracks_per_song": 4,
   "like_weight": 40,
-  "youtube_lyrics_ids": 209,
-  "youtube_video_rows": 483,
+  "youtube_lyrics_ids": 210,
+  "youtube_video_rows": 484,
   "youtube_rows_missing_lyrics_id": 17,
   "youtube_playlists_catalog": 40,
   "youtube_playlists_featured": 0,
@@ -98,8 +98,8 @@
     },
     "yt_videos": {
       "path": "AIRTABLE/snapshots/2026-07-09/clean/yt_videos-2026-07-09.csv",
-      "sha256": "552d5c304abb9d6fc86da8e05a73f2c3660bafb8eaba18b3a37a68a8dcfea1d5",
-      "rows": 488
+      "sha256": "0ac2c1a73dac6782e92280d085a851c52d9d69992285bb6ecb47a654242f11b0",
+      "rows": 489
     },
     "yt_playlists": {
       "path": "AIRTABLE/snapshots/2026-07-09/clean/yt_playlists-2026-07-09.csv",

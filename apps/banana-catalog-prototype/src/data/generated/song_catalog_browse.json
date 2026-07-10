@@ -84,8 +84,8 @@
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/so-woken-growsutra-kindness-epx26",
     "has_in_app_playback": true,
     "has_sc_catalog_listen": false,
-    "has_youtube_video": false,
-    "has_youtube_embed": false,
+    "has_youtube_video": true,
+    "has_youtube_embed": true,
     "songbook": "Dare: KIND(ness)",
     "muse": "Björk",
     "song_muse_quote": "So Broken"

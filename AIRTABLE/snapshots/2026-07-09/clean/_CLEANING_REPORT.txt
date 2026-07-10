@@ -24,7 +24,7 @@ Columns not listed had no modifications.
 ── YTplaylists-2026-07-09.csv → yt_playlists-2026-07-09.csv (50 rows)
     (no cell modifications)
 
-── YTvideos-2026-07-09.csv → yt_videos-2026-07-09.csv (488 rows)
+── YTvideos-2026-07-09.csv → yt_videos-2026-07-09.csv (489 rows)
     description                          NBSP×26, ZWSP×30
 
 ── SC TRACKs-2026-07-09.csv → sc_tracks-2026-07-09.csv (740 rows)
