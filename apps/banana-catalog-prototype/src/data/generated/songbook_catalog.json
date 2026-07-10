@@ -2356,8 +2356,8 @@
         "cover_image_url": "https://i1.sndcdn.com/artworks-z3N32DCHnz9O6lz5-eqgWXw-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
         "aggregate_play_count": 159,
         "aggregate_like_count": 5
       },
