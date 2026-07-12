@@ -48,6 +48,7 @@ import {
   catalogPathSlugFromTitleAndSlug,
   lyricsIdFromSongUrlSlug,
   browseRowHasAudioSection,
+  songCatalogLinkTo,
   songCatalogPath,
 } from './songPaths'
 import { songbookByName } from './songbooks'
@@ -61,14 +62,18 @@ import { PageMeta } from './PageMeta'
 import { CatalogNotFoundPage } from './CatalogNotFoundPage'
 import { songOgImageUrl } from './pageMetaConstants'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
-import { SongThumbDropsGrid } from './SongThumbDropsGrid'
+import { ScrollRail } from './ScrollRail'
+import { SongThumbCard } from './SongThumbCard'
 import { ShareButton } from './ShareButton'
 import { songShareUrl, trackShareUrl } from './shareUrl'
 import { useSongCatalogAndDetail, loadYoutubeByLyricsId } from './generatedData'
 import './CatalogApp.css'
 import './CatalogVideoSpotlight.css'
+import './ListenLpPage.css'
 import './SutrasPages.css'
 import './SongDetail.css'
+
+const SONG_DETAIL_SISTER_SONGS_LIMIT = 6
 
 type AudioListenTab = 'tracks' | `ep:${number}`
 
@@ -1743,24 +1748,25 @@ function SongDetailLoaded({
                 <h2 id="song-related-heading" className="catalog-section-title">
                   Explore sister songs
                 </h2>
-                <SongThumbDropsGrid
-                  songs={orderedRelatedSongs.map((related) => {
-                    const catalog = songCatalogByLyricsId.get(related.lyrics_id)
-                    return {
-                      lyrics_id: related.lyrics_id,
-                      cover_image_url: related.cover_image_url,
-                      lyrics_title: related.lyrics_title,
-                      url_slug: related.url_slug,
-                      sutra: catalog?.sutra ?? '',
-                      published_at: catalog?.published_at,
-                      has_in_app_playback: related.has_in_app_playback,
-                      has_sc_catalog_listen: related.has_sc_catalog_listen,
-                      has_youtube_video: related.has_youtube_video,
-                      primary_ep_url: catalog?.primary_ep_url,
-                    }
-                  })}
-                  limit={4}
-                />
+                <ScrollRail className="listen-lp__scroll-rail" variant="fade">
+                  <ul className="listen-lp__rail-list" aria-label="Sister songs">
+                    {orderedRelatedSongs.slice(0, SONG_DETAIL_SISTER_SONGS_LIMIT).map((related) => {
+                      const catalog = songCatalogByLyricsId.get(related.lyrics_id)
+                      return (
+                        <li key={related.lyrics_id} className="listen-lp__rail-cell">
+                          <SongThumbCard
+                            to={songCatalogLinkTo(related.lyrics_title, related.url_slug, {
+                              section: browseRowHasAudioSection(related) ? 'audio' : undefined,
+                            })}
+                            coverUrl={related.cover_image_url}
+                            title={related.lyrics_title}
+                            metaLabel={catalog?.sutra?.trim() || undefined}
+                          />
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </ScrollRail>
             </section>
           ) : null}
 
