@@ -358,7 +358,7 @@ export function pickRandomHomeVideoTeasers(
     }))
 }
 
-/** Bottom stats row — echoes header counts plus videos (wireframe §7). */
+/** Bottom stats row — catalog scale (media + muses/quotes). */
 export function buildHomeStatsSummary(): HomeStatsSummaryItem[] {
   const stats = chromeStatsJson as {
     sutraCount: number
@@ -366,8 +366,12 @@ export function buildHomeStatsSummary(): HomeStatsSummaryItem[] {
     songCount: number
     topTrackCount: number
     videoCount: number
+    museCount: number
+    quoteCount: number
   }
   const videoCount = stats.videoCount ?? 0
+  const museCount = stats.museCount ?? 0
+  const quoteCount = stats.quoteCount ?? 0
   return [
     {
       value: stats.sutraCount,
@@ -398,6 +402,18 @@ export function buildHomeStatsSummary(): HomeStatsSummaryItem[] {
       label: 'Videos',
       href: '/videos/',
       ariaLabel: `${formatHomeCount(videoCount)} videos`,
+    },
+    {
+      value: museCount,
+      label: 'Muses',
+      href: '/muses/',
+      ariaLabel: `${formatHomeCount(museCount)} muses`,
+    },
+    {
+      value: quoteCount,
+      label: 'Quotes',
+      href: '/quotes/',
+      ariaLabel: `${formatHomeCount(quoteCount)} quotes`,
     },
   ]
 }

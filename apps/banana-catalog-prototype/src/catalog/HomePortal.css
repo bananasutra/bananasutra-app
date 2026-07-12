@@ -655,15 +655,16 @@
 @media (max-width: 640px) {
   .home-stats-summary {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.15rem 0.65rem;
+    /* 7 stats: Sutras full-width, then 3×2 grid for the rest */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem 0.5rem;
     padding-top: 0.75rem;
   }
 
   .home-stats-summary__item {
     flex: unset;
     min-width: 0;
-    padding: 0 0.25rem;
+    padding: 0 0.2rem;
     border-right: none;
     margin-bottom: 0;
   }
@@ -672,11 +673,11 @@
     grid-column: 1 / -1;
     justify-self: center;
     width: min(100%, 9.5rem);
-    margin-bottom: 0.15rem;
+    margin-bottom: 0.1rem;
   }
 
   .home-stats-summary__num {
-    font-size: 1.45rem;
+    font-size: 1.35rem;
   }
 }
 
