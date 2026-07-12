@@ -502,17 +502,6 @@
   }
 }
 
-/* Playlist corner — tokenized Listen LP songbook thumbs (3 picks). */
-.home-songbooks-corner.listen-lp__songbook-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-@media (min-width: 520px) {
-  .home-songbooks-corner.listen-lp__songbook-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
 /* Video teaser */
 .home-video-teaser {
   display: grid;
