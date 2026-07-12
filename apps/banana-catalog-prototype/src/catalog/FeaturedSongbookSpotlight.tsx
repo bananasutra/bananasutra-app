@@ -17,7 +17,7 @@ type Props = {
   className?: string
   /** split = embed + copy side-by-side (768px+); stacked = copy above embed */
   layout?: 'split' | 'stacked'
-  /** listen-lp: no kicker, section CTA below embed (title + description stay above player). */
+  /** listen-lp: no kicker; open-songbook CTA stays in copy above embed. */
   stackedVariant?: 'default' | 'listen-lp'
 }
 
@@ -46,11 +46,9 @@ export function FeaturedSongbookSpotlight({
       titleMeta={formatSongbookScPlaylistMeta(book)}
       description={book.description}
     >
-      {listenLpStacked ? null : (
-        <Link className="catalog-featured-embed-copy__cta" to={ctaTo}>
-          {ctaLabel}
-        </Link>
-      )}
+      <Link className="catalog-featured-embed-copy__cta" to={ctaTo}>
+        {ctaLabel}
+      </Link>
     </CatalogFeaturedEmbedCopy>
   )
 
@@ -60,11 +58,6 @@ export function FeaturedSongbookSpotlight({
         <div className="catalog-featured-songbook__stacked-copy">{copy}</div>
         <div className="catalog-featured-songbook__embed">{embed}</div>
         {outbound}
-        {listenLpStacked ? (
-          <Link className="catalog-section-cta" to={ctaTo}>
-            {ctaLabel}
-          </Link>
-        ) : null}
       </div>
     )
   }
