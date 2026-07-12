@@ -6,6 +6,8 @@ export type CatalogChromeStats = {
   songCount: number
   topTrackCount: number
   videoCount: number
+  museCount: number
+  quoteCount: number
 }
 
 /** Build-time totals (~200 B) — instant chrome counts without waiting on browse JSON fetch. */

@@ -626,6 +626,17 @@
   border-right: none;
 }
 
+/* Muses + Quotes: hide on phones only — tablets keep all seven. */
+@media (max-width: 640px) {
+  .home-stats-summary__item--desktop-only {
+    display: none !important;
+  }
+
+  .home-stats-summary__item:has(+ .home-stats-summary__item--desktop-only) {
+    border-right: none;
+  }
+}
+
 .home-stats-summary__item:hover .home-stats-summary__num,
 .home-stats-summary__item:focus-visible .home-stats-summary__num {
   color: var(--color-link);
