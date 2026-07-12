@@ -121,7 +121,7 @@ export type HomeStatsSummaryItem = {
   label: string
   href: string
   ariaLabel: string
-  /** Hide below desktop (tablets + phones keep the original five-stat band). */
+  /** Hide on phones only (tablets + desktop keep muses/quotes). */
   desktopOnly?: boolean
 }
 
