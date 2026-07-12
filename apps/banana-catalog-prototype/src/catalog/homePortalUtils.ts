@@ -16,7 +16,7 @@ export const HOME_REVOLT_SONGBOOK_SLUG = 'speak-revolt-now'
 /** Language card in the songbooks corner (wireframe §5). */
 export const HOME_FRENCH_SONGBOOK_SLUG = 'lang-french'
 
-export type HomeSongbookCornerSlot = 'topic' | 'genre' | 'language'
+export type HomeSongbookCornerSlot = 'topic' | 'genre' | 'language' | 'collection'
 
 export type HomeSongbookCornerCard = {
   slot: HomeSongbookCornerSlot
@@ -30,7 +30,9 @@ function songbookBySlug(books: SongbookCatalogItem[], slug: string): SongbookCat
   return match
 }
 
-/** Three playlist types for homepage corner: topic/sutra, genre best-of, language — random per reload. */
+const HOME_SONGBOOK_CORNER_SLOTS: HomeSongbookCornerSlot[] = ['topic', 'genre', 'language', 'collection']
+
+/** Four playlist types for homepage corner: sutra, genre best-of, world/language, special collection — random per load. */
 export function pickRandomHomeSongbookCorner(books: SongbookCatalogItem[]): HomeSongbookCornerCard[] {
   const used = new Set<string>()
   const cards: HomeSongbookCornerCard[] = []
@@ -47,12 +49,13 @@ export function pickRandomHomeSongbookCorner(books: SongbookCatalogItem[]): Home
       if (isUsed(b)) return false
       const type = (b.songbook_type || '').trim().toLowerCase()
       if (slot === 'topic') return type === 'sutra'
-      if (slot === 'genre') return type === 'genre' || type === 'collection'
+      if (slot === 'genre') return type === 'genre'
       if (slot === 'language') return type === 'language'
+      if (slot === 'collection') return type === 'collection'
       return false
     })
 
-  for (const slot of ['topic', 'genre', 'language'] as const) {
+  for (const slot of HOME_SONGBOOK_CORNER_SLOTS) {
     const pick = pickRandomSongbookFromPool(poolForSlot(slot), null)
     if (pick) {
       markUsed(pick)
@@ -75,15 +78,15 @@ export function resolveHomeSongbookCorner(books: SongbookCatalogItem[]): HomeSon
   return cards
 }
 
-/** Kicker line for homepage songbook corner cards (wireframe §5). */
+/** Eyebrow for homepage playlist corner — type context above the songbook title. */
 export function homeSongbookCornerKicker(slot: HomeSongbookCornerSlot, book: SongbookCatalogItem): string {
   if (slot === 'topic') {
     const sutra = (book.sutras || '').split(',')[0]?.trim()
-    return sutra ? `TOPIC · ${sutra}` : 'TOPIC'
+    return sutra || 'Sutra'
   }
-  if (slot === 'genre') return 'GENRE · Best-of'
-  const lang = (book.songbook || '').replace(/^World:\s*/i, '').trim()
-  return lang ? `LANGUAGE · ${lang}` : 'LANGUAGE'
+  if (slot === 'genre') return 'Genre best-of'
+  if (slot === 'language') return 'World'
+  return 'Special collection'
 }
 
 /** Homepage spotlight: Hidden Peels by slug, else SC→SONGBOOK join row by `songbook_id` if slug alone fails. */

@@ -755,9 +755,26 @@
   font-size: 1.5rem;
 }
 
+.listen-lp__songbook-thumb-eyebrow {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-ui);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: var(--color-text-faint, #888);
+}
+
+.listen-lp__songbook-thumb-eyebrow + .listen-lp__songbook-thumb-title {
+  margin-top: 0.15rem;
+}
+
 .listen-lp__songbook-thumb-title {
   display: block;
   margin-top: 0.4rem;
+  font-family: var(--font-ui);
   font-size: 0.78rem;
   font-weight: 650;
   line-height: 1.3;

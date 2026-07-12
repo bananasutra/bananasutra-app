@@ -6,16 +6,20 @@ import type { ListenLpSongbookPick } from './listenLpData'
 
 type Props = {
   book: ListenLpSongbookPick
+  /** Optional type kicker above the title (homepage playlist corner). */
+  eyebrow?: string
 }
 
-export function ListenLpSongbookThumb({ book }: Props) {
+export function ListenLpSongbookThumb({ book, eyebrow }: Props) {
   const title = book.songbook
   const meta = formatSongbookScPlaylistMeta(book)
   const art = (book.playlist_artwork_url || '').trim()
   const cover = coverImageUrl(art, { width: 280 })
+  const eyebrowText = (eyebrow || '').trim()
+  const aria = [eyebrowText, title, meta].filter(Boolean).join(' · ')
 
   return (
-    <Link className="listen-lp__songbook-thumb" to={songbookHref(book.songbook)} aria-label={meta ? `${title} · ${meta}` : title}>
+    <Link className="listen-lp__songbook-thumb" to={songbookHref(book.songbook)} aria-label={aria}>
       {cover ? (
         <span className="listen-lp__songbook-thumb-art-wrap">
           <img
@@ -35,6 +39,7 @@ export function ListenLpSongbookThumb({ book }: Props) {
           ♪
         </span>
       )}
+      {eyebrowText ? <span className="listen-lp__songbook-thumb-eyebrow">{eyebrowText}</span> : null}
       <span className="listen-lp__songbook-thumb-title">{title}</span>
       {meta ? <span className="listen-lp__songbook-thumb-meta">{meta}</span> : null}
     </Link>
