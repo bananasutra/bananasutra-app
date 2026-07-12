@@ -30,11 +30,6 @@
   margin-top: 0;
 }
 
-.catalog-featured-songbook .catalog-featured-embed-copy__title {
-  font-size: clamp(1rem, 2.2vw, 1.15rem);
-  line-height: 1.25;
-}
-
 @media (min-width: 768px) {
   .catalog-featured-songbook__copy .catalog-featured-embed-copy__cta {
     text-align: left;

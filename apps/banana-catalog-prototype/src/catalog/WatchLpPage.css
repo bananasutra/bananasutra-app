@@ -196,9 +196,17 @@
 
 /* Facet bar band — match /videos + /songbooks filter strip (R87 / R89). */
 .watch-lp__filters-band {
-  margin: 1.25rem 0;
-  padding: 0 0 1.1rem;
-  border-bottom: 1px solid var(--color-border);
+  margin: 0;
+  padding: 1.15rem 0;
+  border-bottom: var(--catalog-shell-rule);
+}
+
+.watch-lp__filters-band .catalog-filter-bar {
+  margin-bottom: 0;
+}
+
+.watch-lp__filters-band .catalog-filter-bar:not(:has(.catalog-filter-bar__panel.is-open)) .catalog-filter-bar__toolbar {
+  margin-bottom: 0;
 }
 
 /* Legacy facet classes (pre-CatalogFilterBar); kept inert in case of stale markup. */

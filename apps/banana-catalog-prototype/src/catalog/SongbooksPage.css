@@ -13,9 +13,19 @@
 }
 
 .songbooks-page__filters-stacked {
-  margin: 0 0 1.25rem;
-  padding: 0 0 1.1rem;
-  border-bottom: 1px solid var(--color-border);
+  /* Band sits between featured shell rule and this bottom rule; keep pad symmetric. */
+  margin: 0;
+  padding: 1.15rem 0;
+  border-bottom: var(--catalog-shell-rule);
+}
+
+/* Default filter-bar margins separate from grids; inside this band they skew the toolbar. */
+.songbooks-page__filters-stacked .catalog-filter-bar {
+  margin-bottom: 0;
+}
+
+.songbooks-page__filters-stacked .catalog-filter-bar:not(:has(.catalog-filter-bar__panel.is-open)) .catalog-filter-bar__toolbar {
+  margin-bottom: 0;
 }
 
 .songbooks-page__filters-stacked .catalog-section-title {
