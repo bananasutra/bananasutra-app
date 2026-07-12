@@ -96,7 +96,7 @@
     "song_in_app": true,
     "fav": false,
     "published_at": "2026-07-08T19:22:26",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-yFu7z79boWM74g0U-gNvzig-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-Bhnzjk3eXjtj1NZN-Bmk7hA-t500x500.png",
     "track_genres": [
       "DUB"
     ],
@@ -128,11 +128,13 @@
     "best_track_ids": [
       "1982357295"
     ],
-    "ep_refs": [],
-    "primary_ep_volume": 0,
+    "ep_refs": [
+      "https://soundcloud.com/bananasutra/making-songs-like-flowsutra-single-vol2"
+    ],
+    "primary_ep_volume": 2,
     "primary_ep_rating": "",
-    "primary_ep_url": "",
-    "primary_ep_title": "",
+    "primary_ep_url": "https://soundcloud.com/bananasutra/making-songs-like-flowsutra-single-vol2",
+    "primary_ep_title": "Making Songs Like ❥ FLOWsutra Kindness Understands Lullaby Blues MANTRA Vol. 02",
     "ep_volumes": [
       {
         "ep_volume": 1,
@@ -155,10 +157,10 @@
     "lyrics_head_search": "[Intro]\nJust breathe, in sync, in flow…\n\n[Verse 1]\nMaking songs like others meditate, flex, or pray,\nI’m not chasing a corporate crown today,\nDon’t need algorithms to write my verse,\nMy ego ain’t rehearsing for a popularity curse.\n\n[Chorus]\nOnly here to wonder, to learn, and share.\nEach song’s a little atheist prayer.\nIn a world gone bananas, I hum for peace,\nSinging truths that refuse to cease.\n\n[Verse 2]\nRaised atheist, humble but bold,\nTurning fears and hopes into stories told.\nHumming for justice, connecting the dots,\nSilly as it sounds, it’s all I’ve got.\n\n[Chorus]\nOnly here to wonder, to learn, and share,\nEach song’s a little atheist prayer.\nIn a world gone bananas, I hum for peace\nSinging truths that refuse to cease.\n\n[Outro]\nMusic therapy, poetic play...\nJust a fool on a path, finding my way.",
     "fallback_sc_url": "",
     "has_in_app_playback": true,
-    "has_sc_catalog_listen": true,
-    "sc_catalog_listen_url": "https://soundcloud.com/bananasutra/making-songs-like-others",
-    "sc_catalog_track_title": "making songs like…",
-    "sc_catalog_listen_source": "full_v4",
+    "has_sc_catalog_listen": false,
+    "sc_catalog_listen_url": "",
+    "sc_catalog_track_title": "",
+    "sc_catalog_listen_source": "",
     "lyrics_pipeline_status": "PUBLISHED",
     "has_youtube_video": true,
     "has_youtube_embed": true
@@ -4128,7 +4130,7 @@
     "song_in_app": true,
     "fav": false,
     "published_at": "2026-02-11T23:37:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
     "track_genres": [
       "BURLESQUE",
       "FOLK",
@@ -12311,7 +12313,7 @@
     "song_in_app": true,
     "fav": false,
     "published_at": "2025-08-29T12:11:20",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-XirUpSPl2GiR23bD-IUcZyA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-R1VSZuTOo6JhJtf2-Ej51OA-t500x500.jpg",
     "track_genres": [
       "DUB"
     ],
@@ -16072,7 +16074,7 @@
     "song_in_app": true,
     "fav": true,
     "published_at": "2025-05-29T03:53:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-2YAEhVqYbh7DwilS-Nd8dqg-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-abyBryFxsG9vVsON-VYqfCQ-t500x500.png",
     "track_genres": [
       "DUB",
       "FOLK",
@@ -17553,7 +17555,7 @@
     "song_in_app": true,
     "fav": true,
     "published_at": "2025-05-02T01:18:50",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-60rWtzt0Ur5yDsl8-lcLgjQ-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-ycTSJc8nDWdlUg15-s4wo8Q-t500x500.jpg",
     "track_genres": [
       "INDIE",
       "JAZZ"
@@ -20659,7 +20661,7 @@
     "song_in_app": true,
     "fav": false,
     "published_at": "2025-03-30T10:30:09",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-9mKo23b9tXJzWs5t-yMjheA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-vO0k3rhIFff0YYyx-2A2mWw-t500x500.jpg",
     "track_genres": [
       "FOLK"
     ],
@@ -23132,7 +23134,7 @@
     "song_in_app": true,
     "fav": true,
     "published_at": "2024-12-24T20:25:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-y92nfBVYRcfV1Otf-WtxM4A-t500x500.jpg",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-SUUIsI7woB0IboJy-gnp3pA-t500x500.jpg",
     "track_genres": [
       "LOFI"
     ],

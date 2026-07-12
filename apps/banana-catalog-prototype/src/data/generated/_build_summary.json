@@ -3,7 +3,7 @@
   "songs": 410,
   "details": 410,
   "featured_with_in_app_playback": 197,
-  "featured_with_sc_catalog_listen": 21,
+  "featured_with_sc_catalog_listen": 20,
   "featured_lyrics_only": 213,
   "facet_keys": [
     "sutra",
@@ -50,10 +50,10 @@
   "sc_cover_art_overrides_lyrics_ids": 3,
   "sc_cover_art_overrides_ep_urls": 1,
   "sc_catalog_automatch_review_csv": "apps/banana-catalog-prototype/src/data/generated/sc_catalog_listen_automatch_review.csv",
-  "sc_catalog_automatch_rows": 21,
+  "sc_catalog_automatch_rows": 20,
   "sc_catalog_automatch_source_counts": {
     "export_title": 6,
-    "full_v4": 15
+    "full_v4": 14
   },
   "inputs": {
     "lyrics": {
