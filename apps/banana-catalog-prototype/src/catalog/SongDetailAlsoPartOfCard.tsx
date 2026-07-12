@@ -55,18 +55,20 @@ export function SongDetailAlsoPartOfCard({ book, lyricsId, isLyricsOnly = false 
             to={songbookHrefFromCatalogItem(book)}
             aria-label={`Listen to ${book.songbook}`}
           >
-            <CoverImage
-              className="song-detail-also__art"
-              source={art}
-              requestWidth={400}
-              srcSet={buildSrcset(art, [200, 400])}
-              sizes="(max-width: 640px) 50vw, 25vw"
-              alt=""
-              width={400}
-              height={400}
-              loading="lazy"
-              decoding="async"
-            />
+            <span className="song-detail-also__art-wrap">
+              <CoverImage
+                className="song-detail-also__art"
+                source={art}
+                requestWidth={400}
+                srcSet={buildSrcset(art, [200, 400])}
+                sizes="(max-width: 640px) 50vw, 25vw"
+                alt=""
+                width={400}
+                height={400}
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
           </Link>
         ) : null}
         <div className="song-detail-also__body">

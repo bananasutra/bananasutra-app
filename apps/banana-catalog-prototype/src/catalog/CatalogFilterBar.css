@@ -189,11 +189,14 @@ a.catalog-filter-bar__clear:visited {
   display: grid;
   grid-template-columns: minmax(3.5rem, 4.25rem) minmax(0, 1fr);
   gap: 0.25rem 0.55rem;
-  align-items: center;
+  align-items: start;
   min-width: 0;
 }
 
 .catalog-filter-bar__label {
+  display: flex;
+  align-items: center;
+  min-height: var(--chrome-control-height, 2.35rem);
   font-size: 0.65rem;
   font-weight: 600;
   line-height: 1.2;

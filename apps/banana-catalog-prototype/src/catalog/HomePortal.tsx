@@ -158,10 +158,14 @@ export function HomePortal() {
           ) : null}
 
           {coverStripTiles.length > 0 ? (
-            <ScrollRevealSection className="home-portal__section--lucky" aria-labelledby="home-cover-strip-heading">
-              <HomePortalCoverStrip tiles={coverStripTiles} stripKey={luckySeed} onReload={reloadLuckyStrip} />
-              <HomePortalBbbNudge />
-            </ScrollRevealSection>
+            <>
+              <ScrollRevealSection className="home-portal__section--lucky" aria-labelledby="home-cover-strip-heading">
+                <HomePortalCoverStrip tiles={coverStripTiles} stripKey={luckySeed} onReload={reloadLuckyStrip} />
+              </ScrollRevealSection>
+              <ScrollRevealSection className="home-portal__section--bbb" aria-labelledby="home-bbb-nudge-heading">
+                <HomePortalBbbNudge />
+              </ScrollRevealSection>
+            </>
           ) : null}
 
           {songbookCornerCards.length > 0 ? (

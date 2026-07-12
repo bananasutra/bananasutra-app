@@ -107,11 +107,3 @@
   );
   mask-image: linear-gradient(to right, transparent 0, #000 2.75rem, #000 calc(100% - 2.75rem), transparent 100%);
 }
-
-@media (max-width: 640px) {
-  .scroll-rail--fade-left.scroll-rail--fade-right .scroll-rail__inner--fade,
-  .scroll-rail--fade-right .scroll-rail__inner--fade {
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-}

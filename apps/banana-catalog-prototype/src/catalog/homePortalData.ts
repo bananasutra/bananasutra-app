@@ -35,8 +35,8 @@ export const HERO_QUOTE_SLUGS = [
 /** Feeling lucky strip — square covers in a responsive grid (wireframe §4). */
 export const HOME_COVER_STRIP_COUNT = 11
 
-/** Latest drops on home — 2×2 grid beside top-5 player (wireframe §3). */
-export const HOME_LATEST_DROPS_LIMIT = 4
+/** Latest drops on home — fade rail (~4 visible), matching sutra latest drops. */
+export const HOME_LATEST_DROPS_LIMIT = 6
 
 /** Video teaser cards on home (wireframe §6). */
 export const HOME_VIDEO_TEASER_LIMIT = 3

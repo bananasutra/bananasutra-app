@@ -65,20 +65,15 @@ function LuckyCoverThumb({
   )
 }
 
-/** Feeling lucky — square cover grid with reload. */
+/** Feeling lucky — square cover grid with reload under the strip. */
 export function HomePortalCoverStrip({ tiles, stripKey, onReload }: Props) {
   if (!tiles.length) return null
 
   return (
     <>
-      <div className="home-portal__lucky-head">
-        <h2 id="home-cover-strip-heading" className="catalog-section-title">
-          Feeling lucky?
-        </h2>
-        <button type="button" className="home-lucky-reload" onClick={onReload}>
-          ↻ Reload
-        </button>
-      </div>
+      <h2 id="home-cover-strip-heading" className="catalog-section-title">
+        Feeling lucky?
+      </h2>
       <p className="catalog-lp-section-intro">
         Tap a cover and see where it takes you. It&apos;s chill. It&apos;s fun. It&apos;s free. Woo.
       </p>
@@ -87,6 +82,11 @@ export function HomePortalCoverStrip({ tiles, stripKey, onReload }: Props) {
           <LuckyCoverThumb key={`${stripKey}|${tile.slug}`} tile={tile} index={index} stripKey={stripKey} />
         ))}
       </ul>
+      <div className="home-lucky-reload-row">
+        <button type="button" className="home-lucky-reload" onClick={onReload}>
+          ↻ Reload
+        </button>
+      </div>
     </>
   )
 }

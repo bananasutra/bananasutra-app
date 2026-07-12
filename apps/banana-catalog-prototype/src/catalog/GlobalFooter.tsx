@@ -172,7 +172,14 @@ function FooterContactForm() {
         }}
       >
         <span className="footer-contact__toggle-label">
-          {status === 'sent' && open ? 'Message sent!' : 'Questions? Feedback? Get in touch'}
+          {status === 'sent' && open ? (
+            'Message sent!'
+          ) : (
+            <>
+              <span className="footer-contact__toggle-lead">Questions? Feedback?</span>{' '}
+              <span className="footer-contact__toggle-cta">Get in touch</span>
+            </>
+          )}
         </span>
         <span className={`footer-contact__toggle-chevron${open ? ' is-open' : ''}`} aria-hidden />
       </button>
