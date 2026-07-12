@@ -570,9 +570,8 @@
 .home-video-teaser__label {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   flex: 1;
-  min-height: 3.75rem;
+  min-height: 0;
   padding: 0.5rem 0.55rem 0.6rem;
   font-size: 0.78rem;
   line-height: 1.35;
@@ -592,7 +591,8 @@
 
 .home-video-teaser__meta {
   display: block;
-  margin-top: 0.15rem;
+  margin-top: auto;
+  padding-top: 0.35rem;
   font-family: var(--font-ui);
   font-size: 0.62rem;
   font-weight: 500;
