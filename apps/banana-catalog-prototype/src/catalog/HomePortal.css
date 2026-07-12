@@ -22,8 +22,8 @@
   padding-top: calc(var(--catalog-shell-section-pad-y, 1.35rem) + 0.35rem);
 }
 
-.home-portal__section--lucky .home-portal__bbb--lucky {
-  margin-top: 1.15rem;
+.home-portal__section--bbb {
+  padding-top: calc(var(--catalog-shell-section-pad-y, 1.35rem) + 0.15rem);
 }
 
 .home-portal__section--stats {
@@ -31,18 +31,6 @@
   contain-intrinsic-size: auto 120px;
   padding-top: calc(var(--catalog-shell-section-pad-y, 1.65rem) + 0.5rem);
   padding-bottom: calc(var(--catalog-shell-section-pad-y, 1.65rem) + 0.25rem);
-}
-
-.home-portal__lucky-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.home-portal__lucky-head .catalog-section-title {
-  margin-bottom: 0;
 }
 
 .home-portal__empty {
@@ -234,15 +222,21 @@
   }
 }
 
-/* BBB nudge — inline, left-aligned under feeling lucky */
+/* BBB nudge — dedicated section under Feeling lucky (Listen LP tail pattern). */
 .home-bbb-nudge {
   margin: 0;
-  padding: 0;
-  text-align: left;
+  padding: 0.75rem 0.85rem;
+  background: var(--color-bg-inset, #f4f1ea);
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: var(--radius-md, 8px);
+}
+
+.home-bbb-nudge__headline {
+  margin: 0;
   font-family: var(--font-body);
-  font-size: var(--catalog-section-intro-font-size);
-  line-height: var(--catalog-section-intro-line-height);
-  color: var(--catalog-section-intro-color);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--color-text-primary);
 }
 
 .home-bbb-nudge__text {
@@ -255,6 +249,7 @@
   background: none;
   border: 0;
   cursor: pointer;
+  font-weight: 650;
 }
 
 .home-bbb-nudge__cta:hover {
@@ -390,7 +385,19 @@
   margin-top: 0;
 }
 
-/* Feeling lucky — square grid + reload */
+/* Feeling lucky — square grid + reload under strip */
+.home-lucky-reload-row {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.55rem 0 0;
+}
+
+@media (max-width: 640px) {
+  .home-lucky-reload-row {
+    justify-content: center;
+  }
+}
+
 .home-lucky-reload {
   display: inline-flex;
   align-items: center;
@@ -422,7 +429,7 @@
   display: grid;
   grid-template-columns: repeat(11, minmax(0, 1fr));
   gap: 0.38rem;
-  margin: 0 0 0.35rem;
+  margin: 0;
   padding: 0;
   list-style: none;
   min-width: 0;
