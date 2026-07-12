@@ -629,7 +629,7 @@
 /* Muses + Quotes: desktop only — tablets/phones keep the original five-stat band. */
 @media (max-width: 1024px) {
   .home-stats-summary__item--desktop-only {
-    display: none;
+    display: none !important;
   }
 
   .home-stats-summary__item:has(+ .home-stats-summary__item--desktop-only) {

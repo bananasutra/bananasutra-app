@@ -77,13 +77,16 @@
   border-right: none;
 }
 
-/* Muses + Quotes: desktop only — match home; tablets/phones keep five stats. */
+/* Muses + Quotes: desktop only — tablets/phones keep five stats.
+   Specificity must beat `.…--footer .home-stats-summary__item { display: flex }`. */
 @media (max-width: 1024px) {
-  .catalog-footer-stats .home-stats-summary__item--desktop-only {
+  .catalog-footer-stats .home-stats-summary--footer .home-stats-summary__item--desktop-only {
     display: none;
   }
 
-  .catalog-footer-stats .home-stats-summary__item:has(+ .home-stats-summary__item--desktop-only) {
+  .catalog-footer-stats
+    .home-stats-summary--footer
+    .home-stats-summary__item:has(+ .home-stats-summary__item--desktop-only) {
     border-right: none;
   }
 }
