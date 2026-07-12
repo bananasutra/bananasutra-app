@@ -21,6 +21,8 @@ export type CatalogVideoSpotlightItem = {
   inApp?: boolean
   songHref?: To | null
   externalHref?: string | null
+  /** Catalog YT thumb URL (prefer over generic hq/maxres poster). */
+  thumbnailUrl?: string | null
 }
 
 type RailCellProps = {
@@ -103,6 +105,7 @@ export function CatalogVideoSpotlight({
           facadeUntilClick
           facadePosterEager
           posterWidth={640}
+          posterThumbnailUrl={featured.thumbnailUrl}
           onBeforePlay={onBeforePlay}
           onPlayingChange={onPlayingChange}
           showOutboundFooter={false}

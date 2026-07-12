@@ -10,13 +10,20 @@ function isHttpUrl(value: string): boolean {
   return /^https?:\/\//i.test(value)
 }
 
-/** YouTube thumbs: maxresdefault (16:9) crops cleanly to square; sd/hq (4:3) bake letterboxing. */
+/**
+ * YouTube thumbs: prefer maxresdefault for landscape (cleaner square crops).
+ * Keep sddefault as-is — catalog stores it for Shorts/reels that have no maxres
+ * (maxres 404s; upgrading then falling back to hq leaves a tiny letterboxed poster).
+ */
 function normalizeRemoteImageSource(source: string): string {
   try {
     const u = new URL(source)
     if (u.hostname === 'i.ytimg.com') {
+      if (/\/sddefault\.jpg$/i.test(u.pathname)) {
+        return u.toString()
+      }
       u.pathname = u.pathname.replace(
-        /\/(hqdefault|mqdefault|sddefault|default)\.jpg$/i,
+        /\/(hqdefault|mqdefault|default)\.jpg$/i,
         '/maxresdefault.jpg',
       )
       return u.toString()
@@ -36,15 +43,33 @@ export function youtubeThumbnailFallbackUrl(source: string, failedUrl?: string):
   const trimmed = (source || '').trim()
   if (!trimmed) return ''
   try {
-    const u = new URL((failedUrl || trimmed).trim())
-    if (u.hostname !== 'i.ytimg.com') return ''
-    if (/\/maxresdefault\.jpg$/i.test(u.pathname)) {
-      u.pathname = u.pathname.replace(/maxresdefault\.jpg$/i, 'hqdefault.jpg')
-      return u.toString()
+    const failed = new URL((failedUrl || trimmed).trim())
+    if (failed.hostname !== 'i.ytimg.com') return ''
+    if (/\/maxresdefault\.jpg$/i.test(failed.pathname)) {
+      // Prefer catalog sddefault when that was the original source (best Shorts art).
+      try {
+        const orig = new URL(trimmed)
+        if (orig.hostname === 'i.ytimg.com' && /\/sddefault\.jpg$/i.test(orig.pathname)) {
+          return orig.toString()
+        }
+      } catch {
+        /* use hq below */
+      }
+      failed.pathname = failed.pathname.replace(/maxresdefault\.jpg$/i, 'hqdefault.jpg')
+      return failed.toString()
     }
-    if (/\/hqdefault\.jpg$/i.test(u.pathname)) {
-      u.pathname = u.pathname.replace(/hqdefault\.jpg$/i, 'mqdefault.jpg')
-      return u.toString()
+    if (/\/hqdefault\.jpg$/i.test(failed.pathname)) {
+      // hq letterboxes vertical Shorts; prefer sd when available from catalog source.
+      try {
+        const orig = new URL(trimmed)
+        if (orig.hostname === 'i.ytimg.com' && /\/sddefault\.jpg$/i.test(orig.pathname)) {
+          return orig.toString()
+        }
+      } catch {
+        /* use mq below */
+      }
+      failed.pathname = failed.pathname.replace(/hqdefault\.jpg$/i, 'mqdefault.jpg')
+      return failed.toString()
     }
   } catch {
     return ''
@@ -74,8 +99,10 @@ export function nativeImageMaxWidth(source: string): number | null {
       const m = u.pathname.match(/-t(\d+)x(\d+)\./i)
       if (m) return Math.max(Number(m[1]), Number(m[2]))
     }
-    if (u.hostname === 'i.ytimg.com' && /\/maxresdefault\.jpg$/i.test(u.pathname)) {
-      return 1280
+    if (u.hostname === 'i.ytimg.com') {
+      if (/\/maxresdefault\.jpg$/i.test(u.pathname)) return 1280
+      // sddefault is 640×480 — bypass CF like maxres
+      if (/\/sddefault\.jpg$/i.test(u.pathname)) return 640
     }
   } catch {
     return null

@@ -79,3 +79,18 @@ test('coverImageFallbackUrl returns origin when CF transform fails', () => {
   const out = coverImageFallbackUrl(src, failed)
   assert.equal(out, src)
 })
+
+test('coverImageUrl keeps YouTube sddefault (Shorts without maxres)', () => {
+  const src = 'https://i.ytimg.com/vi/m8SlUkRJIWA/sddefault.jpg'
+  const out = coverImageUrl(src, { width: 320 })
+  assert.match(out, /sddefault\.jpg/)
+  assert.doesNotMatch(out, /maxresdefault/)
+  assert.doesNotMatch(out, /\/cdn-cgi\/image\//)
+})
+
+test('youtubeThumbnailFallbackUrl prefers catalog sddefault over hq', () => {
+  const src = 'https://i.ytimg.com/vi/m8SlUkRJIWA/sddefault.jpg'
+  const failed = 'https://i.ytimg.com/vi/m8SlUkRJIWA/maxresdefault.jpg'
+  const out = youtubeThumbnailFallbackUrl(src, failed)
+  assert.match(out, /sddefault\.jpg/)
+})
