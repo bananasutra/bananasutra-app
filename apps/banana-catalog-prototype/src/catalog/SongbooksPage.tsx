@@ -543,7 +543,7 @@ export function SongbooksPage() {
             Songbooks
           </span>
         </nav>
-        <div className="catalog-page-intro catalog-page-intro--song-catalog">
+        <div className="catalog-page-intro catalog-page-intro--song-catalog songbooks-page__intro">
           <h1 className="catalog-page-h1">Songbooks</h1>
           <p className="catalog-page-sub">
             Curated playlists that tell a story. Some follow a sutra, some follow a mood, some follow a language. Need

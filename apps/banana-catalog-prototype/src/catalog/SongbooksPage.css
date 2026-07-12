@@ -7,6 +7,11 @@
   min-width: 0;
 }
 
+/* Match /watch + /listen: rule closes the intro so featured reads as its own section. */
+.songbooks-page__intro {
+  border-bottom: var(--catalog-shell-rule);
+}
+
 .songbooks-page__filters-stacked {
   margin: 0 0 1.25rem;
   padding: 0 0 1.1rem;

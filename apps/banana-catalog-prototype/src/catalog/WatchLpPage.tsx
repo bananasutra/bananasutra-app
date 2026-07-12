@@ -290,8 +290,8 @@ export function WatchLpPage() {
           <header className="catalog-page-intro watch-lp__intro">
             <h1 className="catalog-page-h1">{WATCH_LP_META.lead}</h1>
             <p className="catalog-page-sub">
-              This is the watch door: recent clips and playlists to press play. The full archive, every upload with
-              filters, is on <Link to={canonicalPathForRoute('/videos')}>Videos</Link>.
+              Recent clips and longer playlists, press play here. The full archive, every upload with filters, is on{' '}
+              <Link to={canonicalPathForRoute('/videos')}>Videos</Link>.
             </p>
           </header>
 
