@@ -394,7 +394,14 @@
 
 @media (max-width: 640px) {
   .home-lucky-reload-row {
+    justify-content: stretch;
+  }
+
+  .home-lucky-reload {
+    width: 100%;
     justify-content: center;
+    min-height: 2.35rem;
+    padding: 0.45rem 0.85rem;
   }
 }
 
