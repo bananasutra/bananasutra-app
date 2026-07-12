@@ -1110,16 +1110,65 @@ def build_eps_by_lyrics_id(
     return eps_index, ep_volumes_by_lid
 
 
+def build_artwork_by_norm_url(
+    sc_eps_rows: list[dict[str, str]],
+    full_v4_by_url: dict[str, dict[str, str]],
+) -> dict[str, str]:
+    """Normalized SC URL -> artwork (EP sets from snapshot, tracks from FULL v4)."""
+    out: dict[str, str] = {}
+    for row in sc_eps_rows:
+        nk = _norm_soundcloud_url(str(row.get("ep_url") or ""))
+        art = str(row.get("artwork_url") or "").strip()
+        if nk and art:
+            out[nk] = art
+    for nk, hit in full_v4_by_url.items():
+        if not nk or nk in out:
+            continue
+        art = str(hit.get("artwork_url") or "").strip()
+        if art:
+            out[nk] = art
+    return out
+
+
+def newest_listen_volume(volumes: list[dict[str, Any]] | None) -> dict[str, Any] | None:
+    """Highest ep_volume wins (chronological renumber: newest = max)."""
+    if not volumes:
+        return None
+    return max(
+        volumes,
+        key=lambda v: (int(v.get("ep_volume") or 0), str(v.get("ep_url") or "")),
+    )
+
+
+def artwork_from_newest_volume(
+    volumes: list[dict[str, Any]] | None,
+    artwork_by_norm_url: dict[str, str],
+) -> str:
+    vol = newest_listen_volume(volumes)
+    if not vol:
+        return ""
+    nk = _norm_soundcloud_url(str(vol.get("ep_url") or ""))
+    return str(artwork_by_norm_url.get(nk) or "").strip()
+
+
 def choose_artwork(
     lyrics_id: str,
     all_tracks: list[dict[str, Any]],
     ordered_tracks: list[dict[str, Any]],
     ep_index: dict[str, dict[str, Any]],
     full_v4_hit: dict[str, str] | None = None,
+    ep_volumes: list[dict[str, Any]] | None = None,
+    artwork_by_norm_url: dict[str, str] | None = None,
 ) -> str:
+    # Consistent multi-volume rule: song hero = newest listen volume cover
+    # (EP /sets/ or standalone single), not whichever in-app track ranks highest.
+    if artwork_by_norm_url:
+        newest_art = artwork_from_newest_volume(ep_volumes, artwork_by_norm_url)
+        if newest_art:
+            return newest_art
     ep = ep_index.get(lyrics_id)
     has_ep_backed_track = any(str(t.get("ep_url") or "").strip() for t in all_tracks)
-    # Default catalog hero: primary EP artwork (newest volume) when tracks link to an EP.
+    # Default catalog hero: primary EP artwork when tracks link to an EP.
     if ep and ep.get("artwork_url") and has_ep_backed_track:
         return str(ep["artwork_url"])
     for track in ordered_tracks:
@@ -2536,6 +2585,7 @@ def main() -> None:
         lyrics_titles_by_lid,
     )
     sc_release_by_url = build_sc_release_dates_by_norm_url(full_v4_by_url, sc_eps_rows)
+    artwork_by_norm_url = build_artwork_by_norm_url(sc_eps_rows, full_v4_by_url)
     listen_overrides = load_sc_catalog_listen_overrides(SC_CATALOG_LISTEN_OVERRIDES)
     cover_overrides_by_lid, cover_overrides_by_ep = load_sc_cover_art_overrides(
         SC_COVER_ART_OVERRIDES
@@ -2618,19 +2668,38 @@ def main() -> None:
         )
 
         full_v4_hit = full_v4_by_lid.get(lyrics_id)
-        artwork_url = choose_artwork(lyrics_id, tracks, detail_tracks, eps_index, full_v4_hit)
+        ep_volumes = ep_volumes_by_lid.get(lyrics_id, [])
+        artwork_url = choose_artwork(
+            lyrics_id,
+            tracks,
+            detail_tracks,
+            eps_index,
+            full_v4_hit,
+            ep_volumes=ep_volumes,
+            artwork_by_norm_url=artwork_by_norm_url,
+        )
         if not artwork_url:
             artwork_url = str(lyric.get("fallback_cover_art") or "").strip()
         ep_meta = eps_index.get(lyrics_id)
         ep_url_from_row = str(ep_meta.get("ep_url") or "").strip() if ep_meta else ""
+        ep_title_from_row = str(ep_meta.get("ep_title") or "").strip() if ep_meta else ""
+        ep_created = str(ep_meta.get("created_at") or "").strip() if ep_meta else ""
+        primary_ep_volume = parse_int(str(ep_meta.get("ep_volume") or "0")) if ep_meta else 0
+        primary_ep_rating = str(ep_meta.get("ep_rating") or "").strip() if ep_meta else ""
+        # Singles-only multi-volume songs have no SC EPS row — use newest listen volume as primary.
+        if not ep_url_from_row:
+            newest_vol = newest_listen_volume(ep_volumes)
+            if newest_vol:
+                ep_url_from_row = str(newest_vol.get("ep_url") or "").strip()
+                ep_title_from_row = str(newest_vol.get("ep_title") or "").strip()
+                primary_ep_volume = parse_int(str(newest_vol.get("ep_volume") or "0"))
+                primary_ep_rating = str(newest_vol.get("ep_rating") or "").strip()
         if lyrics_id in cover_overrides_by_lid:
             artwork_url = cover_overrides_by_lid[lyrics_id]
         else:
             ep_norm = _norm_soundcloud_url(ep_url_from_row)
             if ep_norm and ep_norm in cover_overrides_by_ep:
                 artwork_url = cover_overrides_by_ep[ep_norm]
-        ep_title_from_row = str(ep_meta.get("ep_title") or "").strip() if ep_meta else ""
-        ep_created = str(ep_meta.get("created_at") or "").strip() if ep_meta else ""
         sc_catalog_listen_url = ""
         sc_catalog_track_title = ""
         sc_catalog_listen_source = ""
@@ -2672,7 +2741,6 @@ def main() -> None:
                         sc_catalog_track_title = str(url_hit.get("track_title") or "").strip()
                         sc_catalog_listen_source = "full_v4_url"
         has_sc_catalog_listen = bool(sc_catalog_listen_url)
-        ep_volumes = ep_volumes_by_lid.get(lyrics_id, [])
         # Catalog "newest" timestamp: SC tracks + EP rows + every listen-volume release date.
         if tracks or ep_volumes:
             primary_published_at = catalog_published_at(
@@ -2689,9 +2757,6 @@ def main() -> None:
             sc_title_blob = collect_soundcloud_title_blob(tracks, published_only=False)
         else:
             sc_title_blob = ""
-        primary_ep_volume = parse_int(str(ep_meta.get("ep_volume") or "0")) if ep_meta else 0
-        primary_ep_rating = str(ep_meta.get("ep_rating") or "").strip() if ep_meta else ""
-
         written_year = str(lyric.get("year_created") or "").strip()
         raw_lyrics = collapse_airtable_separator_newlines(str(lyric.get("lyrics") or "")).strip()
         raw_songbook = str(lyric.get("songbook") or "").strip()
