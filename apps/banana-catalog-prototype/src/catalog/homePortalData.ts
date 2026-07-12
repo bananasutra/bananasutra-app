@@ -121,6 +121,8 @@ export type HomeStatsSummaryItem = {
   label: string
   href: string
   ariaLabel: string
+  /** Hide below desktop (tablets + phones keep the original five-stat band). */
+  desktopOnly?: boolean
 }
 
 export function hashString(input: string): number {
@@ -408,12 +410,14 @@ export function buildHomeStatsSummary(): HomeStatsSummaryItem[] {
       label: 'Muses',
       href: '/muses/',
       ariaLabel: `${formatHomeCount(museCount)} muses`,
+      desktopOnly: true,
     },
     {
       value: quoteCount,
       label: 'Quotes',
       href: '/quotes/',
       ariaLabel: `${formatHomeCount(quoteCount)} quotes`,
+      desktopOnly: true,
     },
   ]
 }

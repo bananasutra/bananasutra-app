@@ -626,6 +626,17 @@
   border-right: none;
 }
 
+/* Muses + Quotes: desktop only — tablets/phones keep the original five-stat band. */
+@media (max-width: 1024px) {
+  .home-stats-summary__item--desktop-only {
+    display: none;
+  }
+
+  .home-stats-summary__item:has(+ .home-stats-summary__item--desktop-only) {
+    border-right: none;
+  }
+}
+
 .home-stats-summary__item:hover .home-stats-summary__num,
 .home-stats-summary__item:focus-visible .home-stats-summary__num {
   color: var(--color-link);
@@ -655,16 +666,15 @@
 @media (max-width: 640px) {
   .home-stats-summary {
     display: grid;
-    /* 7 stats: Sutras full-width, then 3×2 grid for the rest */
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem 0.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem 0.65rem;
     padding-top: 0.75rem;
   }
 
   .home-stats-summary__item {
     flex: unset;
     min-width: 0;
-    padding: 0 0.2rem;
+    padding: 0 0.25rem;
     border-right: none;
     margin-bottom: 0;
   }
@@ -673,11 +683,11 @@
     grid-column: 1 / -1;
     justify-self: center;
     width: min(100%, 9.5rem);
-    margin-bottom: 0.1rem;
+    margin-bottom: 0.15rem;
   }
 
   .home-stats-summary__num {
-    font-size: 1.35rem;
+    font-size: 1.45rem;
   }
 }
 
