@@ -64,6 +64,7 @@ function toSpotlightItem(
       ? songCatalogLinkTo(title, video.url_slug, { section: 'video' })
       : null,
     externalHref: inApp ? null : (video.yt_url || '').trim() || null,
+    thumbnailUrl: (video.thumbnail_url || '').trim() || undefined,
   }
 }
 
