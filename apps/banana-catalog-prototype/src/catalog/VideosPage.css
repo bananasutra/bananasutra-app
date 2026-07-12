@@ -14,8 +14,9 @@
   text-align: center;
 }
 
-.catalog-page-intro:has(~ .videos-page__content .videos-page__featured-hero) {
-  padding-bottom: 0.65rem;
+/* Match /watch + /listen: rule closes the intro so featured reads as its own section. */
+.videos-page__intro {
+  border-bottom: var(--catalog-shell-rule);
 }
 
 .videos-page__content {

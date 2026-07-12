@@ -723,7 +723,7 @@ export function VideosPage() {
           <span className="catalog-breadcrumbs__current" aria-current="page">Videos</span>
         </nav>
 
-        <div className="catalog-page-intro catalog-page-intro--song-catalog">
+        <div className="catalog-page-intro catalog-page-intro--song-catalog videos-page__intro">
           <h1 className="catalog-page-h1">Picture the Songs</h1>
           <p className="catalog-page-sub">
             Same songs, eyes open. Tall reels and wide frames, side by side. Cards open song pages. To watch clips and

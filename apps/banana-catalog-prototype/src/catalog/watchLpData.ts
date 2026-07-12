@@ -6,7 +6,7 @@ import { sortYoutubeVideosHubOrder } from './youtubeCatalogFlat'
 export const WATCH_LP_META = {
   title: 'Watch',
   description:
-    'Picture the songs. Same catalog, eyes open. Recent clips and playlists on the watch door; browse every upload with filters on Videos.',
+    'Picture the songs. Same catalog, eyes open. Recent clips and longer playlists to press play here; browse every upload with filters on Videos.',
   lead: 'Picture the songs. Same catalog, eyes open.',
 } as const
 
