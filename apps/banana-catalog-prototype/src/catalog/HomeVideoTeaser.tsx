@@ -29,31 +29,36 @@ export function HomeVideoTeaser({ videos, loading = false, loadError = null }: P
       ) : videos.length > 0 ? (
         <>
           <ul className="home-video-teaser">
-            {videos.map((video) => (
-              <li key={video.videoId}>
-                <Link className="home-video-teaser__card" to={video.href} aria-label={`${video.title} · watch video`}>
-                  <span className="home-video-teaser__thumb-wrap">
-                    {video.thumbnail ? (
-                      <img
-                        className="home-video-teaser__thumb"
-                        src={video.thumbnail}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <span className="home-video-teaser__thumb home-video-teaser__thumb--fallback" aria-hidden />
-                    )}
-                  </span>
-                  <span className="home-video-teaser__label">
-                    <span className="home-video-teaser__title">{video.title}</span>
-                    <span className="home-video-teaser__cta">
-                      {video.sutra ? `${video.sutra} · watch video →` : 'watch video →'}
+            {videos.map((video) => {
+              const sutra = (video.sutra || '').trim()
+              return (
+                <li key={video.videoId}>
+                  <Link
+                    className="home-video-teaser__card"
+                    to={video.href}
+                    aria-label={sutra ? `${video.title} · ${sutra}` : video.title}
+                  >
+                    <span className="home-video-teaser__thumb-wrap">
+                      {video.thumbnail ? (
+                        <img
+                          className="home-video-teaser__thumb"
+                          src={video.thumbnail}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <span className="home-video-teaser__thumb home-video-teaser__thumb--fallback" aria-hidden />
+                      )}
                     </span>
-                  </span>
-                </Link>
-              </li>
-            ))}
+                    <span className="home-video-teaser__label">
+                      <span className="home-video-teaser__title">{video.title}</span>
+                      {sutra ? <span className="home-video-teaser__meta">{sutra}</span> : null}
+                    </span>
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
           <Link className="catalog-section-cta" to={canonicalPathForRoute('/watch')}>
             Watch all videos →

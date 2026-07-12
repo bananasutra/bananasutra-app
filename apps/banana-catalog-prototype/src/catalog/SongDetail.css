@@ -849,13 +849,36 @@
   outline-offset: 2px;
 }
 
+.song-detail-also__art-wrap {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--radius-thumb, var(--radius-control, 2px));
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.12s ease;
+}
+
+.song-detail-also__art-link:hover .song-detail-also__art-wrap,
+.song-detail-also__art-link:focus-visible .song-detail-also__art-wrap {
+  box-shadow: 0 0 0 1px var(--color-accent-soft, rgba(0, 0, 0, 0.08));
+  transform: translateY(-1px);
+}
+
 .song-detail-also__art {
   width: 100%;
-  height: auto;
+  height: 100%;
   aspect-ratio: 1;
   border-radius: var(--radius-thumb, var(--radius-control, 2px));
   object-fit: cover;
   display: block;
+  transition: transform 0.16s ease;
+}
+
+.song-detail-also__art-link:hover .song-detail-also__art,
+.song-detail-also__art-link:focus-visible .song-detail-also__art {
+  transform: scale(1.03);
 }
 
 .song-detail-also__body {

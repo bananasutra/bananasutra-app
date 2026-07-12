@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { CatalogFeaturedEmbedCopy } from './CatalogFeaturedEmbedCopy'
+import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import { songbookFeaturedKickerLabel } from './homePortalUtils'
 import { formatSongbookScPlaylistMeta } from './songbookPlaylistMeta'
 import type { SongbookCatalogItem } from './types'
@@ -34,6 +35,10 @@ export function FeaturedSongbookSpotlight({
   stackedVariant = 'default',
 }: Props) {
   const listenLpStacked = layout === 'stacked' && stackedVariant === 'listen-lp'
+  const outboundHref = (book.playlist_url || '').trim()
+  const outbound = outboundHref ? (
+    <CatalogMediaOutbound href={outboundHref} label="Open on SoundCloud ↗" />
+  ) : null
   const copy = (
     <CatalogFeaturedEmbedCopy
       meta={listenLpStacked ? undefined : songbookFeaturedKickerLabel(book)}
@@ -54,6 +59,7 @@ export function FeaturedSongbookSpotlight({
       <div className={['catalog-featured-songbook', 'catalog-featured-songbook--stacked', className].filter(Boolean).join(' ')}>
         <div className="catalog-featured-songbook__stacked-copy">{copy}</div>
         <div className="catalog-featured-songbook__embed">{embed}</div>
+        {outbound}
         {listenLpStacked ? (
           <Link className="catalog-section-cta" to={ctaTo}>
             {ctaLabel}
@@ -66,7 +72,10 @@ export function FeaturedSongbookSpotlight({
   return (
     <div className={['catalog-featured-songbook', className].filter(Boolean).join(' ')}>
       <div className="catalog-featured-songbook__grid">
-        <div className="catalog-featured-songbook__embed">{embed}</div>
+        <div className="catalog-featured-songbook__embed">
+          {embed}
+          {outbound}
+        </div>
         <div className="catalog-featured-songbook__copy">{copy}</div>
       </div>
     </div>
