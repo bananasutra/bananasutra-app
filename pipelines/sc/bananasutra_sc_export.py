@@ -790,10 +790,7 @@ def build_indexes(playlists, client_id):
             ep_count += 1
 
             # Extract EP-level created_at from the playlist object [NEW]
-            ep_created_at = (
-                (pl.get("created_at") or "")
-                .replace("T", " ").replace("Z", "").strip()
-            )
+            ep_created_at = (pl.get("created_at") or "").strip()
 
             for pos, track in enumerate(track_list, start=1):
                 tid = track.get("id") if isinstance(track, dict) else track
@@ -902,7 +899,8 @@ def export_csv(tracks, ep_index, playlist_index, liked_ids, output_path):
             tag_list    = t.get("tag_list", "") or ""
 
             created = t.get("created_at", "") or ""
-            created = created.replace("T", " ").replace("Z", "").strip()
+            # Keep ISO-8601 with Z so catalog can format Pacific calendar dates correctly.
+            created = created.strip()
 
             desc = (t.get("description", "") or "").replace("\n", " ").replace("\r", "").strip()
 

@@ -23,6 +23,7 @@ import { ListenLpSongbookThumb } from './ListenLpSongbookThumb'
 import { browseRowHasAudioSection, songCatalogLinkTo, songCatalogPath, sutraDetailPath } from './songPaths'
 import { sutraCreativeWorkJsonLd } from '../seo/jsonLd'
 import { renderPageMeta } from './usePageMeta'
+import { parseCatalogPublishedAt } from './formatPublishDate'
 import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { songOnWordsSurface } from './wordsStory'
@@ -141,8 +142,8 @@ function songHasAudioOrVideo(song: {
 }
 
 function parsePublishedAt(raw: string): number {
-  const n = Date.parse((raw || '').trim())
-  return Number.isNaN(n) ? 0 : n
+  const n = parseCatalogPublishedAt(raw)
+  return Number.isFinite(n) ? n : 0
 }
 
 function pickRandomVideo(videos: YouTubeCatalogVideo[]): YouTubeCatalogVideo | null {

@@ -353,6 +353,13 @@ def parse_datetime(value: str | None) -> str:
     text = str(value).strip()
     if not text:
         return ""
+    # Preserve timezone when present (SC API uses ...Z). Naive values stay naive.
+    if text.endswith("Z") or re.search(r"[+-]\d{2}:?\d{2}$", text):
+        try:
+            dt = datetime.fromisoformat(text.replace("Z", "+00:00"))
+            return dt.isoformat().replace("+00:00", "Z")
+        except ValueError:
+            pass
     # Keep as ISO-like string when parseable, else return original.
     for fmt in (
         "%Y-%m-%dT%H:%M:%S",
@@ -1112,19 +1119,18 @@ def choose_artwork(
 ) -> str:
     ep = ep_index.get(lyrics_id)
     has_ep_backed_track = any(str(t.get("ep_url") or "").strip() for t in all_tracks)
-    # No in-app tracks: prefer the primary FULL v4 single artwork over a shared EP compilation cover.
-    if not all_tracks and full_v4_hit and str(full_v4_hit.get("artwork_url") or "").strip():
-        return str(full_v4_hit["artwork_url"])
-    # Default catalog hero: EP artwork when tracks link to an EP (shared compilation cover).
+    # Default catalog hero: primary EP artwork (newest volume) when tracks link to an EP.
     if ep and ep.get("artwork_url") and has_ep_backed_track:
         return str(ep["artwork_url"])
     for track in ordered_tracks:
         if track.get("artwork_url"):
             return str(track["artwork_url"])
-    # No usable track art: still use SC EP row art when linked (e.g. lyrics featured but
-    # no rows in filtered SC TRACKs export — cover still exists on the EP).
+    # No in-app tracks / no usable track art: prefer primary EP cover over play-count
+    # ranked FULL v4 singles (old high-play art must not beat a newer EP volume).
     if ep and ep.get("artwork_url"):
         return str(ep["artwork_url"])
+    if not all_tracks and full_v4_hit and str(full_v4_hit.get("artwork_url") or "").strip():
+        return str(full_v4_hit["artwork_url"])
     return ""
 
 
