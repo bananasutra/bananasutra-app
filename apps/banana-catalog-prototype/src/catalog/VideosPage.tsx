@@ -637,17 +637,8 @@ export function VideosPage() {
 
   let nextPosterIndex = 0
 
-  const videosResultCountLine =
-    shownVideos.length === 0
-      ? hasActiveVideoFilters
-        ? 'No videos match these filters.'
-        : ''
-      : hasActiveVideoFilters
-        ? `Showing ${formatCount(shownVideos.length)} of ${formatCount(allVideos.length)} videos`
-        : `${formatCount(allVideos.length)} videos`
-
   const listSection = (
-    <section className="videos-page__list-wrap" aria-label="Video list">
+    <section className="videos-page__list-wrap catalog-index-after-filters" aria-label="Video list">
       {!youtubeCatalogReady ? (
         <p className="videos-page__empty" aria-live="polite">
           Loading videos…
@@ -656,11 +647,6 @@ export function VideosPage() {
         <p className="videos-page__empty">No videos match these filters.</p>
       ) : (
         <>
-          {videosResultCountLine ? (
-            <p className="videos-page__result-count about-result-count" aria-live="polite">
-              {videosResultCountLine}
-            </p>
-          ) : null}
           {verticalVideos.length > 0 ? (
             <div className="videos-page__rail-section">
               <h2 className="videos-page__section-heading catalog-section-title">
@@ -792,7 +778,7 @@ export function VideosPage() {
               </ScrollRevealSection>
             ) : null}
 
-            <div className="videos-page__filters-below-featured">
+            <div className="catalog-index-filter-band videos-page__filters-below-featured">
               <CatalogFilterBar
                 ariaLabel="Filter videos"
                 panelId="videos-filter-panel"
