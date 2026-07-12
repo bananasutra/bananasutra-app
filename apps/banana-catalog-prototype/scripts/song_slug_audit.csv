@@ -1,4 +1,5 @@
 lyrics_id,lyrics_title,url_slug,lyrics_title_blank,slug_share_count
+L-109,I Ain't No Christian,i-ain-t-no-christian,0,1
 L-153,Making Songs Like...,making-songs-like,0,1
 L-426,So Woken,so-woken,0,1
 L-338,Can You Play Win-Win Games Or No?,can-you-play-win-win-games-or-no,0,1
@@ -21,6 +22,7 @@ L-169,"No, I'm Not Being Political (CIRCA 2026)",no-i-m-not-being-political-circ
 L-380,The Sound Of Logic,the-sound-of-logic,0,1
 L-345,Win-Win After Midnight,win-win-after-midnight,0,1
 L-390,"Lightly, My Darling",lightly-my-darling,0,1
+L-436,Caliméro,calimero,0,1
 L-267,"Too Hard, My Friend",too-hard-my-friend,0,1
 L-359,"We’re Tiny Specks, Right?",we-re-tiny-specks-right,0,1
 L-90,Grifters,grifters,0,1
@@ -206,6 +208,7 @@ L-81,FOTUS Circus: Angels Eyes,fotus-circus-angels-eyes,0,1
 L-82,FOTUS Circus: Ginsberg Hollow (Horror) Show,fotus-circus-ginsberg-hollow-horror-show,0,1
 L-77,Fluye (como el mar),fluye-como-el-mar,0,1
 L-210,RUN (Now If You Can),run-now-if-you-can,0,1
+L-445,Skip Me Softly,skip-me-softly,0,1
 L-340,A la Guerre Comme A la Guerre (To War or Not to War?),a-la-guerre-comme-a-la-guerre-to-war-or-not-to-war,0,1
 L-154,Male Fantasies,male-fantasies,0,1
 L-126,Kindness,kindness,0,1
@@ -220,7 +223,6 @@ L-234,Stymy Stymy Yuck,stymy-stymy-yuck,0,1
 L-296,Where Hope Expires (Hole of Fire),where-hope-expires,0,1
 L-303,"Why trust an old, mean religion?",why-trust-an-old-mean-religion,0,1
 L-254,The Poem,the-poem,0,1
-L-109,I Ain't No Christian,i-ain-t-no-christian,0,1
 L-246,The Dystopian Quiz Song,the-dystopian-quiz-song,0,1
 L-157,Mass Media Freakshow,mass-media-freakshow,0,1
 L-381,Freakshow King,freakshow-king,0,1
@@ -261,9 +263,9 @@ L-337,Chuck-A-Dick,chuck-a-dick,0,1
 L-343,Twatocracy (Encore et Encore),twatocracy-encore-et-encore,0,1
 L-422,Shush (STFU),shush,0,1
 L-48,Creepy Con Meme,creepy-con-meme,0,1
+L-448,Power Is Strange,power-is-strange,0,1
 L-196,"Pro-life Means What, Honey?",pro-life-means-what-honey,0,1
 L-139,Learn The Signs (Ego’s Masquerade),learn-the-signs,0,1
-L-15,Ain't No Kid,aint-no-kid,0,1
 L-272,Truth I Never Knew (Crushing on Bertrand),truth-i-never-knew-crushing-on-bertrand,0,1
 L-9,ABC Of Kindness,abc-of-kindness,0,1
 L-143,Liberty,liberty,0,1
@@ -283,6 +285,7 @@ L-172,"Oh, Freedom",oh-freedom,0,1
 L-316,The World We Knew (Public Domain),the-world-we-knew,0,1
 L-194,Predators (Why War),predators-why-war,0,1
 L-334,Enshittification (Word of the Year),enshittification-word-of-the-year,0,1
+L-447,Everybody Blows,everybody-blows,0,1
 L-320,Self-Remembering,self-remembering,0,1
 L-229,Some Songs Are More Fun Than Others,some-songs-are-more-fun-than-others,0,1
 L-230,Some Truths Are Harder to Swallow,some-truths-are-harder-to-swallow,0,1
@@ -322,6 +325,7 @@ L-93,Hard Core,hard-core,0,1
 L-257,The Tyranny of Ignorance,the-tyranny-of-ignorance,0,1
 L-102,"Hold The Mic, Babe",hold-the-mic-babe,0,1
 L-161,Mind the Felon,mind-the-felon,0,1
+L-15,Ain't No Kid,aint-no-kid,0,1
 L-258,The Weave,the-weave,0,1
 L-85,French Poppies,french-poppies,0,1
 L-266,To Dream,to-dream,0,1
@@ -388,6 +392,7 @@ L-308,Win-Win In Unity,win-win-in-unity,0,1
 L-249,The Grazed Duck Luck,the-grazed-duck-luck,0,1
 L-35,Blessed By The Wiggle,blessed-by-the-wiggle,0,1
 L-91,Gunther's BBQ,gunther-bbq,0,1
+L-440,Dogs Just Wanna Have Fun,dogs-just-wanna-have-fun,0,1
 L-255,The President’s Above The Law,the-president-s-above-the-law,0,1
 L-398,Fckonomics,fckonomics,0,1
 L-19,Authentic Innovation Manifesto,authentic-innovation-manifesto,0,1
@@ -397,6 +402,7 @@ L-6,A New Historical Era,a-new-historical-era,0,1
 L-404,"FOTUS Circus: Step Right Up, Murica Freaks",fotus-circus-step-right-up-murica-freaks,0,1
 L-405,FOTUS Circus: Round And Round,fotus-circus-round-and-round,0,1
 L-59,Dear Edward (The Snowden Song),dear-edward-the-snowden-song,0,1
+L-439,What a Wonderful Dog,what-a-wonderful-dog,0,1
 L-408,Let Me Tell You About Heartache,let-me-tell-you-about-heartache,0,1
 L-409,What If MeToo And BLM...,what-if-metoo-and-blm,0,1
 L-11,Acoustic Attractions,acoustic-attractions,0,1

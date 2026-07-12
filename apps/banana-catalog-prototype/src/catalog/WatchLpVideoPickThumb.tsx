@@ -1,4 +1,4 @@
-import { coverImageUrl } from '../seo/imageUrl'
+import { CoverImage } from './CoverImage'
 import type { YouTubeCatalogVideo } from './types'
 import { watchLpVideoMetaLine } from './watchLpData'
 
@@ -11,9 +11,7 @@ type Props = {
 
 export function WatchLpVideoPickThumb({ video, inApp, isActive, onSelect }: Props) {
   const title = (video.lyrics_title || video.title || 'Video').trim()
-  const poster = video.thumbnail_url
-    ? coverImageUrl(video.thumbnail_url, { width: 480 })
-    : null
+  const hasThumb = Boolean((video.thumbnail_url || '').trim())
 
   return (
     <button
@@ -24,8 +22,15 @@ export function WatchLpVideoPickThumb({ video, inApp, isActive, onSelect }: Prop
       onClick={onSelect}
     >
       <span className="watch-lp__video-pick-frame">
-        {poster ? (
-          <img className="watch-lp__video-pick-img" src={poster} alt="" loading="lazy" decoding="async" />
+        {hasThumb ? (
+          <CoverImage
+            source={video.thumbnail_url || ''}
+            requestWidth={480}
+            className="watch-lp__video-pick-img"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
           <span className="watch-lp__video-pick-img watch-lp__video-pick-img--fallback" aria-hidden>
             ▶

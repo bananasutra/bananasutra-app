@@ -17,10 +17,10 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-f66ByNzPT9uoPEaI-NO5RcQ-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/knowsura-naked-truth",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-f66ByNzPT9uoPEaI-NO5RcQ-t500x500.jpg",
-    "playlist_total_plays": 27761,
-    "playlist_total_likes": 456,
+    "playlist_total_plays": 27839,
+    "playlist_total_likes": 455,
     "playlist_track_count": 27,
-    "playlist_duration_total": "1:34:52",
+    "playlist_duration_total": "1:36:17",
     "song_count": 21,
     "songs_with_in_app_playback": 10,
     "member_lyrics_ids": [
@@ -70,7 +70,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 22256,
+        "aggregate_play_count": 22280,
         "aggregate_like_count": 233
       },
       {
@@ -109,7 +109,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 11091,
+        "aggregate_play_count": 11116,
         "aggregate_like_count": 202
       },
       {
@@ -148,7 +148,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 425,
+        "aggregate_play_count": 428,
         "aggregate_like_count": 6
       },
       {
@@ -234,12 +234,12 @@
         "lyrics_title": "Some Truths Are Harder to Swallow",
         "url_slug": "some-truths-are-harder-to-swallow",
         "summary_short": "Some truths are harder to swallow. But they go down easier as a song.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-y92nfBVYRcfV1Otf-WtxM4A-t500x500.jpg",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-SUUIsI7woB0IboJy-gnp3pA-t500x500.jpg",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1430,
+        "aggregate_play_count": 1432,
         "aggregate_like_count": 8
       },
       {
@@ -252,7 +252,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 823,
+        "aggregate_play_count": 825,
         "aggregate_like_count": 8
       },
       {
@@ -340,24 +340,37 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-oJ9Fh72QQzfgiRgF-mSFydg-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/knowsutra-bertrand-mon-cheri",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-oJ9Fh72QQzfgiRgF-mSFydg-t500x500.jpg",
-    "playlist_total_plays": 24512,
-    "playlist_total_likes": 319,
-    "playlist_track_count": 16,
-    "playlist_duration_total": "0:55:14",
+    "playlist_total_plays": 25187,
+    "playlist_total_likes": 329,
+    "playlist_track_count": 17,
+    "playlist_duration_total": "0:59:32",
     "song_count": 9,
     "songs_with_in_app_playback": 5,
     "member_lyrics_ids": [
+      "L-109",
       "L-116",
       "L-274",
       "L-241",
       "L-244",
       "L-393",
       "L-199",
-      "L-109",
       "L-272",
       "L-394"
     ],
     "member_songs": [
+      {
+        "lyrics_id": "L-109",
+        "lyrics_title": "I Ain't No Christian",
+        "url_slug": "i-ain-t-no-christian",
+        "summary_short": "I looked for peace and logic. I found Bertrand Russell. Close enough.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-vWBmqYxogY2cPdB3-QOjsHg-t500x500.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
       {
         "lyrics_id": "L-116",
         "lyrics_title": "It's An Ethical Paradox",
@@ -368,8 +381,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 21513,
-        "aggregate_like_count": 263
+        "aggregate_play_count": 21562,
+        "aggregate_like_count": 266
       },
       {
         "lyrics_id": "L-274",
@@ -381,7 +394,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 7500,
+        "aggregate_play_count": 7508,
         "aggregate_like_count": 67
       },
       {
@@ -420,7 +433,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3294,
+        "aggregate_play_count": 3295,
         "aggregate_like_count": 32
       },
       {
@@ -435,19 +448,6 @@
         "has_youtube_embed": true,
         "aggregate_play_count": 6487,
         "aggregate_like_count": 60
-      },
-      {
-        "lyrics_id": "L-109",
-        "lyrics_title": "I Ain't No Christian",
-        "url_slug": "i-ain-t-no-christian",
-        "summary_short": "I looked for peace and logic. I found Bertrand Russell. Close enough.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-FXu0T1aNuzRuPyMB-olhCZA-t500x500.png",
-        "has_in_app_playback": false,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-272",
@@ -495,10 +495,10 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-ZPm3MIrvf9zymSnp-CfTzsw-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/knowsutra-but-t-why",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-ZPm3MIrvf9zymSnp-CfTzsw-t500x500.jpg",
-    "playlist_total_plays": 20307,
-    "playlist_total_likes": 210,
-    "playlist_track_count": 25,
-    "playlist_duration_total": "1:23:39",
+    "playlist_total_plays": 19811,
+    "playlist_total_likes": 202,
+    "playlist_track_count": 23,
+    "playlist_duration_total": "1:17:20",
     "song_count": 8,
     "songs_with_in_app_playback": 5,
     "member_lyrics_ids": [
@@ -522,8 +522,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 24897,
-        "aggregate_like_count": 234
+        "aggregate_play_count": 24985,
+        "aggregate_like_count": 235
       },
       {
         "lyrics_id": "L-40",
@@ -535,7 +535,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3090,
+        "aggregate_play_count": 3093,
         "aggregate_like_count": 11
       },
       {
@@ -548,7 +548,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 1818,
+        "aggregate_play_count": 1819,
         "aggregate_like_count": 16
       },
       {
@@ -636,10 +636,10 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-4w582El0x5oIrs8P-HzEPOQ-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/knowsutra-peace-not-war",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-4w582El0x5oIrs8P-HzEPOQ-t500x500.jpg",
-    "playlist_total_plays": 50461,
-    "playlist_total_likes": 558,
-    "playlist_track_count": 39,
-    "playlist_duration_total": "2:19:53",
+    "playlist_total_plays": 51223,
+    "playlist_total_likes": 575,
+    "playlist_track_count": 41,
+    "playlist_duration_total": "2:26:02",
     "song_count": 24,
     "songs_with_in_app_playback": 12,
     "member_lyrics_ids": [
@@ -679,8 +679,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1964,
-        "aggregate_like_count": 32
+        "aggregate_play_count": 3218,
+        "aggregate_like_count": 47
       },
       {
         "lyrics_id": "L-80",
@@ -692,7 +692,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 7001,
+        "aggregate_play_count": 7003,
         "aggregate_like_count": 53
       },
       {
@@ -705,7 +705,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4904,
+        "aggregate_play_count": 4905,
         "aggregate_like_count": 75
       },
       {
@@ -718,7 +718,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3850,
+        "aggregate_play_count": 3852,
         "aggregate_like_count": 31
       },
       {
@@ -731,7 +731,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 8212,
+        "aggregate_play_count": 8215,
         "aggregate_like_count": 76
       },
       {
@@ -744,7 +744,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 7119,
+        "aggregate_play_count": 7135,
         "aggregate_like_count": 129
       },
       {
@@ -757,7 +757,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 22754,
+        "aggregate_play_count": 22759,
         "aggregate_like_count": 196
       },
       {
@@ -770,7 +770,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 11613,
+        "aggregate_play_count": 11617,
         "aggregate_like_count": 146
       },
       {
@@ -887,7 +887,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1085,
+        "aggregate_play_count": 1086,
         "aggregate_like_count": 21
       },
       {
@@ -1001,14 +1001,15 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-UVBWmXWPLc9H0Ov3-HwlYIg-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/glowsutra-poet-ry",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-UVBWmXWPLc9H0Ov3-HwlYIg-t500x500.jpg",
-    "playlist_total_plays": 10827,
-    "playlist_total_likes": 134,
-    "playlist_track_count": 16,
-    "playlist_duration_total": "0:54:07",
-    "song_count": 13,
-    "songs_with_in_app_playback": 10,
+    "playlist_total_plays": 16033,
+    "playlist_total_likes": 190,
+    "playlist_track_count": 21,
+    "playlist_duration_total": "1:08:53",
+    "song_count": 14,
+    "songs_with_in_app_playback": 11,
     "member_lyrics_ids": [
       "L-163",
+      "L-129",
       "L-21",
       "L-190",
       "L-20",
@@ -1037,6 +1038,19 @@
         "aggregate_like_count": 13
       },
       {
+        "lyrics_id": "L-129",
+        "lyrics_title": "Kiss A Pulse",
+        "url_slug": "kiss-a-pulse",
+        "summary_short": "Poetry isn't a hat you wear. It's a pulse you kiss.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-FsS9zAJyonxRU7Rm-RHZvfQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 15950,
+        "aggregate_like_count": 176
+      },
+      {
         "lyrics_id": "L-21",
         "lyrics_title": "Awe Is Mighty",
         "url_slug": "awe-is-mighty",
@@ -1054,12 +1068,12 @@
         "lyrics_title": "Poetry Nah Lie",
         "url_slug": "poetry-nah-lie",
         "summary_short": "Poetry nah lie. It's vital like a plant. Medicine for truth, in a world where viral means value.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-XirUpSPl2GiR23bD-IUcZyA-t500x500.png",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-R1VSZuTOo6JhJtf2-Ej51OA-t500x500.jpg",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3577,
+        "aggregate_play_count": 3583,
         "aggregate_like_count": 42
       },
       {
@@ -1093,12 +1107,12 @@
         "lyrics_title": "Poetry Matters",
         "url_slug": "poetry-matters",
         "summary_short": "Question my empathy. I dare you. (Poetry has entered the chat.)",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-2YAEhVqYbh7DwilS-Nd8dqg-t500x500.jpg",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-abyBryFxsG9vVsON-VYqfCQ-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 2713,
+        "aggregate_play_count": 2720,
         "aggregate_like_count": 31
       },
       {
@@ -1124,7 +1138,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3852,
+        "aggregate_play_count": 3854,
         "aggregate_like_count": 38
       },
       {
@@ -1137,7 +1151,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 329,
+        "aggregate_play_count": 330,
         "aggregate_like_count": 2
       },
       {
@@ -1163,7 +1177,7 @@
         "has_sc_catalog_listen": true,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 275,
+        "aggregate_play_count": 276,
         "aggregate_like_count": 7
       },
       {
@@ -1212,11 +1226,11 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-57vIPCGJ4OIaDUaa-UFslNg-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/glowsutra-rainbows-in-my",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-57vIPCGJ4OIaDUaa-UFslNg-t500x500.jpg",
-    "playlist_total_plays": 14473,
-    "playlist_total_likes": 178,
-    "playlist_track_count": 14,
-    "playlist_duration_total": "0:41:49",
-    "song_count": 16,
+    "playlist_total_plays": 19842,
+    "playlist_total_likes": 236,
+    "playlist_track_count": 16,
+    "playlist_duration_total": "0:49:31",
+    "song_count": 17,
     "songs_with_in_app_playback": 6,
     "member_lyrics_ids": [
       "L-344",
@@ -1234,7 +1248,8 @@
       "L-85",
       "L-414",
       "L-8",
-      "L-30"
+      "L-30",
+      "L-439"
     ],
     "member_songs": [
       {
@@ -1247,8 +1262,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 4337,
-        "aggregate_like_count": 48
+        "aggregate_play_count": 4565,
+        "aggregate_like_count": 53
       },
       {
         "lyrics_id": "L-263",
@@ -1260,8 +1275,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 16828,
-        "aggregate_like_count": 121
+        "aggregate_play_count": 16844,
+        "aggregate_like_count": 122
       },
       {
         "lyrics_id": "L-202",
@@ -1273,7 +1288,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 15785,
+        "aggregate_play_count": 15798,
         "aggregate_like_count": 180
       },
       {
@@ -1286,7 +1301,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8843,
+        "aggregate_play_count": 8845,
         "aggregate_like_count": 81
       },
       {
@@ -1299,7 +1314,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 1842,
+        "aggregate_play_count": 1843,
         "aggregate_like_count": 19
       },
       {
@@ -1444,6 +1459,19 @@
         "has_youtube_embed": false,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
+      },
+      {
+        "lyrics_id": "L-439",
+        "lyrics_title": "What a Wonderful Dog",
+        "url_slug": "what-a-wonderful-dog",
+        "summary_short": "Louis Armstrong boned that right ;)",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
       }
     ]
   },
@@ -1465,10 +1493,10 @@
     "songbook_art_url": "",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/bluessutra-best-of",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-cIB0NEtml8oty1Vy-wRu1Gw-t500x500.jpg",
-    "playlist_total_plays": 62088,
-    "playlist_total_likes": 719,
-    "playlist_track_count": 52,
-    "playlist_duration_total": "3:03:27",
+    "playlist_total_plays": 62152,
+    "playlist_total_likes": 718,
+    "playlist_track_count": 53,
+    "playlist_duration_total": "3:07:20",
     "song_count": 0,
     "songs_with_in_app_playback": 0,
     "member_lyrics_ids": [],
@@ -1492,7 +1520,7 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-Y8QjM6vfVoY5XyEi-axwodQ-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/bowsutra-thank-dogs",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-Y8QjM6vfVoY5XyEi-axwodQ-t500x500.jpg",
-    "playlist_total_plays": 2231,
+    "playlist_total_plays": 2236,
     "playlist_total_likes": 31,
     "playlist_track_count": 10,
     "playlist_duration_total": "0:34:33",
@@ -1563,10 +1591,10 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-pJs7anXy4aAFCFrv-isxj5A-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/bowsutra-death-is-nothing",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-pJs7anXy4aAFCFrv-isxj5A-t500x500.jpg",
-    "playlist_total_plays": 5708,
-    "playlist_total_likes": 62,
-    "playlist_track_count": 9,
-    "playlist_duration_total": "0:27:30",
+    "playlist_total_plays": 5924,
+    "playlist_total_likes": 66,
+    "playlist_track_count": 10,
+    "playlist_duration_total": "0:31:06",
     "song_count": 5,
     "songs_with_in_app_playback": 4,
     "member_lyrics_ids": [
@@ -1587,8 +1615,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 148,
-        "aggregate_like_count": 5
+        "aggregate_play_count": 265,
+        "aggregate_like_count": 6
       },
       {
         "lyrics_id": "L-173",
@@ -1600,7 +1628,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 7596,
+        "aggregate_play_count": 7597,
         "aggregate_like_count": 75
       },
       {
@@ -1613,7 +1641,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 668,
+        "aggregate_play_count": 670,
         "aggregate_like_count": 11
       },
       {
@@ -1662,8 +1690,8 @@
     "songbook_art_url": "",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/singlesutra",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-nKFxkPd7COBnHZAF-fy7sYw-t500x500.jpg",
-    "playlist_total_plays": 23912,
-    "playlist_total_likes": 321,
+    "playlist_total_plays": 24121,
+    "playlist_total_likes": 323,
     "playlist_track_count": 46,
     "playlist_duration_total": "2:20:58",
     "song_count": 0,
@@ -1689,10 +1717,10 @@
     "songbook_art_url": "",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/burlesquesutra-best-of",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-n4WmFJexVLsKUShK-WpEC4A-t500x500.jpg",
-    "playlist_total_plays": 73399,
-    "playlist_total_likes": 752,
-    "playlist_track_count": 61,
-    "playlist_duration_total": "3:26:03",
+    "playlist_total_plays": 78129,
+    "playlist_total_likes": 798,
+    "playlist_track_count": 64,
+    "playlist_duration_total": "3:37:02",
     "song_count": 0,
     "songs_with_in_app_playback": 0,
     "member_lyrics_ids": [],
@@ -1716,15 +1744,16 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-pWOrhsGFerHV4tjv-qenNsg-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/growsutra-dare-to-care",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-pWOrhsGFerHV4tjv-qenNsg-t500x500.jpg",
-    "playlist_total_plays": 13627,
-    "playlist_total_likes": 153,
-    "playlist_track_count": 18,
-    "playlist_duration_total": "0:58:50",
-    "song_count": 23,
-    "songs_with_in_app_playback": 13,
+    "playlist_total_plays": 18938,
+    "playlist_total_likes": 212,
+    "playlist_track_count": 24,
+    "playlist_duration_total": "1:19:12",
+    "song_count": 25,
+    "songs_with_in_app_playback": 15,
     "member_lyrics_ids": [
       "L-34",
       "L-346",
+      "L-169",
       "L-312",
       "L-95",
       "L-175",
@@ -1732,6 +1761,7 @@
       "L-420",
       "L-304",
       "L-282",
+      "L-168",
       "L-96",
       "L-283",
       "L-46",
@@ -1758,8 +1788,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5896,
-        "aggregate_like_count": 76
+        "aggregate_play_count": 7762,
+        "aggregate_like_count": 103
       },
       {
         "lyrics_id": "L-346",
@@ -1771,8 +1801,21 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 14694,
+        "aggregate_play_count": 14769,
         "aggregate_like_count": 132
+      },
+      {
+        "lyrics_id": "L-169",
+        "lyrics_title": "No, I'm Not Being Political (CIRCA 2026)",
+        "url_slug": "no-i-m-not-being-political-circa-2026",
+        "summary_short": "No, I'm not being political. I'm just still awake. (Circa 2026.)",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-IZ8a3FakdTggbyZU-ULxipg-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 13193,
+        "aggregate_like_count": 121
       },
       {
         "lyrics_id": "L-312",
@@ -1784,8 +1827,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 23701,
-        "aggregate_like_count": 258
+        "aggregate_play_count": 23735,
+        "aggregate_like_count": 259
       },
       {
         "lyrics_id": "L-95",
@@ -1797,7 +1840,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 10121,
+        "aggregate_play_count": 10141,
         "aggregate_like_count": 106
       },
       {
@@ -1849,7 +1892,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5479,
+        "aggregate_play_count": 5483,
         "aggregate_like_count": 61
       },
       {
@@ -1862,8 +1905,21 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 10127,
-        "aggregate_like_count": 95
+        "aggregate_play_count": 10128,
+        "aggregate_like_count": 96
+      },
+      {
+        "lyrics_id": "L-168",
+        "lyrics_title": "No, I'm Not Being Political (CIRCA 2025)",
+        "url_slug": "no-i-m-not-being-political-circa-2025",
+        "summary_short": "No, I'm not being political. I'm just awake. (Circa 2025.)",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-zz7WsK7tAEH4cMHT-fSdPcQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 528,
+        "aggregate_like_count": 8
       },
       {
         "lyrics_id": "L-96",
@@ -1875,7 +1931,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1011,
+        "aggregate_play_count": 1013,
         "aggregate_like_count": 16
       },
       {
@@ -1888,7 +1944,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 1386,
+        "aggregate_play_count": 1388,
         "aggregate_like_count": 36
       },
       {
@@ -1914,7 +1970,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 2149,
+        "aggregate_play_count": 2150,
         "aggregate_like_count": 18
       },
       {
@@ -1927,7 +1983,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 278,
+        "aggregate_play_count": 279,
         "aggregate_like_count": 6
       },
       {
@@ -1953,7 +2009,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4400,
+        "aggregate_play_count": 4410,
         "aggregate_like_count": 21
       },
       {
@@ -2067,8 +2123,8 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-GR9JyL5n8yqk0dDg-rUqw1g-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/growsutra-god-etc",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-GR9JyL5n8yqk0dDg-rUqw1g-t500x500.jpg",
-    "playlist_total_plays": 25986,
-    "playlist_total_likes": 303,
+    "playlist_total_plays": 26019,
+    "playlist_total_likes": 305,
     "playlist_track_count": 30,
     "playlist_duration_total": "1:35:12",
     "song_count": 16,
@@ -2102,7 +2158,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 13716,
+        "aggregate_play_count": 13730,
         "aggregate_like_count": 147
       },
       {
@@ -2115,7 +2171,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 6040,
+        "aggregate_play_count": 6042,
         "aggregate_like_count": 89
       },
       {
@@ -2128,8 +2184,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8688,
-        "aggregate_like_count": 83
+        "aggregate_play_count": 8711,
+        "aggregate_like_count": 84
       },
       {
         "lyrics_id": "L-205",
@@ -2167,7 +2223,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4630,
+        "aggregate_play_count": 4631,
         "aggregate_like_count": 41
       },
       {
@@ -2320,10 +2376,10 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-b1Fx0OuFqdHgE7WF-fVAj1Q-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/growsutra-kind-ness",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-b1Fx0OuFqdHgE7WF-fVAj1Q-t500x500.jpg",
-    "playlist_total_plays": 13630,
-    "playlist_total_likes": 114,
-    "playlist_track_count": 17,
-    "playlist_duration_total": "0:55:24",
+    "playlist_total_plays": 16237,
+    "playlist_total_likes": 159,
+    "playlist_track_count": 24,
+    "playlist_duration_total": "1:20:24",
     "song_count": 19,
     "songs_with_in_app_playback": 13,
     "member_lyrics_ids": [
@@ -2358,8 +2414,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 159,
-        "aggregate_like_count": 5
+        "aggregate_play_count": 1669,
+        "aggregate_like_count": 25
       },
       {
         "lyrics_id": "L-338",
@@ -2384,7 +2440,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 844,
+        "aggregate_play_count": 855,
         "aggregate_like_count": 13
       },
       {
@@ -2397,7 +2453,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4661,
+        "aggregate_play_count": 4663,
         "aggregate_like_count": 59
       },
       {
@@ -2410,7 +2466,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5154,
+        "aggregate_play_count": 5158,
         "aggregate_like_count": 35
       },
       {
@@ -2522,7 +2578,7 @@
         "lyrics_title": "Kindness",
         "url_slug": "kindness",
         "summary_short": "You don't know the weight of kindness until you've needed it.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-60rWtzt0Ur5yDsl8-lcLgjQ-t500x500.jpg",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-ycTSJc8nDWdlUg15-s4wo8Q-t500x500.jpg",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
@@ -2615,10 +2671,10 @@
     "songbook_art_url": "",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/dubsutra-best-of",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-0sxByuCQtf1zSYMt-w8bhvA-t500x500.jpg",
-    "playlist_total_plays": 140298,
-    "playlist_total_likes": 1478,
-    "playlist_track_count": 96,
-    "playlist_duration_total": "5:20:18",
+    "playlist_total_plays": 142656,
+    "playlist_total_likes": 1516,
+    "playlist_track_count": 99,
+    "playlist_duration_total": "5:30:34",
     "song_count": 0,
     "songs_with_in_app_playback": 0,
     "member_lyrics_ids": [],
@@ -2642,10 +2698,10 @@
     "songbook_art_url": "",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/folksutra-best-of",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-CV0ODQOztCTXkFAF-1T2ODw-t500x500.jpg",
-    "playlist_total_plays": 43257,
-    "playlist_total_likes": 428,
-    "playlist_track_count": 46,
-    "playlist_duration_total": "2:26:46",
+    "playlist_total_plays": 44017,
+    "playlist_total_likes": 438,
+    "playlist_track_count": 49,
+    "playlist_duration_total": "2:36:50",
     "song_count": 0,
     "songs_with_in_app_playback": 0,
     "member_lyrics_ids": [],
@@ -2669,8 +2725,8 @@
     "songbook_art_url": "",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/hidden-peels",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-q37xEnqpYSi9JjNM-xhFyxw-t500x500.jpg",
-    "playlist_total_plays": 30062,
-    "playlist_total_likes": 499,
+    "playlist_total_plays": 30164,
+    "playlist_total_likes": 501,
     "playlist_track_count": 83,
     "playlist_duration_total": "4:31:51",
     "song_count": 0,
@@ -2696,10 +2752,10 @@
     "songbook_art_url": "",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/indiesutra-best-of",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-o2drYEuUiIonduAx-8tLPrg-t500x500.jpg",
-    "playlist_total_plays": 101156,
-    "playlist_total_likes": 947,
+    "playlist_total_plays": 103104,
+    "playlist_total_likes": 957,
     "playlist_track_count": 69,
-    "playlist_duration_total": "4:13:22",
+    "playlist_duration_total": "4:14:52",
     "song_count": 0,
     "songs_with_in_app_playback": 0,
     "member_lyrics_ids": [],
@@ -2723,10 +2779,10 @@
     "songbook_art_url": "",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/jazzsutra-best-of",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-cAdyXVEMk1Mz51KL-IBblxw-t500x500.jpg",
-    "playlist_total_plays": 109881,
-    "playlist_total_likes": 1205,
-    "playlist_track_count": 78,
-    "playlist_duration_total": "4:18:36",
+    "playlist_total_plays": 113068,
+    "playlist_total_likes": 1240,
+    "playlist_track_count": 82,
+    "playlist_duration_total": "4:34:38",
     "song_count": 0,
     "songs_with_in_app_playback": 0,
     "member_lyrics_ids": [],
@@ -2750,10 +2806,10 @@
     "songbook_art_url": "",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/lofisutra-best-of",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-XV1yrYzFlhLY4GGz-vazYKA-t500x500.jpg",
-    "playlist_total_plays": 121789,
-    "playlist_total_likes": 1146,
-    "playlist_track_count": 68,
-    "playlist_duration_total": "3:33:38",
+    "playlist_total_plays": 126773,
+    "playlist_total_likes": 1210,
+    "playlist_track_count": 73,
+    "playlist_duration_total": "3:49:02",
     "song_count": 0,
     "songs_with_in_app_playback": 0,
     "member_lyrics_ids": [],
@@ -2777,7 +2833,7 @@
     "songbook_art_url": "",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/mantrasutra-best-of",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-HoSD40eIsX92F6ug-iEu1fg-t500x500.jpg",
-    "playlist_total_plays": 13557,
+    "playlist_total_plays": 13701,
     "playlist_total_likes": 180,
     "playlist_track_count": 22,
     "playlist_duration_total": "1:15:27",
@@ -2804,14 +2860,15 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-GXTKcXAuyMmSbOsd-dz5iYQ-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/showsutra-shades-of-fools",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-GXTKcXAuyMmSbOsd-dz5iYQ-t500x500.jpg",
-    "playlist_total_plays": 2845,
-    "playlist_total_likes": 47,
-    "playlist_track_count": 8,
-    "playlist_duration_total": "0:25:32",
-    "song_count": 20,
+    "playlist_total_plays": 5861,
+    "playlist_total_likes": 71,
+    "playlist_track_count": 11,
+    "playlist_duration_total": "0:35:11",
+    "song_count": 22,
     "songs_with_in_app_playback": 4,
     "member_lyrics_ids": [
       "L-187",
+      "L-436",
       "L-250",
       "L-430",
       "L-92",
@@ -2829,6 +2886,7 @@
       "L-83",
       "L-204",
       "L-35",
+      "L-440",
       "L-201",
       "L-2"
     ],
@@ -2843,8 +2901,21 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 11677,
-        "aggregate_like_count": 91
+        "aggregate_play_count": 11812,
+        "aggregate_like_count": 93
+      },
+      {
+        "lyrics_id": "L-436",
+        "lyrics_title": "Caliméro",
+        "url_slug": "calimero",
+        "summary_short": "Tu fais ton Caliméro ou quoi?... Dis-moi, t’exagères un p’tit peu, non, là?",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-250",
@@ -2856,8 +2927,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 25258,
-        "aggregate_like_count": 294
+        "aggregate_play_count": 25365,
+        "aggregate_like_count": 295
       },
       {
         "lyrics_id": "L-430",
@@ -2882,7 +2953,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 297,
+        "aggregate_play_count": 300,
         "aggregate_like_count": 5
       },
       {
@@ -2947,7 +3018,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 809,
+        "aggregate_play_count": 810,
         "aggregate_like_count": 22
       },
       {
@@ -3068,6 +3139,19 @@
         "aggregate_like_count": 0
       },
       {
+        "lyrics_id": "L-440",
+        "lyrics_title": "Dogs Just Wanna Have Fun",
+        "url_slug": "dogs-just-wanna-have-fun",
+        "summary_short": "Blessed be the fun.",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
+      {
         "lyrics_id": "L-201",
         "lyrics_title": "Rachel Barks",
         "url_slug": "rachel-barks",
@@ -3113,10 +3197,10 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-zvxXEnN1nhEehvpK-ABzMFA-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/showsutra-b-j-is-for-banana",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-zvxXEnN1nhEehvpK-ABzMFA-t500x500.jpg",
-    "playlist_total_plays": 3567,
-    "playlist_total_likes": 37,
-    "playlist_track_count": 9,
-    "playlist_duration_total": "0:30:16",
+    "playlist_total_plays": 6057,
+    "playlist_total_likes": 68,
+    "playlist_track_count": 10,
+    "playlist_duration_total": "0:32:37",
     "song_count": 8,
     "songs_with_in_app_playback": 3,
     "member_lyrics_ids": [
@@ -3140,8 +3224,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 7529,
-        "aggregate_like_count": 71
+        "aggregate_play_count": 7651,
+        "aggregate_like_count": 72
       },
       {
         "lyrics_id": "L-360",
@@ -3254,7 +3338,7 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-SjuzUkSUCZpiPoz4-LnprBQ-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/showsutra-fanana-club",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-SjuzUkSUCZpiPoz4-LnprBQ-t500x500.jpg",
-    "playlist_total_plays": 14249,
+    "playlist_total_plays": 14279,
     "playlist_total_likes": 173,
     "playlist_track_count": 24,
     "playlist_duration_total": "1:20:41",
@@ -3296,7 +3380,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2677,
+        "aggregate_play_count": 2690,
         "aggregate_like_count": 30
       },
       {
@@ -3348,7 +3432,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3045,
+        "aggregate_play_count": 3046,
         "aggregate_like_count": 27
       },
       {
@@ -3361,7 +3445,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 9654,
+        "aggregate_play_count": 9671,
         "aggregate_like_count": 98
       },
       {
@@ -3374,7 +3458,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1784,
+        "aggregate_play_count": 1796,
         "aggregate_like_count": 22
       },
       {
@@ -3387,7 +3471,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5781,
+        "aggregate_play_count": 5784,
         "aggregate_like_count": 56
       },
       {
@@ -3439,7 +3523,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 845,
+        "aggregate_play_count": 848,
         "aggregate_like_count": 14
       },
       {
@@ -3465,7 +3549,7 @@
         "has_sc_catalog_listen": true,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 296,
+        "aggregate_play_count": 299,
         "aggregate_like_count": 6
       },
       {
@@ -3605,12 +3689,12 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-o0qz0ucmBMzsR5UL-eS6HrA-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/quacksutra-duck-shady",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-o0qz0ucmBMzsR5UL-eS6HrA-t500x500.jpg",
-    "playlist_total_plays": 12553,
-    "playlist_total_likes": 140,
-    "playlist_track_count": 31,
-    "playlist_duration_total": "1:40:31",
+    "playlist_total_plays": 13218,
+    "playlist_total_likes": 142,
+    "playlist_track_count": 32,
+    "playlist_duration_total": "1:43:53",
     "song_count": 41,
-    "songs_with_in_app_playback": 14,
+    "songs_with_in_app_playback": 13,
     "member_lyrics_ids": [
       "L-375",
       "L-428",
@@ -3632,7 +3716,6 @@
       "L-337",
       "L-343",
       "L-48",
-      "L-15",
       "L-333",
       "L-315",
       "L-197",
@@ -3641,6 +3724,7 @@
       "L-43",
       "L-257",
       "L-161",
+      "L-15",
       "L-258",
       "L-122",
       "L-245",
@@ -3717,8 +3801,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1295,
-        "aggregate_like_count": 23
+        "aggregate_play_count": 1323,
+        "aggregate_like_count": 24
       },
       {
         "lyrics_id": "L-330",
@@ -3847,7 +3931,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 643,
+        "aggregate_play_count": 644,
         "aggregate_like_count": 9
       },
       {
@@ -3869,12 +3953,12 @@
         "url_slug": "why-you-lie-to-the-people-s-face",
         "summary_short": "Same lie. New hat. Why you lying to the people's face?",
         "cover_image_url": "https://i1.sndcdn.com/artworks-OY8Egh3zRPXQxH74-PbCZmw-t500x500.png",
-        "has_in_app_playback": true,
+        "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 284,
-        "aggregate_like_count": 5
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-337",
@@ -3912,21 +3996,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 433,
+        "aggregate_play_count": 434,
         "aggregate_like_count": 3
-      },
-      {
-        "lyrics_id": "L-15",
-        "lyrics_title": "Ain't No Kid",
-        "url_slug": "aint-no-kid",
-        "summary_short": "Ain't no kid supposed to watch democracy duck.",
-        "cover_image_url": "",
-        "has_in_app_playback": false,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
-        "aggregate_play_count": 0,
-        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-333",
@@ -3964,7 +4035,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 333,
+        "aggregate_play_count": 335,
         "aggregate_like_count": 5
       },
       {
@@ -3977,7 +4048,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 933,
+        "aggregate_play_count": 935,
         "aggregate_like_count": 16
       },
       {
@@ -3990,7 +4061,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 652,
+        "aggregate_play_count": 658,
         "aggregate_like_count": 3
       },
       {
@@ -4029,8 +4100,21 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2851,
+        "aggregate_play_count": 2852,
         "aggregate_like_count": 28
+      },
+      {
+        "lyrics_id": "L-15",
+        "lyrics_title": "Ain't No Kid",
+        "url_slug": "aint-no-kid",
+        "summary_short": "Ain't no kid supposed to watch democracy duck.",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-258",
@@ -4208,10 +4292,10 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-JWP4i7BJc28GfvPW-mmFU9Q-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/quacksutra-fotus-circus",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-JWP4i7BJc28GfvPW-mmFU9Q-t500x500.jpg",
-    "playlist_total_plays": 7753,
-    "playlist_total_likes": 68,
-    "playlist_track_count": 15,
-    "playlist_duration_total": "0:45:21",
+    "playlist_total_plays": 9280,
+    "playlist_total_likes": 78,
+    "playlist_track_count": 16,
+    "playlist_duration_total": "0:49:14",
     "song_count": 11,
     "songs_with_in_app_playback": 3,
     "member_lyrics_ids": [
@@ -4238,7 +4322,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2755,
+        "aggregate_play_count": 2771,
         "aggregate_like_count": 26
       },
       {
@@ -4251,7 +4335,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3156,
+        "aggregate_play_count": 3157,
         "aggregate_like_count": 20
       },
       {
@@ -4391,8 +4475,8 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-gyBohcCG6YVAXsCO-qAFi8g-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/blowsutra-maxa-series",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-gyBohcCG6YVAXsCO-qAFi8g-t500x500.jpg",
-    "playlist_total_plays": 12342,
-    "playlist_total_likes": 113,
+    "playlist_total_plays": 12346,
+    "playlist_total_likes": 112,
     "playlist_track_count": 14,
     "playlist_duration_total": "0:49:16",
     "song_count": 6,
@@ -4416,20 +4500,20 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 7057,
-        "aggregate_like_count": 41
+        "aggregate_play_count": 7063,
+        "aggregate_like_count": 40
       },
       {
         "lyrics_id": "L-149",
         "lyrics_title": "MAHA (Make America Humane Again)",
         "url_slug": "maha-make-america-humane-again",
         "summary_short": "Make America Humane Again. It's not a radical idea. It should not be.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 11883,
+        "aggregate_play_count": 11891,
         "aggregate_like_count": 92
       },
       {
@@ -4463,7 +4547,7 @@
         "lyrics_title": "MAKA (Make America Kind Again)",
         "url_slug": "maka-make-america-kind-again",
         "summary_short": "MAKA: Make America Kind Again. (The harder acronym. The better one.)",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-9mKo23b9tXJzWs5t-yMjheA-t500x500.png",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-vO0k3rhIFff0YYyx-2A2mWw-t500x500.jpg",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
@@ -4504,7 +4588,7 @@
     "songbook_art_url": "",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/rocksutra-best-of",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-cm4hZJP45iEWi61f-OzQ7hA-t500x500.jpg",
-    "playlist_total_plays": 16992,
+    "playlist_total_plays": 17018,
     "playlist_total_likes": 169,
     "playlist_track_count": 15,
     "playlist_duration_total": "0:49:51",
@@ -4531,16 +4615,15 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-5bVU3160At7As99u-kxcaPw-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/blowsutra-apes-gone-wrong",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-5bVU3160At7As99u-kxcaPw-t500x500.jpg",
-    "playlist_total_plays": 20739,
-    "playlist_total_likes": 207,
-    "playlist_track_count": 32,
-    "playlist_duration_total": "1:48:53",
-    "song_count": 20,
-    "songs_with_in_app_playback": 12,
+    "playlist_total_plays": 21664,
+    "playlist_total_likes": 224,
+    "playlist_track_count": 31,
+    "playlist_duration_total": "1:44:40",
+    "song_count": 21,
+    "songs_with_in_app_playback": 11,
     "member_lyrics_ids": [
       "L-391",
       "L-216",
-      "L-169",
       "L-90",
       "L-134",
       "L-417",
@@ -4552,7 +4635,9 @@
       "L-159",
       "L-174",
       "L-270",
+      "L-448",
       "L-418",
+      "L-447",
       "L-52",
       "L-53",
       "L-137",
@@ -4570,8 +4655,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1420,
-        "aggregate_like_count": 22
+        "aggregate_play_count": 1712,
+        "aggregate_like_count": 24
       },
       {
         "lyrics_id": "L-216",
@@ -4583,21 +4668,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1290,
-        "aggregate_like_count": 28
-      },
-      {
-        "lyrics_id": "L-169",
-        "lyrics_title": "No, I'm Not Being Political (CIRCA 2026)",
-        "url_slug": "no-i-m-not-being-political-circa-2026",
-        "summary_short": "No, I'm not being political. I'm just still awake. (Circa 2026.)",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-IZ8a3FakdTggbyZU-ULxipg-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": true,
-        "has_youtube_embed": true,
-        "aggregate_play_count": 13150,
-        "aggregate_like_count": 121
+        "aggregate_play_count": 1305,
+        "aggregate_like_count": 29
       },
       {
         "lyrics_id": "L-90",
@@ -4609,7 +4681,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4111,
+        "aggregate_play_count": 4127,
         "aggregate_like_count": 47
       },
       {
@@ -4622,7 +4694,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8418,
+        "aggregate_play_count": 8420,
         "aggregate_like_count": 90
       },
       {
@@ -4674,7 +4746,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 480,
+        "aggregate_play_count": 482,
         "aggregate_like_count": 7
       },
       {
@@ -4713,7 +4785,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2331,
+        "aggregate_play_count": 2337,
         "aggregate_like_count": 24
       },
       {
@@ -4726,7 +4798,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 6641,
+        "aggregate_play_count": 6643,
         "aggregate_like_count": 46
       },
       {
@@ -4739,14 +4811,40 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 750,
+        "aggregate_play_count": 751,
         "aggregate_like_count": 9
+      },
+      {
+        "lyrics_id": "L-448",
+        "lyrics_title": "Power Is Strange",
+        "url_slug": "power-is-strange",
+        "summary_short": "The Doors sung that right, people are strange... just know this: power ain’t in the throne, it’s in the truth.",
+        "cover_image_url": "https://i.ytimg.com/vi/7-erPMHFc-c/maxresdefault.jpg",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-418",
         "lyrics_title": "People or Property",
         "url_slug": "people-or-property",
         "summary_short": "People, or Property, what it’s gonna be?... D'oh.",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
+      },
+      {
+        "lyrics_id": "L-447",
+        "lyrics_title": "Everybody Blows",
+        "url_slug": "everybody-blows",
+        "summary_short": "A quacking sequel to \"Everybody Knows\"... and to be clear, it's not funny because it's true.",
         "cover_image_url": "",
         "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
@@ -4791,7 +4889,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3933,
+        "aggregate_play_count": 3935,
         "aggregate_like_count": 51
       },
       {
@@ -4840,11 +4938,11 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-dthPPqfZhiyUkEwu-xSQQFA-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/blowsutra-censor-ed",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-dthPPqfZhiyUkEwu-xSQQFA-t500x500.jpg",
-    "playlist_total_plays": 17562,
-    "playlist_total_likes": 188,
-    "playlist_track_count": 19,
-    "playlist_duration_total": "0:59:23",
-    "song_count": 12,
+    "playlist_total_plays": 21852,
+    "playlist_total_likes": 230,
+    "playlist_track_count": 23,
+    "playlist_duration_total": "1:11:20",
+    "song_count": 13,
     "songs_with_in_app_playback": 6,
     "member_lyrics_ids": [
       "L-114",
@@ -4852,6 +4950,7 @@
       "L-101",
       "L-203",
       "L-131",
+      "L-445",
       "L-246",
       "L-157",
       "L-370",
@@ -4871,7 +4970,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 12278,
+        "aggregate_play_count": 12283,
         "aggregate_like_count": 85
       },
       {
@@ -4884,7 +4983,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4364,
+        "aggregate_play_count": 4367,
         "aggregate_like_count": 46
       },
       {
@@ -4910,7 +5009,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 7104,
+        "aggregate_play_count": 7105,
         "aggregate_like_count": 55
       },
       {
@@ -4923,8 +5022,21 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 10710,
+        "aggregate_play_count": 10719,
         "aggregate_like_count": 108
+      },
+      {
+        "lyrics_id": "L-445",
+        "lyrics_title": "Skip Me Softly",
+        "url_slug": "skip-me-softly",
+        "summary_short": "Have you noticed how the new terms of corporate censorship are all about censoring censorship itself?... I call it the normalization of bullshit, and blame liabilities lawyers.",
+        "cover_image_url": "",
+        "has_in_app_playback": false,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": false,
+        "has_youtube_embed": false,
+        "aggregate_play_count": 0,
+        "aggregate_like_count": 0
       },
       {
         "lyrics_id": "L-246",
@@ -5037,10 +5149,10 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-2fgVK1GEubaAV6QP-rbKhfg-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/knowsutra-ego-gone-loco",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-2fgVK1GEubaAV6QP-rbKhfg-t500x500.jpg",
-    "playlist_total_plays": 32760,
-    "playlist_total_likes": 373,
-    "playlist_track_count": 36,
-    "playlist_duration_total": "2:01:22",
+    "playlist_total_plays": 33259,
+    "playlist_total_likes": 378,
+    "playlist_track_count": 38,
+    "playlist_duration_total": "2:07:24",
     "song_count": 27,
     "songs_with_in_app_playback": 9,
     "member_lyrics_ids": [
@@ -5083,8 +5195,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 29153,
-        "aggregate_like_count": 308
+        "aggregate_play_count": 29200,
+        "aggregate_like_count": 309
       },
       {
         "lyrics_id": "L-365",
@@ -5109,7 +5221,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8387,
+        "aggregate_play_count": 8391,
         "aggregate_like_count": 68
       },
       {
@@ -5136,7 +5248,7 @@
         "has_youtube_video": true,
         "has_youtube_embed": true,
         "aggregate_play_count": 2265,
-        "aggregate_like_count": 34
+        "aggregate_like_count": 33
       },
       {
         "lyrics_id": "L-69",
@@ -5252,7 +5364,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2096,
+        "aggregate_play_count": 2099,
         "aggregate_like_count": 12
       },
       {
@@ -5444,12 +5556,12 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-DQz78hEwZB0tJMxO-l4I40Q-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/blowsutra-revolt-now",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-DQz78hEwZB0tJMxO-l4I40Q-t500x500.jpg",
-    "playlist_total_plays": 31076,
-    "playlist_total_likes": 362,
-    "playlist_track_count": 43,
-    "playlist_duration_total": "2:21:55",
-    "song_count": 37,
-    "songs_with_in_app_playback": 23,
+    "playlist_total_plays": 35828,
+    "playlist_total_likes": 427,
+    "playlist_track_count": 44,
+    "playlist_duration_total": "2:25:18",
+    "song_count": 36,
+    "songs_with_in_app_playback": 22,
     "member_lyrics_ids": [
       "L-429",
       "L-232",
@@ -5473,7 +5585,6 @@
       "L-180",
       "L-379",
       "L-287",
-      "L-168",
       "L-61",
       "L-240",
       "L-226",
@@ -5513,7 +5624,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 13331,
+        "aggregate_play_count": 13353,
         "aggregate_like_count": 134
       },
       {
@@ -5526,7 +5637,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 10383,
+        "aggregate_play_count": 10393,
         "aggregate_like_count": 89
       },
       {
@@ -5565,7 +5676,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2497,
+        "aggregate_play_count": 2502,
         "aggregate_like_count": 34
       },
       {
@@ -5578,7 +5689,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 16446,
+        "aggregate_play_count": 16452,
         "aggregate_like_count": 138
       },
       {
@@ -5591,8 +5702,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8360,
-        "aggregate_like_count": 97
+        "aggregate_play_count": 8378,
+        "aggregate_like_count": 98
       },
       {
         "lyrics_id": "L-177",
@@ -5604,7 +5715,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 2225,
+        "aggregate_play_count": 2226,
         "aggregate_like_count": 19
       },
       {
@@ -5617,7 +5728,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3173,
+        "aggregate_play_count": 3176,
         "aggregate_like_count": 19
       },
       {
@@ -5669,7 +5780,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5666,
+        "aggregate_play_count": 5667,
         "aggregate_like_count": 66
       },
       {
@@ -5682,7 +5793,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 13622,
+        "aggregate_play_count": 13633,
         "aggregate_like_count": 139
       },
       {
@@ -5708,7 +5819,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 2637,
+        "aggregate_play_count": 2638,
         "aggregate_like_count": 21
       },
       {
@@ -5721,7 +5832,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 2882,
+        "aggregate_play_count": 2886,
         "aggregate_like_count": 34
       },
       {
@@ -5775,19 +5886,6 @@
         "has_youtube_embed": false,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
-      },
-      {
-        "lyrics_id": "L-168",
-        "lyrics_title": "No, I'm Not Being Political (CIRCA 2025)",
-        "url_slug": "no-i-m-not-being-political-circa-2025",
-        "summary_short": "No, I'm not being political. I'm just awake. (Circa 2025.)",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-zz7WsK7tAEH4cMHT-fSdPcQ-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": true,
-        "has_youtube_embed": true,
-        "aggregate_play_count": 528,
-        "aggregate_like_count": 8
       },
       {
         "lyrics_id": "L-61",
@@ -5991,10 +6089,10 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-2pHqakX9GOVp97hp-EU7MrQ-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/flowsutra-fly-like-water",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-2pHqakX9GOVp97hp-EU7MrQ-t500x500.jpg",
-    "playlist_total_plays": 10783,
-    "playlist_total_likes": 135,
-    "playlist_track_count": 9,
-    "playlist_duration_total": "0:27:07",
+    "playlist_total_plays": 14986,
+    "playlist_total_likes": 185,
+    "playlist_track_count": 11,
+    "playlist_duration_total": "0:33:28",
     "song_count": 24,
     "songs_with_in_app_playback": 9,
     "member_lyrics_ids": [
@@ -6029,12 +6127,12 @@
         "lyrics_title": "Making Songs Like...",
         "url_slug": "making-songs-like",
         "summary_short": "Some people meditate. Some pray. I make songs. Same thing, different noise.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-yFu7z79boWM74g0U-gNvzig-t500x500.jpg",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-Bhnzjk3eXjtj1NZN-Bmk7hA-t500x500.png",
         "has_in_app_playback": true,
-        "has_sc_catalog_listen": true,
+        "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1485,
+        "aggregate_play_count": 1505,
         "aggregate_like_count": 48
       },
       {
@@ -6047,8 +6145,8 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 7167,
-        "aggregate_like_count": 74
+        "aggregate_play_count": 7798,
+        "aggregate_like_count": 82
       },
       {
         "lyrics_id": "L-369",
@@ -6060,7 +6158,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 15204,
+        "aggregate_play_count": 15261,
         "aggregate_like_count": 137
       },
       {
@@ -6073,7 +6171,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3731,
+        "aggregate_play_count": 3744,
         "aggregate_like_count": 32
       },
       {
@@ -6164,7 +6262,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3687,
+        "aggregate_play_count": 3691,
         "aggregate_like_count": 29
       },
       {
@@ -6229,7 +6327,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 4970,
+        "aggregate_play_count": 4973,
         "aggregate_like_count": 42
       },
       {
@@ -6255,7 +6353,7 @@
         "has_sc_catalog_listen": true,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 520,
+        "aggregate_play_count": 522,
         "aggregate_like_count": 9
       },
       {
@@ -6356,17 +6454,16 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-lcLXcYSTLwU1vVWx-8umDBA-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/flowsutra-wet-my-friend",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-lcLXcYSTLwU1vVWx-8umDBA-t500x500.jpg",
-    "playlist_total_plays": 6308,
-    "playlist_total_likes": 95,
-    "playlist_track_count": 17,
-    "playlist_duration_total": "0:56:23",
-    "song_count": 17,
-    "songs_with_in_app_playback": 8,
+    "playlist_total_plays": 6505,
+    "playlist_total_likes": 100,
+    "playlist_track_count": 18,
+    "playlist_duration_total": "1:00:23",
+    "song_count": 16,
+    "songs_with_in_app_playback": 7,
     "member_lyrics_ids": [
       "L-345",
       "L-54",
       "L-324",
-      "L-129",
       "L-368",
       "L-411",
       "L-213",
@@ -6392,7 +6489,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5601,
+        "aggregate_play_count": 5635,
         "aggregate_like_count": 76
       },
       {
@@ -6405,7 +6502,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 7647,
+        "aggregate_play_count": 7655,
         "aggregate_like_count": 60
       },
       {
@@ -6420,19 +6517,6 @@
         "has_youtube_embed": true,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
-      },
-      {
-        "lyrics_id": "L-129",
-        "lyrics_title": "Kiss A Pulse",
-        "url_slug": "kiss-a-pulse",
-        "summary_short": "Poetry isn't a hat you wear. It's a pulse you kiss.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-FsS9zAJyonxRU7Rm-RHZvfQ-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": true,
-        "has_youtube_embed": true,
-        "aggregate_play_count": 15920,
-        "aggregate_like_count": 176
       },
       {
         "lyrics_id": "L-368",
@@ -6509,7 +6593,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 1093,
+        "aggregate_play_count": 1095,
         "aggregate_like_count": 10
       },
       {
@@ -6535,7 +6619,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 974,
+        "aggregate_play_count": 979,
         "aggregate_like_count": 19
       },
       {
@@ -6548,7 +6632,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 969,
+        "aggregate_play_count": 970,
         "aggregate_like_count": 14
       },
       {
@@ -6574,7 +6658,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 731,
+        "aggregate_play_count": 733,
         "aggregate_like_count": 16
       },
       {
@@ -6623,10 +6707,10 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-GLa538X1fUoCj8Yg-p3dNGg-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/oui-oui-pardon-my-french",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-GLa538X1fUoCj8Yg-p3dNGg-t500x500.jpg",
-    "playlist_total_plays": 33924,
-    "playlist_total_likes": 339,
-    "playlist_track_count": 32,
-    "playlist_duration_total": "1:49:40",
+    "playlist_total_plays": 34246,
+    "playlist_total_likes": 341,
+    "playlist_track_count": 33,
+    "playlist_duration_total": "1:52:51",
     "song_count": 20,
     "songs_with_in_app_playback": 13,
     "member_lyrics_ids": [
@@ -6662,7 +6746,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 15204,
+        "aggregate_play_count": 15261,
         "aggregate_like_count": 137
       },
       {
@@ -6675,7 +6759,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 1842,
+        "aggregate_play_count": 1843,
         "aggregate_like_count": 19
       },
       {
@@ -6688,7 +6772,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 4364,
+        "aggregate_play_count": 4367,
         "aggregate_like_count": 46
       },
       {
@@ -6701,7 +6785,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 8418,
+        "aggregate_play_count": 8420,
         "aggregate_like_count": 90
       },
       {
@@ -6714,7 +6798,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 7596,
+        "aggregate_play_count": 7597,
         "aggregate_like_count": 75
       },
       {
@@ -6740,7 +6824,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 5154,
+        "aggregate_play_count": 5158,
         "aggregate_like_count": 35
       },
       {
@@ -6779,7 +6863,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 10710,
+        "aggregate_play_count": 10719,
         "aggregate_like_count": 108
       },
       {
@@ -6857,7 +6941,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 652,
+        "aggregate_play_count": 658,
         "aggregate_like_count": 3
       },
       {
@@ -6883,7 +6967,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
         "has_youtube_embed": true,
-        "aggregate_play_count": 3933,
+        "aggregate_play_count": 3935,
         "aggregate_like_count": 51
       },
       {
@@ -6932,7 +7016,7 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-TUnq5K6T9gz6Lzs5-hw6yjw-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/worldsutra-russian-ish",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-TUnq5K6T9gz6Lzs5-hw6yjw-t500x500.jpg",
-    "playlist_total_plays": 6013,
+    "playlist_total_plays": 6017,
     "playlist_total_likes": 68,
     "playlist_track_count": 15,
     "playlist_duration_total": "1:01:23",
@@ -6952,7 +7036,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 2882,
+        "aggregate_play_count": 2886,
         "aggregate_like_count": 34
       }
     ]
@@ -6975,7 +7059,7 @@
     "songbook_art_url": "https://i1.sndcdn.com/artworks-V4ORYqjXscpH76UU-11PylA-t1080x1080.jpg",
     "playlist_url": "https://soundcloud.com/bananasutra/sets/worldsutra-span-k-ish",
     "playlist_artwork_url": "https://i1.sndcdn.com/artworks-V4ORYqjXscpH76UU-11PylA-t500x500.jpg",
-    "playlist_total_plays": 3351,
+    "playlist_total_plays": 3353,
     "playlist_total_likes": 37,
     "playlist_track_count": 4,
     "playlist_duration_total": "0:15:03",
@@ -7009,7 +7093,7 @@
         "has_sc_catalog_listen": false,
         "has_youtube_video": false,
         "has_youtube_embed": false,
-        "aggregate_play_count": 3687,
+        "aggregate_play_count": 3691,
         "aggregate_like_count": 29
       }
     ]

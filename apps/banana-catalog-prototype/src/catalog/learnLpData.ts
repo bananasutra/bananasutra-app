@@ -7,6 +7,7 @@ import {
   type SutraFamilyKey,
   sutraHrefForFamily,
 } from './sutraContext'
+import { parseCatalogPublishedAt } from './formatPublishDate'
 
 export const LEARN_LP_META = {
   title: 'Learn',
@@ -241,8 +242,8 @@ export function sutraDisplayNameForKey(key: SutraFamilyKey): string {
 }
 
 function parsePublishedAt(raw: string): number {
-  const n = Date.parse((raw || '').trim())
-  return Number.isNaN(n) ? 0 : n
+  const n = parseCatalogPublishedAt(raw)
+  return Number.isFinite(n) ? n : 0
 }
 
 function wordsLyricsOnly(song: SongCatalogItem): boolean {

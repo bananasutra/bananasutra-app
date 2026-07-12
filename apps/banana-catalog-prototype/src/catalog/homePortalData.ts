@@ -11,6 +11,7 @@ import {
   type SutraFamilyKey,
   sutraHrefForFamily,
 } from './sutraContext'
+import { formatPublishDateShort, parseCatalogPublishedAt } from './formatPublishDate'
 
 /** Curated pool (~15) — one pick per visit (day-hash, matches W-064 prototype). */
 export const HERO_QUOTE_SLUGS = [
@@ -136,10 +137,7 @@ export function formatHomeCount(n: number): string {
 }
 
 export function formatHomeShortDate(iso: string): string {
-  if (!iso) return ''
-  const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return ''
-  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  return formatPublishDateShort(iso)
 }
 
 export function formatHeroExtract(raw: string): string {
@@ -147,8 +145,8 @@ export function formatHeroExtract(raw: string): string {
 }
 
 function parsePublishedAt(raw: string): number {
-  const n = Date.parse((raw || '').trim())
-  return Number.isNaN(n) ? 0 : n
+  const n = parseCatalogPublishedAt(raw)
+  return Number.isFinite(n) ? n : 0
 }
 
 function songHasReleasedListenerAudio(s: SongCatalogItem): boolean {
