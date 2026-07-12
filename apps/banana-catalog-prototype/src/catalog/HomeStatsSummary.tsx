@@ -17,7 +17,12 @@ export function HomeStatsSummary({ items, variant = 'home' }: Props) {
       aria-label="Catalog scale"
     >
       {items.map((item) => (
-        <Link key={item.label} className="home-stats-summary__item" to={item.href} aria-label={item.ariaLabel}>
+        <Link
+          key={item.label}
+          className={`home-stats-summary__item${item.desktopOnly ? ' home-stats-summary__item--desktop-only' : ''}`}
+          to={item.href}
+          aria-label={item.ariaLabel}
+        >
           <span className="home-stats-summary__num">{formatHomeCount(item.value)}</span>
           <span className="home-stats-summary__label">{item.label}</span>
         </Link>

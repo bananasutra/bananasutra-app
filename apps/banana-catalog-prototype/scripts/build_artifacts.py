@@ -144,6 +144,8 @@ def build_catalog_chrome_stats(
     songbook_catalog: list[dict[str, Any]],
     top_track_count: int,
     youtube_by_lyrics_id: dict[str, list[dict[str, Any]]],
+    muse_count: int,
+    quote_count: int,
 ) -> dict[str, int]:
     sutra_entries = facets.get("sutra") or []
     sutra_families = {sutra_family_chrome(str(e.get("value") or "")) for e in sutra_entries}
@@ -155,6 +157,8 @@ def build_catalog_chrome_stats(
         "songCount": len(song_catalog),
         "topTrackCount": top_track_count,
         "videoCount": count_unique_youtube_video_ids(youtube_by_lyrics_id),
+        "museCount": muse_count,
+        "quoteCount": quote_count,
     }
 
 
@@ -3044,7 +3048,13 @@ def main() -> None:
     song_slug_index = build_song_slug_index(song_detail)
     track_catalog = build_track_catalog_flat(song_detail, cards_by_lyrics_id, config.like_weight)
     catalog_chrome_stats = build_catalog_chrome_stats(
-        facets, song_catalog, songbook_catalog, len(track_catalog), youtube_by_lyrics_id
+        facets,
+        song_catalog,
+        songbook_catalog,
+        len(track_catalog),
+        youtube_by_lyrics_id,
+        len(muses_catalog),
+        len(quotes_wall),
     )
 
     outputs = {

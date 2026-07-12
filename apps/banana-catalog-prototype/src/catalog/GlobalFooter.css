@@ -37,7 +37,7 @@
   margin: 0;
   padding: 0.62rem 1rem;
   border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg-shell);
+  background: var(--color-bg-panel);
   box-sizing: border-box;
   overflow-x: clip;
 }
@@ -75,6 +75,20 @@
 
 .catalog-footer-stats .home-stats-summary--footer .home-stats-summary__item:last-child {
   border-right: none;
+}
+
+/* Muses + Quotes: hide on phones only — tablets keep all seven.
+   Specificity must beat `.…--footer .home-stats-summary__item { display: flex }`. */
+@media (max-width: 640px) {
+  .catalog-footer-stats .home-stats-summary--footer .home-stats-summary__item--desktop-only {
+    display: none;
+  }
+
+  .catalog-footer-stats
+    .home-stats-summary--footer
+    .home-stats-summary__item:has(+ .home-stats-summary__item--desktop-only) {
+    border-right: none;
+  }
 }
 
 .catalog-footer-stats .home-stats-summary--footer .home-stats-summary__item:focus-visible {
