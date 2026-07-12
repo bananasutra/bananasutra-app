@@ -39,6 +39,8 @@ export type YoutubeEmbeddedPlayerProps = {
   facadePosterEager?: boolean
   /** Poster transformation width for the facade image. */
   posterWidth?: number
+  /** Catalog thumbnail (e.g. sddefault for Shorts). Wins over generic hqdefault poster. */
+  posterThumbnailUrl?: string | null
   /** When false, omit the default outbound link (parent places it below copy). Default true. */
   showOutboundFooter?: boolean
 }
@@ -80,6 +82,7 @@ export function YoutubeEmbeddedPlayer({
   onPlayingChange,
   facadePosterEager = false,
   posterWidth = 400,
+  posterThumbnailUrl,
   showOutboundFooter = true,
 }: YoutubeEmbeddedPlayerProps) {
   const id = videoId.trim()
@@ -106,7 +109,7 @@ export function YoutubeEmbeddedPlayer({
 
   if (!id) return null
   const iframeClass = ['yt-embed-frame', iframeClassName].filter(Boolean).join(' ')
-  const posterSource = youtubePosterThumbnailUrl(id)
+  const posterSource = (posterThumbnailUrl || "").trim() || youtubePosterThumbnailUrl(id)
   const hasPoster = Boolean(posterSource.trim())
   const posterHeight = Math.round(posterWidth * 9 / 16)
 

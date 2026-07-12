@@ -522,6 +522,7 @@ function SongDetailLoaded({
       sutra: (detail.sutra || focusedYoutubeVideo.sutra || '').trim() || undefined,
       duration: formatDurationDisplay(focusedYoutubeVideo.duration) || undefined,
       inApp: true,
+      thumbnailUrl: (focusedYoutubeVideo.thumbnail_url || '').trim() || undefined,
     }
   }, [focusedYoutubeVideo, detail.lyrics_title, detail.sutra])
 
@@ -534,6 +535,7 @@ function SongDetailLoaded({
         sutra: (detail.sutra || v.sutra || '').trim() || undefined,
         duration: formatDurationDisplay(v.duration) || undefined,
         inApp: true,
+        thumbnailUrl: (v.thumbnail_url || '').trim() || undefined,
       }))
   }, [youtubeVideos, effectiveYoutubeVideoId, detail.lyrics_title, detail.sutra])
 
@@ -1586,6 +1588,7 @@ function SongDetailLoaded({
                               enableJsApi={songExclusivePlaybackEnabled}
                               loading="lazy"
                               facadeUntilClick
+                              posterThumbnailUrl={focusedYoutubeVideo.thumbnail_url}
                               onBeforePlay={onBeforeYoutubePlay}
                             />
                           ) : focusedYoutubeVideo ? (
@@ -1700,6 +1703,7 @@ function SongDetailLoaded({
                     enableJsApi={songExclusivePlaybackEnabled}
                     loading="lazy"
                     facadeUntilClick
+                    posterThumbnailUrl={focusedYoutubeVideo.thumbnail_url}
                     onBeforePlay={onBeforeYoutubePlay}
                   />
                 ) : focusedYoutubeVideo ? (
