@@ -384,7 +384,7 @@ export function WatchLpPage() {
                 />
               </div>
 
-              <div className="watch-lp__filters-band">
+              <div className="catalog-index-filter-band watch-lp__filters-band">
                 <WatchLpFacetBar
                 playlists={allPlaylists}
                 activeSutra={activeSutra}
@@ -408,7 +408,7 @@ export function WatchLpPage() {
               </div>
 
               {visiblePlaylists.length ? (
-                <ul className="watch-lp__playlist-grid" aria-live="polite">
+                <ul className="watch-lp__playlist-grid catalog-index-after-filters" aria-live="polite">
                   {visiblePlaylists.map((pl) => (
                     <WatchLpPlaylistThumb
                       key={pl.playlist_id}
@@ -421,7 +421,7 @@ export function WatchLpPage() {
                   ))}
                 </ul>
               ) : (
-                <p className="watch-lp__empty">No playlists match this filter.</p>
+                <p className="watch-lp__empty catalog-index-after-filters">No playlists match this filter.</p>
               )}
 
               {sortedPlaylists.length > WATCH_LP_PLAYLIST_GRID_LIMIT && !showAllPlaylists ? (

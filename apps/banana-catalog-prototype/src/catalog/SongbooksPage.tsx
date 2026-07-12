@@ -582,7 +582,7 @@ export function SongbooksPage() {
               </ScrollRevealSection>
             ) : null}
 
-          <div className="songbooks-page__filters-stacked">
+          <div className="catalog-index-filter-band songbooks-page__filters-stacked">
             <CatalogFilterBar
               ariaLabel="Filter songbooks"
               panelId="songbooks-filter-panel"
@@ -604,7 +604,7 @@ export function SongbooksPage() {
             />
           </div>
 
-            <div className="songbooks-page__sections" aria-label="Songbook sections by type">
+            <div className="songbooks-page__sections catalog-index-after-filters" aria-label="Songbook sections by type">
               {sections.length === 0 ? (
                 <section className="songbooks-page__empty">
                   <h2 className="songbooks-page__section-title catalog-section-title">No songbooks match these filters</h2>

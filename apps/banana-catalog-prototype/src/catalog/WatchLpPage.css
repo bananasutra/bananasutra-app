@@ -194,20 +194,7 @@
   line-height: 1.35;
 }
 
-/* Facet bar band — match /videos + /songbooks filter strip (R87 / R89). */
-.watch-lp__filters-band {
-  margin: 0;
-  padding: 1.15rem 0;
-  border-bottom: var(--catalog-shell-rule);
-}
-
-.watch-lp__filters-band .catalog-filter-bar {
-  margin-bottom: 0;
-}
-
-.watch-lp__filters-band .catalog-filter-bar:not(:has(.catalog-filter-bar__panel.is-open)) .catalog-filter-bar__toolbar {
-  margin-bottom: 0;
-}
+/* Facet bar band — shared `.catalog-index-filter-band` (see catalog-page-shell.css). */
 
 /* Legacy facet classes (pre-CatalogFilterBar); kept inert in case of stale markup. */
 .watch-lp__facet-bar {

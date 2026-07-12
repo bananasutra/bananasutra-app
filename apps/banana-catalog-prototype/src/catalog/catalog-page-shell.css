@@ -111,6 +111,30 @@
   border-bottom: none;
 }
 
+/*
+ * Index landing rhythm (videos / songbooks / watch cinema filters):
+ * featured shell section → filter band → results.
+ * Pad is symmetric inside the band; results get shell section pad above so labels
+ * clear the rule (do not rely on filter-bar margins for that gap).
+ */
+.catalog-index-filter-band {
+  margin: 0;
+  padding: var(--catalog-index-filter-band-pad-y) 0;
+  border-bottom: var(--catalog-shell-rule);
+}
+
+.catalog-index-filter-band .catalog-filter-bar {
+  margin-bottom: 0;
+}
+
+.catalog-index-filter-band .catalog-filter-bar:not(:has(.catalog-filter-bar__panel.is-open)) .catalog-filter-bar__toolbar {
+  margin-bottom: 0;
+}
+
+.catalog-index-after-filters {
+  padding-top: var(--catalog-shell-section-pad-y);
+}
+
 /* After in-page embed + copy, before filters or browse grid (watch LP cinema, etc.). */
 .catalog-embed-section-follow {
   margin-top: 0;
