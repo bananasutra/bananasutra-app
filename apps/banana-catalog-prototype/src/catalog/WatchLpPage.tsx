@@ -84,6 +84,7 @@ export function WatchLpPage() {
   const [showAllPlaylists, setShowAllPlaylists] = useState(false)
   const [isPlaylistEmbedPlaying, setIsPlaylistEmbedPlaying] = useState(false)
   const [isSpotlightEmbedPlaying, setIsSpotlightEmbedPlaying] = useState(false)
+  const [filterBarExpanded, setFilterBarExpanded] = useState(false)
 
   const { persistentScEmbedWrapRef, usePersistentPlayback } = usePlayerQueueRegistrar()
 
@@ -228,6 +229,7 @@ export function WatchLpPage() {
     pickedFeaturedId,
     activePlaylistId,
     showAllPlaylists,
+    filterBarExpanded,
     allVideos.length,
     allPlaylists.length,
     youtubeVideos === null ? -1 : allVideos.length,
@@ -382,7 +384,7 @@ export function WatchLpPage() {
                 />
               </div>
 
-              <div className="catalog-embed-section-follow">
+              <div className="watch-lp__filters-band">
                 <WatchLpFacetBar
                 playlists={allPlaylists}
                 activeSutra={activeSutra}
@@ -400,6 +402,8 @@ export function WatchLpPage() {
                   setPickedPlaylistId(null)
                 }}
                 onClearAll={clearPlaylistFilters}
+                defaultExpanded={filterBarExpanded}
+                onExpandedChange={setFilterBarExpanded}
                 />
               </div>
 

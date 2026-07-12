@@ -121,9 +121,6 @@
 /* Random featured songbook on each visit (moved from homepage for R18). */
 .songbooks-page__featured-rotator {
   min-width: 0;
-  margin: 0 0 1.35rem;
-  padding: 0 0 1.35rem;
-  border-bottom: 1px solid var(--color-border);
 }
 
 .songbooks-page__featured-rotator .catalog-section-title {
@@ -227,6 +224,13 @@
 
 @media (min-width: 768px) {
   .songbooks-page__grid--triple {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Genre best-ofs on landing: keep mobile 2-up; 3-up from the shared listen-lp breakpoint. */
+@media (min-width: 520px) {
+  .listen-lp__songbook-grid.songbooks-page__songbook-grid--triple {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

@@ -20,6 +20,7 @@ import { renderPageMeta } from './usePageMeta'
 import { useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalogBrowse } from './generatedData'
 import { filterSongsByAlbumSearchQuery, searchTokens } from './searchMatch'
+import { ScrollRevealSection } from './ScrollRevealSection'
 import './CatalogApp.css'
 import './FeaturedSongbookSpotlight.css'
 import './ListenLpPage.css'
@@ -239,9 +240,24 @@ function sutraIntroForKey(key: string): string | null {
   return SUTRA_INTROS[key] ?? null
 }
 
-function SongbookThumbGrid({ books, label }: { books: ListedSongbook[]; label: string }) {
+function featuredSongbookSutraLabel(sutras: string): string {
+  return (sutras || '').split(',')[0]?.trim() ?? ''
+}
+
+function SongbookThumbGrid({
+  books,
+  label,
+  columns = 'default',
+}: {
+  books: ListedSongbook[]
+  label: string
+  columns?: 'default' | 'triple'
+}) {
   return (
-    <ul className="listen-lp__songbook-grid" aria-label={label}>
+    <ul
+      className={`listen-lp__songbook-grid${columns === 'triple' ? ' songbooks-page__songbook-grid--triple' : ''}`}
+      aria-label={label}
+    >
       {books.map((book) => (
         <li key={book.slug} className="listen-lp__songbook-grid-cell">
           <ListenLpSongbookThumb book={book} />
@@ -367,6 +383,7 @@ export function SongbooksPage() {
     const filterSeed = songbooksFiltersToQueryString(filters) || '__all__'
     return pool[hashString(`${visitSeed}|${filterSeed}`) % pool.length] ?? null
   }, [filteredSongbooks, filters, visitSeed])
+  const featuredSpotlightSutra = featuredSongbook ? featuredSongbookSutraLabel(featuredSongbook.sutras) : ''
 
   const sections = useMemo(() => {
     const bySection = new Map<SongbookSectionKey, ListedSongbook[]>()
@@ -536,20 +553,33 @@ export function SongbooksPage() {
 
         <main id="main-content" className="songbooks-page songbooks-page__stacked">
           {featuredSongbook ? (
-              <section className="songbooks-page__featured-rotator" aria-labelledby="songbooks-featured-songbook-heading">
+              <ScrollRevealSection
+                immediate
+                className="songbooks-page__featured-rotator"
+                aria-labelledby="songbooks-featured-songbook-heading"
+              >
                 <h2 id="songbooks-featured-songbook-heading" className="catalog-section-title">
                   Featured songbook
+                  {featuredSpotlightSutra ? (
+                    <>
+                      {' : '}
+                      <span className={`catalog-sutra-word ${sutraClassName(featuredSpotlightSutra)}`}>
+                        {featuredSpotlightSutra}
+                      </span>
+                    </>
+                  ) : null}
                 </h2>
                 <FeaturedSongbookSpotlight
                   book={featuredSongbook}
                   className="songbooks-page__featured-spotlight"
                   layout="stacked"
+                  stackedVariant="listen-lp"
                   ctaTo={songbookHref(featuredSongbook.songbook)}
                   embed={
                     <LazySoundCloudEmbed scUrl={featuredSongbook.playlist_url} title={featuredSongbook.songbook} />
                   }
                 />
-              </section>
+              </ScrollRevealSection>
             ) : null}
 
           <div className="songbooks-page__filters-stacked">
@@ -619,7 +649,11 @@ export function SongbooksPage() {
                       </h2>
                       <p className="songbooks-page__section-intro">{section.intro}</p>
                     </header>
-                    <SongbookThumbGrid books={section.books} label={`${section.title} songbooks`} />
+                    <SongbookThumbGrid
+                      books={section.books}
+                      label={`${section.title} songbooks`}
+                      columns={section.sectionKey === 'genre' ? 'triple' : 'default'}
+                    />
                   </section>
                 ),
               )}

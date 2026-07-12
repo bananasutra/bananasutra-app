@@ -516,7 +516,6 @@ html {
     width: 100%;
   }
 
-  .catalog-layout:not(.catalog-layout--filters-collapsed) .videos-page__watch-crosslink,
   .catalog-layout:not(.catalog-layout--filters-collapsed) .catalog-infinite-scroll-footer {
     order: 5;
     width: 100%;

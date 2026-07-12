@@ -36,6 +36,7 @@ import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
+import { ScrollRevealSection } from './ScrollRevealSection'
 import './CatalogApp.css'
 import './VideosPage.css'
 import { useSongCatalog } from './generatedData'
@@ -725,15 +726,17 @@ export function VideosPage() {
         <div className="catalog-page-intro catalog-page-intro--song-catalog">
           <h1 className="catalog-page-h1">Picture the Songs</h1>
           <p className="catalog-page-sub">
-            Same songs, eyes open. Tall reels and wide frames, side by side. Some of these live only on YouTube with
-            no SoundCloud twin. That&apos;s by design, not an oversight.
+            Same songs, eyes open. Tall reels and wide frames, side by side. Cards open song pages. To watch clips and
+            longer playlists without leaving the page, go to{' '}
+            <Link to={canonicalPathForRoute('/watch')}>Watch</Link>.
           </p>
         </div>
 
         <div className="videos-page__content">
           <main id="main-content" className="catalog-main videos-page__main">
             {!youtubeCatalogReady || featuredVideoHero ? (
-              <section
+              <ScrollRevealSection
+                immediate
                 className={`videos-page__featured-hero${!youtubeCatalogReady ? ' videos-page__featured-hero--pending' : ''}`}
                 aria-labelledby="videos-featured-hero-heading"
                 aria-busy={!youtubeCatalogReady}
@@ -786,7 +789,7 @@ export function VideosPage() {
                     </div>
                   </div>
                 ) : null}
-              </section>
+              </ScrollRevealSection>
             ) : null}
 
             <div className="videos-page__filters-below-featured">
@@ -812,14 +815,6 @@ export function VideosPage() {
             </div>
 
             {listSection}
-            {youtubeCatalogReady && shownVideos.length > 0 ? (
-              <Link
-                className="catalog-section-cta videos-page__watch-crosslink"
-                to={`${canonicalPathForRoute('/watch')}#watch-lp-playlists-heading`}
-              >
-                Watch playlists →
-              </Link>
-            ) : null}
           </main>
         </div>
       </div>

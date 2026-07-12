@@ -194,7 +194,14 @@
   line-height: 1.35;
 }
 
-/* Facet bar (mirrors listen LP) */
+/* Facet bar band — match /videos + /songbooks filter strip (R87 / R89). */
+.watch-lp__filters-band {
+  margin: 1.25rem 0;
+  padding: 0 0 1.1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Legacy facet classes (pre-CatalogFilterBar); kept inert in case of stale markup. */
 .watch-lp__facet-bar {
   padding-top: 0.5rem;
 }
