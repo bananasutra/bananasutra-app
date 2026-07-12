@@ -3,12 +3,13 @@ import type { SongCatalogItem, TrackCatalogItem } from './types'
 import { trackCatalogItemToPlayable } from './playerQueue/playableTrackAdapters'
 import type { PlayableTrack } from './playerQueue/types'
 import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
+import { parseCatalogPublishedAt } from './formatPublishDate'
 
 export const LISTEN_LP_WHATS_NEW_SPOTLIGHT_LIMIT = 3
 
 function parsePublishedAt(raw: string): number {
-  const n = Date.parse((raw || '').trim())
-  return Number.isNaN(n) ? 0 : n
+  const n = parseCatalogPublishedAt(raw)
+  return Number.isFinite(n) ? n : 0
 }
 
 function songHasPlayableAudio(song: SongCatalogItem): boolean {

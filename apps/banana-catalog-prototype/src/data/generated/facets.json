@@ -2,23 +2,23 @@
   "sutra": [
     {
       "value": "BLOWsutra",
-      "count": 95
+      "count": 96
     },
     {
       "value": "KNOWsutra",
       "count": 63
     },
     {
+      "value": "GROWsutra",
+      "count": 60
+    },
+    {
       "value": "QUACKsutra",
       "count": 59
     },
     {
-      "value": "GROWsutra",
-      "count": 58
-    },
-    {
       "value": "SHOWsutra",
-      "count": 53
+      "count": 55
     },
     {
       "value": "FLOWsutra",
@@ -26,7 +26,7 @@
     },
     {
       "value": "GLOWsutra",
-      "count": 30
+      "count": 31
     },
     {
       "value": "BOWsutra",
@@ -36,25 +36,25 @@
   "light_shadow": [
     {
       "value": "LIGHT",
-      "count": 220
+      "count": 223
     },
     {
       "value": "SHADOW",
-      "count": 184
+      "count": 187
     }
   ],
   "topic": [
     {
       "value": "POOLITICS",
-      "count": 86
+      "count": 87
     },
     {
       "value": "BEAUTY",
-      "count": 63
+      "count": 64
     },
     {
       "value": "INJUSTICE",
-      "count": 61
+      "count": 63
     },
     {
       "value": "WISDOM",
@@ -65,12 +65,12 @@
       "count": 40
     },
     {
-      "value": "PEACE",
+      "value": "FOOLERY",
       "count": 34
     },
     {
-      "value": "FOOLERY",
-      "count": 32
+      "value": "PEACE",
+      "count": 34
     },
     {
       "value": "EGO",
@@ -92,27 +92,27 @@
     },
     {
       "value": "seeEGO",
-      "count": 34
+      "count": 36
+    },
+    {
+      "value": "seeHIStory",
+      "count": 28
     },
     {
       "value": "beFAIR",
       "count": 27
     },
     {
-      "value": "seeHIStory",
-      "count": 27
+      "value": "beGRATEFUL",
+      "count": 25
+    },
+    {
+      "value": "beSILLY",
+      "count": 25
     },
     {
       "value": "beCURIOUS",
       "count": 24
-    },
-    {
-      "value": "beGRATEFUL",
-      "count": 24
-    },
-    {
-      "value": "beSILLY",
-      "count": 23
     },
     {
       "value": "beYOU",
@@ -154,29 +154,29 @@
   "written_year": [
     {
       "value": "2025",
-      "count": 215
+      "count": 217
     },
     {
       "value": "2024",
-      "count": 156
+      "count": 159
     },
     {
       "value": "2026",
-      "count": 33
+      "count": 34
     }
   ],
   "track_genre": [
     {
       "value": "DUB",
-      "count": 80
+      "count": 81
     },
     {
       "value": "LOFI",
-      "count": 64
+      "count": 63
     },
     {
       "value": "JAZZ",
-      "count": 61
+      "count": 62
     },
     {
       "value": "INDIE",
@@ -214,11 +214,11 @@
     },
     {
       "value": "FOLK",
-      "count": 60
+      "count": 61
     },
     {
       "value": "BURLESQUE",
-      "count": 57
+      "count": 58
     },
     {
       "value": "BLUES",
@@ -226,7 +226,7 @@
     },
     {
       "value": "LOFI",
-      "count": 42
+      "count": 43
     },
     {
       "value": "MANTRA",
@@ -253,12 +253,12 @@
       "count": 18
     },
     {
-      "value": "HIP HOP",
+      "value": "WALTZ",
       "count": 16
     },
     {
-      "value": "WALTZ",
-      "count": 16
+      "value": "HIP HOP",
+      "count": 15
     },
     {
       "value": "TANGO",
@@ -288,11 +288,11 @@
   "track_instrument": [
     {
       "value": "BASS",
-      "count": 132
+      "count": 131
     },
     {
       "value": "GUITAR",
-      "count": 83
+      "count": 84
     },
     {
       "value": "CELLO",
@@ -304,11 +304,11 @@
     },
     {
       "value": "PIANO",
-      "count": 44
+      "count": 45
     },
     {
       "value": "ACCORDION",
-      "count": 35
+      "count": 36
     },
     {
       "value": "DRUM",
@@ -342,11 +342,11 @@
   "track_mood": [
     {
       "value": "TRIPPY",
-      "count": 72
+      "count": 73
     },
     {
       "value": "NERDY",
-      "count": 70
+      "count": 71
     },
     {
       "value": "KINDLY",
@@ -354,7 +354,7 @@
     },
     {
       "value": "PUNKY",
-      "count": 52
+      "count": 51
     },
     {
       "value": "CHEEKY",
@@ -380,7 +380,7 @@
   "track_tempo_feel": [
     {
       "value": "LOWBEAT",
-      "count": 181
+      "count": 180
     },
     {
       "value": "MIDBEAT",
@@ -394,11 +394,11 @@
   "lang": [
     {
       "value": "EN",
-      "count": 377
+      "count": 382
     },
     {
       "value": "FR",
-      "count": 22
+      "count": 23
     },
     {
       "value": "ES",

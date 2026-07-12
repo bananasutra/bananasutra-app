@@ -2,6 +2,7 @@ import type { SongCatalogItem, SongbookCatalogItem, TrackCatalogItem } from './t
 import { formatDurationFromSeconds } from './durationFormat'
 import { pickRandomSongbookFromPool, songbookPopularity } from './homePortalUtils'
 import { SUTRA_CONTEXT, type SutraFamilyKey } from './sutraContext'
+import { parseCatalogPublishedAt } from './formatPublishDate'
 
 export const LISTEN_LP_TOP_TRACKS_LIMIT = 10
 export const LISTEN_LP_TOP_EPS_LIMIT = 10
@@ -43,8 +44,8 @@ export const LISTEN_LP_SUTRA_FILTER_OPTIONS: { value: ListenLpSutraFilter; label
 ]
 
 function parsePublishedAt(raw: string): number {
-  const n = Date.parse((raw || '').trim())
-  return Number.isNaN(n) ? 0 : n
+  const n = parseCatalogPublishedAt(raw)
+  return Number.isFinite(n) ? n : 0
 }
 
 function primarySutraLabel(book: SongbookCatalogItem): string {

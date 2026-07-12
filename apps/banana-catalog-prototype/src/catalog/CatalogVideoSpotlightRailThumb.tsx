@@ -1,4 +1,4 @@
-import { coverImageUrl } from '../seo/imageUrl'
+import { CoverImage } from './CoverImage'
 
 type Props = {
   thumbnailUrl?: string | null
@@ -24,7 +24,7 @@ export function CatalogVideoSpotlightRailThumb({
   onSelect,
   ariaLabel,
 }: Props) {
-  const poster = thumbnailUrl ? coverImageUrl(thumbnailUrl, { width: 320 }) : null
+  const hasThumb = Boolean((thumbnailUrl || '').trim())
 
   return (
     <button
@@ -35,9 +35,17 @@ export function CatalogVideoSpotlightRailThumb({
       onClick={onSelect}
     >
       {isPlaying ? <span className="catalog-video-spotlight__thumb-now">Playing</span> : null}
-      {poster ? (
+      {hasThumb ? (
         <span className="catalog-video-spotlight__thumb-frame">
-          <img src={poster} alt="" width={160} height={90} loading="lazy" decoding="async" />
+          <CoverImage
+            source={thumbnailUrl || ''}
+            requestWidth={320}
+            alt=""
+            width={160}
+            height={90}
+            loading="lazy"
+            decoding="async"
+          />
         </span>
       ) : (
         <span className="catalog-video-spotlight__thumb-frame catalog-video-spotlight__thumb-frame--fallback" aria-hidden>

@@ -1,6 +1,6 @@
 import type { CSSProperties, RefObject } from 'react'
 import { useEffect, useMemo, useState } from 'react'
-import { coverImageUrl } from '../seo/imageUrl'
+import { CoverImage } from './CoverImage'
 import {
   youtubePosterThumbnailUrl,
   youtubePrivacyEmbedSrc,
@@ -106,7 +106,8 @@ export function YoutubeEmbeddedPlayer({
 
   if (!id) return null
   const iframeClass = ['yt-embed-frame', iframeClassName].filter(Boolean).join(' ')
-  const poster = coverImageUrl(youtubePosterThumbnailUrl(id), { width: posterWidth })
+  const posterSource = youtubePosterThumbnailUrl(id)
+  const hasPoster = Boolean(posterSource.trim())
   const posterHeight = Math.round(posterWidth * 9 / 16)
 
   const outbound = showOutboundFooter ? <YoutubeEmbedOutboundFooter videoId={id} /> : null
@@ -121,9 +122,10 @@ export function YoutubeEmbeddedPlayer({
             aria-live="polite"
             aria-label={`Loading video player: ${title}`}
           >
-            {poster ? (
-              <img
-                src={poster}
+            {hasPoster ? (
+              <CoverImage
+                source={posterSource}
+                requestWidth={posterWidth}
                 alt=""
                 className="yt-embed-client-placeholder__poster"
                 decoding="async"
@@ -153,9 +155,10 @@ export function YoutubeEmbeddedPlayer({
               setFacadeReleased(true)
             }}
           >
-            {poster ? (
-              <img
-                src={poster}
+            {hasPoster ? (
+              <CoverImage
+                source={posterSource}
+                requestWidth={posterWidth}
                 alt=""
                 className="yt-embed-facade__poster"
                 decoding="async"
@@ -171,10 +174,11 @@ export function YoutubeEmbeddedPlayer({
           </button>
         ) : (
           <div className="yt-embed-frame-host">
-            {!iframeReady && poster ? (
+            {!iframeReady && hasPoster ? (
               <>
-                <img
-                  src={poster}
+                <CoverImage
+                  source={posterSource}
+                  requestWidth={posterWidth}
                   alt=""
                   className="yt-embed-frame-host__poster"
                   decoding="async"
