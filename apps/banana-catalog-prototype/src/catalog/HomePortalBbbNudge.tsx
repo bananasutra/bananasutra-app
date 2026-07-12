@@ -1,7 +1,7 @@
 import type { MouseEvent } from 'react'
 import { trackBertrandOpen } from '../lib/analytics'
 
-/** Bertrand inline nudge under feeling lucky. */
+/** Bertrand entry — own section under Feeling lucky. */
 export function HomePortalBbbNudge() {
   const handleOpen = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -10,11 +10,13 @@ export function HomePortalBbbNudge() {
   }
 
   return (
-    <p className="home-bbb-nudge home-portal__bbb home-portal__bbb--lucky">
-      <span className="home-bbb-nudge__text">Not sure where to start?</span>{' '}
-      <button type="button" className="catalog-bertrand-cta home-bbb-nudge__cta" onClick={handleOpen}>
-        Ask Bertrand →
-      </button>
-    </p>
+    <aside className="home-bbb-nudge" aria-labelledby="home-bbb-nudge-heading">
+      <p id="home-bbb-nudge-heading" className="home-bbb-nudge__headline">
+        <span className="home-bbb-nudge__text">Not sure where to start?</span>{' '}
+        <button type="button" className="catalog-bertrand-cta home-bbb-nudge__cta" onClick={handleOpen}>
+          Ask Bertrand →
+        </button>
+      </p>
+    </aside>
   )
 }
