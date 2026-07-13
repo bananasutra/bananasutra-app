@@ -36,6 +36,7 @@ import { youtubeAspectRatioFromFormat } from './youtubeAspectRatio'
 import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
+import { ScrollRevealSection } from './ScrollRevealSection'
 import './CatalogApp.css'
 import './VideosPage.css'
 import { useSongCatalog } from './generatedData'
@@ -636,17 +637,8 @@ export function VideosPage() {
 
   let nextPosterIndex = 0
 
-  const videosResultCountLine =
-    shownVideos.length === 0
-      ? hasActiveVideoFilters
-        ? 'No videos match these filters.'
-        : ''
-      : hasActiveVideoFilters
-        ? `Showing ${formatCount(shownVideos.length)} of ${formatCount(allVideos.length)} videos`
-        : `${formatCount(allVideos.length)} videos`
-
   const listSection = (
-    <section className="videos-page__list-wrap" aria-label="Video list">
+    <section className="videos-page__list-wrap catalog-index-after-filters" aria-label="Video list">
       {!youtubeCatalogReady ? (
         <p className="videos-page__empty" aria-live="polite">
           Loading videos…
@@ -655,11 +647,6 @@ export function VideosPage() {
         <p className="videos-page__empty">No videos match these filters.</p>
       ) : (
         <>
-          {videosResultCountLine ? (
-            <p className="videos-page__result-count about-result-count" aria-live="polite">
-              {videosResultCountLine}
-            </p>
-          ) : null}
           {verticalVideos.length > 0 ? (
             <div className="videos-page__rail-section">
               <h2 className="videos-page__section-heading catalog-section-title">
@@ -722,18 +709,20 @@ export function VideosPage() {
           <span className="catalog-breadcrumbs__current" aria-current="page">Videos</span>
         </nav>
 
-        <div className="catalog-page-intro catalog-page-intro--song-catalog">
+        <div className="catalog-page-intro catalog-page-intro--song-catalog videos-page__intro">
           <h1 className="catalog-page-h1">Picture the Songs</h1>
           <p className="catalog-page-sub">
-            Same songs, eyes open. Tall reels and wide frames, side by side. Some of these live only on YouTube with
-            no SoundCloud twin. That&apos;s by design, not an oversight.
+            Same songs, eyes open. Tall reels and wide frames, side by side. Cards open song pages. To watch clips and
+            longer playlists without leaving the page, go to{' '}
+            <Link to={canonicalPathForRoute('/watch')}>Watch</Link>.
           </p>
         </div>
 
         <div className="videos-page__content">
           <main id="main-content" className="catalog-main videos-page__main">
             {!youtubeCatalogReady || featuredVideoHero ? (
-              <section
+              <ScrollRevealSection
+                immediate
                 className={`videos-page__featured-hero${!youtubeCatalogReady ? ' videos-page__featured-hero--pending' : ''}`}
                 aria-labelledby="videos-featured-hero-heading"
                 aria-busy={!youtubeCatalogReady}
@@ -786,10 +775,10 @@ export function VideosPage() {
                     </div>
                   </div>
                 ) : null}
-              </section>
+              </ScrollRevealSection>
             ) : null}
 
-            <div className="videos-page__filters-below-featured">
+            <div className="catalog-index-filter-band videos-page__filters-below-featured">
               <CatalogFilterBar
                 ariaLabel="Filter videos"
                 panelId="videos-filter-panel"
@@ -812,14 +801,6 @@ export function VideosPage() {
             </div>
 
             {listSection}
-            {youtubeCatalogReady && shownVideos.length > 0 ? (
-              <Link
-                className="catalog-section-cta videos-page__watch-crosslink"
-                to={`${canonicalPathForRoute('/watch')}#watch-lp-playlists-heading`}
-              >
-                Watch playlists →
-              </Link>
-            ) : null}
           </main>
         </div>
       </div>

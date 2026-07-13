@@ -194,7 +194,9 @@
   line-height: 1.35;
 }
 
-/* Facet bar (mirrors listen LP) */
+/* Facet bar band — shared `.catalog-index-filter-band` (see catalog-page-shell.css). */
+
+/* Legacy facet classes (pre-CatalogFilterBar); kept inert in case of stale markup. */
 .watch-lp__facet-bar {
   padding-top: 0.5rem;
 }

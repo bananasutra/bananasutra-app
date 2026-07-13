@@ -7,18 +7,9 @@
   min-width: 0;
 }
 
-.songbooks-page__filters-stacked {
-  margin: 0 0 1.25rem;
-  padding: 0 0 1.1rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.songbooks-page__filters-stacked .catalog-section-title {
-  margin-bottom: 0.65rem;
-}
-
-.songbooks-page__filters-stacked .catalog-facet-stack {
-  margin-top: 0.5rem;
+/* Match /watch + /listen: rule closes the intro so featured reads as its own section. */
+.songbooks-page__intro {
+  border-bottom: var(--catalog-shell-rule);
 }
 
 .songbooks-page__sections {
@@ -121,9 +112,6 @@
 /* Random featured songbook on each visit (moved from homepage for R18). */
 .songbooks-page__featured-rotator {
   min-width: 0;
-  margin: 0 0 1.35rem;
-  padding: 0 0 1.35rem;
-  border-bottom: 1px solid var(--color-border);
 }
 
 .songbooks-page__featured-rotator .catalog-section-title {
@@ -231,6 +219,13 @@
   }
 }
 
+/* Genre best-ofs on landing: keep mobile 2-up; 3-up from the shared listen-lp breakpoint. */
+@media (min-width: 520px) {
+  .listen-lp__songbook-grid.songbooks-page__songbook-grid--triple {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 /* Collections: 2 cols at all breakpoints */
 .songbooks-page__grid--pairs {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -307,6 +302,13 @@
   gap: 0.5rem;
 }
 
+/* First lane under the type intro (e.g. KNOWsutra under “Sutra songbooks”). */
+.songbooks-page__section-header + .songbooks-page__subsection {
+  margin-top: 1.15rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--color-border);
+}
+
 .songbooks-page__subsection + .songbooks-page__subsection {
   margin-top: 1.35rem;
   padding-top: 1.35rem;
@@ -340,7 +342,8 @@
 
 .songbooks-page__subsection-intro {
   margin: 0 0 0.1rem;
-  font: 400 0.88rem/1.5 var(--font-body);
+  font: 400 var(--catalog-section-intro-font-size, 0.82rem) / var(--catalog-section-intro-line-height, 1.5)
+    var(--font-body);
   color: var(--color-text-faint);
   max-width: 58ch;
 }

@@ -23,6 +23,8 @@ type Props = {
   onClearSutra: () => void
   onClearGenre: () => void
   onClearAll: () => void
+  defaultExpanded?: boolean
+  onExpandedChange?: (expanded: boolean) => void
 }
 
 function sutraChipLabel(value: WatchLpSutraFilter): string {
@@ -41,6 +43,8 @@ export function WatchLpFacetBar({
   onClearSutra,
   onClearGenre,
   onClearAll,
+  defaultExpanded,
+  onExpandedChange,
 }: Props) {
   const genreOptions = watchLpGenreFilterOptions(playlists)
   const statusText = watchLpFacetStatusText({
@@ -105,11 +109,14 @@ export function WatchLpFacetBar({
   return (
     <CatalogFilterBar
       ariaLabel="Filter playlists"
+      panelId="watch-filter-panel"
       resultSummary={statusText}
       activePills={activePills}
       onClearAll={onClearAll}
       facetGroups={facetGroups}
       combineHelpText=""
+      defaultExpanded={defaultExpanded}
+      onExpandedChange={onExpandedChange}
     />
   )
 }

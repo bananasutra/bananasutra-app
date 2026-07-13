@@ -84,6 +84,7 @@ export function WatchLpPage() {
   const [showAllPlaylists, setShowAllPlaylists] = useState(false)
   const [isPlaylistEmbedPlaying, setIsPlaylistEmbedPlaying] = useState(false)
   const [isSpotlightEmbedPlaying, setIsSpotlightEmbedPlaying] = useState(false)
+  const [filterBarExpanded, setFilterBarExpanded] = useState(false)
 
   const { persistentScEmbedWrapRef, usePersistentPlayback } = usePlayerQueueRegistrar()
 
@@ -228,6 +229,7 @@ export function WatchLpPage() {
     pickedFeaturedId,
     activePlaylistId,
     showAllPlaylists,
+    filterBarExpanded,
     allVideos.length,
     allPlaylists.length,
     youtubeVideos === null ? -1 : allVideos.length,
@@ -288,8 +290,8 @@ export function WatchLpPage() {
           <header className="catalog-page-intro watch-lp__intro">
             <h1 className="catalog-page-h1">{WATCH_LP_META.lead}</h1>
             <p className="catalog-page-sub">
-              This is the watch door: recent clips and playlists to press play. The full archive, every upload with
-              filters, is on <Link to={canonicalPathForRoute('/videos')}>Videos</Link>.
+              Recent clips and longer playlists, press play here. The full archive, every upload with filters, is on{' '}
+              <Link to={canonicalPathForRoute('/videos')}>Videos</Link>.
             </p>
           </header>
 
@@ -382,7 +384,7 @@ export function WatchLpPage() {
                 />
               </div>
 
-              <div className="catalog-embed-section-follow">
+              <div className="catalog-index-filter-band watch-lp__filters-band">
                 <WatchLpFacetBar
                 playlists={allPlaylists}
                 activeSutra={activeSutra}
@@ -400,11 +402,13 @@ export function WatchLpPage() {
                   setPickedPlaylistId(null)
                 }}
                 onClearAll={clearPlaylistFilters}
+                defaultExpanded={filterBarExpanded}
+                onExpandedChange={setFilterBarExpanded}
                 />
               </div>
 
               {visiblePlaylists.length ? (
-                <ul className="watch-lp__playlist-grid" aria-live="polite">
+                <ul className="watch-lp__playlist-grid catalog-index-after-filters" aria-live="polite">
                   {visiblePlaylists.map((pl) => (
                     <WatchLpPlaylistThumb
                       key={pl.playlist_id}
@@ -417,7 +421,7 @@ export function WatchLpPage() {
                   ))}
                 </ul>
               ) : (
-                <p className="watch-lp__empty">No playlists match this filter.</p>
+                <p className="watch-lp__empty catalog-index-after-filters">No playlists match this filter.</p>
               )}
 
               {sortedPlaylists.length > WATCH_LP_PLAYLIST_GRID_LIMIT && !showAllPlaylists ? (
