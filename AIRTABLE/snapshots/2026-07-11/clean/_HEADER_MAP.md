@@ -42,6 +42,7 @@ update the `HEADER_MAP` dict in the script and re-run.
 | `secondary_sutra` | `secondary_sutra` |
 | `topics_primary` | `topics_primary` |
 | `description` | `description` |
+| `songbook_rationale` | `songbook_rationale` |
 | `songbook_id` | `songbook_id` |
 | `sutra_id_rollup` | `sutra_id_rollup` |
 | `songbook_art_url` | `songbook_art_url` |

@@ -7,9 +7,11 @@
   min-width: 0;
 }
 
-/* Match /watch + /listen: rule closes the intro so featured reads as its own section. */
+/* Match /watch + /listen: rule closes the intro so featured reads as its own section.
+   Equal pad above/below the rule (song-catalog’s tighter mobile after-intro-gap made above look short). */
 .songbooks-page__intro {
   border-bottom: var(--catalog-shell-rule);
+  padding-bottom: var(--catalog-shell-section-pad-y);
 }
 
 .songbooks-page__sections {
@@ -112,6 +114,7 @@
 /* Random featured songbook on each visit (moved from homepage for R18). */
 .songbooks-page__featured-rotator {
   min-width: 0;
+  padding-top: var(--catalog-shell-section-pad-y);
 }
 
 .songbooks-page__featured-rotator .catalog-section-title {
@@ -329,23 +332,146 @@
   scroll-margin-top: calc(var(--catalog-header-h, 108px) + 0.75rem);
 }
 
-.songbooks-page__subsection--quack {
-  padding: 0.65rem 0.75rem;
-  border-radius: var(--radius-sm, 8px);
-  border: 1px dashed var(--color-border-strong);
-  background: color-mix(in srgb, var(--color-bg-inset) 92%, transparent);
+.songbooks-page__lane-hd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem 0.65rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 0.45rem;
 }
 
-.songbooks-page__subsection--quack .songbooks-page__subsection-title {
+.songbooks-page__lane-kicker {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  scroll-margin-top: calc(var(--catalog-header-h, 108px) + 0.75rem);
+}
+
+.songbooks-page__lane-kicker--quack {
+  font-size: 1.1rem;
+}
+
+.songbooks-page__lane-q {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.88rem;
+  line-height: 1.35;
   color: var(--color-text-muted);
 }
 
+.songbooks-page__lane-q-note {
+  font-style: normal;
+  color: var(--color-text-faint);
+}
+
+.songbooks-page__intro-mobile-note {
+  margin-top: 0.55rem;
+}
+
+.songbooks-page__rationale-list {
+  list-style: none;
+  margin: 0.35rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.songbooks-page__rationale-link {
+  display: block;
+}
+
+/* Page-scoped thumb: 8rem on desktop (WordsPage default is 5.5rem).
+   Mobile: full-width square — playlist art has title text baked in; Words’ 7rem
+   landscape crop clips that. Keep aspect-ratio 1 instead. */
+.songbooks-page__rationale-row .words-card__thumb {
+  width: 8rem;
+  height: 8rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-inset);
+}
+
+@media (max-width: 520px) {
+  .songbooks-page__rationale-row .words-card__thumb {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    align-self: stretch;
+  }
+}
+
+.songbooks-page__rationale-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--color-text-strong);
+}
+
+.songbooks-page__rationale-thumb-fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 1.6rem;
+  color: var(--color-text-faint);
+}
+
+.songbooks-page__subsection--quack {
+  margin-top: 0.85rem;
+  padding: 0.9rem 1rem;
+  border-radius: var(--catalog-radius-card);
+  border: none;
+  background: var(--sutra-quack-soft);
+}
+
+.songbooks-page__subsection--quack .songbooks-page__lane-hd {
+  border-bottom: none;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.35rem;
+}
+
 .songbooks-page__subsection-intro {
-  margin: 0 0 0.1rem;
+  margin: 0 0 0.55rem;
   font: 400 var(--catalog-section-intro-font-size, 0.82rem) / var(--catalog-section-intro-line-height, 1.5)
     var(--font-body);
-  color: var(--color-text-faint);
-  max-width: 58ch;
+  color: var(--catalog-section-intro-color, var(--color-text-muted));
+  max-width: none;
+}
+
+/* Featured desc → match rationale row `.words-card__summary` (0.84rem), not the global 0.68rem embed token. */
+.songbooks-page__featured-spotlight .catalog-featured-embed-copy__desc {
+  font-size: 0.84rem;
+  line-height: 1.42;
+}
+
+/* List-mode SC player (no visual cover), same shell height as /listen featured. */
+.songbooks-page__featured-spotlight .catalog-lazy-sc-embed,
+.songbooks-page__featured-spotlight .sc-embed-frame {
+  width: 100%;
+  min-height: 450px;
+}
+
+@media (max-width: 640px) {
+  .songbooks-page__featured-spotlight .catalog-lazy-sc-embed,
+  .songbooks-page__featured-spotlight .sc-embed-frame {
+    min-height: 380px;
+  }
+}
+
+/* Page jump nav: center the link row between the featured rule above and its own bottom rule. */
+.songbooks-page .catalog-page-jump-nav {
+  padding: 0.75rem 0;
+}
+
+.songbooks-page .catalog-page-jump-nav__list {
+  padding-bottom: 0;
 }
 
 .songbooks-page__section-point {

@@ -4,7 +4,7 @@ import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { allSongbooks, songbookHref } from './songbooks'
-import { browsePathWithQuery } from './seoPaths'
+import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
 import { buildBrowsePathForFacet } from './urlState'
 import { ABOUT_SUTRAS_HREF } from './iaPaths'
 import { SUTRA_CONTEXT, sutraEntryBySlug, sutraHrefForFamily } from './sutraContext'
@@ -367,8 +367,14 @@ export function SutraDetailPage() {
             <span className="catalog-breadcrumbs__sep" aria-hidden>
               /
             </span>
-            <Link className="catalog-breadcrumbs__link" to={ABOUT_SUTRAS_HREF}>
+            <Link className="catalog-breadcrumbs__link" to={canonicalPathForRoute('/about')}>
               About
+            </Link>
+            <span className="catalog-breadcrumbs__sep" aria-hidden>
+              /
+            </span>
+            <Link className="catalog-breadcrumbs__link" to={canonicalPathForRoute('/sutras')}>
+              Sutras
             </Link>
             <span className="catalog-breadcrumbs__sep" aria-hidden>
               /

@@ -381,6 +381,8 @@ export type SongbookCatalogItem = {
   sutra_id_rollup: string
   status: string
   description: string
+  /** Short why-this-playlist copy (Airtable SONGBOOKs `songbook_rationale`). */
+  songbook_rationale: string
   sutras: string
   secondary_sutra: string
   topics_primary: string
