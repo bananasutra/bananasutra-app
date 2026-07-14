@@ -383,13 +383,21 @@
   display: block;
 }
 
-/* Page-scoped thumb: 8rem desktop (WordsPage default is 5.5rem). Mobile height stays 7rem
-   from WordsPage.css @520px; re-check visually against the larger desktop size. */
+/* Page-scoped thumb: 8rem on desktop (WordsPage default is 5.5rem).
+   At ≤520px, defer to WordsPage: column-reverse + full-width thumb (7rem). */
 .songbooks-page__rationale-row .words-card__thumb {
   width: 8rem;
   height: 8rem;
   border-radius: var(--radius-sm);
   background: var(--color-bg-inset);
+}
+
+@media (max-width: 520px) {
+  .songbooks-page__rationale-row .words-card__thumb {
+    width: 100%;
+    height: 7rem;
+    align-self: stretch;
+  }
 }
 
 .songbooks-page__rationale-title {
