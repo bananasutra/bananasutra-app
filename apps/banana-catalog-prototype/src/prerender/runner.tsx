@@ -63,6 +63,7 @@ function ensureCatalogSeeded() {
     quotes: data.quotes,
     youtubeByLyricsId: data.youtubeByLyricsId,
     trackCatalog: data.trackCatalog,
+    youtubePlaylists: data.youtubePlaylists,
   })
   seeded = true
 }

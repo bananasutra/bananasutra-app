@@ -9,6 +9,7 @@ import type {
   SongEpVolume,
   TrackCatalogItem,
   YouTubeCatalogVideo,
+  YouTubePlaylistCatalogItem,
 } from './types'
 
 let songCatalogResolved: SongCatalogItem[] | null = null
@@ -597,6 +598,8 @@ let youtubeResolved: Record<string, YouTubeCatalogVideo[]> | null = null
 let youtubePromise: Promise<Record<string, YouTubeCatalogVideo[]>> | null = null
 let trackCatalogResolved: TrackCatalogItem[] | null = null
 let trackCatalogPromise: Promise<TrackCatalogItem[]> | null = null
+let youtubePlaylistsResolved: YouTubePlaylistCatalogItem[] | null = null
+let youtubePlaylistsPromise: Promise<YouTubePlaylistCatalogItem[]> | null = null
 
 /** Sync peek for prerendered / already-fetched youtube map (null until resolved). */
 export function getYoutubeByLyricsIdSync(): Record<string, YouTubeCatalogVideo[]> | null {
@@ -606,6 +609,11 @@ export function getYoutubeByLyricsIdSync(): Record<string, YouTubeCatalogVideo[]
 /** Sync peek for prerendered / already-fetched track catalog (null until resolved). */
 export function getTrackCatalogSync(): TrackCatalogItem[] | null {
   return trackCatalogResolved
+}
+
+/** Sync peek for prerendered / already-fetched YouTube playlists (null until resolved). */
+export function getYoutubePlaylistsSync(): YouTubePlaylistCatalogItem[] | null {
+  return youtubePlaylistsResolved
 }
 
 /** Grouped YT rows — shared cache for discovery, videos hub, song detail. */
@@ -651,6 +659,28 @@ export async function loadTrackCatalog(): Promise<TrackCatalogItem[]> {
   return trackCatalogPromise
 }
 
+/** In-app YouTube playlists — shared cache for /watch and songbook pages. */
+export async function loadYoutubePlaylistsCatalog(): Promise<YouTubePlaylistCatalogItem[]> {
+  if (youtubePlaylistsResolved) return youtubePlaylistsResolved
+  if (!youtubePlaylistsPromise) {
+    youtubePlaylistsPromise = fetchCatalogData(catalogDataFileUrl('youtube_playlists_catalog.json'))
+      .then((r) => {
+        if (!r.ok) throw new Error(`youtube_playlists_catalog.json: HTTP ${r.status}`)
+        return r.json() as Promise<unknown>
+      })
+      .then((rows) => {
+        if (!Array.isArray(rows)) throw new Error('Invalid youtube playlists payload')
+        youtubePlaylistsResolved = rows as YouTubePlaylistCatalogItem[]
+        return youtubePlaylistsResolved
+      })
+      .catch((e) => {
+        youtubePlaylistsPromise = null
+        throw e
+      })
+  }
+  return youtubePlaylistsPromise
+}
+
 /** R24 pre-render: seed module caches from disk (call before `renderToString`). */
 export function seedBuildTimeCatalogCaches(data: {
   songCatalog?: SongCatalogItem[]
@@ -661,6 +691,7 @@ export function seedBuildTimeCatalogCaches(data: {
   quotes?: QuoteWallItem[]
   youtubeByLyricsId?: Record<string, YouTubeCatalogVideo[]>
   trackCatalog?: TrackCatalogItem[]
+  youtubePlaylists?: YouTubePlaylistCatalogItem[]
 }): void {
   if (data.songCatalog) {
     songCatalogResolved = data.songCatalog
@@ -693,5 +724,9 @@ export function seedBuildTimeCatalogCaches(data: {
   if (data.trackCatalog) {
     trackCatalogResolved = data.trackCatalog
     trackCatalogPromise = null
+  }
+  if (data.youtubePlaylists) {
+    youtubePlaylistsResolved = data.youtubePlaylists
+    youtubePlaylistsPromise = null
   }
 }

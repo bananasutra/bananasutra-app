@@ -11,6 +11,7 @@ import type {
   SongDetailRecord,
   TrackCatalogItem,
   YouTubeCatalogVideo,
+  YouTubePlaylistCatalogItem,
 } from '../catalog/types'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -89,12 +90,14 @@ export type SeededCatalogData = {
   quotes: QuoteWallItem[]
   youtubeByLyricsId: Record<string, YouTubeCatalogVideo[]>
   trackCatalog: TrackCatalogItem[]
+  youtubePlaylists: YouTubePlaylistCatalogItem[]
 }
 
 export function loadSeededCatalogData(): SeededCatalogData {
   const songCatalog = readJson<SongCatalogItem[]>('song_catalog.json')
   const browseRaw = readJson<Partial<SongCatalogItem>[]>('song_catalog_browse.json')
   const trackCatalog = readJson<TrackCatalogItem[]>('track_catalog.json')
+  const youtubePlaylists = readJson<YouTubePlaylistCatalogItem[]>('youtube_playlists_catalog.json')
   return {
     songCatalog: Array.isArray(songCatalog) ? songCatalog : [],
     songCatalogBrowse: Array.isArray(browseRaw) ? browseRaw.map(normalizeBrowseSongRow) : [],
@@ -104,5 +107,6 @@ export function loadSeededCatalogData(): SeededCatalogData {
     quotes: readJson<QuoteWallItem[]>('quotes_wall.json'),
     youtubeByLyricsId: readJson<Record<string, YouTubeCatalogVideo[]>>('youtube_by_lyrics_id.json'),
     trackCatalog: Array.isArray(trackCatalog) ? trackCatalog : [],
+    youtubePlaylists: Array.isArray(youtubePlaylists) ? youtubePlaylists : [],
   }
 }
