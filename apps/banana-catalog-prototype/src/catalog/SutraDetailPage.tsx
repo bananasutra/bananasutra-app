@@ -367,8 +367,14 @@ export function SutraDetailPage() {
             <span className="catalog-breadcrumbs__sep" aria-hidden>
               /
             </span>
-            <Link className="catalog-breadcrumbs__link" to={ABOUT_SUTRAS_HREF}>
+            <Link className="catalog-breadcrumbs__link" to={canonicalPathForRoute('/about')}>
               About
+            </Link>
+            <span className="catalog-breadcrumbs__sep" aria-hidden>
+              /
+            </span>
+            <Link className="catalog-breadcrumbs__link" to={canonicalPathForRoute('/sutras')}>
+              Sutras
             </Link>
             <span className="catalog-breadcrumbs__sep" aria-hidden>
               /
