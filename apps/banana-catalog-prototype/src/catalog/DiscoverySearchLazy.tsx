@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import type { DiscoverySearchProps } from './DiscoverySearch'
 import { DISCOVERY_SEARCH_OPEN_EVENT, HEADER_DESKTOP_SEARCH_FIELD_MQ } from './discoverySearchConstants'
+import { isCatalogPrerender } from '../prerender/prerenderFlag'
 
 const DiscoverySearchRoot = lazy(() =>
   import('./DiscoverySearch').then((m) => ({ default: m.DiscoverySearch })),
@@ -46,7 +47,8 @@ export function DiscoverySearchLazy(props: DiscoverySearchProps) {
     return () => window.removeEventListener(DISCOVERY_SEARCH_OPEN_EVENT, onOpen)
   }, [shouldDefer])
 
-  if (!mountSearch) {
+  // `renderToString` cannot suspend — emit the static shell during R24 prerender.
+  if (!mountSearch || isCatalogPrerender()) {
     return (
       <button
         type="button"

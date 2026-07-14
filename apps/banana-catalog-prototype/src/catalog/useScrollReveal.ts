@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react'
+import { isCatalogPrerender } from '../prerender/prerenderFlag'
 
 const SCROLL_REVEAL_OBSERVER: IntersectionObserverInit = {
   threshold: 0,
@@ -7,6 +8,8 @@ const SCROLL_REVEAL_OBSERVER: IntersectionObserverInit = {
 
 function scrollRevealStartsVisible(immediate: boolean): boolean {
   if (immediate) return true
+  // happy-dom has IntersectionObserver but layout effects never run during renderToString.
+  if (isCatalogPrerender()) return true
   if (typeof window === 'undefined') return true
   return !('IntersectionObserver' in window)
 }

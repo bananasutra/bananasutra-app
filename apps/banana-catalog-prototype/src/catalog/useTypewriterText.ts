@@ -9,30 +9,32 @@ type Options = {
 /** Character-by-character pull-quote typing; instant when prefers-reduced-motion. */
 export function useTypewriterText(fullText: string, options: Options = {}): string {
   const msPerChar = options.msPerChar ?? DEFAULT_MS_PER_CHAR
-  const [typedText, setTypedText] = useState('')
+  const full = (fullText || '').trim()
+  // Start with full text so R24 prerender / first paint expose the quote to crawlers + print.
+  const [typedText, setTypedText] = useState(full)
   const intervalRef = useRef<number | undefined>(undefined)
 
   useEffect(() => {
-    const full = (fullText || '').trim()
+    const next = (fullText || '').trim()
     if (intervalRef.current !== undefined) {
       window.clearInterval(intervalRef.current)
       intervalRef.current = undefined
     }
-    if (!full) {
+    if (!next) {
       queueMicrotask(() => setTypedText(''))
       return
     }
     const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
     if (reducedMotion) {
-      queueMicrotask(() => setTypedText(full))
+      queueMicrotask(() => setTypedText(next))
       return
     }
     queueMicrotask(() => setTypedText(''))
     let idx = 0
     intervalRef.current = window.setInterval(() => {
       idx += 1
-      setTypedText(full.slice(0, idx))
-      if (idx >= full.length && intervalRef.current !== undefined) {
+      setTypedText(next.slice(0, idx))
+      if (idx >= next.length && intervalRef.current !== undefined) {
         window.clearInterval(intervalRef.current)
         intervalRef.current = undefined
       }

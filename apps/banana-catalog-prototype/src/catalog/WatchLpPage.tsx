@@ -7,7 +7,7 @@ import {
 } from './CatalogVideoSpotlight'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { useSongCatalogBrowse } from './generatedData'
+import { getYoutubeByLyricsIdSync, useSongCatalogBrowse } from './generatedData'
 import { canonicalPathForRoute } from './seoPaths'
 import { songCatalogLinkTo } from './songPaths'
 import type { YouTubeCatalogVideo, YouTubePlaylistCatalogItem } from './types'
@@ -74,7 +74,11 @@ export function WatchLpPage() {
   const spotlightYtRef = useRef<HTMLIFrameElement>(null)
   const playlistYtRef = useRef<HTMLIFrameElement>(null)
   const { data: songCatalogRows } = useSongCatalogBrowse()
-  const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[] | null>(null)
+  const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[] | null>(() => {
+    const seeded = getYoutubeByLyricsIdSync()
+    if (!seeded) return null
+    return dedupeYoutubeVideosByVideoId(Object.values(seeded).flat())
+  })
   const [playlists, setPlaylists] = useState<YouTubePlaylistCatalogItem[] | null>(null)
   const [catalogLoadError, setCatalogLoadError] = useState<string | null>(null)
   const [activeSutra, setActiveSutra] = useState<WatchLpSutraFilter>('ALL')

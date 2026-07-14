@@ -8,6 +8,7 @@ import { renderToString } from 'react-dom/server'
 import type { HelmetServerState } from 'react-helmet-async'
 import { HelmetProvider } from 'react-helmet-async'
 import { AppPrerender } from './AppPrerender'
+import { setCatalogPrerenderActive } from './prerenderFlag'
 import { loadSeededCatalogData } from './seedCatalogCaches'
 import { seedBuildTimeCatalogCaches } from '../catalog/generatedData'
 
@@ -61,6 +62,7 @@ function ensureCatalogSeeded() {
     muses: data.muses,
     quotes: data.quotes,
     youtubeByLyricsId: data.youtubeByLyricsId,
+    trackCatalog: data.trackCatalog,
   })
   seeded = true
 }
@@ -71,11 +73,17 @@ export function renderRoute(pathname: string, origin = 'https://bananasutra.com'
   ensureCatalogSeeded()
 
   const helmetContext: { helmet?: HelmetServerState } = {}
-  const bodyHtml = renderToString(
-    <HelmetProvider context={helmetContext}>
-      <AppPrerender location={pathname} />
-    </HelmetProvider>,
-  )
+  setCatalogPrerenderActive(true)
+  let bodyHtml = ''
+  try {
+    bodyHtml = renderToString(
+      <HelmetProvider context={helmetContext}>
+        <AppPrerender location={pathname} />
+      </HelmetProvider>,
+    )
+  } finally {
+    setCatalogPrerenderActive(false)
+  }
 
   const helmet = helmetContext.helmet
   const helmetHead = helmet
