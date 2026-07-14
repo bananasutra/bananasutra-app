@@ -52,6 +52,9 @@ function AboutSutraMatrixCard({
           </span>
           {entry.themes}
         </div>
+        <p className="about-page__sutra-list-counts">
+          {formatCount(stats.songs)} songs · {formatCount(stats.tracks)} tracks
+        </p>
       </div>
       {(entry.sutra_when || '').trim() || (entry.sutra_card_essence || '').trim() ? (
         <div className="about-page__sutra-list-meta">
@@ -63,9 +66,6 @@ function AboutSutraMatrixCard({
           ) : null}
         </div>
       ) : null}
-      <p className="about-page__sutra-list-counts">
-        {formatCount(stats.songs)} songs · {formatCount(stats.tracks)} tracks
-      </p>
       <span className="about-page__sutra-list-cta" aria-hidden>
         Explore {sutraDisplayName} →
       </span>

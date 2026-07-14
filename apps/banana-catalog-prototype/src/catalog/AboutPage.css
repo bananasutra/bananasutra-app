@@ -165,7 +165,7 @@
 }
 
 .about-page__sutra-quack-kicker {
-  margin: 0 0 0.35rem;
+  margin: 1.15rem 0 0.4rem;
   font: 600 0.62rem/1.35 var(--font-ui);
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -232,13 +232,18 @@
   width: 100%;
 }
 
-/* Match songbook rationale `.words-card__summary` scale (was ~0.82em of a larger card base). */
-.about-page__sutra-list--index-grid .about-page__sutra-list-meta {
-  font-size: 0.84rem;
-  line-height: 1.42;
+/* Body when/essence: step down so each sentence stays on one line in the 2-col cards. */
+.about-page__sutra-list--index-grid .about-page__sutra-list-meta,
+.about-page__sutra-list-item--quack .about-page__sutra-list-meta {
+  font-size: 0.72rem;
+  line-height: 1.4;
 }
 
-.about-page__sutra-list--index-grid .about-page__sutra-list-counts {
+.about-page__sutra-list-heading .about-page__sutra-list-counts {
+  margin-top: 0.35rem;
+}
+
+.about-page__sutra-list--index-grid .about-page__sutra-list-cta {
   margin-top: auto;
 }
 
