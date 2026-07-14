@@ -524,7 +524,8 @@
 .about-tab-row {
   display: flex;
   gap: 0;
-  margin: 0 0 var(--about-section-pad-y);
+  /* No bottom margin — first section’s pad-top already opens the band (was stacking to ~3.3rem). */
+  margin: 0;
   overflow-x: auto;
   border-bottom: 1px solid var(--color-border);
   -webkit-overflow-scrolling: touch;
