@@ -384,7 +384,8 @@
 }
 
 /* Page-scoped thumb: 8rem on desktop (WordsPage default is 5.5rem).
-   At ≤520px, defer to WordsPage: column-reverse + full-width thumb (7rem). */
+   Mobile: full-width square — playlist art has title text baked in; Words’ 7rem
+   landscape crop clips that. Keep aspect-ratio 1 instead. */
 .songbooks-page__rationale-row .words-card__thumb {
   width: 8rem;
   height: 8rem;
@@ -395,7 +396,8 @@
 @media (max-width: 520px) {
   .songbooks-page__rationale-row .words-card__thumb {
     width: 100%;
-    height: 7rem;
+    height: auto;
+    aspect-ratio: 1;
     align-self: stretch;
   }
 }
