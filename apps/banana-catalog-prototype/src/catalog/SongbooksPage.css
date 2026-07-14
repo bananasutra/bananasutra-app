@@ -7,9 +7,11 @@
   min-width: 0;
 }
 
-/* Match /watch + /listen: rule closes the intro so featured reads as its own section. */
+/* Match /watch + /listen: rule closes the intro so featured reads as its own section.
+   Equal pad above/below the rule (song-catalog’s tighter mobile after-intro-gap made above look short). */
 .songbooks-page__intro {
   border-bottom: var(--catalog-shell-rule);
+  padding-bottom: var(--catalog-shell-section-pad-y);
 }
 
 .songbooks-page__sections {
@@ -112,6 +114,7 @@
 /* Random featured songbook on each visit (moved from homepage for R18). */
 .songbooks-page__featured-rotator {
   min-width: 0;
+  padding-top: var(--catalog-shell-section-pad-y);
 }
 
 .songbooks-page__featured-rotator .catalog-section-title {
