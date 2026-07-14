@@ -243,8 +243,10 @@
   margin-top: 0.35rem;
 }
 
-.about-page__sutra-list--index-grid .about-page__sutra-list-cta {
+.about-page__sutra-list--index-grid .about-page__sutra-list-cta,
+.about-page__sutra-list-item--quack .about-page__sutra-list-cta {
   margin-top: auto;
+  padding-top: 0.9rem;
 }
 
 .about-page__sutra-list-item--hero {
@@ -452,7 +454,7 @@
 
 .about-page__sutra-list-cta {
   display: block;
-  margin-top: 0.5rem;
+  margin-top: 0.85rem;
   font: 700 0.62rem/1.35 var(--font-ui);
   letter-spacing: 0.06em;
   text-transform: uppercase;
