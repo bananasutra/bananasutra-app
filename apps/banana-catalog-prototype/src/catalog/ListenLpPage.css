@@ -826,3 +826,15 @@
 .listen-lp__bertrand-cta:hover {
   text-decoration: underline;
 }
+
+@media print {
+  .listen-lp__rail-list {
+    flex-wrap: wrap !important;
+  }
+
+  .listen-lp__rail-cell {
+    width: 7.5rem !important;
+    max-width: 7.5rem !important;
+    min-width: 0 !important;
+  }
+}

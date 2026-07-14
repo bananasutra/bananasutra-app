@@ -4,8 +4,14 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { MuseCatalogItem, QuoteWallItem, SongCatalogItem, SongDetailRecord } from '../catalog/types'
-import type { YouTubeCatalogVideo } from '../catalog/types'
+import type {
+  MuseCatalogItem,
+  QuoteWallItem,
+  SongCatalogItem,
+  SongDetailRecord,
+  TrackCatalogItem,
+  YouTubeCatalogVideo,
+} from '../catalog/types'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const generatedDir = path.join(__dirname, '../data/generated')
@@ -82,11 +88,13 @@ export type SeededCatalogData = {
   muses: MuseCatalogItem[]
   quotes: QuoteWallItem[]
   youtubeByLyricsId: Record<string, YouTubeCatalogVideo[]>
+  trackCatalog: TrackCatalogItem[]
 }
 
 export function loadSeededCatalogData(): SeededCatalogData {
   const songCatalog = readJson<SongCatalogItem[]>('song_catalog.json')
   const browseRaw = readJson<Partial<SongCatalogItem>[]>('song_catalog_browse.json')
+  const trackCatalog = readJson<TrackCatalogItem[]>('track_catalog.json')
   return {
     songCatalog: Array.isArray(songCatalog) ? songCatalog : [],
     songCatalogBrowse: Array.isArray(browseRaw) ? browseRaw.map(normalizeBrowseSongRow) : [],
@@ -95,5 +103,6 @@ export function loadSeededCatalogData(): SeededCatalogData {
     muses: readJson<MuseCatalogItem[]>('muses_catalog.json'),
     quotes: readJson<QuoteWallItem[]>('quotes_wall.json'),
     youtubeByLyricsId: readJson<Record<string, YouTubeCatalogVideo[]>>('youtube_by_lyrics_id.json'),
+    trackCatalog: Array.isArray(trackCatalog) ? trackCatalog : [],
   }
 }

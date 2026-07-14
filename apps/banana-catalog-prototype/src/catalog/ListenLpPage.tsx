@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
+import { getTrackCatalogSync, loadTrackCatalog, useSongCatalogBrowse } from './generatedData'
 import { FeaturedSongbookSpotlight } from './FeaturedSongbookSpotlight'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
@@ -30,7 +30,6 @@ import {
 } from './listenLpData'
 import { buildListenLpWhatsNewPicks, pickWhatsNewSpotlightSongs } from './listenLpWhatsNewData'
 import { browseRowHasAudioSection, songCatalogLinkTo } from './songPaths'
-import { useSongCatalogBrowse } from './generatedData'
 import { canonicalPathForRoute } from './seoPaths'
 import type { TrackCatalogItem } from './types'
 import { renderPageMeta } from './usePageMeta'
@@ -62,30 +61,31 @@ export function ListenLpPage() {
   const [activeSutra, setActiveSutra] = useState<ListenLpSutraFilter>('ALL')
   const [activeGenre, setActiveGenre] = useState('ALL')
   const [showAllSongbooks, setShowAllSongbooks] = useState(false)
-  const [trackCatalog, setTrackCatalog] = useState<TrackCatalogItem[] | null>(null)
+  const [trackCatalog, setTrackCatalog] = useState<TrackCatalogItem[] | null>(() => getTrackCatalogSync())
   const [trackLoadError, setTrackLoadError] = useState<string | null>(null)
   const { data: songCatalogRows } = useSongCatalogBrowse()
 
   useEffect(() => {
     let cancelled = false
-    const loadCatalog = async () => {
-      try {
-        const r = await fetchCatalogData(catalogDataFileUrl('track_catalog.json'))
-        if (!r.ok) throw new Error(`HTTP ${r.status}`)
-        const rows = (await r.json()) as unknown
-        if (!Array.isArray(rows)) throw new Error('Invalid track catalog payload')
+    const seeded = getTrackCatalogSync()
+    if (seeded) {
+      setTrackCatalog(seeded)
+      setTrackLoadError(null)
+      return
+    }
+    void loadTrackCatalog()
+      .then((rows) => {
         if (!cancelled) {
           setTrackLoadError(null)
-          setTrackCatalog(rows as TrackCatalogItem[])
+          setTrackCatalog(rows)
         }
-      } catch {
+      })
+      .catch(() => {
         if (!cancelled) {
           setTrackCatalog(null)
           setTrackLoadError('Could not load track catalog data.')
         }
-      }
-    }
-    void loadCatalog()
+      })
     return () => {
       cancelled = true
     }
