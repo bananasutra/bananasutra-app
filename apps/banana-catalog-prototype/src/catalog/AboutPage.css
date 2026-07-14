@@ -1007,3 +1007,13 @@
     padding-bottom: 1.75rem;
   }
 }
+
+@media print {
+  .about-filter-group {
+    overflow: visible !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    flex-wrap: wrap;
+    padding-right: 0;
+  }
+}

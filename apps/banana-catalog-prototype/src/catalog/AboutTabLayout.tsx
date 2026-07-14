@@ -13,8 +13,24 @@ const ABOUT_TABS = [
   { to: canonicalPathForRoute('/quotes'), label: 'Quotes', end: false },
 ] as const
 
+const ABOUT_TAB_H1: Record<(typeof ABOUT_TABS)[number]['label'], string> = {
+  About: 'Ideas you can feel.',
+  Sutras: 'The seven sutras',
+  Muses: 'The muses',
+  Quotes: 'The quotes',
+}
+
+function normalizeAboutPath(pathname: string): string {
+  if (pathname.length > 1 && pathname.endsWith('/')) return pathname.slice(0, -1)
+  return pathname
+}
+
 function activeAboutLabel(pathname: string): string {
-  const tab = ABOUT_TABS.find((item) => (item.end ? pathname === item.to : pathname.startsWith(item.to)))
+  const path = normalizeAboutPath(pathname)
+  const tab = ABOUT_TABS.find((item) => {
+    const to = normalizeAboutPath(item.to)
+    return item.end ? path === to : path === to || path.startsWith(`${to}/`)
+  })
   return tab?.label ?? 'About'
 }
 
@@ -23,6 +39,7 @@ export function AboutTabLayout({ children }: { children: ReactNode }) {
   const headerRef = useRef<HTMLElement>(null)
   const location = useLocation()
   const currentLabel = activeAboutLabel(location.pathname)
+  const pageH1 = ABOUT_TAB_H1[currentLabel as keyof typeof ABOUT_TAB_H1] ?? ABOUT_TAB_H1.About
 
   useSyncCatalogHeaderHeight(pageRef, headerRef, [location.pathname])
 
@@ -58,9 +75,11 @@ export function AboutTabLayout({ children }: { children: ReactNode }) {
           </nav>
 
           <header className="catalog-page-intro">
-            <h1 className="catalog-page-h1">Ideas you can feel.</h1>
+            <h1 className="catalog-page-h1">{pageH1}</h1>
             <p className="catalog-page-sub">
-              Songs for a world gone bananas. This is us in sonderland.
+              {currentLabel === 'About'
+                ? 'Songs for a world gone bananas. This is us in sonderland.'
+                : 'Ideas you can feel. Songs for a world gone bananas.'}
             </p>
           </header>
 

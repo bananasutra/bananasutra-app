@@ -348,3 +348,8 @@
   text-decoration: underline;
 }
 
+@media print {
+  .watch-lp__playlist-grid {
+    content-visibility: visible !important;
+  }
+}

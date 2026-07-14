@@ -1123,3 +1123,12 @@
     transform: none;
   }
 }
+
+@media print {
+  .catalog-scroll-reveal.is-visible .learn-lp__mood-btn,
+  .learn-lp__mood-btn {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

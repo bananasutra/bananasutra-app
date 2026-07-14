@@ -105,7 +105,7 @@ export function AboutSutrasContent() {
     <div className="about-page__body">
       {pageMeta}
       <section className="about-page__section" aria-labelledby="sutras">
-        <h2 id="sutras" className="catalog-section-title about-page__anchor-target">
+        <h2 id="sutras" className="visually-hidden about-page__anchor-target">
           The seven sutras
         </h2>
         <div className="about-page__prose">

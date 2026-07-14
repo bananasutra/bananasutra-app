@@ -18,6 +18,11 @@ export const SPA_PATH_PREFIXES: readonly string[] = [
   "/songbooks",
   "/tracks",
   "/videos",
+  "/learn",
+  "/listen",
+  "/watch",
+  "/manifesto",
+  "/privacy",
   "/style-guide",
   "/sitemap",
 ] as const;

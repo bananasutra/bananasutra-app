@@ -458,7 +458,7 @@ export function MuseCardGrid() {
     return (
       <div className="about-page__body about-page__body--muses about-page__body--loading">
         <section className="about-page__section about-page__section--loading" aria-labelledby="muses-title-loading">
-          <h2 id="muses-title-loading" className="catalog-section-title about-page__anchor-target">
+          <h2 id="muses-title-loading" className="visually-hidden about-page__anchor-target">
             The muses
           </h2>
           <p className="about-page__prose">Loading muses...</p>
@@ -472,7 +472,7 @@ export function MuseCardGrid() {
     <div className="about-page__body about-page__body--muses">
       {pageMeta}
       <section className="about-page__section about-page__section--muses" aria-labelledby="muses-title">
-        <h2 id="muses-title" className="catalog-section-title about-page__anchor-target">
+        <h2 id="muses-title" className="visually-hidden about-page__anchor-target">
           The muses
         </h2>
         <p className="catalog-lp-section-intro">

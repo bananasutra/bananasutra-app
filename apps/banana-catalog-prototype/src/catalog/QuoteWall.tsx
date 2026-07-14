@@ -404,7 +404,7 @@ export function QuoteWall() {
     return (
       <div className="about-page__body about-page__body--quotes about-page__body--loading">
         <section className="about-page__section about-page__section--loading" aria-labelledby="quotes-title-loading">
-          <h2 id="quotes-title-loading" className="catalog-section-title about-page__anchor-target">
+          <h2 id="quotes-title-loading" className="visually-hidden about-page__anchor-target">
             The quotes
           </h2>
           <p className="about-page__prose">Loading quotes...</p>
@@ -418,7 +418,7 @@ export function QuoteWall() {
     <div className="about-page__body about-page__body--quotes">
       {pageMeta}
       <section className="about-page__section" aria-labelledby="quotes-title">
-        <h2 id="quotes-title" className="catalog-section-title about-page__anchor-target">
+        <h2 id="quotes-title" className="visually-hidden about-page__anchor-target">
           The quotes
         </h2>
         <p className="catalog-lp-section-intro">
