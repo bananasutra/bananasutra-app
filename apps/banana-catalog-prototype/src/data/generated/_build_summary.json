@@ -73,7 +73,7 @@
     },
     "songbooks": {
       "path": "AIRTABLE/snapshots/2026-07-11/clean/songbooks-2026-07-11.csv",
-      "sha256": "bde234f877318c578160290002d3c5240e451bf535e9e60f9752f15abde59de9",
+      "sha256": "b9574d5c531fbccdb4fc7f76f4013f29dae356b32458ec314c7b7b97de021a41",
       "rows": 44
     },
     "sc_playlists": {

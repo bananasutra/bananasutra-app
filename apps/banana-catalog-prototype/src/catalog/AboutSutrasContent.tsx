@@ -124,13 +124,19 @@ export function AboutSutrasContent() {
         </div>
 
         <div className="about-page__sutra-matrix">
-          <ul className="about-page__sutra-list" aria-label="The seven sutras with question, practice, and themes">
+          <ul className="about-page__sutra-list about-page__sutra-list--index-grid" aria-label="The seven sutras with question, practice, and themes">
             {SUTRA_INDEX_CORE_ORDER.map((key) => {
               const entry = SUTRA_CONTEXT[key]
               const stats = sutraStats.get(key) ?? { songs: 0, tracks: 0 }
+              const isHero = key === 'KNOW'
               return (
-                <li key={key}>
-                  <AboutSutraMatrixCard familyKey={key} entry={entry} stats={stats} />
+                <li key={key} className={isHero ? 'about-page__sutra-list-cell--hero' : undefined}>
+                  <AboutSutraMatrixCard
+                    familyKey={key}
+                    entry={entry}
+                    stats={stats}
+                    itemClassName={isHero ? 'about-page__sutra-list-item--hero' : undefined}
+                  />
                 </li>
               )
             })}
