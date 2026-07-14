@@ -335,7 +335,12 @@ export function SongbooksPage() {
                 stackedVariant="listen-lp"
                 ctaTo={songbookHref(featuredSongbook.songbook)}
                 embed={
-                  <LazySoundCloudEmbed scUrl={featuredSongbook.playlist_url} title={featuredSongbook.songbook} />
+                  <LazySoundCloudEmbed
+                    scUrl={featuredSongbook.playlist_url}
+                    title={featuredSongbook.songbook}
+                    mode="list"
+                    height={450}
+                  />
                 }
               />
             </ScrollRevealSection>

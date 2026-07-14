@@ -429,7 +429,36 @@
   font: 400 var(--catalog-section-intro-font-size, 0.82rem) / var(--catalog-section-intro-line-height, 1.5)
     var(--font-body);
   color: var(--catalog-section-intro-color, var(--color-text-muted));
-  max-width: 58ch;
+  max-width: none;
+}
+
+/* Featured desc → match rationale row `.words-card__summary` (0.84rem), not the global 0.68rem embed token. */
+.songbooks-page__featured-spotlight .catalog-featured-embed-copy__desc {
+  font-size: 0.84rem;
+  line-height: 1.42;
+}
+
+/* List-mode SC player (no visual cover), same shell height as /listen featured. */
+.songbooks-page__featured-spotlight .catalog-lazy-sc-embed,
+.songbooks-page__featured-spotlight .sc-embed-frame {
+  width: 100%;
+  min-height: 450px;
+}
+
+@media (max-width: 640px) {
+  .songbooks-page__featured-spotlight .catalog-lazy-sc-embed,
+  .songbooks-page__featured-spotlight .sc-embed-frame {
+    min-height: 380px;
+  }
+}
+
+/* Page jump nav: center the link row between the featured rule above and its own bottom rule. */
+.songbooks-page .catalog-page-jump-nav {
+  padding: 0.75rem 0;
+}
+
+.songbooks-page .catalog-page-jump-nav__list {
+  padding-bottom: 0;
 }
 
 .songbooks-page__section-point {
