@@ -388,8 +388,41 @@ a:focus-visible {
 }
 
 @media print {
-  :root {
-    /* Same horizontal inset as `.catalog.catalog-page { padding: 0 1rem … }` */
+  :root,
+  :root[data-theme='light'],
+  :root[data-theme='dark'] {
+    color-scheme: light !important;
+
+    /* Force light printable tokens regardless of live theme. */
+    --color-bg-page: #ffffff;
+    --color-bg-shell: #ffffff;
+    --color-bg-elevated: #ffffff;
+    --color-bg-panel: #ffffff;
+    --color-bg-inset: #ffffff;
+    --color-text-primary: #111111;
+    --color-text-strong: #000000;
+    --color-text-muted: #222222;
+    --color-text-faint: #333333;
+    --color-border: #cccccc;
+    --color-border-strong: #999999;
+    --color-link: #000000;
+    --color-link-hover: #000000;
+    --color-link-visited: #000000;
+    --color-accent: #000000;
+    --color-accent-soft: transparent;
+    --color-accent-on: #ffffff;
+    --color-focus: #000000;
+    --focus-ring-color: #000000;
+    --color-inline-link: #000000;
+    --color-inline-link-hover: #000000;
+    --color-inline-link-visited: #000000;
+    --color-hero-gradient: none;
+    --catalog-row-hover-shadow: none;
+    --catalog-track-row-selected-border: #cccccc;
+    --catalog-track-row-selected-bg: #ffffff;
+    --catalog-section-intro-color: #222222;
+    --catalog-breadcrumb-color-rail: #333333;
+    --catalog-breadcrumb-color-current: #222222;
     --print-chrome-pad-x: 1rem;
     --print-chrome-pad-top: var(--catalog-breadcrumb-margin-top, 0.75rem);
   }
@@ -399,17 +432,23 @@ a:focus-visible {
   }
 
   html {
-    -webkit-print-color-adjust: economy;
-    print-color-adjust: economy;
+    /* Keep print readable: do not honor ink-saving that preserves dark fills. */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background: #fff !important;
   }
 
   body {
     margin: 0;
     padding: 0;
     font-family: var(--font-body);
+    background: #fff !important;
+    background-image: none !important;
+    color: #000 !important;
   }
 
   body,
+  #root,
   .catalog,
   .catalog-page,
   .catalog-page__main,
@@ -421,15 +460,44 @@ a:focus-visible {
   .song-detail-lyrics-pre,
   .catalog-breadcrumbs,
   .catalog-page-intro,
-  .quote-item {
+  .quote-item,
+  .home-portal,
+  .home-portal__main,
+  .listen-lp,
+  .watch-lp,
+  .learn-lp {
     background: #fff !important;
     background-color: #fff !important;
+    background-image: none !important;
     color: #000 !important;
+  }
+
+  /* Broad safety: no element keeps a dark theme fill under the print sheet. */
+  #root *:not(img):not(svg):not(path):not(circle):not(rect) {
+    background-image: none !important;
   }
 
   * {
     box-shadow: none !important;
     text-shadow: none !important;
+  }
+
+  /* Prefer inked text over faint/on-dark tones that survive via component CSS. */
+  #root,
+  #root p,
+  #root li,
+  #root span,
+  #root h1,
+  #root h2,
+  #root h3,
+  #root h4,
+  #root time,
+  #root label,
+  #root button,
+  #root a,
+  #root pre,
+  #root blockquote {
+    color: #000 !important;
   }
 
   a {
@@ -452,7 +520,12 @@ a:focus-visible {
   .yt-embed-client-placeholder,
   .catalog-media-outbound,
   .nav-route-loading-bar,
-  .skip-link {
+  .skip-link,
+  .persistent-player-shell,
+  .bbb-chat-widget,
+  .catalog-bertrand-cta,
+  .home-bbb-nudge,
+  .song-detail-hero-share {
     display: none !important;
   }
 
@@ -482,7 +555,8 @@ a:focus-visible {
     letter-spacing: normal;
     text-transform: none;
     white-space: pre-wrap;
-    color: #000;
+    color: #000 !important;
+    background: #fff !important;
   }
 
   body::after {
@@ -500,6 +574,35 @@ a:focus-visible {
     line-height: 1.45;
     text-align: center;
     white-space: pre-wrap;
-    color: #444;
+    color: #222 !important;
+    background: #fff !important;
+  }
+
+  /*
+   * Lyrics-only print (song page “Print lyrics” control).
+   * Shows title + taxonomy + lyrics; attribution comes from body::after.
+   */
+  html.print-lyrics-only .song-detail-cover,
+  html.print-lyrics-only .song-detail-summary,
+  html.print-lyrics-only .song-detail-related,
+  html.print-lyrics-only .song-detail-bertrand,
+  html.print-lyrics-only .song-detail-shell-section,
+  html.print-lyrics-only .song-detail-media,
+  html.print-lyrics-only .song-detail-tracks,
+  html.print-lyrics-only .song-detail-player,
+  html.print-lyrics-only .song-detail-audio-playall,
+  html.print-lyrics-only .song-detail-tabs,
+  html.print-lyrics-only .song-detail-split__media,
+  html.print-lyrics-only .song-detail-print-lyrics,
+  html.print-lyrics-only .catalog-breadcrumbs {
+    display: none !important;
+  }
+
+  html.print-lyrics-only .song-detail-hero {
+    grid-template-columns: 1fr !important;
+  }
+
+  html.print-lyrics-only .song-detail-hero-text {
+    max-width: none !important;
   }
 }
