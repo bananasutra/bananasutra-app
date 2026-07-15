@@ -803,6 +803,26 @@
     "muse": "Marie Curie",
     "first_name": "Marie",
     "last_name": "Curie",
+    "muse_id": "",
+    "gender_pronoun": "She",
+    "type_category": "Scientist",
+    "country": "RU/FR",
+    "era": "Early 20th C",
+    "birth_year": "1867",
+    "death_year": "1934",
+    "famous_works": "",
+    "core_sutra": "",
+    "secondary_sutras": "",
+    "themes": "",
+    "notes": "",
+    "quote_excerpt": "",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Marie_Curie",
+    "song_count": 0
+  },
+  {
+    "muse": "Marie Curie",
+    "first_name": "Marie",
+    "last_name": "Curie",
     "muse_id": "M-41",
     "gender_pronoun": "She",
     "type_category": "Scientist,Author",
@@ -1477,6 +1497,26 @@
     "notes": "",
     "quote_excerpt": "There is always light. If only we’re brave enough to see it. If only we’re brave enough to be it.",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Amanda_Gorman",
+    "song_count": 0
+  },
+  {
+    "muse": "Michelle Gurevitch",
+    "first_name": "Michelle",
+    "last_name": "Gurevitch",
+    "muse_id": "M-195",
+    "gender_pronoun": "She",
+    "type_category": "Musician,Songwriter",
+    "country": "CA",
+    "era": "Contemporary",
+    "birth_year": "?",
+    "death_year": "",
+    "famous_works": "I'll Be Your Woman, Chinawoman",
+    "core_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "themes": "",
+    "notes": "",
+    "quote_excerpt": "",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Michelle_Gurevich",
     "song_count": 0
   },
   {
@@ -2277,7 +2317,7 @@
     "notes": "",
     "quote_excerpt": "",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Ada_Lovelace",
-    "song_count": 0
+    "song_count": 1
   },
   {
     "muse": "Wangari Maathai",

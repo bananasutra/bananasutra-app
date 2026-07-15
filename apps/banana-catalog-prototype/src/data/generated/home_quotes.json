@@ -1072,6 +1072,14 @@
     "quote_id": "Q-148"
   },
   {
+    "quote": "One of the saddest lessons of history is this: If we’ve been bamboozled long enough, we tend to reject any evidence of the bamboozle.",
+    "muse": "Carl Sagan",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-149"
+  },
+  {
     "quote": "Music is the only religion that delivers the good.",
     "muse": "Frank Zappa",
     "primary_sutra": "SHOWsutra",
@@ -1174,5 +1182,61 @@
     "secondary_sutras": "KNOWsutra",
     "core_topic": "WISDOM",
     "quote_id": "Q-163"
+  },
+  {
+    "quote": "The world is full of magical things patiently waiting for our wits to grow sharper.",
+    "muse": "Bertrand Russell",
+    "primary_sutra": "GLOWsutra",
+    "secondary_sutras": "FLOWsutra",
+    "core_topic": "BEAUTY",
+    "quote_id": "Q-164"
+  },
+  {
+    "quote": "The only thing that will redeem mankind is cooperation.",
+    "muse": "Bertrand Russell",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-165"
+  },
+  {
+    "quote": "The good life is one inspired by love and guided by knowledge.",
+    "muse": "Bertrand Russell",
+    "primary_sutra": "KNOWsutra",
+    "secondary_sutras": "GLOWsutra",
+    "core_topic": "WISDOM",
+    "quote_id": "Q-166"
+  },
+  {
+    "quote": "War does not determine who is right—only who is left.",
+    "muse": "Bertrand Russell",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "core_topic": "PEACE",
+    "quote_id": "Q-167"
+  },
+  {
+    "quote": "Most people would sooner die than think; in fact, they do.",
+    "muse": "Bertrand Russell",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-168"
+  },
+  {
+    "quote": "People's opinions are mainly designed to make them feel comfortable; truth, for most people, is a secondary consideration.",
+    "muse": "Bertrand Russell",
+    "primary_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-169"
+  },
+  {
+    "quote": "Our planet is a lonely speck in the great enveloping cosmic dark.",
+    "muse": "Carl Sagan",
+    "primary_sutra": "BLOWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "core_topic": "TRUTH",
+    "quote_id": "Q-170"
   }
 ]
