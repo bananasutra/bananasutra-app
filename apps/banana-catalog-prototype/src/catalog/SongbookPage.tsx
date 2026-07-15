@@ -317,9 +317,10 @@ export function SongbookPage() {
               </div>
               <div className="song-detail-hero-text songbooks-page__hero-text--detail">
                 <h1 className="catalog-page-h1 songbooks-page__hero-title">{songbook.songbook}</h1>
-                <div className="song-detail-hero-share">
+                <div className="song-detail-hero-actions" role="group" aria-label="Songbook actions">
                   <ShareButton
-                    variant="chip"
+                    variant="icon"
+                    className="song-detail-hero-action"
                     url={songbookShareUrl(trimmedSlug)}
                     title={songbook.songbook}
                     text={`Listen to "${songbook.songbook}" on Bananasutra`}
