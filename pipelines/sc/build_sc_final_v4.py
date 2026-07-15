@@ -2194,7 +2194,8 @@ def main():
     # clean/sc_eps snapshot so AT-EPS imports do not strip editorial or internal tracking.
     EP_HEADERS = [
         'ep_title', 'ep_url', 'ep_volume', 'ep_rating', 'sutra', 'genres', 'genres_full',
-        'ep_total_tracks', 'track_titles', 'track_ids', 'total_plays', 'total_likes', 'duration_total',
+        'ep_total_tracks', 'track_titles', 'track_ids', 'total_plays', 'total_likes',
+        'ep_engagement_rate', 'duration_total',
         'artwork_url', 'artwork_lg_url', 'lyrics_title', 'lyrics_id', 'ep_in_app',
         'ep_featured', 'ep_description', 'ep_songbook_title',
         'vid_exist', 'vid_ytplaylist', 'vid_yturl',
@@ -2271,6 +2272,7 @@ def main():
             'track_ids':            _format_ep_track_ids(d['track_entries']),
             'total_plays':          d['plays'],
             'total_likes':          d['likes'],
+            'ep_engagement_rate':   engagement_rate_str_from_counts(d['plays'], d['likes']),
             'duration_total':       _secs_to_hms(d['secs']),
             'artwork_url':          artwork_url,
             'artwork_lg_url':       artwork_lg_url,
@@ -2325,6 +2327,7 @@ def main():
                 'track_ids':            '',
                 'total_plays':          0,
                 'total_likes':          0,
+                'ep_engagement_rate':   engagement_rate_str_from_counts(0, 0),
                 'duration_total':       '0:00:00',
                 'artwork_url':          _au_o,
                 'artwork_lg_url':       _alg_o,

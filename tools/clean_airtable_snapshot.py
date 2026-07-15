@@ -509,6 +509,7 @@ HEADER_MAP: dict[str, dict[str, str]] = {
         "TRACK ids": "track_ids",
         "total_plays": "total_plays",
         "total_likes": "total_likes",
+        "ep_engagement_rate": "ep_engagement_rate",
         "duration_total": "duration_total",
         "artwork_url": "artwork_url",
         "artwork_lg_url": "artwork_lg_url",
