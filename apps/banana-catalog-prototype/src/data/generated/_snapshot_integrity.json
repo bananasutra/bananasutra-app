@@ -1,16 +1,16 @@
 {
-  "snapshot_date": "2026-07-11",
+  "snapshot_date": "2026-07-15",
   "rows": {
-    "lyrics": 426,
-    "sc_tracks": 747,
-    "sc_eps": 251
+    "lyrics": 427,
+    "sc_tracks": 760,
+    "sc_eps": 252
   },
   "light_shadow_values": {
-    "LIGHT": 230,
-    "SHADOW": 196
+    "SHADOW": 197,
+    "LIGHT": 230
   },
   "errors": [],
   "warnings": [
-    "sc_eps: non-empty genres=251, genres_full=250 (informational; app facets ignore EP genres)."
+    "sc_eps: non-empty genres=252, genres_full=252 (informational; app facets ignore EP genres)."
   ]
 }
