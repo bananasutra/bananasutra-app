@@ -591,11 +591,52 @@
     var(--song-detail-chrome-label-leading) var(--font-ui);
   letter-spacing: var(--song-detail-chrome-label-tracking);
   text-transform: uppercase;
+  margin: 0;
   color: var(--color-text-faint);
 }
 
+.song-detail-lyrics-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0 0 0.35rem;
+}
+
+.song-detail-lyrics-heading-row .song-detail-chrome-label,
+.song-detail-lyrics-heading-row .catalog-section-title {
+  margin: 0;
+}
+
+.song-detail-print-lyrics {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control, 2px);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font: 600 0.6875rem/1.2 var(--font-ui);
+  letter-spacing: var(--catalog-section-cta-tracking, 0.06em);
+  text-transform: uppercase;
+  padding: 0.2rem 0.45rem;
+  touch-action: manipulation;
+}
+
+.song-detail-print-lyrics:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-panel);
+}
+
+.song-detail-print-lyrics:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
 @container song-detail-media (max-width: 28rem) {
-  .song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-chrome-label {
+  .song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-chrome-label,
+  .song-detail-split--tabbed .song-detail-lyrics-heading-row .song-detail-chrome-label {
     font-size: clamp(0.62rem, 2.6cqi, 0.7rem);
   }
 }
@@ -736,7 +777,9 @@
 
 /* Lyrics column heading beside listen tabs: same chrome scale as tab row (not full section title). */
 .song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-chrome-label,
+.song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-lyrics-heading-row,
 .song-detail-split--tabbed .song-detail-split__lyrics > .song-detail-chrome-label {
+
   margin: 0 0 0.65rem;
   padding-left: var(--space-5);
   padding-right: var(--space-5);
@@ -997,7 +1040,8 @@
     align-items: start;
   }
 
-  .song-detail-split--two-col.song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-chrome-label {
+  .song-detail-split--two-col.song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-chrome-label,
+  .song-detail-split--two-col.song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-lyrics-heading-row {
     margin: 0 0 0.65rem;
     padding: 0.45rem var(--space-5);
     min-height: 2.25rem;
@@ -1683,6 +1727,7 @@ h3.song-detail-youtube-subheading,
   }
 
   .song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-chrome-label,
+  .song-detail-split--tabbed .song-detail-split__lyrics-col > .song-detail-lyrics-heading-row,
   .song-detail-split--tabbed .song-detail-split__lyrics > .song-detail-chrome-label {
     padding-left: 0.88rem;
     padding-right: 0.88rem;
@@ -1774,7 +1819,8 @@ h3.song-detail-youtube-subheading,
   .song-detail-tracks,
   .song-detail-audio-playall,
   .song-detail-panel-expand,
-  .song-detail-split__media {
+  .song-detail-split__media,
+  .song-detail-print-lyrics {
     display: none !important;
   }
 
@@ -1796,8 +1842,29 @@ h3.song-detail-youtube-subheading,
     border-radius: var(--radius-control, 2px);
   }
 
+  /* Inline maxHeight clamp on the lyrics column must not survive print. */
+  .song-detail-lyrics-col--clamped,
+  .song-detail-split__lyrics-col {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .song-detail-lyrics-frame,
+  .song-detail-lyrics-frame--collapsed {
+    gap: 0.55rem;
+    overflow: visible !important;
+  }
+
+  .song-detail-lyrics-frame--clipped .song-detail-lyrics-pre::before,
+  .song-detail-lyrics-frame--clipped .song-detail-lyrics-pre::after {
+    content: none !important;
+    display: none !important;
+  }
+
   .song-detail-lyrics-pre {
     max-height: none !important;
+    height: auto !important;
     overflow: visible !important;
     -webkit-mask-image: none !important;
     mask-image: none !important;
@@ -1806,6 +1873,7 @@ h3.song-detail-youtube-subheading,
     border: none !important;
     padding: 0 !important;
     background: transparent !important;
+    color: #000 !important;
   }
 
   .song-detail-split,
@@ -1818,6 +1886,10 @@ h3.song-detail-youtube-subheading,
     grid-column: auto !important;
     width: 100% !important;
     max-width: none !important;
+  }
+
+  .song-detail-lyrics-heading-row {
+    display: block;
   }
 
   .song-detail-related {

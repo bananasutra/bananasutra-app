@@ -575,6 +575,33 @@ function SongDetailLoaded({
   const videoSectionRef = useRef<HTMLElement>(null)
   const mediaColumnRef = useRef<HTMLDivElement>(null)
 
+  const printLyricsOnly = useCallback(() => {
+    setLyricsExpanded(true)
+    const root = document.documentElement
+    root.classList.add('print-lyrics-only')
+    let cleaned = false
+    const cleanup = () => {
+      if (cleaned) return
+      cleaned = true
+      root.classList.remove('print-lyrics-only')
+      window.removeEventListener('afterprint', cleanup)
+    }
+    window.addEventListener('afterprint', cleanup)
+    window.setTimeout(cleanup, 60_000)
+    // Expand + class need a paint before the print dialog snapshots the page.
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        window.print()
+      })
+    })
+  }, [])
+
+  useEffect(() => {
+    const expandForPrint = () => setLyricsExpanded(true)
+    window.addEventListener('beforeprint', expandForPrint)
+    return () => window.removeEventListener('beforeprint', expandForPrint)
+  }, [])
+
   const songbookRecord = useMemo(
     () => (detail.songbook ? songbookByName(detail.songbook) : undefined),
     [detail.songbook],
@@ -1630,12 +1657,21 @@ function SongDetailLoaded({
                     }
                     aria-labelledby="song-lyrics-heading"
                   >
-                    <h2
-                      id="song-lyrics-heading"
-                      className={hasListenTabNav ? 'song-detail-chrome-label' : 'catalog-section-title'}
-                    >
-                      Lyrics
-                    </h2>
+                    <div className="song-detail-lyrics-heading-row">
+                      <h2
+                        id="song-lyrics-heading"
+                        className={hasListenTabNav ? 'song-detail-chrome-label' : 'catalog-section-title'}
+                      >
+                        Lyrics
+                      </h2>
+                      <button
+                        type="button"
+                        className="song-detail-print-lyrics"
+                        onClick={printLyricsOnly}
+                      >
+                        Print lyrics
+                      </button>
+                    </div>
                     <div
                       className={
                         'song-detail-lyrics-frame' +
