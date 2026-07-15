@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
 import {
   CatalogVideoSpotlight,
   type CatalogVideoSpotlightItem,
 } from './CatalogVideoSpotlight'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
-import { useSongCatalogBrowse } from './generatedData'
+import { getYoutubeByLyricsIdSync, getYoutubePlaylistsSync, loadYoutubePlaylistsCatalog, useSongCatalogBrowse } from './generatedData'
 import { canonicalPathForRoute } from './seoPaths'
 import { songCatalogLinkTo } from './songPaths'
 import type { YouTubeCatalogVideo, YouTubePlaylistCatalogItem } from './types'
@@ -74,8 +73,15 @@ export function WatchLpPage() {
   const spotlightYtRef = useRef<HTMLIFrameElement>(null)
   const playlistYtRef = useRef<HTMLIFrameElement>(null)
   const { data: songCatalogRows } = useSongCatalogBrowse()
-  const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[] | null>(null)
-  const [playlists, setPlaylists] = useState<YouTubePlaylistCatalogItem[] | null>(null)
+  const [youtubeVideos, setYoutubeVideos] = useState<YouTubeCatalogVideo[] | null>(() => {
+    const seeded = getYoutubeByLyricsIdSync()
+    if (!seeded) return null
+    return dedupeYoutubeVideosByVideoId(Object.values(seeded).flat())
+  })
+  const [playlists, setPlaylists] = useState<YouTubePlaylistCatalogItem[] | null>(() => {
+    const seeded = getYoutubePlaylistsSync()
+    return seeded ? dedupeWatchPlaylists(seeded) : null
+  })
   const [catalogLoadError, setCatalogLoadError] = useState<string | null>(null)
   const [activeSutra, setActiveSutra] = useState<WatchLpSutraFilter>('ALL')
   const [activeGenre, setActiveGenre] = useState('ALL')
@@ -107,17 +113,11 @@ export function WatchLpPage() {
         }
       })
 
-    void fetchCatalogData(catalogDataFileUrl('youtube_playlists_catalog.json'))
-      .then(async (r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`)
-        const rows = (await r.json()) as unknown
-        if (!Array.isArray(rows)) throw new Error('Invalid playlist catalog payload')
-        return rows as YouTubePlaylistCatalogItem[]
-      })
-      .then((playlistsResult) => {
+    void loadYoutubePlaylistsCatalog()
+      .then((rows) => {
         if (cancelled) return
         setCatalogLoadError(null)
-        setPlaylists(dedupeWatchPlaylists(Array.isArray(playlistsResult) ? playlistsResult : []))
+        setPlaylists(dedupeWatchPlaylists(Array.isArray(rows) ? rows : []))
       })
       .catch(() => {
         if (!cancelled) {

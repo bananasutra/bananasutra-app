@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { KeyboardEvent, MouseEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
+import { getTrackCatalogSync, loadTrackCatalog } from './generatedData'
 import { TRACKS_BROWSER_FACET_ORDER, TRACKS_FACET_LABELS } from './catalogFacetConfig'
 import { CatalogInfiniteScrollFooter } from './CatalogInfiniteScrollFooter'
 import {
@@ -112,7 +112,7 @@ export function TracksPage() {
   const location = useLocation()
   const navigate = useNavigate()
   const playAllDesktopAvailable = usePlayAllDesktopAvailable()
-  const [trackCatalog, setTrackCatalog] = useState<TrackCatalogItem[] | null>(null)
+  const [trackCatalog, setTrackCatalog] = useState<TrackCatalogItem[] | null>(() => getTrackCatalogSync())
   const [catalogLoadError, setCatalogLoadError] = useState<string | null>(null)
 
   const [filterBarExpanded, setFilterBarExpanded] = useState(false)
@@ -136,17 +136,21 @@ export function TracksPage() {
 
   useEffect(() => {
     let cancelled = false
+    const seeded = getTrackCatalogSync()
+    if (seeded) {
+      setTrackCatalog(seeded)
+      setCatalogLoadError(null)
+      return
+    }
     const loadCatalog = async () => {
-      // Keep no-store for local preview reliability: stale/corrupt cached JSON (or cached HTML fallback)
-      // can otherwise persist after a port/server swap and look like intermittent data loss.
+      // Retry once for local preview reliability: stale/corrupt cached JSON can look like data loss.
       for (let attempt = 0; attempt < 2; attempt += 1) {
         try {
-          const r = await fetchCatalogData(catalogDataFileUrl('track_catalog.json'))
-          if (!cancelled) setCatalogLoadError(null)
-          if (!r.ok) throw new Error(`HTTP ${r.status}`)
-          const rows = (await r.json()) as unknown
-          if (!Array.isArray(rows)) throw new Error('Invalid track catalog payload')
-          if (!cancelled) setTrackCatalog(rows as TrackCatalogItem[])
+          const rows = await loadTrackCatalog()
+          if (!cancelled) {
+            setCatalogLoadError(null)
+            setTrackCatalog(rows)
+          }
           return
         } catch {
           if (attempt === 0) {

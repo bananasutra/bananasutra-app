@@ -51,7 +51,7 @@ import {
   songCatalogLinkTo,
   songCatalogPath,
 } from './songPaths'
-import { songbookByName } from './songbooks'
+import { songbookByName, songbookHref } from './songbooks'
 import { sutraClassName } from './sutraTheme'
 import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, SongEpVolume, YouTubeCatalogVideo } from './types'
 import { sutraHrefFromSongSutraField } from './sutraPageUtils'
@@ -574,6 +574,33 @@ function SongDetailLoaded({
   const exclusivePlaybackRef = useRef<ExclusiveYoutubeSoundcloudControls | null>(null)
   const videoSectionRef = useRef<HTMLElement>(null)
   const mediaColumnRef = useRef<HTMLDivElement>(null)
+
+  const printLyricsOnly = useCallback(() => {
+    setLyricsExpanded(true)
+    const root = document.documentElement
+    root.classList.add('print-lyrics-only')
+    let cleaned = false
+    const cleanup = () => {
+      if (cleaned) return
+      cleaned = true
+      root.classList.remove('print-lyrics-only')
+      window.removeEventListener('afterprint', cleanup)
+    }
+    window.addEventListener('afterprint', cleanup)
+    window.setTimeout(cleanup, 60_000)
+    // Expand + class need a paint before the print dialog snapshots the page.
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        window.print()
+      })
+    })
+  }, [])
+
+  useEffect(() => {
+    const expandForPrint = () => setLyricsExpanded(true)
+    window.addEventListener('beforeprint', expandForPrint)
+    return () => window.removeEventListener('beforeprint', expandForPrint)
+  }, [])
 
   const songbookRecord = useMemo(
     () => (detail.songbook ? songbookByName(detail.songbook) : undefined),
@@ -1104,45 +1131,90 @@ function SongDetailLoaded({
               </div>
             ) : null}
             <div className="song-detail-hero-text">
-              <h1 className="song-detail-title song-title">{detail.lyrics_title}</h1>
-              <div className="song-detail-hero-share">
-                <ShareButton
-                  variant="chip"
-                  url={songPageShareUrl}
-                  title={detail.lyrics_title}
-                  text={`Listen to "${detail.lyrics_title}" on Bananasutra`}
-                />
+              <div className="song-detail-hero-title-row">
+                <h1 className="song-detail-title song-title">{detail.lyrics_title}</h1>
+                <div className="song-detail-hero-actions" role="group" aria-label="Song actions">
+                  <ShareButton
+                    variant="icon"
+                    className="song-detail-hero-action"
+                    url={songPageShareUrl}
+                    title={detail.lyrics_title}
+                    text={`Listen to "${detail.lyrics_title}" on Bananasutra`}
+                  />
+                  {hasLyrics ? (
+                    <button
+                      type="button"
+                      className="song-detail-print-lyrics song-detail-hero-action"
+                      onClick={printLyricsOnly}
+                      title="Print lyrics"
+                      aria-label="Print lyrics"
+                    >
+                      <svg
+                        className="song-detail-print-lyrics__icon"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path
+                          d="M4 6V2.5h8V6M4 11.5H3A1.5 1.5 0 0 1 1.5 10V7A1.5 1.5 0 0 1 3 5.5h10A1.5 1.5 0 0 1 14.5 7v3A1.5 1.5 0 0 1 13 11.5h-1"
+                          stroke="currentColor"
+                          strokeWidth="1.4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M4 9.5h8V14H4V9.5Z"
+                          stroke="currentColor"
+                          strokeWidth="1.4"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  ) : null}
+                </div>
               </div>
               {detail.lyrics_summary ? <p className="song-detail-summary">{detail.lyrics_summary}</p> : null}
-              {detail.sutra || hasHeroFacetMeta || museName ? (
+              {detail.sutra || hasHeroFacetMeta || museName || detail.songbook ? (
                 <div className="song-detail-hero-meta">
-                  {detail.sutra || museName ? (
-                    <div className="song-detail-hero-meta__identity">
+                  {detail.sutra || museName || detail.songbook ? (
+                    <ul
+                      className="song-detail-secondary-meta song-detail-secondary-meta--identity"
+                      aria-label="Sutra and songbook"
+                    >
                       {detail.sutra ? (
-                        <ul className="song-detail-secondary-meta song-detail-secondary-meta--sutra" aria-label="Sutra">
-                          <li className="song-detail-secondary-meta-item">
-                            <Link
-                              className="song-detail-secondary-link"
-                              to={sutraHrefFromSongSutraField(detail.sutra) ?? buildBrowsePathForFacet('sutra', detail.sutra)}
-                            >
-                              <span className={`catalog-facet-sutra-name ${sutraClassName(detail.sutra)}`}>{detail.sutra}</span>
-                            </Link>
-                          </li>
-                        </ul>
+                        <li className="song-detail-secondary-meta-item">
+                          <Link
+                            className="song-detail-secondary-link"
+                            to={sutraHrefFromSongSutraField(detail.sutra) ?? buildBrowsePathForFacet('sutra', detail.sutra)}
+                          >
+                            <span className={`catalog-facet-sutra-name ${sutraClassName(detail.sutra)}`}>{detail.sutra}</span>
+                          </Link>
+                        </li>
+                      ) : null}
+                      {detail.songbook ? (
+                        <li className="song-detail-secondary-meta-item">
+                          <Link className="song-detail-secondary-link" to={songbookHref(detail.songbook)}>
+                            {detail.songbook}
+                          </Link>
+                        </li>
                       ) : null}
                       {museName ? (
-                        <ul className="song-detail-secondary-meta song-detail-secondary-meta--muse" aria-label="Muse">
-                          <li className="song-detail-secondary-meta-item">
-                            <Link className="song-detail-secondary-link" to={searchCatalogHref(museName)}>
-                              {museName}
-                            </Link>
-                          </li>
-                        </ul>
+                        <li className="song-detail-secondary-meta-item">
+                          <Link className="song-detail-secondary-link" to={searchCatalogHref(museName)}>
+                            {museName}
+                          </Link>
+                        </li>
                       ) : null}
-                    </div>
+                    </ul>
                   ) : null}
                   {hasHeroFacetMeta ? (
-                    <ul className="song-detail-secondary-meta song-detail-secondary-meta--facets" aria-label="Song metadata">
+                    <ul
+                      className="song-detail-secondary-meta song-detail-secondary-meta--facets"
+                      aria-label="Song facets"
+                    >
                       {detail.topic ? (
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={buildBrowsePathForFacet('topic', detail.topic)}>

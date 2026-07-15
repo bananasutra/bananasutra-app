@@ -716,3 +716,9 @@
     column-gap: 0.5rem;
   }
 }
+
+@media print {
+  .tracks-page__list {
+    content-visibility: visible !important;
+  }
+}

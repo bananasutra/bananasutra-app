@@ -332,3 +332,12 @@
     transform: none;
   }
 }
+
+/* Print / PDF: do not leave below-fold sections at opacity 0. */
+@media print {
+  .catalog-scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

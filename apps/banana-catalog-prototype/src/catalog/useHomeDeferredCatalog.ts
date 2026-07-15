@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
-import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
+import {
+  getTrackCatalogSync,
+  getYoutubeByLyricsIdSync,
+  loadTrackCatalog,
+  loadYoutubeByLyricsId,
+} from './generatedData'
 import type { TrackCatalogItem, YouTubeCatalogVideo } from './types'
 
 export type HomeDeferredCatalog = {
@@ -9,56 +14,55 @@ export type HomeDeferredCatalog = {
   youtubeLoadError: string | null
 }
 
-/** Runtime fetch for heavy home slices — matches /listen and /watch LP pattern. */
+/** Heavy home slices — prefers build-time/module caches (R24) then runtime fetch. */
 export function useHomeDeferredCatalog(): HomeDeferredCatalog {
-  const [trackCatalog, setTrackCatalog] = useState<TrackCatalogItem[] | null>(null)
-  const [youtubeByLyrics, setYoutubeByLyrics] = useState<Record<string, YouTubeCatalogVideo[]> | null>(null)
+  const [trackCatalog, setTrackCatalog] = useState<TrackCatalogItem[] | null>(() => getTrackCatalogSync())
+  const [youtubeByLyrics, setYoutubeByLyrics] = useState<Record<string, YouTubeCatalogVideo[]> | null>(
+    () => getYoutubeByLyricsIdSync(),
+  )
   const [trackLoadError, setTrackLoadError] = useState<string | null>(null)
   const [youtubeLoadError, setYoutubeLoadError] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
 
-    const loadTrackCatalog = async () => {
-      try {
-        const r = await fetchCatalogData(catalogDataFileUrl('track_catalog.json'))
-        if (!r.ok) throw new Error(`HTTP ${r.status}`)
-        const rows = (await r.json()) as unknown
-        if (!Array.isArray(rows)) throw new Error('Invalid track catalog payload')
-        if (!cancelled) {
-          setTrackLoadError(null)
-          setTrackCatalog(rows as TrackCatalogItem[])
-        }
-      } catch {
-        if (!cancelled) {
-          setTrackCatalog(null)
-          setTrackLoadError('Could not load track catalog data.')
-        }
-      }
+    if (!getTrackCatalogSync()) {
+      void loadTrackCatalog()
+        .then((rows) => {
+          if (!cancelled) {
+            setTrackLoadError(null)
+            setTrackCatalog(rows)
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setTrackCatalog(null)
+            setTrackLoadError('Could not load track catalog data.')
+          }
+        })
+    } else {
+      setTrackCatalog(getTrackCatalogSync())
+      setTrackLoadError(null)
     }
 
-    const loadYoutubeCatalog = async () => {
-      try {
-        const r = await fetchCatalogData(catalogDataFileUrl('youtube_by_lyrics_id.json'))
-        if (!r.ok) throw new Error(`HTTP ${r.status}`)
-        const payload = (await r.json()) as unknown
-        if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
-          throw new Error('Invalid youtube catalog payload')
-        }
-        if (!cancelled) {
-          setYoutubeLoadError(null)
-          setYoutubeByLyrics(payload as Record<string, YouTubeCatalogVideo[]>)
-        }
-      } catch {
-        if (!cancelled) {
-          setYoutubeByLyrics(null)
-          setYoutubeLoadError('Could not load video catalog data.')
-        }
-      }
+    if (!getYoutubeByLyricsIdSync()) {
+      void loadYoutubeByLyricsId()
+        .then((payload) => {
+          if (!cancelled) {
+            setYoutubeLoadError(null)
+            setYoutubeByLyrics(payload)
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setYoutubeByLyrics(null)
+            setYoutubeLoadError('Could not load video catalog data.')
+          }
+        })
+    } else {
+      setYoutubeByLyrics(getYoutubeByLyricsIdSync())
+      setYoutubeLoadError(null)
     }
-
-    void loadTrackCatalog()
-    void loadYoutubeCatalog()
 
     return () => {
       cancelled = true

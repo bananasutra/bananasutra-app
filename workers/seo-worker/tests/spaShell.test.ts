@@ -14,6 +14,9 @@ test("SPA_PATH_PREFIXES documents primary app routes", () => {
   assert.ok(SPA_PATH_PREFIXES.includes("/songs"));
   assert.ok(SPA_PATH_PREFIXES.includes("/songbooks"));
   assert.ok(SPA_PATH_PREFIXES.includes("/about"));
+  assert.ok(SPA_PATH_PREFIXES.includes("/learn"));
+  assert.ok(SPA_PATH_PREFIXES.includes("/listen"));
+  assert.ok(SPA_PATH_PREFIXES.includes("/watch"));
 });
 
 test("pathnameNeedsSpaShell: known client prefixes", () => {
@@ -26,6 +29,11 @@ test("pathnameNeedsSpaShell: known client prefixes", () => {
   assert.equal(pathnameNeedsSpaShell("/videos"), true);
   assert.equal(pathnameNeedsSpaShell("/words"), true);
   assert.equal(pathnameNeedsSpaShell("/search"), true);
+  assert.equal(pathnameNeedsSpaShell("/learn"), true);
+  assert.equal(pathnameNeedsSpaShell("/listen"), true);
+  assert.equal(pathnameNeedsSpaShell("/watch"), true);
+  assert.equal(pathnameNeedsSpaShell("/manifesto"), true);
+  assert.equal(pathnameNeedsSpaShell("/privacy"), true);
   assert.equal(pathnameNeedsSpaShell("/style-guide"), true);
   assert.equal(pathnameNeedsSpaShell("/sitemap"), true);
 });
