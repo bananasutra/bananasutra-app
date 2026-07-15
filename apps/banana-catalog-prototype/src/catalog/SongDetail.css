@@ -257,34 +257,21 @@
   width: 100%;
 }
 
-/* R74 / R91: share + print lyrics as matching icon actions beside title */
-.song-detail-hero-title-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.65rem;
-  width: 100%;
-}
-
-.song-detail-hero-title-row .song-detail-title {
-  flex: 1;
-  min-width: 0;
-}
-
+/* R91: share + print under title — 44×44 targets (match track-row share; WCAG 2.5.5) */
 .song-detail-hero-actions {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  flex-shrink: 0;
-  margin-top: 0.2rem;
+  justify-content: flex-start;
+  gap: 0.55rem;
+  margin-top: -0.15rem;
 }
 
 .song-detail-hero-actions .song-detail-print-lyrics,
 .song-detail-hero-actions .share-btn--icon {
-  width: 2rem;
-  height: 2rem;
-  min-width: 2rem;
-  min-height: 2rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   padding: 0;
 }
 
@@ -378,7 +365,9 @@
   color: var(--color-text-muted);
 }
 
-.song-detail-secondary-meta:not(.song-detail-secondary-meta--identity):not(.song-detail-secondary-meta--facets):last-child
+.song-detail-secondary-meta:not(.song-detail-secondary-meta--identity):not(.song-detail-secondary-meta--facets):not(
+    .song-detail-secondary-meta--muses
+  ):last-child
   .song-detail-secondary-meta-item
   + .song-detail-secondary-meta-item::before {
   content: '·';
@@ -394,6 +383,14 @@
   opacity: 0.55;
   font-weight: 400;
   pointer-events: none;
+}
+
+.song-detail-muse-label {
+  flex-shrink: 0;
+  margin-right: 0.3rem;
+  color: var(--color-text-faint);
+  font: 400 0.72rem/1.2 var(--font-ui);
+  letter-spacing: 0.02em;
 }
 
 /* WCAG 2.5.8: ≥24×24 target; padding creates spacing between neighboring tags */

@@ -52,6 +52,7 @@ import {
   songCatalogPath,
 } from './songPaths'
 import { songbookByName, songbookHref } from './songbooks'
+import { splitMuseList } from './museFiltersCore'
 import { sutraClassName } from './sutraTheme'
 import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, SongEpVolume, YouTubeCatalogVideo } from './types'
 import { sutraHrefFromSongSutraField } from './sutraPageUtils'
@@ -809,7 +810,8 @@ function SongDetailLoaded({
 
   const writtenYear = (detail.written_year ?? '').trim()
   const songPageShareUrl = songShareUrl(detail.lyrics_title, detail.url_slug)
-  const museName = (detail.muse ?? '').trim()
+  const museNames = splitMuseList(detail.muse ?? '')
+  const hasMuseMeta = museNames.length > 0
   const hasHeroFacetMeta =
     Boolean(detail.topic) ||
     Boolean(detail.intention) ||
@@ -1131,55 +1133,53 @@ function SongDetailLoaded({
               </div>
             ) : null}
             <div className="song-detail-hero-text">
-              <div className="song-detail-hero-title-row">
-                <h1 className="song-detail-title song-title">{detail.lyrics_title}</h1>
-                <div className="song-detail-hero-actions" role="group" aria-label="Song actions">
-                  <ShareButton
-                    variant="icon"
-                    className="song-detail-hero-action"
-                    url={songPageShareUrl}
-                    title={detail.lyrics_title}
-                    text={`Listen to "${detail.lyrics_title}" on Bananasutra`}
-                  />
-                  {hasLyrics ? (
-                    <button
-                      type="button"
-                      className="song-detail-print-lyrics song-detail-hero-action"
-                      onClick={printLyricsOnly}
-                      title="Print lyrics"
-                      aria-label="Print lyrics"
+              <h1 className="song-detail-title song-title">{detail.lyrics_title}</h1>
+              <div className="song-detail-hero-actions" role="group" aria-label="Song actions">
+                <ShareButton
+                  variant="icon"
+                  className="song-detail-hero-action"
+                  url={songPageShareUrl}
+                  title={detail.lyrics_title}
+                  text={`Listen to "${detail.lyrics_title}" on Bananasutra`}
+                />
+                {hasLyrics ? (
+                  <button
+                    type="button"
+                    className="song-detail-print-lyrics song-detail-hero-action"
+                    onClick={printLyricsOnly}
+                    title="Print lyrics"
+                    aria-label="Print lyrics"
+                  >
+                    <svg
+                      className="song-detail-print-lyrics__icon"
+                      width="15"
+                      height="15"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      aria-hidden="true"
+                      focusable="false"
                     >
-                      <svg
-                        className="song-detail-print-lyrics__icon"
-                        width="15"
-                        height="15"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        aria-hidden="true"
-                        focusable="false"
-                      >
-                        <path
-                          d="M4 6V2.5h8V6M4 11.5H3A1.5 1.5 0 0 1 1.5 10V7A1.5 1.5 0 0 1 3 5.5h10A1.5 1.5 0 0 1 14.5 7v3A1.5 1.5 0 0 1 13 11.5h-1"
-                          stroke="currentColor"
-                          strokeWidth="1.4"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M4 9.5h8V14H4V9.5Z"
-                          stroke="currentColor"
-                          strokeWidth="1.4"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                  ) : null}
-                </div>
+                      <path
+                        d="M4 6V2.5h8V6M4 11.5H3A1.5 1.5 0 0 1 1.5 10V7A1.5 1.5 0 0 1 3 5.5h10A1.5 1.5 0 0 1 14.5 7v3A1.5 1.5 0 0 1 13 11.5h-1"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M4 9.5h8V14H4V9.5Z"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                ) : null}
               </div>
               {detail.lyrics_summary ? <p className="song-detail-summary">{detail.lyrics_summary}</p> : null}
-              {detail.sutra || hasHeroFacetMeta || museName || detail.songbook ? (
+              {detail.sutra || hasHeroFacetMeta || hasMuseMeta || detail.songbook ? (
                 <div className="song-detail-hero-meta">
-                  {detail.sutra || museName || detail.songbook ? (
+                  {detail.sutra || detail.songbook ? (
                     <ul
                       className="song-detail-secondary-meta song-detail-secondary-meta--identity"
                       aria-label="Sutra and songbook"
@@ -1198,13 +1198,6 @@ function SongDetailLoaded({
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={songbookHref(detail.songbook)}>
                             {detail.songbook}
-                          </Link>
-                        </li>
-                      ) : null}
-                      {museName ? (
-                        <li className="song-detail-secondary-meta-item">
-                          <Link className="song-detail-secondary-link" to={searchCatalogHref(museName)}>
-                            {museName}
                           </Link>
                         </li>
                       ) : null}
@@ -1253,6 +1246,25 @@ function SongDetailLoaded({
                           </Link>
                         </li>
                       ) : null}
+                    </ul>
+                  ) : null}
+                  {hasMuseMeta ? (
+                    <ul
+                      className="song-detail-secondary-meta song-detail-secondary-meta--muses"
+                      aria-label="Muses"
+                    >
+                      {museNames.map((muse, index) => (
+                        <li key={muse} className="song-detail-secondary-meta-item">
+                          {index === 0 ? (
+                            <span className="song-detail-muse-label" aria-hidden="true">
+                              Muse:
+                            </span>
+                          ) : null}
+                          <Link className="song-detail-secondary-link" to={searchCatalogHref(muse)}>
+                            {muse}
+                          </Link>
+                        </li>
+                      ))}
                     </ul>
                   ) : null}
                 </div>
