@@ -51,7 +51,7 @@ import {
   songCatalogLinkTo,
   songCatalogPath,
 } from './songPaths'
-import { songbookByName } from './songbooks'
+import { songbookByName, songbookHref } from './songbooks'
 import { sutraClassName } from './sutraTheme'
 import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, SongEpVolume, YouTubeCatalogVideo } from './types'
 import { sutraHrefFromSongSutraField } from './sutraPageUtils'
@@ -1131,45 +1131,90 @@ function SongDetailLoaded({
               </div>
             ) : null}
             <div className="song-detail-hero-text">
-              <h1 className="song-detail-title song-title">{detail.lyrics_title}</h1>
-              <div className="song-detail-hero-share">
-                <ShareButton
-                  variant="chip"
-                  url={songPageShareUrl}
-                  title={detail.lyrics_title}
-                  text={`Listen to "${detail.lyrics_title}" on Bananasutra`}
-                />
+              <div className="song-detail-hero-title-row">
+                <h1 className="song-detail-title song-title">{detail.lyrics_title}</h1>
+                <div className="song-detail-hero-actions" role="group" aria-label="Song actions">
+                  <ShareButton
+                    variant="icon"
+                    className="song-detail-hero-action"
+                    url={songPageShareUrl}
+                    title={detail.lyrics_title}
+                    text={`Listen to "${detail.lyrics_title}" on Bananasutra`}
+                  />
+                  {hasLyrics ? (
+                    <button
+                      type="button"
+                      className="song-detail-print-lyrics song-detail-hero-action"
+                      onClick={printLyricsOnly}
+                      title="Print lyrics"
+                      aria-label="Print lyrics"
+                    >
+                      <svg
+                        className="song-detail-print-lyrics__icon"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path
+                          d="M4 6V2.5h8V6M4 11.5H3A1.5 1.5 0 0 1 1.5 10V7A1.5 1.5 0 0 1 3 5.5h10A1.5 1.5 0 0 1 14.5 7v3A1.5 1.5 0 0 1 13 11.5h-1"
+                          stroke="currentColor"
+                          strokeWidth="1.4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M4 9.5h8V14H4V9.5Z"
+                          stroke="currentColor"
+                          strokeWidth="1.4"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  ) : null}
+                </div>
               </div>
               {detail.lyrics_summary ? <p className="song-detail-summary">{detail.lyrics_summary}</p> : null}
-              {detail.sutra || hasHeroFacetMeta || museName ? (
+              {detail.sutra || hasHeroFacetMeta || museName || detail.songbook ? (
                 <div className="song-detail-hero-meta">
-                  {detail.sutra || museName ? (
-                    <div className="song-detail-hero-meta__identity">
+                  {detail.sutra || museName || detail.songbook ? (
+                    <ul
+                      className="song-detail-secondary-meta song-detail-secondary-meta--identity"
+                      aria-label="Sutra and songbook"
+                    >
                       {detail.sutra ? (
-                        <ul className="song-detail-secondary-meta song-detail-secondary-meta--sutra" aria-label="Sutra">
-                          <li className="song-detail-secondary-meta-item">
-                            <Link
-                              className="song-detail-secondary-link"
-                              to={sutraHrefFromSongSutraField(detail.sutra) ?? buildBrowsePathForFacet('sutra', detail.sutra)}
-                            >
-                              <span className={`catalog-facet-sutra-name ${sutraClassName(detail.sutra)}`}>{detail.sutra}</span>
-                            </Link>
-                          </li>
-                        </ul>
+                        <li className="song-detail-secondary-meta-item">
+                          <Link
+                            className="song-detail-secondary-link"
+                            to={sutraHrefFromSongSutraField(detail.sutra) ?? buildBrowsePathForFacet('sutra', detail.sutra)}
+                          >
+                            <span className={`catalog-facet-sutra-name ${sutraClassName(detail.sutra)}`}>{detail.sutra}</span>
+                          </Link>
+                        </li>
+                      ) : null}
+                      {detail.songbook ? (
+                        <li className="song-detail-secondary-meta-item">
+                          <Link className="song-detail-secondary-link" to={songbookHref(detail.songbook)}>
+                            {detail.songbook}
+                          </Link>
+                        </li>
                       ) : null}
                       {museName ? (
-                        <ul className="song-detail-secondary-meta song-detail-secondary-meta--muse" aria-label="Muse">
-                          <li className="song-detail-secondary-meta-item">
-                            <Link className="song-detail-secondary-link" to={searchCatalogHref(museName)}>
-                              {museName}
-                            </Link>
-                          </li>
-                        </ul>
+                        <li className="song-detail-secondary-meta-item">
+                          <Link className="song-detail-secondary-link" to={searchCatalogHref(museName)}>
+                            {museName}
+                          </Link>
+                        </li>
                       ) : null}
-                    </div>
+                    </ul>
                   ) : null}
                   {hasHeroFacetMeta ? (
-                    <ul className="song-detail-secondary-meta song-detail-secondary-meta--facets" aria-label="Song metadata">
+                    <ul
+                      className="song-detail-secondary-meta song-detail-secondary-meta--facets"
+                      aria-label="Song facets"
+                    >
                       {detail.topic ? (
                         <li className="song-detail-secondary-meta-item">
                           <Link className="song-detail-secondary-link" to={buildBrowsePathForFacet('topic', detail.topic)}>
@@ -1657,21 +1702,12 @@ function SongDetailLoaded({
                     }
                     aria-labelledby="song-lyrics-heading"
                   >
-                    <div className="song-detail-lyrics-heading-row">
-                      <h2
-                        id="song-lyrics-heading"
-                        className={hasListenTabNav ? 'song-detail-chrome-label' : 'catalog-section-title'}
-                      >
-                        Lyrics
-                      </h2>
-                      <button
-                        type="button"
-                        className="song-detail-print-lyrics"
-                        onClick={printLyricsOnly}
-                      >
-                        Print lyrics
-                      </button>
-                    </div>
+                    <h2
+                      id="song-lyrics-heading"
+                      className={hasListenTabNav ? 'song-detail-chrome-label' : 'catalog-section-title'}
+                    >
+                      Lyrics
+                    </h2>
                     <div
                       className={
                         'song-detail-lyrics-frame' +

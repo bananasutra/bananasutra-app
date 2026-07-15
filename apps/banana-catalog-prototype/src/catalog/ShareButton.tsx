@@ -12,8 +12,8 @@ export type ShareButtonProps = {
   /** Additional CSS classes. */
   className?: string
   /**
-   * 'chip'  — icon + "share" label (default, used in persistent player + page heroes)
-   * 'icon'  — icon only with aria-label (used in track rows where space is tight)
+   * 'chip'  — icon + "share" label (default, used in persistent player)
+   * 'icon'  — icon only with tooltip (heroes, track rows)
    */
   variant?: 'chip' | 'icon'
 }
@@ -83,7 +83,8 @@ export function ShareButton({ url, title, text, className = '', variant = 'chip'
 
   const isIcon = variant === 'icon'
   const label = copied ? 'copied!' : 'share'
-  const ariaLabel = copied ? 'Link copied' : `Share: ${title ?? url}`
+  const ariaLabel = copied ? 'Link copied' : title ? `Share: ${title}` : 'Share'
+  const tooltip = copied ? 'Link copied' : 'Share'
 
   return (
     <button
@@ -92,7 +93,7 @@ export function ShareButton({ url, title, text, className = '', variant = 'chip'
       onClick={handleShare}
       onPointerDown={stopRowActivation}
       aria-label={isIcon ? ariaLabel : undefined}
-      title={ariaLabel}
+      title={tooltip}
     >
       {SHARE_ICON}
       {!isIcon ? <span className="share-btn__label">{label}</span> : null}
