@@ -1,13 +1,19 @@
+import { useState } from 'react'
 import './CatalogProgressiveLoading.css'
 
 type Variant = 'page' | 'inline'
 
 type Props = {
-  /** Visible status copy. Trailing ellipsis is stripped; CSS dots animate instead. */
-  label: string
+  /** Visible status copy when not using `labels`. Trailing ellipsis is stripped. */
+  label?: string
+  /**
+   * When set, one line is picked at random on mount (stable for that wait).
+   * Prefer this for playful page waits.
+   */
+  labels?: readonly string[]
   /**
    * Screen-reader label when visible copy is playful.
-   * Defaults to `label` (after ellipsis strip).
+   * Defaults to the visible line.
    */
   ariaLabel?: string
   /** `page` = centered hero wait; `inline` = compact mark for section waits. */
@@ -15,8 +21,16 @@ type Props = {
   className?: string
 }
 
+/** Playful page-wait lines — Archivo Black caps in CSS; keep source sentence case. */
+export const CATALOG_PAGE_LOADING_LINES = ['Peeling your banana', 'Almost ripe'] as const
+
 function normalizeLabel(label: string): string {
   return label.replace(/\u2026|\.{2,}$/u, '').trimEnd()
+}
+
+function pickLabel(labels: readonly string[]): string {
+  const i = Math.floor(Math.random() * labels.length)
+  return normalizeLabel(labels[i] ?? labels[0] ?? '')
 }
 
 /**
@@ -24,12 +38,15 @@ function normalizeLabel(label: string): string {
  * No images, no JS animation loops.
  */
 export function CatalogProgressiveLoading({
-  label,
+  label = 'Loading',
+  labels,
   ariaLabel,
   variant = 'inline',
   className,
 }: Props) {
-  const text = normalizeLabel(label)
+  const [text] = useState(() =>
+    labels && labels.length > 0 ? pickLabel(labels) : normalizeLabel(label),
+  )
   const announced = ariaLabel ? normalizeLabel(ariaLabel) : text
   const rootClass = [
     'catalog-progressive-loading',

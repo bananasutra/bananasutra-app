@@ -3,7 +3,7 @@ import { lazyWithRetry } from './lazyWithRetry'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { NavigationLoadingBridge } from './NavigationLoadingBridge'
-import { CatalogProgressiveLoading } from './catalog/CatalogProgressiveLoading'
+import { CatalogProgressiveLoading, CATALOG_PAGE_LOADING_LINES } from './catalog/CatalogProgressiveLoading'
 import { installRoutePrefetchOnIntent } from './routePrefetch'
 import { SearchRedirect } from './catalog/SearchRedirect'
 import { useBfCacheEmbedTeardown } from './catalog/useBfCacheEmbedTeardown'
@@ -59,7 +59,7 @@ function AppRouteFallback() {
   return (
     <div className="app-route-fallback">
       <CatalogProgressiveLoading
-        label="Peeling your banana"
+        labels={CATALOG_PAGE_LOADING_LINES}
         ariaLabel="Loading page"
         variant="page"
         className="catalog-progressive-loading--centered"
