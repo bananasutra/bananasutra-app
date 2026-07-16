@@ -20,6 +20,7 @@ import {
 } from './useCatalogInfiniteScroll'
 import { GlobalFooter } from './GlobalFooter'
 import { GlobalHeader } from './GlobalHeader'
+import { CatalogProgressiveLoading } from './CatalogProgressiveLoading'
 import { coverImageUrl } from '../seo/imageUrl'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
@@ -370,7 +371,7 @@ export function WordsPage() {
         <GlobalHeader ref={headerRef} />
         <div className="catalog-page__main">
           <article className="about-page catalog-layout-shell" id="main-content">
-            <p className="about-page__p">Loading song catalog…</p>
+            <CatalogProgressiveLoading label="Loading song catalog" variant="page" />
           </article>
         </div>
         <GlobalFooter />

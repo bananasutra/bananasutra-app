@@ -16,6 +16,7 @@ import { useExclusiveYoutubeEmbedsPlayback } from './useExclusiveYoutubeEmbedsPl
 import { pauseSoundcloudWidgetsInWraps } from './useExclusiveYoutubeSoundcloudPlayback'
 import { usePlayerQueueRegistrar } from './playerQueue/playerQueueRegistrarContext'
 import { WatchLpBertrandTail } from './WatchLpBertrandTail'
+import { CatalogProgressiveLoading } from './CatalogProgressiveLoading'
 import { ScrollRevealSection } from './ScrollRevealSection'
 import { WatchLpFacetBar } from './WatchLpFacetBar'
 import { allSongbooks } from './songbooks'
@@ -298,9 +299,7 @@ export function WatchLpPage() {
           {catalogLoadError ? <p className="watch-lp__load-error">{catalogLoadError}</p> : null}
 
           {youtubeVideos === null && !catalogLoadError ? (
-            <p className="watch-lp__loading" aria-live="polite">
-              Loading videos…
-            </p>
+            <CatalogProgressiveLoading label="Loading videos" />
           ) : (
             <ScrollRevealSection
               immediate
@@ -357,9 +356,7 @@ export function WatchLpPage() {
           )}
 
           {playlists === null && !catalogLoadError ? (
-            <p className="watch-lp__loading" aria-live="polite">
-              Loading playlists…
-            </p>
+            <CatalogProgressiveLoading label="Loading playlists" />
           ) : (
             <ScrollRevealSection
               className="watch-lp__section watch-lp__playlists-block"

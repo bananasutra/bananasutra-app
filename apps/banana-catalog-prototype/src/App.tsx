@@ -3,6 +3,7 @@ import { lazyWithRetry } from './lazyWithRetry'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { NavigationLoadingBridge } from './NavigationLoadingBridge'
+import { CatalogProgressiveLoading } from './catalog/CatalogProgressiveLoading'
 import { installRoutePrefetchOnIntent } from './routePrefetch'
 import { SearchRedirect } from './catalog/SearchRedirect'
 import { useBfCacheEmbedTeardown } from './catalog/useBfCacheEmbedTeardown'
@@ -56,9 +57,12 @@ function AppRouteFallback() {
     }
   }, [])
   return (
-    <div className="app-route-fallback" role="status" aria-live="polite" aria-busy="true">
-      <span className="app-route-fallback__spinner" aria-hidden />
-      <p className="app-route-fallback__label">Loading…</p>
+    <div className="app-route-fallback">
+      <CatalogProgressiveLoading
+        label="Loading"
+        variant="page"
+        className="catalog-progressive-loading--centered"
+      />
       {loadPhase === 'waiting' ? (
         <p className="app-route-fallback__hint">Still loading this page. Hang tight.</p>
       ) : null}

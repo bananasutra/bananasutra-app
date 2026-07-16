@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { HomeVideoTeaser as HomeVideoTeaserItem } from './homePortalData'
+import { CatalogProgressiveLoading } from './CatalogProgressiveLoading'
 import { canonicalPathForRoute } from './seoPaths'
 
 type Props = {
@@ -19,9 +20,7 @@ export function HomeVideoTeaser({ videos, loading = false, loadError = null }: P
         Same songs, visual format. Music films and YouTube playlists, organized by sutra and story.
       </p>
       {loading ? (
-        <p className="home-portal__empty listen-lp__loading" aria-live="polite">
-          Loading video picks…
-        </p>
+        <CatalogProgressiveLoading label="Loading video picks" />
       ) : loadError ? (
         <p className="home-portal__empty" role="status">
           {loadError}

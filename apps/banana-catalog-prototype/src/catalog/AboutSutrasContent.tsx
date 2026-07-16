@@ -6,6 +6,7 @@ import { sutraClassName } from './sutraTheme'
 import { canonicalPathForRoute } from './seoPaths'
 import { renderPageMeta } from './usePageMeta'
 import { useSongCatalogBrowse } from './generatedData'
+import { CatalogProgressiveLoading } from './CatalogProgressiveLoading'
 import { useMemo } from 'react'
 
 function formatCount(n: number): string {
@@ -91,7 +92,7 @@ export function AboutSutrasContent() {
     return (
       <div className="about-page__body about-page__body--loading about-page__body--sutras">
         <section className="about-page__section about-page__section--loading" aria-busy="true" aria-live="polite">
-          <p className="about-page__prose">Loading sutra counts...</p>
+          <CatalogProgressiveLoading label="Loading sutra counts" />
         </section>
       </div>
     )
