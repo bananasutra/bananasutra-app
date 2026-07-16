@@ -19,6 +19,7 @@ import { CatalogNotFoundPage } from './CatalogNotFoundPage'
 import { syncCatalogHeaderHeightNow, useSyncCatalogHeaderHeight } from './useSyncCatalogHeaderHeight'
 import { useSongCatalog } from './generatedData'
 import { SongThumbCard } from './SongThumbCard'
+import { CatalogProgressiveLoading } from './CatalogProgressiveLoading'
 import { SongbookPlaylistMetaLine } from './SongbookPlaylistMetaLine'
 import { catalogDataFileUrl, fetchCatalogData } from './catalogDataUrl'
 import { primaryGenreTokenFromSongbookTitle } from './songbookGenreToken'
@@ -436,7 +437,7 @@ export function SongbookPage() {
                   {catalogLoading ? 'Related songs' : relatedSongsHeading}
                 </h2>
                 {catalogLoading ? (
-                  <p className="songbooks-page__playback-empty">Loading song catalog…</p>
+                  <CatalogProgressiveLoading label="Loading song catalog" />
                 ) : playbackMemberSongs.length === 0 ? (
                   songbookTypeKey === 'genre' ? (
                     <p className="songbooks-page__playback-empty songbooks-page__playback-empty--browse">
@@ -484,7 +485,7 @@ export function SongbookPage() {
                   Songs in this songbook with lyrics on file, no audio or video linked yet.
                 </p>
                 {catalogLoading ? (
-                  <p className="songbooks-page__playback-empty">Loading song catalog…</p>
+                  <CatalogProgressiveLoading label="Loading song catalog" />
                 ) : (
                   <ul className="song-thumb-grid song-thumb-grid--home">
                     {lyricsOnlyMemberSongs.map((song) => {

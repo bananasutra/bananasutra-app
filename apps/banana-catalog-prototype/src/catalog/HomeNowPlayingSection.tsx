@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { HomeHaveABitePlayer } from './HomeHaveABitePlayer'
 import { HomeLatestDropsSpotlight } from './HomeLatestDropsSpotlight'
+import { CatalogProgressiveLoading } from './CatalogProgressiveLoading'
 import type { HomeListenerFavorite } from './homePortalData'
 import type { SongCatalogItem } from './types'
 import { browsePathWithQuery, canonicalPathForRoute } from './seoPaths'
@@ -21,9 +22,7 @@ export function HomeLatestDropsSection({
         Fresh in the catalog. The newest songs, ready when you are.
       </p>
       {loading ? (
-        <p className="home-portal__empty listen-lp__loading" aria-live="polite">
-          Loading latest drops…
-        </p>
+        <CatalogProgressiveLoading label="Loading latest drops" />
       ) : (
         <HomeLatestDropsSpotlight songs={songs} />
       )}
@@ -52,9 +51,7 @@ export function HomeTopTracksSection({
         Press play. The five tracks listeners keep coming back to.
       </p>
       {loading ? (
-        <p className="home-portal__empty listen-lp__loading" aria-live="polite">
-          Loading top tracks…
-        </p>
+        <CatalogProgressiveLoading label="Loading top tracks" />
       ) : loadError ? (
         <p className="home-portal__empty" role="status">
           {loadError}

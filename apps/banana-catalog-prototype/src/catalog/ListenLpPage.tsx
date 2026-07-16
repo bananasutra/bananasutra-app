@@ -10,6 +10,7 @@ import { ListenLpFacetBar } from './ListenLpFacetBar'
 import { ListenLpSongbookThumb } from './ListenLpSongbookThumb'
 import { ListenLpTopTracks } from './ListenLpTopTracks'
 import { ListenLpWhatsNewSamples } from './ListenLpWhatsNewSamples'
+import { CatalogProgressiveLoading } from './CatalogProgressiveLoading'
 import { ScrollRail } from './ScrollRail'
 import { ScrollRevealSection } from './ScrollRevealSection'
 import { SongThumbCard } from './SongThumbCard'
@@ -200,9 +201,7 @@ export function ListenLpPage() {
           {trackLoadError ? <p className="listen-lp__load-error">{trackLoadError}</p> : null}
 
           {trackCatalog === null && !trackLoadError ? (
-            <p className="listen-lp__loading" aria-live="polite">
-              Loading popular tracks…
-            </p>
+            <CatalogProgressiveLoading label="Loading popular tracks" />
           ) : (
             <ListenLpTopTracks
               tracks={topTracks}
