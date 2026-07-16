@@ -328,7 +328,11 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
         <GlobalHeader ref={headerRef} />
         <div className="catalog-page__main">
           <main id="main-content" className="song-detail catalog-layout-shell">
-            <CatalogProgressiveLoading label="Loading song" variant="page" />
+            <CatalogProgressiveLoading
+              label="Peeling your banana"
+              ariaLabel="Loading song"
+              variant="page"
+            />
           </main>
         </div>
         <GlobalFooter />
