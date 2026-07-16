@@ -59,7 +59,8 @@ function AppRouteFallback() {
   return (
     <div className="app-route-fallback">
       <CatalogProgressiveLoading
-        label="Loading"
+        label="Peeling your banana"
+        ariaLabel="Loading page"
         variant="page"
         className="catalog-progressive-loading--centered"
       />

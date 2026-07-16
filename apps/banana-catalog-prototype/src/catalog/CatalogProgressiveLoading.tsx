@@ -3,9 +3,14 @@ import './CatalogProgressiveLoading.css'
 type Variant = 'page' | 'inline'
 
 type Props = {
-  /** Short status copy, e.g. "Loading song". Trailing ellipsis is stripped; CSS dots animate instead. */
+  /** Visible status copy. Trailing ellipsis is stripped; CSS dots animate instead. */
   label: string
-  /** `page` = content-shaped skeleton under the header; `inline` = compact mark for section waits. */
+  /**
+   * Screen-reader label when visible copy is playful.
+   * Defaults to `label` (after ellipsis strip).
+   */
+  ariaLabel?: string
+  /** `page` = centered hero wait; `inline` = compact mark for section waits. */
   variant?: Variant
   className?: string
 }
@@ -15,11 +20,17 @@ function normalizeLabel(label: string): string {
 }
 
 /**
- * Lightweight progressive loading treatment: CSS-only motion, existing shimmer tokens,
- * respects prefers-reduced-motion. No images, no timers, no JS animation loops.
+ * Lightweight progressive loading: CSS-only motion, respects prefers-reduced-motion.
+ * No images, no JS animation loops.
  */
-export function CatalogProgressiveLoading({ label, variant = 'inline', className }: Props) {
+export function CatalogProgressiveLoading({
+  label,
+  ariaLabel,
+  variant = 'inline',
+  className,
+}: Props) {
   const text = normalizeLabel(label)
+  const announced = ariaLabel ? normalizeLabel(ariaLabel) : text
   const rootClass = [
     'catalog-progressive-loading',
     `catalog-progressive-loading--${variant}`,
@@ -29,26 +40,15 @@ export function CatalogProgressiveLoading({ label, variant = 'inline', className
     .join(' ')
 
   return (
-    <div className={rootClass} role="status" aria-live="polite" aria-busy="true">
-      {variant === 'page' ? (
-        <div className="catalog-progressive-loading__stage" aria-hidden>
-          <div className="catalog-progressive-loading__cover">
-            <span className="thumb-shimmer" />
-            <span className="catalog-progressive-loading__cover-glow" />
-          </div>
-          <div className="catalog-progressive-loading__lines">
-            <span className="catalog-progressive-loading__line catalog-progressive-loading__line--title" />
-            <span className="catalog-progressive-loading__line catalog-progressive-loading__line--meta" />
-            <span className="catalog-progressive-loading__line catalog-progressive-loading__line--body" />
-          </div>
-        </div>
-      ) : (
-        <span className="catalog-progressive-loading__pulse" aria-hidden>
-          <span className="catalog-progressive-loading__pulse-ring" />
-          <span className="catalog-progressive-loading__pulse-core" />
-        </span>
-      )}
-      <p className="catalog-progressive-loading__label">
+    <div
+      className={rootClass}
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      aria-label={announced}
+    >
+      <span className="catalog-progressive-loading__spinner" aria-hidden />
+      <p className="catalog-progressive-loading__label" aria-hidden={ariaLabel ? true : undefined}>
         {text}
         <span className="catalog-progressive-loading__dots" aria-hidden>
           <span />
