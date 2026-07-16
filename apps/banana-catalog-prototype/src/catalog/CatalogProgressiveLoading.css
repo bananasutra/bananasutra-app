@@ -72,12 +72,13 @@
 }
 
 .catalog-progressive-loading--page .catalog-progressive-loading__label {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-variation-settings: var(--fraunces-display);
-  letter-spacing: 0.01em;
-  color: var(--color-text-primary);
-  max-width: 18rem;
+  /* Match homepage / route fallback loader: Sora UI, not Fraunces. */
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  max-width: 20rem;
 }
 
 .catalog-progressive-loading__dots {
