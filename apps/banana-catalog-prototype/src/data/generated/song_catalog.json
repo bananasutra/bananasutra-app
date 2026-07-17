@@ -4328,26 +4328,44 @@
       },
       {
         "ep_volume": 2,
+        "ep_url": "https://soundcloud.com/bananasutra/2-maha-o-make-america-human",
+        "ep_title": "[2] MAHA • Make America Humane Again • Psy Waltz BURLESQUEsutra (2)",
+        "ep_rating": ""
+      },
+      {
+        "ep_volume": 3,
         "ep_url": "https://soundcloud.com/bananasutra/3-maha-o-make-america-human",
         "ep_title": "[3] MAHA • Make America Humane Again • Bass IBYN BURLESQUE JAZZsutra",
         "ep_rating": ""
       },
       {
-        "ep_volume": 3,
+        "ep_volume": 4,
         "ep_url": "https://soundcloud.com/bananasutra/4-maha-o-make-america-human",
         "ep_title": "[4] MAHA • Make America Humane Again • Accordion CAT BURLESQUEsutra",
         "ep_rating": ""
       },
       {
-        "ep_volume": 4,
+        "ep_volume": 5,
         "ep_url": "https://soundcloud.com/bananasutra/5-maha-o-make-america-human",
         "ep_title": "[5] MAHA • Make America Humane Again • Authentic Banjo FOLKsutra",
         "ep_rating": ""
       },
       {
-        "ep_volume": 5,
+        "ep_volume": 6,
+        "ep_url": "https://soundcloud.com/bananasutra/6-maha-o-make-america-human",
+        "ep_title": "[6] MAHA • Make America Humane Again • DUBsutra",
+        "ep_rating": ""
+      },
+      {
+        "ep_volume": 7,
         "ep_url": "https://soundcloud.com/bananasutra/7-maha-o-make-america-human",
         "ep_title": "[7] MAHA • Make America Humane Again • Booya BANJOsutra",
+        "ep_rating": ""
+      },
+      {
+        "ep_volume": 8,
+        "ep_url": "https://soundcloud.com/bananasutra/8-maha-o-make-america-humane",
+        "ep_title": "[8] MAHA • Make America Humane Again • Weary BLUESsutra",
         "ep_rating": ""
       }
     ],
@@ -8060,11 +8078,12 @@
     "published_at": "2025-11-16T04:20:39Z",
     "cover_image_url": "https://i1.sndcdn.com/artworks-mzPTVVzYjzKf5bIY-HeAycA-t500x500.png",
     "track_genres": [
+      "BURLESQUE",
       "JAZZ"
     ],
     "track_secondary_genres": [
-      "FOLK",
-      "INDIE"
+      "INDIE",
+      "WALTZ"
     ],
     "track_instruments": [
       "BASS",
@@ -8083,15 +8102,15 @@
     "track_count_total": 2,
     "track_count_published": 2,
     "track_count_selected": 2,
-    "aggregate_play_count": 828,
+    "aggregate_play_count": 948,
     "aggregate_like_count": 14,
-    "aggregate_engagement_rate": 1.6908212560386473,
+    "aggregate_engagement_rate": 1.4767932489451476,
     "peak_play_count": 630,
     "peak_like_count": 9,
-    "aggregate_duration_sec": 526,
+    "aggregate_duration_sec": 536,
     "best_track_ids": [
       "2213380430",
-      "2213380412"
+      "2213380427"
     ],
     "ep_refs": [
       "https://soundcloud.com/bananasutra/sets/the-conquest-of-happiness-according-to-bertrand-russel-2-songs-epx10-knowsutra"
@@ -8103,32 +8122,32 @@
     "ep_volumes": [
       {
         "ep_volume": 1,
-        "ep_url": "https://soundcloud.com/bananasutra/side-a-05-ep-bertrand-the-unhappiness-dance-growsutra-indie-jazz-5",
-        "ep_title": "Side A [05] EP Bertrand - The Unhappiness Dance - GROWsutra Indie JAZZ",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 2,
         "ep_url": "https://soundcloud.com/bananasutra/side-b-01-ep-bertrand-the-conquest-of-happiness-growsutra-lullaby-indie-mantra-6",
         "ep_title": "Side B [01] EP Bertrand - The Conquest of Happiness - GROWsutra Lullaby Indie MANTRA",
         "ep_rating": ""
       },
       {
-        "ep_volume": 3,
+        "ep_volume": 2,
         "ep_url": "https://soundcloud.com/bananasutra/side-b-02-ep-bertrand-the-conquest-of-happiness-growsutra-indie-folk-7",
         "ep_title": "Side B [02] EP Bertrand - The Conquest of Happiness - GROWsutra Indie FOLK",
         "ep_rating": ""
       },
       {
-        "ep_volume": 4,
+        "ep_volume": 3,
         "ep_url": "https://soundcloud.com/bananasutra/side-b-03-ep-bertrand-the-conquest-of-happiness-growsutra-jazzy-folk-8",
         "ep_title": "Side B [03] EP Bertrand - The Conquest of Happiness - GROWsutra Jazzy FOLK",
         "ep_rating": ""
       },
       {
-        "ep_volume": 5,
+        "ep_volume": 4,
         "ep_url": "https://soundcloud.com/bananasutra/side-b-04-ep-bertrand-the-conquest-of-happiness-growsutra-indie-folk-jazz-9",
         "ep_title": "Side B [04] EP Bertrand - The Conquest of Happiness - GROWsutra Indie Folk JAZZ",
+        "ep_rating": ""
+      },
+      {
+        "ep_volume": 5,
+        "ep_url": "https://soundcloud.com/bananasutra/side-b-05-ep-bertrand-the-conquest-of-happiness-growsutra-sweet-waltz-burlesque-10",
+        "ep_title": "Side B [05] EP Bertrand - The Conquest of Happiness - GROWsutra Sweet Waltz BURLESQUE",
         "ep_rating": ""
       }
     ],
@@ -8136,7 +8155,7 @@
     "songbook": "Ask: BERTRAND (knows)",
     "muse": "Bertrand Russell",
     "song_muse_quote": "",
-    "soundcloud_title_blob": "Side B [04] EP Bertrand - The Conquest of Happiness - GROWsutra Indie Folk JAZZ The Conquest of Happiness (according to Bertrand Russel) ☰ 2 Songs EPx10 ☰ KNOWsutra Side A [05] EP Bertrand - The Unhappiness Dance - GROWsutra Indie JAZZ",
+    "soundcloud_title_blob": "Side B [04] EP Bertrand - The Conquest of Happiness - GROWsutra Indie Folk JAZZ The Conquest of Happiness (according to Bertrand Russel) ☰ 2 Songs EPx10 ☰ KNOWsutra Side B [05] EP Bertrand - The Conquest of Happiness - GROWsutra Sweet Waltz BURLESQUE",
     "lyrics_head_search": "[Intro]\nAnd now, dear friends, let’s switch the tune,\nFrom sadness to joy, under the same moon...\n\nQuoting Russell again, from his wise little book,\n\"The Conquest of Happiness,\" here’s what he took,\nTo find a bit of joy in life’s winding maze,\nFollow these steps, and dance through the days!\n\n[Verse 1]\nFind joy in the little things, the simple delights,\nThe morning sun, the cool breeze, the starry nights,\nExpand your interests, let your passions grow wide,\nA curious heart is a joyful guide.\n\n[Chorus]\nOh, happiness waltz, come dance in the light,\nWith love and with laughter, we’ll make life so bright,\nWith friends by your side and work you adore,\nThis is the dance that brings you to more.\n\n[Verse 2]\nEmbrace affection, let love take the lead,\nIn giving and sharing, we find what we need,\nA sense of adventure, a spirit so free,\nThese are the things that bring us to glee.\n\n[Chorus]\nOh, happiness waltz, come dance in the light,\nWith love and with laughter, we’ll make life so bright,\nWith friends by your side and work you adore,\nThis is the dance that brings you to more.\n\n[Bridge]\nTranquil and calm, let peace be your guide,\nIn a world full of noise, let joy be your stride,\nOh, live for tod",
     "fallback_sc_url": "",
     "has_in_app_playback": true,
@@ -8169,13 +8188,13 @@
     "cover_image_url": "https://i1.sndcdn.com/artworks-mzPTVVzYjzKf5bIY-HeAycA-t500x500.png",
     "track_genres": [
       "BURLESQUE",
-      "FOLK"
+      "FOLK",
+      "JAZZ"
     ],
     "track_secondary_genres": [
       "FOLK",
       "INDIE",
-      "JAZZ",
-      "WALTZ"
+      "JAZZ"
     ],
     "track_instruments": [
       "BASS",
@@ -8189,23 +8208,23 @@
     "track_tempo_feels": [
       "LOWBEAT"
     ],
-    "discovery_top_track_genres": "BURLESQUE, FOLK",
+    "discovery_top_track_genres": "JAZZ, INDIE, FOLK",
     "soundcloud_genre_tags": [
       "Soundtrack"
     ],
     "track_count_total": 4,
     "track_count_published": 4,
     "track_count_selected": 4,
-    "aggregate_play_count": 3295,
+    "aggregate_play_count": 3175,
     "aggregate_like_count": 32,
-    "aggregate_engagement_rate": 0.9711684370257967,
+    "aggregate_engagement_rate": 1.0078740157480315,
     "peak_play_count": 1389,
     "peak_like_count": 12,
-    "aggregate_duration_sec": 958,
+    "aggregate_duration_sec": 948,
     "best_track_ids": [
+      "2213380412",
       "2213380424",
       "2213380433",
-      "2213380427",
       "2213380418"
     ],
     "ep_refs": [
@@ -8236,16 +8255,22 @@
       },
       {
         "ep_volume": 4,
-        "ep_url": "https://soundcloud.com/bananasutra/side-b-05-ep-bertrand-the-conquest-of-happiness-growsutra-sweet-waltz-burlesque-10",
-        "ep_title": "Side B [05] EP Bertrand - The Conquest of Happiness - GROWsutra Sweet Waltz BURLESQUE",
+        "ep_url": "https://soundcloud.com/bananasutra/side-a-04-ep-bertrand-the-unhappiness-dance-growsutra-folk-indie-4",
+        "ep_title": "Side A [04] EP Bertrand - The Unhappiness Dance - GROWsutra Folk INDIE",
+        "ep_rating": ""
+      },
+      {
+        "ep_volume": 5,
+        "ep_url": "https://soundcloud.com/bananasutra/side-a-05-ep-bertrand-the-unhappiness-dance-growsutra-indie-jazz-5",
+        "ep_title": "Side A [05] EP Bertrand - The Unhappiness Dance - GROWsutra Indie JAZZ",
         "ep_rating": ""
       }
     ],
-    "has_fav_track": false,
+    "has_fav_track": true,
     "songbook": "Ask: BERTRAND (knows)",
     "muse": "Bertrand Russell",
     "song_muse_quote": "",
-    "soundcloud_title_blob": "Side B [05] EP Bertrand - The Conquest of Happiness - GROWsutra Sweet Waltz BURLESQUE The Conquest of Happiness (according to Bertrand Russel) ☰ 2 Songs EPx10 ☰ KNOWsutra Side A [01] EP Bertrand - The Unhappiness Dance - GROWsutra Jazzy BURLESQUE Side A [03] EP Bertrand - The Unhappiness Dance - GROWsutra Jazzy Indie FOLK Side A [02] EP Bertrand - The Unhappiness Dance - GROWsutra Jazzy BURLESQUE",
+    "soundcloud_title_blob": "Side A [05] EP Bertrand - The Unhappiness Dance - GROWsutra Indie JAZZ The Conquest of Happiness (according to Bertrand Russel) ☰ 2 Songs EPx10 ☰ KNOWsutra Side A [01] EP Bertrand - The Unhappiness Dance - GROWsutra Jazzy BURLESQUE Side A [03] EP Bertrand - The Unhappiness Dance - GROWsutra Jazzy Indie FOLK Side A [02] EP Bertrand - The Unhappiness Dance - GROWsutra Jazzy BURLESQUE",
     "lyrics_head_search": "[Intro]\nGather 'round, dear friends, and lend me your ear,\nWe’ve got a list that’ll make things clear,\nStraight from Russell's pen, a philosopher’s plan,\nIn \"The Conquest of Happiness,\" he told every man,\n\nWhy the world feels weary, why joy’s often gone,\nBut stay tuned, dear listener, for the happy song!\n\n[Verse 1]\nOh, the world’s so dreary when you’re chasing the gold,\nEyes on the prize, but the heart’s feeling cold,\nCompete and compare, oh, it’s never enough,\nYou’re lost in the hustle, stuck in the bluff.\n\n[Chorus]\nBoredom or excitement, you swing to extremes,\nForget all the peace, lost in wild schemes,\nFatigue, oh fatigue, it’s weighing you down,\nEnvy’s a monster wearing a frown.\n\n[Bridge]\nGuilt on your shoulder, shame in your step,\nLiving in fear of opinions they’ve kept,\nParanoia’s a friend you never should trust,\nA life full of worry is bound to combust!\n\n[Chorus]\nBoredom or excitement, you swing to extremes,\nForget all the peace, lost in wild schemes,\nFatigue, oh fatigue, it’s weighing you down,\nEnvy’s a monster wearing a frown.\n\n[Outro]\nBut this isn’t the end, there’s more to the tale,\nWe’ll find the joy, we’ll lift up the veil,\nRussell knew well, there's more to this dance",
     "fallback_sc_url": "",
     "has_in_app_playback": true,
