@@ -1376,7 +1376,9 @@ def merge_full_v4_listen_volumes(
         elif len(singles) >= 2 and sets and any(
             is_compilation_ep_set(_norm_soundcloud_url(str(s.get("ep_url") or ""))) for s in sets
         ):
-            merged[lid] = sorted(singles, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")))
+            # Multi-song EP: keep the shared /sets/ playlist as the EP tab(s).
+            # Member singles belong in TOP TRACKS, not as SINGLE · VOL tabs.
+            merged[lid] = sorted(sets, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")))
         elif sets and singles and not any(
             is_compilation_ep_set(_norm_soundcloud_url(str(s.get("ep_url") or ""))) for s in sets
         ):

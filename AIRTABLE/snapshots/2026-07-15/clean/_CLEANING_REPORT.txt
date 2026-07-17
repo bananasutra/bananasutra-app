@@ -35,3 +35,6 @@ Columns not listed had no modifications.
 
 ── SC Playlists-2026-07-15.csv → sc_playlists-2026-07-15.csv (60 rows)
     (no cell modifications)
+
+── 301 REDIRECTS-2026-07-15.csv → 301_redirects-2026-07-15.csv (11 rows)
+    (no cell modifications)

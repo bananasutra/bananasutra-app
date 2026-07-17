@@ -63,7 +63,7 @@
     },
     "sc_tracks": {
       "path": "AIRTABLE/snapshots/2026-07-15/clean/sc_tracks-2026-07-15.csv",
-      "sha256": "56157c4e0d931cb2fdf38e0e1ae5889efe3d60acfda53e9802e2d2e1b378382c",
+      "sha256": "1c21822d50864564b0dedb21af1295675f20ea9e65ccd7a5c24a0e413cc5b2cd",
       "rows": 760
     },
     "sc_eps": {

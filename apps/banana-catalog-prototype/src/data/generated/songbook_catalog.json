@@ -4535,7 +4535,7 @@
         "lyrics_title": "MAHA (Make America Humane Again)",
         "url_slug": "maha-make-america-humane-again",
         "summary_short": "Make America Humane Again. It's not a radical idea. It should not be.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true,
@@ -4670,8 +4670,8 @@
       "L-447",
       "L-52",
       "L-53",
-      "L-137",
       "L-136",
+      "L-137",
       "L-135"
     ],
     "member_songs": [
@@ -4923,19 +4923,6 @@
         "aggregate_like_count": 0
       },
       {
-        "lyrics_id": "L-137",
-        "lyrics_title": "Le Système",
-        "url_slug": "le-systeme",
-        "summary_short": "Je vous parle d'un temps où Macron mentait avec éclat. Ah, le bon vieux temps.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-5bgKJmvCXOs9jvio-ky1CkQ-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": true,
-        "has_youtube_embed": true,
-        "aggregate_play_count": 3938,
-        "aggregate_like_count": 51
-      },
-      {
         "lyrics_id": "L-136",
         "lyrics_title": "Manu, P’tit Roi",
         "url_slug": "manu-ptit-roi",
@@ -4947,6 +4934,19 @@
         "has_youtube_embed": false,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
+      },
+      {
+        "lyrics_id": "L-137",
+        "lyrics_title": "Le Système",
+        "url_slug": "le-systeme",
+        "summary_short": "Je vous parle d'un temps où Macron mentait avec éclat. Ah, le bon vieux temps.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-5bgKJmvCXOs9jvio-ky1CkQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 3938,
+        "aggregate_like_count": 51
       },
       {
         "lyrics_id": "L-135",
@@ -6780,8 +6780,8 @@
       "L-45",
       "L-130",
       "L-53",
-      "L-137",
       "L-136",
+      "L-137",
       "L-135"
     ],
     "member_songs": [
@@ -7007,19 +7007,6 @@
         "aggregate_like_count": 0
       },
       {
-        "lyrics_id": "L-137",
-        "lyrics_title": "Le Système",
-        "url_slug": "le-systeme",
-        "summary_short": "Je vous parle d'un temps où Macron mentait avec éclat. Ah, le bon vieux temps.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-5bgKJmvCXOs9jvio-ky1CkQ-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": true,
-        "has_youtube_embed": true,
-        "aggregate_play_count": 3938,
-        "aggregate_like_count": 51
-      },
-      {
         "lyrics_id": "L-136",
         "lyrics_title": "Manu, P’tit Roi",
         "url_slug": "manu-ptit-roi",
@@ -7031,6 +7018,19 @@
         "has_youtube_embed": false,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
+      },
+      {
+        "lyrics_id": "L-137",
+        "lyrics_title": "Le Système",
+        "url_slug": "le-systeme",
+        "summary_short": "Je vous parle d'un temps où Macron mentait avec éclat. Ah, le bon vieux temps.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-5bgKJmvCXOs9jvio-ky1CkQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 3938,
+        "aggregate_like_count": 51
       },
       {
         "lyrics_id": "L-135",
