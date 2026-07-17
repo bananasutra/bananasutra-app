@@ -11,6 +11,7 @@ import {
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { GlobalHeader } from './GlobalHeader'
 import { GlobalFooter } from './GlobalFooter'
+import { CatalogProgressiveLoading, CATALOG_PAGE_LOADING_LINES } from './CatalogProgressiveLoading'
 import { LazySoundCloudEmbed } from './LazySoundCloudEmbed'
 import { SoundCloudPassthroughEmbed } from './SoundCloudPassthroughEmbed'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
@@ -327,7 +328,11 @@ function SongDetailInner({ lyricsId, urlSlug }: { lyricsId: string; urlSlug: str
         <GlobalHeader ref={headerRef} />
         <div className="catalog-page__main">
           <main id="main-content" className="song-detail catalog-layout-shell">
-            <p className="song-detail-missing-title">Loading song…</p>
+            <CatalogProgressiveLoading
+              labels={CATALOG_PAGE_LOADING_LINES}
+              ariaLabel="Loading song"
+              variant="page"
+            />
           </main>
         </div>
         <GlobalFooter />

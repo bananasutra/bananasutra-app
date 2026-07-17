@@ -10123,14 +10123,8 @@
     "ep_volumes": [
       {
         "ep_volume": 1,
-        "ep_url": "https://soundcloud.com/bananasutra/criminals-we-just-cant-escape",
-        "ep_title": "Criminals • Gipsy emoPunk Blues Cabaret Chanson • Bananasutra(BLOW)",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 2,
-        "ep_url": "https://soundcloud.com/bananasutra/crrriminals",
-        "ep_title": "Crrriminals (v2) • emoPunkRock Jazz Cabaret Chanson • Bananasutra(BLOW)",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/crimina-els-ep",
+        "ep_title": "Crimina/els EP",
         "ep_rating": ""
       }
     ],
@@ -30235,92 +30229,8 @@
     "ep_volumes": [
       {
         "ep_volume": 1,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-piano-soul-le-ptit-jupiter",
-        "ep_title": "Le P'tit Jupiter • sutraFRENCH • indieJAZZZ Piano LOFI Soul :)",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 2,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-burlesque-ego-tale-le-systeme-de-macron-v1",
-        "ep_title": "Le système, ça voulait dire… v1 • sutraFRENCH • Burlesque Ego Accordion Cabaret",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 3,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-burlesque-ego-tale-le-systeme-de-macron-v10",
-        "ep_title": "Le système, ça voulait dire… v10 • sutraFRENCH • Burlesque Ego Accordion Masquerade",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 4,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-burlesque-ego-tale-le-systeme-de-macron-v2",
-        "ep_title": "Le système, ça voulait dire… v2 • sutraFRENCH • Burlesque Ego Accordion Cabaret",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 5,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-burlesque-ego-tale-le-systeme-de-macron-v3",
-        "ep_title": "Le système, ça voulait dire… v3 • sutraFRENCH • Burlesque Ego JAZZZ Masquerade",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 6,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-burlesque-ego-tale-le-systeme-de-macron-v4",
-        "ep_title": "Le système, ça voulait dire… v4 • sutraFRENCH • Burlesque Ego Accordion Cabaret",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 7,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-burlesque-ego-tale-le-systeme-de-macron-v5",
-        "ep_title": "Le système, ça voulait dire… v5 • sutraFRENCH • Burlesque Ego Cabaret",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 8,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-burlesque-ego-tale-le-systeme-de-macron-v6",
-        "ep_title": "Le système, ça voulait dire… v6 • sutraFRENCH • Burlesque Ego Accordion Masquerade",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 9,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-burlesque-ego-tale-le-systeme-de-macron-v7",
-        "ep_title": "Le système, ça voulait dire… v8 • sutraFRENCH • Burlesque Ego Accordion Masquerade",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 10,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-burlesque-ego-tale-le-systeme-de-macron-v8",
-        "ep_title": "Le système, ça voulait dire… v8 • sutraFRENCH • Burlesque Ego Accordion Masquerade",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 11,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-burlesque-ego-tale-le-systeme-de-macron-v9",
-        "ep_title": "Le système, ça voulait dire… v9 • sutraFRENCH • Burlesque Ego Accordion Masquerade",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 12,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-dub-le-poids-de-lego-v1",
-        "ep_title": "Le Poids de l'Ego v1 • sutraFRENCH • Burlesque Ego Dub Cabaret",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 13,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-folk-ego-tale-oh-le-ptit-manu",
-        "ep_title": "Le système, ça voulait dire… v9 • sutraFRENCH • Burlesque Ego Cabaret",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 14,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-jazz-le-ptit-menteur-v1",
-        "ep_title": "Manu, Le P'tit Menteur v2 • sutraFRENCH • Burlesque Ego Accordion Cabaret",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 15,
-        "ep_url": "https://soundcloud.com/bananasutra/sutrablow-french-jazz-le-ptit-menteur-v2",
-        "ep_title": "Manu, Le P'tit Menteur v2 • sutraFRENCH • Burlesque Ego Accordion Cabaret",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/le-systeme-de-macron-le-ptit-con",
+        "ep_title": "Le Système EP MIX X16 | Bluesy French Jazz",
         "ep_rating": ""
       }
     ],
@@ -32607,7 +32517,7 @@
     "written_year": "2025",
     "song_in_app": true,
     "fav": false,
-    "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
     "songbook": "Quack: MAxxxA Saga",
     "muse": "",
     "primary_ep_volume": 1,
@@ -32617,32 +32527,14 @@
     "ep_volumes": [
       {
         "ep_volume": 1,
-        "ep_url": "https://soundcloud.com/bananasutra/1-maha-o-make-america-human",
-        "ep_title": "[1] MAHA • Make America Humane Again • Psy Waltz BURLESQUEsutra",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/maxa-series",
+        "ep_title": "MAxA Alphabet Series Compilation - Make America Humane · Kind · Safe · Smart · etcetera Alright?!",
         "ep_rating": ""
       },
       {
         "ep_volume": 2,
-        "ep_url": "https://soundcloud.com/bananasutra/3-maha-o-make-america-human",
-        "ep_title": "[3] MAHA • Make America Humane Again • Bass IBYN BURLESQUE JAZZsutra",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 3,
-        "ep_url": "https://soundcloud.com/bananasutra/4-maha-o-make-america-human",
-        "ep_title": "[4] MAHA • Make America Humane Again • Accordion CAT BURLESQUEsutra",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 4,
-        "ep_url": "https://soundcloud.com/bananasutra/5-maha-o-make-america-human",
-        "ep_title": "[5] MAHA • Make America Humane Again • Authentic Banjo FOLKsutra",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 5,
-        "ep_url": "https://soundcloud.com/bananasutra/7-maha-o-make-america-human",
-        "ep_title": "[7] MAHA • Make America Humane Again • Booya BANJOsutra",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/maha-make-america-humane-again-vol2-epx6-blowsutra-psy-trip-hop",
+        "ep_title": "MAHA (Make America Humane Again) ☆ VOL.2 EPx6 ☆ BLOWsutra (MAxA Series) Psychedelic Trip Hop",
         "ep_rating": ""
       }
     ],
@@ -33166,7 +33058,7 @@
         "lyrics_id": "L-149",
         "lyrics_title": "MAHA (Make America Humane Again)",
         "url_slug": "maha-make-america-humane-again",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true
@@ -33391,7 +33283,7 @@
         "lyrics_id": "L-149",
         "lyrics_title": "MAHA (Make America Humane Again)",
         "url_slug": "maha-make-america-humane-again",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true
@@ -34232,7 +34124,7 @@
         "lyrics_id": "L-149",
         "lyrics_title": "MAHA (Make America Humane Again)",
         "url_slug": "maha-make-america-humane-again",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true
@@ -34630,7 +34522,7 @@
         "lyrics_id": "L-149",
         "lyrics_title": "MAHA (Make America Humane Again)",
         "url_slug": "maha-make-america-humane-again",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true
@@ -35468,7 +35360,7 @@
         "lyrics_id": "L-149",
         "lyrics_title": "MAHA (Make America Humane Again)",
         "url_slug": "maha-make-america-humane-again",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
         "has_in_app_playback": true,
         "has_sc_catalog_listen": false,
         "has_youtube_video": true
@@ -39784,20 +39676,14 @@
     "ep_volumes": [
       {
         "ep_volume": 1,
-        "ep_url": "https://soundcloud.com/bananasutra/03-defy-song-2-optics-of-cruelty-blowsutra-jazz-open-low-3",
-        "ep_title": "[03] DEFY (Song 2) • Optics of Cruelty • BLOWsutra JAZZ LOFI",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/defy-3-songs-epx7-blowsutra-jazzy-folk-lo-fi-blues",
+        "ep_title": "DEFY ✰ 3 Songs EPx7 ✰ BLOWsutra Jazzy Folk Lo-Fi BLUES",
         "ep_rating": ""
       },
       {
         "ep_volume": 2,
-        "ep_url": "https://soundcloud.com/bananasutra/side-a-02-optics-of-cruelty-defy-ep-vol-2-blowsutra-revolution-ring-psychedelic-piano-burlesque-jazz-2",
-        "ep_title": "Side A [02] Optics of Cruelty - DEFY EP Vol 2 - BLOWsutra Revolution Ring Psychedelic Piano Burlesque JAZZ",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 3,
-        "ep_url": "https://soundcloud.com/bananasutra/side-b-02-optics-of-cruelty-defy-ep-vol-2-blowsutra-revolution-ring-psychedelic-trip-hope-lofi-5",
-        "ep_title": "Side B [02] Optics of Cruelty - DEFY EP Vol 2 - BLOWsutra Revolution Ring Psychedelic Trip Hop(e) LOFI",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/defy-vol-2-3-songs-epx6-blowsutra-revolution-ring-lofi-jazz-fusion",
+        "ep_title": "DEFY (Vol 2) - 3 Songs EPx6 - BLOWsutra Revolution Ring LoFi Jazz Fusion",
         "ep_rating": ""
       }
     ],
@@ -49449,26 +49335,14 @@
     "ep_volumes": [
       {
         "ep_volume": 1,
-        "ep_url": "https://soundcloud.com/bananasutra/01-defy-song-1-shameless-blowsutra-blues-1",
-        "ep_title": "[01] DEFY (Song 1) • Shameless • KNOWsutra BLUES",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/defy-3-songs-epx7-blowsutra-jazzy-folk-lo-fi-blues",
+        "ep_title": "DEFY ✰ 3 Songs EPx7 ✰ BLOWsutra Jazzy Folk Lo-Fi BLUES",
         "ep_rating": ""
       },
       {
         "ep_volume": 2,
-        "ep_url": "https://soundcloud.com/bananasutra/bonus-shameless-defy-ep-vol-2-blowsutra-revolution-ring-psychedelic-piano-jazz-burlesque-7",
-        "ep_title": "[BONUS] Shameless - DEFY EP Vol 2 - BLOWsutra Revolution Ring Psychedelic Piano Jazz BURLESQUE",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 3,
-        "ep_url": "https://soundcloud.com/bananasutra/side-a-01-shameless-defy-ep-vol-2-blowsutra-revolution-ring-psychedelic-piano-burlesque-jazz-1",
-        "ep_title": "Side A [01] Shameless - DEFY EP Vol 2 - BLOWsutra Revolution Ring Psychedelic Piano Burlesque JAZZ",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 4,
-        "ep_url": "https://soundcloud.com/bananasutra/side-b-01-shameless-defy-ep-vol-2-blowsutra-revolution-ring-psychedelic-trip-hope-lofi-4",
-        "ep_title": "Side B [01] Shameless - DEFY EP Vol 2 - BLOWsutra Revolution Ring Psychedelic Trip Hop(e) LOFI",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/defy-vol-2-3-songs-epx6-blowsutra-revolution-ring-lofi-jazz-fusion",
+        "ep_title": "DEFY (Vol 2) - 3 Songs EPx6 - BLOWsutra Revolution Ring LoFi Jazz Fusion",
         "ep_rating": ""
       }
     ],
@@ -55988,32 +55862,8 @@
     "ep_volumes": [
       {
         "ep_volume": 1,
-        "ep_url": "https://soundcloud.com/bananasutra/side-a-05-ep-bertrand-the-unhappiness-dance-growsutra-indie-jazz-5",
-        "ep_title": "Side A [05] EP Bertrand - The Unhappiness Dance - GROWsutra Indie JAZZ",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 2,
-        "ep_url": "https://soundcloud.com/bananasutra/side-b-01-ep-bertrand-the-conquest-of-happiness-growsutra-lullaby-indie-mantra-6",
-        "ep_title": "Side B [01] EP Bertrand - The Conquest of Happiness - GROWsutra Lullaby Indie MANTRA",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 3,
-        "ep_url": "https://soundcloud.com/bananasutra/side-b-02-ep-bertrand-the-conquest-of-happiness-growsutra-indie-folk-7",
-        "ep_title": "Side B [02] EP Bertrand - The Conquest of Happiness - GROWsutra Indie FOLK",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 4,
-        "ep_url": "https://soundcloud.com/bananasutra/side-b-03-ep-bertrand-the-conquest-of-happiness-growsutra-jazzy-folk-8",
-        "ep_title": "Side B [03] EP Bertrand - The Conquest of Happiness - GROWsutra Jazzy FOLK",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 5,
-        "ep_url": "https://soundcloud.com/bananasutra/side-b-04-ep-bertrand-the-conquest-of-happiness-growsutra-indie-folk-jazz-9",
-        "ep_title": "Side B [04] EP Bertrand - The Conquest of Happiness - GROWsutra Indie Folk JAZZ",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/the-conquest-of-happiness-according-to-bertrand-russel-2-songs-epx10-knowsutra",
+        "ep_title": "The Conquest of Happiness (according to Bertrand Russel) ☰ 2 Songs EPx10 ☰ KNOWsutra",
         "ep_rating": ""
       }
     ],
@@ -56121,45 +55971,45 @@
         "sutra": "KNOWsutra"
       },
       {
-        "track_id": "2213380412",
+        "track_id": "2213380427",
         "lyrics_id": "L-244",
-        "track_title": "Side A [05] EP Bertrand - The Unhappiness Dance - GROWsutra Indie JAZZ",
-        "lyrics_title": "The Conquest of Happiness",
-        "sc_url": "https://soundcloud.com/bananasutra/side-a-05-ep-bertrand-the-unhappiness-dance-growsutra-indie-jazz-5",
-        "play_count": 198,
+        "track_title": "Side B [05] EP Bertrand - The Conquest of Happiness - GROWsutra Sweet Waltz BURLESQUE",
+        "lyrics_title": "The Unhappiness Tango",
+        "sc_url": "https://soundcloud.com/bananasutra/side-b-05-ep-bertrand-the-conquest-of-happiness-growsutra-sweet-waltz-burlesque-10",
+        "play_count": 318,
         "like_count": 5,
-        "engagement_rate": 2.525252525252525,
-        "duration_sec": 268,
-        "duration_raw": "4:28",
+        "engagement_rate": 1.5723270440251573,
+        "duration_sec": 278,
+        "duration_raw": "4:38",
         "genres": [
-          "JAZZ",
-          "INDIE",
-          "FOLK"
+          "BURLESQUE",
+          "WALTZ",
+          "INDIE"
         ],
-        "primary_genre": "JAZZ",
+        "primary_genre": "BURLESQUE",
         "secondary_genres": [
-          "INDIE",
-          "FOLK"
+          "WALTZ",
+          "INDIE"
         ],
         "soundcloud_genre": "Soundtrack",
-        "secondary_genre": "INDIE",
+        "secondary_genre": "WALTZ",
         "instruments": [
           "BASS"
         ],
         "ep_title": "The Conquest of Happiness (according to Bertrand Russel) ☰ 2 Songs EPx10 ☰ KNOWsutra",
         "ep_url": "https://soundcloud.com/bananasutra/sets/the-conquest-of-happiness-according-to-bertrand-russel-2-songs-epx10-knowsutra",
-        "ep_track_number": 5,
+        "ep_track_number": 10,
         "ep_total_tracks": 10,
         "created_at": "2025-11-16T04:20:00",
         "artwork_url": "https://i1.sndcdn.com/artworks-mzPTVVzYjzKf5bIY-HeAycA-t500x500.png",
-        "waveform_url": "https://wave.sndcdn.com/gjWtBgqAMqEb_m.json",
+        "waveform_url": "https://wave.sndcdn.com/esjHNu87JvEW_m.json",
         "bpm": 0,
         "track_status": "",
         "track_in_app": true,
-        "fav_track": true,
+        "fav_track": false,
         "mood": "KINDLY",
         "tempo_feel": "LOWBEAT",
-        "curation_rating": "4",
+        "curation_rating": "3",
         "sutra": "KNOWsutra"
       }
     ],
@@ -59613,26 +59463,8 @@
     "ep_volumes": [
       {
         "ep_volume": 1,
-        "ep_url": "https://soundcloud.com/bananasutra/side-a-01-ep-bertrand-the-unhappiness-dance-growsutra-jazzy-burlesque-1",
-        "ep_title": "Side A [01] EP Bertrand - The Unhappiness Dance - GROWsutra Jazzy BURLESQUE",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 2,
-        "ep_url": "https://soundcloud.com/bananasutra/side-a-02-ep-bertrand-the-unhappiness-dance-growsutra-jazzy-burlesque-2",
-        "ep_title": "Side A [02] EP Bertrand - The Unhappiness Dance - GROWsutra Jazzy BURLESQUE",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 3,
-        "ep_url": "https://soundcloud.com/bananasutra/side-a-03-ep-bertrand-the-unhappiness-dance-growsutra-jazzy-indie-folk-3",
-        "ep_title": "Side A [03] EP Bertrand - The Unhappiness Dance - GROWsutra Jazzy Indie FOLK",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 4,
-        "ep_url": "https://soundcloud.com/bananasutra/side-b-05-ep-bertrand-the-conquest-of-happiness-growsutra-sweet-waltz-burlesque-10",
-        "ep_title": "Side B [05] EP Bertrand - The Conquest of Happiness - GROWsutra Sweet Waltz BURLESQUE",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/the-conquest-of-happiness-according-to-bertrand-russel-2-songs-epx10-knowsutra",
+        "ep_title": "The Conquest of Happiness (according to Bertrand Russel) ☰ 2 Songs EPx10 ☰ KNOWsutra",
         "ep_rating": ""
       }
     ],
@@ -59698,6 +59530,48 @@
       }
     ],
     "tracks": [
+      {
+        "track_id": "2213380412",
+        "lyrics_id": "L-393",
+        "track_title": "Side A [05] EP Bertrand - The Unhappiness Dance - GROWsutra Indie JAZZ",
+        "lyrics_title": "The Conquest of Happiness",
+        "sc_url": "https://soundcloud.com/bananasutra/side-a-05-ep-bertrand-the-unhappiness-dance-growsutra-indie-jazz-5",
+        "play_count": 198,
+        "like_count": 5,
+        "engagement_rate": 2.525252525252525,
+        "duration_sec": 268,
+        "duration_raw": "4:28",
+        "genres": [
+          "JAZZ",
+          "INDIE",
+          "FOLK"
+        ],
+        "primary_genre": "JAZZ",
+        "secondary_genres": [
+          "INDIE",
+          "FOLK"
+        ],
+        "soundcloud_genre": "Soundtrack",
+        "secondary_genre": "INDIE",
+        "instruments": [
+          "BASS"
+        ],
+        "ep_title": "The Conquest of Happiness (according to Bertrand Russel) ☰ 2 Songs EPx10 ☰ KNOWsutra",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/the-conquest-of-happiness-according-to-bertrand-russel-2-songs-epx10-knowsutra",
+        "ep_track_number": 5,
+        "ep_total_tracks": 10,
+        "created_at": "2025-11-16T04:20:00",
+        "artwork_url": "https://i1.sndcdn.com/artworks-mzPTVVzYjzKf5bIY-HeAycA-t500x500.png",
+        "waveform_url": "https://wave.sndcdn.com/gjWtBgqAMqEb_m.json",
+        "bpm": 0,
+        "track_status": "",
+        "track_in_app": true,
+        "fav_track": true,
+        "mood": "KINDLY",
+        "tempo_feel": "LOWBEAT",
+        "curation_rating": "4",
+        "sutra": "KNOWsutra"
+      },
       {
         "track_id": "2213380424",
         "lyrics_id": "L-393",
@@ -59776,48 +59650,6 @@
         "mood": "RAINY",
         "tempo_feel": "LOWBEAT",
         "curation_rating": "2",
-        "sutra": "KNOWsutra"
-      },
-      {
-        "track_id": "2213380427",
-        "lyrics_id": "L-393",
-        "track_title": "Side B [05] EP Bertrand - The Conquest of Happiness - GROWsutra Sweet Waltz BURLESQUE",
-        "lyrics_title": "The Unhappiness Tango",
-        "sc_url": "https://soundcloud.com/bananasutra/side-b-05-ep-bertrand-the-conquest-of-happiness-growsutra-sweet-waltz-burlesque-10",
-        "play_count": 318,
-        "like_count": 5,
-        "engagement_rate": 1.5723270440251573,
-        "duration_sec": 278,
-        "duration_raw": "4:38",
-        "genres": [
-          "BURLESQUE",
-          "WALTZ",
-          "INDIE"
-        ],
-        "primary_genre": "BURLESQUE",
-        "secondary_genres": [
-          "WALTZ",
-          "INDIE"
-        ],
-        "soundcloud_genre": "Soundtrack",
-        "secondary_genre": "WALTZ",
-        "instruments": [
-          "BASS"
-        ],
-        "ep_title": "The Conquest of Happiness (according to Bertrand Russel) ☰ 2 Songs EPx10 ☰ KNOWsutra",
-        "ep_url": "https://soundcloud.com/bananasutra/sets/the-conquest-of-happiness-according-to-bertrand-russel-2-songs-epx10-knowsutra",
-        "ep_track_number": 10,
-        "ep_total_tracks": 10,
-        "created_at": "2025-11-16T04:20:00",
-        "artwork_url": "https://i1.sndcdn.com/artworks-mzPTVVzYjzKf5bIY-HeAycA-t500x500.png",
-        "waveform_url": "https://wave.sndcdn.com/esjHNu87JvEW_m.json",
-        "bpm": 0,
-        "track_status": "",
-        "track_in_app": true,
-        "fav_track": false,
-        "mood": "KINDLY",
-        "tempo_feel": "LOWBEAT",
-        "curation_rating": "3",
         "sutra": "KNOWsutra"
       },
       {
@@ -63425,26 +63257,14 @@
     "ep_volumes": [
       {
         "ep_volume": 1,
-        "ep_url": "https://soundcloud.com/bananasutra/06-defy-song-3-universal-currency-folk-6",
-        "ep_title": "[06] DEFY (Song 3) Universal Currency • FOLK",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/defy-3-songs-epx7-blowsutra-jazzy-folk-lo-fi-blues",
+        "ep_title": "DEFY ✰ 3 Songs EPx7 ✰ BLOWsutra Jazzy Folk Lo-Fi BLUES",
         "ep_rating": ""
       },
       {
         "ep_volume": 2,
-        "ep_url": "https://soundcloud.com/bananasutra/07-defy-song-3-universal-currency-destiny-blues-7",
-        "ep_title": "[07] DEFY (Song 3) Universal Currency • Destiny BLUES",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 3,
-        "ep_url": "https://soundcloud.com/bananasutra/side-a-03-universal-currency-defy-ep-vol-2-blowsutra-revolution-ring-psychedelic-piano-burlesque-jazz-3",
-        "ep_title": "Side A [03] Universal Currency - DEFY EP Vol 2 - BLOWsutra Revolution Ring Psychedelic Piano Burlesque JAZZ",
-        "ep_rating": ""
-      },
-      {
-        "ep_volume": 4,
-        "ep_url": "https://soundcloud.com/bananasutra/side-b-03-universal-currency-defy-ep-vol-2-blowsutra-revolution-ring-psychedelic-trip-hope-lofi-6",
-        "ep_title": "Side B [03] Universal Currency - DEFY EP Vol 2 - BLOWsutra Revolution Ring Psychedelic Trip Hop(e) LOFI",
+        "ep_url": "https://soundcloud.com/bananasutra/sets/defy-vol-2-3-songs-epx6-blowsutra-revolution-ring-lofi-jazz-fusion",
+        "ep_title": "DEFY (Vol 2) - 3 Songs EPx6 - BLOWsutra Revolution Ring LoFi Jazz Fusion",
         "ep_rating": ""
       }
     ],

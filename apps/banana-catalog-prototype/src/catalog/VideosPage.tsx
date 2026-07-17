@@ -37,6 +37,7 @@ import { CatalogMediaOutbound } from './CatalogMediaOutbound'
 import { YoutubeEmbeddedPlayer } from './YouTubeEmbed'
 import { featuredYoutubeSongPageHref } from './featuredYoutubeSongPageHref'
 import { ScrollRevealSection } from './ScrollRevealSection'
+import { CatalogProgressiveLoading } from './CatalogProgressiveLoading'
 import './CatalogApp.css'
 import './VideosPage.css'
 import { useSongCatalog } from './generatedData'
@@ -640,9 +641,7 @@ export function VideosPage() {
   const listSection = (
     <section className="videos-page__list-wrap catalog-index-after-filters" aria-label="Video list">
       {!youtubeCatalogReady ? (
-        <p className="videos-page__empty" aria-live="polite">
-          Loading videos…
-        </p>
+        <CatalogProgressiveLoading label="Loading videos" />
       ) : shownVideos.length === 0 ? (
         <p className="videos-page__empty">No videos match these filters.</p>
       ) : (

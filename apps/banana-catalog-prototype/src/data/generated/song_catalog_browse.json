@@ -2450,7 +2450,7 @@
     "lang": "EN",
     "written_year": "2025",
     "published_at": "2026-02-11T23:37:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-1kvONAzRbkd2SdIu-RVmpoA-t500x500.png",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-JGT1OnfOXKJX40oI-WLwAYA-t500x500.png",
     "track_genres": [
       "BURLESQUE",
       "FOLK",
@@ -3061,7 +3061,7 @@
     "light_shadow": "SHADOW",
     "lang": "EN",
     "written_year": "2025",
-    "published_at": "2026-01-08T07:26:18Z",
+    "published_at": "2026-01-08T07:26:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-ZOzjbG3qBNgMzOWS-9LnxjQ-t500x500.png",
     "track_genres": [
       "JAZZ",
@@ -3112,7 +3112,7 @@
     "light_shadow": "SHADOW",
     "lang": "EN",
     "written_year": "2025",
-    "published_at": "2026-01-08T07:26:18Z",
+    "published_at": "2026-01-08T07:26:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-ZOzjbG3qBNgMzOWS-9LnxjQ-t500x500.png",
     "track_genres": [
       "BURLESQUE",
@@ -3163,7 +3163,7 @@
     "light_shadow": "SHADOW",
     "lang": "EN",
     "written_year": "2025",
-    "published_at": "2026-01-08T07:26:18Z",
+    "published_at": "2026-01-08T07:26:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-ZOzjbG3qBNgMzOWS-9LnxjQ-t500x500.png",
     "track_genres": [
       "JAZZ"
@@ -4599,14 +4599,15 @@
     "light_shadow": "LIGHT",
     "lang": "EN",
     "written_year": "2025",
-    "published_at": "2025-11-16T04:20:39Z",
+    "published_at": "2025-11-16T04:20:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-mzPTVVzYjzKf5bIY-HeAycA-t500x500.png",
     "track_genres": [
+      "BURLESQUE",
       "JAZZ"
     ],
     "track_secondary_genres": [
-      "FOLK",
-      "INDIE"
+      "INDIE",
+      "WALTZ"
     ],
     "track_instruments": [
       "BASS",
@@ -4620,9 +4621,9 @@
     ],
     "discovery_top_track_genres": "JAZZ, INDIE",
     "track_count_published": 2,
-    "aggregate_play_count": 828,
+    "aggregate_play_count": 948,
     "aggregate_like_count": 14,
-    "aggregate_engagement_rate": 1.6908212560386473,
+    "aggregate_engagement_rate": 1.4767932489451476,
     "peak_play_count": 630,
     "peak_like_count": 9,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/the-conquest-of-happiness-according-to-bertrand-russel-2-songs-epx10-knowsutra",
@@ -4646,17 +4647,17 @@
     "light_shadow": "SHADOW",
     "lang": "EN",
     "written_year": "2025",
-    "published_at": "2025-11-16T04:20:39Z",
+    "published_at": "2025-11-16T04:20:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-mzPTVVzYjzKf5bIY-HeAycA-t500x500.png",
     "track_genres": [
       "BURLESQUE",
-      "FOLK"
+      "FOLK",
+      "JAZZ"
     ],
     "track_secondary_genres": [
       "FOLK",
       "INDIE",
-      "JAZZ",
-      "WALTZ"
+      "JAZZ"
     ],
     "track_instruments": [
       "BASS",
@@ -4670,11 +4671,11 @@
     "track_tempo_feels": [
       "LOWBEAT"
     ],
-    "discovery_top_track_genres": "BURLESQUE, FOLK",
+    "discovery_top_track_genres": "JAZZ, INDIE, FOLK",
     "track_count_published": 4,
-    "aggregate_play_count": 3295,
+    "aggregate_play_count": 3175,
     "aggregate_like_count": 32,
-    "aggregate_engagement_rate": 0.9711684370257967,
+    "aggregate_engagement_rate": 1.0078740157480315,
     "peak_play_count": 1389,
     "peak_like_count": 12,
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/the-conquest-of-happiness-according-to-bertrand-russel-2-songs-epx10-knowsutra",
@@ -14877,6 +14878,41 @@
     "song_muse_quote": "\"Yesterday\""
   },
   {
+    "lyrics_id": "L-136",
+    "lyrics_title": "Manu, P’tit Roi",
+    "url_slug": "manu-ptit-roi",
+    "summary_short": "Manu, p'tit roi, grandes ambitions, petite vérité.",
+    "lyrics_extract": "Ah, le p’tit Manu, sans âme, sans loi, / Il rigole bien fort, de nous et des droits.",
+    "sutra": "BLOWsutra",
+    "topic": "POOLITICS",
+    "intention": "beFAIR",
+    "light_shadow": "SHADOW",
+    "lang": "FR",
+    "written_year": "2024",
+    "published_at": "2024-11-03T02:33:00",
+    "cover_image_url": "https://i1.sndcdn.com/artworks-5bgKJmvCXOs9jvio-ky1CkQ-t500x500.png",
+    "track_genres": [],
+    "track_secondary_genres": [],
+    "track_instruments": [],
+    "track_moods": [],
+    "track_tempo_feels": [],
+    "discovery_top_track_genres": "",
+    "track_count_published": 0,
+    "aggregate_play_count": 0,
+    "aggregate_like_count": 0,
+    "aggregate_engagement_rate": 0.0,
+    "peak_play_count": 0,
+    "peak_like_count": 0,
+    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/le-systeme-de-macron-le-ptit-con",
+    "has_in_app_playback": false,
+    "has_sc_catalog_listen": false,
+    "has_youtube_video": false,
+    "has_youtube_embed": false,
+    "songbook": "Speak: APES (gone wrong)",
+    "muse": "",
+    "song_muse_quote": "\"La Boheme\""
+  },
+  {
     "lyrics_id": "L-137",
     "lyrics_title": "Le Système",
     "url_slug": "le-systeme",
@@ -14888,7 +14924,7 @@
     "light_shadow": "SHADOW",
     "lang": "FR",
     "written_year": "2024",
-    "published_at": "2024-11-03T02:33:17Z",
+    "published_at": "2024-11-03T02:33:00",
     "cover_image_url": "https://i1.sndcdn.com/artworks-5bgKJmvCXOs9jvio-ky1CkQ-t500x500.png",
     "track_genres": [
       "BURLESQUE",
@@ -14929,41 +14965,6 @@
     "has_youtube_embed": true,
     "songbook": "Speak: APES (gone wrong)",
     "muse": "Charles Aznavour",
-    "song_muse_quote": "\"La Boheme\""
-  },
-  {
-    "lyrics_id": "L-136",
-    "lyrics_title": "Manu, P’tit Roi",
-    "url_slug": "manu-ptit-roi",
-    "summary_short": "Manu, p'tit roi, grandes ambitions, petite vérité.",
-    "lyrics_extract": "Ah, le p’tit Manu, sans âme, sans loi, / Il rigole bien fort, de nous et des droits.",
-    "sutra": "BLOWsutra",
-    "topic": "POOLITICS",
-    "intention": "beFAIR",
-    "light_shadow": "SHADOW",
-    "lang": "FR",
-    "written_year": "2024",
-    "published_at": "2024-11-03T02:33:00",
-    "cover_image_url": "https://i1.sndcdn.com/artworks-5bgKJmvCXOs9jvio-ky1CkQ-t500x500.png",
-    "track_genres": [],
-    "track_secondary_genres": [],
-    "track_instruments": [],
-    "track_moods": [],
-    "track_tempo_feels": [],
-    "discovery_top_track_genres": "",
-    "track_count_published": 0,
-    "aggregate_play_count": 0,
-    "aggregate_like_count": 0,
-    "aggregate_engagement_rate": 0.0,
-    "peak_play_count": 0,
-    "peak_like_count": 0,
-    "primary_ep_url": "https://soundcloud.com/bananasutra/sets/le-systeme-de-macron-le-ptit-con",
-    "has_in_app_playback": false,
-    "has_sc_catalog_listen": false,
-    "has_youtube_video": false,
-    "has_youtube_embed": false,
-    "songbook": "Speak: APES (gone wrong)",
-    "muse": "",
     "song_muse_quote": "\"La Boheme\""
   },
   {

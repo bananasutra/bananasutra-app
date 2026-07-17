@@ -19,6 +19,7 @@ import {
   type CatalogFilterBarFacetGroup,
 } from './CatalogFilterBar'
 import { CatalogInfiniteScrollFooter } from './CatalogInfiniteScrollFooter'
+import { CatalogProgressiveLoading } from './CatalogProgressiveLoading'
 import {
   catalogInfiniteScrollStorageKey,
   useCatalogInfiniteScroll,
@@ -407,7 +408,7 @@ export function QuoteWall() {
           <h2 id="quotes-title-loading" className="visually-hidden about-page__anchor-target">
             The quotes
           </h2>
-          <p className="about-page__prose">Loading quotes...</p>
+          <CatalogProgressiveLoading label="Loading quotes" variant="page" />
         </section>
       </div>
     )

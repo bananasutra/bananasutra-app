@@ -301,3 +301,13 @@ update the `HEADER_MAP` dict in the script and re-run.
 | `sc_playlist_type` | `sc_playlist_type` |
 | `scplaylist_in_app` | `scplaylist_in_app` |
 | `songbook_id` | `songbook_id` |
+
+## 301_redirects-2026-07-15.csv
+
+| raw Airtable header | canonical name |
+|---|---|
+| `redirect_from` | `redirect_from` |
+| `redirect_to` | `redirect_to` |
+| `redirect_note` | `redirect_note` |
+| `redirect_status` | `redirect_status` |
+| `redirect_live` | `redirect_live` |

@@ -11,6 +11,7 @@ import {
   type CatalogFilterBarActivePill,
   type CatalogFilterBarFacetGroup,
 } from './CatalogFilterBar'
+import { CatalogProgressiveLoading } from './CatalogProgressiveLoading'
 import './CatalogApp.css'
 import './catalog-page-shell.css'
 
@@ -461,7 +462,7 @@ export function MuseCardGrid() {
           <h2 id="muses-title-loading" className="visually-hidden about-page__anchor-target">
             The muses
           </h2>
-          <p className="about-page__prose">Loading muses...</p>
+          <CatalogProgressiveLoading label="Loading muses" variant="page" />
         </section>
       </div>
     )

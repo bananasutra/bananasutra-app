@@ -1376,7 +1376,9 @@ def merge_full_v4_listen_volumes(
         elif len(singles) >= 2 and sets and any(
             is_compilation_ep_set(_norm_soundcloud_url(str(s.get("ep_url") or ""))) for s in sets
         ):
-            merged[lid] = sorted(singles, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")))
+            # Multi-song EP: keep the shared /sets/ playlist as the EP tab(s).
+            # Member singles belong in TOP TRACKS, not as SINGLE · VOL tabs.
+            merged[lid] = sorted(sets, key=lambda x: (x.get("ep_volume", 0), str(x.get("ep_url") or "")))
         elif sets and singles and not any(
             is_compilation_ep_set(_norm_soundcloud_url(str(s.get("ep_url") or ""))) for s in sets
         ):
@@ -1428,6 +1430,15 @@ def normalize_title_for_match(value: str | None) -> str:
     return "".join(chars).strip()
 
 
+def normalize_title_for_ep_ownership_match(value: str | None) -> str:
+    """Title normalize plus known SC vs catalog aliases (Dance ↔ Tango)."""
+    text = normalize_title_for_match(value)
+    if not text:
+        return ""
+    # Catalog song is "The Unhappiness Tango"; SC singles say "Unhappiness Dance".
+    return text.replace("unhappiness dance", "unhappiness tango")
+
+
 def title_match_score(target: str, candidate: str) -> int:
     if not target or not candidate:
         return 0
@@ -1440,6 +1451,26 @@ def title_match_score(target: str, candidate: str) -> int:
     if candidate.startswith(target + " ") or candidate.endswith(" " + target):
         return 85
     return 0
+
+
+def best_compilation_lid_from_track_title(
+    track_title: str,
+    lids: list[str],
+    lyrics_titles_by_lid: dict[str, str],
+) -> tuple[str, int]:
+    """Score SoundCloud track_title against each compilation EP member song title."""
+    title = normalize_title_for_ep_ownership_match(track_title)
+    if not title:
+        return "", 0
+    best_lid = ""
+    best_score = 0
+    for lid in lids:
+        song_title = normalize_title_for_ep_ownership_match(lyrics_titles_by_lid.get(lid, ""))
+        score = title_match_score(song_title, title) if song_title else 0
+        if score > best_score:
+            best_score = score
+            best_lid = lid
+    return best_lid, best_score
 
 
 def build_lids_by_ep_set(sc_eps_rows: list[dict[str, str]]) -> dict[str, list[str]]:
@@ -1463,7 +1494,8 @@ def canonical_lyrics_id_from_ep_row(
 ) -> str:
     """
     Prefer sc_eps EP ownership over stale track lyrics_id (e.g. Blessed Be The Dogs L-33 vs L-146).
-    Single-song EPs always win; compilation EPs keep declared lid when valid, else title-match.
+    Single-song EPs always win. Compilation EPs: prefer SoundCloud track_title when it strongly
+    matches a member song (overrides swapped Airtable lyrics_id); else keep declared if valid.
     """
     ep_set = _norm_soundcloud_url(str(row.get("ep_url") or ""))
     if not ep_set:
@@ -1473,21 +1505,29 @@ def canonical_lyrics_id_from_ep_row(
         return declared_lid if declared_lid.startswith("L-") else ""
     if len(lids) == 1:
         return lids[0]
+
+    track_title = str(row.get("track_title") or "")
+    best_lid, best_score = best_compilation_lid_from_track_title(
+        track_title, lids, lyrics_titles_by_lid
+    )
+    if best_score >= 85 and best_lid:
+        return best_lid
+
     if declared_lid in lids:
         return declared_lid
-    title = normalize_title_for_match(str(row.get("lyrics_title") or row.get("track_title") or ""))
+
+    title = normalize_title_for_ep_ownership_match(
+        str(row.get("lyrics_title") or row.get("track_title") or "")
+    )
     if "criminels" in title:
         return "L-53" if "L-53" in lids else declared_lid
     if "criminal" in title or "crrriminals" in title:
         return "L-52" if "L-52" in lids else declared_lid
-    best_lid = ""
-    best_score = 0
-    for lid in lids:
-        song_title = normalize_title_for_match(lyrics_titles_by_lid.get(lid, ""))
-        score = title_match_score(song_title, title) if song_title else 0
-        if score > best_score:
-            best_score = score
-            best_lid = lid
+    best_lid, best_score = best_compilation_lid_from_track_title(
+        str(row.get("lyrics_title") or row.get("track_title") or ""),
+        lids,
+        lyrics_titles_by_lid,
+    )
     if best_score >= 85 and best_lid:
         return best_lid
     return declared_lid if declared_lid.startswith("L-") else ""
