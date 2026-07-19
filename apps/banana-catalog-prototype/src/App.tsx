@@ -3,7 +3,6 @@ import { lazyWithRetry } from './lazyWithRetry'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { NavigationLoadingBridge } from './NavigationLoadingBridge'
-import { CatalogProgressiveLoading, CATALOG_PAGE_LOADING_LINES } from './catalog/CatalogProgressiveLoading'
 import { installRoutePrefetchOnIntent } from './routePrefetch'
 import { SearchRedirect } from './catalog/SearchRedirect'
 import { useBfCacheEmbedTeardown } from './catalog/useBfCacheEmbedTeardown'
@@ -48,6 +47,11 @@ function CatalogBrowseRoute() {
 
 function AppRouteFallback() {
   const [loadPhase, setLoadPhase] = useState<'initial' | 'waiting' | 'slow'>('initial')
+  // Duplicate of CATALOG_PAGE_LOADING_LINES — do not import catalogPageLoadingCopy here
+  // (would put it in the entry bundle and recreate the lazy→index circular dep).
+  const [loadingLine] = useState(() =>
+    Math.random() < 0.5 ? 'Peeling your banana' : 'Almost ripe',
+  )
   useEffect(() => {
     const waitingId = window.setTimeout(() => setLoadPhase('waiting'), 4500)
     const slowId = window.setTimeout(() => setLoadPhase('slow'), 12000)
@@ -58,12 +62,24 @@ function AppRouteFallback() {
   }, [])
   return (
     <div className="app-route-fallback">
-      <CatalogProgressiveLoading
-        labels={CATALOG_PAGE_LOADING_LINES}
-        ariaLabel="Loading page"
-        variant="page"
-        className="catalog-progressive-loading--centered"
-      />
+      {/* Markup mirrors CatalogProgressiveLoading — do not import that module here (entry circular-dep). */}
+      <div
+        className="catalog-progressive-loading catalog-progressive-loading--page catalog-progressive-loading--centered"
+        role="status"
+        aria-live="polite"
+        aria-busy="true"
+        aria-label="Loading page"
+      >
+        <span className="catalog-progressive-loading__spinner" aria-hidden />
+        <p className="catalog-progressive-loading__label" aria-hidden>
+          {loadingLine}
+          <span className="catalog-progressive-loading__dots" aria-hidden>
+            <span />
+            <span />
+            <span />
+          </span>
+        </p>
+      </div>
       {loadPhase === 'waiting' ? (
         <p className="app-route-fallback__hint">Still loading this page. Hang tight.</p>
       ) : null}

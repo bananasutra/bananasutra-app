@@ -4,6 +4,8 @@
 @import "./catalog/CatalogBreadcrumbs.css";
 @import "./catalog/catalog-page-shell.css";
 @import "./catalog/thumbShimmer.css";
+/* Entry-safe: route Suspense fallback uses these classes without importing the component module. */
+@import "./catalog/CatalogProgressiveLoading.css";
 
 :root {
   font-family: var(--font-ui);
