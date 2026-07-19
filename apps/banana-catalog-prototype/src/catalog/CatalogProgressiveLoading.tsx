@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import './CatalogProgressiveLoading.css'
+import { pickCatalogPageLoadingLine } from './catalogPageLoadingCopy'
+
+export { CATALOG_PAGE_LOADING_LINES } from './catalogPageLoadingCopy'
 
 type Variant = 'page' | 'inline'
 
@@ -21,21 +24,16 @@ type Props = {
   className?: string
 }
 
-/** Playful page-wait lines — Archivo Black caps in CSS; keep source sentence case. */
-export const CATALOG_PAGE_LOADING_LINES = ['Peeling your banana', 'Almost ripe'] as const
-
 function normalizeLabel(label: string): string {
   return label.replace(/\u2026|\.{2,}$/u, '').trimEnd()
-}
-
-function pickLabel(labels: readonly string[]): string {
-  const i = Math.floor(Math.random() * labels.length)
-  return normalizeLabel(labels[i] ?? labels[0] ?? '')
 }
 
 /**
  * Lightweight progressive loading: CSS-only motion, respects prefers-reduced-motion.
  * No images, no JS animation loops.
+ *
+ * Do not import this module from App.tsx / the entry bundle — it must stay in lazy
+ * route chunks (see verify-build-chunks.mjs circular-dep guard).
  */
 export function CatalogProgressiveLoading({
   label = 'Loading',
@@ -45,7 +43,7 @@ export function CatalogProgressiveLoading({
   className,
 }: Props) {
   const [text] = useState(() =>
-    labels && labels.length > 0 ? pickLabel(labels) : normalizeLabel(label),
+    labels && labels.length > 0 ? pickCatalogPageLoadingLine(labels) : normalizeLabel(label),
   )
   const announced = ariaLabel ? normalizeLabel(ariaLabel) : text
   const rootClass = [
