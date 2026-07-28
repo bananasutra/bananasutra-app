@@ -177,7 +177,7 @@
     "notes": "Male Fantasies' is a direct Atwood lyric quote-turned-song. Her work on how democracies slide into theocracies is the blueprint for...",
     "quote_excerpt": "\"Another belief of mine; that everyone else my age is an adult, whereas I am merely in disguise.\"",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Margaret_Atwood",
-    "song_count": 3
+    "song_count": 4
   },
   {
     "muse": "Charles Aznavour",
@@ -803,26 +803,6 @@
     "muse": "Marie Curie",
     "first_name": "Marie",
     "last_name": "Curie",
-    "muse_id": "",
-    "gender_pronoun": "She",
-    "type_category": "Scientist",
-    "country": "RU/FR",
-    "era": "Early 20th C",
-    "birth_year": "1867",
-    "death_year": "1934",
-    "famous_works": "",
-    "core_sutra": "",
-    "secondary_sutras": "",
-    "themes": "",
-    "notes": "",
-    "quote_excerpt": "",
-    "wikipedia_url": "https://en.wikipedia.org/wiki/Marie_Curie",
-    "song_count": 0
-  },
-  {
-    "muse": "Marie Curie",
-    "first_name": "Marie",
-    "last_name": "Curie",
     "muse_id": "M-41",
     "gender_pronoun": "She",
     "type_category": "Scientist,Author",
@@ -836,6 +816,26 @@
     "themes": "science,courage,humility,perseverance,truth",
     "notes": "Curie literally glowed — and she bowed to the mystery of the atom. First person to win two Nobels in two sciences. BOW energy as radical...",
     "quote_excerpt": "\"Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less.\"",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Marie_Curie",
+    "song_count": 0
+  },
+  {
+    "muse": "Marie Curie",
+    "first_name": "Marie",
+    "last_name": "Curie",
+    "muse_id": "M-196",
+    "gender_pronoun": "She",
+    "type_category": "Scientist",
+    "country": "RU/FR",
+    "era": "Early 20th C",
+    "birth_year": "1867",
+    "death_year": "1934",
+    "famous_works": "",
+    "core_sutra": "GROWsutra",
+    "secondary_sutras": "KNOWsutra",
+    "themes": "",
+    "notes": "",
+    "quote_excerpt": "",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Marie_Curie",
     "song_count": 0
   },
@@ -2240,6 +2240,26 @@
     "song_count": 5
   },
   {
+    "muse": "Annie Lennox",
+    "first_name": "Annie",
+    "last_name": "Lennox",
+    "muse_id": "M-198",
+    "gender_pronoun": "She",
+    "type_category": "Activist,Songwriter,Musician",
+    "country": "UK",
+    "era": "Late 20th C",
+    "birth_year": "1954",
+    "death_year": "",
+    "famous_works": "Sweet Dreams (Are Made of This)",
+    "core_sutra": "GROWsutra",
+    "secondary_sutras": "",
+    "themes": "",
+    "notes": "",
+    "quote_excerpt": "",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Annie_Lennox",
+    "song_count": 0
+  },
+  {
     "muse": "Carroll Lewis",
     "first_name": "Caroll",
     "last_name": "Lewis",
@@ -2900,6 +2920,26 @@
     "song_count": 0
   },
   {
+    "muse": "Otis Redding",
+    "first_name": "Otis",
+    "last_name": "Reding",
+    "muse_id": "M-197",
+    "gender_pronoun": "He",
+    "type_category": "Songwriter,Musician",
+    "country": "US",
+    "era": "Mid 20th C",
+    "birth_year": "1941",
+    "death_year": "1967",
+    "famous_works": "(Sittin' On) The Dock of the Bay, Respect",
+    "core_sutra": "GLOWsutra",
+    "secondary_sutras": "GROWsutra",
+    "themes": "",
+    "notes": "",
+    "quote_excerpt": "",
+    "wikipedia_url": "https://en.wikipedia.org/wiki/Otis_Redding",
+    "song_count": 0
+  },
+  {
     "muse": "Lou Reed",
     "first_name": "Lou",
     "last_name": "Reed",
@@ -3117,7 +3157,7 @@
     "notes": "My wise dead daddy. He gave me the two simplest and most radical instructions: get the facts right, keep love in sight. 'Two Things,...",
     "quote_excerpt": "The trouble with the world is that the stupid are cocksure and the intelligent are full of doubt.,To be without some of the things you want is an indispensable part of...",
     "wikipedia_url": "https://en.wikipedia.org/wiki/Bertrand_Russell",
-    "song_count": 12
+    "song_count": 13
   },
   {
     "muse": "Carl Sagan",
