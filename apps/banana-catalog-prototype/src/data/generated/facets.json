@@ -6,7 +6,7 @@
     },
     {
       "value": "KNOWsutra",
-      "count": 63
+      "count": 64
     },
     {
       "value": "GROWsutra",
@@ -36,7 +36,7 @@
   "light_shadow": [
     {
       "value": "LIGHT",
-      "count": 223
+      "count": 224
     },
     {
       "value": "SHADOW",
@@ -58,7 +58,7 @@
     },
     {
       "value": "WISDOM",
-      "count": 43
+      "count": 44
     },
     {
       "value": "TRUTH",
@@ -88,7 +88,7 @@
     },
     {
       "value": "beBRAVE",
-      "count": 39
+      "count": 40
     },
     {
       "value": "seeEGO",
@@ -154,7 +154,7 @@
   "written_year": [
     {
       "value": "2025",
-      "count": 218
+      "count": 219
     },
     {
       "value": "2024",
@@ -171,24 +171,24 @@
       "count": 83
     },
     {
+      "value": "LOFI",
+      "count": 67
+    },
+    {
       "value": "JAZZ",
       "count": 66
     },
     {
-      "value": "LOFI",
-      "count": 66
+      "value": "BURLESQUE",
+      "count": 60
     },
     {
       "value": "INDIE",
       "count": 60
     },
     {
-      "value": "BURLESQUE",
-      "count": 58
-    },
-    {
       "value": "BLUES",
-      "count": 47
+      "count": 48
     },
     {
       "value": "FOLK",
@@ -196,7 +196,7 @@
     },
     {
       "value": "MANTRA",
-      "count": 15
+      "count": 16
     },
     {
       "value": "ROCK",
@@ -210,11 +210,11 @@
     },
     {
       "value": "JAZZ",
-      "count": 71
+      "count": 72
     },
     {
       "value": "FOLK",
-      "count": 61
+      "count": 62
     },
     {
       "value": "BURLESQUE",
@@ -226,7 +226,7 @@
     },
     {
       "value": "LOFI",
-      "count": 43
+      "count": 44
     },
     {
       "value": "MANTRA",
@@ -234,7 +234,7 @@
     },
     {
       "value": "GIPSY",
-      "count": 36
+      "count": 37
     },
     {
       "value": "DUB",
@@ -269,11 +269,11 @@
       "count": 8
     },
     {
-      "value": "TECHNO",
-      "count": 6
+      "value": "WORLD",
+      "count": 7
     },
     {
-      "value": "WORLD",
+      "value": "TECHNO",
       "count": 6
     },
     {
@@ -300,19 +300,19 @@
     },
     {
       "value": "BANJO",
-      "count": 60
+      "count": 61
     },
     {
       "value": "PIANO",
-      "count": 49
+      "count": 50
     },
     {
       "value": "ACCORDION",
-      "count": 37
+      "count": 38
     },
     {
       "value": "DRUM",
-      "count": 31
+      "count": 32
     },
     {
       "value": "BRASS",
@@ -342,7 +342,7 @@
   "track_mood": [
     {
       "value": "NERDY",
-      "count": 74
+      "count": 76
     },
     {
       "value": "TRIPPY",
@@ -350,7 +350,7 @@
     },
     {
       "value": "KINDLY",
-      "count": 64
+      "count": 65
     },
     {
       "value": "PUNKY",
@@ -358,11 +358,11 @@
     },
     {
       "value": "CHEEKY",
-      "count": 50
+      "count": 51
     },
     {
       "value": "RAINY",
-      "count": 40
+      "count": 41
     },
     {
       "value": "HOLY",
@@ -380,11 +380,11 @@
   "track_tempo_feel": [
     {
       "value": "LOWBEAT",
-      "count": 183
+      "count": 184
     },
     {
       "value": "MIDBEAT",
-      "count": 78
+      "count": 79
     },
     {
       "value": "UPBEAT",
@@ -394,7 +394,7 @@
   "lang": [
     {
       "value": "EN",
-      "count": 383
+      "count": 384
     },
     {
       "value": "FR",
