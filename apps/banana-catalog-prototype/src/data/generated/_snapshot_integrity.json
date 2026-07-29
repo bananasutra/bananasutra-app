@@ -11,6 +11,6 @@
   },
   "errors": [],
   "warnings": [
-    "sc_eps: non-empty genres=258, genres_full=255 (informational; app facets ignore EP genres)."
+    "sc_eps: non-empty genres=258, genres_full=258 (informational; app facets ignore EP genres)."
   ]
 }
