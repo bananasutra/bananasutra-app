@@ -340,6 +340,7 @@ export function QuoteWall() {
       label: 'Primary sutra',
       allLabel: 'All primary sutras',
       allCount: contextualPrimarySutraRows.length,
+      showAllChip: false,
       onClearGroup: () => setPrimarySutraFilter('all'),
       options: primarySutraOptions.map(([sutra]) => {
         const count = contextualPrimarySutraRows.filter((row) => row.primary_sutra.trim() === sutra).length
@@ -358,6 +359,7 @@ export function QuoteWall() {
       label: 'Secondary sutra',
       allLabel: 'All secondary sutras',
       allCount: contextualSecondarySutraRows.length,
+      showAllChip: false,
       onClearGroup: () => setSecondarySutraFilter('all'),
       options: secondarySutraOptions.map(([sutra]) => {
         const count = contextualSecondarySutraRows.filter((row) => secondarySutras(row).includes(sutra)).length
@@ -376,6 +378,7 @@ export function QuoteWall() {
       label: 'Topic',
       allLabel: 'All topics',
       allCount: contextualTopicRows.length,
+      showAllChip: false,
       onClearGroup: () => setTopicFilter('all'),
       options: topicOptions.map(([topic]) => {
         const count = contextualTopicRows.filter((row) => topicLabel(row.core_topic) === topic).length
@@ -437,11 +440,11 @@ export function QuoteWall() {
           search={{
             id: 'quotes-find-input',
             label: 'Search',
-            ariaLabel: 'Find a quote, muse, sutra, topic, or song',
+            ariaLabel: 'Find a quote, muse, sutra, or topic',
             value: findQuote,
             onChange: setFindQuote,
             inputName: 'quotes_find',
-            placeholder: 'Find a quote, muse, sutra, topic, or song...',
+            placeholder: 'Find a quote, muse, sutra, or topic...',
           }}
           defaultExpanded={filterBarExpanded}
           onExpandedChange={setFilterBarExpanded}

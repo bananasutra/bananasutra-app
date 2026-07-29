@@ -57,7 +57,7 @@ import { splitMuseList } from './museFiltersCore'
 import { sutraClassName } from './sutraTheme'
 import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, SongEpVolume, YouTubeCatalogVideo } from './types'
 import { sutraHrefFromSongSutraField } from './sutraPageUtils'
-import { buildBrowsePathForFacet, CATALOG_BROWSE_PATH } from './urlState'
+import { buildBrowsePathForFacet, buildMuseSongsFindPath, CATALOG_BROWSE_PATH } from './urlState'
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { songRecordingJsonLd } from '../seo/jsonLd'
 import { PageMeta } from './PageMeta'
@@ -197,9 +197,7 @@ function firstInAppPlayableTrack(tracks: SongDetailTrack[], preferredGenre?: str
 }
 
 function searchCatalogHref(query: string): string {
-  const trimmed = query.trim()
-  if (!trimmed) return CATALOG_BROWSE_PATH
-  return `${CATALOG_BROWSE_PATH}?find=${encodeURIComponent(trimmed)}`
+  return buildMuseSongsFindPath(query)
 }
 
 /** Matches `_norm_soundcloud_url` in build_artifacts.py — stable lookup for EP duration metadata. */
@@ -968,6 +966,9 @@ function SongDetailLoaded({
       if (!requestedTrackId) {
         setTopTracksExpanded(false)
       }
+      // EP-only songs (multi-volume, no top tracks) must default to an EP tab even when
+      // YouTube exists below — otherwise tab stays on 'tracks', the EP panel stays hidden,
+      // and lyrics skip the media-height clamp (looks "fully expanded").
       const defaultListenTab: AudioListenTab =
         requestedSection === 'audio' || requestedTrackId
           ? hasTopTracksListenUi
@@ -975,7 +976,7 @@ function SongDetailLoaded({
             : showEpEmbed
               ? primaryListenEpTab
               : 'tracks'
-          : showEpEmbed && !hasTopTracksListenUi && !hasYoutubeVideos
+          : showEpEmbed && !hasTopTracksListenUi
             ? primaryListenEpTab
             : 'tracks'
       setAudioListenTab(defaultListenTab)
@@ -983,7 +984,6 @@ function SongDetailLoaded({
   }, [
     detail.lyrics_id,
     hasTopTracksListenUi,
-    hasYoutubeVideos,
     requestedSection,
     requestedTrackId,
     showEpEmbed,

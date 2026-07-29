@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useMusesCatalog } from './generatedData'
 import type { MuseCatalogItem } from './types'
 import { canonicalPathForRoute } from './seoPaths'
+import { buildMuseSongsFindPath } from './urlState'
 import { renderPageMeta } from './usePageMeta'
 import {
   CatalogFilterBar,
@@ -183,7 +184,7 @@ function MuseCard({ item, highlighted }: { item: MuseCatalogItem; highlighted: b
           ) : null}
         </dl>
         <div className="muse-card__links">
-          {item.song_count > 0 ? <Link to={`/songs?find=${encodeURIComponent(item.muse)}`}>Filter songs</Link> : null}
+          {item.song_count > 0 ? <Link to={buildMuseSongsFindPath(item.muse)}>Filter songs</Link> : null}
           {item.wikipedia_url ? (
             <a href={item.wikipedia_url} target="_blank" rel="noreferrer">
               Wikipedia
@@ -382,6 +383,7 @@ export function MuseCardGrid() {
       label: 'Era',
       allLabel: 'All eras',
       allCount: contextualEraRows.length,
+      showAllChip: false,
       onClearGroup: () => setEraFilter('all'),
       options: eraOptions.map(([era]) => {
         const count = contextualEraRows.filter((row) => splitList(row.era).includes(era)).length
@@ -401,6 +403,7 @@ export function MuseCardGrid() {
       label: 'Gender',
       allLabel: 'All',
       allCount: contextualGenderRows.length,
+      showAllChip: false,
       onClearGroup: () => setGenderFilter('all'),
       options: genderOptions.map(([gender]) => {
         const count = contextualGenderRows.filter((row) => row.gender_pronoun.trim() === gender).length
@@ -420,6 +423,7 @@ export function MuseCardGrid() {
       label: 'Type',
       allLabel: 'All types',
       allCount: contextualTypeRows.length,
+      showAllChip: false,
       onClearGroup: () => setTypeFilter('all'),
       options: typeOptions.map(([type]) => {
         const count = contextualTypeRows.filter((row) => splitList(row.type_category).includes(type)).length
@@ -439,6 +443,7 @@ export function MuseCardGrid() {
       label: 'Country',
       allLabel: 'All countries',
       allCount: contextualCountryRows.length,
+      showAllChip: false,
       onClearGroup: () => setCountryFilter('all'),
       options: countryOptions.map(([country]) => {
         const count = contextualCountryRows.filter((row) => row.country.trim() === country).length

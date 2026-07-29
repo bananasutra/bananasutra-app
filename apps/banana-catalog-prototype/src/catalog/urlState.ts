@@ -153,6 +153,21 @@ export function buildBrowsePath(
   return qs ? `${CATALOG_BROWSE_PATH}?${qs}` : CATALOG_BROWSE_PATH
 }
 
+/**
+ * Muse / person “filter songs” links. Muse `song_count` includes lyrics-only rows, but `/songs`
+ * defaults to listener media only — opt in so Hunter S. Thompson et al. don’t land on an empty grid.
+ */
+export function buildSongsFindPath(find: string, opts?: { includeLyricsOnly?: boolean }): string {
+  const trimmed = find.trim()
+  if (!trimmed) return CATALOG_BROWSE_PATH
+  return buildBrowsePath('newest', emptyFilterState(), trimmed, 'all', 1, opts?.includeLyricsOnly ?? false)
+}
+
+/** Muse-sourced song finds: always include lyrics-only so counts match the muses page. */
+export function buildMuseSongsFindPath(museName: string): string {
+  return buildSongsFindPath(museName, { includeLyricsOnly: true })
+}
+
 /** Pre-filter browse to a single facet value (replace mode). */
 export function buildBrowsePathForFacet(key: FilterFacetKey, value: string): string {
   const filters = emptyFilterState()

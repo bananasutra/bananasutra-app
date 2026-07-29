@@ -122,7 +122,15 @@ function ListenLpSampleCard({
             {isPlayLoading ? (
               <span className="listen-lp__sample-card__play-spinner" aria-hidden />
             ) : (
-              <span className="listen-lp__sample-card__play-glyph">{isActive && isPlaying ? '❚❚' : '▶'}</span>
+              <span
+                className={`listen-lp__sample-card__play-glyph${
+                  isActive && isPlaying
+                    ? ' listen-lp__sample-card__play-glyph--pause'
+                    : ' listen-lp__sample-card__play-glyph--play'
+                }`}
+              >
+                {isActive && isPlaying ? '❚❚' : '▶'}
+              </span>
             )}
           </span>
         </button>
