@@ -57,7 +57,7 @@ import { splitMuseList } from './museFiltersCore'
 import { sutraClassName } from './sutraTheme'
 import type { SongCatalogItem, SongDetailNavState, SongDetailRecord, SongDetailTrack, SongEpVolume, YouTubeCatalogVideo } from './types'
 import { sutraHrefFromSongSutraField } from './sutraPageUtils'
-import { buildBrowsePathForFacet, CATALOG_BROWSE_PATH } from './urlState'
+import { buildBrowsePathForFacet, buildMuseSongsFindPath, CATALOG_BROWSE_PATH } from './urlState'
 import { buildSrcset, coverImageUrl } from '../seo/imageUrl'
 import { songRecordingJsonLd } from '../seo/jsonLd'
 import { PageMeta } from './PageMeta'
@@ -197,9 +197,7 @@ function firstInAppPlayableTrack(tracks: SongDetailTrack[], preferredGenre?: str
 }
 
 function searchCatalogHref(query: string): string {
-  const trimmed = query.trim()
-  if (!trimmed) return CATALOG_BROWSE_PATH
-  return `${CATALOG_BROWSE_PATH}?find=${encodeURIComponent(trimmed)}`
+  return buildMuseSongsFindPath(query)
 }
 
 /** Matches `_norm_soundcloud_url` in build_artifacts.py — stable lookup for EP duration metadata. */
