@@ -1250,11 +1250,10 @@
     "playlist_total_likes": 238,
     "playlist_track_count": 16,
     "playlist_duration_total": "0:49:31",
-    "song_count": 17,
-    "songs_with_in_app_playback": 6,
+    "song_count": 16,
+    "songs_with_in_app_playback": 5,
     "member_lyrics_ids": [
       "L-344",
-      "L-263",
       "L-202",
       "L-63",
       "L-118",
@@ -1284,19 +1283,6 @@
         "has_youtube_embed": false,
         "aggregate_play_count": 4684,
         "aggregate_like_count": 56
-      },
-      {
-        "lyrics_id": "L-263",
-        "lyrics_title": "This Is My Quest",
-        "url_slug": "this-is-my-quest",
-        "summary_short": "Born with a fire that silence could not tame. This is the quest.",
-        "cover_image_url": "https://i1.sndcdn.com/artworks-qhqHRqMMeCjATzsp-RQ8fQQ-t500x500.png",
-        "has_in_app_playback": true,
-        "has_sc_catalog_listen": false,
-        "has_youtube_video": true,
-        "has_youtube_embed": true,
-        "aggregate_play_count": 16925,
-        "aggregate_like_count": 121
       },
       {
         "lyrics_id": "L-202",
@@ -1774,14 +1760,15 @@
     "playlist_total_likes": 231,
     "playlist_track_count": 25,
     "playlist_duration_total": "1:23:37",
-    "song_count": 25,
-    "songs_with_in_app_playback": 15,
+    "song_count": 26,
+    "songs_with_in_app_playback": 16,
     "member_lyrics_ids": [
       "L-193",
       "L-34",
       "L-346",
       "L-169",
       "L-312",
+      "L-263",
       "L-95",
       "L-175",
       "L-420",
@@ -1868,6 +1855,19 @@
         "has_youtube_embed": true,
         "aggregate_play_count": 23973,
         "aggregate_like_count": 258
+      },
+      {
+        "lyrics_id": "L-263",
+        "lyrics_title": "This Is My Quest",
+        "url_slug": "this-is-my-quest",
+        "summary_short": "Born with a fire that silence could not tame. This is the quest.",
+        "cover_image_url": "https://i1.sndcdn.com/artworks-qhqHRqMMeCjATzsp-RQ8fQQ-t500x500.png",
+        "has_in_app_playback": true,
+        "has_sc_catalog_listen": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
+        "aggregate_play_count": 16925,
+        "aggregate_like_count": 121
       },
       {
         "lyrics_id": "L-95",

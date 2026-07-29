@@ -58,7 +58,7 @@
   "inputs": {
     "lyrics": {
       "path": "AIRTABLE/snapshots/2026-07-28/clean/lyrics-2026-07-28.csv",
-      "sha256": "6e25e802e91d3f31fd39900985d66afca2fb3fe4836a3962a6aaa1a1ccf067d2",
+      "sha256": "383c31ee5c3d4a9c878278834e534f5e4d2c91c2f7d1221f3276cd3760afdf56",
       "rows": 428
     },
     "sc_tracks": {
@@ -68,7 +68,7 @@
     },
     "sc_eps": {
       "path": "AIRTABLE/snapshots/2026-07-28/clean/sc_eps-2026-07-28.csv",
-      "sha256": "04101b4510e080b53538af8239ee0fe2d9ade888298c2935f02d3da6a49c1a0c",
+      "sha256": "b84100c541b170d0f5fa755516a2cae65d88c18b8832535d46ba70005f035039",
       "rows": 258
     },
     "songbooks": {
@@ -98,7 +98,7 @@
     },
     "yt_videos": {
       "path": "AIRTABLE/snapshots/2026-07-28/clean/yt_videos-2026-07-28.csv",
-      "sha256": "72a1949501ea11207d58bf3ad9bec7837ba6805229da038bc02830252ab9472f",
+      "sha256": "dfc9ed2f7ea976fe2340f55e88e3268ad11db26a7529cf3ae592b86a4659b879",
       "rows": 501
     },
     "yt_playlists": {

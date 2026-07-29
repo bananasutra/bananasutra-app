@@ -138,11 +138,20 @@
 }
 
 .listen-lp__sample-card__play-glyph {
-  margin-left: 0.12em;
+  display: block;
   font-size: 0.95rem;
   line-height: 1;
   color: #fff;
-  letter-spacing: -0.08em;
+}
+
+/* ▶ is optically left-heavy; nudge play only. Pause bars stay grid-centered. */
+.listen-lp__sample-card__play-glyph--play {
+  margin-left: 0.12em;
+}
+
+.listen-lp__sample-card__play-glyph--pause {
+  margin-left: 0;
+  letter-spacing: 0.02em;
 }
 
 .listen-lp__sample-card__play-ring--loading {
