@@ -2,9 +2,9 @@
   "snapshot_date": "2026-07-28",
   "songs": 412,
   "details": 412,
-  "featured_with_in_app_playback": 201,
+  "featured_with_in_app_playback": 202,
   "featured_with_sc_catalog_listen": 21,
-  "featured_lyrics_only": 211,
+  "featured_lyrics_only": 210,
   "facet_keys": [
     "sutra",
     "light_shadow",
@@ -21,8 +21,8 @@
   "songbooks": 37,
   "top_tracks_per_song": 4,
   "like_weight": 40,
-  "youtube_lyrics_ids": 221,
-  "youtube_video_rows": 495,
+  "youtube_lyrics_ids": 222,
+  "youtube_video_rows": 496,
   "youtube_rows_missing_lyrics_id": 17,
   "youtube_playlists_catalog": 40,
   "youtube_playlists_featured": 0,
@@ -30,7 +30,7 @@
   "home_quotes": 155,
   "muses_catalog": 193,
   "quotes_wall": 155,
-  "track_catalog_rows": 786,
+  "track_catalog_rows": 791,
   "related_song_links_written": 2548,
   "edition_rows_missing_links_count": 1,
   "edition_rows_missing_links": [
@@ -63,8 +63,8 @@
     },
     "sc_tracks": {
       "path": "AIRTABLE/snapshots/2026-07-28/clean/sc_tracks-2026-07-28.csv",
-      "sha256": "1d039ddad54617ee92bb1a9eb88e0e398cb0181bbc9cfee218a12de0a5704f34",
-      "rows": 786
+      "sha256": "d564a6f66d8952de9cc5e802218de2c7c0ea86e04c045d2067d96bb0a4d2da18",
+      "rows": 791
     },
     "sc_eps": {
       "path": "AIRTABLE/snapshots/2026-07-28/clean/sc_eps-2026-07-28.csv",
@@ -78,7 +78,7 @@
     },
     "sc_playlists": {
       "path": "AIRTABLE/snapshots/2026-07-28/clean/sc_playlists-2026-07-28.csv",
-      "sha256": "faaefe7b4598f4e3cedf87935608b87d350011e17615ed5b3189f00d4b387378",
+      "sha256": "a6d665c5ba9f85ce34791cbe334d5c3351d2c6941f165122cd7865456919d8ad",
       "rows": 60
     },
     "sutras": {
@@ -98,8 +98,8 @@
     },
     "yt_videos": {
       "path": "AIRTABLE/snapshots/2026-07-28/clean/yt_videos-2026-07-28.csv",
-      "sha256": "ab36c18931ee5c2bb1b741e950565c3d313ae4262955019fba35c7e1436eb269",
-      "rows": 500
+      "sha256": "72a1949501ea11207d58bf3ad9bec7837ba6805229da038bc02830252ab9472f",
+      "rows": 501
     },
     "yt_playlists": {
       "path": "AIRTABLE/snapshots/2026-07-28/clean/yt_playlists-2026-07-28.csv",
