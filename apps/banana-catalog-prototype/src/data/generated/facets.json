@@ -172,23 +172,23 @@
     },
     {
       "value": "LOFI",
-      "count": 67
+      "count": 68
     },
     {
       "value": "JAZZ",
       "count": 66
     },
     {
+      "value": "INDIE",
+      "count": 61
+    },
+    {
       "value": "BURLESQUE",
       "count": 60
     },
     {
-      "value": "INDIE",
-      "count": 60
-    },
-    {
       "value": "BLUES",
-      "count": 48
+      "count": 49
     },
     {
       "value": "FOLK",
@@ -210,7 +210,7 @@
     },
     {
       "value": "JAZZ",
-      "count": 72
+      "count": 73
     },
     {
       "value": "FOLK",
@@ -222,7 +222,7 @@
     },
     {
       "value": "BLUES",
-      "count": 46
+      "count": 47
     },
     {
       "value": "LOFI",
@@ -234,7 +234,7 @@
     },
     {
       "value": "GIPSY",
-      "count": 37
+      "count": 38
     },
     {
       "value": "DUB",
@@ -250,7 +250,7 @@
     },
     {
       "value": "FLAMENCO",
-      "count": 18
+      "count": 19
     },
     {
       "value": "HIP HOP",
@@ -269,12 +269,12 @@
       "count": 8
     },
     {
-      "value": "WORLD",
+      "value": "TECHNO",
       "count": 7
     },
     {
-      "value": "TECHNO",
-      "count": 6
+      "value": "WORLD",
+      "count": 7
     },
     {
       "value": "MOTORIK",
@@ -288,11 +288,11 @@
   "track_instrument": [
     {
       "value": "BASS",
-      "count": 134
+      "count": 135
     },
     {
       "value": "GUITAR",
-      "count": 86
+      "count": 87
     },
     {
       "value": "CELLO",
@@ -300,11 +300,11 @@
     },
     {
       "value": "BANJO",
-      "count": 61
+      "count": 62
     },
     {
       "value": "PIANO",
-      "count": 50
+      "count": 51
     },
     {
       "value": "ACCORDION",
@@ -350,7 +350,7 @@
     },
     {
       "value": "KINDLY",
-      "count": 65
+      "count": 66
     },
     {
       "value": "PUNKY",
@@ -380,15 +380,15 @@
   "track_tempo_feel": [
     {
       "value": "LOWBEAT",
-      "count": 184
+      "count": 185
     },
     {
       "value": "MIDBEAT",
-      "count": 79
+      "count": 80
     },
     {
       "value": "UPBEAT",
-      "count": 32
+      "count": 33
     }
   ],
   "lang": [
