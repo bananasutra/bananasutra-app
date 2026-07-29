@@ -383,6 +383,7 @@ export function MuseCardGrid() {
       label: 'Era',
       allLabel: 'All eras',
       allCount: contextualEraRows.length,
+      showAllChip: false,
       onClearGroup: () => setEraFilter('all'),
       options: eraOptions.map(([era]) => {
         const count = contextualEraRows.filter((row) => splitList(row.era).includes(era)).length
@@ -402,6 +403,7 @@ export function MuseCardGrid() {
       label: 'Gender',
       allLabel: 'All',
       allCount: contextualGenderRows.length,
+      showAllChip: false,
       onClearGroup: () => setGenderFilter('all'),
       options: genderOptions.map(([gender]) => {
         const count = contextualGenderRows.filter((row) => row.gender_pronoun.trim() === gender).length
@@ -421,6 +423,7 @@ export function MuseCardGrid() {
       label: 'Type',
       allLabel: 'All types',
       allCount: contextualTypeRows.length,
+      showAllChip: false,
       onClearGroup: () => setTypeFilter('all'),
       options: typeOptions.map(([type]) => {
         const count = contextualTypeRows.filter((row) => splitList(row.type_category).includes(type)).length
@@ -440,6 +443,7 @@ export function MuseCardGrid() {
       label: 'Country',
       allLabel: 'All countries',
       allCount: contextualCountryRows.length,
+      showAllChip: false,
       onClearGroup: () => setCountryFilter('all'),
       options: countryOptions.map(([country]) => {
         const count = contextualCountryRows.filter((row) => row.country.trim() === country).length
