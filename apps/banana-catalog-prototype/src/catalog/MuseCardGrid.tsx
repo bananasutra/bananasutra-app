@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useMusesCatalog } from './generatedData'
 import type { MuseCatalogItem } from './types'
 import { canonicalPathForRoute } from './seoPaths'
+import { buildMuseSongsFindPath } from './urlState'
 import { renderPageMeta } from './usePageMeta'
 import {
   CatalogFilterBar,
@@ -183,7 +184,7 @@ function MuseCard({ item, highlighted }: { item: MuseCatalogItem; highlighted: b
           ) : null}
         </dl>
         <div className="muse-card__links">
-          {item.song_count > 0 ? <Link to={`/songs?find=${encodeURIComponent(item.muse)}`}>Filter songs</Link> : null}
+          {item.song_count > 0 ? <Link to={buildMuseSongsFindPath(item.muse)}>Filter songs</Link> : null}
           {item.wikipedia_url ? (
             <a href={item.wikipedia_url} target="_blank" rel="noreferrer">
               Wikipedia
