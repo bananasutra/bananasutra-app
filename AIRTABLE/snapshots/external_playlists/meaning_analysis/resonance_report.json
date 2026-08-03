@@ -1,0 +1,926 @@
+{
+ "sutra": [
+  {
+   "value": "KNOWsutra",
+   "adds": 438,
+   "adds_share": 0.2533,
+   "library_tracks": 141,
+   "lib_share": 0.1888,
+   "lift": 1.34
+  },
+  {
+   "value": "BLOWsutra",
+   "adds": 383,
+   "adds_share": 0.2215,
+   "library_tracks": 182,
+   "lib_share": 0.2436,
+   "lift": 0.91
+  },
+  {
+   "value": "GROWsutra",
+   "adds": 324,
+   "adds_share": 0.1874,
+   "library_tracks": 154,
+   "lib_share": 0.2062,
+   "lift": 0.91
+  },
+  {
+   "value": "GLOWsutra",
+   "adds": 181,
+   "adds_share": 0.1047,
+   "library_tracks": 71,
+   "lib_share": 0.095,
+   "lift": 1.1
+  },
+  {
+   "value": "SHOWsutra",
+   "adds": 150,
+   "adds_share": 0.0868,
+   "library_tracks": 59,
+   "lib_share": 0.079,
+   "lift": 1.1
+  },
+  {
+   "value": "FLOWsutra",
+   "adds": 104,
+   "adds_share": 0.0602,
+   "library_tracks": 46,
+   "lib_share": 0.0616,
+   "lift": 0.98
+  },
+  {
+   "value": "QUACKsutra",
+   "adds": 83,
+   "adds_share": 0.048,
+   "library_tracks": 72,
+   "lib_share": 0.0964,
+   "lift": 0.5
+  },
+  {
+   "value": "BOWsutra",
+   "adds": 66,
+   "adds_share": 0.0382,
+   "library_tracks": 22,
+   "lib_share": 0.0295,
+   "lift": 1.3
+  }
+ ],
+ "songbook": [
+  {
+   "value": "Dare: DARE (to care)",
+   "adds": 180,
+   "adds_share": 0.1041,
+   "library_tracks": 76,
+   "lib_share": 0.1017,
+   "lift": 1.02
+  },
+  {
+   "value": "Ask: PEACE (not war)",
+   "adds": 168,
+   "adds_share": 0.0972,
+   "library_tracks": 60,
+   "lib_share": 0.0803,
+   "lift": 1.21
+  },
+  {
+   "value": "Ask: (Naked) TRUTH",
+   "adds": 152,
+   "adds_share": 0.0879,
+   "library_tracks": 32,
+   "lib_share": 0.0428,
+   "lift": 2.05
+  },
+  {
+   "value": "Speak: REVOLT (now)",
+   "adds": 131,
+   "adds_share": 0.0758,
+   "library_tracks": 51,
+   "lib_share": 0.0683,
+   "lift": 1.11
+  },
+  {
+   "value": "Speak: EGO (gone loco)",
+   "adds": 103,
+   "adds_share": 0.0596,
+   "library_tracks": 34,
+   "lib_share": 0.0455,
+   "lift": 1.31
+  },
+  {
+   "value": "Bless: POET(ry)",
+   "adds": 90,
+   "adds_share": 0.0521,
+   "library_tracks": 37,
+   "lib_share": 0.0495,
+   "lift": 1.05
+  },
+  {
+   "value": "Play: (Be) The Fool",
+   "adds": 89,
+   "adds_share": 0.0515,
+   "library_tracks": 25,
+   "lib_share": 0.0335,
+   "lift": 1.54
+  },
+  {
+   "value": "Bless: RAINBOWS (in my clouds)",
+   "adds": 88,
+   "adds_share": 0.0509,
+   "library_tracks": 30,
+   "lib_share": 0.0402,
+   "lift": 1.27
+  },
+  {
+   "value": "Dare: GOD (etc.)",
+   "adds": 84,
+   "adds_share": 0.0486,
+   "library_tracks": 38,
+   "lib_share": 0.0509,
+   "lift": 0.96
+  },
+  {
+   "value": "Ask: BERTRAND (knows)",
+   "adds": 78,
+   "adds_share": 0.0451,
+   "library_tracks": 27,
+   "lib_share": 0.0361,
+   "lift": 1.25
+  },
+  {
+   "value": "Play: FANANA (party)",
+   "adds": 52,
+   "adds_share": 0.0301,
+   "library_tracks": 29,
+   "lib_share": 0.0388,
+   "lift": 0.77
+  },
+  {
+   "value": "Speak: CENSOR(ed),World: FRENCHsutra",
+   "adds": 41,
+   "adds_share": 0.0237,
+   "library_tracks": 15,
+   "lib_share": 0.0201,
+   "lift": 1.18
+  },
+  {
+   "value": "Ask: But(t) WHY",
+   "adds": 38,
+   "adds_share": 0.022,
+   "library_tracks": 20,
+   "lib_share": 0.0268,
+   "lift": 0.82
+  },
+  {
+   "value": "Bow: Cosmic Bananas",
+   "adds": 37,
+   "adds_share": 0.0214,
+   "library_tracks": 8,
+   "lib_share": 0.0107,
+   "lift": 2.0
+  },
+  {
+   "value": "Quack: MAxxxA Saga",
+   "adds": 36,
+   "adds_share": 0.0208,
+   "library_tracks": 29,
+   "lib_share": 0.0388,
+   "lift": 0.54
+  },
+  {
+   "value": "Speak: APES (gone wrong)",
+   "adds": 36,
+   "adds_share": 0.0208,
+   "library_tracks": 27,
+   "lib_share": 0.0361,
+   "lift": 0.58
+  },
+  {
+   "value": "Trust: FLY (like water)",
+   "adds": 36,
+   "adds_share": 0.0208,
+   "library_tracks": 17,
+   "lib_share": 0.0228,
+   "lift": 0.91
+  },
+  {
+   "value": "Trust: WET (my friend)",
+   "adds": 34,
+   "adds_share": 0.0197,
+   "library_tracks": 16,
+   "lib_share": 0.0214,
+   "lift": 0.92
+  },
+  {
+   "value": "Quack: DUCK (shady)",
+   "adds": 34,
+   "adds_share": 0.0197,
+   "library_tracks": 34,
+   "lib_share": 0.0455,
+   "lift": 0.43
+  },
+  {
+   "value": "World: FRENCHsutra,Trust: FLY (like water)",
+   "adds": 26,
+   "adds_share": 0.015,
+   "library_tracks": 8,
+   "lib_share": 0.0107,
+   "lift": 1.4
+  },
+  {
+   "value": "Speak: APES (gone wrong),World: FRENCHsutra",
+   "adds": 24,
+   "adds_share": 0.0139,
+   "library_tracks": 13,
+   "lib_share": 0.0174,
+   "lift": 0.8
+  },
+  {
+   "value": "Dare: KIND(ness)",
+   "adds": 23,
+   "adds_share": 0.0133,
+   "library_tracks": 27,
+   "lib_share": 0.0361,
+   "lift": 0.37
+  },
+  {
+   "value": "Trust: FLY (like water),World: FRENCHsutra",
+   "adds": 23,
+   "adds_share": 0.0133,
+   "library_tracks": 3,
+   "lib_share": 0.004,
+   "lift": 3.31
+  },
+  {
+   "value": "Speak: CENSOR(ed)",
+   "adds": 19,
+   "adds_share": 0.011,
+   "library_tracks": 20,
+   "lib_share": 0.0268,
+   "lift": 0.41
+  },
+  {
+   "value": "Bow: Death (is nothing),World: FRENCHsutra",
+   "adds": 15,
+   "adds_share": 0.0087,
+   "library_tracks": 8,
+   "lib_share": 0.0107,
+   "lift": 0.81
+  },
+  {
+   "value": "Speak: REVOLT (now),EP: Sid\u00e9ration",
+   "adds": 13,
+   "adds_share": 0.0075,
+   "library_tracks": 13,
+   "lib_share": 0.0174,
+   "lift": 0.43
+  },
+  {
+   "value": "Dare: KIND(ness),World: FRENCHsutra",
+   "adds": 13,
+   "adds_share": 0.0075,
+   "library_tracks": 6,
+   "lib_share": 0.008,
+   "lift": 0.94
+  },
+  {
+   "value": "Quack: FOTUS Circus",
+   "adds": 13,
+   "adds_share": 0.0075,
+   "library_tracks": 8,
+   "lib_share": 0.0107,
+   "lift": 0.7
+  },
+  {
+   "value": "Play: B.J. (is for banana jokes)",
+   "adds": 9,
+   "adds_share": 0.0052,
+   "library_tracks": 5,
+   "lib_share": 0.0067,
+   "lift": 0.78
+  },
+  {
+   "value": "Bow: Death (is nothing)",
+   "adds": 8,
+   "adds_share": 0.0046,
+   "library_tracks": 4,
+   "lib_share": 0.0054,
+   "lift": 0.86
+  },
+  {
+   "value": "Trust: FLY (like water),World: SPANISHsutra",
+   "adds": 8,
+   "adds_share": 0.0046,
+   "library_tracks": 7,
+   "lib_share": 0.0094,
+   "lift": 0.49
+  },
+  {
+   "value": "Speak: REVOLT (now),EP: DEFY",
+   "adds": 8,
+   "adds_share": 0.0046,
+   "library_tracks": 6,
+   "lib_share": 0.008,
+   "lift": 0.58
+  },
+  {
+   "value": "World: RUSSIANsutra,Speak: REVOLT (now)",
+   "adds": 8,
+   "adds_share": 0.0046,
+   "library_tracks": 3,
+   "lib_share": 0.004,
+   "lift": 1.15
+  },
+  {
+   "value": "Bow: (Thank) Dogs,EP: Best Teacher Award",
+   "adds": 6,
+   "adds_share": 0.0035,
+   "library_tracks": 2,
+   "lib_share": 0.0027,
+   "lift": 1.3
+  },
+  {
+   "value": "Bless: RAINBOWS (in my clouds),World: FRENCHsutra",
+   "adds": 3,
+   "adds_share": 0.0017,
+   "library_tracks": 2,
+   "lib_share": 0.0027,
+   "lift": 0.65
+  },
+  {
+   "value": "Trust: WET (my friend),EP: Peachy",
+   "adds": 3,
+   "adds_share": 0.0017,
+   "library_tracks": 3,
+   "lib_share": 0.004,
+   "lift": 0.43
+  },
+  {
+   "value": "Ask: PEACE (not war),World: FRENCHsutra",
+   "adds": 0,
+   "adds_share": 0.0,
+   "library_tracks": 1,
+   "lib_share": 0.0013,
+   "lift": null
+  },
+  {
+   "value": "Bless: POET(ry),World: SPANISHsutra",
+   "adds": 0,
+   "adds_share": 0.0,
+   "library_tracks": 2,
+   "lib_share": 0.0027,
+   "lift": null
+  },
+  {
+   "value": "Quack: DUCK (shady),World: FRENCHsutra",
+   "adds": 0,
+   "adds_share": 0.0,
+   "library_tracks": 1,
+   "lib_share": 0.0013,
+   "lift": null
+  }
+ ],
+ "light_shadow": [
+  {
+   "value": "LIGHT",
+   "adds": 982,
+   "adds_share": 0.568,
+   "library_tracks": 415,
+   "lib_share": 0.5556,
+   "lift": 1.02
+  },
+  {
+   "value": "SHADOW",
+   "adds": 747,
+   "adds_share": 0.432,
+   "library_tracks": 332,
+   "lib_share": 0.4444,
+   "lift": 0.97
+  }
+ ],
+ "topic": [
+  {
+   "value": "INJUSTICE",
+   "adds": 279,
+   "adds_share": 0.1614,
+   "library_tracks": 143,
+   "lib_share": 0.1914,
+   "lift": 0.84
+  },
+  {
+   "value": "BEAUTY",
+   "adds": 261,
+   "adds_share": 0.151,
+   "library_tracks": 111,
+   "lib_share": 0.1486,
+   "lift": 1.02
+  },
+  {
+   "value": "TRUTH",
+   "adds": 254,
+   "adds_share": 0.1469,
+   "library_tracks": 75,
+   "lib_share": 0.1004,
+   "lift": 1.46
+  },
+  {
+   "value": "EGO",
+   "adds": 225,
+   "adds_share": 0.1301,
+   "library_tracks": 61,
+   "lib_share": 0.0817,
+   "lift": 1.59
+  },
+  {
+   "value": "WISDOM",
+   "adds": 224,
+   "adds_share": 0.1296,
+   "library_tracks": 87,
+   "lib_share": 0.1165,
+   "lift": 1.11
+  },
+  {
+   "value": "POOLITICS",
+   "adds": 213,
+   "adds_share": 0.1232,
+   "library_tracks": 129,
+   "lib_share": 0.1727,
+   "lift": 0.71
+  },
+  {
+   "value": "PEACE",
+   "adds": 140,
+   "adds_share": 0.081,
+   "library_tracks": 61,
+   "lib_share": 0.0817,
+   "lift": 0.99
+  },
+  {
+   "value": "RELIGION",
+   "adds": 92,
+   "adds_share": 0.0532,
+   "library_tracks": 47,
+   "lib_share": 0.0629,
+   "lift": 0.85
+  },
+  {
+   "value": "FOOLERY",
+   "adds": 41,
+   "adds_share": 0.0237,
+   "library_tracks": 33,
+   "lib_share": 0.0442,
+   "lift": 0.54
+  }
+ ],
+ "intention": [
+  {
+   "value": "beBRAVE",
+   "adds": 210,
+   "adds_share": 0.1215,
+   "library_tracks": 100,
+   "lib_share": 0.1339,
+   "lift": 0.91
+  },
+  {
+   "value": "seeEGO",
+   "adds": 195,
+   "adds_share": 0.1128,
+   "library_tracks": 55,
+   "lib_share": 0.0736,
+   "lift": 1.53
+  },
+  {
+   "value": "beCURIOUS",
+   "adds": 180,
+   "adds_share": 0.1041,
+   "library_tracks": 65,
+   "lib_share": 0.087,
+   "lift": 1.2
+  },
+  {
+   "value": "beWOKE",
+   "adds": 146,
+   "adds_share": 0.0844,
+   "library_tracks": 101,
+   "lib_share": 0.1352,
+   "lift": 0.62
+  },
+  {
+   "value": "beWISE",
+   "adds": 120,
+   "adds_share": 0.0694,
+   "library_tracks": 32,
+   "lib_share": 0.0428,
+   "lift": 1.62
+  },
+  {
+   "value": "beWONDROUS",
+   "adds": 118,
+   "adds_share": 0.0682,
+   "library_tracks": 53,
+   "lib_share": 0.071,
+   "lift": 0.96
+  },
+  {
+   "value": "beFOOL",
+   "adds": 113,
+   "adds_share": 0.0654,
+   "library_tracks": 30,
+   "lib_share": 0.0402,
+   "lift": 1.63
+  },
+  {
+   "value": "seeHIStory",
+   "adds": 109,
+   "adds_share": 0.063,
+   "library_tracks": 38,
+   "lib_share": 0.0509,
+   "lift": 1.24
+  },
+  {
+   "value": "beKIND",
+   "adds": 103,
+   "adds_share": 0.0596,
+   "library_tracks": 51,
+   "lib_share": 0.0683,
+   "lift": 0.87
+  },
+  {
+   "value": "beSILLY",
+   "adds": 80,
+   "adds_share": 0.0463,
+   "library_tracks": 47,
+   "lib_share": 0.0629,
+   "lift": 0.74
+  },
+  {
+   "value": "beGODless",
+   "adds": 74,
+   "adds_share": 0.0428,
+   "library_tracks": 33,
+   "lib_share": 0.0442,
+   "lift": 0.97
+  },
+  {
+   "value": "beGRATEFUL",
+   "adds": 71,
+   "adds_share": 0.0411,
+   "library_tracks": 33,
+   "lib_share": 0.0442,
+   "lift": 0.93
+  },
+  {
+   "value": "seeWAR",
+   "adds": 71,
+   "adds_share": 0.0411,
+   "library_tracks": 29,
+   "lib_share": 0.0388,
+   "lift": 1.06
+  },
+  {
+   "value": "beHUMBLE",
+   "adds": 47,
+   "adds_share": 0.0272,
+   "library_tracks": 16,
+   "lib_share": 0.0214,
+   "lift": 1.27
+  },
+  {
+   "value": "beYOU",
+   "adds": 42,
+   "adds_share": 0.0243,
+   "library_tracks": 19,
+   "lib_share": 0.0254,
+   "lift": 0.96
+  },
+  {
+   "value": "beFAIR",
+   "adds": 35,
+   "adds_share": 0.0202,
+   "library_tracks": 26,
+   "lib_share": 0.0348,
+   "lift": 0.58
+  },
+  {
+   "value": "beBRIGHT",
+   "adds": 15,
+   "adds_share": 0.0087,
+   "library_tracks": 19,
+   "lib_share": 0.0254,
+   "lift": 0.34
+  }
+ ],
+ "lang": [
+  {
+   "value": "EN",
+   "adds": 1566,
+   "adds_share": 0.9057,
+   "library_tracks": 672,
+   "lib_share": 0.8996,
+   "lift": 1.01
+  },
+  {
+   "value": "FR",
+   "adds": 145,
+   "adds_share": 0.0839,
+   "library_tracks": 57,
+   "lib_share": 0.0763,
+   "lift": 1.1
+  },
+  {
+   "value": "ES",
+   "adds": 10,
+   "adds_share": 0.0058,
+   "library_tracks": 15,
+   "lib_share": 0.0201,
+   "lift": 0.29
+  },
+  {
+   "value": "RU",
+   "adds": 8,
+   "adds_share": 0.0046,
+   "library_tracks": 3,
+   "lib_share": 0.004,
+   "lift": 1.15
+  }
+ ],
+ "primary_genre": [
+  {
+   "value": "DUB",
+   "adds": 471,
+   "adds_share": 0.2724,
+   "library_tracks": 162,
+   "lib_share": 0.2169,
+   "lift": 1.26
+  },
+  {
+   "value": "LOFI",
+   "adds": 314,
+   "adds_share": 0.1816,
+   "library_tracks": 116,
+   "lib_share": 0.1553,
+   "lift": 1.17
+  },
+  {
+   "value": "JAZZ",
+   "adds": 234,
+   "adds_share": 0.1353,
+   "library_tracks": 103,
+   "lib_share": 0.1379,
+   "lift": 0.98
+  },
+  {
+   "value": "BLUES",
+   "adds": 217,
+   "adds_share": 0.1255,
+   "library_tracks": 68,
+   "lib_share": 0.091,
+   "lift": 1.38
+  },
+  {
+   "value": "INDIE",
+   "adds": 194,
+   "adds_share": 0.1122,
+   "library_tracks": 107,
+   "lib_share": 0.1432,
+   "lift": 0.78
+  },
+  {
+   "value": "BURLESQUE",
+   "adds": 177,
+   "adds_share": 0.1024,
+   "library_tracks": 93,
+   "lib_share": 0.1245,
+   "lift": 0.82
+  },
+  {
+   "value": "FOLK",
+   "adds": 78,
+   "adds_share": 0.0451,
+   "library_tracks": 65,
+   "lib_share": 0.087,
+   "lift": 0.52
+  },
+  {
+   "value": "ROCK",
+   "adds": 29,
+   "adds_share": 0.0168,
+   "library_tracks": 18,
+   "lib_share": 0.0241,
+   "lift": 0.7
+  },
+  {
+   "value": "MANTRA",
+   "adds": 15,
+   "adds_share": 0.0087,
+   "library_tracks": 15,
+   "lib_share": 0.0201,
+   "lift": 0.43
+  }
+ ],
+ "mood": [
+  {
+   "value": "KINDLY",
+   "adds": 420,
+   "adds_share": 0.2429,
+   "library_tracks": 146,
+   "lib_share": 0.1954,
+   "lift": 1.24
+  },
+  {
+   "value": "NERDY",
+   "adds": 332,
+   "adds_share": 0.192,
+   "library_tracks": 131,
+   "lib_share": 0.1754,
+   "lift": 1.09
+  },
+  {
+   "value": "CHEEKY",
+   "adds": 311,
+   "adds_share": 0.1799,
+   "library_tracks": 109,
+   "lib_share": 0.1459,
+   "lift": 1.23
+  },
+  {
+   "value": "TRIPPY",
+   "adds": 168,
+   "adds_share": 0.0972,
+   "library_tracks": 107,
+   "lib_share": 0.1432,
+   "lift": 0.68
+  },
+  {
+   "value": "HOLY",
+   "adds": 134,
+   "adds_share": 0.0775,
+   "library_tracks": 52,
+   "lib_share": 0.0696,
+   "lift": 1.11
+  },
+  {
+   "value": "PUNKY",
+   "adds": 132,
+   "adds_share": 0.0763,
+   "library_tracks": 79,
+   "lib_share": 0.1058,
+   "lift": 0.72
+  },
+  {
+   "value": "RAINY",
+   "adds": 121,
+   "adds_share": 0.07,
+   "library_tracks": 68,
+   "lib_share": 0.091,
+   "lift": 0.77
+  },
+  {
+   "value": "FRENCHY",
+   "adds": 69,
+   "adds_share": 0.0399,
+   "library_tracks": 31,
+   "lib_share": 0.0415,
+   "lift": 0.96
+  },
+  {
+   "value": "PEACHY",
+   "adds": 42,
+   "adds_share": 0.0243,
+   "library_tracks": 24,
+   "lib_share": 0.0321,
+   "lift": 0.76
+  }
+ ],
+ "tempo_feel": [
+  {
+   "value": "LOWBEAT",
+   "adds": 1315,
+   "adds_share": 0.7606,
+   "library_tracks": 573,
+   "lib_share": 0.7671,
+   "lift": 0.99
+  },
+  {
+   "value": "MIDBEAT",
+   "adds": 336,
+   "adds_share": 0.1943,
+   "library_tracks": 134,
+   "lib_share": 0.1794,
+   "lift": 1.08
+  },
+  {
+   "value": "UPBEAT",
+   "adds": 78,
+   "adds_share": 0.0451,
+   "library_tracks": 40,
+   "lib_share": 0.0535,
+   "lift": 0.84
+  }
+ ],
+ "instruments": [
+  {
+   "value": "BASS",
+   "adds": 697,
+   "adds_share": 0.3497,
+   "library_tracks": 283,
+   "lib_share": 0.3234,
+   "lift": 1.08
+  },
+  {
+   "value": "GUITAR",
+   "adds": 409,
+   "adds_share": 0.2052,
+   "library_tracks": 160,
+   "lib_share": 0.1829,
+   "lift": 1.12
+  },
+  {
+   "value": "CELLO",
+   "adds": 209,
+   "adds_share": 0.1049,
+   "library_tracks": 119,
+   "lib_share": 0.136,
+   "lift": 0.77
+  },
+  {
+   "value": "BANJO",
+   "adds": 193,
+   "adds_share": 0.0968,
+   "library_tracks": 91,
+   "lib_share": 0.104,
+   "lift": 0.93
+  },
+  {
+   "value": "PIANO",
+   "adds": 169,
+   "adds_share": 0.0848,
+   "library_tracks": 75,
+   "lib_share": 0.0857,
+   "lift": 0.99
+  },
+  {
+   "value": "ACCORDION",
+   "adds": 152,
+   "adds_share": 0.0763,
+   "library_tracks": 63,
+   "lib_share": 0.072,
+   "lift": 1.06
+  },
+  {
+   "value": "DRUM",
+   "adds": 62,
+   "adds_share": 0.0311,
+   "library_tracks": 37,
+   "lib_share": 0.0423,
+   "lift": 0.74
+  },
+  {
+   "value": "BRASS",
+   "adds": 50,
+   "adds_share": 0.0251,
+   "library_tracks": 24,
+   "lib_share": 0.0274,
+   "lift": 0.91
+  },
+  {
+   "value": "CLARINET",
+   "adds": 26,
+   "adds_share": 0.013,
+   "library_tracks": 9,
+   "lib_share": 0.0103,
+   "lift": 1.27
+  },
+  {
+   "value": "FIDDLE",
+   "adds": 11,
+   "adds_share": 0.0055,
+   "library_tracks": 6,
+   "lib_share": 0.0069,
+   "lift": 0.8
+  },
+  {
+   "value": "VOICE",
+   "adds": 9,
+   "adds_share": 0.0045,
+   "library_tracks": 3,
+   "lib_share": 0.0034,
+   "lift": 1.32
+  },
+  {
+   "value": "XYLOPHONE",
+   "adds": 4,
+   "adds_share": 0.002,
+   "library_tracks": 2,
+   "lib_share": 0.0023,
+   "lift": 0.88
+  },
+  {
+   "value": "HARMONICA",
+   "adds": 2,
+   "adds_share": 0.001,
+   "library_tracks": 3,
+   "lib_share": 0.0034,
+   "lift": 0.29
+  }
+ ]
+}
