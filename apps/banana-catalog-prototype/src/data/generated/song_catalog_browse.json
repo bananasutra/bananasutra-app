@@ -28,8 +28,8 @@
     "primary_ep_url": "https://soundcloud.com/bananasutra/sets/predators-fotus-edition-quacksutra-epx14",
     "has_in_app_playback": false,
     "has_sc_catalog_listen": false,
-    "has_youtube_video": false,
-    "has_youtube_embed": false,
+    "has_youtube_video": true,
+    "has_youtube_embed": true,
     "songbook": "Quack: DUCK (shady)",
     "muse": "",
     "song_muse_quote": ""

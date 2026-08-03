@@ -3786,8 +3786,8 @@
         "cover_image_url": "https://i1.sndcdn.com/artworks-IzsRM8lQnXOeyBC9-O7tjgw-t500x500.jpg",
         "has_in_app_playback": false,
         "has_sc_catalog_listen": false,
-        "has_youtube_video": false,
-        "has_youtube_embed": false,
+        "has_youtube_video": true,
+        "has_youtube_embed": true,
         "aggregate_play_count": 0,
         "aggregate_like_count": 0
       },
