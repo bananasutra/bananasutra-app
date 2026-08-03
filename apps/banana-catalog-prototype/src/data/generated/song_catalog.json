@@ -63,8 +63,8 @@
     "sc_catalog_track_title": "",
     "sc_catalog_listen_source": "",
     "lyrics_pipeline_status": "PUBLISHED",
-    "has_youtube_video": false,
-    "has_youtube_embed": false
+    "has_youtube_video": true,
+    "has_youtube_embed": true
   },
   {
     "lyrics_id": "L-62",

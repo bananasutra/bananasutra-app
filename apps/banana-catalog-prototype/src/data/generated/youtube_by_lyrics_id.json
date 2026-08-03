@@ -1,11 +1,90 @@
 {
+  "L-428": [
+    {
+      "video_id": "wGYq-6jHoxw",
+      "title": "Predators, FOTUS Edition - QUACKsutra (Duck Shady) Indie Gipsy LoFi Banjo Dream EPx2",
+      "lyrics_title": "Predators (FOTUS Edition)",
+      "lyrics_id": "L-428",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "QUACKsutra",
+      "genre_primary": "LOFI",
+      "genre_secondary": "INDIE",
+      "instruments": "",
+      "yt_url": "https://www.youtube.com/watch?v=wGYq-6jHoxw",
+      "thumbnail_url": "https://i.ytimg.com/vi/wGYq-6jHoxw/maxresdefault.jpg",
+      "duration": "6:46",
+      "publish_date": "2026-08-03",
+      "playlist_names": "BLOWsutra : DUCK (Shady), LOFIsutra, FOTUS CIRCUS (Felon Of The United States), Bible Gone Bananas",
+      "content_type": "EP Compilation",
+      "format": "16:9",
+      "topic_categories": "Independent music, Music",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "beWOKE",
+      "lyrics_summary": "Contempt replaced consent, preying replaced praying, and \n authoritarian-apologists sheeples howl along...",
+      "url_slug": "predators-fotus-edition"
+    }
+  ],
+  "L-62": [
+    {
+      "video_id": "jNhiHYuGa9k",
+      "title": "Do You Ever Wonder • GROWsutra (Dare to Care) Psychedelic Fado Dub Fusion Prayer Dream 🫀💭",
+      "lyrics_title": "Do You Ever Wonder?",
+      "lyrics_id": "L-62",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "GROWsutra",
+      "genre_primary": "DUB",
+      "genre_secondary": "FOLK",
+      "instruments": "",
+      "yt_url": "https://www.youtube.com/watch?v=jNhiHYuGa9k",
+      "thumbnail_url": "https://i.ytimg.com/vi/jNhiHYuGa9k/maxresdefault.jpg",
+      "duration": "2:56",
+      "publish_date": "2026-07-30",
+      "playlist_names": "CELLOsutra, INDIEsutra, GROWsutra : DARE (to Care), PEACE CIRCUS, GROWsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Electronic music, Music",
+      "can_embed": true,
+      "song_topic": "TRUTH",
+      "song_intention": "beBRAVE",
+      "lyrics_summary": "Do you ever wonder what you'd find if you stopped performing?",
+      "url_slug": "do-you-ever-wonder"
+    },
+    {
+      "video_id": "UAQ9Pg59IfM",
+      "title": "Do you ever wonder? • Jazzy BananaBible Story • SutraKNOW Cabaret",
+      "lyrics_title": "Do You Ever Wonder?",
+      "lyrics_id": "L-62",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "GROWsutra",
+      "genre_primary": "INDIE",
+      "genre_secondary": "JAZZ,FOLK",
+      "instruments": "Guitar,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=UAQ9Pg59IfM",
+      "thumbnail_url": "https://i.ytimg.com/vi/UAQ9Pg59IfM/maxresdefault.jpg",
+      "duration": "2:35",
+      "publish_date": "2024-10-28",
+      "playlist_names": "INDIEsutra, Hidden Peels, GROWsutra : DARE (to Care), PEACE CIRCUS, GROWsutra, FOLKsutra, Bible Gone Bananas",
+      "content_type": "Short/Reel",
+      "format": "9:16",
+      "topic_categories": "Jazz, Music",
+      "can_embed": true,
+      "song_topic": "TRUTH",
+      "song_intention": "beBRAVE",
+      "lyrics_summary": "Do you ever wonder what you'd find if you stopped performing?",
+      "url_slug": "do-you-ever-wonder"
+    }
+  ],
   "L-304": [
     {
       "video_id": "R1xP2MUDTYU",
       "title": "Why We Can’t Be Brave? (Cello Edition) • GROWsutra LoFi Fusion EPx3 🎻",
       "lyrics_title": "Why We Can't Be Brave?",
       "lyrics_id": "L-304",
-      "video_featured": false,
+      "video_featured": true,
       "video_featured_description": "",
       "sutra": "GROWsutra",
       "genre_primary": "INDIE",
@@ -128,58 +207,6 @@
       "url_slug": "they-call-her-wild-but-she-s-just-free"
     }
   ],
-  "L-62": [
-    {
-      "video_id": "jNhiHYuGa9k",
-      "title": "Do You Ever Wonder • GROWsutra (Dare to Care) Psychedelic Fado Dub Fusion Prayer Dream 🫀💭",
-      "lyrics_title": "Do You Ever Wonder?",
-      "lyrics_id": "L-62",
-      "video_featured": true,
-      "video_featured_description": "",
-      "sutra": "GROWsutra",
-      "genre_primary": "DUB",
-      "genre_secondary": "FOLK",
-      "instruments": "",
-      "yt_url": "https://www.youtube.com/watch?v=jNhiHYuGa9k",
-      "thumbnail_url": "https://i.ytimg.com/vi/jNhiHYuGa9k/maxresdefault.jpg",
-      "duration": "2:56",
-      "publish_date": "2026-07-30",
-      "playlist_names": "CELLOsutra, INDIEsutra, GROWsutra : DARE (to Care), PEACE CIRCUS, GROWsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Electronic music, Music",
-      "can_embed": true,
-      "song_topic": "TRUTH",
-      "song_intention": "beBRAVE",
-      "lyrics_summary": "Do you ever wonder what you'd find if you stopped performing?",
-      "url_slug": "do-you-ever-wonder"
-    },
-    {
-      "video_id": "UAQ9Pg59IfM",
-      "title": "Do you ever wonder? • Jazzy BananaBible Story • SutraKNOW Cabaret",
-      "lyrics_title": "Do You Ever Wonder?",
-      "lyrics_id": "L-62",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "GROWsutra",
-      "genre_primary": "INDIE",
-      "genre_secondary": "JAZZ,FOLK",
-      "instruments": "Guitar,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=UAQ9Pg59IfM",
-      "thumbnail_url": "https://i.ytimg.com/vi/UAQ9Pg59IfM/maxresdefault.jpg",
-      "duration": "2:35",
-      "publish_date": "2024-10-28",
-      "playlist_names": "INDIEsutra, Hidden Peels, GROWsutra : DARE (to Care), PEACE CIRCUS, GROWsutra, FOLKsutra, Bible Gone Bananas",
-      "content_type": "Short/Reel",
-      "format": "9:16",
-      "topic_categories": "Jazz, Music",
-      "can_embed": true,
-      "song_topic": "TRUTH",
-      "song_intention": "beBRAVE",
-      "lyrics_summary": "Do you ever wonder what you'd find if you stopped performing?",
-      "url_slug": "do-you-ever-wonder"
-    }
-  ],
   "L-263": [
     {
       "video_id": "k2u4L8HD86E",
@@ -205,33 +232,6 @@
       "song_intention": "beBRAVE",
       "lyrics_summary": "Born with a fire that silence could not tame. This is the quest.",
       "url_slug": "this-is-my-quest"
-    }
-  ],
-  "L-238": [
-    {
-      "video_id": "DeWUqaP4WNY",
-      "title": "T-R-U-T-H • KNOWsutra (Naked Truth) Alternative Pop Punk Rock 🎸⚡️",
-      "lyrics_title": "T-R-U-T-H",
-      "lyrics_id": "L-238",
-      "video_featured": true,
-      "video_featured_description": "",
-      "sutra": "KNOWsutra",
-      "genre_primary": "ROCK",
-      "genre_secondary": "",
-      "instruments": "Guitar",
-      "yt_url": "https://www.youtube.com/watch?v=DeWUqaP4WNY",
-      "thumbnail_url": "https://i.ytimg.com/vi/DeWUqaP4WNY/maxresdefault.jpg",
-      "duration": "2:28",
-      "publish_date": "2026-07-27",
-      "playlist_names": "KNOWsutra : (Naked) Truth, ROCKsutra, KNOWsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Independent music, Music, Pop music, Rock music",
-      "can_embed": true,
-      "song_topic": "TRUTH",
-      "song_intention": "beBRAVE",
-      "lyrics_summary": "T.R.U.T.H: tell it, receive it, understand it, trust it, hold it.",
-      "url_slug": "t-r-u-t-h"
     }
   ],
   "L-54": [
@@ -261,6 +261,33 @@
       "url_slug": "curious-like-a-kiss"
     }
   ],
+  "L-238": [
+    {
+      "video_id": "DeWUqaP4WNY",
+      "title": "T-R-U-T-H • KNOWsutra (Naked Truth) Alternative Pop Punk Rock 🎸⚡️",
+      "lyrics_title": "T-R-U-T-H",
+      "lyrics_id": "L-238",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "KNOWsutra",
+      "genre_primary": "ROCK",
+      "genre_secondary": "",
+      "instruments": "Guitar",
+      "yt_url": "https://www.youtube.com/watch?v=DeWUqaP4WNY",
+      "thumbnail_url": "https://i.ytimg.com/vi/DeWUqaP4WNY/maxresdefault.jpg",
+      "duration": "2:28",
+      "publish_date": "2026-07-27",
+      "playlist_names": "KNOWsutra : (Naked) Truth, ROCKsutra, KNOWsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Country music, Independent music, Music, Pop music",
+      "can_embed": true,
+      "song_topic": "TRUTH",
+      "song_intention": "beBRAVE",
+      "lyrics_summary": "T.R.U.T.H: tell it, receive it, understand it, trust it, hold it.",
+      "url_slug": "t-r-u-t-h"
+    }
+  ],
   "L-193": [
     {
       "video_id": "Ue5ET_bl5nM",
@@ -288,6 +315,33 @@
       "url_slug": "possum-scrotum"
     }
   ],
+  "L-272": [
+    {
+      "video_id": "sRuDhEwg_s0",
+      "title": "Truth I Never Knew (Crushing on Bertrand) • KNOWsutra Acoustic Psychedelick Ragga Mama DUB Fun 🙈🙉🙊",
+      "lyrics_title": "Truth I Never Knew (Crushing on Bertrand)",
+      "lyrics_id": "L-272",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "KNOWsutra",
+      "genre_primary": "DUB",
+      "genre_secondary": "",
+      "instruments": "Bass",
+      "yt_url": "https://www.youtube.com/watch?v=sRuDhEwg_s0",
+      "thumbnail_url": "https://i.ytimg.com/vi/sRuDhEwg_s0/maxresdefault.jpg",
+      "duration": "3:24",
+      "publish_date": "2026-07-23",
+      "playlist_names": "KNOWsutra : Bertrand (He Knows), PEACE CIRCUS, KNOWsutra, DUBsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Music, Pop music, Reggae, Soul music",
+      "can_embed": true,
+      "song_topic": "WISDOM",
+      "song_intention": "beBRAVE",
+      "lyrics_summary": "A love letter to Bertrand Russell. Totally appropriate. Deeply heartfelt. Entirely overdue.",
+      "url_slug": "truth-i-never-knew-crushing-on-bertrand"
+    }
+  ],
   "L-381": [
     {
       "video_id": "mgVSG2RyDvo",
@@ -313,33 +367,6 @@
       "song_intention": "beWOKE",
       "lyrics_summary": "The clown's in the ring. Truth's not for sale. The absurdity has reached the highest office. Step right up.",
       "url_slug": "freak-show-king"
-    }
-  ],
-  "L-272": [
-    {
-      "video_id": "sRuDhEwg_s0",
-      "title": "Truth I Never Knew (Crushing on Bertrand) • KNOWsutra Acoustic Psychedelick Ragga Mama DUB Fun 🙈🙉🙊",
-      "lyrics_title": "Truth I Never Knew (Crushing on Bertrand)",
-      "lyrics_id": "L-272",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "KNOWsutra",
-      "genre_primary": "DUB",
-      "genre_secondary": "",
-      "instruments": "Bass",
-      "yt_url": "https://www.youtube.com/watch?v=sRuDhEwg_s0",
-      "thumbnail_url": "https://i.ytimg.com/vi/sRuDhEwg_s0/maxresdefault.jpg",
-      "duration": "3:24",
-      "publish_date": "2026-07-23",
-      "playlist_names": "KNOWsutra : Bertrand (He Knows), PEACE CIRCUS, KNOWsutra, DUBsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Music, Pop music, Reggae, Soul music",
-      "can_embed": true,
-      "song_topic": "WISDOM",
-      "song_intention": "beBRAVE",
-      "lyrics_summary": "A love letter to Bertrand Russell. Totally appropriate. Deeply heartfelt. Entirely overdue.",
-      "url_slug": "truth-i-never-knew-crushing-on-bertrand"
     }
   ],
   "L-394": [
@@ -1334,6 +1361,33 @@
       "url_slug": "win-win-after-midnight"
     }
   ],
+  "L-90": [
+    {
+      "video_id": "Ry9Xlkw9cYo",
+      "title": "Are you a grifter or a gifter? (Hot tip: grifters are likely to lie… proof even the best Qs #fail ;)",
+      "lyrics_title": "Grifters",
+      "lyrics_id": "L-90",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "DUB",
+      "genre_secondary": "",
+      "instruments": "Voice,Upright Bass",
+      "yt_url": "https://www.youtube.com/watch?v=Ry9Xlkw9cYo",
+      "thumbnail_url": "https://i.ytimg.com/vi/Ry9Xlkw9cYo/maxresdefault.jpg",
+      "duration": "2:52",
+      "publish_date": "2026-04-03",
+      "playlist_names": "BLOWsutra : Apes Gone Wrong, BLOWsutra, DUBsutra, SHORTsutra Bananas Matter, Bible Gone Bananas",
+      "content_type": "Short/Reel",
+      "format": "9:16",
+      "topic_categories": "Independent music, Lifestyle (sociology), Pop music",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "seeEGO",
+      "lyrics_summary": "One question that won’t let go: are you a grifter or a gifter?",
+      "url_slug": "grifters"
+    }
+  ],
   "L-88": [
     {
       "video_id": "Yd70x26o-wU",
@@ -1409,33 +1463,6 @@
       "song_intention": "beWONDROUS",
       "lyrics_summary": "Alice went through the looking glass. Gladys tumbled through Sonderland. The Cheshire Cat now strips in a glitch-and-bitch show. No checkmates.",
       "url_slug": "gladys-in-sonderland"
-    }
-  ],
-  "L-90": [
-    {
-      "video_id": "Ry9Xlkw9cYo",
-      "title": "Are you a grifter or a gifter? (Hot tip: grifters are likely to lie… proof even the best Qs #fail ;)",
-      "lyrics_title": "Grifters",
-      "lyrics_id": "L-90",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "DUB",
-      "genre_secondary": "",
-      "instruments": "Voice,Upright Bass",
-      "yt_url": "https://www.youtube.com/watch?v=Ry9Xlkw9cYo",
-      "thumbnail_url": "https://i.ytimg.com/vi/Ry9Xlkw9cYo/maxresdefault.jpg",
-      "duration": "2:52",
-      "publish_date": "2026-04-03",
-      "playlist_names": "BLOWsutra : Apes Gone Wrong, BLOWsutra, DUBsutra, SHORTsutra Bananas Matter, Bible Gone Bananas",
-      "content_type": "Short/Reel",
-      "format": "9:16",
-      "topic_categories": "Independent music, Lifestyle (sociology), Pop music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "seeEGO",
-      "lyrics_summary": "One question that won’t let go: are you a grifter or a gifter?",
-      "url_slug": "grifters"
     }
   ],
   "L-250": [
@@ -1673,6 +1700,33 @@
       "url_slug": "tell-the-truth"
     }
   ],
+  "L-274": [
+    {
+      "video_id": "sXDZRAfur9s",
+      "title": "“Two Things, Darling“ 🎻 KNOWsutra Conscious Gipsy Cello LoFi Indie song inspired by Bertrand Russell",
+      "lyrics_title": "Two Things, Darling",
+      "lyrics_id": "L-274",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "KNOWsutra",
+      "genre_primary": "LOFI",
+      "genre_secondary": "INDIE",
+      "instruments": "Cello",
+      "yt_url": "https://www.youtube.com/watch?v=sXDZRAfur9s",
+      "thumbnail_url": "https://i.ytimg.com/vi/sXDZRAfur9s/maxresdefault.jpg",
+      "duration": "3:41",
+      "publish_date": "2026-03-10",
+      "playlist_names": "KNOWsutra : Bertrand (He Knows), PEACE CIRCUS, KNOWsutra, LOFIsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Independent music, Music, Pop music, Rock music",
+      "can_embed": true,
+      "song_topic": "WISDOM",
+      "song_intention": "beWISE",
+      "lyrics_summary": "Two things, darling: the world is mad, and kindness is the only sane response. Get the facts right. Keep love in sight.",
+      "url_slug": "two-things-darling"
+    }
+  ],
   "L-165": [
     {
       "video_id": "qJ_iFqEp1mM",
@@ -1798,33 +1852,6 @@
       "song_intention": "beYOU",
       "lyrics_summary": "They muddy the water to make it look deep. Nietzsche saw through it.",
       "url_slug": "nietzsche-s-gift-muddy-waters"
-    }
-  ],
-  "L-274": [
-    {
-      "video_id": "sXDZRAfur9s",
-      "title": "“Two Things, Darling“ 🎻 KNOWsutra Conscious Gipsy Cello LoFi Indie song inspired by Bertrand Russell",
-      "lyrics_title": "Two Things, Darling",
-      "lyrics_id": "L-274",
-      "video_featured": true,
-      "video_featured_description": "",
-      "sutra": "KNOWsutra",
-      "genre_primary": "LOFI",
-      "genre_secondary": "INDIE",
-      "instruments": "Cello",
-      "yt_url": "https://www.youtube.com/watch?v=sXDZRAfur9s",
-      "thumbnail_url": "https://i.ytimg.com/vi/sXDZRAfur9s/maxresdefault.jpg",
-      "duration": "3:41",
-      "publish_date": "2026-03-10",
-      "playlist_names": "KNOWsutra : Bertrand (He Knows), PEACE CIRCUS, KNOWsutra, LOFIsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Independent music, Music, Pop music, Rock music",
-      "can_embed": true,
-      "song_topic": "WISDOM",
-      "song_intention": "beWISE",
-      "lyrics_summary": "Two things, darling: the world is mad, and kindness is the only sane response. Get the facts right. Keep love in sight.",
-      "url_slug": "two-things-darling"
     }
   ],
   "L-37": [
@@ -2653,33 +2680,6 @@
       "url_slug": "question-the-nation"
     }
   ],
-  "L-209": [
-    {
-      "video_id": "Jw3pXgajmpA",
-      "title": "Rise Up (Freedom Rings) 🏴‍☠️ BLOWsutra Indie Folk Revolution Dream, inspired by Victor Hugo 🌾",
-      "lyrics_title": "Rise Up, You Naked Peoples (Freedom Rings)",
-      "lyrics_id": "L-209",
-      "video_featured": true,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "FOLK",
-      "genre_secondary": "",
-      "instruments": "Guitar",
-      "yt_url": "https://www.youtube.com/watch?v=Jw3pXgajmpA",
-      "thumbnail_url": "https://i.ytimg.com/vi/Jw3pXgajmpA/maxresdefault.jpg",
-      "duration": "3:08",
-      "publish_date": "2026-02-18",
-      "playlist_names": "BLOWsutra : REVOLT (Now), PEACE CIRCUS, FOLKsutra, BLOWsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Independent music, Music, Rock music",
-      "can_embed": true,
-      "song_topic": "INJUSTICE",
-      "song_intention": "beBRAVE",
-      "lyrics_summary": "Victor Hugo would approve. Rise up, ye naked peoples. Freedom rings. Heed the call.",
-      "url_slug": "rise-up-you-naked-peoples-freedom-rings"
-    }
-  ],
   "L-218": [
     {
       "video_id": "iDJkmW_kzRE",
@@ -2805,6 +2805,33 @@
       "song_intention": "beFOOL",
       "lyrics_summary": "We're all fools on show. The question is what shade.",
       "url_slug": "shady-fools"
+    }
+  ],
+  "L-209": [
+    {
+      "video_id": "Jw3pXgajmpA",
+      "title": "Rise Up (Freedom Rings) 🏴‍☠️ BLOWsutra Indie Folk Revolution Dream, inspired by Victor Hugo 🌾",
+      "lyrics_title": "Rise Up, You Naked Peoples (Freedom Rings)",
+      "lyrics_id": "L-209",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "FOLK",
+      "genre_secondary": "",
+      "instruments": "Guitar",
+      "yt_url": "https://www.youtube.com/watch?v=Jw3pXgajmpA",
+      "thumbnail_url": "https://i.ytimg.com/vi/Jw3pXgajmpA/maxresdefault.jpg",
+      "duration": "3:08",
+      "publish_date": "2026-02-18",
+      "playlist_names": "BLOWsutra : REVOLT (Now), PEACE CIRCUS, FOLKsutra, BLOWsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Independent music, Music, Rock music",
+      "can_embed": true,
+      "song_topic": "INJUSTICE",
+      "song_intention": "beBRAVE",
+      "lyrics_summary": "Victor Hugo would approve. Rise up, ye naked peoples. Freedom rings. Heed the call.",
+      "url_slug": "rise-up-you-naked-peoples-freedom-rings"
     }
   ],
   "L-228": [
@@ -3269,33 +3296,6 @@
       "url_slug": "what-dissent-looks-like-now"
     }
   ],
-  "L-36": [
-    {
-      "video_id": "5CY5-CkYn0U",
-      "title": "Bloom Past Doom (Apes Gone Wrong Series) EPx2 • BLOWsutra Revolution Ring Conscious Folk Dream 🐒📺",
-      "lyrics_title": "Bloom Past Doom",
-      "lyrics_id": "L-36",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "BLUES",
-      "genre_secondary": "JAZZ,INDIE",
-      "instruments": "Voice,Banjo",
-      "yt_url": "https://www.youtube.com/watch?v=5CY5-CkYn0U",
-      "thumbnail_url": "https://i.ytimg.com/vi/5CY5-CkYn0U/maxresdefault.jpg",
-      "duration": "5:20",
-      "publish_date": "2026-01-28",
-      "playlist_names": "BLOWsutra : REVOLT (Now), FOLKsutra, BLUESsutra, BLOWsutra, Bible Gone Bananas",
-      "content_type": "EP Compilation",
-      "format": "16:9",
-      "topic_categories": "Independent music, Music, Pop music, Rock music",
-      "can_embed": true,
-      "song_topic": "TRUTH",
-      "song_intention": "beFAIR",
-      "lyrics_summary": "This issue is real, not fiction. When people can't even agree that lying is wrong, what's left? Bloom past doom, or don't.",
-      "url_slug": "bloom-past-doom"
-    }
-  ],
   "L-329": [
     {
       "video_id": "XQwk7HYumoc",
@@ -3323,31 +3323,31 @@
       "url_slug": "ignoramus-divine"
     }
   ],
-  "L-243": [
+  "L-36": [
     {
-      "video_id": "BYwCM6-T1fw",
-      "title": "The Atheist Tango 📺💡GROWsutra (God, Etc.) Burlesque Jazz • Lyrics inspired by Ralph Waldo Emerson",
-      "lyrics_title": "The Atheist Tango",
-      "lyrics_id": "L-243",
-      "video_featured": true,
+      "video_id": "5CY5-CkYn0U",
+      "title": "Bloom Past Doom (Apes Gone Wrong Series) EPx2 • BLOWsutra Revolution Ring Conscious Folk Dream 🐒📺",
+      "lyrics_title": "Bloom Past Doom",
+      "lyrics_id": "L-36",
+      "video_featured": false,
       "video_featured_description": "",
-      "sutra": "GROWsutra",
-      "genre_primary": "JAZZ",
-      "genre_secondary": "BURLESQUE",
-      "instruments": "Upright Bass",
-      "yt_url": "https://www.youtube.com/watch?v=BYwCM6-T1fw",
-      "thumbnail_url": "https://i.ytimg.com/vi/BYwCM6-T1fw/maxresdefault.jpg",
-      "duration": "3:02",
-      "publish_date": "2026-01-21",
-      "playlist_names": "GROWsutra : GOD (Questions Etc...), PEACE CIRCUS, GROWsutra, JAZZsutra, BURLESQUEsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
+      "sutra": "BLOWsutra",
+      "genre_primary": "BLUES",
+      "genre_secondary": "JAZZ,INDIE",
+      "instruments": "Voice,Banjo",
+      "yt_url": "https://www.youtube.com/watch?v=5CY5-CkYn0U",
+      "thumbnail_url": "https://i.ytimg.com/vi/5CY5-CkYn0U/maxresdefault.jpg",
+      "duration": "5:20",
+      "publish_date": "2026-01-28",
+      "playlist_names": "BLOWsutra : REVOLT (Now), FOLKsutra, BLUESsutra, BLOWsutra, Bible Gone Bananas",
+      "content_type": "EP Compilation",
       "format": "16:9",
-      "topic_categories": "Jazz, Music, Music of Latin America",
+      "topic_categories": "Independent music, Music, Pop music, Rock music",
       "can_embed": true,
-      "song_topic": "RELIGION",
-      "song_intention": "beGODless",
-      "lyrics_summary": "Who needs a sky full of gods when you've got a tango?",
-      "url_slug": "the-atheist-tango"
+      "song_topic": "TRUTH",
+      "song_intention": "beFAIR",
+      "lyrics_summary": "This issue is real, not fiction. When people can't even agree that lying is wrong, what's left? Bloom past doom, or don't.",
+      "url_slug": "bloom-past-doom"
     }
   ],
   "L-207": [
@@ -3375,6 +3375,33 @@
       "song_intention": "beBRAVE",
       "lyrics_summary": "Just a girl, a guitar, and the audacity to call it a revolution.",
       "url_slug": "revolution-s-lit"
+    }
+  ],
+  "L-243": [
+    {
+      "video_id": "BYwCM6-T1fw",
+      "title": "The Atheist Tango 📺💡GROWsutra (God, Etc.) Burlesque Jazz • Lyrics inspired by Ralph Waldo Emerson",
+      "lyrics_title": "The Atheist Tango",
+      "lyrics_id": "L-243",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "GROWsutra",
+      "genre_primary": "JAZZ",
+      "genre_secondary": "BURLESQUE",
+      "instruments": "Upright Bass",
+      "yt_url": "https://www.youtube.com/watch?v=BYwCM6-T1fw",
+      "thumbnail_url": "https://i.ytimg.com/vi/BYwCM6-T1fw/maxresdefault.jpg",
+      "duration": "3:02",
+      "publish_date": "2026-01-21",
+      "playlist_names": "GROWsutra : GOD (Questions Etc...), PEACE CIRCUS, GROWsutra, JAZZsutra, BURLESQUEsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Jazz, Music, Music of Latin America",
+      "can_embed": true,
+      "song_topic": "RELIGION",
+      "song_intention": "beGODless",
+      "lyrics_summary": "Who needs a sky full of gods when you've got a tango?",
+      "url_slug": "the-atheist-tango"
     }
   ],
   "L-116": [
@@ -3914,33 +3941,6 @@
       "url_slug": "universal-currency"
     }
   ],
-  "L-325": [
-    {
-      "video_id": "l2Ui8EYdLj0",
-      "title": "Not Bad, Friendo 🪐 SHOWsutra Infinite Psychedelic Galaxy Wink to the Burlesque Post-Punk Universe ✨",
-      "lyrics_title": "Not Bad, Friendo",
-      "lyrics_id": "L-325",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "SHOWsutra",
-      "genre_primary": "INDIE",
-      "genre_secondary": "ROCK",
-      "instruments": "Bass,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=l2Ui8EYdLj0",
-      "thumbnail_url": "https://i.ytimg.com/vi/l2Ui8EYdLj0/maxresdefault.jpg",
-      "duration": "4:17",
-      "publish_date": "2026-01-09",
-      "playlist_names": "INDIEsutra, SHOWsutra : Fanana Club, ROCKsutra, PEACE CIRCUS, SHOWsutra, BURLESQUEsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Independent music, Music, Rock music",
-      "can_embed": true,
-      "song_topic": "FOOLERY",
-      "song_intention": "beGRATEFUL",
-      "lyrics_summary": "Big brother spins. The black hole pulls in. \"Not bad, friendo.\" Around and around we go.",
-      "url_slug": "not-bad-friendo"
-    }
-  ],
   "L-72": [
     {
       "video_id": "lkMb7XxbsUE",
@@ -3993,6 +3993,33 @@
       "url_slug": "everybody-knows"
     }
   ],
+  "L-325": [
+    {
+      "video_id": "l2Ui8EYdLj0",
+      "title": "Not Bad, Friendo 🪐 SHOWsutra Infinite Psychedelic Galaxy Wink to the Burlesque Post-Punk Universe ✨",
+      "lyrics_title": "Not Bad, Friendo",
+      "lyrics_id": "L-325",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "SHOWsutra",
+      "genre_primary": "INDIE",
+      "genre_secondary": "ROCK",
+      "instruments": "Bass,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=l2Ui8EYdLj0",
+      "thumbnail_url": "https://i.ytimg.com/vi/l2Ui8EYdLj0/maxresdefault.jpg",
+      "duration": "4:17",
+      "publish_date": "2026-01-09",
+      "playlist_names": "INDIEsutra, SHOWsutra : Fanana Club, ROCKsutra, PEACE CIRCUS, SHOWsutra, BURLESQUEsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Independent music, Music, Rock music",
+      "can_embed": true,
+      "song_topic": "FOOLERY",
+      "song_intention": "beGRATEFUL",
+      "lyrics_summary": "Big brother spins. The black hole pulls in. \"Not bad, friendo.\" Around and around we go.",
+      "url_slug": "not-bad-friendo"
+    }
+  ],
   "L-178": [
     {
       "video_id": "315UmHBAQGk",
@@ -4043,58 +4070,6 @@
       "song_intention": "beHUMBLE",
       "lyrics_summary": "It's Pride month. Authenticity isn't loud and proud — it's humble, vulnerable, and brave. Ordo amoris, in a world of ego.",
       "url_slug": "ordo-amoris-in-decay-all-i-want-is-to-believe"
-    }
-  ],
-  "L-227": [
-    {
-      "video_id": "rwlRylvqrMk",
-      "title": "Sing Your Own Gospel • GROWsutra (God, Etc.) Gipsy Piano Burlesque JAZZ Edition 🎼🎧",
-      "lyrics_title": "Sing Your Own Gospel",
-      "lyrics_id": "L-227",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "GROWsutra",
-      "genre_primary": "JAZZ",
-      "genre_secondary": "BURLESQUE",
-      "instruments": "Piano",
-      "yt_url": "https://www.youtube.com/watch?v=rwlRylvqrMk",
-      "thumbnail_url": "https://i.ytimg.com/vi/rwlRylvqrMk/maxresdefault.jpg",
-      "duration": "2:55",
-      "publish_date": "2026-01-07",
-      "playlist_names": "GROWsutra : GOD (Questions Etc...), PEACE CIRCUS, GROWsutra, JAZZsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "9:16",
-      "topic_categories": "Jazz, Music",
-      "can_embed": true,
-      "song_topic": "RELIGION",
-      "song_intention": "beYOU",
-      "lyrics_summary": "Don't look for God in a book. It's in the music.",
-      "url_slug": "sing-your-own-gospel"
-    },
-    {
-      "video_id": "NvTo-T8FN-k",
-      "title": "Sing Your Own Gospel • GROWsutra (God, Etc.) Magic Wand Gospel BLUES 🙌🎵",
-      "lyrics_title": "Sing Your Own Gospel",
-      "lyrics_id": "L-227",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "GROWsutra",
-      "genre_primary": "BLUES",
-      "genre_secondary": "",
-      "instruments": "Voice",
-      "yt_url": "https://www.youtube.com/watch?v=NvTo-T8FN-k",
-      "thumbnail_url": "https://i.ytimg.com/vi/NvTo-T8FN-k/maxresdefault.jpg",
-      "duration": "2:48",
-      "publish_date": "2026-01-06",
-      "playlist_names": "GROWsutra : GOD (Questions Etc...), GROWsutra, BLUESsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "9:16",
-      "topic_categories": "Music, Pop music, Religion, Soul music",
-      "can_embed": true,
-      "song_topic": "RELIGION",
-      "song_intention": "beYOU",
-      "lyrics_summary": "Don't look for God in a book. It's in the music.",
-      "url_slug": "sing-your-own-gospel"
     }
   ],
   "L-174": [
@@ -4222,6 +4197,58 @@
       "song_intention": "beWOKE",
       "lyrics_summary": "Okie dokie. (No. It's not.)",
       "url_slug": "okie-dokie-no-it-s-not"
+    }
+  ],
+  "L-227": [
+    {
+      "video_id": "rwlRylvqrMk",
+      "title": "Sing Your Own Gospel • GROWsutra (God, Etc.) Gipsy Piano Burlesque JAZZ Edition 🎼🎧",
+      "lyrics_title": "Sing Your Own Gospel",
+      "lyrics_id": "L-227",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "GROWsutra",
+      "genre_primary": "JAZZ",
+      "genre_secondary": "BURLESQUE",
+      "instruments": "Piano",
+      "yt_url": "https://www.youtube.com/watch?v=rwlRylvqrMk",
+      "thumbnail_url": "https://i.ytimg.com/vi/rwlRylvqrMk/maxresdefault.jpg",
+      "duration": "2:55",
+      "publish_date": "2026-01-07",
+      "playlist_names": "GROWsutra : GOD (Questions Etc...), PEACE CIRCUS, GROWsutra, JAZZsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "9:16",
+      "topic_categories": "Jazz, Music",
+      "can_embed": true,
+      "song_topic": "RELIGION",
+      "song_intention": "beYOU",
+      "lyrics_summary": "Don't look for God in a book. It's in the music.",
+      "url_slug": "sing-your-own-gospel"
+    },
+    {
+      "video_id": "NvTo-T8FN-k",
+      "title": "Sing Your Own Gospel • GROWsutra (God, Etc.) Magic Wand Gospel BLUES 🙌🎵",
+      "lyrics_title": "Sing Your Own Gospel",
+      "lyrics_id": "L-227",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "GROWsutra",
+      "genre_primary": "BLUES",
+      "genre_secondary": "",
+      "instruments": "Voice",
+      "yt_url": "https://www.youtube.com/watch?v=NvTo-T8FN-k",
+      "thumbnail_url": "https://i.ytimg.com/vi/NvTo-T8FN-k/maxresdefault.jpg",
+      "duration": "2:48",
+      "publish_date": "2026-01-06",
+      "playlist_names": "GROWsutra : GOD (Questions Etc...), GROWsutra, BLUESsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "9:16",
+      "topic_categories": "Music, Pop music, Religion, Soul music",
+      "can_embed": true,
+      "song_topic": "RELIGION",
+      "song_intention": "beYOU",
+      "lyrics_summary": "Don't look for God in a book. It's in the music.",
+      "url_slug": "sing-your-own-gospel"
     }
   ],
   "L-217": [
@@ -4378,6 +4405,33 @@
       "url_slug": "awe-is-mighty"
     }
   ],
+  "L-335": [
+    {
+      "video_id": "WVHL46QK7H8",
+      "title": "Come Waddle with Me (Penguins in Shoes) • SHOWsutra Cheeky Absurd Chanson inspired by Anatole France",
+      "lyrics_title": "Come Waddle With Me",
+      "lyrics_id": "L-335",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "SHOWsutra",
+      "genre_primary": "BURLESQUE",
+      "genre_secondary": "JAZZ",
+      "instruments": "Piano,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=WVHL46QK7H8",
+      "thumbnail_url": "https://i.ytimg.com/vi/WVHL46QK7H8/maxresdefault.jpg",
+      "duration": "5:38",
+      "publish_date": "2025-12-27",
+      "playlist_names": "SHOWsutra : Fanana Club, PEACE CIRCUS, SHOWsutra, JAZZsutra, BURLESQUEsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Music, Pop music",
+      "can_embed": true,
+      "song_topic": "FOOLERY",
+      "song_intention": "beSILLY",
+      "lyrics_summary": "Because dystopian truth tastes better with a midnight muse and a penguin's sense of humor.",
+      "url_slug": "come-waddle-with-me"
+    }
+  ],
   "L-214": [
     {
       "video_id": "d_XK7uChskU",
@@ -4453,33 +4507,6 @@
       "song_intention": "beGODless",
       "lyrics_summary": "Who fact-checked the prophets? (Nobody's answering.)",
       "url_slug": "seminal-bollocks"
-    }
-  ],
-  "L-335": [
-    {
-      "video_id": "WVHL46QK7H8",
-      "title": "Come Waddle with Me (Penguins in Shoes) • SHOWsutra Cheeky Absurd Chanson inspired by Anatole France",
-      "lyrics_title": "Come Waddle With Me",
-      "lyrics_id": "L-335",
-      "video_featured": true,
-      "video_featured_description": "",
-      "sutra": "SHOWsutra",
-      "genre_primary": "BURLESQUE",
-      "genre_secondary": "JAZZ",
-      "instruments": "Piano,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=WVHL46QK7H8",
-      "thumbnail_url": "https://i.ytimg.com/vi/WVHL46QK7H8/maxresdefault.jpg",
-      "duration": "5:38",
-      "publish_date": "2025-12-27",
-      "playlist_names": "SHOWsutra : Fanana Club, PEACE CIRCUS, SHOWsutra, JAZZsutra, BURLESQUEsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Music, Pop music",
-      "can_embed": true,
-      "song_topic": "FOOLERY",
-      "song_intention": "beSILLY",
-      "lyrics_summary": "Because dystopian truth tastes better with a midnight muse and a penguin's sense of humor.",
-      "url_slug": "come-waddle-with-me"
     }
   ],
   "L-48": [
@@ -5100,6 +5127,33 @@
       "url_slug": "peel-me-kindly"
     }
   ],
+  "L-237": [
+    {
+      "video_id": "57emK4lmWzw",
+      "title": "Synthema Sutra ♆ SHOWsutra Psychedelic Banana Gipsy LoFi (Goddess Goes to Switzerland :) 🎧❄️",
+      "lyrics_title": "SynthemaSutra",
+      "lyrics_id": "L-237",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "SHOWsutra",
+      "genre_primary": "LOFI",
+      "genre_secondary": "",
+      "instruments": "Upright Bass,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=57emK4lmWzw",
+      "thumbnail_url": "https://i.ytimg.com/vi/57emK4lmWzw/maxresdefault.jpg",
+      "duration": "4:30",
+      "publish_date": "2025-12-05",
+      "playlist_names": "SHOWsutra: B.J. is for Banana Joke, PEACE CIRCUS, SHOWsutra, LOFIsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Independent music, Music, Pop music",
+      "can_embed": true,
+      "song_topic": "WISDOM",
+      "song_intention": "beWONDROUS",
+      "lyrics_summary": "All seven sutras, as if they were good old greek synthemas. Timeless philosophy in motion.",
+      "url_slug": "synthemasutra"
+    }
+  ],
   "L-203": [
     {
       "video_id": "n-RaR7GCoIU",
@@ -5200,33 +5254,6 @@
       "song_intention": "beBRIGHT",
       "lyrics_summary": "They banned the books but not the beat. BB is for Banned Books — and Badass Brains. Read harder.",
       "url_slug": "read-me-harder-bb-is-for-banned-books"
-    }
-  ],
-  "L-237": [
-    {
-      "video_id": "57emK4lmWzw",
-      "title": "Synthema Sutra ♆ SHOWsutra Psychedelic Banana Gipsy LoFi (Goddess Goes to Switzerland :) 🎧❄️",
-      "lyrics_title": "SynthemaSutra",
-      "lyrics_id": "L-237",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "SHOWsutra",
-      "genre_primary": "LOFI",
-      "genre_secondary": "",
-      "instruments": "Upright Bass,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=57emK4lmWzw",
-      "thumbnail_url": "https://i.ytimg.com/vi/57emK4lmWzw/maxresdefault.jpg",
-      "duration": "4:30",
-      "publish_date": "2025-12-05",
-      "playlist_names": "SHOWsutra: B.J. is for Banana Joke, PEACE CIRCUS, SHOWsutra, LOFIsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Independent music, Music, Pop music",
-      "can_embed": true,
-      "song_topic": "WISDOM",
-      "song_intention": "beWONDROUS",
-      "lyrics_summary": "All seven sutras, as if they were good old greek synthemas. Timeless philosophy in motion.",
-      "url_slug": "synthemasutra"
     }
   ],
   "L-288": [
@@ -5846,6 +5873,33 @@
       "url_slug": "can-you-play-win-win-games-or-no"
     }
   ],
+  "L-206": [
+    {
+      "video_id": "ucdsk_IoOt8",
+      "title": "Relative Steve 🎧 Cheeky Psychedelic BLOWsutra Hip Hop Duende Satire Flow",
+      "lyrics_title": "Relative Steve",
+      "lyrics_id": "L-206",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "LOFI",
+      "genre_secondary": "INDIE",
+      "instruments": "Upright Bass,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=ucdsk_IoOt8",
+      "thumbnail_url": "https://i.ytimg.com/vi/ucdsk_IoOt8/maxresdefault.jpg",
+      "duration": "3:54",
+      "publish_date": "2025-11-18",
+      "playlist_names": "BLOWsutra : Ego (Gone Loco), BLOWsutra, LOFIsutra, Bible Gone Bananas",
+      "content_type": "EP Compilation",
+      "format": "16:9",
+      "topic_categories": "Electronic music, Hip hop music, Music, Pop music, Rock music",
+      "can_embed": true,
+      "song_topic": "TRUTH",
+      "song_intention": "seeEGO",
+      "lyrics_summary": "Is truth relative, Steve? A vintage hip hop song asking the dumb recycled questions. Yo.",
+      "url_slug": "relative-steve"
+    }
+  ],
   "L-244": [
     {
       "video_id": "jpRx8Num5eM",
@@ -5896,33 +5950,6 @@
       "song_intention": "beWISE",
       "lyrics_summary": "The happiness they sold you was a tango with the wrong partner on your shoulder.",
       "url_slug": "the-conquest-of-happiness"
-    }
-  ],
-  "L-206": [
-    {
-      "video_id": "ucdsk_IoOt8",
-      "title": "Relative Steve 🎧 Cheeky Psychedelic BLOWsutra Hip Hop Duende Satire Flow",
-      "lyrics_title": "Relative Steve",
-      "lyrics_id": "L-206",
-      "video_featured": true,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "LOFI",
-      "genre_secondary": "INDIE",
-      "instruments": "Upright Bass,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=ucdsk_IoOt8",
-      "thumbnail_url": "https://i.ytimg.com/vi/ucdsk_IoOt8/maxresdefault.jpg",
-      "duration": "3:54",
-      "publish_date": "2025-11-18",
-      "playlist_names": "BLOWsutra : Ego (Gone Loco), BLOWsutra, LOFIsutra, Bible Gone Bananas",
-      "content_type": "EP Compilation",
-      "format": "16:9",
-      "topic_categories": "Electronic music, Hip hop music, Music, Pop music, Rock music",
-      "can_embed": true,
-      "song_topic": "TRUTH",
-      "song_intention": "seeEGO",
-      "lyrics_summary": "Is truth relative, Steve? A vintage hip hop song asking the dumb recycled questions. Yo.",
-      "url_slug": "relative-steve"
     }
   ],
   "L-14": [
@@ -6466,6 +6493,83 @@
       "url_slug": "love-from-the-future-the-hesse-song"
     }
   ],
+  "L-113": [
+    {
+      "video_id": "kF7IpEt4SzU",
+      "title": "Idiocracy Now 😬 QUACKsutra Accoustic Banjo Music, Psychedelic Reality turned Macchiavelic Dystopia",
+      "lyrics_title": "Idiocracy Now",
+      "lyrics_id": "L-113",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "BURLESQUE",
+      "genre_secondary": "FOLK",
+      "instruments": "Banjo,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=kF7IpEt4SzU",
+      "thumbnail_url": "https://i.ytimg.com/vi/kF7IpEt4SzU/maxresdefault.jpg",
+      "duration": "2:59",
+      "publish_date": "2025-10-14",
+      "playlist_names": "BLOWsutra : Apes Gone Wrong, LOFIsutra, BANJOsutra, FOTUS CIRCUS (Felon Of The United States), BURLESQUEsutra, Bible Gone Bananas",
+      "content_type": "Short/Reel",
+      "format": "9:16",
+      "topic_categories": "Humour, Music",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "beWOKE",
+      "lyrics_summary": "The difference between Idiocracy and MAGAcracy? The timeline.",
+      "url_slug": "idiocracy-now"
+    },
+    {
+      "video_id": "BddS6xg1fYY",
+      "title": "Idiocracy Now 📺🍟 QUACKsutra Psychedelic Reality turned Macchiavelic Dystopia Accoustic LoFi Music",
+      "lyrics_title": "Idiocracy Now",
+      "lyrics_id": "L-113",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "LOFI",
+      "genre_secondary": "INDIE",
+      "instruments": "Upright Bass",
+      "yt_url": "https://www.youtube.com/watch?v=BddS6xg1fYY",
+      "thumbnail_url": "https://i.ytimg.com/vi/BddS6xg1fYY/maxresdefault.jpg",
+      "duration": "3:10",
+      "publish_date": "2025-10-14",
+      "playlist_names": "BLOWsutra : Apes Gone Wrong, LOFIsutra, FOTUS CIRCUS (Felon Of The United States), Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Music",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "beWOKE",
+      "lyrics_summary": "The difference between Idiocracy and MAGAcracy? The timeline.",
+      "url_slug": "idiocracy-now"
+    },
+    {
+      "video_id": "4mNl4QfRBmg",
+      "title": "“Idiocracy Now” World LoFi Fusion 🎧⚠️ IRL Murica Movie Prequel currently playing goldfish near you",
+      "lyrics_title": "Idiocracy Now",
+      "lyrics_id": "L-113",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "LOFI",
+      "genre_secondary": "INDIE",
+      "instruments": "Upright Bass",
+      "yt_url": "https://www.youtube.com/watch?v=4mNl4QfRBmg",
+      "thumbnail_url": "https://i.ytimg.com/vi/4mNl4QfRBmg/maxresdefault.jpg",
+      "duration": "2:59",
+      "publish_date": "2025-09-10",
+      "playlist_names": "BLOWsutra : Apes Gone Wrong, LOFIsutra, FOTUS CIRCUS (Felon Of The United States), SHORTsutra Bananas Matter, Bible Gone Bananas",
+      "content_type": "Short/Reel",
+      "format": "9:16",
+      "topic_categories": "Independent music, Lifestyle (sociology), Pop music",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "beWOKE",
+      "lyrics_summary": "The difference between Idiocracy and MAGAcracy? The timeline.",
+      "url_slug": "idiocracy-now"
+    }
+  ],
   "L-132": [
     {
       "video_id": "q7leV7mZ9Bo",
@@ -6618,83 +6722,6 @@
       "url_slug": "la-force-douce"
     }
   ],
-  "L-113": [
-    {
-      "video_id": "kF7IpEt4SzU",
-      "title": "Idiocracy Now 😬 QUACKsutra Accoustic Banjo Music, Psychedelic Reality turned Macchiavelic Dystopia",
-      "lyrics_title": "Idiocracy Now",
-      "lyrics_id": "L-113",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "BURLESQUE",
-      "genre_secondary": "FOLK",
-      "instruments": "Banjo,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=kF7IpEt4SzU",
-      "thumbnail_url": "https://i.ytimg.com/vi/kF7IpEt4SzU/maxresdefault.jpg",
-      "duration": "2:59",
-      "publish_date": "2025-10-14",
-      "playlist_names": "BLOWsutra : Apes Gone Wrong, LOFIsutra, BANJOsutra, FOTUS CIRCUS (Felon Of The United States), BURLESQUEsutra, Bible Gone Bananas",
-      "content_type": "Short/Reel",
-      "format": "9:16",
-      "topic_categories": "Humour, Music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "beWOKE",
-      "lyrics_summary": "The difference between Idiocracy and MAGAcracy? The timeline.",
-      "url_slug": "idiocracy-now"
-    },
-    {
-      "video_id": "BddS6xg1fYY",
-      "title": "Idiocracy Now 📺🍟 QUACKsutra Psychedelic Reality turned Macchiavelic Dystopia Accoustic LoFi Music",
-      "lyrics_title": "Idiocracy Now",
-      "lyrics_id": "L-113",
-      "video_featured": true,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "LOFI",
-      "genre_secondary": "INDIE",
-      "instruments": "Upright Bass",
-      "yt_url": "https://www.youtube.com/watch?v=BddS6xg1fYY",
-      "thumbnail_url": "https://i.ytimg.com/vi/BddS6xg1fYY/maxresdefault.jpg",
-      "duration": "3:10",
-      "publish_date": "2025-10-14",
-      "playlist_names": "BLOWsutra : Apes Gone Wrong, LOFIsutra, FOTUS CIRCUS (Felon Of The United States), Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "beWOKE",
-      "lyrics_summary": "The difference between Idiocracy and MAGAcracy? The timeline.",
-      "url_slug": "idiocracy-now"
-    },
-    {
-      "video_id": "4mNl4QfRBmg",
-      "title": "“Idiocracy Now” World LoFi Fusion 🎧⚠️ IRL Murica Movie Prequel currently playing goldfish near you",
-      "lyrics_title": "Idiocracy Now",
-      "lyrics_id": "L-113",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "LOFI",
-      "genre_secondary": "INDIE",
-      "instruments": "Upright Bass",
-      "yt_url": "https://www.youtube.com/watch?v=4mNl4QfRBmg",
-      "thumbnail_url": "https://i.ytimg.com/vi/4mNl4QfRBmg/maxresdefault.jpg",
-      "duration": "2:59",
-      "publish_date": "2025-09-10",
-      "playlist_names": "BLOWsutra : Apes Gone Wrong, LOFIsutra, FOTUS CIRCUS (Felon Of The United States), SHORTsutra Bananas Matter, Bible Gone Bananas",
-      "content_type": "Short/Reel",
-      "format": "9:16",
-      "topic_categories": "Independent music, Lifestyle (sociology), Pop music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "beWOKE",
-      "lyrics_summary": "The difference between Idiocracy and MAGAcracy? The timeline.",
-      "url_slug": "idiocracy-now"
-    }
-  ],
   "L-225": [
     {
       "video_id": "9xLvPVJuD_I",
@@ -6801,6 +6828,33 @@
       "url_slug": "oy-we-care"
     }
   ],
+  "L-67": [
+    {
+      "video_id": "P__Z5CJU8gM",
+      "title": "“Easy (Death Is Nothing At All)” 🧘‍♀️ A Rare BOWsutra Divine Lullaby Bluesy Dub Song About Death…",
+      "lyrics_title": "Easy (Death Is Nothing At All)",
+      "lyrics_id": "L-67",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "BOWsutra",
+      "genre_primary": "DUB",
+      "genre_secondary": "BLUES",
+      "instruments": "Banjo,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=P__Z5CJU8gM",
+      "thumbnail_url": "https://i.ytimg.com/vi/P__Z5CJU8gM/maxresdefault.jpg",
+      "duration": "3:25",
+      "publish_date": "2025-09-28",
+      "playlist_names": "PEACE CIRCUS, BLUESsutra, DUBsutra, BANJOsutra, LULLAsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Music, Reggae",
+      "can_embed": true,
+      "song_topic": "BEAUTY",
+      "song_intention": "beWONDROUS",
+      "lyrics_summary": "Death is nothing at all. Henry Scott Holland said so. Breathe easy, mon chéri.",
+      "url_slug": "easy-death-is-nothing-at-all"
+    }
+  ],
   "L-293": [
     {
       "video_id": "QHRw32TX3zE",
@@ -6828,31 +6882,31 @@
       "url_slug": "when-did-seduction-become-so-untrue"
     }
   ],
-  "L-67": [
+  "L-96": [
     {
-      "video_id": "P__Z5CJU8gM",
-      "title": "“Easy (Death Is Nothing At All)” 🧘‍♀️ A Rare BOWsutra Divine Lullaby Bluesy Dub Song About Death…",
-      "lyrics_title": "Easy (Death Is Nothing At All)",
-      "lyrics_id": "L-67",
+      "video_id": "pqQ7D4TO0f0",
+      "title": "Hereby, I Cry 🖤 GROWsutra Mantra Prayer Dream (from the so-called Land of the Free)",
+      "lyrics_title": "Hereby, I Cry",
+      "lyrics_id": "L-96",
       "video_featured": true,
       "video_featured_description": "",
-      "sutra": "BOWsutra",
-      "genre_primary": "DUB",
-      "genre_secondary": "BLUES",
-      "instruments": "Banjo,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=P__Z5CJU8gM",
-      "thumbnail_url": "https://i.ytimg.com/vi/P__Z5CJU8gM/maxresdefault.jpg",
-      "duration": "3:25",
-      "publish_date": "2025-09-28",
-      "playlist_names": "PEACE CIRCUS, BLUESsutra, DUBsutra, BANJOsutra, LULLAsutra, Bible Gone Bananas",
+      "sutra": "GROWsutra",
+      "genre_primary": "MANTRA",
+      "genre_secondary": "",
+      "instruments": "Drum,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=pqQ7D4TO0f0",
+      "thumbnail_url": "https://i.ytimg.com/vi/pqQ7D4TO0f0/maxresdefault.jpg",
+      "duration": "4:01",
+      "publish_date": "2025-09-27",
+      "playlist_names": "GROWsutra : DARE (to Care), PEACE CIRCUS, GROWsutra, LULLAsutra, Bible Gone Bananas",
       "content_type": "Music Video",
       "format": "16:9",
-      "topic_categories": "Music, Reggae",
+      "topic_categories": "Electronic music, Music, Pop music",
       "can_embed": true,
-      "song_topic": "BEAUTY",
-      "song_intention": "beWONDROUS",
-      "lyrics_summary": "Death is nothing at all. Henry Scott Holland said so. Breathe easy, mon chéri.",
-      "url_slug": "easy-death-is-nothing-at-all"
+      "song_topic": "INJUSTICE",
+      "song_intention": "beKIND",
+      "lyrics_summary": "Not fury — memory's flame. This is the cry in the name of the sacred, the silenced, the still.",
+      "url_slug": "hereby-i-cry"
     }
   ],
   "L-449": [
@@ -6907,31 +6961,56 @@
       "url_slug": "planet-idiocracy"
     }
   ],
-  "L-96": [
+  "L-104": [
     {
-      "video_id": "pqQ7D4TO0f0",
-      "title": "Hereby, I Cry 🖤 GROWsutra Mantra Prayer Dream (from the so-called Land of the Free)",
-      "lyrics_title": "Hereby, I Cry",
-      "lyrics_id": "L-96",
+      "video_id": "McbePPjfpJI",
+      "title": "Hope is Do-Do-Dope Encore 🎻😽 SHOWsutra Gipsy World Peace Indie Fusion Dream 🎼",
+      "lyrics_title": "Hope is Do-Do-Dope",
+      "lyrics_id": "L-104",
       "video_featured": true,
       "video_featured_description": "",
-      "sutra": "GROWsutra",
-      "genre_primary": "MANTRA",
-      "genre_secondary": "",
-      "instruments": "Drum,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=pqQ7D4TO0f0",
-      "thumbnail_url": "https://i.ytimg.com/vi/pqQ7D4TO0f0/maxresdefault.jpg",
-      "duration": "4:01",
-      "publish_date": "2025-09-27",
-      "playlist_names": "GROWsutra : DARE (to Care), PEACE CIRCUS, GROWsutra, LULLAsutra, Bible Gone Bananas",
+      "sutra": "SHOWsutra",
+      "genre_primary": "INDIE",
+      "genre_secondary": "MANTRA",
+      "instruments": "Cello,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=McbePPjfpJI",
+      "thumbnail_url": "https://i.ytimg.com/vi/McbePPjfpJI/maxresdefault.jpg",
+      "duration": "5:00",
+      "publish_date": "2025-09-25",
+      "playlist_names": "CELLOsutra, INDIEsutra, SHOWsutra : Fanana Club, PEACE CIRCUS, SHOWsutra, LULLAsutra, Bible Gone Bananas",
       "content_type": "Music Video",
       "format": "16:9",
-      "topic_categories": "Electronic music, Music, Pop music",
+      "topic_categories": "Music",
       "can_embed": true,
-      "song_topic": "INJUSTICE",
-      "song_intention": "beKIND",
-      "lyrics_summary": "Not fury — memory's flame. This is the cry in the name of the sacred, the silenced, the still.",
-      "url_slug": "hereby-i-cry"
+      "song_topic": "FOOLERY",
+      "song_intention": "beWONDROUS",
+      "lyrics_summary": "The Dodo is back. It feels like hope. And hope is dope. Right? (Ahem, let's dance.)",
+      "url_slug": "hope-is-do-do-dope"
+    },
+    {
+      "video_id": "7IKryKdrEPw",
+      "title": "Hope is Do-Do-Dope 🪗🦤 SHOWsutra Psychedelic Accordion Duende Waltz Circus Burlesque 🎶",
+      "lyrics_title": "Hope is Do-Do-Dope",
+      "lyrics_id": "L-104",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "SHOWsutra",
+      "genre_primary": "BURLESQUE",
+      "genre_secondary": "WORLD",
+      "instruments": "Accordion",
+      "yt_url": "https://www.youtube.com/watch?v=7IKryKdrEPw",
+      "thumbnail_url": "https://i.ytimg.com/vi/7IKryKdrEPw/maxresdefault.jpg",
+      "duration": "2:50",
+      "publish_date": "2025-09-25",
+      "playlist_names": "SHOWsutra : Fanana Club, PEACE CIRCUS, SHOWsutra, BURLESQUEsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Music",
+      "can_embed": true,
+      "song_topic": "FOOLERY",
+      "song_intention": "beWONDROUS",
+      "lyrics_summary": "The Dodo is back. It feels like hope. And hope is dope. Right? (Ahem, let's dance.)",
+      "url_slug": "hope-is-do-do-dope"
     }
   ],
   "L-115": [
@@ -6984,58 +7063,6 @@
       "song_intention": "seeHIStory",
       "lyrics_summary": "The history of eugenics: what happens when certainty meets cruelty.",
       "url_slug": "ironic-moronic-eugenics"
-    }
-  ],
-  "L-104": [
-    {
-      "video_id": "McbePPjfpJI",
-      "title": "Hope is Do-Do-Dope Encore 🎻😽 SHOWsutra Gipsy World Peace Indie Fusion Dream 🎼",
-      "lyrics_title": "Hope is Do-Do-Dope",
-      "lyrics_id": "L-104",
-      "video_featured": true,
-      "video_featured_description": "",
-      "sutra": "SHOWsutra",
-      "genre_primary": "INDIE",
-      "genre_secondary": "MANTRA",
-      "instruments": "Cello,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=McbePPjfpJI",
-      "thumbnail_url": "https://i.ytimg.com/vi/McbePPjfpJI/maxresdefault.jpg",
-      "duration": "5:00",
-      "publish_date": "2025-09-25",
-      "playlist_names": "CELLOsutra, INDIEsutra, SHOWsutra : Fanana Club, PEACE CIRCUS, SHOWsutra, LULLAsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Music",
-      "can_embed": true,
-      "song_topic": "FOOLERY",
-      "song_intention": "beWONDROUS",
-      "lyrics_summary": "The Dodo is back. It feels like hope. And hope is dope. Right? (Ahem, let's dance.)",
-      "url_slug": "hope-is-do-do-dope"
-    },
-    {
-      "video_id": "7IKryKdrEPw",
-      "title": "Hope is Do-Do-Dope 🪗🦤 SHOWsutra Psychedelic Accordion Duende Waltz Circus Burlesque 🎶",
-      "lyrics_title": "Hope is Do-Do-Dope",
-      "lyrics_id": "L-104",
-      "video_featured": true,
-      "video_featured_description": "",
-      "sutra": "SHOWsutra",
-      "genre_primary": "BURLESQUE",
-      "genre_secondary": "WORLD",
-      "instruments": "Accordion",
-      "yt_url": "https://www.youtube.com/watch?v=7IKryKdrEPw",
-      "thumbnail_url": "https://i.ytimg.com/vi/7IKryKdrEPw/maxresdefault.jpg",
-      "duration": "2:50",
-      "publish_date": "2025-09-25",
-      "playlist_names": "SHOWsutra : Fanana Club, PEACE CIRCUS, SHOWsutra, BURLESQUEsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Music",
-      "can_embed": true,
-      "song_topic": "FOOLERY",
-      "song_intention": "beWONDROUS",
-      "lyrics_summary": "The Dodo is back. It feels like hope. And hope is dope. Right? (Ahem, let's dance.)",
-      "url_slug": "hope-is-do-do-dope"
     }
   ],
   "L-314": [
@@ -7373,58 +7400,6 @@
       "url_slug": "who-s-your-vladdy"
     }
   ],
-  "L-41": [
-    {
-      "video_id": "G4wsetpOo3k",
-      "title": "Step right up, step right in, where grotesque rules, and the FOTUS #circus joke’s on me & you 🤡🇺🇸",
-      "lyrics_title": "Carnival FOTUS (ctd)",
-      "lyrics_id": "L-41",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "QUACKsutra",
-      "genre_primary": "BURLESQUE",
-      "genre_secondary": "SPOKEN WORDS",
-      "instruments": "Voice",
-      "yt_url": "https://www.youtube.com/watch?v=G4wsetpOo3k",
-      "thumbnail_url": "https://i.ytimg.com/vi/G4wsetpOo3k/maxresdefault.jpg",
-      "duration": "3:00",
-      "publish_date": "2025-09-14",
-      "playlist_names": "BLOWsutra : FOTUS Circus",
-      "content_type": "Short/Reel",
-      "format": "9:16/16:9",
-      "topic_categories": "Hobby, Lifestyle (sociology), Pop music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "beWOKE",
-      "lyrics_summary": "Step right up. The pigs are in suits, the clowns are in congress, Ginsberg and Orwell are in the cheap seats, and the carousel never stops.",
-      "url_slug": "carnival-fotus-ctd"
-    },
-    {
-      "video_id": "nC5u32rNUHI",
-      "title": "Murica dunno the meaning of a rule of law, double-standards, or even right vs. wrong 🎪🦆💨 #truestory",
-      "lyrics_title": "Carnival FOTUS (ctd)",
-      "lyrics_id": "L-41",
-      "video_featured": true,
-      "video_featured_description": "",
-      "sutra": "QUACKsutra",
-      "genre_primary": "BURLESQUE",
-      "genre_secondary": "LOFI",
-      "instruments": "Voice",
-      "yt_url": "https://www.youtube.com/watch?v=nC5u32rNUHI",
-      "thumbnail_url": "https://i.ytimg.com/vi/nC5u32rNUHI/maxresdefault.jpg",
-      "duration": "3:14",
-      "publish_date": "2025-02-26",
-      "playlist_names": "BLOWsutra : FOTUS Circus, BLOWsutra, DUBsutra, FOTUS CIRCUS (Felon Of The United States), BURLESQUEsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Electronic music, Hip hop music, Independent music, Music, Pop music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "beWOKE",
-      "lyrics_summary": "Step right up. The pigs are in suits, the clowns are in congress, Ginsberg and Orwell are in the cheap seats, and the carousel never stops.",
-      "url_slug": "carnival-fotus-ctd"
-    }
-  ],
   "L-210": [
     {
       "video_id": "MKC6GjBY0-A",
@@ -7525,6 +7500,58 @@
       "song_intention": "beWOKE",
       "lyrics_summary": "Habeas Corpus just called. It's gone in the attic. Dark times.",
       "url_slug": "run-now-if-you-can"
+    }
+  ],
+  "L-41": [
+    {
+      "video_id": "G4wsetpOo3k",
+      "title": "Step right up, step right in, where grotesque rules, and the FOTUS #circus joke’s on me & you 🤡🇺🇸",
+      "lyrics_title": "Carnival FOTUS (ctd)",
+      "lyrics_id": "L-41",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "QUACKsutra",
+      "genre_primary": "BURLESQUE",
+      "genre_secondary": "SPOKEN WORDS",
+      "instruments": "Voice",
+      "yt_url": "https://www.youtube.com/watch?v=G4wsetpOo3k",
+      "thumbnail_url": "https://i.ytimg.com/vi/G4wsetpOo3k/maxresdefault.jpg",
+      "duration": "3:00",
+      "publish_date": "2025-09-14",
+      "playlist_names": "BLOWsutra : FOTUS Circus",
+      "content_type": "Short/Reel",
+      "format": "9:16/16:9",
+      "topic_categories": "Hobby, Lifestyle (sociology), Pop music",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "beWOKE",
+      "lyrics_summary": "Step right up. The pigs are in suits, the clowns are in congress, Ginsberg and Orwell are in the cheap seats, and the carousel never stops.",
+      "url_slug": "carnival-fotus-ctd"
+    },
+    {
+      "video_id": "nC5u32rNUHI",
+      "title": "Murica dunno the meaning of a rule of law, double-standards, or even right vs. wrong 🎪🦆💨 #truestory",
+      "lyrics_title": "Carnival FOTUS (ctd)",
+      "lyrics_id": "L-41",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "QUACKsutra",
+      "genre_primary": "BURLESQUE",
+      "genre_secondary": "LOFI",
+      "instruments": "Voice",
+      "yt_url": "https://www.youtube.com/watch?v=nC5u32rNUHI",
+      "thumbnail_url": "https://i.ytimg.com/vi/nC5u32rNUHI/maxresdefault.jpg",
+      "duration": "3:14",
+      "publish_date": "2025-02-26",
+      "playlist_names": "BLOWsutra : FOTUS Circus, BLOWsutra, DUBsutra, FOTUS CIRCUS (Felon Of The United States), BURLESQUEsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Electronic music, Hip hop music, Independent music, Music, Pop music",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "beWOKE",
+      "lyrics_summary": "Step right up. The pigs are in suits, the clowns are in congress, Ginsberg and Orwell are in the cheap seats, and the carousel never stops.",
+      "url_slug": "carnival-fotus-ctd"
     }
   ],
   "L-61": [
@@ -7656,6 +7683,33 @@
       "url_slug": "dump-trump"
     }
   ],
+  "L-339": [
+    {
+      "video_id": "12eQO6Nqe24",
+      "title": "BURN🔥 because all I need is #hopecore fun… what is your dearest democratic hope? I sincerely wonder",
+      "lyrics_title": "Buuuuurn!",
+      "lyrics_id": "L-339",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "SHOWsutra",
+      "genre_primary": "SPOKEN WORDS",
+      "genre_secondary": "ROCK",
+      "instruments": "Voice",
+      "yt_url": "https://www.youtube.com/watch?v=12eQO6Nqe24",
+      "thumbnail_url": "https://i.ytimg.com/vi/12eQO6Nqe24/maxresdefault.jpg",
+      "duration": "0:15",
+      "publish_date": "2025-09-03",
+      "playlist_names": "SHOWsutra : Fanana Club",
+      "content_type": "Short/Reel",
+      "format": "9:16",
+      "topic_categories": "Music, Pop music",
+      "can_embed": true,
+      "song_topic": "BEAUTY",
+      "song_intention": "beYOU",
+      "lyrics_summary": "No phone, no rules, no corporate lies. Just ten guiding principles and a tutu under dusty skies. Buuuuurn!",
+      "url_slug": "buuuuurn"
+    }
+  ],
   "L-226": [
     {
       "video_id": "0zWYUeJV81g",
@@ -7731,33 +7785,6 @@
       "song_intention": "beWISE",
       "lyrics_summary": "White House's burning, no alarm. The new normal is illegal. Sidération's calling.",
       "url_slug": "sideration-s-calling"
-    }
-  ],
-  "L-339": [
-    {
-      "video_id": "12eQO6Nqe24",
-      "title": "BURN🔥 because all I need is #hopecore fun… what is your dearest democratic hope? I sincerely wonder",
-      "lyrics_title": "Buuuuurn!",
-      "lyrics_id": "L-339",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "SHOWsutra",
-      "genre_primary": "SPOKEN WORDS",
-      "genre_secondary": "ROCK",
-      "instruments": "Voice",
-      "yt_url": "https://www.youtube.com/watch?v=12eQO6Nqe24",
-      "thumbnail_url": "https://i.ytimg.com/vi/12eQO6Nqe24/maxresdefault.jpg",
-      "duration": "0:15",
-      "publish_date": "2025-09-03",
-      "playlist_names": "SHOWsutra : Fanana Club",
-      "content_type": "Short/Reel",
-      "format": "9:16",
-      "topic_categories": "Music, Pop music",
-      "can_embed": true,
-      "song_topic": "BEAUTY",
-      "song_intention": "beYOU",
-      "lyrics_summary": "No phone, no rules, no corporate lies. Just ten guiding principles and a tutu under dusty skies. Buuuuurn!",
-      "url_slug": "buuuuurn"
     }
   ],
   "L-317": [
@@ -8020,6 +8047,33 @@
       "url_slug": "too-hard-my-friend"
     }
   ],
+  "L-69": [
+    {
+      "video_id": "S5B_T0rH3gU",
+      "title": "EGO’s Maquerade 🤓🍿🎶 BLOWsutra Cabaret Music",
+      "lyrics_title": "EGO's Masquerade",
+      "lyrics_id": "L-69",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "LOFI",
+      "genre_secondary": "BURLESQUE",
+      "instruments": "Drum,Upright Bass",
+      "yt_url": "https://www.youtube.com/watch?v=S5B_T0rH3gU",
+      "thumbnail_url": "https://i.ytimg.com/vi/S5B_T0rH3gU/maxresdefault.jpg",
+      "duration": "4:55",
+      "publish_date": "2025-08-26",
+      "playlist_names": "BLOWsutra : FOTUS Circus, BLOWsutra : Ego (Gone Loco), BLOWsutra, LOFIsutra, FOTUS CIRCUS (Felon Of The United States), BURLESQUEsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Electronic music, Independent music, Music, Pop music, Rock music",
+      "can_embed": true,
+      "song_topic": "TRUTH",
+      "song_intention": "seeEGO",
+      "lyrics_summary": "Welcome to Ego's Masquerade. Charming smiles, deceit in the eyes. Pull up a chair. Watch the show. Learn the signs.",
+      "url_slug": "ego-s-masquerade"
+    }
+  ],
   "L-16": [
     {
       "video_id": "IdchpTXWd5c",
@@ -8070,33 +8124,6 @@
       "song_intention": "seeEGO",
       "lyrics_summary": "What if every -ism was just one -ism wearing different hats? (Spoiler: it's narcissism, all the way down.)",
       "url_slug": "all-the-isms"
-    }
-  ],
-  "L-69": [
-    {
-      "video_id": "S5B_T0rH3gU",
-      "title": "EGO’s Maquerade 🤓🍿🎶 BLOWsutra Cabaret Music",
-      "lyrics_title": "EGO's Masquerade",
-      "lyrics_id": "L-69",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "LOFI",
-      "genre_secondary": "BURLESQUE",
-      "instruments": "Drum,Upright Bass",
-      "yt_url": "https://www.youtube.com/watch?v=S5B_T0rH3gU",
-      "thumbnail_url": "https://i.ytimg.com/vi/S5B_T0rH3gU/maxresdefault.jpg",
-      "duration": "4:55",
-      "publish_date": "2025-08-26",
-      "playlist_names": "BLOWsutra : FOTUS Circus, BLOWsutra : Ego (Gone Loco), BLOWsutra, LOFIsutra, FOTUS CIRCUS (Felon Of The United States), BURLESQUEsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Electronic music, Independent music, Music, Pop music, Rock music",
-      "can_embed": true,
-      "song_topic": "TRUTH",
-      "song_intention": "seeEGO",
-      "lyrics_summary": "Welcome to Ego's Masquerade. Charming smiles, deceit in the eyes. Pull up a chair. Watch the show. Learn the signs.",
-      "url_slug": "ego-s-masquerade"
     }
   ],
   "L-153": [
@@ -8203,6 +8230,58 @@
       "url_slug": "blessed-be-the-dogs-showsutra-edition"
     }
   ],
+  "L-300": [
+    {
+      "video_id": "wUgEGd2SQ84",
+      "title": "Who Knows Where How Happiness Truly Grows? GROWsutra FOLK Yum Music",
+      "lyrics_title": "Who Knows Where How Happiness Truly Grows",
+      "lyrics_id": "L-300",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "GROWsutra",
+      "genre_primary": "FOLK",
+      "genre_secondary": "INDIE",
+      "instruments": "Guitar",
+      "yt_url": "https://www.youtube.com/watch?v=wUgEGd2SQ84",
+      "thumbnail_url": "https://i.ytimg.com/vi/wUgEGd2SQ84/maxresdefault.jpg",
+      "duration": "3:51",
+      "publish_date": "2025-08-12",
+      "playlist_names": "KNOWsutra : But(t) Whyyy, PEACE CIRCUS, GROWsutra, FOLKsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Independent music, Jazz, Music, Pop music",
+      "can_embed": true,
+      "song_topic": "BEAUTY",
+      "song_intention": "beCURIOUS",
+      "lyrics_summary": "Not built for fame. Not made for scale. No branded ask, no bullshit mask. Just words that breathe. Who knows. EPx29.",
+      "url_slug": "who-knows-where-how-happiness-truly-grows"
+    },
+    {
+      "video_id": "n9l5lIRxJ5E",
+      "title": "Worthless—but(t) who knows where, how happiness truly grows? GROWsutra 🍯🍑",
+      "lyrics_title": "Who Knows Where How Happiness Truly Grows",
+      "lyrics_id": "L-300",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "GROWsutra",
+      "genre_primary": "FOLK",
+      "genre_secondary": "",
+      "instruments": "Guitar,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=n9l5lIRxJ5E",
+      "thumbnail_url": "https://i.ytimg.com/vi/n9l5lIRxJ5E/maxresdefault.jpg",
+      "duration": "4:00",
+      "publish_date": "2025-08-10",
+      "playlist_names": "Hidden Peels, KNOWsutra : But(t) Whyyy, PEACE CIRCUS, GROWsutra, FOLKsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Electronic music, Independent music, Music, Pop music, Rock music",
+      "can_embed": true,
+      "song_topic": "BEAUTY",
+      "song_intention": "beCURIOUS",
+      "lyrics_summary": "Not built for fame. Not made for scale. No branded ask, no bullshit mask. Just words that breathe. Who knows. EPx29.",
+      "url_slug": "who-knows-where-how-happiness-truly-grows"
+    }
+  ],
   "L-106": [
     {
       "video_id": "02rdL6T_ucA",
@@ -8303,58 +8382,6 @@
       "song_intention": "beCURIOUS",
       "lyrics_summary": "How do kids learn what's right when the adults are still figuring it out?",
       "url_slug": "how-do-kids-learn-now"
-    }
-  ],
-  "L-300": [
-    {
-      "video_id": "wUgEGd2SQ84",
-      "title": "Who Knows Where How Happiness Truly Grows? GROWsutra FOLK Yum Music",
-      "lyrics_title": "Who Knows Where How Happiness Truly Grows",
-      "lyrics_id": "L-300",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "GROWsutra",
-      "genre_primary": "FOLK",
-      "genre_secondary": "INDIE",
-      "instruments": "Guitar",
-      "yt_url": "https://www.youtube.com/watch?v=wUgEGd2SQ84",
-      "thumbnail_url": "https://i.ytimg.com/vi/wUgEGd2SQ84/maxresdefault.jpg",
-      "duration": "3:51",
-      "publish_date": "2025-08-12",
-      "playlist_names": "KNOWsutra : But(t) Whyyy, PEACE CIRCUS, GROWsutra, FOLKsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Independent music, Jazz, Music, Pop music",
-      "can_embed": true,
-      "song_topic": "BEAUTY",
-      "song_intention": "beCURIOUS",
-      "lyrics_summary": "Not built for fame. Not made for scale. No branded ask, no bullshit mask. Just words that breathe. Who knows. EPx29.",
-      "url_slug": "who-knows-where-how-happiness-truly-grows"
-    },
-    {
-      "video_id": "n9l5lIRxJ5E",
-      "title": "Worthless—but(t) who knows where, how happiness truly grows? GROWsutra 🍯🍑",
-      "lyrics_title": "Who Knows Where How Happiness Truly Grows",
-      "lyrics_id": "L-300",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "GROWsutra",
-      "genre_primary": "FOLK",
-      "genre_secondary": "",
-      "instruments": "Guitar,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=n9l5lIRxJ5E",
-      "thumbnail_url": "https://i.ytimg.com/vi/n9l5lIRxJ5E/maxresdefault.jpg",
-      "duration": "4:00",
-      "publish_date": "2025-08-10",
-      "playlist_names": "Hidden Peels, KNOWsutra : But(t) Whyyy, PEACE CIRCUS, GROWsutra, FOLKsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Electronic music, Independent music, Music, Pop music, Rock music",
-      "can_embed": true,
-      "song_topic": "BEAUTY",
-      "song_intention": "beCURIOUS",
-      "lyrics_summary": "Not built for fame. Not made for scale. No branded ask, no bullshit mask. Just words that breathe. Who knows. EPx29.",
-      "url_slug": "who-knows-where-how-happiness-truly-grows"
     }
   ],
   "L-168": [
@@ -8636,33 +8663,6 @@
       "url_slug": "fotus-circus-ginsberg-hollow-horror-show"
     }
   ],
-  "L-219": [
-    {
-      "video_id": "kqZ5M5JveDk",
-      "title": "Aren’t U Ashamed We Ain’t Ashamed? SHAMELESS, DEFY EP is an American song inspired by @defiance13 🔥",
-      "lyrics_title": "Shameless (DEFY)",
-      "lyrics_id": "L-219",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "FOLK",
-      "genre_secondary": "",
-      "instruments": "Upright Bass,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=kqZ5M5JveDk",
-      "thumbnail_url": "https://i.ytimg.com/vi/kqZ5M5JveDk/maxresdefault.jpg",
-      "duration": "2:58",
-      "publish_date": "2025-07-26",
-      "playlist_names": "INDIEsutra, FOTUS CIRCUS (Felon Of The United States), Bible Gone Bananas",
-      "content_type": "Short/Reel",
-      "format": "9:16",
-      "topic_categories": "Independent music, Music, Pop music",
-      "can_embed": true,
-      "song_topic": "INJUSTICE",
-      "song_intention": "seeWAR",
-      "lyrics_summary": "They used to hide the cruelty. Now it's front row seats.",
-      "url_slug": "shameless-defy"
-    }
-  ],
   "L-148": [
     {
       "video_id": "qnqL1PztSF0",
@@ -8688,6 +8688,33 @@
       "song_intention": "beSILLY",
       "lyrics_summary": "All seven sutras, one cheeky anthem. Lyrics matter. Authentic imagination beats artificial indoctrination. Every time.",
       "url_slug": "lyrics-matter-foosutra"
+    }
+  ],
+  "L-219": [
+    {
+      "video_id": "kqZ5M5JveDk",
+      "title": "Aren’t U Ashamed We Ain’t Ashamed? SHAMELESS, DEFY EP is an American song inspired by @defiance13 🔥",
+      "lyrics_title": "Shameless (DEFY)",
+      "lyrics_id": "L-219",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "FOLK",
+      "genre_secondary": "",
+      "instruments": "Upright Bass,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=kqZ5M5JveDk",
+      "thumbnail_url": "https://i.ytimg.com/vi/kqZ5M5JveDk/maxresdefault.jpg",
+      "duration": "2:58",
+      "publish_date": "2025-07-26",
+      "playlist_names": "INDIEsutra, FOTUS CIRCUS (Felon Of The United States), Bible Gone Bananas",
+      "content_type": "Short/Reel",
+      "format": "9:16",
+      "topic_categories": "Independent music, Music, Pop music",
+      "can_embed": true,
+      "song_topic": "INJUSTICE",
+      "song_intention": "seeWAR",
+      "lyrics_summary": "They used to hide the cruelty. Now it's front row seats.",
+      "url_slug": "shameless-defy"
     }
   ],
   "L-22": [
@@ -8979,58 +9006,6 @@
       "url_slug": "a-la-guerre-comme-a-la-guerre-to-war-or-not-to-war"
     }
   ],
-  "L-233": [
-    {
-      "video_id": "vz2mxvPk-Z8",
-      "title": "The only logical reason that could explain Murica's current ab0rtion laws:  \"SS means Sacred Sperm\"",
-      "lyrics_title": "SS Means Sacred Sp3rm",
-      "lyrics_id": "L-233",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "QUACKsutra",
-      "genre_primary": "FOLK",
-      "genre_secondary": "",
-      "instruments": "Banjo",
-      "yt_url": "https://www.youtube.com/watch?v=vz2mxvPk-Z8",
-      "thumbnail_url": "https://i.ytimg.com/vi/vz2mxvPk-Z8/maxresdefault.jpg",
-      "duration": "2:40",
-      "publish_date": "2025-06-28",
-      "playlist_names": "BLOWsutra : CENSOR(ed), FOLKsutra, KNOWsutra, FOTUS CIRCUS (Felon Of The United States), SHORTsutra Bananas Matter, Bible Gone Bananas",
-      "content_type": "Short/Reel",
-      "format": "9:16",
-      "topic_categories": "Independent music, Pop music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "beWOKE",
-      "lyrics_summary": "A true crime story, happening now in Murica.",
-      "url_slug": "ss-means-sacred-sp3rm"
-    },
-    {
-      "video_id": "SN7_gzCZE64",
-      "title": "Clarity. That’ll do 🐷 🇺🇸 ps: people want to know WHO said Sp3rm is Sacred now... #prolife my 🍑",
-      "lyrics_title": "SS Means Sacred Sp3rm",
-      "lyrics_id": "L-233",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "QUACKsutra",
-      "genre_primary": "SPOKEN WORDS",
-      "genre_secondary": "",
-      "instruments": "Voice",
-      "yt_url": "https://www.youtube.com/watch?v=SN7_gzCZE64",
-      "thumbnail_url": "https://i.ytimg.com/vi/SN7_gzCZE64/maxresdefault.jpg",
-      "duration": "0:06",
-      "publish_date": "2025-06-25",
-      "playlist_names": "REALsutras, BLABLAsutra, BLOWsutra, FOTUS CIRCUS (Felon Of The United States), Bible Gone Bananas",
-      "content_type": "Commentary",
-      "format": "9:16",
-      "topic_categories": "",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "beWOKE",
-      "lyrics_summary": "A true crime story, happening now in Murica.",
-      "url_slug": "ss-means-sacred-sp3rm"
-    }
-  ],
   "L-184": [
     {
       "video_id": "pSRnVyMMqDo",
@@ -9083,56 +9058,56 @@
       "url_slug": "pedo-nation-felon-nation-redux"
     }
   ],
-  "L-223": [
+  "L-233": [
     {
-      "video_id": "xOhD5Qb6GeU",
-      "title": "“Sidération” Is The Word You Need 🤯🇺🇸 When A Rap!st King Legislates “Freedom to Lie” As #humanrights",
-      "lyrics_title": "Sidération",
-      "lyrics_id": "L-223",
+      "video_id": "vz2mxvPk-Z8",
+      "title": "The only logical reason that could explain Murica's current ab0rtion laws:  \"SS means Sacred Sperm\"",
+      "lyrics_title": "SS Means Sacred Sp3rm",
+      "lyrics_id": "L-233",
       "video_featured": false,
       "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "BURLESQUE",
-      "genre_secondary": "JAZZ",
-      "instruments": "Voice",
-      "yt_url": "https://www.youtube.com/watch?v=xOhD5Qb6GeU",
-      "thumbnail_url": "https://i.ytimg.com/vi/xOhD5Qb6GeU/maxresdefault.jpg",
-      "duration": "3:20",
-      "publish_date": "2025-06-25",
-      "playlist_names": "BLOWsutra : REVOLT (Now), KNOWsutra, FOTUS CIRCUS (Felon Of The United States), BURLESQUEsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Independent music, Music, Pop music",
-      "can_embed": true,
-      "song_topic": "INJUSTICE",
-      "song_intention": "beWISE",
-      "lyrics_summary": "Sidération: when something is so absurd your brain just freezes. Like your soul slipped on a banana peel.",
-      "url_slug": "sideration"
-    },
-    {
-      "video_id": "wlxLBPVx-Uc",
-      "title": "#yoda said Murica is so #insane, there’s no word—only the (French) word “sidération” comes close🩸",
-      "lyrics_title": "Sidération",
-      "lyrics_id": "L-223",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "BURLESQUE",
+      "sutra": "QUACKsutra",
+      "genre_primary": "FOLK",
       "genre_secondary": "",
-      "instruments": "Accordion",
-      "yt_url": "https://www.youtube.com/watch?v=wlxLBPVx-Uc",
-      "thumbnail_url": "https://i.ytimg.com/vi/wlxLBPVx-Uc/maxresdefault.jpg",
-      "duration": "3:01",
-      "publish_date": "2025-05-05",
-      "playlist_names": "BLOWsutra : Apes Gone Wrong, “UNAVAILABLE” Content said YouTube Music… Who knew? Not me!, BLOWsutra, FOTUS CIRCUS (Felon Of The United States), SHORTsutra Bananas Matter, Bible Gone Bananas",
+      "instruments": "Banjo",
+      "yt_url": "https://www.youtube.com/watch?v=vz2mxvPk-Z8",
+      "thumbnail_url": "https://i.ytimg.com/vi/vz2mxvPk-Z8/maxresdefault.jpg",
+      "duration": "2:40",
+      "publish_date": "2025-06-28",
+      "playlist_names": "BLOWsutra : CENSOR(ed), FOLKsutra, KNOWsutra, FOTUS CIRCUS (Felon Of The United States), SHORTsutra Bananas Matter, Bible Gone Bananas",
       "content_type": "Short/Reel",
       "format": "9:16",
-      "topic_categories": "Music, Pop music",
+      "topic_categories": "Independent music, Pop music",
       "can_embed": true,
-      "song_topic": "INJUSTICE",
-      "song_intention": "beWISE",
-      "lyrics_summary": "Sidération: when something is so absurd your brain just freezes. Like your soul slipped on a banana peel.",
-      "url_slug": "sideration"
+      "song_topic": "POOLITICS",
+      "song_intention": "beWOKE",
+      "lyrics_summary": "A true crime story, happening now in Murica.",
+      "url_slug": "ss-means-sacred-sp3rm"
+    },
+    {
+      "video_id": "SN7_gzCZE64",
+      "title": "Clarity. That’ll do 🐷 🇺🇸 ps: people want to know WHO said Sp3rm is Sacred now... #prolife my 🍑",
+      "lyrics_title": "SS Means Sacred Sp3rm",
+      "lyrics_id": "L-233",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "QUACKsutra",
+      "genre_primary": "SPOKEN WORDS",
+      "genre_secondary": "",
+      "instruments": "Voice",
+      "yt_url": "https://www.youtube.com/watch?v=SN7_gzCZE64",
+      "thumbnail_url": "https://i.ytimg.com/vi/SN7_gzCZE64/maxresdefault.jpg",
+      "duration": "0:06",
+      "publish_date": "2025-06-25",
+      "playlist_names": "REALsutras, BLABLAsutra, BLOWsutra, FOTUS CIRCUS (Felon Of The United States), Bible Gone Bananas",
+      "content_type": "Commentary",
+      "format": "9:16",
+      "topic_categories": "",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "beWOKE",
+      "lyrics_summary": "A true crime story, happening now in Murica.",
+      "url_slug": "ss-means-sacred-sp3rm"
     }
   ],
   "L-257": [
@@ -9210,6 +9185,58 @@
       "song_intention": "beWOKE",
       "lyrics_summary": "Ignorance isn't bliss. It's a tyrant in a loud hat.",
       "url_slug": "the-tyranny-of-ignorance"
+    }
+  ],
+  "L-223": [
+    {
+      "video_id": "xOhD5Qb6GeU",
+      "title": "“Sidération” Is The Word You Need 🤯🇺🇸 When A Rap!st King Legislates “Freedom to Lie” As #humanrights",
+      "lyrics_title": "Sidération",
+      "lyrics_id": "L-223",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "BURLESQUE",
+      "genre_secondary": "JAZZ",
+      "instruments": "Voice",
+      "yt_url": "https://www.youtube.com/watch?v=xOhD5Qb6GeU",
+      "thumbnail_url": "https://i.ytimg.com/vi/xOhD5Qb6GeU/maxresdefault.jpg",
+      "duration": "3:20",
+      "publish_date": "2025-06-25",
+      "playlist_names": "BLOWsutra : REVOLT (Now), KNOWsutra, FOTUS CIRCUS (Felon Of The United States), BURLESQUEsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Independent music, Music, Pop music",
+      "can_embed": true,
+      "song_topic": "INJUSTICE",
+      "song_intention": "beWISE",
+      "lyrics_summary": "Sidération: when something is so absurd your brain just freezes. Like your soul slipped on a banana peel.",
+      "url_slug": "sideration"
+    },
+    {
+      "video_id": "wlxLBPVx-Uc",
+      "title": "#yoda said Murica is so #insane, there’s no word—only the (French) word “sidération” comes close🩸",
+      "lyrics_title": "Sidération",
+      "lyrics_id": "L-223",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "BURLESQUE",
+      "genre_secondary": "",
+      "instruments": "Accordion",
+      "yt_url": "https://www.youtube.com/watch?v=wlxLBPVx-Uc",
+      "thumbnail_url": "https://i.ytimg.com/vi/wlxLBPVx-Uc/maxresdefault.jpg",
+      "duration": "3:01",
+      "publish_date": "2025-05-05",
+      "playlist_names": "BLOWsutra : Apes Gone Wrong, “UNAVAILABLE” Content said YouTube Music… Who knew? Not me!, BLOWsutra, FOTUS CIRCUS (Felon Of The United States), SHORTsutra Bananas Matter, Bible Gone Bananas",
+      "content_type": "Short/Reel",
+      "format": "9:16",
+      "topic_categories": "Music, Pop music",
+      "can_embed": true,
+      "song_topic": "INJUSTICE",
+      "song_intention": "beWISE",
+      "lyrics_summary": "Sidération: when something is so absurd your brain just freezes. Like your soul slipped on a banana peel.",
+      "url_slug": "sideration"
     }
   ],
   "L-70": [
@@ -9397,33 +9424,6 @@
       "url_slug": "sideration-the-sky-stood-still"
     }
   ],
-  "L-245": [
-    {
-      "video_id": "aw-LmHCscgw",
-      "title": "I wrote “Ducktator Lament” the night of the presidential debate, pre-election… how on point 🏴‍☠️💭",
-      "lyrics_title": "The Ducktator (Lament)",
-      "lyrics_id": "L-245",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "QUACKsutra",
-      "genre_primary": "FOLK",
-      "genre_secondary": "BLUES",
-      "instruments": "Cello",
-      "yt_url": "https://www.youtube.com/watch?v=aw-LmHCscgw",
-      "thumbnail_url": "https://i.ytimg.com/vi/aw-LmHCscgw/maxresdefault.jpg",
-      "duration": "2:52",
-      "publish_date": "2025-05-16",
-      "playlist_names": "INDIEsutra, BLOWsutra : DUCK (Shady), BLOWsutra, FOTUS CIRCUS (Felon Of The United States), SHORTsutra Bananas Matter, Bible Gone Bananas",
-      "content_type": "Short/Reel",
-      "format": "9:16",
-      "topic_categories": "Independent music, Music, Pop music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "beWOKE",
-      "lyrics_summary": "The ducktator: a lament in quacks.",
-      "url_slug": "the-ducktator-lament"
-    }
-  ],
   "L-156": [
     {
       "video_id": "xq0iHjcKRTY",
@@ -9501,6 +9501,33 @@
       "url_slug": "mama-make-america-mine-achtung"
     }
   ],
+  "L-245": [
+    {
+      "video_id": "aw-LmHCscgw",
+      "title": "I wrote “Ducktator Lament” the night of the presidential debate, pre-election… how on point 🏴‍☠️💭",
+      "lyrics_title": "The Ducktator (Lament)",
+      "lyrics_id": "L-245",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "QUACKsutra",
+      "genre_primary": "FOLK",
+      "genre_secondary": "BLUES",
+      "instruments": "Cello",
+      "yt_url": "https://www.youtube.com/watch?v=aw-LmHCscgw",
+      "thumbnail_url": "https://i.ytimg.com/vi/aw-LmHCscgw/maxresdefault.jpg",
+      "duration": "2:52",
+      "publish_date": "2025-05-16",
+      "playlist_names": "INDIEsutra, BLOWsutra : DUCK (Shady), BLOWsutra, FOTUS CIRCUS (Felon Of The United States), SHORTsutra Bananas Matter, Bible Gone Bananas",
+      "content_type": "Short/Reel",
+      "format": "9:16",
+      "topic_categories": "Independent music, Music, Pop music",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "beWOKE",
+      "lyrics_summary": "The ducktator: a lament in quacks.",
+      "url_slug": "the-ducktator-lament"
+    }
+  ],
   "L-342": [
     {
       "video_id": "vZIEqgQmu4k",
@@ -9526,6 +9553,33 @@
       "song_intention": "seeWAR",
       "lyrics_summary": "Jackboots too tight. Books too banned. God complex too loud. Jingoism 101: the curriculum nobody asked for, now mandatory.",
       "url_slug": "jingoism-101"
+    }
+  ],
+  "L-108": [
+    {
+      "video_id": "vaRUXTONyhA",
+      "title": "Why do the grown-ups fight so loud? And where do kites fly now? #🕊️ #ceasefire #aivoice  #sunomusic",
+      "lyrics_title": "How Do You Explain War?",
+      "lyrics_id": "L-108",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "KNOWsutra",
+      "genre_primary": "INDIE",
+      "genre_secondary": "DUB",
+      "instruments": "Guitar",
+      "yt_url": "https://www.youtube.com/watch?v=vaRUXTONyhA",
+      "thumbnail_url": "https://i.ytimg.com/vi/vaRUXTONyhA/maxresdefault.jpg",
+      "duration": "2:59",
+      "publish_date": "2025-05-13",
+      "playlist_names": "Hidden Peels, KNOWsutra : But(t) Whyyy, “UNAVAILABLE” Content said YouTube Music… Who knew? Not me!, PEACE CIRCUS, BLOWsutra, BANJOsutra, SHORTsutra Bananas Matter, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "9:16",
+      "topic_categories": "Independent music, Lifestyle (sociology), Pop music",
+      "can_embed": true,
+      "song_topic": "PEACE",
+      "song_intention": "seeWAR",
+      "lyrics_summary": "How do you explain war to a child who just wanted to fly?",
+      "url_slug": "how-do-you-explain-war"
     }
   ],
   "L-7": [
@@ -9605,60 +9659,6 @@
       "url_slug": "a-stroll-down-history-s-lane"
     }
   ],
-  "L-108": [
-    {
-      "video_id": "vaRUXTONyhA",
-      "title": "Why do the grown-ups fight so loud? And where do kites fly now? #🕊️ #ceasefire #aivoice  #sunomusic",
-      "lyrics_title": "How Do You Explain War?",
-      "lyrics_id": "L-108",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "KNOWsutra",
-      "genre_primary": "INDIE",
-      "genre_secondary": "DUB",
-      "instruments": "Guitar",
-      "yt_url": "https://www.youtube.com/watch?v=vaRUXTONyhA",
-      "thumbnail_url": "https://i.ytimg.com/vi/vaRUXTONyhA/maxresdefault.jpg",
-      "duration": "2:59",
-      "publish_date": "2025-05-13",
-      "playlist_names": "Hidden Peels, KNOWsutra : But(t) Whyyy, “UNAVAILABLE” Content said YouTube Music… Who knew? Not me!, PEACE CIRCUS, BLOWsutra, BANJOsutra, SHORTsutra Bananas Matter, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "9:16",
-      "topic_categories": "Independent music, Lifestyle (sociology), Pop music",
-      "can_embed": true,
-      "song_topic": "PEACE",
-      "song_intention": "seeWAR",
-      "lyrics_summary": "How do you explain war to a child who just wanted to fly?",
-      "url_slug": "how-do-you-explain-war"
-    }
-  ],
-  "L-71": [
-    {
-      "video_id": "MmFGNH1vCes",
-      "title": "“On Est Tous Frères” & la Terre, c’est notre Mère—a #jazz #peace song inspired by “We Are the World”",
-      "lyrics_title": "En Vrai, On Est Tous Frères",
-      "lyrics_id": "L-71",
-      "video_featured": true,
-      "video_featured_description": "",
-      "sutra": "KNOWsutra",
-      "genre_primary": "INDIE",
-      "genre_secondary": "FOLK,BLUES",
-      "instruments": "Voice",
-      "yt_url": "https://www.youtube.com/watch?v=MmFGNH1vCes",
-      "thumbnail_url": "https://i.ytimg.com/vi/MmFGNH1vCes/maxresdefault.jpg",
-      "duration": "3:24",
-      "publish_date": "2025-05-04",
-      "playlist_names": "Hidden Peels, KNOWsutra : PEACE (Not War), PEACE CIRCUS, FRENCHsutra, JAZZsutra, KNOWsutra, BANJOsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Jazz, Music, Soul music",
-      "can_embed": true,
-      "song_topic": "PEACE",
-      "song_intention": "beKIND",
-      "lyrics_summary": "En vrai, on est tous seuls. En vrai, on est tous frères. Blessed be #fraternity",
-      "url_slug": "en-vrai-on-est-tous-freres"
-    }
-  ],
   "L-353": [
     {
       "video_id": "kyp8P25k6w0",
@@ -9734,6 +9734,33 @@
       "song_intention": "seeHIStory",
       "lyrics_summary": "Maslow mapped the needs. War ignored the map. A bomb kissed a boy and his bike in broad daylight. The gods took a hike.",
       "url_slug": "wars-don-t-flow"
+    }
+  ],
+  "L-71": [
+    {
+      "video_id": "MmFGNH1vCes",
+      "title": "“On Est Tous Frères” & la Terre, c’est notre Mère—a #jazz #peace song inspired by “We Are the World”",
+      "lyrics_title": "En Vrai, On Est Tous Frères",
+      "lyrics_id": "L-71",
+      "video_featured": true,
+      "video_featured_description": "",
+      "sutra": "KNOWsutra",
+      "genre_primary": "INDIE",
+      "genre_secondary": "FOLK,BLUES",
+      "instruments": "Voice",
+      "yt_url": "https://www.youtube.com/watch?v=MmFGNH1vCes",
+      "thumbnail_url": "https://i.ytimg.com/vi/MmFGNH1vCes/maxresdefault.jpg",
+      "duration": "3:24",
+      "publish_date": "2025-05-04",
+      "playlist_names": "Hidden Peels, KNOWsutra : PEACE (Not War), PEACE CIRCUS, FRENCHsutra, JAZZsutra, KNOWsutra, BANJOsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Jazz, Music, Soul music",
+      "can_embed": true,
+      "song_topic": "PEACE",
+      "song_intention": "beKIND",
+      "lyrics_summary": "En vrai, on est tous seuls. En vrai, on est tous frères. Blessed be #fraternity",
+      "url_slug": "en-vrai-on-est-tous-freres"
     }
   ],
   "L-32": [
@@ -10379,6 +10406,33 @@
       "url_slug": "maha-make-america-humane-again"
     }
   ],
+  "L-137": [
+    {
+      "video_id": "ODxdj80Km4Y",
+      "title": "In France, “Le Système” is also all about lying to #thepeople … why is that not a crime? 😈 #macron",
+      "lyrics_title": "Le Système",
+      "lyrics_id": "L-137",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "JAZZ",
+      "genre_secondary": "INDIE",
+      "instruments": "Upright Bass,Voice",
+      "yt_url": "https://www.youtube.com/watch?v=ODxdj80Km4Y",
+      "thumbnail_url": "https://i.ytimg.com/vi/ODxdj80Km4Y/maxresdefault.jpg",
+      "duration": "2:12",
+      "publish_date": "2025-04-07",
+      "playlist_names": "FRENCHsutra, JAZZsutra, KNOWsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "9:16",
+      "topic_categories": "Music, Pop music",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "beFAIR",
+      "lyrics_summary": "Je vous parle d'un temps où Macron mentait avec éclat. Ah, le bon vieux temps.",
+      "url_slug": "le-systeme"
+    }
+  ],
   "L-403": [
     {
       "video_id": "JVkTjFgSHvM",
@@ -10429,33 +10483,6 @@
       "song_intention": "beWISE",
       "lyrics_summary": "Suspended in time. Above the world, just below the sky — floating on dreams and letting time fly.",
       "url_slug": "suspended-in-time"
-    }
-  ],
-  "L-137": [
-    {
-      "video_id": "ODxdj80Km4Y",
-      "title": "In France, “Le Système” is also all about lying to #thepeople … why is that not a crime? 😈 #macron",
-      "lyrics_title": "Le Système",
-      "lyrics_id": "L-137",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "JAZZ",
-      "genre_secondary": "INDIE",
-      "instruments": "Upright Bass,Voice",
-      "yt_url": "https://www.youtube.com/watch?v=ODxdj80Km4Y",
-      "thumbnail_url": "https://i.ytimg.com/vi/ODxdj80Km4Y/maxresdefault.jpg",
-      "duration": "2:12",
-      "publish_date": "2025-04-07",
-      "playlist_names": "FRENCHsutra, JAZZsutra, KNOWsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "9:16",
-      "topic_categories": "Music, Pop music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "beFAIR",
-      "lyrics_summary": "Je vous parle d'un temps où Macron mentait avec éclat. Ah, le bon vieux temps.",
-      "url_slug": "le-systeme"
     }
   ],
   "L-150": [
@@ -11403,6 +11430,58 @@
       "url_slug": "segggsting"
     }
   ],
+  "L-334": [
+    {
+      "video_id": "3t3Mq-QICzw",
+      "title": "Word of the year(s) 🚽🙃📺 En•shit•ifi•cation PsyHop LoFiSUTRA",
+      "lyrics_title": "Enshittification (Word of the Year)",
+      "lyrics_id": "L-334",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "SHOWsutra",
+      "genre_primary": "LOFI",
+      "genre_secondary": "JAZZ",
+      "instruments": "Voice",
+      "yt_url": "https://www.youtube.com/watch?v=3t3Mq-QICzw",
+      "thumbnail_url": "https://i.ytimg.com/vi/3t3Mq-QICzw/maxresdefault.jpg",
+      "duration": "4:01",
+      "publish_date": "2025-03-10",
+      "playlist_names": "SHOWsutra : Fanana Club, SHOWsutra, LOFIsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Electronic music, Music",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "seeHIStory",
+      "lyrics_summary": "En-shit-ti-fi-ca-tion: six syllables, one trending truth. Glittering rot in algorithm's scent. Systems are breaking down. Twerk your hopes while you can.",
+      "url_slug": "enshittification-word-of-the-year"
+    },
+    {
+      "video_id": "56tBW1P8gW4",
+      "title": "ENSHIT-TIFI-CATION (just so we’re all clear on the official #wordoftheyear 2024, you know?) 🍌",
+      "lyrics_title": "Enshittification (Word of the Year)",
+      "lyrics_id": "L-334",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "SHOWsutra",
+      "genre_primary": "DUB",
+      "genre_secondary": "",
+      "instruments": "",
+      "yt_url": "https://www.youtube.com/watch?v=56tBW1P8gW4",
+      "thumbnail_url": "https://i.ytimg.com/vi/56tBW1P8gW4/maxresdefault.jpg",
+      "duration": "2:00",
+      "publish_date": "2025-03-03",
+      "playlist_names": "SHOWsutra : Fanana Club, “UNAVAILABLE” Content said YouTube Music… Who knew? Not me!, JAZZsutra, BLOWsutra, KNOWsutra, LOFIsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Independent music, Pop music",
+      "can_embed": true,
+      "song_topic": "POOLITICS",
+      "song_intention": "seeHIStory",
+      "lyrics_summary": "En-shit-ti-fi-ca-tion: six syllables, one trending truth. Glittering rot in algorithm's scent. Systems are breaking down. Twerk your hopes while you can.",
+      "url_slug": "enshittification-word-of-the-year"
+    }
+  ],
   "L-199": [
     {
       "video_id": "vXcPEais20I",
@@ -11478,58 +11557,6 @@
       "song_intention": "beGODless",
       "lyrics_summary": "Rise up tall. Reason first. Kingdom, second (if needed).",
       "url_slug": "question-di-kingdom"
-    }
-  ],
-  "L-334": [
-    {
-      "video_id": "3t3Mq-QICzw",
-      "title": "Word of the year(s) 🚽🙃📺 En•shit•ifi•cation PsyHop LoFiSUTRA",
-      "lyrics_title": "Enshittification (Word of the Year)",
-      "lyrics_id": "L-334",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "SHOWsutra",
-      "genre_primary": "LOFI",
-      "genre_secondary": "JAZZ",
-      "instruments": "Voice",
-      "yt_url": "https://www.youtube.com/watch?v=3t3Mq-QICzw",
-      "thumbnail_url": "https://i.ytimg.com/vi/3t3Mq-QICzw/maxresdefault.jpg",
-      "duration": "4:01",
-      "publish_date": "2025-03-10",
-      "playlist_names": "SHOWsutra : Fanana Club, SHOWsutra, LOFIsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Electronic music, Music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "seeHIStory",
-      "lyrics_summary": "En-shit-ti-fi-ca-tion: six syllables, one trending truth. Glittering rot in algorithm's scent. Systems are breaking down. Twerk your hopes while you can.",
-      "url_slug": "enshittification-word-of-the-year"
-    },
-    {
-      "video_id": "56tBW1P8gW4",
-      "title": "ENSHIT-TIFI-CATION (just so we’re all clear on the official #wordoftheyear 2024, you know?) 🍌",
-      "lyrics_title": "Enshittification (Word of the Year)",
-      "lyrics_id": "L-334",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "SHOWsutra",
-      "genre_primary": "DUB",
-      "genre_secondary": "",
-      "instruments": "",
-      "yt_url": "https://www.youtube.com/watch?v=56tBW1P8gW4",
-      "thumbnail_url": "https://i.ytimg.com/vi/56tBW1P8gW4/maxresdefault.jpg",
-      "duration": "2:00",
-      "publish_date": "2025-03-03",
-      "playlist_names": "SHOWsutra : Fanana Club, “UNAVAILABLE” Content said YouTube Music… Who knew? Not me!, JAZZsutra, BLOWsutra, KNOWsutra, LOFIsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Independent music, Pop music",
-      "can_embed": true,
-      "song_topic": "POOLITICS",
-      "song_intention": "seeHIStory",
-      "lyrics_summary": "En-shit-ti-fi-ca-tion: six syllables, one trending truth. Glittering rot in algorithm's scent. Systems are breaking down. Twerk your hopes while you can.",
-      "url_slug": "enshittification-word-of-the-year"
     }
   ],
   "L-305": [
@@ -11688,33 +11715,6 @@
       "url_slug": "linguistic-weaponry"
     }
   ],
-  "L-285": [
-    {
-      "video_id": "1_0YnMCmPqo",
-      "title": "Nothing like a wet peaches blues 🍌📺",
-      "lyrics_title": "Wet (Prickly) Peaches vol.2",
-      "lyrics_id": "L-285",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "FLOWsutra",
-      "genre_primary": "BLUES",
-      "genre_secondary": "",
-      "instruments": "Banjo",
-      "yt_url": "https://www.youtube.com/watch?v=1_0YnMCmPqo",
-      "thumbnail_url": "https://i.ytimg.com/vi/1_0YnMCmPqo/maxresdefault.jpg",
-      "duration": "2:45",
-      "publish_date": "2025-03-05",
-      "playlist_names": "FLOWsutra : WET (My Friend), BLUESsutra, SHOWsutra, BANJOsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Music, Pop music",
-      "can_embed": true,
-      "song_topic": "FOOLERY",
-      "song_intention": "beKIND",
-      "lyrics_summary": "What Jefferson Airplane would sound like as a haunting psychedelic ode to radical intimacy. Vol. 2, because some songs are cheekier than others.",
-      "url_slug": "wet-prickly-peaches-vol-2"
-    }
-  ],
   "L-355": [
     {
       "video_id": "9lxf862x5cU",
@@ -11765,6 +11765,33 @@
       "song_intention": "seeWAR",
       "lyrics_summary": "Nobody asks why. Nobody dares. Kids still die for greed, for pride. And the questions outlast the history.",
       "url_slug": "why-are-kids-allowed-to-die-why-war"
+    }
+  ],
+  "L-285": [
+    {
+      "video_id": "1_0YnMCmPqo",
+      "title": "Nothing like a wet peaches blues 🍌📺",
+      "lyrics_title": "Wet (Prickly) Peaches vol.2",
+      "lyrics_id": "L-285",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "FLOWsutra",
+      "genre_primary": "BLUES",
+      "genre_secondary": "",
+      "instruments": "Banjo",
+      "yt_url": "https://www.youtube.com/watch?v=1_0YnMCmPqo",
+      "thumbnail_url": "https://i.ytimg.com/vi/1_0YnMCmPqo/maxresdefault.jpg",
+      "duration": "2:45",
+      "publish_date": "2025-03-05",
+      "playlist_names": "FLOWsutra : WET (My Friend), BLUESsutra, SHOWsutra, BANJOsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Music, Pop music",
+      "can_embed": true,
+      "song_topic": "FOOLERY",
+      "song_intention": "beKIND",
+      "lyrics_summary": "What Jefferson Airplane would sound like as a haunting psychedelic ode to radical intimacy. Vol. 2, because some songs are cheekier than others.",
+      "url_slug": "wet-prickly-peaches-vol-2"
     }
   ],
   "L-358": [
@@ -12106,33 +12133,6 @@
       "url_slug": "jolly-poo"
     }
   ],
-  "L-64": [
-    {
-      "video_id": "7koPoWFkqHs",
-      "title": "Yo Felon Nation, what’s the deal with #doublestandards — the world is asking 🇺🇸 @banasutra lyrics",
-      "lyrics_title": "Double Standards",
-      "lyrics_id": "L-64",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "GROWsutra",
-      "genre_primary": "BURLESQUE",
-      "genre_secondary": "JAZZ",
-      "instruments": "Voice",
-      "yt_url": "https://www.youtube.com/watch?v=7koPoWFkqHs",
-      "thumbnail_url": "https://i.ytimg.com/vi/7koPoWFkqHs/maxresdefault.jpg",
-      "duration": "2:51",
-      "publish_date": "2025-02-11",
-      "playlist_names": "BLOWsutra : DUCK (Shady), BLOWsutra : CENSOR(ed), PIANOsutra, JAZZsutra, BLOWsutra, FOTUS CIRCUS (Felon Of The United States), BURLESQUEsutra, SHORTsutra Bananas Matter, Bible Gone Bananas",
-      "content_type": "Short/Reel",
-      "format": "9:16",
-      "topic_categories": "Electronic music, Independent music, Music, Pop music",
-      "can_embed": true,
-      "song_topic": "EGO",
-      "song_intention": "beBRAVE",
-      "lyrics_summary": "They censor skin but cradle sin. Guns in, truth locked out. Why can't we be brave? A waltz-question that won't age.",
-      "url_slug": "double-standards"
-    }
-  ],
   "L-222": [
     {
       "video_id": "Tl1KbppJVls",
@@ -12210,6 +12210,33 @@
       "url_slug": "shush-how-to-help-a-bible-bro-grow-up"
     }
   ],
+  "L-64": [
+    {
+      "video_id": "7koPoWFkqHs",
+      "title": "Yo Felon Nation, what’s the deal with #doublestandards — the world is asking 🇺🇸 @banasutra lyrics",
+      "lyrics_title": "Double Standards",
+      "lyrics_id": "L-64",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "GROWsutra",
+      "genre_primary": "BURLESQUE",
+      "genre_secondary": "JAZZ",
+      "instruments": "Voice",
+      "yt_url": "https://www.youtube.com/watch?v=7koPoWFkqHs",
+      "thumbnail_url": "https://i.ytimg.com/vi/7koPoWFkqHs/maxresdefault.jpg",
+      "duration": "2:51",
+      "publish_date": "2025-02-11",
+      "playlist_names": "BLOWsutra : DUCK (Shady), BLOWsutra : CENSOR(ed), PIANOsutra, JAZZsutra, BLOWsutra, FOTUS CIRCUS (Felon Of The United States), BURLESQUEsutra, SHORTsutra Bananas Matter, Bible Gone Bananas",
+      "content_type": "Short/Reel",
+      "format": "9:16",
+      "topic_categories": "Electronic music, Independent music, Music, Pop music",
+      "can_embed": true,
+      "song_topic": "EGO",
+      "song_intention": "beBRAVE",
+      "lyrics_summary": "They censor skin but cradle sin. Guns in, truth locked out. Why can't we be brave? A waltz-question that won't age.",
+      "url_slug": "double-standards"
+    }
+  ],
   "L-297": [
     {
       "video_id": "-NAlhhfFoiw",
@@ -12264,33 +12291,6 @@
       "url_slug": "new-normalcy-planet-earth-to-higher-grounds"
     }
   ],
-  "L-415": [
-    {
-      "video_id": "uvjQ4g73qcM",
-      "title": "But(t) El Bully doesn’t believe in music therapy, nor cares for #FelonNation or #celloshorts—do you?",
-      "lyrics_title": "Bully",
-      "lyrics_id": "L-415",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "QUACKsutra",
-      "genre_primary": "INDIE",
-      "genre_secondary": "BURLESQUE",
-      "instruments": "Cello",
-      "yt_url": "https://www.youtube.com/watch?v=uvjQ4g73qcM",
-      "thumbnail_url": "https://i.ytimg.com/vi/uvjQ4g73qcM/maxresdefault.jpg",
-      "duration": "0:41",
-      "publish_date": "2025-02-07",
-      "playlist_names": "BLOWsutra, BURLESQUEsutra, SHORTsutra Bananas Matter",
-      "content_type": "Short/Reel",
-      "format": "9:16",
-      "topic_categories": "Independent music, Music",
-      "can_embed": true,
-      "song_topic": "INJUSTICE",
-      "song_intention": "seeEGO",
-      "lyrics_summary": "Why do we choose the broken men?... Asking for a friend.",
-      "url_slug": "bully"
-    }
-  ],
   "L-281": [
     {
       "video_id": "yWx-wMjkHeM",
@@ -12316,6 +12316,33 @@
       "song_intention": "seeHIStory",
       "lyrics_summary": "The ballroom is lit. The leaders are waltzing. Down we go.",
       "url_slug": "waldo-s-fascist-tango-down-we-go"
+    }
+  ],
+  "L-415": [
+    {
+      "video_id": "uvjQ4g73qcM",
+      "title": "But(t) El Bully doesn’t believe in music therapy, nor cares for #FelonNation or #celloshorts—do you?",
+      "lyrics_title": "Bully",
+      "lyrics_id": "L-415",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "QUACKsutra",
+      "genre_primary": "INDIE",
+      "genre_secondary": "BURLESQUE",
+      "instruments": "Cello",
+      "yt_url": "https://www.youtube.com/watch?v=uvjQ4g73qcM",
+      "thumbnail_url": "https://i.ytimg.com/vi/uvjQ4g73qcM/maxresdefault.jpg",
+      "duration": "0:41",
+      "publish_date": "2025-02-07",
+      "playlist_names": "BLOWsutra, BURLESQUEsutra, SHORTsutra Bananas Matter",
+      "content_type": "Short/Reel",
+      "format": "9:16",
+      "topic_categories": "Independent music, Music",
+      "can_embed": true,
+      "song_topic": "INJUSTICE",
+      "song_intention": "seeEGO",
+      "lyrics_summary": "Why do we choose the broken men?... Asking for a friend.",
+      "url_slug": "bully"
     }
   ],
   "L-26": [
@@ -12451,6 +12478,33 @@
       "url_slug": "abc-of-kindness"
     }
   ],
+  "L-356": [
+    {
+      "video_id": "b8JeousZ2Ow",
+      "title": "The Weary Blues • Public Domain Lyrics • BLUESsutra",
+      "lyrics_title": "Weary Blues",
+      "lyrics_id": "L-356",
+      "video_featured": false,
+      "video_featured_description": "",
+      "sutra": "BLOWsutra",
+      "genre_primary": "BLUES",
+      "genre_secondary": "",
+      "instruments": "Banjo",
+      "yt_url": "https://www.youtube.com/watch?v=b8JeousZ2Ow",
+      "thumbnail_url": "https://i.ytimg.com/vi/b8JeousZ2Ow/maxresdefault.jpg",
+      "duration": "3:20",
+      "publish_date": "2025-01-16",
+      "playlist_names": "BLOWsutra : REVOLT (Now), BLUESsutra, SHOWsutra, BANJOsutra, Bible Gone Bananas",
+      "content_type": "Music Video",
+      "format": "16:9",
+      "topic_categories": "Music",
+      "can_embed": true,
+      "song_topic": "INJUSTICE",
+      "song_intention": "beBRAVE",
+      "lyrics_summary": "Langston Hughes. Lenox Avenue. A man, a piano, and the Weary Blues echoing through his head long after the stars went out.",
+      "url_slug": "weary-blues"
+    }
+  ],
   "L-316": [
     {
       "video_id": "rHFK9gBeeEY",
@@ -12501,33 +12555,6 @@
       "song_intention": "beGRATEFUL",
       "lyrics_summary": "Over and over, going over the world we knew... wondering what Frank Sinatra would sing now.",
       "url_slug": "the-world-we-knew"
-    }
-  ],
-  "L-356": [
-    {
-      "video_id": "b8JeousZ2Ow",
-      "title": "The Weary Blues • Public Domain Lyrics • BLUESsutra",
-      "lyrics_title": "Weary Blues",
-      "lyrics_id": "L-356",
-      "video_featured": false,
-      "video_featured_description": "",
-      "sutra": "BLOWsutra",
-      "genre_primary": "BLUES",
-      "genre_secondary": "",
-      "instruments": "Banjo",
-      "yt_url": "https://www.youtube.com/watch?v=b8JeousZ2Ow",
-      "thumbnail_url": "https://i.ytimg.com/vi/b8JeousZ2Ow/maxresdefault.jpg",
-      "duration": "3:20",
-      "publish_date": "2025-01-16",
-      "playlist_names": "BLOWsutra : REVOLT (Now), BLUESsutra, SHOWsutra, BANJOsutra, Bible Gone Bananas",
-      "content_type": "Music Video",
-      "format": "16:9",
-      "topic_categories": "Music",
-      "can_embed": true,
-      "song_topic": "INJUSTICE",
-      "song_intention": "beBRAVE",
-      "lyrics_summary": "Langston Hughes. Lenox Avenue. A man, a piano, and the Weary Blues echoing through his head long after the stars went out.",
-      "url_slug": "weary-blues"
     }
   ],
   "L-194": [
