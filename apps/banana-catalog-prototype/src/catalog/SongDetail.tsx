@@ -520,8 +520,6 @@ function SongDetailLoaded({
     [youtubeVideos, effectiveYoutubeVideoId],
   )
 
-  const useSongVideoSpotlight = youtubeVideos.length > 1 && youtubeVideos.some((v) => v.can_embed)
-
   const songVideoSpotlightFeatured = useMemo((): CatalogVideoSpotlightItem | null => {
     if (!focusedYoutubeVideo?.can_embed) return null
     const title = (focusedYoutubeVideo.title || focusedYoutubeVideo.lyrics_title || detail.lyrics_title).trim()
@@ -534,6 +532,9 @@ function SongDetailLoaded({
       thumbnailUrl: (focusedYoutubeVideo.thumbnail_url || '').trim() || undefined,
     }
   }, [focusedYoutubeVideo, detail.lyrics_title, detail.sutra])
+
+  // Same title/meta/outbound chrome for one video as for many (rail hides when empty).
+  const useSongVideoSpotlight = Boolean(songVideoSpotlightFeatured)
 
   const songVideoSpotlightRail = useMemo((): CatalogVideoSpotlightItem[] => {
     return youtubeVideos

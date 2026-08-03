@@ -44,6 +44,23 @@ function findTrackIndex(queue: readonly PlayableTrack[], key: string | null, mod
   return queue.findIndex((t) => playableTrackKey(t, mode) === key)
 }
 
+/** Session list for a user pick: prefer live getQueue, always include click-time track metadata. */
+function sessionQueueForPick(
+  track: PlayableTrack,
+  mode: PlayableTrackSelectionMode,
+  getQueue: () => readonly PlayableTrack[],
+): PlayableTrack[] {
+  const key = playableTrackKey(track, mode)
+  const queue = [...getQueue()]
+  const idx = findTrackIndex(queue, key, mode)
+  if (idx >= 0) {
+    queue[idx] = track
+    return queue
+  }
+  // Cross-page / empty / stale registration: chrome must still match the track we load.
+  return [track]
+}
+
 export type UsePagePlayerQueueResult = PlayerQueueContextValue & {
   bindWidgetOnLoad: (wrap: HTMLElement | null) => void
   /** Clear play-all session without stop analytics (e.g. list became empty). */
@@ -161,6 +178,10 @@ export function usePagePlayerQueue(
 
   const pickTrack = useCallback(
     (track: PlayableTrack, options: PickTrackOptions = {}) => {
+      // Registration is ref-only (no provider re-render). Refresh before acting so
+      // song→Tracks picks don't keep a frozen prior page's getQueue / onPlayTrack.
+      configRef.current = { ...registrationRef.current, widgetRef }
+
       const { keepPlayAll = false, fromPlayAllStart = false } = options
       const { selectionMode: mode, analytics: pageAnalytics, onPlayTrack: playTrackSideEffect } = configRef.current
       const key = playableTrackKey(track, mode)
@@ -244,11 +265,12 @@ export function usePagePlayerQueue(
         pageAnalytics.onPlayAllStopped(idx >= 0 ? idx + 1 : 0, queue.length, 'replaced_by_new_queue')
         setPlayAllActive(false)
         playAllActiveRef.current = false
-        setSessionTracks(configRef.current.getQueue())
+        setSessionTracks(sessionQueueForPick(track, mode, () => configRef.current.getQueue()))
       }
 
       if (!keepPlayAll || !playAllActiveRef.current) {
-        setSessionTracks(configRef.current.getQueue())
+        // Audio loads from `track`; chrome reads sessionTracks[position] — keep them aligned.
+        setSessionTracks(sessionQueueForPick(track, mode, () => configRef.current.getQueue()))
       }
 
       pageAnalytics.onPlayStarted(track, playbackIntentRef.current, playAllActiveRef.current)
@@ -275,7 +297,17 @@ export function usePagePlayerQueue(
       }
       playTrackSideEffect(track, { intent: playbackIntentRef.current, keepPlayAll })
     },
-    [pause, persistentApiRef, resolveCurrentKey, resolveQueue, resume, syncPlayInGesture, usePersistentPlayback, widgetRef],
+    [
+      pause,
+      persistentApiRef,
+      registrationRef,
+      resolveCurrentKey,
+      resolveQueue,
+      resume,
+      syncPlayInGesture,
+      usePersistentPlayback,
+      widgetRef,
+    ],
   )
 
   const stop = useCallback(() => {

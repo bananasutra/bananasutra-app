@@ -289,7 +289,7 @@ export function TracksPage() {
   const skipScAutoplayOffOnNextSelectionChange = useRef(false)
 
   const playerWrapRef = useRef<HTMLDivElement>(null)
-  const filteredRef = useRef<TrackCatalogItem[]>([])
+  const filteredRef = useRef<TrackCatalogItem[]>(filtered)
   const selectedIdRef = useRef<string | null>(null)
   const filtersRefForAdvance = useRef<TracksFilterState>(filters)
   const urlFindRefForAdvance = useRef<string>(urlFind)
@@ -297,7 +297,8 @@ export function TracksPage() {
   const scrollActiveRowOnNextPaintRef = useRef(false)
   const trackListRef = useRef<HTMLUListElement>(null)
 
-  useEffect(() => {
+  // Layout: queue getQueue() must see the painted list on the same click that starts playback.
+  useLayoutEffect(() => {
     filteredRef.current = filtered
   }, [filtered])
   useEffect(() => {
