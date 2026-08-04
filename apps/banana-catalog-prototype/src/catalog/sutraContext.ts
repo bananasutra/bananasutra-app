@@ -33,6 +33,7 @@ export type SutraContextEntry = {
   mental_health_pivot: string
   sutra_when: string
   sutra_card_essence: string
+  sutra_lens: string
   sutra_essence: string
   url_slug_sutra: string
   url_sutra_locked: boolean
