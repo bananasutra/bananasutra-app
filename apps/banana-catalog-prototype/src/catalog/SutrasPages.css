@@ -56,11 +56,17 @@
 }
 
 .sutra-detail__hero-when,
-.sutra-detail__hero-card-essence {
+.sutra-detail__hero-card-essence,
+.sutra-detail__hero-lens {
   margin: 0 0 0.3rem;
   font-size: 0.96rem;
   line-height: 1.55;
   color: var(--color-text-muted);
+}
+
+.sutra-detail__hero-lens {
+  font-weight: 600;
+  color: var(--color-text-secondary, var(--color-text-muted));
 }
 
 .sutra-detail__hero-essence {

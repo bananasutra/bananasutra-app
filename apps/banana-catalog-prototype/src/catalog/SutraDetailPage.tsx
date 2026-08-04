@@ -399,6 +399,9 @@ export function SutraDetailPage() {
               </p>
             </div>
             <div className="sutra-detail__hero-description">
+              {(entry.sutra_lens || '').trim() ? (
+                <p className="sutra-detail__hero-lens">{entry.sutra_lens.trim()}</p>
+              ) : null}
               {entry.sutra_essence ? (
                 (() => {
                   const parts = entry.sutra_essence.split(/(?=Reach for )/i)

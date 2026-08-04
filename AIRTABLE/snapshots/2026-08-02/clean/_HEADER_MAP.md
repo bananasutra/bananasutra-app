@@ -18,6 +18,7 @@ update the `HEADER_MAP` dict in the script and re-run.
 | `intentions` | `intentions` |
 | `sutra_when` | `sutra_when` |
 | `sutra_card_essence` | `sutra_card_essence` |
+| `sutra_lens` | `sutra_lens` |
 | `sutra_essence` | `sutra_essence` |
 | `vibe` | `vibe` |
 | `mental_health_pivot` | `mental_health_pivot` |

@@ -74,7 +74,7 @@
     },
     "sutras": {
       "path": "AIRTABLE/snapshots/2026-08-02/clean/sutras-2026-08-02.csv",
-      "sha256": "d7b3fb258365f943d7f837aa3af003e5ead9af29eef76fbc45935427b06b85ff",
+      "sha256": "e6b70f88777d368ddcfb5b3389b2f69779772f9947308f0450e1925b3826e41c",
       "rows": 8
     },
     "muses": {

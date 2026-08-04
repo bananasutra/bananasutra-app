@@ -21,7 +21,7 @@ Outputs:
   src/data/generated/songbook_catalog.json — SONGBOOK rows with **songbook_in_app** + member featured songs; **playlist_artwork_url**
     prefers SoundCloud oEmbed thumbnail for the SC playlist URL (set cover), CSV ``artwork_url`` fallback
   src/data/generated/sutra_context.json — sutra context (question/practice/themes/mental_health_pivot,
-    sutra_when/sutra_card_essence/sutra_essence, optional featured_ep from sc_eps when ep_featured)
+    sutra_when/sutra_card_essence/sutra_lens/sutra_essence, optional featured_ep from sc_eps when ep_featured)
   src/data/generated/home_quotes.json — quote pool from QUOTEs where **quote_in_app** is enabled
   src/data/generated/muses_catalog.json — lightweight muse cards for `/about/muses`
   src/data/generated/quotes_wall.json — quote wall data for `/about/quotes`, with optional inspired song links
@@ -870,6 +870,7 @@ def build_sutra_context(sutra_rows: list[dict[str, str]]) -> dict[str, dict[str,
             "mental_health_pivot": str(row.get("mental_health_pivot") or "").strip(),
             "sutra_when": str(row.get("sutra_when") or "").strip(),
             "sutra_card_essence": str(row.get("sutra_card_essence") or "").strip(),
+            "sutra_lens": str(row.get("sutra_lens") or "").strip(),
             "sutra_essence": str(row.get("sutra_essence") or "").strip(),
             "url_slug_sutra": catalog_sutra_url_slug(row, raw_sutra),
             "url_sutra_locked": parse_bool(row.get("url_sutra_locked")),
