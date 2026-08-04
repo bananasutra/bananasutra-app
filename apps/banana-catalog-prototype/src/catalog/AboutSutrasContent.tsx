@@ -57,13 +57,18 @@ function AboutSutraMatrixCard({
           {formatCount(stats.songs)} songs · {formatCount(stats.tracks)} tracks
         </p>
       </div>
-      {(entry.sutra_when || '').trim() || (entry.sutra_card_essence || '').trim() ? (
+      {(entry.sutra_when || '').trim() ||
+      (entry.sutra_card_essence || '').trim() ||
+      (entry.sutra_lens || '').trim() ? (
         <div className="about-page__sutra-list-meta">
           {(entry.sutra_when || '').trim() ? (
             <p className="about-page__sutra-list-when">{entry.sutra_when.trim()}</p>
           ) : null}
           {(entry.sutra_card_essence || '').trim() ? (
             <p className="about-page__sutra-list-essence">{entry.sutra_card_essence.trim()}</p>
+          ) : null}
+          {(entry.sutra_lens || '').trim() ? (
+            <p className="about-page__sutra-list-lens">{entry.sutra_lens.trim()}</p>
           ) : null}
         </div>
       ) : null}
