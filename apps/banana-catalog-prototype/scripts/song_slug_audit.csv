@@ -1,4 +1,8 @@
 lyrics_id,lyrics_title,url_slug,lyrics_title_blank,slug_share_count
+L-102,"Hold The Mic, Babe",hold-the-mic-babe,0,1
+L-322,Profane Obscenities,profane-obscenities,0,1
+L-413,Cruelty’s The Point (Admit It),cruelty-s-the-point-admit-it,0,1
+L-375,Syndrome Nom Nom,syndrome-nom-nom,0,1
 L-428,Predators (FOTUS Edition),predators-fotus-edition,0,1
 L-62,Do You Ever Wonder?,do-you-ever-wonder,0,1
 L-260,They Call Her Wild (But She's Just Free),they-call-her-wild-but-she-s-just-free,0,1
@@ -64,7 +68,6 @@ L-202,Rainbows in the Clouds,rainbows-in-the-clouds,0,1
 L-335,Come Waddle With Me,come-waddle-with-me,0,1
 L-17,An American in Paris (Public Domain),an-american-in-paris-public-domain,0,1
 L-36,Bloom Past Doom,bloom-past-doom,0,1
-L-375,Syndrome Nom Nom,syndrome-nom-nom,0,1
 L-243,The Atheist Tango,the-atheist-tango,0,1
 L-177,Optics Of Cruelty (DEFY),optics-of-cruelty-defy,0,1
 L-219,Shameless (DEFY),shameless-defy,0,1
@@ -165,7 +168,6 @@ L-146,Blessed Be The Dogs (SHOWsutra Edition),blessed-be-the-dogs-showsutra-edit
 L-382,Skanking Pickles,skanking-pickles,0,1
 L-293,When Did Seduction Become so Untrue?,when-did-seduction-become-so-untrue,0,1
 L-22,Banana Alleluia,banana-alleluia,0,1
-L-413,Cruelty’s The Point (Admit It),cruelty-s-the-point-admit-it,0,1
 L-171,"Oh My, Oh Why (Socrates Song)",oh-my-oh-why-socrates-song,0,1
 L-206,Relative Steve,relative-steve,0,1
 L-168,"No, I'm Not Being Political (CIRCA 2025)",no-i-m-not-being-political-circa-2025,0,1
@@ -199,7 +201,7 @@ L-231,Sous Terre (Underground),sous-terre-underground,0,1
 L-236,Sutra of Immanence,sutra-of-immanence,0,1
 L-240,"Thank you, Mister Paine",thank-you-mister-paine,0,1
 L-410,Oh The Masquerade,oh-the-masquerade,0,1
-L-283,We Remember What (We Remember What) We Feel☉,we-remember-what-we-remember-what-we-feel,0,1
+L-283,We Remember What (We Remember What) We Feel,we-remember-what-we-remember-what-we-feel,0,1
 L-191,Poetry Slow Burns,poetry-slow-burns,0,1
 L-189,Poetry Matters,poetry-matters,0,1
 L-133,La Poesia Importa,la-poesia-importa,0,1
@@ -257,7 +259,6 @@ L-280,Waldo's Atheist Tango,waldo-s-atheist-tango,0,1
 L-270,Trust No One,trust-no-one,0,1
 L-292,What's F-A-S-C-I-S-T?,what-s-f-a-s-c-i-s-t,0,1
 L-64,Double Standards,double-standards,0,1
-L-322,Profane Obscenities,profane-obscenities,0,1
 L-7,A Stroll Down History’s Lane,a-stroll-down-history-s-lane,0,1
 L-150,MAKA (Make America Kind Again),maka-make-america-kind-again,0,1
 L-158,MAWA (Make America Woke Again),mawa-make-america-woke-again,0,1
@@ -329,7 +330,6 @@ L-87,"Genius, You See",genius-you-see,0,1
 L-220,She Wears The Words,she-wears-the-words,0,1
 L-93,Hard Core,hard-core,0,1
 L-257,The Tyranny of Ignorance,the-tyranny-of-ignorance,0,1
-L-102,"Hold The Mic, Babe",hold-the-mic-babe,0,1
 L-161,Mind the Felon,mind-the-felon,0,1
 L-15,Ain't No Kid,aint-no-kid,0,1
 L-258,The Weave,the-weave,0,1
@@ -412,3 +412,4 @@ L-181,Pablo's Grandeur,pablo-s-grandeur,0,1
 L-221,Shining Twins,shining-twins,0,1
 L-253,The Narcissist's Cabaret,the-narcissist-s-cabaret,0,1
 L-2,A Good Witch,a-good-witch,0,1
+L-451,But(t) Not Everybody Ask (Why),butt-not-everybody-asks-why,0,1
