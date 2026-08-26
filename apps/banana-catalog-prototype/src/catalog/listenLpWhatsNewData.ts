@@ -7,6 +7,9 @@ import { parseCatalogPublishedAt } from './formatPublishDate'
 
 export const LISTEN_LP_WHATS_NEW_SPOTLIGHT_LIMIT = 3
 
+/** Same weight as `build_artifacts.py` / `discoveryRanking.ts` (plays + likes). */
+const LIKE_WEIGHT = 40
+
 function parsePublishedAt(raw: string): number {
   const n = parseCatalogPublishedAt(raw)
   return Number.isFinite(n) ? n : 0
@@ -14,6 +17,34 @@ function parsePublishedAt(raw: string): number {
 
 function songHasPlayableAudio(song: SongCatalogItem): boolean {
   return Boolean(song.has_in_app_playback || song.has_sc_catalog_listen)
+}
+
+function normalizeEpUrl(url: string): string {
+  return url.trim().replace(/\/+$/, '').toLowerCase()
+}
+
+function latestReleaseEpUrl(song: SongCatalogItem): string {
+  const volumes = (song.ep_volumes ?? [])
+    .map((v) => ({ volume: Number(v.ep_volume) || 0, url: (v.ep_url || '').trim() }))
+    .filter((v) => v.url)
+  if (volumes.length >= 2) {
+    volumes.sort((a, b) => a.volume - b.volume || a.url.localeCompare(b.url))
+    return volumes[volumes.length - 1]!.url
+  }
+  return (song.primary_ep_url || '').trim() || volumes[0]?.url || ''
+}
+
+function scoreSampleTrack(track: TrackCatalogItem): number {
+  return track.play_count + LIKE_WEIGHT * track.like_count
+}
+
+function rankSampleTracks(tracks: TrackCatalogItem[]): TrackCatalogItem[] {
+  return [...tracks].sort(
+    (a, b) =>
+      scoreSampleTrack(b) - scoreSampleTrack(a) ||
+      b.play_count - a.play_count ||
+      b.like_count - a.like_count,
+  )
 }
 
 function indexTracksByLyricsId(catalog: TrackCatalogItem[] | null): Map<string, TrackCatalogItem[]> {
@@ -36,9 +67,14 @@ function pickBestCatalogTrack(
 ): TrackCatalogItem | null {
   const tracks = byLyricsId.get(song.lyrics_id) ?? []
   const inApp = tracks.filter((t) => t.track_in_app)
-  if (inApp.length) {
-    return [...inApp].sort((a, b) => b.play_count - a.play_count)[0] ?? null
-  }
+  const pool = inApp.length ? inApp : tracks
+  const latestEp = latestReleaseEpUrl(song)
+  const latestKey = latestEp ? normalizeEpUrl(latestEp) : ''
+  const onLatest = latestKey
+    ? pool.filter((t) => normalizeEpUrl(t.ep_url || '') === latestKey)
+    : []
+  const ranked = rankSampleTracks(onLatest.length ? onLatest : pool)
+  if (ranked[0]) return ranked[0]
   for (const trackId of song.best_track_ids ?? []) {
     const hit = tracks.find((t) => t.track_id === trackId)
     if (hit) return hit
@@ -102,6 +138,7 @@ export function buildListenLpWhatsNewPicks(
       catalogTrack,
       songHref: songCatalogLinkTo(song.lyrics_title, song.url_slug, {
         section: browseRowHasAudioSection(song) ? 'audio' : undefined,
+        trackId: catalogTrack?.track_id,
       }),
     })
   }

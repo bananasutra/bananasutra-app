@@ -35,11 +35,15 @@ export function sutraDetailPath(slug: string): string {
 export function songCatalogLinkTo(
   lyricsTitle: string,
   urlSlug?: string | null,
-  opts?: { section?: 'audio' | 'video' },
+  opts?: { section?: 'audio' | 'video'; trackId?: string },
 ): To {
   const pathname = songCatalogPath(lyricsTitle, urlSlug)
-  if (!opts?.section) return pathname
-  return { pathname, search: `?section=${opts.section}` }
+  const trackId = (opts?.trackId || '').trim()
+  if (!opts?.section && !trackId) return pathname
+  const params = new URLSearchParams()
+  if (opts?.section) params.set('section', opts.section)
+  if (trackId) params.set('t', trackId)
+  return { pathname, search: `?${params.toString()}` }
 }
 
 /** Browse row has a listen path worth opening with `?section=audio`. */
