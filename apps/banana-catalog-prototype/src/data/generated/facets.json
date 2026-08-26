@@ -176,14 +176,14 @@
     },
     {
       "value": "JAZZ",
-      "count": 67
-    },
-    {
-      "value": "BURLESQUE",
-      "count": 62
+      "count": 66
     },
     {
       "value": "INDIE",
+      "count": 63
+    },
+    {
+      "value": "BURLESQUE",
       "count": 62
     },
     {
@@ -192,7 +192,7 @@
     },
     {
       "value": "FOLK",
-      "count": 49
+      "count": 50
     },
     {
       "value": "MANTRA",
@@ -206,7 +206,7 @@
   "track_secondary_genre": [
     {
       "value": "INDIE",
-      "count": 87
+      "count": 86
     },
     {
       "value": "JAZZ",
@@ -222,7 +222,7 @@
     },
     {
       "value": "BLUES",
-      "count": 48
+      "count": 49
     },
     {
       "value": "LOFI",
@@ -234,11 +234,11 @@
     },
     {
       "value": "GIPSY",
-      "count": 40
+      "count": 41
     },
     {
       "value": "DUB",
-      "count": 35
+      "count": 36
     },
     {
       "value": "RAGGA",
@@ -288,7 +288,7 @@
   "track_instrument": [
     {
       "value": "BASS",
-      "count": 136
+      "count": 135
     },
     {
       "value": "GUITAR",
@@ -362,7 +362,7 @@
     },
     {
       "value": "RAINY",
-      "count": 45
+      "count": 44
     },
     {
       "value": "HOLY",
@@ -380,7 +380,7 @@
   "track_tempo_feel": [
     {
       "value": "LOWBEAT",
-      "count": 189
+      "count": 188
     },
     {
       "value": "MIDBEAT",
