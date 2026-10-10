@@ -36,6 +36,11 @@ export const CATALOG_REDIRECT_ENTRIES = [
     "reason": "L-155 to L-154 (consolidate vols) [vol2 EP updated to 154]"
   },
   {
+    "from": "/songs/poetry-slow-burns",
+    "to": "/songs/poetry-sets-us-free",
+    "reason": "song rename"
+  },
+  {
     "from": "/songs/serial-blowers-vol2",
     "to": "/songs/serial-blowers",
     "reason": "L-425 to L-216 (consolidate vols)"

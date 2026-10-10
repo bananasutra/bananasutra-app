@@ -1,4 +1,6 @@
 lyrics_id,lyrics_title,url_slug,lyrics_title_blank,slug_share_count
+L-191,Poetry (Sets Us Free),poetry-sets-us-free,0,1
+L-4,A Liar’s Prize,a-liar-s-prize,0,1
 L-102,"Hold The Mic, Babe",hold-the-mic-babe,0,1
 L-322,Profane Obscenities,profane-obscenities,0,1
 L-413,Cruelty’s The Point (Admit It),cruelty-s-the-point-admit-it,0,1
@@ -176,7 +178,6 @@ L-290,What the Mirror Said (Reste Lucide),what-the-mirror-said-reste-lucide,0,1
 L-213,Segggsting,segggsting,0,1
 L-374,Life's A Song,life-s-a-song,0,1
 L-42,Cassandra's Lullaby,cassandra-s-lullaby,0,1
-L-4,A Liar’s Prize,a-liar-s-prize,0,1
 L-56,Daddy's a Creep,daddy-s-a-creep,0,1
 L-300,Who Knows Where How Happiness Truly Grows,who-knows-where-how-happiness-truly-grows,0,1
 L-96,"Hereby, I Cry",hereby-i-cry,0,1
@@ -202,7 +203,6 @@ L-236,Sutra of Immanence,sutra-of-immanence,0,1
 L-240,"Thank you, Mister Paine",thank-you-mister-paine,0,1
 L-410,Oh The Masquerade,oh-the-masquerade,0,1
 L-283,We Remember What (We Remember What) We Feel,we-remember-what-we-remember-what-we-feel,0,1
-L-191,Poetry Slow Burns,poetry-slow-burns,0,1
 L-189,Poetry Matters,poetry-matters,0,1
 L-133,La Poesia Importa,la-poesia-importa,0,1
 L-51,Creo (La Poesia),creo-la-poesia,0,1
@@ -269,6 +269,7 @@ L-305,Why You Lie (To The People's Face)?,why-you-lie-to-the-people-s-face,0,1
 L-337,Chuck-A-Dick,chuck-a-dick,0,1
 L-343,Twatocracy (Encore et Encore),twatocracy-encore-et-encore,0,1
 L-422,Shush (STFU),shush,0,1
+L-142,Liars,liars,0,1
 L-48,Creepy Con Meme,creepy-con-meme,0,1
 L-448,Power Is Strange,power-is-strange,0,1
 L-196,"Pro-life Means What, Honey?",pro-life-means-what-honey,0,1
@@ -350,7 +351,6 @@ L-83,Freedom Fries,freedom-fries,0,1
 L-415,Bully,bully,0,1
 L-10,ABC of NPD,abc-of-npd,0,1
 L-111,I Know You Didn’t Ask,i-know-you-didn-t-ask,0,1
-L-142,Liars,liars,0,1
 L-261,"Out of Step, Out Of Mind",out-of-step-out-of-mind,0,1
 L-434,"Out of Step, Out Of Sight",out-of-step-out-of-sight,0,1
 L-47,Creeps,creeps,0,1
