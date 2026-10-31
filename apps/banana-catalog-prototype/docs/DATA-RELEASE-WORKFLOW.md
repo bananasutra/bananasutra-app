@@ -139,6 +139,7 @@ git checkout staging && git pull origin staging
 |---------|----------------|-----|
 | Clean script exits on unknown header | Missing `HEADER_MAP` entry | Add mapping in `tools/clean_airtable_snapshot.py`, re-run clean |
 | Bertrand lists old "latest" songs | Stale `library-data.ts` on Worker | `npm run build:library --prefix bbb-api`, commit, push `main` |
+| Latest **songs** correct, latest **videos** wrong (Sept vs Oct) | `youtube_by_lyrics_id.json` updated without re-running `build:library` | Re-run `npm run catalog:data` or `build:library`; `build:library` now fails if video dates lag catalog max |
 | Site updated, Bertrand did not | R54-style miss: catalog committed without `bbb-api/**` | Same as above; ensure `catalog:data` runs `build:library` (wired in root `package.json`) |
 | Deploy BBB API did not run | No `bbb-api/**` changes in `main` push | Commit must include `library-data.ts` |
 
