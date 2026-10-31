@@ -1,6 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildLatestDrops } from "./library-latest-drops.ts";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -224,54 +225,6 @@ const buildMuseLines = (muses: MuseRecord[]): string[] =>
     .sort((a, b) => a.localeCompare(b));
 
 const lineTitle = (line: string): string => line.split(" | ")[0]?.trim() ?? "";
-
-const normalizeDate = (raw: unknown): string | null => {
-  const value = sanitize(raw);
-  if (!value) return null;
-  const isoMatch = value.match(/^(\d{4}-\d{2}-\d{2})/);
-  if (isoMatch?.[1]) return isoMatch[1];
-  return null;
-};
-
-const buildLatestDrops = (songs: SongRecord[], videosByLyricsId: Record<string, VideoRecord[]>): string => {
-  const latestSongs = songs
-    .map((song) => ({
-      title: sanitize(song.lyrics_title),
-      sutra: sanitize(song.sutra).toUpperCase(),
-      slug: sanitize(song.url_slug),
-      publishedDate: normalizeDate(song.published_at),
-    }))
-    .filter((song) => song.title && song.slug && song.publishedDate)
-    .sort((a, b) => (b.publishedDate ?? "").localeCompare(a.publishedDate ?? ""))
-    .slice(0, 5);
-
-  const latestVideos = Object.values(videosByLyricsId)
-    .flat()
-    .map((video) => ({
-      title: sanitize(video.lyrics_title) || sanitize(video.title),
-      sutra: sanitize(video.sutra).toUpperCase(),
-      slug: sanitize(video.url_slug),
-      publishedDate: normalizeDate(video.publish_date),
-    }))
-    .filter((video) => video.title && video.publishedDate)
-    .sort((a, b) => (b.publishedDate ?? "").localeCompare(a.publishedDate ?? ""))
-    .slice(0, 3);
-
-  const refreshDate = new Date().toISOString().slice(0, 10);
-  const lines = [`Refresh date: ${refreshDate}`, "Latest songs:"];
-
-  for (const song of latestSongs) {
-    lines.push(`- ${song.title} (${song.sutra || "UNKNOWN"}) - published ${song.publishedDate} - /songs/${song.slug}`);
-  }
-
-  lines.push("Latest videos:");
-  for (const video of latestVideos) {
-    const route = video.slug ? `/songs/${video.slug}` : "/videos";
-    lines.push(`- ${video.title} (${video.sutra || "UNKNOWN"}) - published ${video.publishedDate} - ${route}`);
-  }
-
-  return lines.join("\n");
-};
 
 const main = async (): Promise<void> => {
   const songs = await readJsonFile<SongRecord[]>("song_catalog.json");
