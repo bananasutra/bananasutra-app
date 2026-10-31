@@ -6,7 +6,7 @@
     },
     {
       "value": "KNOWsutra",
-      "count": 65
+      "count": 66
     },
     {
       "value": "GROWsutra",
@@ -30,7 +30,7 @@
     },
     {
       "value": "BOWsutra",
-      "count": 9
+      "count": 10
     }
   ],
   "light_shadow": [
@@ -40,7 +40,7 @@
     },
     {
       "value": "SHADOW",
-      "count": 189
+      "count": 191
     }
   ],
   "topic": [
@@ -58,7 +58,7 @@
     },
     {
       "value": "WISDOM",
-      "count": 44
+      "count": 46
     },
     {
       "value": "TRUTH",
@@ -119,6 +119,10 @@
       "count": 23
     },
     {
+      "value": "beKIND",
+      "count": 22
+    },
+    {
       "value": "beWONDROUS",
       "count": 22
     },
@@ -127,12 +131,8 @@
       "count": 21
     },
     {
-      "value": "beKIND",
-      "count": 21
-    },
-    {
       "value": "beBRIGHT",
-      "count": 14
+      "count": 15
     },
     {
       "value": "beWISE",
@@ -162,25 +162,25 @@
     },
     {
       "value": "2026",
-      "count": 34
+      "count": 37
     }
   ],
   "track_genre": [
     {
       "value": "DUB",
-      "count": 88
+      "count": 91
     },
     {
       "value": "LOFI",
-      "count": 70
+      "count": 71
     },
     {
       "value": "JAZZ",
-      "count": 68
+      "count": 70
     },
     {
       "value": "INDIE",
-      "count": 64
+      "count": 66
     },
     {
       "value": "BURLESQUE",
@@ -188,57 +188,57 @@
     },
     {
       "value": "BLUES",
-      "count": 53
+      "count": 54
     },
     {
       "value": "FOLK",
-      "count": 51
+      "count": 54
     },
     {
       "value": "MANTRA",
-      "count": 16
+      "count": 17
     },
     {
       "value": "ROCK",
-      "count": 13
+      "count": 14
     }
   ],
   "track_secondary_genre": [
     {
       "value": "INDIE",
-      "count": 88
+      "count": 90
     },
     {
       "value": "JAZZ",
-      "count": 75
-    },
-    {
-      "value": "FOLK",
-      "count": 64
+      "count": 77
     },
     {
       "value": "BURLESQUE",
-      "count": 62
+      "count": 67
+    },
+    {
+      "value": "FOLK",
+      "count": 67
     },
     {
       "value": "BLUES",
+      "count": 51
+    },
+    {
+      "value": "MANTRA",
       "count": 48
+    },
+    {
+      "value": "GIPSY",
+      "count": 44
     },
     {
       "value": "LOFI",
       "count": 44
     },
     {
-      "value": "MANTRA",
-      "count": 44
-    },
-    {
-      "value": "GIPSY",
-      "count": 43
-    },
-    {
       "value": "DUB",
-      "count": 37
+      "count": 39
     },
     {
       "value": "RAGGA",
@@ -246,7 +246,7 @@
     },
     {
       "value": "CIRCUS",
-      "count": 23
+      "count": 24
     },
     {
       "value": "FLAMENCO",
@@ -288,39 +288,39 @@
   "track_instrument": [
     {
       "value": "BASS",
-      "count": 139
+      "count": 143
     },
     {
       "value": "GUITAR",
-      "count": 91
+      "count": 95
     },
     {
       "value": "CELLO",
-      "count": 71
+      "count": 74
     },
     {
       "value": "BANJO",
-      "count": 67
+      "count": 70
     },
     {
       "value": "PIANO",
-      "count": 57
+      "count": 59
     },
     {
       "value": "ACCORDION",
-      "count": 41
+      "count": 44
     },
     {
       "value": "DRUM",
-      "count": 35
+      "count": 37
     },
     {
       "value": "BRASS",
-      "count": 20
+      "count": 21
     },
     {
       "value": "CLARINET",
-      "count": 8
+      "count": 9
     },
     {
       "value": "FIDDLE",
@@ -342,27 +342,27 @@
   "track_mood": [
     {
       "value": "NERDY",
-      "count": 77
+      "count": 80
     },
     {
       "value": "TRIPPY",
-      "count": 76
+      "count": 77
     },
     {
       "value": "KINDLY",
-      "count": 68
+      "count": 70
     },
     {
       "value": "CHEEKY",
-      "count": 55
+      "count": 58
     },
     {
       "value": "PUNKY",
-      "count": 55
+      "count": 57
     },
     {
       "value": "RAINY",
-      "count": 47
+      "count": 49
     },
     {
       "value": "HOLY",
@@ -380,11 +380,11 @@
   "track_tempo_feel": [
     {
       "value": "LOWBEAT",
-      "count": 191
+      "count": 197
     },
     {
       "value": "MIDBEAT",
-      "count": 83
+      "count": 86
     },
     {
       "value": "UPBEAT",
@@ -394,7 +394,7 @@
   "lang": [
     {
       "value": "EN",
-      "count": 385
+      "count": 387
     },
     {
       "value": "FR",
