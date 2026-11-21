@@ -33,6 +33,13 @@ class DurationParseTests(unittest.TestCase):
         self.assertIsNone(media.parse_duration_seconds("nope"))
 
 
+class BananaDescTests(unittest.TestCase):
+    def test_keeps_hand_written_copy(self) -> None:
+        self.assertEqual(media.existing_banana_desc({"desc_bn": "  longer site copy  "}), "longer site copy")
+        self.assertEqual(media.existing_banana_desc({"_desc-bn": "from the import name"}), "from the import name")
+        self.assertEqual(media.existing_banana_desc({}), "")
+
+
 class LikeStateTests(unittest.TestCase):
     def test_blank_is_unknown_not_a_fail(self) -> None:
         self.assertEqual(media.like_state(None), "unknown")

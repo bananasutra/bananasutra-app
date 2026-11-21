@@ -25,7 +25,8 @@ Writes AIRTABLE/snapshots/<date>/enrich/:
 Import the four *-import.csv files into the matching Airtable tables.
 New columns to create as long text: _desc-sc, _desc-yt, _desc-bn,
 vid_yturls, vid_ytplaylists, vid_song_urls. Single URL columns: vid_yturl,
-sc_url. Checkboxes: vid_exist, yt_liked. _desc-bn is left empty on purpose.
+sc_url. Checkboxes: vid_exist, yt_liked. _desc-bn stays blank until you
+write it; a later enrich keeps whatever is already in that cell.
 """
 from __future__ import annotations
 
@@ -303,6 +304,11 @@ def write_csv(path: Path, fields: list[str], rows: list[dict]) -> None:
 
 def checked_or_blank(flag: bool) -> str:
     return CHECKED if flag else ""
+
+
+def existing_banana_desc(row: dict) -> str:
+    """Keep a hand-written _desc-bn across re-enrich. The other desc columns are derived."""
+    return (row.get("desc_bn") or row.get("_desc-bn") or "").strip()
 
 
 def _clean_file(clean_dir: Path, prefix: str, date_stamp: str) -> Path:
@@ -602,7 +608,7 @@ def enrich(snap: Path) -> dict:
                 "_desc-sc-from": sc_from,
                 "_desc-yt": yt_text,
                 "_desc-yt-from": yt_from,
-                "_desc-bn": "",
+                "_desc-bn": existing_banana_desc(song),
                 "vid_exist": checked_or_blank(has_video or manual),
                 "vid_yturls": join_lines(urls),
                 "vid_ytplaylists": join_lines(playlist_lines),
