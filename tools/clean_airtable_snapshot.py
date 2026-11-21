@@ -15,6 +15,8 @@ copies to `{snapshot}/clean/`:
   - raw files are never modified (kept as evidence)
 
 Pipelines and future app code should read from `clean/` exclusively.
+Local Airtable media enrich (descriptions, video links, duration match) is a
+separate step: `python3 tools/enrich_airtable_media.py`. It does not feed the site.
 
 Further documentation (performance cleanup, future improvements): `_docs/CLEAN-AIRTABLE-SNAPSHOT.md`.
 
@@ -329,6 +331,20 @@ HEADER_MAP: dict[str, dict[str, str]] = {
         "vid_yturls": "vid_yturls",
         "vid_ytplaylists": "vid_ytplaylists",
         "r_rated": "r_rated",
+        # R102 media enrich — Airtable import names and snake_case round-trip
+        "_desc-sc": "desc_sc",
+        "desc_sc": "desc_sc",
+        "_desc-sc-from": "desc_sc_from",
+        "desc_sc_from": "desc_sc_from",
+        "_desc-yt": "desc_yt",
+        "desc_yt": "desc_yt",
+        "_desc-yt-from": "desc_yt_from",
+        "desc_yt_from": "desc_yt_from",
+        "_desc-bn": "desc_bn",
+        "desc_bn": "desc_bn",
+        "yt_like_max": "yt_like_max",
+        "yt_liked": "yt_liked",
+        "yt_like_state": "yt_like_state",
     },
     "301 REDIRECTS": {
         "redirect_from": "redirect_from",
@@ -415,6 +431,14 @@ HEADER_MAP: dict[str, dict[str, str]] = {
         "Video featured description": "video_featured_description",
         "video_songbook": "video_songbook",
         "Video songbook": "video_songbook",
+        # R102 — duration match back onto the video row, plus like pass/fail
+        "yt_liked": "yt_liked",
+        "yt_like_state": "yt_like_state",
+        "sc_track_id": "sc_track_id",
+        "sc_url": "sc_url",
+        "sc_track_title": "sc_track_title",
+        "vid_match": "vid_match",
+        "vid_delta_sec": "vid_delta_sec",
     },
     # SC TRACKs — headers converged to snake_case after the first import
     # round-trip (Airtable adopted the output column names). Legacy "track
@@ -485,6 +509,13 @@ HEADER_MAP: dict[str, dict[str, str]] = {
         "user_liked": "liked_track",
         "secondary_genre": "secondary_genres",
         "secondary_genres": "secondary_genres",
+        # R102 — video visibility + duration guess (not a catalog field)
+        "vid_exist": "vid_exist",
+        "vid_yturl": "vid_yturl",
+        "vid_match": "vid_match",
+        "vid_delta_sec": "vid_delta_sec",
+        "vid_title": "vid_title",
+        "vid_song_urls": "vid_song_urls",
     },
     # SC EPs — `lyrics_title` is now a real column (for human review in
     # Airtable). Linked-record columns (e.g. `SC TRACKs`) reappear whenever
