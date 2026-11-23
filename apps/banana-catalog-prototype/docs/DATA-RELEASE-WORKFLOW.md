@@ -29,14 +29,7 @@ python3 tools/clean_airtable_snapshot.py
 
 If clean fails on unmapped headers, add variants to `HEADER_MAP` in `tools/clean_airtable_snapshot.py` first.
 
-### 1b. Media meaning enrich (local Airtable only)
-
-```bash
-python3 tools/enrich_airtable_media.py
-# or: python3 tools/enrich_airtable_media.py 2026-11-20
-```
-
-Reads the cleaned lyrics, SoundCloud track, and YouTube video tables and writes `AIRTABLE/snapshots/<date>/enrich/` import CSVs: `_desc-sc`, `_desc-yt`, empty `_desc-bn`, video links, a duration-based track↔video guess, and a YouTube like pass (`yt_liked`). This does **not** feed the catalog build. Import into Airtable (merge on `lyrics_id`, `track_id`, `video_id`, `ep_url`), then re-export a snapshot before the next `catalog:data` run if those columns should come along. Long descriptions stay off the website until a later, explicit page change.
+Clean only canonicalizes the export. Columns you already keep in Airtable (`redux_status`, `_desc-sc`, `_desc-yt`, `_desc-bn`, the video-link fields) come through as themselves. Do not re-import `enrich/lyrics-media-import.csv` or `redux-review.csv`; those were the one-time backfill. `build_sc_final_v4.py` and `build_yt_final.py` copy video-match and like columns from the snapshot into `AT-TRACKS-v4.csv`, `AT-EPS-v4.csv`, and `AT-VIDEOS-final.csv`, and fill a blank from `enrich/` only when the snapshot cell is empty. Description columns are not read by the catalog build.
 
 ### 2. Run pipelines (when SC/YT source data changed)
 

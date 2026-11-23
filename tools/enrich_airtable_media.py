@@ -9,23 +9,26 @@ the text and links across as ordinary fields and guesses which SoundCloud
 version a video belongs to by comparing durations within the same lyrics_id.
 
 It does not rebuild catalog JSON. Long descriptions stay off bananasutra.com.
+Once those columns are in Airtable, stop running this. Clean carries the
+export through, and a later run must not replace a cell you already edited.
 
 Usage:
-    python3 tools/clean_airtable_snapshot.py 2026-11-20
     python3 tools/enrich_airtable_media.py 2026-11-20
 
 Writes AIRTABLE/snapshots/<date>/enrich/:
-    lyrics-media-import.csv       merge on lyrics_id
-    sc-tracks-video-import.csv    merge on track_id
-    yt-videos-match-import.csv    merge on video_id
-    sc-eps-video-import.csv       merge on ep_url
-    match-review.csv              ambiguous, weak, and unpaired rows
+    lyrics-media-import.csv       FULL lyrics table, original columns, new fields at the end
+    sc-tracks-video-import.csv    FULL SoundCloud tracks table, same rule
+    yt-videos-match-import.csv    FULL YouTube videos table, same rule
+    sc-eps-video-import.csv       FULL SoundCloud EPs table, same rule
+    match-review.csv              QA only. Do not import this into an Airtable table.
+    redux-review.csv              QA only. Do not import this into an Airtable table.
     _MEDIA_ENRICH_REPORT.txt
 
-Import the four *-import.csv files into the matching Airtable tables.
-New columns to create as long text: _desc-sc, _desc-yt, _desc-bn,
-vid_yturls, vid_ytplaylists, vid_song_urls. Single URL columns: vid_yturl,
-sc_url. Checkboxes: vid_exist, yt_liked. _desc-bn stays blank until you
+These four import files are table replacements. Every column from the Airtable
+export is copied in its original order. New fields are appended. The only
+existing cells that change are the video-link columns we are filling
+(vid_exist, vid_yturls, vid_ytplaylists, vid_yturl, vid_ytplaylist) when they
+were blank. A non-empty cell is left alone. _desc-bn stays blank until you
 write it; a later enrich keeps whatever is already in that cell.
 """
 from __future__ import annotations
@@ -57,8 +60,8 @@ LABEL_RANK = {
 }
 
 LYRICS_FIELDS = [
-    "lyrics_id",
     "song_title",
+    "lyrics_id",
     "_desc-sc",
     "_desc-sc-from",
     "_desc-yt",
@@ -72,10 +75,10 @@ LYRICS_FIELDS = [
     "yt_like_state",
 ]
 TRACK_FIELDS = [
-    "track_id",
     "track_title",
-    "lyrics_id",
+    "track_id",
     "lyrics_title",
+    "lyrics_id",
     "vid_exist",
     "vid_yturl",
     "vid_match",
@@ -84,20 +87,22 @@ TRACK_FIELDS = [
     "vid_song_urls",
 ]
 VIDEO_FIELDS = [
-    "video_id",
     "title",
+    "video_id",
+    "lyrics_title",
     "lyrics_id",
     "yt_liked",
     "yt_like_state",
+    "sc_track_title",
     "sc_track_id",
     "sc_url",
-    "sc_track_title",
     "vid_match",
     "vid_delta_sec",
 ]
 EP_FIELDS = [
-    "ep_url",
     "ep_title",
+    "ep_url",
+    "lyrics_title",
     "lyrics_id",
     "vid_exist",
     "vid_yturl",
@@ -105,17 +110,17 @@ EP_FIELDS = [
 ]
 REVIEW_FIELDS = [
     "kind",
-    "video_id",
     "title",
+    "video_id",
     "yt_url",
     "duration",
-    "lyrics_id",
     "lyrics_title",
+    "lyrics_id",
     "vid_match",
     "delta_sec",
     "second_delta_sec",
-    "best_track_id",
     "best_track_title",
+    "best_track_id",
     "best_sc_url",
     "note",
 ]
@@ -274,6 +279,25 @@ def split_ids(value: str | None) -> list[str]:
     return [part for part in parts if part]
 
 
+def is_published_stage(stage: str | None) -> bool:
+    return (stage or "").strip().upper() == "PUBLISHED"
+
+
+def is_single_track(track: dict) -> bool:
+    """A single is a SoundCloud track that is not sitting on an EP set."""
+    return not (track.get("ep_url") or "").strip()
+
+
+def redux_status_for(stage: str | None, eps: list[dict], singles: list[dict]) -> str:
+    """``redux`` when a song is not PUBLISHED and an EP or single already exists.
+
+    Does not change production_stage. Volume is not a separate status.
+    """
+    if is_published_stage(stage) or (not eps and not singles):
+        return ""
+    return "redux"
+
+
 def split_playlist_names(value: str | None) -> list[str]:
     return [part.strip() for part in (value or "").split(", ") if part.strip()]
 
@@ -292,6 +316,119 @@ def load_csv(path: Path) -> list[dict]:
         for row in csv.DictReader(handle):
             rows.append({(key or "").lstrip("\ufeff"): value for key, value in row.items()})
         return rows
+
+
+def overlay_enrich_csv(rows: list[dict], csv_path: Path | str, key: str, fields: tuple[str, ...]) -> int:
+    """Fill blank cells from an enrich import CSV. Does not overwrite a value already set.
+
+    Used by the SoundCloud and YouTube builders so the files you already import
+    pick up the media columns. Returns how many rows gained at least one value.
+    """
+    csv_path = Path(csv_path)
+    if not csv_path.exists():
+        return 0
+    index: dict[str, dict] = {}
+    for extra in load_csv(csv_path):
+        token = (extra.get(key) or "").strip()
+        if token:
+            index[token] = extra
+    touched = 0
+    for row in rows:
+        extra = index.get((row.get(key) or "").strip())
+        if not extra:
+            continue
+        changed = False
+        for field in fields:
+            if (row.get(field) or "").strip():
+                continue
+            incoming = (extra.get(field) or "").strip()
+            if incoming:
+                row[field] = incoming
+                changed = True
+        if changed:
+            touched += 1
+    return touched
+
+
+def load_raw_table(path: Path) -> tuple[list[str], list[dict]]:
+    """Airtable export, original header order. BOM stripped from header names only."""
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        headers = [(name or "").lstrip("\ufeff") for name in (reader.fieldnames or [])]
+        rows: list[dict] = []
+        for raw in reader:
+            row: dict[str, str] = {}
+            for key, value in raw.items():
+                row[(key or "").lstrip("\ufeff")] = value if value is not None else ""
+            rows.append(row)
+    return headers, rows
+
+
+def extend_fields(original: list[str], additions: list[str]) -> list[str]:
+    """Keep Airtable's column order. Append fields that are not already there."""
+    fields = list(original)
+    present = set(original)
+    for name in additions:
+        if name not in present:
+            fields.append(name)
+            present.add(name)
+    return fields
+
+
+def keep_if_filled(existing: str, incoming: str) -> str:
+    """A non-empty Airtable cell wins. Incoming fills a blank cell only."""
+    if (existing or "").strip():
+        return existing
+    return incoming or ""
+
+
+def assemble_full_table(
+    raw_headers: list[str],
+    raw_rows: list[dict],
+    updates_by_key: dict[str, dict],
+    key: str,
+    additions: list[str],
+    fill_blank: set[str],
+    keep_if_present: set[str],
+) -> tuple[list[str], list[dict]]:
+    """Copy every source cell, in Airtable's order. Append brand-new columns.
+
+    fill_blank: existing columns. A non-empty cell is kept; a blank cell takes the new value.
+    additions: columns this enrich creates. Written from the update, except keep_if_present
+    (hand-written _desc-bn), which is not overwritten once it has text.
+    """
+    fields = extend_fields(raw_headers, additions)
+    out_rows: list[dict] = []
+    for raw in raw_rows:
+        token = (raw.get(key) or "").strip()
+        update = updates_by_key.get(token, {})
+        row = {header: raw.get(header, "") for header in raw_headers}
+        for header in fill_blank:
+            if header not in raw_headers:
+                continue
+            row[header] = keep_if_filled(raw.get(header, ""), update.get(header, ""))
+        for header in additions:
+            if header in raw_headers:
+                # Already on the Airtable export. Her edit wins, including a
+                # value this enrich would have left blank.
+                continue
+            incoming = update.get(header, "")
+            if header in keep_if_present:
+                row[header] = keep_if_filled(row.get(header, ""), incoming)
+            else:
+                row[header] = incoming
+        out_rows.append(row)
+    for raw, out in zip(raw_rows, out_rows):
+        for header in raw_headers:
+            if header in fill_blank:
+                continue
+            if (raw.get(header) or "") != (out.get(header) or ""):
+                raise SystemExit(f"ERROR: full-table copy changed {header!r} on {key}={raw.get(key)!r}")
+    if fields[: len(raw_headers)] != list(raw_headers):
+        raise SystemExit("ERROR: full-table copy reordered the Airtable columns")
+    if len(out_rows) != len(raw_rows):
+        raise SystemExit(f"ERROR: full-table copy dropped rows for {key}")
+    return fields, out_rows
 
 
 def write_csv(path: Path, fields: list[str], rows: list[dict]) -> None:
@@ -370,10 +507,19 @@ def enrich(snap: Path) -> dict:
     known_ids = set(lyrics_by_id)
 
     tracks_by_song: dict[str, list[dict]] = defaultdict(list)
+    singles_by_song: dict[str, list[dict]] = defaultdict(list)
     for track in tracks:
         song_id = (track.get("lyrics_id") or "").strip()
         if song_id:
             tracks_by_song[song_id].append(track)
+            if is_single_track(track):
+                singles_by_song[song_id].append(track)
+
+    eps_by_song: dict[str, list[dict]] = defaultdict(list)
+    for ep in eps:
+        for song_id in split_ids(ep.get("lyrics_id")):
+            if song_id:
+                eps_by_song[song_id].append(ep)
 
     videos_by_song: dict[str, list[dict]] = defaultdict(list)
     for video in videos:
@@ -409,6 +555,7 @@ def enrich(snap: Path) -> dict:
         base = {
             "video_id": video_id,
             "title": title,
+            "lyrics_title": (video.get("lyrics_title") or "").strip(),
             "lyrics_id": song_id,
             "yt_liked": checked_or_blank(state == "liked"),
             "yt_like_state": state,
@@ -525,6 +672,7 @@ def enrich(snap: Path) -> dict:
             )
 
     lyrics_rows: list[dict] = []
+    redux_review: list[dict] = []
     desc_sc_filled = desc_yt_filled = 0
     sc_variants = yt_variants = 0
     songs_with_video = 0
@@ -600,6 +748,17 @@ def enrich(snap: Path) -> dict:
             )
         if has_video:
             songs_with_video += 1
+        stage = (song.get("production_stage") or "").strip()
+        redux_status = redux_status_for(stage, eps_by_song.get(song_id, []), singles_by_song.get(song_id, []))
+        if redux_status:
+            redux_review.append(
+                {
+                    "song_title": (song.get("song_title") or "").strip(),
+                    "lyrics_id": song_id,
+                    "production_stage": stage,
+                    "redux_status": redux_status,
+                }
+            )
         lyrics_rows.append(
             {
                 "lyrics_id": song_id,
@@ -615,6 +774,7 @@ def enrich(snap: Path) -> dict:
                 "yt_like_max": "" if not known_likes else str(max(known_likes)),
                 "yt_liked": checked_or_blank(any(state == "liked" for state in states)),
                 "yt_like_state": _rollup_like_state(states),
+                "redux_status": redux_status,
             }
         )
 
@@ -675,6 +835,7 @@ def enrich(snap: Path) -> dict:
             {
                 "ep_url": (ep.get("ep_url") or "").strip(),
                 "ep_title": (ep.get("ep_title") or "").strip(),
+                "lyrics_title": (ep.get("lyrics_title") or "").strip(),
                 "lyrics_id": (ep.get("lyrics_id") or "").strip(),
                 "vid_exist": checked_or_blank(has_video),
                 "vid_yturl": join_lines(urls),
@@ -684,11 +845,65 @@ def enrich(snap: Path) -> dict:
 
     out_dir = snap / "enrich"
     out_dir.mkdir(exist_ok=True)
-    write_csv(out_dir / "lyrics-media-import.csv", LYRICS_FIELDS, lyrics_rows)
-    write_csv(out_dir / "sc-tracks-video-import.csv", TRACK_FIELDS, track_rows)
-    write_csv(out_dir / "yt-videos-match-import.csv", VIDEO_FIELDS, video_rows)
-    write_csv(out_dir / "sc-eps-video-import.csv", EP_FIELDS, ep_rows)
+
+    def raw_table(filename: str) -> tuple[list[str], list[dict]]:
+        path = snap / filename
+        if not path.exists():
+            raise SystemExit(f"ERROR: {path} missing. Refusing to write a partial Airtable table.")
+        return load_raw_table(path)
+
+    lyrics_headers, lyrics_raw = raw_table(f"SONGS (Lyrics)-{date_stamp}.csv")
+    track_headers, tracks_raw = raw_table(f"SC TRACKs-{date_stamp}.csv")
+    video_headers, videos_raw = raw_table(f"YTvideos-{date_stamp}.csv")
+    ep_headers, eps_raw = raw_table(f"SC EPs-{date_stamp}.csv")
+
+    lyrics_fields, lyrics_full = assemble_full_table(
+        lyrics_headers,
+        lyrics_raw,
+        {row["lyrics_id"]: row for row in lyrics_rows},
+        "lyrics_id",
+        ["_desc-sc", "_desc-sc-from", "_desc-yt", "_desc-yt-from", "_desc-bn", "yt_like_max", "yt_liked", "yt_like_state", "redux_status"],
+        {"vid_exist", "vid_yturls", "vid_ytplaylists"},
+        {"_desc-bn"},
+    )
+    track_fields, tracks_full = assemble_full_table(
+        track_headers,
+        tracks_raw,
+        {row["track_id"]: row for row in track_rows},
+        "track_id",
+        ["vid_exist", "vid_yturl", "vid_match", "vid_delta_sec", "vid_title", "vid_song_urls"],
+        set(),
+        set(),
+    )
+    video_fields, videos_full = assemble_full_table(
+        video_headers,
+        videos_raw,
+        {row["video_id"]: row for row in video_rows},
+        "video_id",
+        ["yt_liked", "yt_like_state", "sc_track_title", "sc_track_id", "sc_url", "vid_match", "vid_delta_sec"],
+        set(),
+        set(),
+    )
+    ep_fields, eps_full = assemble_full_table(
+        ep_headers,
+        eps_raw,
+        {row["ep_url"]: row for row in ep_rows},
+        "ep_url",
+        [],
+        {"vid_exist", "vid_yturl", "vid_ytplaylist"},
+        set(),
+    )
+
+    write_csv(out_dir / "lyrics-media-import.csv", lyrics_fields, lyrics_full)
+    write_csv(out_dir / "sc-tracks-video-import.csv", track_fields, tracks_full)
+    write_csv(out_dir / "yt-videos-match-import.csv", video_fields, videos_full)
+    write_csv(out_dir / "sc-eps-video-import.csv", ep_fields, eps_full)
     write_csv(out_dir / "match-review.csv", REVIEW_FIELDS, review)
+    write_csv(
+        out_dir / "redux-review.csv",
+        ["song_title", "lyrics_id", "production_stage", "redux_status"],
+        sorted(redux_review, key=lambda row: (row["redux_status"], row["song_title"])),
+    )
 
     like_states = [row["yt_like_state"] for row in video_rows]
     match_counts: dict[str, int] = defaultdict(int)
@@ -710,6 +925,7 @@ def enrich(snap: Path) -> dict:
         "eps_with_video": eps_with_video,
         "manual_kept": manual_kept,
         "review_rows": len(review),
+        "redux_rows": len(redux_review),
         "like_liked": like_states.count("liked"),
         "like_none": like_states.count("none"),
         "like_unknown": like_states.count("unknown"),
@@ -751,11 +967,19 @@ def _report(summary: dict) -> str:
         [
             "",
             f"Review rows                 {summary['review_rows']}",
+            f"redux_status                {summary['redux_rows']}",
             f"Output                      {summary['out_dir']}",
             "",
-            "Airtable import: merge lyrics on lyrics_id, tracks on track_id,",
-            "videos on video_id, EPs on ep_url. Do not publish these description",
-            "columns to the website from this step.",
+            "The four *-import.csv files are full copies of the Airtable exports.",
+            "Original columns stay in their original order. New columns are appended.",
+            "match-review.csv and redux-review.csv are QA lists. Do not import them over a table.",
+            "",
+            "production_stage is never changed. redux_status is redux or blank.",
+            "redux means the song is not PUBLISHED and an EP or single already exists.",
+            "",
+            "Existing cells are unchanged except blank video-link columns",
+            "(vid_exist, vid_yturls, vid_ytplaylists, vid_yturl, vid_ytplaylist),",
+            "which are filled. A cell that already had text is left as it was.",
             "",
             "Match labels: exact 0s, close 1–5s, loose 6–15s, weak 16–30s,",
             "ambiguous = another version within 3s of the best and still ≤15s,",

@@ -29,11 +29,19 @@ Duration match (videos):
   unknown_lyrics     1
 
 Review rows                 233
+redux_status                17
 Output                      /Users/cee/Developer/BANANASUTRA-app/AIRTABLE/snapshots/2026-11-20/enrich
 
-Airtable import: merge lyrics on lyrics_id, tracks on track_id,
-videos on video_id, EPs on ep_url. Do not publish these description
-columns to the website from this step.
+The four *-import.csv files are full copies of the Airtable exports.
+Original columns stay in their original order. New columns are appended.
+match-review.csv and redux-review.csv are QA lists. Do not import them over a table.
+
+production_stage is never changed. redux_status is redux or blank.
+redux means the song is not PUBLISHED and an EP or single already exists.
+
+Existing cells are unchanged except blank video-link columns
+(vid_exist, vid_yturls, vid_ytplaylists, vid_yturl, vid_ytplaylist),
+which are filled. A cell that already had text is left as it was.
 
 Match labels: exact 0s, close 1–5s, loose 6–15s, weak 16–30s,
 ambiguous = another version within 3s of the best and still ≤15s,

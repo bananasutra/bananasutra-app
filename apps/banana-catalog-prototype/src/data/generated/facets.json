@@ -18,7 +18,7 @@
     },
     {
       "value": "SHOWsutra",
-      "count": 54
+      "count": 55
     },
     {
       "value": "FLOWsutra",
@@ -36,7 +36,7 @@
   "light_shadow": [
     {
       "value": "LIGHT",
-      "count": 224
+      "count": 225
     },
     {
       "value": "SHADOW",
@@ -66,7 +66,7 @@
     },
     {
       "value": "FOOLERY",
-      "count": 34
+      "count": 35
     },
     {
       "value": "PEACE",
@@ -119,16 +119,16 @@
       "count": 23
     },
     {
+      "value": "beFOOL",
+      "count": 22
+    },
+    {
       "value": "beKIND",
       "count": 22
     },
     {
       "value": "beWONDROUS",
       "count": 22
-    },
-    {
-      "value": "beFOOL",
-      "count": 21
     },
     {
       "value": "beBRIGHT",
@@ -162,13 +162,13 @@
     },
     {
       "value": "2026",
-      "count": 37
+      "count": 38
     }
   ],
   "track_genre": [
     {
       "value": "DUB",
-      "count": 91
+      "count": 93
     },
     {
       "value": "LOFI",
@@ -180,7 +180,7 @@
     },
     {
       "value": "INDIE",
-      "count": 66
+      "count": 67
     },
     {
       "value": "BURLESQUE",
@@ -222,18 +222,18 @@
     },
     {
       "value": "BLUES",
-      "count": 51
+      "count": 52
     },
     {
       "value": "MANTRA",
       "count": 48
     },
     {
-      "value": "GIPSY",
-      "count": 44
+      "value": "LOFI",
+      "count": 45
     },
     {
-      "value": "LOFI",
+      "value": "GIPSY",
       "count": 44
     },
     {
@@ -242,7 +242,7 @@
     },
     {
       "value": "RAGGA",
-      "count": 25
+      "count": 27
     },
     {
       "value": "CIRCUS",
@@ -296,7 +296,7 @@
     },
     {
       "value": "CELLO",
-      "count": 74
+      "count": 75
     },
     {
       "value": "BANJO",
@@ -380,11 +380,11 @@
   "track_tempo_feel": [
     {
       "value": "LOWBEAT",
-      "count": 197
+      "count": 198
     },
     {
       "value": "MIDBEAT",
-      "count": 86
+      "count": 88
     },
     {
       "value": "UPBEAT",
@@ -394,7 +394,7 @@
   "lang": [
     {
       "value": "EN",
-      "count": 387
+      "count": 388
     },
     {
       "value": "FR",

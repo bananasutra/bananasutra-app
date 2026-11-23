@@ -552,6 +552,18 @@ for vid, scrape_row in raw_by_id.items():
 print("\n[Step 4] Writing outputs...")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
+_tools = REPO / "tools"
+if str(_tools) not in sys.path:
+    sys.path.insert(0, str(_tools))
+from enrich_airtable_media import overlay_enrich_csv
+
+_n_vid = overlay_enrich_csv(
+    final_rows,
+    SNAP / "enrich" / "yt-videos-match-import.csv",
+    "video_id",
+    ("sc_track_id", "sc_url", "sc_track_title", "vid_match", "vid_delta_sec"),
+)
+print(f"  ✓ Media match columns filled from enrich/: {_n_vid} videos")
 write_csv(OUT_FINAL, FINAL_FIELDS, final_rows)
 dated_final = dated_copy(OUT_FINAL)
 print(f"  {OUT_FINAL.name} ({len(final_rows)} rows)")

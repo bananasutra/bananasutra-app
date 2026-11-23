@@ -40,6 +40,60 @@ class BananaDescTests(unittest.TestCase):
         self.assertEqual(media.existing_banana_desc({}), "")
 
 
+class FullTableTests(unittest.TestCase):
+    def test_original_columns_stay_first_and_untouched(self) -> None:
+        headers = ["song_title", "lyrics_id", "lyrics", "vid_exist"]
+        raw = [{"song_title": "Hold The Mic", "lyrics_id": "L-1", "lyrics": "full text", "vid_exist": ""}]
+        updates = {"L-1": {"_desc-sc": "the essay", "_desc-bn": "", "vid_exist": "checked", "lyrics": "WIPED"}}
+        fields, rows = media.assemble_full_table(
+            headers,
+            raw,
+            updates,
+            "lyrics_id",
+            ["_desc-sc", "_desc-bn"],
+            {"vid_exist"},
+            {"_desc-bn"},
+        )
+        self.assertEqual(fields[:4], headers)
+        self.assertEqual(fields[4:], ["_desc-sc", "_desc-bn"])
+        self.assertEqual(rows[0]["lyrics"], "full text")
+        self.assertEqual(rows[0]["song_title"], "Hold The Mic")
+        self.assertEqual(rows[0]["vid_exist"], "checked")
+        self.assertEqual(rows[0]["_desc-sc"], "the essay")
+
+    def test_existing_airtable_column_is_not_recalculated(self) -> None:
+        headers = ["song_title", "lyrics_id", "redux_status"]
+        raw = [{"song_title": "Hey, You (Creepers)", "lyrics_id": "L-98", "redux_status": "redux"}]
+        fields, rows = media.assemble_full_table(
+            headers,
+            raw,
+            {"L-98": {"redux_status": ""}},
+            "lyrics_id",
+            ["redux_status"],
+            set(),
+            set(),
+        )
+        self.assertEqual(fields, headers)
+        self.assertEqual(rows[0]["redux_status"], "redux")
+
+    def test_nonempty_cell_is_not_replaced(self) -> None:
+        self.assertEqual(media.keep_if_filled("already written", "new guess"), "already written")
+        self.assertEqual(media.keep_if_filled("", "new guess"), "new guess")
+
+
+class ReduxStatusTests(unittest.TestCase):
+    def test_published_song_is_not_a_redux(self) -> None:
+        self.assertEqual(media.redux_status_for("PUBLISHED", [{"ep_url": "https://sc/sets/old"}], []), "")
+
+    def test_existing_ep_or_single_is_redux(self) -> None:
+        self.assertEqual(media.redux_status_for("LANDR", [{"ep_url": "https://sc/sets/blessed"}], []), "redux")
+        self.assertEqual(media.redux_status_for("LANDR", [], [{"ep_url": ""}]), "redux")
+        self.assertEqual(media.redux_status_for("LANDR", [{"ep_volume": "2"}], []), "redux")
+
+    def test_no_release_is_blank(self) -> None:
+        self.assertEqual(media.redux_status_for("NEW", [], []), "")
+
+
 class LikeStateTests(unittest.TestCase):
     def test_blank_is_unknown_not_a_fail(self) -> None:
         self.assertEqual(media.like_state(None), "unknown")
