@@ -15,8 +15,8 @@ copies to `{snapshot}/clean/`:
   - raw files are never modified (kept as evidence)
 
 Pipelines and future app code should read from `clean/` exclusively.
-Local Airtable media enrich (descriptions, video links, duration match) is a
-separate step: `python3 tools/enrich_airtable_media.py`. It does not feed the site.
+Description, redux, and video-link columns are ordinary Airtable fields.
+Clean carries them through. It does not recalculate them.
 
 Further documentation (performance cleanup, future improvements): `_docs/CLEAN-AIRTABLE-SNAPSHOT.md`.
 
@@ -345,6 +345,7 @@ HEADER_MAP: dict[str, dict[str, str]] = {
         "yt_like_max": "yt_like_max",
         "yt_liked": "yt_liked",
         "yt_like_state": "yt_like_state",
+        "redux_status": "redux_status",
     },
     "301 REDIRECTS": {
         "redirect_from": "redirect_from",

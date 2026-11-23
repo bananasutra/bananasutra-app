@@ -24,13 +24,13 @@ Columns not listed had no modifications.
 ── YTplaylists-2026-11-20.csv → yt_playlists-2026-11-20.csv (50 rows)
     (no cell modifications)
 
-── YTvideos-2026-11-20.csv → yt_videos-2026-11-20.csv (523 rows)
+── YTvideos-2026-11-20.csv → yt_videos-2026-11-20.csv (527 rows)
     description                          NBSP×30, ZWSP×29
 
-── SC TRACKs-2026-11-20.csv → sc_tracks-2026-11-20.csv (876 rows)
-    description                          NBSP×210, LINE-SEP×2976, ZWSP×9
+── SC TRACKs-2026-11-20.csv → sc_tracks-2026-11-20.csv (886 rows)
+    description                          LINE-SEP×2989, NBSP×213, ZWSP×9
 
-── SC EPs-2026-11-20.csv → sc_eps-2026-11-20.csv (270 rows)
+── SC EPs-2026-11-20.csv → sc_eps-2026-11-20.csv (276 rows)
     (no cell modifications)
 
 ── SC Playlists-2026-11-20.csv → sc_playlists-2026-11-20.csv (62 rows)

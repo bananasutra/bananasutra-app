@@ -115,6 +115,7 @@ import csv
 import json
 import os
 import re
+import sys
 import unicodedata
 from collections import Counter, defaultdict
 from datetime import date, datetime
@@ -2567,6 +2568,28 @@ def main():
             f"  ⚠  Row-count sanity: FULL={len(out_tracks_full)} vs raw export={len(raw_rows)} "
             f"(expected equal — every scraped track becomes one FULL row)."
         )
+
+    # Video-link columns live in Airtable. The snapshot copy above already
+    # carried them. Fill a cell only when that copy is still blank.
+    if SNAPSHOT_DIR_PATH:
+        _tools = os.path.join(REPO_ROOT, "tools")
+        if _tools not in sys.path:
+            sys.path.insert(0, _tools)
+        from enrich_airtable_media import overlay_enrich_csv
+        _enrich = os.path.join(SNAPSHOT_DIR_PATH, "enrich")
+        n_tracks = overlay_enrich_csv(
+            out_tracks_full,
+            os.path.join(_enrich, "sc-tracks-video-import.csv"),
+            "track_id",
+            TRACK_VIDEO_PASSTHROUGH,
+        )
+        n_eps = overlay_enrich_csv(
+            out_eps,
+            os.path.join(_enrich, "sc-eps-video-import.csv"),
+            "ep_url",
+            ("vid_exist", "vid_yturl", "vid_ytplaylist"),
+        )
+        print(f"  ✓ Media columns filled from enrich/: {n_tracks} tracks, {n_eps} EPs")
 
     print(
         f"  TRACK CSVs — both written every run; same columns ({len(TRACK_HEADERS)} fields):\n"

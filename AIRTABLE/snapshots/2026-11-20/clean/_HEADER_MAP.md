@@ -101,6 +101,7 @@ update the `HEADER_MAP` dict in the script and re-run.
 | `url_slug_locked` | `url_slug_locked` |
 | `song_in_app` | `song_in_app` |
 | `production_stage` | `production_stage` |
+| `redux_status` | `redux_status` |
 | `landr_url` | `landr_url` |
 | `cover_art_ready` | `cover_art_ready` |
 | `lyrics_review_needed` | `lyrics_review_needed` |
@@ -140,6 +141,14 @@ update the `HEADER_MAP` dict in the script and re-run.
 | `vid_yturls` | `vid_yturls` |
 | `vid_ytplaylists` | `vid_ytplaylists` |
 | `r_rated` | `r_rated` |
+| `_desc-sc` | `desc_sc` |
+| `_desc-sc-from` | `desc_sc_from` |
+| `_desc-yt` | `desc_yt` |
+| `_desc-yt-from` | `desc_yt_from` |
+| `_desc-bn` | `desc_bn` |
+| `yt_like_max` | `yt_like_max` |
+| `yt_liked` | `yt_liked` |
+| `yt_like_state` | `yt_like_state` |
 
 ## yt_playlists-2026-11-20.csv
 
@@ -203,6 +212,13 @@ update the `HEADER_MAP` dict in the script and re-run.
 | `video_featured` | `video_featured` |
 | `video_featured_description` | `video_featured_description` |
 | `video_songbook` | `video_songbook` |
+| `yt_liked` | `yt_liked` |
+| `yt_like_state` | `yt_like_state` |
+| `sc_track_id` | `sc_track_id` |
+| `sc_url` | `sc_url` |
+| `sc_track_title` | `sc_track_title` |
+| `vid_match` | `vid_match` |
+| `vid_delta_sec` | `vid_delta_sec` |
 
 ## sc_tracks-2026-11-20.csv
 
@@ -250,6 +266,12 @@ update the `HEADER_MAP` dict in the script and re-run.
 | `download_url` | `download_url` |
 | `track_id` | `track_id` |
 | `lyrics_id` | `lyrics_id` |
+| `vid_exist` | `vid_exist` |
+| `vid_yturl` | `vid_yturl` |
+| `vid_match` | `vid_match` |
+| `vid_delta_sec` | `vid_delta_sec` |
+| `vid_title` | `vid_title` |
+| `vid_song_urls` | `vid_song_urls` |
 
 ## sc_eps-2026-11-20.csv
 
