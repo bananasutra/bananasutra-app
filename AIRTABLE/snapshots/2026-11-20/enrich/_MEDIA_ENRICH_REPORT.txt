@@ -1,0 +1,54 @@
+AIRTABLE MEDIA ENRICH — 2026-11-20
+======================================================================
+
+Local import CSVs only. Catalog JSON was not rebuilt.
+_desc-bn is present and empty so the column exists for later site copy.
+
+Lyrics rows                 437
+  _desc-sc filled           221  (variants: 46)
+  _desc-yt filled           196  (variants: 84)
+  songs with a video link   227
+  manual vid_exist kept     1
+SC tracks                   876
+  tracks with a guessed URL 249
+SC EPs with a video link    209 / 270
+YouTube videos              523
+  yt_like_state liked       105
+  yt_like_state none        188
+  yt_like_state unknown     230
+Duration match (videos):
+  exact              46
+  close              78
+  loose              39
+  ambiguous          65
+  weak               30
+  none               118
+  no_track           128
+  no_duration        0
+  no_lyrics          18
+  unknown_lyrics     1
+
+Review rows                 233
+redux_status                17
+Output                      /Users/cee/Developer/BANANASUTRA-app/AIRTABLE/snapshots/2026-11-20/enrich
+
+The four *-import.csv files are full copies of the Airtable exports.
+Original columns stay in their original order. New columns are appended.
+match-review.csv and redux-review.csv are QA lists. Do not import them over a table.
+
+production_stage is never changed. redux_status is redux or blank.
+redux means the song is not PUBLISHED and an EP or single already exists.
+
+Existing cells are unchanged except blank video-link columns
+(vid_exist, vid_yturls, vid_ytplaylists, vid_yturl, vid_ytplaylist),
+which are filled. A cell that already had text is left as it was.
+
+Match labels: exact 0s, close 1–5s, loose 6–15s, weak 16–30s,
+ambiguous = another version within 3s of the best and still ≤15s,
+none = closest version is >30s off (no track URL written).
+vid_exist on a track means the song has a video. vid_yturl is the
+duration guess for that version. vid_song_urls lists every video.
+
+yt_liked is checked only when YouTube returned like_count >= 1.
+unknown means the API omitted likeCount (views were still returned).
+That is not stored as a fail.

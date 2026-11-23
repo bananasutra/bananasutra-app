@@ -115,6 +115,7 @@ import csv
 import json
 import os
 import re
+import sys
 import unicodedata
 from collections import Counter, defaultdict
 from datetime import date, datetime
@@ -1045,6 +1046,26 @@ def _ep_curation_from_snapshot(conf: dict) -> dict[str, str]:
     }
 
 
+TRACK_VIDEO_PASSTHROUGH = (
+    "vid_exist",
+    "vid_yturl",
+    "vid_match",
+    "vid_delta_sec",
+    "vid_title",
+    "vid_song_urls",
+)
+
+
+def _track_video_from_snapshot(ref: dict | None) -> dict[str, str]:
+    """Duration-match columns written by tools/enrich_airtable_media.py.
+
+    They are not in the SoundCloud scrape. Copy them off the clean track
+    snapshot so the next AT-TRACKS import does not blank them.
+    """
+    src = ref or {}
+    return {key: (src.get(key) or "").strip() for key in TRACK_VIDEO_PASSTHROUGH}
+
+
 def _parse_ep_track_number(raw: str) -> int | None:
     """Numeric ep_track_number for sort order; None when missing or non-numeric."""
     s = (raw or '').strip()
@@ -1807,6 +1828,7 @@ def main():
         'created_at', 'bpm', 'artwork_url', 'artwork_lg_url', 'waveform_url',
         'soundcloud_genre', 'tags', 'description', 'license', 'track_type',
         'purchase_url', 'download_url', 'track_id', 'lyrics_id',
+        *TRACK_VIDEO_PASSTHROUGH,
     ]
 
     for r in raw_rows:
@@ -1927,6 +1949,7 @@ def main():
                 'liked_track':  _pick_first_value(ref, ['liked_track', 'user_liked']) or common.get('liked_track', ''),
                 'track_in_app': normalize_track_in_app_for_airtable(ref.get('track_in_app', '')),
                 'lyrics_id':    final_lid,
+                **_track_video_from_snapshot(ref),
             }
             out_tracks_full.append(track_out_row)
             if is_filtered_track:
@@ -2042,6 +2065,7 @@ def main():
                 'liked_track':  common.get('liked_track', ''),
                 'track_in_app': track_in_app_out,
                 'lyrics_id':    lyrics_id,
+                **_track_video_from_snapshot(None),
             }
             out_tracks_full.append(track_out_row)
             if is_filtered_track:
@@ -2544,6 +2568,28 @@ def main():
             f"  ⚠  Row-count sanity: FULL={len(out_tracks_full)} vs raw export={len(raw_rows)} "
             f"(expected equal — every scraped track becomes one FULL row)."
         )
+
+    # Video-link columns live in Airtable. The snapshot copy above already
+    # carried them. Fill a cell only when that copy is still blank.
+    if SNAPSHOT_DIR_PATH:
+        _tools = os.path.join(REPO_ROOT, "tools")
+        if _tools not in sys.path:
+            sys.path.insert(0, _tools)
+        from enrich_airtable_media import overlay_enrich_csv
+        _enrich = os.path.join(SNAPSHOT_DIR_PATH, "enrich")
+        n_tracks = overlay_enrich_csv(
+            out_tracks_full,
+            os.path.join(_enrich, "sc-tracks-video-import.csv"),
+            "track_id",
+            TRACK_VIDEO_PASSTHROUGH,
+        )
+        n_eps = overlay_enrich_csv(
+            out_eps,
+            os.path.join(_enrich, "sc-eps-video-import.csv"),
+            "ep_url",
+            ("vid_exist", "vid_yturl", "vid_ytplaylist"),
+        )
+        print(f"  ✓ Media columns filled from enrich/: {n_tracks} tracks, {n_eps} EPs")
 
     print(
         f"  TRACK CSVs — both written every run; same columns ({len(TRACK_HEADERS)} fields):\n"

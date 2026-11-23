@@ -29,6 +29,8 @@ python3 tools/clean_airtable_snapshot.py
 
 If clean fails on unmapped headers, add variants to `HEADER_MAP` in `tools/clean_airtable_snapshot.py` first.
 
+Clean only canonicalizes the export. Columns you already keep in Airtable (`redux_status`, `_desc-sc`, `_desc-yt`, `_desc-bn`, the video-link fields) come through as themselves. Do not re-import `enrich/lyrics-media-import.csv` or `redux-review.csv`; those were the one-time backfill. `build_sc_final_v4.py` and `build_yt_final.py` copy video-match and like columns from the snapshot into `AT-TRACKS-v4.csv`, `AT-EPS-v4.csv`, and `AT-VIDEOS-final.csv`, and fill a blank from `enrich/` only when the snapshot cell is empty. Description columns are not read by the catalog build.
+
 ### 2. Run pipelines (when SC/YT source data changed)
 
 ```bash

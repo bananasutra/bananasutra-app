@@ -22,7 +22,10 @@ Field-ownership contract:
   Preserved from Airtable snapshot:     lyrics_id, format, rating, genre_primary,
                                         genre_secondary, instruments, has_manual_caption,
                                         manual_notes, ytvideo_in_app, status, notes,
-                                        content_type, series_info, language
+                                        content_type, series_info, language,
+                                        sc_track_id, sc_url, sc_track_title,
+                                        vid_match, vid_delta_sec
+  Derived from refreshed like_count:    yt_liked, yt_like_state
   Refreshed from fresh scrape:          title, yt_url, publish_date, duration,
                                         view_count, like_count, comment_count,
                                         thumbnail_url, description, yt_tags,
@@ -90,6 +93,8 @@ PRESERVED_FROM_SNAPSHOT = [
     "ytvideo_in_app", "status", "notes",
     "content_type", "series_info", "language",
     "video_featured", "video_featured_description", "video_songbook",
+    # R102 duration match. Kept from Airtable; the scrape does not know it.
+    "sc_track_id", "sc_url", "sc_track_title", "vid_match", "vid_delta_sec",
 ]
 
 REFRESHED_FROM_SCRAPE = [
@@ -113,10 +118,29 @@ FINAL_FIELDS = [
     "privacy_status", "embeddable", "license", "made_for_kids",
     "status", "notes", "video_id", "ytvideo_in_app",
     "video_featured", "video_featured_description", "video_songbook",
+    "yt_liked", "yt_like_state",
+    "sc_track_id", "sc_url", "sc_track_title", "vid_match", "vid_delta_sec",
 ]
 
 
 # ── HELPERS ──────────────────────────────────────────────────────────────────
+def yt_like_fields(raw: str) -> tuple[str, str]:
+    """Return (yt_like_state, yt_liked) from a refreshed like_count cell.
+
+    Blank stays unknown. Zero is a real none, not a missing value.
+    """
+    text = (raw or "").strip()
+    if not text:
+        return "unknown", ""
+    try:
+        count = int(float(text))
+    except ValueError:
+        return "unknown", ""
+    if count >= 1:
+        return "liked", "checked"
+    return "none", ""
+
+
 def normlid(v):
     """Normalize lyrics_id to L-N (no zero padding)."""
     v = (v or "").strip()
@@ -397,6 +421,7 @@ def build_row(scrape, snap, resolved_lid):
                 if not out.get(f):
                     out[f] = (scrape.get(f) or "").strip()
 
+    out["yt_like_state"], out["yt_liked"] = yt_like_fields(out.get("like_count") or "")
     return out
 
 
@@ -527,6 +552,18 @@ for vid, scrape_row in raw_by_id.items():
 print("\n[Step 4] Writing outputs...")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
+_tools = REPO / "tools"
+if str(_tools) not in sys.path:
+    sys.path.insert(0, str(_tools))
+from enrich_airtable_media import overlay_enrich_csv
+
+_n_vid = overlay_enrich_csv(
+    final_rows,
+    SNAP / "enrich" / "yt-videos-match-import.csv",
+    "video_id",
+    ("sc_track_id", "sc_url", "sc_track_title", "vid_match", "vid_delta_sec"),
+)
+print(f"  ✓ Media match columns filled from enrich/: {_n_vid} videos")
 write_csv(OUT_FINAL, FINAL_FIELDS, final_rows)
 dated_final = dated_copy(OUT_FINAL)
 print(f"  {OUT_FINAL.name} ({len(final_rows)} rows)")
