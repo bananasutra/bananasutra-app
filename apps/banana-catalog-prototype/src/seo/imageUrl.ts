@@ -38,6 +38,16 @@ function normalizeRemoteImageSource(source: string): string {
   return source
 }
 
+/**
+ * YouTube answers a missing maxresdefault with a successful 120×90 gray filmstrip,
+ * so `<img onError>` never fires and the facade paints that placeholder full-bleed.
+ */
+export function isYoutubeMissingMaxresPlaceholder(url: string, width: number, height: number): boolean {
+  if (!url || width <= 0 || height <= 0) return false
+  if (width > 120 || height > 90) return false
+  return /\/maxresdefault\.jpg(?:$|[?#])/i.test(url)
+}
+
 /** Downgrade YouTube poster tier when maxresdefault is missing (common on Shorts). */
 export function youtubeThumbnailFallbackUrl(source: string, failedUrl?: string): string {
   const trimmed = (source || '').trim()
