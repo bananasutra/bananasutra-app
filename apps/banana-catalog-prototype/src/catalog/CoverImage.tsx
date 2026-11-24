@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type ImgHTMLAttributes } from 'react'
-import { coverImageFallbackUrl, coverImageUrl } from '../seo/imageUrl'
+import { coverImageFallbackUrl, coverImageUrl, isYoutubeMissingMaxresPlaceholder } from '../seo/imageUrl'
 import { ThumbShimmer } from './ThumbShimmer'
 import './coverImage.css'
 
@@ -30,25 +30,7 @@ export function CoverImage({
   const [terminalFailure, setTerminalFailure] = useState(false)
   const imgRef = useRef<HTMLImageElement>(null)
 
-  useEffect(() => {
-    setSrc(primary)
-    setActiveSrcSet(srcSet || '')
-  }, [primary, srcSet])
-
-  useEffect(() => {
-    setImageReady(false)
-    setTerminalFailure(false)
-    const img = imgRef.current
-    if (img?.complete && img.naturalWidth > 0) {
-      setImageReady(true)
-    }
-  }, [src, primary])
-
-  const handleLoad = useCallback(() => {
-    setImageReady(true)
-  }, [])
-
-  const handleError = useCallback(() => {
+  const advancePastFailedThumb = useCallback(() => {
     if (!trimmed) return
     const fallback = coverImageFallbackUrl(trimmed, src)
     if (fallback && fallback !== src) {
@@ -58,6 +40,45 @@ export function CoverImage({
       setTerminalFailure(true)
     }
   }, [trimmed, src])
+
+  const loadedUrlMatchesSrc = useCallback((img: HTMLImageElement) => {
+    const loaded = img.currentSrc || img.src
+    return loaded === src
+  }, [src])
+
+  useEffect(() => {
+    setSrc(primary)
+    setActiveSrcSet(srcSet || '')
+  }, [primary, srcSet])
+
+  useEffect(() => {
+    setImageReady(false)
+    setTerminalFailure(false)
+    const img = imgRef.current
+    if (!img?.complete || img.naturalWidth <= 0 || !loadedUrlMatchesSrc(img)) return
+    if (isYoutubeMissingMaxresPlaceholder(img.currentSrc || img.src, img.naturalWidth, img.naturalHeight)) {
+      advancePastFailedThumb()
+      return
+    }
+    setImageReady(true)
+  }, [src, primary, advancePastFailedThumb, loadedUrlMatchesSrc])
+
+  const handleLoad = useCallback(() => {
+    const img = imgRef.current
+    if (
+      img &&
+      loadedUrlMatchesSrc(img) &&
+      isYoutubeMissingMaxresPlaceholder(img.currentSrc || img.src, img.naturalWidth, img.naturalHeight)
+    ) {
+      advancePastFailedThumb()
+      return
+    }
+    setImageReady(true)
+  }, [advancePastFailedThumb, loadedUrlMatchesSrc])
+
+  const handleError = useCallback(() => {
+    advancePastFailedThumb()
+  }, [advancePastFailedThumb])
 
   if (!primary) return null
 

@@ -544,6 +544,7 @@ export function SutraDetailPage() {
                     embedWrapperStyle={{ aspectRatio: youtubeAspectRatioFromFormat(featuredSutraVideo.format) }}
                     iframeClassName="sutra-detail__yt-embed"
                     facadeUntilClick
+                    posterThumbnailUrl={featuredSutraVideo.thumbnail_url}
                     showOutboundFooter={false}
                     onBeforePlay={() => exclusivePlaybackRef.current?.pauseAllSoundcloud()}
                     onIframeLoad={() => setYoutubeIframeGen((g) => g + 1)}
