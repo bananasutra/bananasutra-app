@@ -1,6 +1,13 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { buildSrcset, coverImageUrl, coverImageFallbackUrl, nativeImageMaxWidth, youtubeThumbnailFallbackUrl } from './imageUrl'
+import {
+  buildSrcset,
+  coverImageUrl,
+  coverImageFallbackUrl,
+  isYoutubeMissingMaxresPlaceholder,
+  nativeImageMaxWidth,
+  youtubeThumbnailFallbackUrl,
+} from './imageUrl'
 
 const SC_T500 =
   'https://i1.sndcdn.com/artworks-6hfJ7MQsBYyjyhKs-VO8orw-t500x500.png'
@@ -86,6 +93,20 @@ test('coverImageUrl keeps YouTube sddefault (Shorts without maxres)', () => {
   assert.match(out, /sddefault\.jpg/)
   assert.doesNotMatch(out, /maxresdefault/)
   assert.doesNotMatch(out, /\/cdn-cgi\/image\//)
+})
+
+test('isYoutubeMissingMaxresPlaceholder matches the 120x90 gray filmstrip only', () => {
+  const maxres = 'https://i.ytimg.com/vi/7OHMhVa__gU/maxresdefault.jpg'
+  assert.equal(isYoutubeMissingMaxresPlaceholder(maxres, 120, 90), true)
+  assert.equal(isYoutubeMissingMaxresPlaceholder(maxres, 1280, 720), false)
+  assert.equal(
+    isYoutubeMissingMaxresPlaceholder('https://i.ytimg.com/vi/7OHMhVa__gU/sddefault.jpg', 120, 90),
+    false,
+  )
+  assert.equal(
+    isYoutubeMissingMaxresPlaceholder('https://i.ytimg.com/vi/7OHMhVa__gU/hqdefault.jpg', 120, 90),
+    false,
+  )
 })
 
 test('youtubeThumbnailFallbackUrl prefers catalog sddefault over hq', () => {

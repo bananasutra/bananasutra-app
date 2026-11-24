@@ -750,6 +750,7 @@ export function VideosPage() {
                         facadeUntilClick
                         facadePosterEager
                         posterWidth={640}
+                        posterThumbnailUrl={featuredVideoHero.thumbnail_url}
                         showOutboundFooter={false}
                       />
                     </div>
